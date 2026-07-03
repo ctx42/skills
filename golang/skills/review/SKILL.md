@@ -1,0 +1,196 @@
+---
+name: review
+description: >
+  Done-time Go quality review. Run after edits and features are complete on the
+  current diff, a package, or a whole module. Checks Go code against the
+  style rules, the deeper criteria in rules.md, and general correctness
+  (bugs, edge cases, error handling). The default review reasons only, running
+  no build or test tools (read-only LSP code navigation is allowed); an opt-in
+  fix path applies findings and runs the test suite to prove them. Honors budget
+  controls (packages, max_issues, depth, plan_first). Also edits the rule list
+  from a plain-language prompt.
+license: MIT
+---
+
+# review
+
+Final-gate review for Go code. Pick the mode from the invocation:
+
+- **Check** (default) — audit finished code.
+- **Rule edit** — when the input is a style preference or asks to
+  `add`/`change`/`remove` a rule.
+
+Sources of truth:
+- `../style/SKILL.md` — canonical terse rules (Production + Test).
+- `rules.md` — deeper rationale / examples / how-to-detect, keyed
+  to those rules. Consult it for non-obvious rules.
+
+## Check mode
+
+### Target
+
+Resolve what to review from the invocation:
+- **no target** — the current git diff vs the base branch (staged + unstaged).
+- **a package** — a path like `./pkg/foo` or an import path; review that one
+  package's `.go` files.
+- **a module / many packages** — `./...`, a directory containing `go.mod`, or
+  an explicit "module"; review every package in the module.
+
+State the resolved target and the exact package/file set before reviewing.
+
+### Budget & scope
+
+Parse and respect these controls from the invocation:
+- `packages=a,b` — restrict to these packages within the target.
+- `max_issues=N` — hard cap on findings reported (default 25).
+- `depth=light|standard|exhaustive` — default `standard`.
+- `plan_first` — produce a short prioritized plan plus the top findings, then
+  stop for approval before the full pass.
+
+Default to plan-first: if the target is broad (whole module, many packages, or
+large LOC) and no budget was given, switch to `plan_first` automatically,
+propose defaults (`max_issues=25`, `depth=standard`, the package list), and ask
+before the full review.
+
+Depth:
+- `light` — only blockers and major maintainability; minimal examples.
+- `standard` — balanced coverage of the target.
+- `exhaustive` — full deep review; use sparingly.
+
+Stop at `max_issues`; report highest-severity first and say how many findings
+were left unreported.
+
+### Workflow
+
+1. Resolve the target and budget (above) and list the packages/files in scope.
+2. Read `style`'s `SKILL.md` and this skill's `rules.md` once.
+3. Review each file, in this order:
+   - **Rules**: every applicable style rule (Production for `*.go`, Test for
+     `*_test.go`); use `rules.md` for detection detail.
+   - **Correctness**: bugs, wrong logic, nil/bounds, ignored errors, data races.
+   - **Edge cases**: empty/large/concurrent inputs and every error path.
+   - **Error handling & API**: wrapping, sentinels, boundaries, easy misuse.
+   - **Cross-boundary verify** (`depth=standard`+): before reporting any claim
+     that reaches beyond the diff — a symbol is unused, all callers handle an
+     error/nil, an interface is fully implemented, a suspect branch is
+     reachable — confirm it with the `LSP` tool (`findReferences`,
+     `goToImplementation`, `incomingCalls`, `hover`/`goToDefinition`) instead of
+     asserting from the visible code. Skip at `depth=light`; reserve for
+     findings that actually cross a file/package boundary, not every line. If no
+     Go language server is configured the tool errors — fall back to grep/read
+     and note the reduced confidence in the finding.
+4. Reason only. Do not run gofmt, go vet, golangci-lint, or go test — judge by
+   reading the code. The `LSP` tool is permitted: it is read-only semantic
+   navigation, not the build/test toolchain, and does not mutate code.
+5. Report findings (below). Do not change code unless asked.
+
+### Scale
+
+- **Single package or small module (<= ~6 packages)**: review in this context,
+  package by package, highest-risk first.
+- **Larger module (> ~6 packages)**: fan out one review subagent per package
+  (each gets `style`, `rules.md`, the `depth`, and a share of `max_issues`),
+  then synthesize one merged report, re-ranking findings to the global
+  `max_issues` cap. Keeps the main context lean.
+- Always report which packages were reviewed and which, if any, were skipped.
+
+### Output
+
+Group by severity: **Blocker / Should-fix / Nit**. Each finding:
+- `file:line` — the problem in one line.
+- The rule id or dimension (e.g. `style: %w`, `correctness`).
+- A minimal suggested fix.
+
+End with a one-line verdict (ship / fix-first) and the per-severity counts. For
+a module, give the verdict per package plus an overall summary. Report budget
+usage: `depth`, packages/files reviewed, and whether you stayed under
+`max_issues` (and how many findings went unreported).
+
+Report tersely: no preamble or narration; state each fact once; don't restate
+output the user can already see.
+
+### Scope control
+
+Bound the work to the resolved target. If even that is too large, review the
+highest-risk packages first and say what you skipped. Never silently truncate.
+
+### Applying fixes
+
+When asked to change code (apply findings, fix, refactor), every code change
+ships with accompanying tests in the same change — new behavior gets new tests,
+changed behavior gets updated tests. This covers behavioral changes, not pure
+no-ops like renames or comment edits.
+
+**Refactors: enumerate before editing.** Before a rename, signature change, or
+interface change, use the `LSP` tool to find everything the edit must touch —
+`findReferences` for every call site, `goToImplementation` for every implementer
+— so the definition and all its dependents change together. The tool only
+locates code; the edits themselves still go through Edit/Write, and it performs
+no rename for you. Re-query after writing, since a pre-edit result goes stale.
+LSP is not the safety net: the `go test ./... -race` gate below remains the
+proof that no caller broke. If no Go language server is configured, fall back to
+grep to enumerate call sites.
+
+**Logical bugs: prove before fixing.** For any correctness, concurrency, or
+performance finding — a behavioral bug at any severity (pure style, doc, and
+naming are exempt) — reproduce it before touching the fix:
+
+1. Write a test (or a benchmark for performance) and run it against the
+   current code to show it **fails**; capture the red output.
+2. Apply the fix and show the same test/benchmark now **passes**.
+3. Report both states — the bug was real and the fix resolves it.
+
+A bug is **always reported**, whether or not it can be proven. If it genuinely
+cannot be reproduced by a test or benchmark (cost-prohibitive or very hard —
+unreachable branch, untestable side effect, disproportionate scaffolding), **do
+not apply the fix**: report the bug, state that a fix is available but cannot be
+proven by test/benchmark, say why, and let the user decide whether to implement
+it.
+
+For a non-bug change where a test is merely coverage and is impossible or
+cost-prohibitive, do not skip it silently: **warn the user**, name the change
+left untested, and say why.
+
+Run the whole-module suite, not just the changed package:
+
+- **Before editing**, run `go test ./... -race` for a green baseline. If it is
+  already red, **stop and report** the pre-existing failures; do not edit.
+- **After editing**, run `go test ./... -race` again. The job is not done until
+  it passes for the whole module. A failing or unrun suite means not done —
+  never report success without it.
+
+(This gate is for the fix path only; Check mode stays reason-only.)
+
+## Rule-edit mode
+
+Triggered when the input is a preference or asks to add/change/remove a rule.
+
+> **Writes must reach the repo.** This mode edits `../style/SKILL.md` and
+> `rules.md` in place, relative to the running plugin copy. Rules only stick if
+> that copy is the git clone (loaded via `claude --plugin-dir ./golang`), so the
+> change can be committed and shared. If this skill is running from a marketplace
+> install (a copy under `~/.claude/plugins/cache/`), the edit lands in that
+> throwaway copy and is lost on the next update — warn the user and have them
+> re-run from the clone before writing.
+
+1. Read `style`'s `SKILL.md`.
+2. Turn the input into rule entries shaped per **How a rule entry should
+   look** below. If the scope is ambiguous, ask one quick question.
+3. Detect duplicate or conflicting rules; show them and the proposed change,
+   then **wait** for confirmation before writing. Never silently overwrite a
+   conflicting rule.
+4. Write the rule to `style`; add a keyed `rules.md` entry only when the
+   rule is non-obvious.
+5. Show the before/after diff.
+
+### How a rule entry should look
+
+- One rule = one concept = one dense imperative line.
+- Scope it Production (`*.go`), Test (`*_test.go`), or both; place it in that
+  section, grouped near related rules.
+- Examples may show only generic Go syntax (`ErrXxx`, `[Type]`,
+  `//nolint:name`); never project-specific identifiers.
+- Prefer no example when the prose stands alone; add one only to remove
+  ambiguity.
+- Deeper rationale or detection detail goes in `rules.md`, keyed to the rule
+  and only when non-obvious; keep both files lean.

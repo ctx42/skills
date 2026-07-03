@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "ctx42-skills",
+  "description": "Shared skill suite for Claude Code — Go tooling, SRD authoring, and general authoring skills for Claude Code and Grok.",
+  "version": "0.1.0",
+  "owner": {
+    "name": "Rafal Zajac",
+    "email": "rzajac@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "golang",
+      "source": "./golang",
+      "strict": false,
+      "category": "development"
+    },
+    {
+      "name": "srd",
+      "source": "./srd",
+      "strict": false,
+      "category": "productivity"
+    },
+    {
+      "name": "craft",
+      "source": "./craft",
+      "strict": false,
+      "category": "productivity"
+    }
+  ]
+}
