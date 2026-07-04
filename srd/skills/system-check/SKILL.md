@@ -20,7 +20,7 @@ that drives every check: *can I implement and test this exactly as written,
 without coming back to guess?*
 
 This skill is a **thin orchestration layer**. It does not re-run the standard
-checks — it delegates those to `review` — and it never rewrites prose. Its
+checks — it delegates those to `srd:review` — and it never rewrites prose. Its
 own value is the **system-knowledge layer**: judging the SRD against what is
 already known about the target platform, as captured in `memory.md`.
 
@@ -30,11 +30,11 @@ already known about the target platform, as captured in `memory.md`.
   author; never rewrite the document.
 - **Owns:** `<srd>.questions.md` (the question list) and `memory.md` (the system
   knowledge base). No other skill writes these.
-- **Must not:** write or edit `<srd>.review.md` (owned by `review`); edit the
+- **Must not:** write or edit `<srd>.review.md` (owned by `srd:review`); edit the
   SRD; re-implement or restate the SRD standard checks.
-- **Depends on:** `review`, which itself reads `../create/references/*`.
+- **Depends on:** `srd:review`, which itself reads `../create/references/*`.
   This skill does **not** read the SRD standard directly — it gets standard
-  findings through `review`. If `review` is missing at run time, stop and
+  findings through `srd:review`. If `srd:review` is missing at run time, stop and
   tell the user.
 
 ## Support files
@@ -51,13 +51,12 @@ already known about the target platform, as captured in `memory.md`.
 
 `memory.md` holds machine-specific, growing user data, so it must not live in
 this skill's directory, which the host replaces on every plugin update. It lives
-in one fixed, tool-agnostic location on the machine, shared by every tool
-(Claude, Grok) and every project — one platform memory, update-safe everywhere.
+in one fixed, host-agnostic location on the machine, shared by every project —
+one platform memory, update-safe everywhere.
 
 **Resolve the path once per run** with a shell command, then use it for every
-read and write below (the plugin data variables are not portable — Claude
-substitutes `${CLAUDE_PLUGIN_DATA}` but Grok does not — so resolve from `$HOME`
-instead):
+read and write below (plugin-data path variables are host-specific and not
+portable — resolve from `$HOME` instead):
 
 ```bash
 MEM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/ctx42-srd"
@@ -94,9 +93,9 @@ Detect the mode from the user's words.
    does not resolve, ask the user for it once — and if they have no space docs,
    proceed without the live-doc layer rather than stopping.
 2. **Get the review without clobbering it.**
-   - `<srd>.review.md` exists → read it as-is. Do **not** run `review` —
+   - `<srd>.review.md` exists → read it as-is. Do **not** run `srd:review` —
      never risk overwriting the author's file.
-   - absent → run `review path/to/srd.md` once to create it, then read it.
+   - absent → run `srd:review path/to/srd.md` once to create it, then read it.
 3. **Build the merged question set:**
    - **From the review** — reframe each relevant finding as a colleague-voice
      question. Drop its severity tag and rule id (keep the severity only to order
@@ -104,7 +103,7 @@ Detect the mode from the user's words.
    - **System confrontation** — the layer only this skill does. Confront the SRD
      against `memory.md` and the live space docs it points to. If memory is empty
      and no space root is configured, **skip this layer**: the review reduces to
-     the `review` findings, and you begin populating memory from the answers.
+     the `srd:review` findings, and you begin populating memory from the answers.
      Raise a question
      when the SRD: contradicts a documented API rule, service behavior, or
      glossary term; redefines or conflicts with another SRD; uses a term
@@ -153,7 +152,7 @@ questions remain, the SRD is build-ready from the implementer's view.
 Re-running `/system-check path/to/srd.md` when `<srd>.questions.md` already
 exists is **resume mode**:
 
-1. Refresh the review layer non-destructively: run `review path/to/srd.md
+1. Refresh the review layer non-destructively: run `srd:review path/to/srd.md
    check` — it strikes resolved findings, keeps open ones, appends defects the
    edit introduced, and bumps `Updated:`. It never rewrites the file.
 2. Re-check each open question against the current SRD; drop the ones the edit

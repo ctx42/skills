@@ -22,7 +22,7 @@ author acts on.
 - **Role:** the read-only reviewer of an SRD written by someone else. Produce
   findings; the author acts on them.
 - **Owns:** the creation and structure of the `<srd>.review.md` file beside the
-  source, plus the `feedback` and `check` modes. `edit` may delete findings
+  source, plus the `walk`, `feedback`, and `check` modes. `edit` may delete findings
   it has fully fixed; no other skill writes the file.
 - **Must not:** edit the source SRD or fix anything; restate or invent rules —
   defer all format, style, logic, and rules to `create`'s reference files.
@@ -79,6 +79,9 @@ never passed as an argument. Detect the mode from the user's words:
 - `/review path/to/srd.md feedback` → **feedback**: emit a terse plain-text
   issue list for an email or ticket. No file write.
 
+In every mode, report tersely: no preamble or narration; state each fact once;
+don't restate output the user can already see.
+
 ## Review file format
 
 Group findings **by document section** in this order: Metadata, Introduction,
@@ -114,9 +117,6 @@ Source: `path/to/srd.md`
    `Updated:`.
 5. Close with one line: counts per severity, and whether any blocker stands
    between the SRD and the Quality Bar.
-
-Report tersely: no preamble or narration; state each fact once; don't restate
-output the user can already see.
 
 ## walk
 

@@ -1,7 +1,7 @@
 ---
 name: skill-smith
 description: >
-  Author new skills and improve existing ones in this repo. Forges a new skill
+  Authors new skills and improves existing ones in this repo. Forges a new skill
   end-to-end (directory, SKILL.md, README with evals, catalog updates) or
   audits a named existing skill against the authoring standard and fixes it on
   confirmation. Use when asked to create, write, scaffold, review, or improve a

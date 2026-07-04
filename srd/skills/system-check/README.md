@@ -5,7 +5,7 @@ who has to build it. The driving question: *can I implement and test this
 exactly as written, without coming back to guess?*
 
 It is a **thin orchestration layer**. The standard, logic, and consistency
-checks are delegated to `review`; this skill adds the **system-knowledge
+checks are delegated to `srd:review`; this skill adds the **system-knowledge
 layer** — confronting the SRD against a curated memory of the target platform
 — and presents the whole thing as one author-facing question list it walks one
 question at a time. It produces questions, never rewrites.
@@ -25,11 +25,11 @@ question at a time. It produces questions, never rewrites.
   relative to it. The skill validates the root every run and flags any pointer
   that no longer resolves. Maintaining memory is a first-class job — facts are
   added from answers during the walk, always with your confirmation.
-- **Delegation.** For the standard checks the skill reuses `review` instead
+- **Delegation.** For the standard checks the skill reuses `srd:review` instead
   of re-implementing them. It never writes `<srd>.review.md`:
   - if that file exists, it is read as-is (review is **not** run, so the
     author's file is never clobbered);
-  - if absent, `review` is run once to create it.
+  - if absent, `srd:review` is run once to create it.
 - **Merge.** Review findings are reframed into colleague-voice questions and
   merged with the system-confrontation questions into `<srd>.questions.md`.
 - **Walk.** Questions are walked one at a time, ordered by underlying severity
@@ -44,7 +44,7 @@ question at a time. It produces questions, never rewrites.
 /system-check memory           curate memory.md only (validate, dedupe, regroup)
 ```
 
-On a re-run after the SRD was edited, the skill runs `review … check`
+On a re-run after the SRD was edited, the skill runs `srd:review … check`
 (non-destructive: strikes fixed, appends new), drops open questions the edit
 answered, re-runs system confrontation, and walks the refreshed open set.
 
@@ -66,7 +66,7 @@ JSON response fields, no `<srd>.review.md` exists, and `memory.md` records a
 documented API rule requiring snake_case response fields.
 
 **Expected behavior:**
-- Runs `review specs/labeling.md` once to create `specs/labeling.review.md`,
+- Runs `srd:review specs/labeling.md` once to create `specs/labeling.review.md`,
   then reads it — makes no edit to the SRD.
 - Writes `specs/labeling.questions.md` merging the review findings (reframed,
   untagged) with a system question noting `GR-4` contradicts that API rule.
@@ -79,7 +79,7 @@ the SRD, with `specs/labeling.questions.md` and `specs/labeling.review.md`
 already present.
 
 **Expected behavior:**
-- Runs `review specs/labeling.md check` (strikes fixed findings, appends new
+- Runs `srd:review specs/labeling.md check` (strikes fixed findings, appends new
   ones, bumps `Updated:`) rather than overwriting the review file.
 - Drops the open questions the edit answered, naming which, and re-runs system
   confrontation for new gaps.

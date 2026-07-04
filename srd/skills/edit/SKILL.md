@@ -4,7 +4,7 @@ description: >
   Interactively improves an existing Software Requirement Document (SRD) by
   editing it in place against the SRD standard, one confirmed change at a
   time. Use when asked to edit, improve, fix, revise, or clean up an SRD, or to
-  apply the findings from an review `<srd>.review.md` or pasted feedback.
+  apply the findings from a review `<srd>.review.md` or pasted feedback.
   Walks the SRD entry by entry, proposes one change at a time with before/after,
   guards requirement ids on approved documents, and re-validates after each
   edit. The write counterpart to the read-only review.

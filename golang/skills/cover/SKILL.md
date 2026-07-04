@@ -1,7 +1,7 @@
 ---
 name: cover
 description: >
-  Improve Go test coverage one function at a time. Runs the toolchain:
+  Improves Go test coverage one function at a time. Runs the toolchain:
   measures each function via its own direct test only, then adds the easy
   cases (rows, subtests, light fakes) until every coverable line is hit.
   Plan-first for a file, package, or module; runs straight for a single

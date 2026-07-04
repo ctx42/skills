@@ -38,6 +38,7 @@ When this skill is invoked, switch into interviewer mode:
 - **Push back.** If a decision seems risky or contradictory, say so.
 - **No implementation.** This skill is for planning only. Don't write code.
 - **Be direct.** Skip pleasantries. Get to the point. No preamble or narration;
-  restating a decision to confirm it is the payload here, but never pad it.
+  state each fact once; restating a decision to confirm it is the payload here,
+  but never pad it.
 - **Track progress.** Keep a mental map of resolved vs. open branches so the
   user knows how much is left.
