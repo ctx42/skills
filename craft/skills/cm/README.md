@@ -69,3 +69,17 @@ See `SKILL.md` for the full message structure and quality rules.
 - Presents the commit message once in a zero-indent code block, then the single
   "Commit with this message?" prompt — no restating of the diff or the message
   the user can already see.
+
+### 5. Detail matched to impact
+
+**Request:** `/cm` with a staged diff whose only effect is passing the linter
+(e.g. a package comment, an identifier rename, a `#nosec` suppression) with no
+user-visible behavior change.
+
+**Expected behavior:**
+- Summary line captures the change (`style: ...` / `chore: ...`).
+- Summarizes the cleanup in a single sentence, or omits the body entirely — it
+  does **not** enumerate each mechanical edit line by line.
+- Reserves per-symbol detail for changes that affect a user of the software
+  (behavior, API, bug fixes); a mixed commit leads with those and folds the
+  cleanup into one closing sentence.
