@@ -31,14 +31,14 @@ own manifest and a `skills/` folder:
 │   └── skills/{create,review,edit,system-check}/
 └── craft/
     ├── .claude-plugin/plugin.json
-    └── skills/{cm,grill-me,skill-smith}/
+    └── skills/{cm,grill-me,skill-smith,readme-smith}/
 ```
 
-| Plugin   | Skills                                     | Purpose                                              |
-|----------|--------------------------------------------|------------------------------------------------------|
-| `golang` | `style`, `review`, `cover`                 | Go write-time style, done-time review, test coverage |
-| `srd`    | `create`, `review`, `edit`, `system-check` | Software Requirement Document lifecycle              |
-| `craft`  | `cm`, `grill-me`, `skill-smith`            | Commit messages, planning interview, skill authoring |
+| Plugin   | Skills                                          | Purpose                                                       |
+|----------|-------------------------------------------------|---------------------------------------------------------------|
+| `golang` | `style`, `review`, `cover`                      | Go write-time style, done-time review, test coverage          |
+| `srd`    | `create`, `review`, `edit`, `system-check`      | Software Requirement Document lifecycle                       |
+| `craft`  | `cm`, `grill-me`, `skill-smith`, `readme-smith` | Commit messages, planning interview, skill + README authoring |
 
 Plugin skills are **namespaced** by their plugin (e.g. `/srd:review`),
 so they never silently shadow a personal or project skill of the same name.

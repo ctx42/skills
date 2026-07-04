@@ -40,7 +40,8 @@ as Claude Code plugins.
     └── skills/
         ├── cm/                     # Conventional commit messages
         ├── grill-me/               # Planning interview
-        └── skill-smith/            # Author and improve skills
+        ├── skill-smith/            # Author and improve skills
+        └── readme-smith/           # Author and improve project READMEs
 ```
 
 Skills are grouped into **three plugins** (`golang`, `srd`, `craft`).

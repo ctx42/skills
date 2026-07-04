@@ -88,6 +88,11 @@ claude --plugin-dir ./srd      # repeat the flag for more groups
   skill against `craft/skills/skill-smith/standards.md`, then fix on
   confirmation). Owns the authoring standard; defers to this file and
   CONTRIBUTING.md for repo mechanics.
+- `readme-smith` — Author and improve a project's `README.md`. Two modes: create
+  (scan the repo, ask only the gaps, draft to a distilled house structure) and
+  improve (audit an existing README, report by severity, fix on confirmation).
+  Structure and style come from `craft/skills/readme-smith/references/template.md`;
+  never fabricates facts and runs the install/quickstart commands it ships.
 
 ## More Detail
 
