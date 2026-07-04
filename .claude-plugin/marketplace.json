@@ -11,19 +11,22 @@
     {
       "name": "golang",
       "source": "./golang",
-      "strict": false,
+      "description": "Go workflow: enforced write-time style (style), done-time quality review (review), and per-function test-coverage improvement (cover).",
+      "strict": true,
       "category": "development"
     },
     {
       "name": "srd",
       "source": "./srd",
-      "strict": false,
+      "description": "Software Requirement Document lifecycle: author (create), review read-only (review), edit in place (edit), and build-readiness system check (system-check), all against one SRD standard.",
+      "strict": true,
       "category": "productivity"
     },
     {
       "name": "craft",
       "source": "./craft",
-      "strict": false,
+      "description": "Cross-cutting engineering-craft aids: Conventional Commit messages (cm), a relentless planning interview (grill-me), and a skill author/auditor (skill-smith).",
+      "strict": true,
       "category": "productivity"
     }
   ]
