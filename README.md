@@ -141,19 +141,22 @@ claude --plugin-dir ./srd   # repeat the flag to load several groups
 
 `--plugin-dir` reads the directory live (uncommitted edits included), but only
 for **that one session**. To push an edit to *every* session that installed the
-plugin (see [From a local clone](#from-a-local-clone)), you must bump the
-plugin's `version` in its `.claude-plugin/plugin.json` and commit — the cache is
-keyed on that version, so `claude plugin update <plugin>@ctx42-skills` at an
-unchanged version is a no-op. After the bump:
+plugin (see [From a local clone](#from-a-local-clone)), you must bump the repo
+version and commit — the cache is keyed on each plugin's `version`, so
+`claude plugin update <plugin>@ctx42-skills` at an unchanged version is a no-op.
+Set the version once in the `VER` file and commit; a `pre-commit` hook derives
+every manifest version from `VER` so nothing drifts (never edit manifest
+versions by hand — see [Versioning](CONTRIBUTING.md#versioning)):
 
 ```shell
-# in your clone, after committing the version bump
-claude plugin update golang@ctx42-skills   # copies the new version into the cache
+# in your clone (once: ./version.sh install-hooks)
+# bump VER + CHANGELOG, commit, tag, push — the hook syncs all manifests
+claude plugin update golang@ctx42-skills     # copies the new version into the cache
 ```
 
 Then restart running sessions (or `/reload-plugins`) to load it. In short:
-`--plugin-dir` for live iteration in one session; **bump `version` + `update`**
-to publish an edit to all sessions.
+`--plugin-dir` for live iteration in one session; **bump `VER` + `update`** to
+publish an edit to all sessions.
 
 **Editing rules that a skill grows itself** — e.g. `golang:review`/`golang:style`
 rule edits via `/golang:review add …` — must be done against your clone with

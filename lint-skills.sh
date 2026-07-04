@@ -147,6 +147,14 @@ done < <(find "$SKILLS_SRC" -name SKILL.md | sort)
 
 check_marketplace
 
+# Every plugin/marketplace manifest version must match the VER file. Delegated
+# to version.sh so the version logic lives in exactly one place.
+if [ -x "$SKILLS_SRC/version.sh" ] && command -v jq >/dev/null 2>&1; then
+    "$SKILLS_SRC/version.sh" verify || err "manifest versions drifted from VER (run ./version.sh sync)"
+else
+    warn "skipping version-drift check (version.sh or jq missing)"
+fi
+
 echo "----"
 echo "$errors error(s), $warnings warning(s)."
 [ "$errors" -eq 0 ]

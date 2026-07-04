@@ -98,6 +98,48 @@ When adding a skill, update:
 - `AGENTS.md` skill catalog
 - `ONBOARDING.md` if relevant for new users
 
+## Versioning
+
+The whole repo ships as one version. The **single source of truth is the `VER`
+file**. Every `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
+carries the same number and is **derived from `VER`, never edited by hand** — a
+stale manifest version silently blocks `claude plugin update`.
+
+**One-time per clone** — point git at the tracked hooks so the sync runs:
+
+```shell
+./version.sh install-hooks   # git config core.hooksPath .githooks
+```
+
+**Releasing** — bump the version however your release process does it: update
+`VER` (and `CHANGELOG.md`), commit, tag, push. The only rule is that the version
+change lands as a commit that includes `VER`. On that commit the
+`.githooks/pre-commit` hook fires, derives every manifest version from the
+just-written `VER` (`version.sh sync`), and stages the manifests — so the bump
+commit, and the tag placed on it, carry matching versions. You set the version
+in one place (`VER`); the manifests follow mechanically.
+
+The manual equivalent, if you bump by hand:
+
+```shell
+printf 'v0.2.0' > VER            # set the new version
+# …update CHANGELOG.md…
+git add VER CHANGELOG.md         # the hook syncs + stages the manifests on commit
+git commit -m 'Bump version to 0.2.0.'
+git tag -a v0.2.0 -m 'Tag version v0.2.0.' && git push --follow-tags
+```
+
+Supporting commands (you rarely run these directly):
+
+```shell
+./version.sh verify   # fail if any manifest disagrees with VER (run by lint-skills.sh)
+./version.sh sync     # write VER's number into every manifest (repairs drift)
+```
+
+`./lint-skills.sh` calls `version.sh verify`, so a drifted manifest also fails
+the lint gate as a backstop. The hook fails closed: if `jq` is missing or a
+manifest cannot be written, the commit aborts rather than releasing drift.
+
 ## Renaming a Skill
 
 1. Rename the directory (keep the `name:` frontmatter in `SKILL.md` in sync).
