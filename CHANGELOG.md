@@ -1,3 +1,7 @@
+## v0.2.0 (Sat, 04 Jul 2026 13:01:00 UTC)
+- build(dev): move maintainer scripts to dev/ and drop jq.
+- build(marketplace): validate plugin manifests and add entry descriptions.
+
 ## v0.1.2 (Sat, 04 Jul 2026 12:34:56 UTC)
 - skills: add rules on asserting distinctive output.
 - build(version): derive plugin manifests from VER.
