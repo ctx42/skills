@@ -11,6 +11,7 @@ duplicates it.
 
 - Frontmatter (strict-portable)
 - Description quality
+- Token performance
 - Body: conciseness
 - Output discipline
 - Progressive disclosure
@@ -62,6 +63,21 @@ highest-leverage field.
   or any description containing a colon — it is valid YAML, supported by both
   Claude and Grok, and is the repo default. Never "fix" a colon by deleting the
   block scalar.
+
+## Token performance
+
+Conciseness and output discipline both serve one metric: **tokens spent per unit
+of outcome**. Treat it as a hard budget the skill must earn against, not a nicety.
+
+- Every token must earn its place. If cutting a word, line, or example does not
+  lower the skill's success rate, cut it.
+- Optimize the always-loaded surface first: the `description` and the `SKILL.md`
+  body cost tokens on **every** trigger. Push anything not needed each run into
+  on-demand references (see Progressive disclosure).
+- Shortest phrasing that stays unambiguous wins. Terse-but-precise beats verbose;
+  it also beats cryptic — do not compress past the point of clarity.
+- Judge by tokens-to-outcome, not line count — a padded 400-line body can cost
+  more than a lean 500-line one.
 
 ## Body: conciseness
 
@@ -182,6 +198,8 @@ Mandatory and written before finalizing (eval-driven development):
 - [ ] `name` equals dir name; lowercase-hyphen; no reserved words / org prefix.
 - [ ] Frontmatter is `name` + `description` (+ allowed optional only).
 - [ ] Description: third person, what + when, specific triggers, key use first.
+- [ ] Token performance: always-loaded surface (description + body) carries only
+      what raises success rate; on-demand detail pushed to references.
 - [ ] Body under ~500 lines, dense, consistent terms, no time-sensitive info.
 - [ ] Output discipline: body carries the terse-output line; no framing or
       restating mandated; payload always stated in full.
