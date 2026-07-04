@@ -21,22 +21,32 @@
 #   install-hooks  Point git at the tracked .githooks/ directory (one-time,
 #                  per clone) so the pre-commit sync runs for this repo.
 #
-# Requires jq. Exit status is 0 on success, non-zero on drift or bad input, so a
-# failure aborts the commit that triggered it (fail closed — never drift).
+# No external dependencies (pure bash + coreutils; no jq). Exit status is 0 on
+# success, non-zero on drift or bad input, so a failure aborts the commit that
+# triggered it (fail closed — never drift).
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")" && pwd)"
+# The script lives in dev/; the repo root is one level up.
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 VER_FILE="$ROOT/VER"
 MARKETPLACE="$ROOT/.claude-plugin/marketplace.json"
 
 die() { echo "version.sh: error: $*" >&2; exit 2; }
 
-command -v jq >/dev/null 2>&1 || die "jq is required"
 [ -f "$VER_FILE" ] || die "no VER file at $VER_FILE"
 
 # Numeric version only, e.g. "0.1.1" — the form stored in the JSON manifests.
 # VER itself carries a leading "v" (e.g. "v0.1.1"), set by the version bump.
 num_ver() { local v; v="$(cat "$VER_FILE")"; printf '%s' "${v#v}"; }
+
+# Print the first top-level "version": "..." string value from a JSON manifest.
+# The manifests carry "version" as a top-level key and it is the first "version"
+# in each file, so the first match is the value jq's '.version' returned. Prints
+# nothing when the key is absent.
+json_version() {
+    grep -oE '"version"[[:space:]]*:[[:space:]]*"[^"]*"' "$1" \
+        | head -1 | sed -E 's/.*"([^"]*)"[[:space:]]*$/\1/'
+}
 
 # Every JSON file that carries a "version" key, absolute paths, one per line:
 # marketplace first, then each plugin manifest.
@@ -50,7 +60,7 @@ cmd_verify() {
     want="$(num_ver)"
     while IFS= read -r f; do
         [ -f "$f" ] || { echo "MISSING ${f#"$ROOT"/}"; bad=1; continue; }
-        cur="$(jq -r '.version' "$f")"
+        cur="$(json_version "$f")"
         if [ "$cur" != "$want" ]; then
             echo "DRIFT  ${f#"$ROOT"/}: '$cur' != VER '$want'"
             bad=1
@@ -65,15 +75,15 @@ cmd_sync() {
     want="$(num_ver)"
     while IFS= read -r f; do
         [ -f "$f" ] || die "missing manifest $f"
-        if [ "$(jq -r '.version' "$f")" = "$want" ]; then continue; fi
+        if [ "$(json_version "$f")" = "$want" ]; then continue; fi
         # Surgically rewrite only the top-level "version" value line, so the
         # rest of the file's formatting (e.g. inline arrays) is left untouched.
         # 0,/re/ restricts the substitution to the first matching line (GNU sed).
         sed -i -E \
             "0,/^([[:space:]]*\"version\"[[:space:]]*:[[:space:]]*\")[^\"]*(\".*)$/s//\\1$want\\2/" \
             "$f"
-        # Trust nothing: confirm the file is still valid JSON at the wanted version.
-        [ "$(jq -r '.version' "$f")" = "$want" ] \
+        # Trust nothing: confirm the version line now reads the wanted value.
+        [ "$(json_version "$f")" = "$want" ] \
             || die "failed to set version in $f (check for a nested 'version' key)"
         echo "set ${f#"$ROOT"/} -> $want"
         changed=1

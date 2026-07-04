@@ -42,7 +42,7 @@ If you will edit skills, clone the repo and use the dev loop:
 ```bash
 git clone https://github.com/ctx42/skills.git
 cd skills
-./version.sh install-hooks      # once: enables the version-sync pre-commit hook
+./dev/version.sh install-hooks  # once: enables the version-sync pre-commit hook
 claude --plugin-dir ./srd       # load a group straight from the repo
 # …edit a SKILL.md…  then in the session:
 /reload-plugins                        # picks up the change live

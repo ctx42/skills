@@ -193,4 +193,4 @@ Mandatory and written before finalizing (eval-driven development):
 - [ ] `README.md` exists with usage and `## Evaluations` (≥ 3 scenarios, ≥ 1
       asserting terse output).
 - [ ] Skill lives under a plugin group's `skills/` dir; catalog docs updated and
-      `lint-skills.sh` passes — per CONTRIBUTING.md.
+      `dev/lint-skills.sh` passes — per CONTRIBUTING.md.

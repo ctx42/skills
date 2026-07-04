@@ -76,7 +76,7 @@ Before committing a new or changed skill, run the linter:
 
 ```bash
 # from the repo root
-./lint-skills.sh
+./dev/lint-skills.sh
 ```
 
 It checks every skill against the mechanical parts of
@@ -108,14 +108,14 @@ stale manifest version silently blocks `claude plugin update`.
 **One-time per clone** — point git at the tracked hooks so the sync runs:
 
 ```shell
-./version.sh install-hooks   # git config core.hooksPath .githooks
+./dev/version.sh install-hooks   # git config core.hooksPath .githooks
 ```
 
 **Releasing** — bump the version however your release process does it: update
 `VER` (and `CHANGELOG.md`), commit, tag, push. The only rule is that the version
 change lands as a commit that includes `VER`. On that commit the
 `.githooks/pre-commit` hook fires, derives every manifest version from the
-just-written `VER` (`version.sh sync`), and stages the manifests — so the bump
+just-written `VER` (`dev/version.sh sync`), and stages the manifests — so the bump
 commit, and the tag placed on it, carry matching versions. You set the version
 in one place (`VER`); the manifests follow mechanically.
 
@@ -132,19 +132,19 @@ git tag -a v0.2.0 -m 'Tag version v0.2.0.' && git push --follow-tags
 Supporting commands (you rarely run these directly):
 
 ```shell
-./version.sh verify   # fail if any manifest disagrees with VER (run by lint-skills.sh)
-./version.sh sync     # write VER's number into every manifest (repairs drift)
+./dev/version.sh verify   # fail if any manifest disagrees with VER (run by lint-skills.sh)
+./dev/version.sh sync     # write VER's number into every manifest (repairs drift)
 ```
 
-`./lint-skills.sh` calls `version.sh verify`, so a drifted manifest also fails
-the lint gate as a backstop. The hook fails closed: if `jq` is missing or a
-manifest cannot be written, the commit aborts rather than releasing drift.
+`./dev/lint-skills.sh` calls `dev/version.sh verify`, so a drifted manifest also
+fails the lint gate as a backstop. The hook fails closed: if a manifest cannot be
+written, the commit aborts rather than releasing drift.
 
 ## Renaming a Skill
 
 1. Rename the directory (keep the `name:` frontmatter in `SKILL.md` in sync).
 2. Update any `../sibling` references that pointed at the old name.
-3. Run `./lint-skills.sh`, then `/reload-plugins` to pick up the change.
+3. Run `./dev/lint-skills.sh`, then `/reload-plugins` to pick up the change.
 4. Update documentation.
 
 ## Retiring a Skill
@@ -152,5 +152,5 @@ manifest cannot be written, the commit aborts rather than releasing drift.
 1. Delete its directory. Its history stays in Git if you need to recover it.
 2. If it was the last skill in a group, also remove the group's marketplace entry
    and directory.
-3. Run `./lint-skills.sh`, then `/reload-plugins`.
+3. Run `./dev/lint-skills.sh`, then `/reload-plugins`.
 4. Remove it from the documentation skill lists.

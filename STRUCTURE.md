@@ -16,7 +16,9 @@ as Claude Code plugins.
 ├── STRUCTURE.md
 ├── ONBOARDING.md
 ├── AGENTS.md                       # Guide for AI agents working in this repo
-├── lint-skills.sh                  # Checks skills against the authoring standard
+├── dev/                            # Maintainer scripts (no jq / external deps)
+│   ├── lint-skills.sh              # Checks skills against the authoring standard
+│   └── version.sh                  # Syncs manifest versions with the VER file
 ├── .claude-plugin/
 │   └── marketplace.json            # Marketplace catalog: the three plugins below
 │

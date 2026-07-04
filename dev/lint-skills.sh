@@ -14,13 +14,15 @@
 # It then cross-checks .claude-plugin/marketplace.json (if present): every plugin
 # `source` must be a real plugin directory (with .claude-plugin/plugin.json), and
 # every skill on disk must live under exactly one plugin's skills/ directory.
-# Skipped with a warning if jq is missing.
+#
+# No external dependencies (pure bash + coreutils; no jq).
 #
 # Exit status is 0 when clean, 1 when any error is found. Warnings do not fail.
 set -euo pipefail
 shopt -s nullglob
 
-SKILLS_SRC="$(cd "$(dirname "$0")" && pwd)"
+# The script lives in dev/; the repo root is one level up.
+SKILLS_SRC="$(cd "$(dirname "$0")/.." && pwd)"
 MARKETPLACE="$SKILLS_SRC/.claude-plugin/marketplace.json"
 
 # Frontmatter keys that break Grok/Claude portability (standards.md).
@@ -97,6 +99,25 @@ lint_skill() {
     done
 }
 
+# Print "name<TAB>source" for each object in the marketplace's "plugins" array,
+# one per line. Replaces `jq -r '.plugins[] | "\(.name)\t\(.source)"'` without a
+# JSON dependency: it relies on the manifest's well-formed layout — each plugin
+# object lists "name" before "source" — which the marketplace file guarantees.
+plugin_entries() {
+    awk '
+        # Return the first double-quoted string value on a "key": "value" line.
+        function strval(s) {
+            sub(/^[^:]*:[[:space:]]*"/, "", s)
+            sub(/".*/, "", s)
+            return s
+        }
+        /"plugins"[[:space:]]*:/       { in_plugins = 1; next }
+        !in_plugins                    { next }
+        /"name"[[:space:]]*:/          { name = strval($0); have = 1; next }
+        have && /"source"[[:space:]]*:/ { print name "\t" strval($0); have = 0 }
+    ' "$1"
+}
+
 # Cross-check the plugin marketplace against the skills on disk: every plugin
 # `source` must be a real plugin directory, and every skill must live under
 # exactly one plugin's skills/ dir. SKILL_PATHS is the set of skill directories
@@ -106,25 +127,23 @@ check_marketplace() {
         warn "no .claude-plugin/marketplace.json — skipping marketplace checks"
         return
     }
-    if ! command -v jq >/dev/null 2>&1; then
-        warn "jq not found — skipping marketplace/skill consistency checks"
-        return
-    fi
-    if ! jq empty "$MARKETPLACE" 2>/dev/null; then
-        err "marketplace.json: invalid JSON"
+    if ! grep -q '"plugins"[[:space:]]*:' "$MARKETPLACE"; then
+        err "marketplace.json: no \"plugins\" array (invalid or malformed)"
         return
     fi
 
     # Collect plugin sources (leading "./" stripped) and validate each one is a
-    # real plugin directory carrying a manifest.
+    # real plugin directory carrying a manifest. plugin_entries emits a
+    # "name<TAB>source" line per object in the plugins array.
     local -a sources=()
     local name src
     while IFS=$'\t' read -r name src; do
+        [ -n "$name" ] || continue
         src="${src#./}"
         sources+=("$src")
         [ -f "$SKILLS_SRC/$src/.claude-plugin/plugin.json" ] \
             || err "marketplace: plugin '$name' source '$src' has no .claude-plugin/plugin.json"
-    done < <(jq -r '.plugins[] | "\(.name)\t\(.source)"' "$MARKETPLACE")
+    done < <(plugin_entries "$MARKETPLACE")
 
     # Every skill on disk must sit under exactly one plugin source's skills/ dir.
     local sp hits
@@ -149,10 +168,11 @@ check_marketplace
 
 # Every plugin/marketplace manifest version must match the VER file. Delegated
 # to version.sh so the version logic lives in exactly one place.
-if [ -x "$SKILLS_SRC/version.sh" ] && command -v jq >/dev/null 2>&1; then
-    "$SKILLS_SRC/version.sh" verify || err "manifest versions drifted from VER (run ./version.sh sync)"
+if [ -x "$SKILLS_SRC/dev/version.sh" ]; then
+    "$SKILLS_SRC/dev/version.sh" verify \
+        || err "manifest versions drifted from VER (run ./dev/version.sh sync)"
 else
-    warn "skipping version-drift check (version.sh or jq missing)"
+    warn "skipping version-drift check (dev/version.sh missing or not executable)"
 fi
 
 echo "----"

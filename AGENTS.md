@@ -20,7 +20,7 @@ folder with a `SKILL.md` (the prompt) and a `README.md` (human usage guide).
 4. **Reference siblings relatively.** Skills in the same plugin resolve each other
    as `../sibling/...` (they are cached together). Cross-plugin file references do
    not resolve — keep interdependent skills in one group.
-5. **Lint before committing.** Run `./lint-skills.sh` after editing any skill; it
+5. **Lint before committing.** Run `./dev/lint-skills.sh` after editing any skill; it
    checks the mechanical parts of the authoring standard and the marketplace
    wiring, and exits non-zero on any error.
 

@@ -20,7 +20,7 @@ own manifest and a `skills/` folder:
 ```
 <repo-root>/
 ├── README.md  CONTRIBUTING.md  STRUCTURE.md  ONBOARDING.md  AGENTS.md
-├── lint-skills.sh                       # checks skills against the standard
+├── dev/                                 # maintainer scripts (lint, version sync)
 ├── .claude-plugin/marketplace.json      # the marketplace catalog (3 plugins)
 │
 ├── golang/
@@ -149,7 +149,7 @@ every manifest version from `VER` so nothing drifts (never edit manifest
 versions by hand — see [Versioning](CONTRIBUTING.md#versioning)):
 
 ```shell
-# in your clone (once: ./version.sh install-hooks)
+# in your clone (once: ./dev/version.sh install-hooks)
 # bump VER + CHANGELOG, commit, tag, push — the hook syncs all manifests
 claude plugin update golang@ctx42-skills     # copies the new version into the cache
 ```
@@ -166,7 +166,7 @@ made there land in that throwaway copy and are lost on the next update, never
 reaching the source of truth. (Per-machine data like `srd:system-check`'s memory
 is exempt — it lives at a fixed external path, not inside the plugin.)
 
-Run `./lint-skills.sh` before committing; it checks every skill against the
+Run `./dev/lint-skills.sh` before committing; it checks every skill against the
 mechanical parts of the authoring standard and the marketplace wiring.
 
 ## More detail

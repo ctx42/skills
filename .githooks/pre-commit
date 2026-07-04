@@ -3,14 +3,14 @@
 #
 # A version bump writes VER and commits it. This hook fires on that commit: if
 # VER is part of the commit, it derives the manifest versions from VER
-# (version.sh sync) and stages them, so the bump commit — and the tag placed on
+# (dev/version.sh sync) and stages them, so the bump commit — and the tag placed on
 # it — carry matching versions. However VER is bumped (release tool or by hand),
 # it is covered. Commits that leave VER untouched make the hook no-op.
 #
-# Fail closed: any error (missing jq, unwritable manifest) exits non-zero and
+# Fail closed: any error (unwritable manifest, bad input) exits non-zero and
 # aborts the commit, so a release can never proceed with drifted versions.
 #
-# Enable per clone with: ./version.sh install-hooks
+# Enable per clone with: ./dev/version.sh install-hooks
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
@@ -20,9 +20,9 @@ if ! git diff --cached --name-only | grep -qx 'VER'; then
     exit 0
 fi
 
-"$ROOT/version.sh" sync
+"$ROOT/dev/version.sh" sync
 
 # Stage the derived manifests so they ride in this commit and its tag.
 while IFS= read -r manifest; do
     git add -- "$manifest"
-done < <("$ROOT/version.sh" manifests)
+done < <("$ROOT/dev/version.sh" manifests)
