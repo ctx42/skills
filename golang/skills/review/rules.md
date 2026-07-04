@@ -14,6 +14,7 @@ rationale or detection helps. Grows via `/review add`.
 - nolint directive format (Production)
 - Wrap with %w, hide with %v (Production)
 - ErrXxx sentinels (Production)
+- Assert on distinctive output, not shared tokens (Test)
 - Hoist a literal expected value into `want` (Test)
 - Test helpers in all_test.go (Test)
 - Test order mirrors source order (Test)
@@ -113,6 +114,30 @@ cause; `==` comparison of a wrapped error.
 Why: exported, matchable error values; the `Err` prefix is the Go convention.
 Detect: exported error vars without the `Err` prefix; errors compared with `==`
 instead of `errors.Is`.
+
+## Assert on distinctive output, not shared tokens (Test)
+
+Why: an assertion is only as good as its discriminating power. Checking that
+output *contains* a token shared by several outputs — the program name, a
+`cfsync:` prefix, a word in both the version banner and the usage text — passes
+even when the wrong branch ran, so it proves almost nothing. The assertion must
+be able to fail if the code printed the wrong thing. `assert.NotEqual(t, "",
+out)` (merely "something was printed") is the degenerate case: it can never
+distinguish correct output from garbage.
+Detect: `Contain` on a token that also appears in a sibling test's expected
+output; assertions against the binary/package name; `NotEqual(t, "", ...)` or
+`len(out) > 0` as the only content check. Prefer whole-string `Equal` when the
+output is small and fixed; otherwise pick a substring unique to the wanted
+branch (`"cfsync dev\n"`, not `"cfsync"`).
+
+```go
+// avoid — "cfsync" is in both the version banner and the usage text:
+assert.Contain(t, "cfsync", tst.Stdout())
+
+// prefer — only the version branch prints exactly this:
+want := "cfsync dev\n"
+assert.Equal(t, want, tst.Stdout())
+```
 
 ## Hoist a literal expected value into `want` (Test)
 

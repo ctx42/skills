@@ -33,6 +33,9 @@ Test rule overrides it. Do not hand-edit this file ad hoc — change rules with
 - Comments explain the code; never trace it to a spec — no requirement/ticket
   ids in code comments (`// CLI-4`, `// JIRA-123`).
 - No name stutter: `pkg.Thing`, not `pkg.PkgThing`.
+- Group related consts into one `const (...)` block with a headline comment
+  naming the group; keep each member's own godoc. Reserve standalone `const`
+  for a value with no relatives.
 - Every exported symbol and the package have godoc.
 - No godoc on interface-implementing methods.
 - Use godoc cross-references: `[Type]`, `[pkg.Symbol]`.
@@ -63,6 +66,10 @@ Test rule overrides it. Do not hand-edit this file ad hoc — change rules with
 - Call `t.Helper()` in test helpers.
 - Test helpers must use `tester.T` to allow testing with `tester.Spy`.
 - Keep assertion style consistent with the project's chosen library.
+- Assert on output text unique to the expected result, never a token shared
+  with other outputs (the program name, a common prefix); the assertion must
+  fail if the wrong branch printed. Prefer whole-string `Equal` when the output
+  is small and fixed; reach for `Contain` only on a distinctive substring.
 - Hoist a literal expected value into a `want` local rather than wrap an
   assertion call past 80 cols.
 - Every new func/method (exported or not) ships with tests in the same change.
