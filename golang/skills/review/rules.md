@@ -12,12 +12,16 @@ rationale or detection helps. Grows via `/review add`.
 - Use godoc cross-references (Production)
 - No godoc on interface-implementing methods (Production)
 - nolint directive format (Production)
+- No name stutter (Production)
+- Example functions for public APIs (Production)
+- Reusable package ships a README (Production)
 - Wrap with %w, hide with %v (Production)
 - ErrXxx sentinels (Production)
 - Assert on distinctive output, not shared tokens (Test)
 - Hoist a literal expected value into `want` (Test)
 - Test helpers in all_test.go (Test)
 - Test order mirrors source order (Test)
+- Field-count guard forces new-field coverage (Test)
 - Useful or safe zero value (Production)
 
 ## Extract format strings into a `format` local (Production)
@@ -101,6 +105,67 @@ x := unsafeCall() //nolint:gosec
 //nolint:gocognit
 func Decode(p []byte) (T, error) { ... }
 ```
+
+## No name stutter (Production)
+
+Why: `pkg.PkgThing` or `m.MetaGet` makes the reader say the qualifier twice;
+dropping the redundant prefix is the Go convention and reads cleaner.
+Exemption: a member name is load-bearing when it is fixed by a contract outside
+the package — a method set some other type is asserted against, or names invoked
+by string via `text/template`, reflection, or (de)serialization — because
+renaming it breaks those callers with no local compile error. Do not flag such a
+name when the file pins the set with a compile-time assertion (`var _ Contract =
+(*T)(nil)`, often against a locally-declared mirror interface) plus a godoc
+explaining the external contract.
+Detect: a member name repeating its type or package qualifier (`Meta.MetaGet`,
+`client.ClientDo`). Before flagging, look in the same file for a `var _ ... =`
+assertion or an interface whose method set contains the name; if one is present
+with a rationale comment, treat the name as intentional and skip it. Absent any
+such pin, flag it as before.
+
+```go
+// Not stutter — the prefix is pinned by an external contract:
+type metaContract interface {
+	MetaGet(key string) any
+	// ...
+}
+
+var _ metaContract = Meta(nil) // Renames break external callers; fail here.
+```
+
+## Example functions for public APIs (Production)
+
+Why: `Example*` functions are compiled and executed by `go test`, so unlike
+prose in a doc comment they cannot silently rot; they render on pkg.go.dev as
+the canonical usage; and writing one exercises the public API from a caller's
+seat, exposing awkward signatures before users hit them.
+Detect: a non-trivial exported symbol — a constructor, a primary entry point,
+anything needing non-obvious setup — with no matching `Example`, `ExampleT`, or
+`ExampleT_method` in the package's `_test.go` files. Skip trivial getters,
+setters, and self-evident one-liners. The common trigger is new public API in a
+diff with no accompanying example.
+
+```go
+// Package under review exports NewClient; a runnable example doubles as docs
+// and a compile-checked usage test:
+func ExampleNewClient() {
+	c := goldkit.NewClient("host")
+	fmt.Println(c.Ping())
+	// Output: pong
+}
+```
+
+## Reusable package ships a README (Production)
+
+Why: godoc documents the API symbol by symbol, but a reader landing on the
+repository or on pkg.go.dev first needs orientation — what the package is for,
+how to import it, and one worked example to copy. A package with thorough
+godoc can still be opaque without that overview.
+Detect: a package meant for outside consumption (not `main`, `internal`, or
+test-only) whose directory has no `README.md` and no `doc.go` package-overview
+comment beyond a one-line synopsis; or one present but missing the essentials —
+stated purpose, import path, and at least one runnable usage snippet. Scope to
+the module root and each public sub-package; do not demand a README per file.
 
 ## Wrap with %w, hide with %v (Production)
 

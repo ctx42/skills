@@ -14,6 +14,9 @@ the **Test** section to `*_test.go`. Test code inherits Production unless a
 Test rule overrides it. Do not hand-edit this file ad hoc — change rules with
 `/review`.
 
+Report tersely: when citing a rule, name it and the fix; don't restate the
+rule's full text or narrate.
+
 ## Production
 
 - gofmt + goimports always; never hand-format or reorder imports manually.
@@ -32,7 +35,9 @@ Test rule overrides it. Do not hand-edit this file ad hoc — change rules with
 - Comments are full sentences: capital start, terminal period.
 - Comments explain the code; never trace it to a spec — no requirement/ticket
   ids in code comments (`// CLI-4`, `// JIRA-123`).
-- No name stutter: `pkg.Thing`, not `pkg.PkgThing`.
+- No name stutter: `pkg.Thing`, not `pkg.PkgThing`; exempt a name fixed by an
+  external contract when the file pins it with a compile-time assertion
+  (`var _ Contract = (*T)(nil)`) and a godoc saying why.
 - Group related consts into one `const (...)` block with a headline comment
   naming the group; keep each member's own godoc. Reserve standalone `const`
   for a value with no relatives.
@@ -57,6 +62,9 @@ Test rule overrides it. Do not hand-edit this file ad hoc — change rules with
 - nolint: no space `//nolint:name`; line-level at end of line; func-scoped as
   the last godoc line after an empty `//`; comma-join multiple (`a,b`).
 - Provide `Example*` for non-trivial public APIs; they must pass `go test`.
+- A reusable package ships a `README.md` (or `doc.go` package overview):
+  purpose, import path, and one runnable usage example; skip `main`,
+  `internal`, and test-only packages.
 
 ## Test
 
