@@ -1,3 +1,8 @@
+## v0.1.2 (Sat, 04 Jul 2026 12:34:56 UTC)
+- skills: add rules on asserting distinctive output.
+- build(version): derive plugin manifests from VER.
+- docs(cm): scale commit-body detail to reader impact.
+
 ## v0.1.1 (Fri, 03 Jul 2026 22:08:21 UTC)
 - docs(style): tighten and re-wrap Go style rules.
 
