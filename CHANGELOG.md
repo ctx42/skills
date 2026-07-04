@@ -1,3 +1,8 @@
+## v0.3.0 (Sat, 04 Jul 2026 14:22:16 UTC)
+- feat(skill-smith): guard skill edits against the standard.
+- feat(golang): expand the Go review and style rule set.
+- fix(skills): resolve authoring-standard violations.
+
 ## v0.2.0 (Sat, 04 Jul 2026 13:01:00 UTC)
 - build(dev): move maintainer scripts to dev/ and drop jq.
 - build(marketplace): validate plugin manifests and add entry descriptions.
