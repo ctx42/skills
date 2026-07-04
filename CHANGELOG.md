@@ -1,3 +1,6 @@
+## v0.4.0 (Sat, 04 Jul 2026 20:25:11 UTC)
+- feat(readme-smith): add README authoring and audit skill.
+
 ## v0.3.0 (Sat, 04 Jul 2026 14:22:16 UTC)
 - feat(skill-smith): guard skill edits against the standard.
 - feat(golang): expand the Go review and style rule set.
