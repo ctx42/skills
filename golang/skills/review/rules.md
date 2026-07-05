@@ -1,129 +1,64 @@
 # review deep rules
 
-Deeper notes for the non-obvious `style` rules: why they exist, a short
-example, and how to detect a violation. Keyed to the terse rule in
-`../style/SKILL.md`. Not every rule needs an entry — only those where
-rationale or detection helps. Grows via `/review add`.
+The reviewer reasons from the **Principles** below; the terse rule of record for
+every convention lives in `../style/SKILL.md`. The keyed entries here add only
+what a capable reviewer can't infer from that one-line rule — a non-obvious
+detection heuristic or an exemption. Consult an entry when you're about to flag
+its rule; don't preload the file. Grows via `/review add`.
 
 ## Contents
 
-- Extract format strings into a `format` local (Production)
-- Split a long string literal with a leading `"" +` (Production)
-- Godoc omits the obvious (Production)
-- Use godoc cross-references (Production)
-- No godoc on interface-implementing methods (Production)
-- nolint directive format (Production)
+**Principles** — earn every token · name for what it is · separate groups ·
+output & errors at the right layer · keep functions pure · assertions must fail ·
+name the overflow.
+
+Keyed entries:
+
 - No name stutter (Production)
 - Method over a single-receiver-arg func (Production)
-- Method leaves presentation to the caller (Production)
-- Reuse an in-scope err with `=` (Production)
 - Name a helper for behavior, not its caller (Production)
+- No godoc on interface-implementing methods (Production)
+- Use godoc cross-references (Production)
 - Example functions for public APIs (Production)
 - Reusable package ships a README (Production)
-- Wrap with %w, hide with %v (Production)
 - Output belongs to the entry point, not leaf functions (Production)
-- ErrXxx sentinels (Production)
+- Name the overflow (Production + Test)
+- Blank line between distinct groups (Production + Test)
+- Three-letter receivers and matching locals (Production)
 - Don't wrap a one-liner in a test helper (Test)
-- Blank line between topics in a test block (Test)
 - Assert on distinctive output, not shared tokens (Test)
-- Hoist a literal expected value into `want` (Test)
 - must.Value for error not under test (Test)
 - Test helpers in all_test.go (Test)
 - Test order mirrors source order (Test)
 - Field-count guard forces new-field coverage (Test)
-- Useful or safe zero value (Production)
-- Three-letter receivers and matching locals (Production)
-- Blank line between cases in a complex switch (Production)
 
-## Extract format strings into a `format` local (Production)
+## Principles
 
-Why: when a printf-style call (`fmt.Errorf`, `Sprintf`, `Printf`, …) runs past
-80 cols, hoisting the format string into a `format` local is cleaner than
-breaking the call across lines — the args stay on one line and the string is
-named. Applies to the whole `fmt` printf family, not just `Sprintf`.
-Detect: a multi-line-wrapped `fmt.Errorf`/`Sprintf`/`Printf` call whose only
-reason to wrap is length; or an inline format string long/complex enough to
-obscure the args.
+Reason from these; reach for a keyed entry only for a rule's non-obvious detail.
 
-```go
-// avoid — call broken across lines just to fit:
-return fmt.Errorf(
-	"cannot parse toolchain version %q", runtime.Version(),
-)
-
-// prefer:
-format := "cannot parse toolchain version %q"
-return fmt.Errorf(format, runtime.Version())
-```
-
-## Split a long string literal with a leading `"" +` (Production)
-
-Why: a raw backtick string for multi-line content must start at column 0,
-breaking the surrounding indentation, and hides trailing whitespace. Quoted
-per-line segments joined with `+` keep the block indented and make every `\n`
-explicit. The leading `"" +` puts the first real segment on its own line so
-all segments align vertically instead of the first one trailing the `:=`.
-Detect: a multi-line backtick string embedded in indented code; or quoted
-segments where the first sits on the `:=` line and the rest hang below it
-misaligned.
-
-```go
-// avoid — first segment trails the assignment, rest misalign:
-content := "host: example\n" +
-	"account: a@ex.com\n"
-
-// prefer:
-content := "" +
-	"host: example\n" +
-	"account: a@ex.com\n"
-```
-
-## Godoc omits the obvious (Production)
-
-Why: a comment paraphrasing the name and params ("writes the value to path")
-is noise that rots on rename; the signature already says it. Spend the comment
-on what the reader can't infer — side effects, invariants, output shape.
-Detect: godoc that restates the func name/params. Trim to the non-obvious
-(creates missing dirs, output is pretty-printed) or drop the comment.
-
-## Use godoc cross-references (Production)
-
-Why: `[Type]`/`[pkg.Symbol]` render as links and stay greppable; bare names rot
-on rename.
-Detect: prose naming another in-package symbol without brackets ("source for
-Makefile code" → "source for [Makefile] code"). Skip the comment's own leading
-name and lowercase concepts ("a target"). When editing a comment, apply to the
-whole comment, not just the line you came for.
-
-## No godoc on interface-implementing methods (Production)
-
-Why: the interface declaration is the canonical doc; repeating it on each
-implementation duplicates text that rots.
-Detect: a method whose signature matches an implemented interface and that
-carries a full godoc comment. The only allowed comment is a one-line reference.
-
-```go
-// implements [io.WriterTo].
-func (e *Encoder) WriteTo(w io.Writer) (int64, error) { ... }
-```
-
-## nolint directive format (Production)
-
-Why: `nolint` is a machine directive like `//go:build`. The no-space form
-`//nolint:name` is the canonical, portable spelling: gofmt-stable, greppable,
-and accepted by every golangci-lint version. Spaced forms (`// nolint`,
-`//nolint: x`) are tolerated by some versions but not guaranteed — don't rely
-on them.
-Detect: a space anywhere in the directive, or a directive on the wrong line.
-
-```go
-x := unsafeCall() //nolint:gosec
-
-// Decode parses p.
-//
-//nolint:gocognit
-func Decode(p []byte) (T, error) { ... }
-```
+1. **Earn every token.** Flag text the signature, the reader, or the terse rule
+   already carries: godoc that paraphrases the name/params, a doc comment
+   duplicating an interface, a helper wrapping one expression, a `want` that
+   saves no width, an `x, err :=` + `assert.NoError` dance where the error isn't
+   under test. Trim to the non-obvious or cut it.
+2. **Name for what a thing is or does, not where it sits** — no qualifier
+   stutter (`pkg.PkgThing`), a method over a func taking one receiver-typed arg,
+   a helper named for its behavior not its caller, `ErrXxx` sentinels, typed
+   receivers and matching locals.
+3. **Separate distinct multi-line groups with a blank line** — switch cases,
+   test topic groups, const groups. Group by subject, not by statement type.
+4. **Handle output and errors at the right layer.** A leaf returns values and
+   errors; the command entry point owns the streams and the exit code. Wrap with
+   `%w` (hide the cause with `%v` only deliberately), match with
+   `errors.Is`/`errors.As` never `==`, handle each error exactly once.
+5. **Keep functions pure and reusable** — return the computed value; leave
+   presentation (trailing newline, padding) and destination (stdout/stderr) to
+   the caller.
+6. **An assertion must be able to fail.** Pin the output or error cause unique to
+   the wanted branch, never a token shared across sibling paths.
+7. **When a line overflows 80 cols, name the overflowing piece** as a local — a
+   `format` string, a split literal, a `want` value — rather than wrapping the
+   call across lines.
 
 ## No name stutter (Production)
 
@@ -167,23 +102,6 @@ Detect: an unexported func with a single local-type parameter and no
 signature-contract reason to stay a func. Convert to a method, update callers to
 `p.f()`, rename its test to `Test_T_f`.
 
-## Method leaves presentation to the caller (Production)
-
-Why: a method that also formats its result — appends a newline, pads, frames —
-does two jobs and forces that choice on every caller. Return the value; let the
-caller add what its context needs. Keeps small methods reusable and testable on
-the value alone.
-Detect: a small method whose return mixes the computed value with presentation
-bytes its name doesn't promise.
-
-```go
-// avoid — the encoder decides the caller's line ending:
-func (t *T) MarshalJSON() ([]byte, error) {
-	return append(data, '\n'), nil
-}
-// prefer — return the value; the writer appends the newline it needs.
-```
-
 ## Name a helper for behavior, not its caller (Production)
 
 Why: `cached(path)` implies cache semantics, but a plain `os.Stat` existence
@@ -193,6 +111,28 @@ check is domain-agnostic; the caller-derived name misleads and blocks reuse.
 singular: `fileExists`, not `fileExist`.
 Detect: a helper named for a caller/domain (`cached`, `writeConfig`) whose body
 touches only stdlib fs/string/math ops, no domain type.
+
+## No godoc on interface-implementing methods (Production)
+
+Why: the interface declaration is the canonical doc; repeating it on each
+implementation duplicates text that rots. The only allowed comment is a one-line
+reference.
+Detect: a method whose signature matches an implemented interface and that
+carries a full godoc comment.
+
+```go
+// implements [io.WriterTo].
+func (e *Encoder) WriteTo(w io.Writer) (int64, error) { ... }
+```
+
+## Use godoc cross-references (Production)
+
+Why: `[Type]`/`[pkg.Symbol]` render as links and stay greppable; bare names rot
+on rename.
+Detect: prose naming another in-package symbol without brackets ("source for
+Makefile code" → "source for [Makefile] code"). Skip the comment's own leading
+name and lowercase concepts ("a target"). When editing a comment, apply to the
+whole comment, not just the line you came for.
 
 ## Example functions for public APIs (Production)
 
@@ -207,8 +147,6 @@ setters, and self-evident one-liners. The common trigger is new public API in a
 diff with no accompanying example.
 
 ```go
-// Package under review exports NewClient; a runnable example doubles as docs
-// and a compile-checked usage test:
 func ExampleNewClient() {
 	c := goldkit.NewClient("host")
 	fmt.Println(c.Ping())
@@ -220,36 +158,12 @@ func ExampleNewClient() {
 
 Why: godoc documents the API symbol by symbol, but a reader landing on the
 repository or on pkg.go.dev first needs orientation — what the package is for,
-how to import it, and one worked example to copy. A package with thorough
-godoc can still be opaque without that overview.
+how to import it, and one worked example to copy.
 Detect: a package meant for outside consumption (not `main`, `internal`, or
 test-only) whose directory has no `README.md` and no `doc.go` package-overview
 comment beyond a one-line synopsis; or one present but missing the essentials —
 stated purpose, import path, and at least one runnable usage snippet. Scope to
 the module root and each public sub-package; do not demand a README per file.
-
-## Wrap with %w, hide with %v (Production)
-
-Why: `%w` keeps the cause inspectable via `errors.Is`/`errors.As`; `%v`
-flattens it. Use `%v` only to deliberately hide the cause.
-Detect: `fmt.Errorf("... %v", err)` where callers likely need to match the
-cause; `==` comparison of a wrapped error.
-
-## Reuse an in-scope err with `=` (Production)
-
-Why: `:=` inside an `if` opens a fresh scope and shadows the `err` already
-declared above, so a later read can see a stale value and vet/linters flag the
-shadow. Once `err` exists in the function, plain `=` threads one variable
-through every check.
-Detect: `if err := f(); err != nil` where `err` is already declared earlier in
-the same function; only the first declaration uses `:=`.
-
-```go
-data, err := read()
-if err != nil { ... }
-if err := write(data); err != nil { ... } // avoid — shadows err
-if err = write(data); err != nil { ... }  // prefer — reuse
-```
 
 ## Output belongs to the entry point, not leaf functions (Production)
 
@@ -258,9 +172,7 @@ stdout or stderr, is a policy decision — one that belongs to the single place
 that also owns the process exit code (the command's `Main`/entry point). A leaf
 or mid-level function that prints hard-codes that policy, can't be reused in a
 context that wants the output elsewhere (a server, a test, a different stream),
-and splits error handling across two layers. Returning the error or the output
-as a value keeps the function pure and testable and leaves one authority
-deciding destination and exit code. This is stricter than "never
+and splits error handling across two layers. This is stricter than "never
 log-and-return": it forbids *any* stdout/stderr write from non-entry functions,
 not just logging an error you also return.
 
@@ -288,14 +200,6 @@ func run(cfg *Config) (string, error) {
 	}
 	return out, nil
 }
-func main() {
-	out, err := run(cfg)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
-	fmt.Fprint(os.Stdout, out)
-}
 ```
 
 Detect: `fmt.Fprint*`/`fmt.Print*`/`log.*` to `os.Stdout`/`os.Stderr` (or an
@@ -303,19 +207,88 @@ injected writer used for error/result reporting) anywhere but the command entry
 point; a function returning an `int` exit code instead of an `error`; a
 function that both prints an error and returns (or absorbs) it.
 
-## ErrXxx sentinels (Production)
+## Name the overflow (Production + Test)
 
-Why: exported, matchable error values; the `Err` prefix is the Go convention.
-Detect: exported error vars without the `Err` prefix; errors compared with `==`
-instead of `errors.Is`.
+Why: when a call or literal pushes past 80 cols, hoisting the overflowing piece
+into a named local reads cleaner than breaking the call across lines — the args
+stay on one line and the value gets a name. Three forms:
+
+- a printf-family format string → a `format` local (the whole `fmt` family:
+  `Errorf`, `Sprintf`, `Printf`, …, not just `Sprintf`);
+- a long string literal → per-line `"..."` segments joined with `+`, led by an
+  empty `"" +` on the opening line so every segment aligns vertically and each
+  `\n` stays explicit; never a raw backtick string for multi-line content in
+  indented code (it must start at column 0 and hides trailing whitespace);
+- a long expected value in a test → a `want` local.
+
+Inverse: don't hoist when the inlined call already fits <=80 — a `want` that
+saves no width is needless indirection.
+Detect: a call wrapped only to fit length; a multi-line backtick string in
+indented code; quoted segments where the first trails the `:=` and the rest hang
+below it misaligned.
+
+```go
+// format local:
+format := "cannot parse toolchain version %q"
+return fmt.Errorf(format, runtime.Version())
+
+// string literal — leading "" + aligns every segment:
+content := "" +
+	"host: example\n" +
+	"account: a@ex.com\n"
+
+// want local — names the expectation, keeps the assert on one line:
+want := "flag provided but not defined: -unknown\n"
+assert.Equal(t, want, tst.Stderr())
+```
+
+## Blank line between distinct groups (Production + Test)
+
+Why: multi-line groups serving different subjects read as one wall when run
+together; a blank line between them makes each scannable. Group by the subject,
+not by statement type. Applies to multi-line switch cases (none before the
+first; one-line cases need no spacing) and to statement groups inside a
+`--- Given ---`/`--- Then ---` block (assert the return, then inspect a recorded
+request, then check auth).
+Detect: three-plus consecutive statements splitting into distinct subjects (a
+fresh `:=` target read/asserted, a different value under inspection) with no
+blank line between the groups; multi-line switch cases with no blank between.
+
+```go
+// test block — return value, request, auth each their own group:
+assert.NoError(t, err)
+assert.Contain(t, "ok (v3)", have)
+
+req := srv.Request(0)
+assert.Equal(t, "/api/v2/pages/1", req.URL.Path)
+
+user, pass, ok := req.BasicAuth()
+assert.True(t, ok)
+```
+
+## Three-letter receivers and matching locals (Production)
+
+Why: `p` carries no type information; a fixed `pag`/`cfg` reads as its type
+everywhere, and reusing it for locals names one value the same in production
+and test.
+Detect: a single-letter receiver; a local of type `*T`/`T` named other than the
+type's receiver abbreviation.
+
+```go
+// avoid:               // prefer:
+func (p *page) ...      func (pag *page) ...
+p := &page{...}         pag := &page{...}
+```
+
+In tests the value under test is still `have`, not the type name — the have/want
+rule wins over receiver-mirroring.
 
 ## Don't wrap a one-liner in a test helper (Test)
 
 Why: a helper whose whole body is one expression adds a name and an indirection
-to jump through without hiding any complexity — the call site reads no worse
-inlined. The one benefit a thin wrapper sometimes carries is centralizing a
-repeated literal (a golden-fixture path, a magic filename); a `const` does that
-without the function, keeping the value in one place and the call direct.
+without hiding any complexity — the call site reads no worse inlined. The one
+benefit a thin wrapper sometimes carries is centralizing a repeated literal (a
+golden-fixture path, a magic filename); a `const` does that without the function.
 Detect: a `func(...) T { t.Helper(); return oneExpr }` in a `_test.go` file.
 Inline it at every call site. If it existed only to avoid repeating a literal,
 declare that literal as a `const` and inline the expression.
@@ -332,39 +305,13 @@ const pageTpl = "testdata/page.tpl.yml"
 body := goldkit.Create(t, pageTpl, d).Body()
 ```
 
-## Blank line between topics in a test block (Test)
-
-Why: a `--- Given ---` or `--- Then ---` block often runs several statements
-that serve different subjects — asserting the return value, then inspecting a
-recorded request, then checking auth; or setting up a fixture, then a server,
-then config. Run together they read as one wall; a blank line between topics
-makes each group scannable, the same way blank lines separate multi-line switch
-cases. Group by subject, not by statement type.
-Detect: three-plus consecutive statements in a Given/Then block that split into
-distinct subjects (a fresh `:=` target read/asserted, a different value under
-inspection) with no blank line between the groups.
-
-```go
-// prefer — return value, request, auth each their own group:
-assert.NoError(t, err)
-assert.Contain(t, "ok (v3)", have)
-
-req := srv.Request(0)
-assert.Equal(t, "/api/v2/pages/1", req.URL.Path)
-
-user, pass, ok := req.BasicAuth()
-assert.True(t, ok)
-assert.Equal(t, "a@ex.com", user)
-```
-
 ## Assert on distinctive output, not shared tokens (Test)
 
 Why: an assertion is only as good as its discriminating power. Checking that
 output *contains* a token shared by several outputs — the program name, a
 `cfsync:` prefix, a word in both the version banner and the usage text — passes
-even when the wrong branch ran, so it proves almost nothing. The assertion must
-be able to fail if the code printed the wrong thing. `assert.NotEqual(t, "",
-out)` (merely "something was printed") is the degenerate case: it can never
+even when the wrong branch ran, so it proves almost nothing. `assert.NotEqual(t,
+"", out)` (merely "something was printed") is the degenerate case: it can never
 distinguish correct output from garbage.
 Detect: `Contain` on a token that also appears in a sibling test's expected
 output; assertions against the binary/package name; `NotEqual(t, "", ...)` or
@@ -400,25 +347,6 @@ assert.ErrorContain(t, "invalid character", err)
 
 // prefer — one regexp:
 assert.ErrorRegexp(t, "encoding page 7.*invalid character", err)
-```
-
-## Hoist a literal expected value into `want` (Test)
-
-Why: an assertion wrapped only to fit a long literal reads worse than naming the
-value; a `want` local keeps the call on one line and names the expectation.
-Conversely, don't hoist when the inlined call fits within 80 cols — a `want`
-that saves no width is needless indirection.
-Detect: an assertion wrapped solely because a literal argument overflows; or a
-single-use `want`/`have` whose inlined assertion still fits.
-
-```go
-// avoid — call wrapped just to fit the literal:
-assert.Equal(t,
-	"flag provided but not defined: -unknown\n", tst.Stderr())
-
-// prefer:
-want := "flag provided but not defined: -unknown\n"
-assert.Equal(t, want, tst.Stderr())
 ```
 
 ## must.Value for error not under test (Test)
@@ -478,13 +406,6 @@ previous subject's position.
 func Test_A(t *testing.T) { ... }
 func Test_C(t *testing.T) { ... } // C before B — violation
 func Test_B(t *testing.T) { ... }
-func Test_B_tabular(t *testing.T) { ... }
-
-// good foo_test.go order:
-func Test_A(t *testing.T) { ... }
-func Test_B(t *testing.T) { ... }
-func Test_B_tabular(t *testing.T) { ... }
-func Test_C(t *testing.T) { ... }
 ```
 
 ## Field-count guard forces new-field coverage (Test)
@@ -495,48 +416,3 @@ Bumping `N` to make it compile/pass without adding an assertion for the new
 field silences the tripwire and defeats its only purpose.
 Detect: a diff that changes the `N` in `assert.Fields` (or adds a struct field)
 without adding an assertion referencing the new field in the same change.
-
-## Useful or safe zero value (Production)
-
-Why: callers can use `var x T` without a constructor, or at least not crash.
-Detect: methods that panic on a zero-valued receiver; types that require an
-init call before any method is safe.
-
-## Three-letter receivers and matching locals (Production)
-
-Why: `p` carries no type information; a fixed `pag`/`cfg` reads as its type
-everywhere, and reusing it for locals names one value the same in production
-and test.
-Detect: a single-letter receiver; a local of type `*T`/`T` named other than the
-type's receiver abbreviation.
-
-```go
-// avoid:
-func (p *page) write(...) error { ... }
-p := &page{...}
-
-// prefer:
-func (pag *page) write(...) error { ... }
-pag := &page{...}
-```
-
-In tests the value under test is still `have`, not the type name — the have/want
-rule wins over receiver-mirroring.
-
-## Blank line between cases in a complex switch (Production)
-
-Why: multi-line cases run together visually; a blank line before each case
-after the first makes the boundaries scannable. One-line cases need no spacing.
-Detect: a switch with multi-line case bodies and no blank lines between cases.
-
-```go
-switch {
-case *ver:
-	printVersion()
-	return exitOK
-
-case *help:
-	printUsage()
-	return exitOK
-}
-```

@@ -5,9 +5,9 @@ description: >
   current diff, a package, or a whole module. Checks Go code against the
   style rules, the deeper criteria in rules.md, and general correctness
   (bugs, edge cases, error handling). The default review reasons only, running
-  no build or test tools (read-only LSP code navigation is allowed); an opt-in
-  fix path applies findings and runs the test suite to prove them. Honors budget
-  controls (packages, max_issues, depth, plan_first). Also grows the rule list —
+  no build or test tools; an opt-in fix path applies findings and runs the test
+  suite to prove them. Honors budget controls (packages, max_issues, depth,
+  plan_first). Also grows the rule list —
   from a plain-language prompt or by mining the current editing session for your
   feedback.
 license: MIT
@@ -70,7 +70,9 @@ were left unreported.
 ### Workflow
 
 1. Resolve the target and budget (above) and list the packages/files in scope.
-2. Read `style`'s `SKILL.md` and this skill's `rules.md` once.
+2. Read `style`'s `SKILL.md` in full and skim `rules.md`'s **Principles**
+   section. Reason from those principles; open a specific keyed `rules.md` entry
+   only when about to flag its rule — never preload the whole file.
 3. Review each file, in this order:
    - **Rules**: every applicable style rule (Production for `*.go`, Test for
      `*_test.go`); use `rules.md` for detection detail.
