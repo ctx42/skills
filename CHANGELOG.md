@@ -1,3 +1,8 @@
+## v0.5.0 (Sun, 05 Jul 2026 11:06:20 UTC)
+- feat(golang): add output-ownership rule to Go style.
+- fix(readme-smith): require relpath prefix in gmdoceg markers.
+- feat(golang): add /review learn mode and two style rules.
+
 ## v0.4.0 (Sat, 04 Jul 2026 20:25:11 UTC)
 - feat(readme-smith): add README authoring and audit skill.
 
