@@ -9,11 +9,14 @@ rationale or detection helps. Grows via `/review add`.
 
 - Extract format strings into a `format` local (Production)
 - Split a long string literal with a leading `"" +` (Production)
+- Godoc omits the obvious (Production)
 - Use godoc cross-references (Production)
 - No godoc on interface-implementing methods (Production)
 - nolint directive format (Production)
 - No name stutter (Production)
 - Method over a single-receiver-arg func (Production)
+- Method leaves presentation to the caller (Production)
+- Reuse an in-scope err with `=` (Production)
 - Name a helper for behavior, not its caller (Production)
 - Example functions for public APIs (Production)
 - Reusable package ships a README (Production)
@@ -22,6 +25,7 @@ rationale or detection helps. Grows via `/review add`.
 - ErrXxx sentinels (Production)
 - Assert on distinctive output, not shared tokens (Test)
 - Hoist a literal expected value into `want` (Test)
+- must.Value for error not under test (Test)
 - Test helpers in all_test.go (Test)
 - Test order mirrors source order (Test)
 - Field-count guard forces new-field coverage (Test)
@@ -69,6 +73,14 @@ content := "" +
 	"host: example\n" +
 	"account: a@ex.com\n"
 ```
+
+## Godoc omits the obvious (Production)
+
+Why: a comment paraphrasing the name and params ("writes the value to path")
+is noise that rots on rename; the signature already says it. Spend the comment
+on what the reader can't infer — side effects, invariants, output shape.
+Detect: godoc that restates the func name/params. Trim to the non-obvious
+(creates missing dirs, output is pretty-printed) or drop the comment.
 
 ## Use godoc cross-references (Production)
 
@@ -151,6 +163,23 @@ Detect: an unexported func with a single local-type parameter and no
 signature-contract reason to stay a func. Convert to a method, update callers to
 `p.f()`, rename its test to `Test_T_f`.
 
+## Method leaves presentation to the caller (Production)
+
+Why: a method that also formats its result — appends a newline, pads, frames —
+does two jobs and forces that choice on every caller. Return the value; let the
+caller add what its context needs. Keeps small methods reusable and testable on
+the value alone.
+Detect: a small method whose return mixes the computed value with presentation
+bytes its name doesn't promise.
+
+```go
+// avoid — the encoder decides the caller's line ending:
+func (t *T) MarshalJSON() ([]byte, error) {
+	return append(data, '\n'), nil
+}
+// prefer — return the value; the writer appends the newline it needs.
+```
+
 ## Name a helper for behavior, not its caller (Production)
 
 Why: `cached(path)` implies cache semantics, but a plain `os.Stat` existence
@@ -201,6 +230,22 @@ Why: `%w` keeps the cause inspectable via `errors.Is`/`errors.As`; `%v`
 flattens it. Use `%v` only to deliberately hide the cause.
 Detect: `fmt.Errorf("... %v", err)` where callers likely need to match the
 cause; `==` comparison of a wrapped error.
+
+## Reuse an in-scope err with `=` (Production)
+
+Why: `:=` inside an `if` opens a fresh scope and shadows the `err` already
+declared above, so a later read can see a stale value and vet/linters flag the
+shadow. Once `err` exists in the function, plain `=` threads one variable
+through every check.
+Detect: `if err := f(); err != nil` where `err` is already declared earlier in
+the same function; only the first declaration uses `:=`.
+
+```go
+data, err := read()
+if err != nil { ... }
+if err := write(data); err != nil { ... } // avoid — shadows err
+if err = write(data); err != nil { ... }  // prefer — reuse
+```
 
 ## Output belongs to the entry point, not leaf functions (Production)
 
@@ -299,6 +344,29 @@ assert.Equal(t,
 // prefer:
 want := "flag provided but not defined: -unknown\n"
 assert.Equal(t, want, tst.Stderr())
+```
+
+## must.Value for error not under test (Test)
+
+Why: in the `--- Given ---` arrange step and the `--- Then ---` readback, a
+value-plus-error call is plumbing — the error is not what the test asserts, so
+`x, err := f(); assert.NoError(t, err)` is three lines of noise around one
+value. `must.Value(f())` / `must.Values(f())` (`ctx42/testing/pkg/must`) panic
+on error, failing the test at that line with the same effect and less ceremony.
+The boundary is the assertion target: the error returned by the `--- When ---`
+call *is* the thing under test — keep `out, err := f(...)` and assert on `err`
+there. Never swap the subject call for `must`.
+Detect: a `_, err :=`/`x, err :=` outside the When step immediately followed by
+`assert.NoError(t, err)` where `err` is not otherwise inspected; the value feeds
+setup or a later assertion. Leave the When call's error check alone.
+
+```go
+// avoid — error is plumbing, not the assertion:
+want, err := p.MarshalJSON()
+assert.NoError(t, err)
+
+// prefer:
+want := must.Value(p.MarshalJSON())
 ```
 
 ## Test helpers in all_test.go (Test)

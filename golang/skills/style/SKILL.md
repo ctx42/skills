@@ -42,6 +42,8 @@ rule's full text or narrate.
   (`p.f()`, not `f(p)`); drop the type from its name (`encode`, not
   `encodePage`). Stay a func only when a signature contract (sort, http,
   callback) or deliberate typelessness (`helpers.go`) requires.
+- A method returns only its named result; leave presentation (trailing
+  newline, padding) to the caller.
 - Name a helper for what it does, not its one caller: a domain-agnostic body
   gets a domain-agnostic name and error text (`fileExists`, not `cached`).
 - Domain-agnostic, typeless helpers (`fileExists`, `isDigits`) live in
@@ -50,10 +52,14 @@ rule's full text or narrate.
   naming the group; keep each member's own godoc. Reserve standalone `const`
   for a value with no relatives.
 - Every exported symbol and the package have godoc.
+- Godoc states only what the signature can't; never restate the obvious.
+- In godoc prose name the type, not the receiver variable.
 - No godoc on interface-implementing methods.
 - Use godoc cross-references: `[Type]`, `[pkg.Symbol]`.
 - Wrap errors with `%w` and add context; never swallow the error.
 - Handle each error exactly once.
+- Reuse an already-declared `err` with `=`; only the first check in a scope
+  uses `:=`.
 - Never write output (errors included) to stdout/stderr from library/leaf/mid-level
   functions; return an error (`%w`) or output as a value.
 - Discard an intentionally-ignored return explicitly with `_` (`_, _ =
@@ -90,6 +96,14 @@ rule's full text or narrate.
   is small and fixed; reach for `Contain` only on a distinctive substring.
 - Hoist a literal expected value into a `want` local rather than wrap an
   assertion call past 80 cols.
+- Name the actual value `have` and the expected value `want`, never `got`; when
+  several of each coexist in one scope, suffix as `hXxx`/`wXxx` naming the value.
+- In arrange/readback code where the error is not under test, unwrap
+  value-plus-error with `must.Value`/`must.Values` instead of assigning then
+  `assert.NoError`; keep the explicit check only where the error itself is the
+  assertion (the `--- When ---` call).
+- Read a file with `oskit.ReadFile`/`oskit.ReadFileStr(t, path)`, not
+  `os.ReadFile` plus error handling and a `string(...)` conversion.
 - Every new func/method (exported or not) ships with tests in the same change.
 - When a test guards a struct's field count, a new field must both bump the
   count and gain an assertion in the same change — never bump the count alone.

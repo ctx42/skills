@@ -215,6 +215,10 @@ durable rules. Same repo-copy caveat and write path as Rule-edit mode.
 ### How a rule entry should look
 
 - One rule = one concept = one dense imperative line.
+- State it generically: name the construct, not the site — no project
+  identifiers, domain nouns, or file names in the prose (`the receiver`, not
+  `page`).
+- Cut every word the rule survives without.
 - Scope it Production (`*.go`), Test (`*_test.go`), or both; place it in that
   section, grouped near related rules.
 - Examples may show only generic Go syntax (`ErrXxx`, `[Type]`,
