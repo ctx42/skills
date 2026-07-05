@@ -85,8 +85,9 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
   sentence that explains a common concept.
 - Once loaded, body content persists across turns — every line is a recurring
   token cost. Keep the body **under ~500 lines**; split sooner if it sprawls.
-- Imperative and dense. State what to do, not why, unless the why changes the
-  action.
+- Imperative and dense. State what to do, not why — **unless the why lets the
+  agent generalize** to cases the skill did not spell out; then state the rule,
+  then the reason. Keep bare imperatives for fragile, one-right-way steps.
 - One consistent term per concept throughout (don't mix "field/box/element").
 - **Model-agnostic.** Write for "the agent", never a named product. No "ask
   Claude", "in Grok", "Claude will…". Naming a runtime breaks portability and
