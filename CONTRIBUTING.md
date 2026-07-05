@@ -14,7 +14,7 @@ repository. Skills ship as Claude Code plugins, grouped into `golang`,
 A skill lives at `<group>/skills/<skill-name>/`. Pick the group by purpose:
 
 | Group    | For                                     |
-| -------- | --------------------------------------- |
+|----------|-----------------------------------------|
 | `golang` | Go tooling (style, review, coverage)    |
 | `srd`    | Software Requirement Document lifecycle |
 | `craft`  | Cross-cutting engineering-craft aids    |
