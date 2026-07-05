@@ -59,9 +59,11 @@ example is proven by `go test`, not by inspection.
 2. **Author runnable examples first.** Write them as Go testable `Example…`
    functions in `_test.go`; run `go test ./...` until they pass.
 3. **Mark the spots.** At each place an example belongs, write a one-line marker
-   naming the function — `<!-- gmdoceg:<ExampleFuncName> -->` — immediately above
-   an empty (or existing) ```go fence. See `references/template.md` for the exact
-   form.
+   keyed as `<!-- gmdoceg:<relpath>/<ExampleFuncName> -->`, where `relpath` is the
+   example package's directory relative to the Markdown file (e.g.
+   `pkg/foo/ExampleNew` for a root README; drop the prefix only when the
+   `_test.go` sits in the file's own directory) — immediately above an empty (or
+   existing) ```go fence. See `references/template.md` for the exact form.
 4. **Inject with gomake.** Run `gomake :project:doc-eg`; it fills each marked
    fence with the matching `Example…` function's body and `// Output:` block.
 5. **Never hand-edit injected fences or ship unbacked snippets.** To change an
