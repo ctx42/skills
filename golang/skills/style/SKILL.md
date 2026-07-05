@@ -12,7 +12,7 @@ license: MIT
 Authoritative Go style rules. Apply the **Production** section to `*.go` and
 the **Test** section to `*_test.go`. Test code inherits Production unless a
 Test rule overrides it. Do not hand-edit this file ad hoc — change rules with
-`/review`.
+`/review` (state a preference, or `/review learn` to mine an editing session).
 
 Report tersely: when citing a rule, name it and the fix; don't restate the
 rule's full text or narrate.
@@ -38,6 +38,14 @@ rule's full text or narrate.
 - No name stutter: `pkg.Thing`, not `pkg.PkgThing`; exempt a name fixed by an
   external contract when the file pins it with a compile-time assertion
   (`var _ Contract = (*T)(nil)`) and a godoc saying why.
+- A func whose sole parameter is a local `*T`/`T` belongs on T as a method
+  (`p.f()`, not `f(p)`); drop the type from its name (`encode`, not
+  `encodePage`). Stay a func only when a signature contract (sort, http,
+  callback) or deliberate typelessness (`helpers.go`) requires.
+- Name a helper for what it does, not its one caller: a domain-agnostic body
+  gets a domain-agnostic name and error text (`fileExists`, not `cached`).
+- Domain-agnostic, typeless helpers (`fileExists`, `isDigits`) live in
+  `helpers.go`, their tests in `helpers_test.go` — mirrors `all_test.go`.
 - Group related consts into one `const (...)` block with a headline comment
   naming the group; keep each member's own godoc. Reserve standalone `const`
   for a value with no relatives.

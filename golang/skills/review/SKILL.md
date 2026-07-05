@@ -7,8 +7,9 @@ description: >
   (bugs, edge cases, error handling). The default review reasons only, running
   no build or test tools (read-only LSP code navigation is allowed); an opt-in
   fix path applies findings and runs the test suite to prove them. Honors budget
-  controls (packages, max_issues, depth, plan_first). Also edits the rule list
-  from a plain-language prompt.
+  controls (packages, max_issues, depth, plan_first). Also grows the rule list —
+  from a plain-language prompt or by mining the current editing session for your
+  feedback.
 license: MIT
 ---
 
@@ -19,6 +20,9 @@ Final-gate review for Go code. Pick the mode from the invocation:
 - **Check** (default) — audit finished code.
 - **Rule edit** — when the input is a style preference or asks to
   `add`/`change`/`remove` a rule.
+- **Learn** — when asked to learn from this session / your feedback; mines the
+  current editing session (since the last /clear) for convention feedback and
+  proposes rules.
 
 Sources of truth:
 - `../style/SKILL.md` — canonical terse rules (Production + Test).
@@ -182,6 +186,31 @@ Triggered when the input is a preference or asks to add/change/remove a rule.
 4. Write the rule to `style`; add a keyed `rules.md` entry only when the
    rule is non-obvious.
 5. Show the before/after diff.
+
+## Learn mode
+
+Triggered when asked to learn from the session / your feedback (e.g. `/review
+learn`). Turns the corrections you gave while editing Go this session into
+durable rules. Same repo-copy caveat and write path as Rule-edit mode.
+
+1. Warn if running from a marketplace copy (see Rule-edit mode) before writing.
+2. Gather two signals since the last /clear: (a) feedback you gave on Go code —
+   corrections, "do X not Y", requested renames/refactors, accepted or rejected
+   suggestions; (b) the diff those turns produced (`git diff` and the session's
+   edits). Pair each piece of feedback with the before/after hunk that resolved
+   it. The diff corroborates and illustrates feedback — it is not an independent
+   source; never mine a rule from code the user never commented on.
+3. Keep only **generalizable convention** — a rule that applies beyond the one
+   site. Drop task-specific instructions (one-off logic, a lone rename with no
+   pattern). When unsure, keep it as a candidate and let the user cut it.
+4. Distill each into a terse rule per **How a rule entry should look**, using the
+   paired hunk as its before/after example; classify Production/Test/both;
+   dedupe against existing `style` rules.
+5. Present candidates as a list — each with its provenance (the session moment
+   that prompted it), flagging duplicates/conflicts. **Wait** for the user to
+   pick which to keep; never write unpicked or conflicting rules.
+6. Write the chosen rules via Rule-edit mode's path (steps 4–5): `style` line +
+   keyed `rules.md` entry when non-obvious; show the before/after diff.
 
 ### How a rule entry should look
 

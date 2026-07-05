@@ -47,7 +47,8 @@ claude --plugin-dir ./srd      # repeat the flag for more groups
   rules, the deeper criteria in `review/rules.md`, and general correctness
   (bugs, edge cases, error handling). Reasoning only — it does not run tools.
   It also owns rule editing: a free-form suggestion becomes a terse rule in
-  `style` (use it instead of hand-editing `style`).
+  `style`, or `/review learn` mines the current editing session's feedback into
+  rules (use it instead of hand-editing `style`).
 - `cover` — Improves test coverage. Executing skill: it runs `go test
   -coverprofile`, edits/creates `*_test.go`, and re-runs to verify. Governing
   rule: a function's coverage counts only from its own style-named direct

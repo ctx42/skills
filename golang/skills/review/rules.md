@@ -13,6 +13,8 @@ rationale or detection helps. Grows via `/review add`.
 - No godoc on interface-implementing methods (Production)
 - nolint directive format (Production)
 - No name stutter (Production)
+- Method over a single-receiver-arg func (Production)
+- Name a helper for behavior, not its caller (Production)
 - Example functions for public APIs (Production)
 - Reusable package ships a README (Production)
 - Wrap with %w, hide with %v (Production)
@@ -133,6 +135,31 @@ type metaContract interface {
 
 var _ metaContract = Meta(nil) // Renames break external callers; fail here.
 ```
+
+## Method over a single-receiver-arg func (Production)
+
+Why: `p.cacheFile()` reads as an operation on the page; `cacheFile(p)` reads as
+an outside procedure that happens to need one. A method groups behavior with the
+type, shortens call sites, and lets a chain collapse — `p.encode()` then
+`p.write(path)` beats threading a value through free functions. The receiver
+names the type, so drop any type suffix from the name (`encodePage` → `encode`)
+per No name stutter.
+Exemption: the arg is one of several equals (no clear receiver); the func must
+match a signature (sort, http handler, callback); or it is deliberately typeless
+(→ `helpers.go`).
+Detect: an unexported func with a single local-type parameter and no
+signature-contract reason to stay a func. Convert to a method, update callers to
+`p.f()`, rename its test to `Test_T_f`.
+
+## Name a helper for behavior, not its caller (Production)
+
+Why: `cached(path)` implies cache semantics, but a plain `os.Stat` existence
+check is domain-agnostic; the caller-derived name misleads and blocks reuse.
+`fileExists` states the contract. Generalize incidental wrap text too
+("checking cache file" → "checking file"). Boolean predicates read third-person
+singular: `fileExists`, not `fileExist`.
+Detect: a helper named for a caller/domain (`cached`, `writeConfig`) whose body
+touches only stdlib fs/string/math ops, no domain type.
 
 ## Example functions for public APIs (Production)
 

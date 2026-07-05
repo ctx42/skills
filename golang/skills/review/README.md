@@ -11,7 +11,8 @@ It reasons about the code only — it does not run gofmt, vet, linters, or tests
 It reports findings; it does not change code unless you ask.
 
 It also owns the rule list: describe a preference in plain words and it becomes
-a durable rule in `style`.
+a durable rule in `style`. Or run `/review learn` to turn the feedback you gave
+across a whole editing session into rules.
 
 ## Usage
 
@@ -22,6 +23,7 @@ a durable rule in `style`.
 /review /path/to/project                   # review that module (go.mod dir)
 /review add "no naked returns in tests"    # add or refine a rule
 /review remove "the compile-time check rule"
+/review learn                              # mine this session's feedback into rules
 ```
 
 Targets: no argument reviews the current diff; a package path/import reviews
@@ -89,7 +91,20 @@ another with `fmt.Errorf` using `%v`.
 - Detects any duplicate/conflicting rule and waits for confirmation before
   writing to `style`; shows the before/after diff.
 
-### 4. Terse output
+### 4. Learn from the session
+
+**Request:** `/review learn` after a session where the user renamed a helper for
+clarity and asked to convert an `f(p *T)` function into a method.
+
+**Expected behavior:**
+- Scans the session's Go feedback and pairs each with the diff hunk that
+  resolved it; proposes only generalizable rules (method-over-func,
+  behavior-named helper), each with its provenance and a before/after example.
+- Drops task-specific one-offs; dedupes against existing `style` rules.
+- Waits for the user to pick before writing; on confirmation writes the `style`
+  line (+ keyed `rules.md` entry) and shows the diff.
+
+### 5. Terse output
 
 **Request:** `/review ./pkg/foo`.
 
