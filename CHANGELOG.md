@@ -1,3 +1,6 @@
+## v0.6.0 (Sun, 05 Jul 2026 13:16:16 UTC)
+- feat(golang): expand the Go style and review rule set.
+
 ## v0.5.0 (Sun, 05 Jul 2026 11:06:20 UTC)
 - feat(golang): add output-ownership rule to Go style.
 - fix(readme-smith): require relpath prefix in gmdoceg markers.
