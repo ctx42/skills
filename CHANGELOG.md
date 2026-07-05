@@ -1,3 +1,12 @@
+## v0.7.0 (Sun, 05 Jul 2026 20:37:16 UTC)
+- feat(golang): extend style and review rules with receiver names, switch spacing, and error assertion guidance.
+- Add `SKILL-STANDARD.md` textbook on crafting durable, reliable, and maintainable agent skills.
+- feat(skill-smith): add eval-first and lint gates.
+- feat(golang): add test-helper and topic-grouping style rules.
+- docs(golang): make review skill description and terse rule mode-wide.
+- feat(skill-smith): audit reference content and eager preloading.
+- refactor(golang): restructure review rules around principles.
+
 ## v0.6.0 (Sun, 05 Jul 2026 13:16:16 UTC)
 - feat(golang): expand the Go style and review rule set.
 
