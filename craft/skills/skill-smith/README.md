@@ -16,9 +16,9 @@ optional fields). It enforces [standards.md](standards.md), and defers to
 ## Usage
 
 ```
-/skill-smith create a skill that lints Markdown tables      # create mode
+/skill-smith create a skill that lints Markdown tables   # create mode
 /skill-smith improve cover                               # improve, one skill
-/skill-smith review cm                                      # audit by name
+/skill-smith review cm                                   # audit by name
 ```
 
 You don't need a mode keyword — it infers create vs improve from the request.

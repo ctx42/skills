@@ -23,6 +23,8 @@ rationale or detection helps. Grows via `/review add`.
 - Wrap with %w, hide with %v (Production)
 - Output belongs to the entry point, not leaf functions (Production)
 - ErrXxx sentinels (Production)
+- Don't wrap a one-liner in a test helper (Test)
+- Blank line between topics in a test block (Test)
 - Assert on distinctive output, not shared tokens (Test)
 - Hoist a literal expected value into `want` (Test)
 - must.Value for error not under test (Test)
@@ -306,6 +308,54 @@ function that both prints an error and returns (or absorbs) it.
 Why: exported, matchable error values; the `Err` prefix is the Go convention.
 Detect: exported error vars without the `Err` prefix; errors compared with `==`
 instead of `errors.Is`.
+
+## Don't wrap a one-liner in a test helper (Test)
+
+Why: a helper whose whole body is one expression adds a name and an indirection
+to jump through without hiding any complexity — the call site reads no worse
+inlined. The one benefit a thin wrapper sometimes carries is centralizing a
+repeated literal (a golden-fixture path, a magic filename); a `const` does that
+without the function, keeping the value in one place and the call direct.
+Detect: a `func(...) T { t.Helper(); return oneExpr }` in a `_test.go` file.
+Inline it at every call site. If it existed only to avoid repeating a literal,
+declare that literal as a `const` and inline the expression.
+
+```go
+// avoid — helper wraps a single expression at 5 call sites:
+func pageBody(t tester.T, d pageData) []byte {
+	t.Helper()
+	return goldkit.Create(t, "testdata/page.tpl.yml", d).Body()
+}
+
+// prefer — const for the shared path, expression inlined:
+const pageTpl = "testdata/page.tpl.yml"
+body := goldkit.Create(t, pageTpl, d).Body()
+```
+
+## Blank line between topics in a test block (Test)
+
+Why: a `--- Given ---` or `--- Then ---` block often runs several statements
+that serve different subjects — asserting the return value, then inspecting a
+recorded request, then checking auth; or setting up a fixture, then a server,
+then config. Run together they read as one wall; a blank line between topics
+makes each group scannable, the same way blank lines separate multi-line switch
+cases. Group by subject, not by statement type.
+Detect: three-plus consecutive statements in a Given/Then block that split into
+distinct subjects (a fresh `:=` target read/asserted, a different value under
+inspection) with no blank line between the groups.
+
+```go
+// prefer — return value, request, auth each their own group:
+assert.NoError(t, err)
+assert.Contain(t, "ok (v3)", have)
+
+req := srv.Request(0)
+assert.Equal(t, "/api/v2/pages/1", req.URL.Path)
+
+user, pass, ok := req.BasicAuth()
+assert.True(t, ok)
+assert.Equal(t, "a@ex.com", user)
+```
 
 ## Assert on distinctive output, not shared tokens (Test)
 

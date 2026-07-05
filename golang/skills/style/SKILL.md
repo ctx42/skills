@@ -94,6 +94,8 @@ rule's full text or narrate.
   assertions; move any case needing different assertions to its own test.
 - Call `t.Helper()` in test helpers.
 - Test helpers must use `tester.T` to allow testing with `tester.Spy`.
+- Don't wrap a single expression in a test helper; inline it. If a helper only
+  centralizes a repeated literal (e.g. a fixture path), extract a `const`.
 - Keep assertion style consistent with the project's chosen library.
 - Assert on output text unique to the expected result, never a token shared
   with other outputs (the program name, a common prefix); the assertion must
@@ -114,13 +116,15 @@ rule's full text or narrate.
   value-plus-error with `must.Value`/`must.Values` instead of assigning then
   `assert.NoError`; keep the explicit check only where the error itself is the
   assertion (the `--- When ---` call).
-- Read a file with `oskit.ReadFile`/`oskit.ReadFileStr(t, path)`, not
-  `os.ReadFile` plus error handling and a `string(...)` conversion.
+- Use oskit filesystem helpers in arrange/readback (`oskit.Create`, `Write`,
+  `MkdirAll`, `ReadFile`/`ReadFileStr`), not `os.*` wrapped in `assert.NoError`
+  (nor `os.ReadFile` plus error handling and a `string(...)` conversion).
 - Every new func/method (exported or not) ships with tests in the same change.
 - When a test guards a struct's field count, a new field must both bump the
   count and gain an assertion in the same change — never bump the count alone.
 - Cover error paths and edge cases, not just the happy path.
 - Subtest names use only `[a-zA-Z0-9 _-]`; keep them flat, no `/`.
+- Keep subtest names terse — name the condition or trigger, not a full sentence.
 - Error-path subtest names start with `error - ` then the failure condition;
   don't restate "returns error".
 - Prepare every value passed to the `--- When ---` call in `--- Given ---`;
@@ -128,6 +132,8 @@ rule's full text or narrate.
 - Declare those `--- Given ---` argument variables in the same left-to-right
   order the `--- When ---` call uses them; keep a variable's setup next to its
   declaration.
+- Separate distinct topics within a `--- Given ---`/`--- Then ---` block with a
+  blank line; group statements by the subject they set up or verify.
 - Name tests `Test_Func` and `Test_Type_Method`; add `_tabular` for table tests.
 - Use `tester.Spy` (not raw `*testing.T`) when testing test helpers.
 - Simple test helpers shared within a package live in `all_test.go`; do not
