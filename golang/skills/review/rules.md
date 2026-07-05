@@ -30,6 +30,8 @@ rationale or detection helps. Grows via `/review add`.
 - Test order mirrors source order (Test)
 - Field-count guard forces new-field coverage (Test)
 - Useful or safe zero value (Production)
+- Three-letter receivers and matching locals (Production)
+- Blank line between cases in a complex switch (Production)
 
 ## Extract format strings into a `format` local (Production)
 
@@ -329,12 +331,35 @@ want := "cfsync dev\n"
 assert.Equal(t, want, tst.Stdout())
 ```
 
+Applies to errors too: a wrapper prefix (`"reading config"`) passes for any
+failure in that stage. Assert the cause's unique substring, or pin wrapper and
+cause with one `ErrorRegexp`. A dispatch test is the same trap — if `--test`
+and `--pull` both fail at config-load, `"reading config"` proves neither ran;
+drive it to an X-only outcome.
+
+```go
+// avoid — every load failure produces this wrapper:
+assert.ErrorContain(t, "parsing config", err)
+
+// prefer — pins wrapper and the invalid-YAML cause in one match:
+assert.ErrorRegexp(t, "parsing config.*cannot start any token", err)
+
+// avoid — stacked contains for one error:
+assert.ErrorContain(t, "encoding page 7", err)
+assert.ErrorContain(t, "invalid character", err)
+
+// prefer — one regexp:
+assert.ErrorRegexp(t, "encoding page 7.*invalid character", err)
+```
+
 ## Hoist a literal expected value into `want` (Test)
 
 Why: an assertion wrapped only to fit a long literal reads worse than naming the
 value; a `want` local keeps the call on one line and names the expectation.
-Detect: an assertion call broken across lines solely because a string/composite
-literal argument overflows.
+Conversely, don't hoist when the inlined call fits within 80 cols — a `want`
+that saves no width is needless indirection.
+Detect: an assertion wrapped solely because a literal argument overflows; or a
+single-use `want`/`have` whose inlined assertion still fits.
 
 ```go
 // avoid — call wrapped just to fit the literal:
@@ -426,3 +451,42 @@ without adding an assertion referencing the new field in the same change.
 Why: callers can use `var x T` without a constructor, or at least not crash.
 Detect: methods that panic on a zero-valued receiver; types that require an
 init call before any method is safe.
+
+## Three-letter receivers and matching locals (Production)
+
+Why: `p` carries no type information; a fixed `pag`/`cfg` reads as its type
+everywhere, and reusing it for locals names one value the same in production
+and test.
+Detect: a single-letter receiver; a local of type `*T`/`T` named other than the
+type's receiver abbreviation.
+
+```go
+// avoid:
+func (p *page) write(...) error { ... }
+p := &page{...}
+
+// prefer:
+func (pag *page) write(...) error { ... }
+pag := &page{...}
+```
+
+In tests the value under test is still `have`, not the type name — the have/want
+rule wins over receiver-mirroring.
+
+## Blank line between cases in a complex switch (Production)
+
+Why: multi-line cases run together visually; a blank line before each case
+after the first makes the boundaries scannable. One-line cases need no spacing.
+Detect: a switch with multi-line case bodies and no blank lines between cases.
+
+```go
+switch {
+case *ver:
+	printVersion()
+	return exitOK
+
+case *help:
+	printUsage()
+	return exitOK
+}
+```

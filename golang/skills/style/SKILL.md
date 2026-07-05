@@ -32,6 +32,7 @@ rule's full text or narrate.
 - Split a string literal too long for one line into per-line `"..."` segments
   joined with `+`, led by an empty `"" +` on the opening line so every segment
   aligns; keep `\n` explicit, never a raw backtick string for multi-line content.
+- Separate multi-line switch cases with a blank line; none before the first.
 - Comments are full sentences: capital start, terminal period.
 - Comments explain the code; never trace it to a spec — no requirement/ticket
   ids in code comments (`// CLI-4`, `// JIRA-123`).
@@ -39,9 +40,13 @@ rule's full text or narrate.
   external contract when the file pins it with a compile-time assertion
   (`var _ Contract = (*T)(nil)`) and a godoc saying why.
 - A func whose sole parameter is a local `*T`/`T` belongs on T as a method
-  (`p.f()`, not `f(p)`); drop the type from its name (`encode`, not
+  (`pag.f()`, not `f(pag)`); drop the type from its name (`encode`, not
   `encodePage`). Stay a func only when a signature contract (sort, http,
   callback) or deliberate typelessness (`helpers.go`) requires.
+- Receivers are a ~three-letter type abbreviation, not a single letter:
+  `pag *page`, `cfg *config`.
+- A local of type `T` reuses `T`'s receiver name (`pag` for `*page`, `cfg` for
+  `*config`).
 - A method returns only its named result; leave presentation (trailing
   newline, padding) to the caller.
 - Name a helper for what it does, not its one caller: a domain-agnostic body
@@ -94,10 +99,17 @@ rule's full text or narrate.
   with other outputs (the program name, a common prefix); the assertion must
   fail if the wrong branch printed. Prefer whole-string `Equal` when the output
   is small and fixed; reach for `Contain` only on a distinctive substring.
-- Hoist a literal expected value into a `want` local rather than wrap an
-  assertion call past 80 cols.
+- Assert an error's distinctive cause, not a wrapper prefix shared by sibling
+  paths; a dispatch test must observe an outcome only that branch yields.
+- Match several substrings of one error with one `ErrorRegexp("a.*b")`, not
+  stacked `ErrorContain` calls.
+- Hoist an expected literal into a `want` local only to keep the assertion
+  within 80 cols; inline it when the call already fits.
 - Name the actual value `have` and the expected value `want`, never `got`; when
   several of each coexist in one scope, suffix as `hXxx`/`wXxx` naming the value.
+- `have` is the value under test (the `--- When ---` result); it overrides
+  receiver-mirroring. Given subjects and secondary Then values keep descriptive
+  names.
 - In arrange/readback code where the error is not under test, unwrap
   value-plus-error with `must.Value`/`must.Values` instead of assigning then
   `assert.NoError`; keep the explicit check only where the error itself is the
