@@ -44,8 +44,10 @@ rule's full text or narrate.
 - Every exported symbol and the package have godoc.
 - No godoc on interface-implementing methods.
 - Use godoc cross-references: `[Type]`, `[pkg.Symbol]`.
-- Wrap errors with `%w` and add context; never swallow or log-and-return.
+- Wrap errors with `%w` and add context; never swallow the error.
 - Handle each error exactly once.
+- Never write output (errors included) to stdout/stderr from library/leaf/mid-level
+  functions; return an error (`%w`) or output as a value.
 - Discard an intentionally-ignored return explicitly with `_` (`_, _ =
   fmt.Fprintf(w, ...)`); never leave it bare, so the discard reads as deliberate.
 - Export sentinel errors as `ErrXxx`; unexported as `errXxx`.

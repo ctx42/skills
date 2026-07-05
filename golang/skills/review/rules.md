@@ -16,6 +16,7 @@ rationale or detection helps. Grows via `/review add`.
 - Example functions for public APIs (Production)
 - Reusable package ships a README (Production)
 - Wrap with %w, hide with %v (Production)
+- Output belongs to the entry point, not leaf functions (Production)
 - ErrXxx sentinels (Production)
 - Assert on distinctive output, not shared tokens (Test)
 - Hoist a literal expected value into `want` (Test)
@@ -173,6 +174,58 @@ Why: `%w` keeps the cause inspectable via `errors.Is`/`errors.As`; `%v`
 flattens it. Use `%v` only to deliberately hide the cause.
 Detect: `fmt.Errorf("... %v", err)` where callers likely need to match the
 cause; `==` comparison of a wrapped error.
+
+## Output belongs to the entry point, not leaf functions (Production)
+
+Why: whether a message is an error or a normal result, and whether it goes to
+stdout or stderr, is a policy decision — one that belongs to the single place
+that also owns the process exit code (the command's `Main`/entry point). A leaf
+or mid-level function that prints hard-codes that policy, can't be reused in a
+context that wants the output elsewhere (a server, a test, a different stream),
+and splits error handling across two layers. Returning the error or the output
+as a value keeps the function pure and testable and leaves one authority
+deciding destination and exit code. This is stricter than "never
+log-and-return": it forbids *any* stdout/stderr write from non-entry functions,
+not just logging an error you also return.
+
+Return the output text (or a small result value) alongside `error`; the entry
+point writes results to stdout, errors to stderr, and maps the error to an exit
+code. Do not pass `os.Stdout`/`os.Stderr`/a writer into a function so it can
+report its own errors — passing a sink for streamed *data* is fine, reporting
+*errors/results* through it is not.
+
+```go
+// avoid — leaf decides stream and swallows the return into an exit code:
+func run(cfg *Config) int {
+	if err := do(cfg); err != nil {
+		fmt.Fprintf(os.Stderr, "run: %s\n", err)
+		return 1
+	}
+	return 0
+}
+
+// prefer — leaf returns; Main decides:
+func run(cfg *Config) (string, error) {
+	out, err := do(cfg)
+	if err != nil {
+		return "", fmt.Errorf("run: %w", err)
+	}
+	return out, nil
+}
+func main() {
+	out, err := run(cfg)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	fmt.Fprint(os.Stdout, out)
+}
+```
+
+Detect: `fmt.Fprint*`/`fmt.Print*`/`log.*` to `os.Stdout`/`os.Stderr` (or an
+injected writer used for error/result reporting) anywhere but the command entry
+point; a function returning an `int` exit code instead of an `error`; a
+function that both prints an error and returns (or absorbs) it.
 
 ## ErrXxx sentinels (Production)
 
