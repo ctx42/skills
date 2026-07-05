@@ -74,6 +74,10 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
 - Optimize the always-loaded surface first: the `description` and the `SKILL.md`
   body cost tokens on **every** trigger. Push anything not needed each run into
   on-demand references (see Progressive disclosure).
+- On-demand saves tokens **only if the workflow defers the read**. A step that
+  eagerly loads a whole reference every run (`read rules.md once`) makes it
+  always-loaded in practice — consult a keyed or large reference per-need, never
+  preload it wholesale.
 - Shortest phrasing that stays unambiguous wins. Terse-but-precise beats verbose;
   it also beats cryptic — do not compress past the point of clarity.
 - Judge by tokens-to-outcome, not line count — a padded 400-line body can cost
@@ -83,6 +87,11 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
 
 - **Assume the model is already smart.** Add only what it does not know. Cut any
   sentence that explains a common concept.
+- **These tests apply to every loaded file, not just the body.** A reference must
+  also cut what the model already knows: a keyed reference that restates the terse
+  rule it keys to, or whose entries collapse to one shared principle, is
+  duplication dressed as detail — trim each entry to the non-obvious (exemption,
+  detection heuristic) or drop it.
 - Once loaded, body content persists across turns — every line is a recurring
   token cost. Keep the body **under ~500 lines**; split sooner if it sprawls.
 - Imperative and dense. State what to do, not why — **unless the why lets the
@@ -128,6 +137,10 @@ files (on demand). Exploit it:
 - Name bundled files for their content (`standards.md`, `rules.md`), not
   `doc2.md`. Use forward slashes always.
 - Any reference file over ~100 lines starts with a Contents list.
+- Structure is necessary, not sufficient: a well-formed reference (one hop, ToC,
+  named for content) can still bloat with restated or duplicated content — audit
+  the content by the conciseness tests, and confirm the workflow reads it on
+  demand rather than preloading it whole.
 
 ## Degrees of freedom
 
@@ -189,6 +202,10 @@ Mandatory and written before finalizing (eval-driven development):
 - Offering too many options — pick a default.
 - Vague names (`helper`, `utils`) or vague descriptions.
 - Deeply nested references.
+- Preloading a whole reference each run — negates the on-demand saving; consult
+  keyed references per-need.
+- A reference that restates the rule or file it keys to, or repeats itself — bloat
+  dressed as detail.
 - Chatty runtime output — preamble, narration, or a closing summary that restates
   what the user already sees.
 - Frontmatter beyond the strict-portable set.
@@ -205,6 +222,9 @@ Mandatory and written before finalizing (eval-driven development):
 - [ ] Output discipline: body carries the terse-output line; no framing or
       restating mandated; payload always stated in full.
 - [ ] References one level deep; files named for content; ToC if > ~100 lines.
+- [ ] References earn their tokens too: no restating the model's knowledge or the
+      rule they key to; entries don't collapse to one shared principle.
+- [ ] On-demand references are consulted per-need, not preloaded whole each run.
 - [ ] Degrees of freedom match task fragility.
 - [ ] Multi-step work has clear steps / checklist; quality work has a feedback
       loop.

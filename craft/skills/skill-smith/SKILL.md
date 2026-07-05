@@ -50,7 +50,9 @@ Forge a complete, standard-compliant skill end-to-end.
    always-loaded token cost, so cut anything that doesn't raise success rate;
    keep it under ~500 lines. Use progressive disclosure — push large reference
    material into sibling files linked one level deep, because agents only preview
-   nested files and deeper chains read as incomplete. Carry the output-discipline
+   nested files and deeper chains read as incomplete. Reference content obeys the
+   same conciseness test as the body, and the workflow must consult it on demand —
+   never preload a whole reference each run. Carry the output-discipline
    line (standards.md) where the skill describes its output — terse output is
    mandatory, not optional.
 6. **Write `README.md`.** Concise usage + when-to-use, and an `## Evaluations`
@@ -99,6 +101,11 @@ user asks.
      in full. Flag duplicate or repeating summaries.
    - **Structure** — progressive disclosure, references one level deep, files
      named for content, ToC on long files.
+   - **Reference content** — read each reference, not just its structure: apply
+     the body's conciseness test to it (cut what the model already knows), flag
+     entries that restate the rule or file they key to or that collapse to one
+     shared principle, and flag any workflow step that reads a whole reference
+     eagerly each run instead of consulting it on demand.
    - **Workflows** — clear steps / checklist, feedback loops where quality
      matters; scripts solve-not-punt with no voodoo constants.
    - **Evals** — `README.md` has `## Evaluations` with ≥ 3 scenarios.

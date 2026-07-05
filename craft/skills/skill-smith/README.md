@@ -78,6 +78,19 @@ a closing summary`
 - Its own audit report opens with the payload — no preamble or narration, no
   restating of findings already shown.
 
+### 5. Audit reference content and preloading
+
+**Request:** `/skill-smith improve` a skill whose keyed reference restates its own
+terse rules and whose workflow reads that reference whole every run.
+
+**Expected behavior:**
+- Reads the reference's content, not just its structure (one hop, ToC, naming).
+- Flags entries that restate the rule they key to, or that collapse to one shared
+  principle, as redundant reference bloat.
+- Flags the workflow step that preloads the whole reference — on-demand saves
+  tokens only if the read is deferred.
+- Reports findings by severity; makes no edits before confirmation.
+
 ## Relationship to other skills
 
 - `grill-me` — use it first when a new skill's purpose or triggers are fuzzy;
