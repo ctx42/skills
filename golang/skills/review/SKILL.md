@@ -1,7 +1,7 @@
 ---
 name: review
 description: >
-  Done-time Go quality review. Run after edits and features are complete on the
+  Done-time Go quality review. Runs after edits and features are complete on the
   current diff, a package, or a whole module. Checks Go code against the
   style rules, the deeper criteria in rules.md, and general correctness
   (bugs, edge cases, error handling). The default review reasons only, running
@@ -28,6 +28,9 @@ Sources of truth:
 - `../style/SKILL.md` — canonical terse rules (Production + Test).
 - `rules.md` — deeper rationale / examples / how-to-detect, keyed
   to those rules. Consult it for non-obvious rules.
+
+In every mode, report tersely: no preamble or narration; state each fact once;
+don't restate output the user can already see.
 
 ## Check mode
 
@@ -109,9 +112,6 @@ End with a one-line verdict (ship / fix-first) and the per-severity counts. For
 a module, give the verdict per package plus an overall summary. Report budget
 usage: `depth`, packages/files reviewed, and whether you stayed under
 `max_issues` (and how many findings went unreported).
-
-Report tersely: no preamble or narration; state each fact once; don't restate
-output the user can already see.
 
 ### Scope control
 
