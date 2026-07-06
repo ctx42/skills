@@ -27,7 +27,8 @@ as Claude Code plugins.
 │   └── skills/
 │       ├── style/               # Enforced Go style ruleset (prod + test)
 │       ├── review/              # Done-time Go review + rule editing
-│       └── cover/               # Per-function Go test coverage improvement
+│       ├── cover/               # Per-function Go test coverage improvement
+│       └── reshape/             # Consumer-driven library API-change proposals
 ├── srd/                            # Plugin: SRD lifecycle
 │   ├── .claude-plugin/plugin.json
 │   └── skills/

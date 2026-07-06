@@ -55,6 +55,13 @@ claude --plugin-dir ./srd      # repeat the flag for more groups
   test, measured in isolation on that function's own lines. Targets a single
   function, a line, a file, a package, or a module; honors `max_tests`,
   `packages`, `include=all`.
+- `reshape` — Consumer-driven API review. Given a library the project depends
+  on, it maps every call site, diagnoses the friction, and proposes ranked,
+  impact-scored changes to that **library's** API that would simplify the
+  consuming code. Reasoning only — read-only, edits nothing. Brainstorms across
+  a broad archetype catalog (`reshape/references/change-catalog.md`) and detects
+  whether the library is locally editable (concrete diffs) or external (public
+  surface). Honors `max`.
 
 ### srd
 
