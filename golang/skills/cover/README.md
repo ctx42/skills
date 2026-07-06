@@ -29,7 +29,7 @@ Targets:
 - **package** (default, `./pkg/foo`) — iterates function by function,
   plan-first.
 - **module** (`./...`, a `go.mod` dir, or "module") — packages → functions,
-  fans out per package, plan-first.
+  sequentially with no fan-out, plan-first.
 
 ## Controls
 

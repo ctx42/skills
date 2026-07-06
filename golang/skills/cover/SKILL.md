@@ -1,13 +1,10 @@
 ---
 name: cover
 description: >
-  Improves Go test coverage one function at a time. Runs the toolchain:
-  measures each function via its own direct test only, then adds the easy
-  cases (rows, subtests, light fakes) until every coverable line is hit.
-  Plan-first for a file, package, or module; runs straight for a single
-  function or line.
-  Reports deferred and un-coverable lines with reasons. Honors max_tests,
-  packages, include=all.
+  Improves Go test coverage one function at a time, measuring each function
+  from its own direct test only. Plan-first for a file, package, or module;
+  runs straight for a single function or line. Reports deferred and
+  un-coverable lines with reasons. Honors max_tests, packages, include=all.
 license: MIT
 ---
 
