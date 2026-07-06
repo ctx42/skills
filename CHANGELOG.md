@@ -1,3 +1,6 @@
+## v0.8.0 (Mon, 06 Jul 2026 10:55:14 UTC)
+- docs(golang): fix cover module fan-out claim and trim description.
+
 ## v0.7.0 (Sun, 05 Jul 2026 20:37:16 UTC)
 - feat(golang): extend style and review rules with receiver names, switch spacing, and error assertion guidance.
 - Add `SKILL-STANDARD.md` textbook on crafting durable, reliable, and maintainable agent skills.
