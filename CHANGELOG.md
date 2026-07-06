@@ -1,3 +1,6 @@
+## v0.9.0 (Mon, 06 Jul 2026 16:37:50 UTC)
+- feat(golang): add reshape skill for library API proposals.
+
 ## v0.8.0 (Mon, 06 Jul 2026 10:55:14 UTC)
 - docs(golang): fix cover module fan-out claim and trim description.
 
