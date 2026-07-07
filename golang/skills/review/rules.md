@@ -31,6 +31,7 @@ Keyed entries:
 - Test helpers in all_test.go (Test)
 - Test order mirrors source order (Test)
 - Field-count guard forces new-field coverage (Test)
+- Break an over-width table row positionally (Test)
 
 ## Principles
 
@@ -416,3 +417,29 @@ Bumping `N` to make it compile/pass without adding an assertion for the new
 field silences the tripwire and defeats its only purpose.
 Detect: a diff that changes the `N` in `assert.Fields` (or adds a struct field)
 without adding an assertion referencing the new field in the same change.
+
+## Break an over-width table row positionally (Test)
+
+Why: a table row is data, not a struct being documented — the field order is
+already fixed by the anonymous struct above it, so field-name keys add noise
+without adding information. This runs against the common Go habit of keying
+multi-line struct literals, so it needs saying: when a row fits on one line,
+leave it; when it overflows the line limit, break it one element per line and
+keep the values positional.
+
+```go
+// bad — keyed on overflow
+{
+	testN: "bad value that is not quoted",
+	msg:   "invalid value x for flag -n: parse error",
+},
+
+// good — positional, one element per line
+{
+	"bad value that is not quoted",
+	"invalid value x for flag -n: parse error",
+},
+```
+
+Detect: a multi-line table-row literal using `field: value` keys, or a
+single-line row past the width limit that should wrap.

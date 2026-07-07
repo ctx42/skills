@@ -90,6 +90,8 @@ rule's full text or narrate.
 ## Test
 
 - Table-driven subtests via `t.Run`; one case per table row.
+- When a table row exceeds the line limit, break it one element per line,
+  positional in field order — never add field-name keys.
 - Keep the table-test loop body branch-free — every row runs the same
   assertions; move any case needing different assertions to its own test.
 - Call `t.Helper()` in test helpers.
