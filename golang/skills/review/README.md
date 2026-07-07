@@ -10,6 +10,12 @@ finished. It reviews the changed Go code against:
 It reasons about the code only — it does not run gofmt, vet, linters, or tests.
 It reports findings; it does not change code unless you ask.
 
+When you ask it to apply findings, the fix path proves bugs with tests and runs
+the module suite. A broad fix job is first planned to a scratch file and applied
+package by package (a big package splits to file level), running the whole-module
+`go test ./... -race` gate per chunk. It never `git commit`s without an explicit
+consult and stops to ask commit-now-or-defer after each chunk that changed code.
+
 It also owns the rule list: describe a preference in plain words and it becomes
 a durable rule in `style`. Or run `/review learn` to turn the feedback you gave
 across a whole editing session into rules.
@@ -104,7 +110,21 @@ clarity and asked to convert an `f(p *T)` function into a method.
 - Waits for the user to pick before writing; on confirmation writes the `style`
   line (+ keyed `rules.md` entry) and shows the diff.
 
-### 5. Terse output
+### 5. Broad fix job: plan, chunk, consult
+
+**Request:** `/review ./... fix` (or "apply the findings") where fixes span
+several packages.
+
+**Expected behavior:**
+- Detects the broad scope and writes an ordered plan to `tmp/review-fix-plan.md`
+  — one chunk per package, findings listed, status boxes — and gets a go-ahead
+  before editing; splits a large package to file-level chunks.
+- Works chunks in order, running `go test ./... -race` per chunk so each ends
+  green, ticking the plan boxes.
+- Stops after each changed chunk to ask commit-now-or-defer; never `git commit`s
+  without that consult and never proceeds past an unmade decision.
+
+### 6. Terse output
 
 **Request:** `/review ./pkg/foo`.
 

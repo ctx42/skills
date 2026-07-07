@@ -6,8 +6,9 @@ description: >
   style rules, the deeper criteria in rules.md, and general correctness
   (bugs, edge cases, error handling). The default review reasons only, running
   no build or test tools; an opt-in fix path applies findings and runs the test
-  suite to prove them. Honors budget controls (packages, max_issues, depth,
-  plan_first). Also grows the rule list —
+  suite to prove them. Broad fix jobs are planned to a file and applied package
+  by package, consulting before each commit. Honors budget controls (packages,
+  max_issues, depth, plan_first). Also grows the rule list —
   from a plain-language prompt or by mining the current editing session for your
   feedback.
 license: MIT
@@ -161,11 +162,31 @@ Run the whole-module suite, not just the changed package:
 
 - **Before editing**, run `go test ./... -race` for a green baseline. If it is
   already red, **stop and report** the pre-existing failures; do not edit.
-- **After editing**, run `go test ./... -race` again. The job is not done until
-  it passes for the whole module. A failing or unrun suite means not done —
-  never report success without it.
+- **After editing**, run `go test ./... -race` again — in a chunked job (below),
+  after each chunk so every chunk ends green. The job is not done until it passes
+  for the whole module. A failing or unrun suite means not done — never report
+  success without it.
 
 (This gate is for the fix path only; Check mode stays reason-only.)
+
+**Committing.** The fix path may `git commit` applied fixes, but **never without
+an explicit consult**. Propose the commit — a conventional-commit summary of the
+change — and commit only on approval; the user decides commit-now or defer. Never
+commit a red or unrun suite.
+
+**Big fix jobs: plan, chunk, consult.** When the fix job is broad — findings span
+several packages or large LOC — do not edit straight through:
+
+1. Write an ordered plan to a gitignored scratch file (`tmp/review-fix-plan.md`):
+   one entry per chunk, each naming the package (or file) it covers, the findings
+   to fix there, and status boxes (fixed / tests green / committed). A chunk is one
+   package; split a large package (many findings or big files) into file-level
+   chunks and note the split. Show the plan and get a go-ahead before chunk 1.
+2. Work chunks in order. Per chunk: apply its fixes under the rules above, run the
+   whole-module gate so the chunk ends green, and tick its plan boxes.
+3. Consult after each chunk that produced edits or a decision — show the change and
+   the green result, then ask commit-now-or-defer per **Committing**. Auto-continue
+   only a chunk that needed no fixes. Never proceed past an unmade decision.
 
 ## Rule-edit mode
 
