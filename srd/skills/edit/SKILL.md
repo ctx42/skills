@@ -58,9 +58,9 @@ user; do not proceed.** Read these before editing:
   — shared operating procedures (glossary resolution).
 - [../create/assets/srd-template.md](../create/assets/srd-template.md)
   — the required section order; consult it when restructuring.
-- [../create/scripts/glossary-terms.sh](../create/scripts/glossary-terms.sh)
-  — lists terms already in the shared glossary, so term edits link, not
-  redefine.
+- [../create/scripts/glossary-fingerprint.sh](../create/scripts/glossary-fingerprint.sh)
+  — hashes the shared glossary so its term digest is rebuilt only on change; the
+  digest keeps term edits linking, not redefining.
 
 ## Session start (every mode)
 

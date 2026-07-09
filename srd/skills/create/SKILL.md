@@ -50,8 +50,8 @@ file, creating it), then report where — so it never recurs.
   procedures (glossary resolution).
 - [assets/srd-template.md](assets/srd-template.md) — the SRD skeleton, in the
   required section order with the keyword notice. Fill it; do not restructure it.
-- [scripts/glossary-terms.sh](scripts/glossary-terms.sh) — lists terms already
-  defined in the shared glossary, so they are linked, not redefined.
+- [scripts/glossary-fingerprint.sh](scripts/glossary-fingerprint.sh) — hashes the
+  shared glossary so its term digest is rebuilt only when the glossary changes.
 
 Two hard constraints, every run: the SRD MUST contain **no** `Example`/`Don't`/
 `Do` annotations (REQ-7), and a normative keyword (MUST, SHALL, …) MUST appear
@@ -61,7 +61,7 @@ Two hard constraints, every run: the SRD MUST contain **no** `Example`/`Don't`/
 
 Copy this checklist and tick it off:
 
-- [ ] 0. Resolve the shared glossary path (file or directory) and load its terms.
+- [ ] 0. Resolve the shared glossary and load its term digest.
 - [ ] 1. Interview the user along the SRD spine.
 - [ ] 2. Propose requirement groups and prefixes; get confirmation.
 - [ ] 3. Draft the SRD from the template.
@@ -71,10 +71,10 @@ Copy this checklist and tick it off:
 ### 0. Resolve the glossary
 
 Run the glossary-resolution procedure in
-[references/srd-procedures.md](references/srd-procedures.md): confirm the glossary
-path — a single Markdown file or a directory of them — load its terms with the
-extractor, and save the path to memory. The loaded term set lets the SRD satisfy
-GLO-3 / STR-10 without redefining known terms.
+[references/srd-procedures.md](references/srd-procedures.md): resolve the
+per-project glossary path — a single Markdown file or a directory of them —
+fingerprint it, and load or regenerate its term digest. The digest lets the SRD
+satisfy GLO-3 / STR-10 without redefining known terms.
 
 ### 1. Interview
 
@@ -91,7 +91,7 @@ time**, in this order, and restate each resolved branch before moving on:
    atomic (REQ-1), about what *the system* does (LANG-1, LANG-5), and verifiable
    with concrete criteria — reject vague qualities like "secure" or "fast" and
    ask for the measurable form (REQ-5, REQ-6).
-6. **Terms** — as terms surface, check them against the loaded glossary set. Mark
+6. **Terms** — as terms surface, check them against the glossary digest. Mark
    each as already-defined (link to it) or needs a local Glossary entry.
 
 Do not collect Owners, Initiative links, or Designs links — those are left as

@@ -39,7 +39,8 @@ or rename `create`, or this skill loses its standard.
 1. Reads the SRD top to bottom.
 2. **Approval gate** — reads `Status`, pre-fills approved vs in-progress, and
    asks you to confirm or override. This governs id rules for the session.
-3. Resolves and loads the shared glossary (confirms the path, remembers it).
+3. Resolves the per-project glossary and loads its term digest, regenerating it
+   only when the glossary changed.
 
 ## Id Rules
 

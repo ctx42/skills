@@ -17,9 +17,10 @@ SRD written elsewhere.
 
 ## How It Works
 
-1. **Resolves the shared glossary** — confirms the glossary path, a single
-   Markdown file or a directory of them (remembered between runs), and loads its
-   terms so known terms are linked, not redefined.
+1. **Resolves the shared glossary** — a single Markdown file or a directory of
+   them, remembered per project. It fingerprints the docs and loads a cached term
+   digest, regenerating the digest only when the glossary changed, so known terms
+   are linked, not redefined.
 2. **Interviews you** one branch at a time: objective → UI change → in/out of
    scope → the actual requirements → terms. It pushes back on vague or
    non-atomic requirements.
@@ -39,7 +40,8 @@ verification checklist in
 `references/srd-checklist.md`; house extensions (US English, sub-numbering,
 defect examples) in `references/authoring-guide.md`; shared operating procedures
 (glossary resolution) in `references/srd-procedures.md`; the skeleton in
-`assets/srd-template.md`; the glossary extractor in `scripts/glossary-terms.sh`.
+`assets/srd-template.md`; the glossary fingerprint in
+`scripts/glossary-fingerprint.sh`.
 The `edit` and `review` skills read these same files — `create` owns
 them.
 
@@ -67,7 +69,7 @@ questioning.
 **Request:** `/create` then "We need an SRD for a password reset feature."
 
 **Expected behavior:**
-- Confirms the shared glossary path (file or directory) and loads its terms
+- Resolves the per-project glossary (file or directory) and loads its term digest
   before drafting.
 - Interviews one branch at a time (objective, UI change, in/out of scope, the
   rules), refusing to draft straight from the one-line idea.
@@ -83,7 +85,7 @@ questioning.
 glossary (e.g. "Audit Log") and a brand-new term.
 
 **Expected behavior:**
-- Recognizes the known term from `glossary-terms.sh` output and does not add a
+- Recognizes the known term from the glossary digest and does not add a
   local Glossary entry for it; links or refers to the shared glossary instead
   (GLO-3 / STR-10).
 - Adds a local Glossary entry only for the genuinely new term, defining it and
