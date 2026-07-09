@@ -67,19 +67,23 @@ update-safe on Linux, macOS, and Windows.
 read and write below:
 
 ```bash
-MEM_DIR="$HOME/.agent-data/ctx42-skills"
+MEM_DIR="$HOME/.agent-data/ctx42-skills/srd"
 mkdir -p "$MEM_DIR"
 MEM="$MEM_DIR/memory.md"   # the memory.md every step below reads and writes
 ```
+
+The `srd` segment scopes this base to `srd` skills; `craft` and `golang`
+never load it.
 
 **First run and migration** (do once; confirm the file change with the user):
 
 - `$MEM` exists → use it.
 - `$MEM` does not exist, but a prior store does → offer to move it to `$MEM`,
   then use it. Check, in order:
-  `${XDG_DATA_HOME:-$HOME/.local/share}/ctx42-srd/memory.md` (the previous
-  location) and an old `memory.md` in this skill's directory (a pre-move or dev
-  checkout).
+  `$HOME/.agent-data/ctx42-skills/memory.md` (the earlier bundle-root location),
+  `${XDG_DATA_HOME:-$HOME/.local/share}/srd-system-check/memory.md` and
+  `${XDG_DATA_HOME:-$HOME/.local/share}/ctx42-srd/memory.md` (older locations),
+  and an old `memory.md` in this skill's directory (a pre-move or dev checkout).
 - Neither exists → seed `$MEM` from `memory.template.md` in this skill's
   directory.
 

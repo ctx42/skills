@@ -91,14 +91,16 @@ not shipped content**, so it lives outside the repo at one fixed, `$HOME`-rooted
 per-machine path shared by Claude and Grok:
 
 ```
-~/.agent-data/ctx42-skills/memory.md
+~/.agent-data/ctx42-skills/srd/memory.md
 ```
 
-The `craft:enhance-skills` self-learning mechanism uses the same root:
+The `srd/` segment scopes it to the `srd` skills, so only they load it. The
+`craft:enhance-skills` self-learning mechanism uses the same root:
 `~/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md` for skills that run
 from a read-only install. The repo ships only `memory.template.md`, used to seed
-`memory.md` on a fresh machine (older installs migrate from
-`${XDG_DATA_HOME:-~/.local/share}/ctx42-srd/`). See each skill's `SKILL.md` for
-the resolution and migration rules.
+`memory.md` on a fresh machine (older installs migrate from the earlier
+bundle-root `~/.agent-data/ctx42-skills/memory.md` or
+`${XDG_DATA_HOME:-~/.local/share}/{srd-system-check,ctx42-srd}/`). See each
+skill's `SKILL.md` for the resolution and migration rules.
 
 ---
