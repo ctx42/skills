@@ -12,12 +12,10 @@ license: MIT
 
 ## Self-learning
 
-Read this skill's lessons first and obey them: the sibling `LESSONS.md`, plus —
-when this skill's directory is not writable (an installed copy) —
-`$HOME/.agent-data/ctx42-skills/lessons/craft/cm.md`. When the user corrects
-you, or you catch your own mistake, append the fix as a one-line rule to
-whichever is writable (the sibling in a source checkout, else the `.agent-data`
-file, creating it), then report where — so it never recurs.
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/craft/cm.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.
 
 ## Invocation
 
