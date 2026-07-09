@@ -42,7 +42,8 @@ as Claude Code plugins.
         ├── cm/                     # Conventional commit messages
         ├── grill-me/               # Planning interview
         ├── skill-smith/            # Author and improve skills
-        └── readme-smith/           # Author and improve project READMEs
+        ├── readme-smith/           # Author and improve project READMEs
+        └── enhance-skills/         # Record lessons into skills; self-learning
 ```
 
 Skills are grouped into **three plugins** (`golang`, `srd`, `craft`).
@@ -86,14 +87,18 @@ Keep these skills within the same plugin so the `../sibling` paths resolve.
 ## system-check Memory
 
 `system-check` keeps a curated platform-knowledge base. It is **user data,
-not shipped content**, so it lives outside the repo at one fixed, tool-agnostic,
+not shipped content**, so it lives outside the repo at one fixed, `$HOME`-rooted,
 per-machine path shared by Claude and Grok:
 
 ```
-${XDG_DATA_HOME:-~/.local/share}/ctx42-srd/memory.md
+~/.agent-data/ctx42-skills/memory.md
 ```
 
-The repo ships only `memory.template.md`, used to seed the file on a fresh
-machine. See that skill's `SKILL.md` for the resolution and migration rules.
+The `craft:enhance-skills` self-learning mechanism uses the same root:
+`~/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md` for skills that run
+from a read-only install. The repo ships only `memory.template.md`, used to seed
+`memory.md` on a fresh machine (older installs migrate from
+`${XDG_DATA_HOME:-~/.local/share}/ctx42-srd/`). See each skill's `SKILL.md` for
+the resolution and migration rules.
 
 ---

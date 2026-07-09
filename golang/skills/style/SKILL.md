@@ -17,6 +17,15 @@ Test rule overrides it. Do not hand-edit this file ad hoc — change rules with
 Report tersely: when citing a rule, name it and the fix; don't restate the
 rule's full text or narrate.
 
+## Self-learning
+
+Read this skill's lessons first and obey them: the sibling `LESSONS.md`, plus —
+when this skill's directory is not writable (an installed copy) —
+`$HOME/.agent-data/ctx42-skills/lessons/golang/style.md`. When the user corrects
+you, or you catch your own mistake, append the fix as a one-line rule to
+whichever is writable (the sibling in a source checkout, else the `.agent-data`
+file, creating it), then report where — so it never recurs.
+
 ## Production
 
 - gofmt + goimports always; never hand-format or reorder imports manually.

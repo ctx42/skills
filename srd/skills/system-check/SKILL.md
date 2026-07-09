@@ -24,6 +24,15 @@ checks — it delegates those to `srd:review` — and it never rewrites prose. I
 own value is the **system-knowledge layer**: judging the SRD against what is
 already known about the target platform, as captured in `memory.md`.
 
+## Self-learning
+
+Read this skill's lessons first and obey them: the sibling `LESSONS.md`, plus —
+when this skill's directory is not writable (an installed copy) —
+`$HOME/.agent-data/ctx42-skills/lessons/srd/system-check.md`. When the user
+corrects you, or you catch your own mistake, append the fix as a one-line rule to
+whichever is writable (the sibling in a source checkout, else the `.agent-data`
+file, creating it), then report where — so it never recurs.
+
 ## Boundaries
 
 - **Role:** implementation-readiness reviewer. Produce questions for the SRD
@@ -51,15 +60,14 @@ already known about the target platform, as captured in `memory.md`.
 
 `memory.md` holds machine-specific, growing user data, so it must not live in
 this skill's directory, which the host replaces on every plugin update. It lives
-in one fixed, host-agnostic location on the machine, shared by every project —
-one platform memory, update-safe everywhere.
+in one fixed, `$HOME`-rooted location shared by every project — visible and
+update-safe on Linux, macOS, and Windows.
 
 **Resolve the path once per run** with a shell command, then use it for every
-read and write below (plugin-data path variables are host-specific and not
-portable — resolve from `$HOME` instead):
+read and write below:
 
 ```bash
-MEM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/ctx42-srd"
+MEM_DIR="$HOME/.agent-data/ctx42-skills"
 mkdir -p "$MEM_DIR"
 MEM="$MEM_DIR/memory.md"   # the memory.md every step below reads and writes
 ```
@@ -67,9 +75,11 @@ MEM="$MEM_DIR/memory.md"   # the memory.md every step below reads and writes
 **First run and migration** (do once; confirm the file change with the user):
 
 - `$MEM` exists → use it.
-- `$MEM` does not exist, but an old `memory.md` with facts sits in this skill's
-  directory (a pre-move checkout, or dev use) → offer to move that file to
-  `$MEM`, then use it.
+- `$MEM` does not exist, but a prior store does → offer to move it to `$MEM`,
+  then use it. Check, in order:
+  `${XDG_DATA_HOME:-$HOME/.local/share}/ctx42-srd/memory.md` (the previous
+  location) and an old `memory.md` in this skill's directory (a pre-move or dev
+  checkout).
 - Neither exists → seed `$MEM` from `memory.template.md` in this skill's
   directory.
 

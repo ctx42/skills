@@ -25,6 +25,15 @@ Sources of truth (read once per run):
   a plugin group's `skills/` dir), naming, the catalog-doc update list, the
   plugin dev loop, retiring. Do not duplicate it; follow it.
 
+## Self-learning
+
+Read this skill's lessons first and obey them: the sibling `LESSONS.md`, plus —
+when this skill's directory is not writable (an installed copy) —
+`$HOME/.agent-data/ctx42-skills/lessons/craft/skill-smith.md`. When the user
+corrects you, or you catch your own mistake, append the fix as a one-line rule to
+whichever is writable (the sibling in a source checkout, else the `.agent-data`
+file, creating it), then report where — so it never recurs.
+
 ## Create mode
 
 Forge a complete, standard-compliant skill end-to-end.

@@ -17,6 +17,15 @@ Review an SRD someone else wrote and report what fails the SRD standard. This
 skill is **read-only** — it never edits the source. It produces findings the
 author acts on.
 
+## Self-learning
+
+Read this skill's lessons first and obey them: the sibling `LESSONS.md`, plus —
+when this skill's directory is not writable (an installed copy) —
+`$HOME/.agent-data/ctx42-skills/lessons/srd/review.md`. When the user corrects
+you, or you catch your own mistake, append the fix as a one-line rule to
+whichever is writable (the sibling in a source checkout, else the `.agent-data`
+file, creating it), then report where — so it never recurs.
+
 ## Boundaries
 
 - **Role:** the read-only reviewer of an SRD written by someone else. Produce

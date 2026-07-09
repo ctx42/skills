@@ -16,6 +16,15 @@ a shared understanding. Walk down each branch of the design tree, resolving
 dependencies between decisions one-by-one. Bias toward small, compartmentalized
 specs. Make me verify key decisions explicitly so nothing is missed.
 
+## Self-learning
+
+Read this skill's lessons first and obey them: the sibling `LESSONS.md`, plus —
+when this skill's directory is not writable (an installed copy) —
+`$HOME/.agent-data/ctx42-skills/lessons/craft/grill-me.md`. When the user
+corrects you, or you catch your own mistake, append the fix as a one-line rule to
+whichever is writable (the sibling in a source checkout, else the `.agent-data`
+file, creating it), then report where — so it never recurs.
+
 ## How It Works
 
 When this skill is invoked, switch into interviewer mode:

@@ -29,6 +29,15 @@ Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. The README is the payload — write it in full;
 do not also paste it back into chat.
 
+## Self-learning
+
+Read this skill's lessons first and obey them: the sibling `LESSONS.md`, plus —
+when this skill's directory is not writable (an installed copy) —
+`$HOME/.agent-data/ctx42-skills/lessons/craft/readme-smith.md`. When the user
+corrects you, or you catch your own mistake, append the fix as a one-line rule to
+whichever is writable (the sibling in a source checkout, else the `.agent-data`
+file, creating it), then report where — so it never recurs.
+
 ## Non-negotiables (both modes)
 
 - **Never fabricate.** A claim, command, version, or number you cannot verify

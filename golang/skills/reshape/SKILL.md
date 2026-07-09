@@ -29,6 +29,15 @@ Sources of truth:
 - `references/change-catalog.md` — each archetype's detail + Go example, keyed to
   the list below. Consult an entry when drafting that proposal; don't preload it.
 
+## Self-learning
+
+Read this skill's lessons first and obey them: the sibling `LESSONS.md`, plus —
+when this skill's directory is not writable (an installed copy) —
+`$HOME/.agent-data/ctx42-skills/lessons/golang/reshape.md`. When the user
+corrects you, or you catch your own mistake, append the fix as a one-line rule to
+whichever is writable (the sibling in a source checkout, else the `.agent-data`
+file, creating it), then report where — so it never recurs.
+
 ## Target
 
 Resolve the invocation:

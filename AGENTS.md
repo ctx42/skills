@@ -101,6 +101,14 @@ claude --plugin-dir ./srd      # repeat the flag for more groups
   improve (audit an existing README, report by severity, fix on confirmation).
   Structure and style come from `craft/skills/readme-smith/references/template.md`;
   never fabricates facts and runs the install/quickstart commands it ships.
+- `enhance-skills` — Turn corrections into durable skill improvements. Harvest
+  mode scans the conversation for corrections and self-caught mistakes and
+  appends one-line rules to each used skill's lessons store; retrofit mode
+  installs the `## Self-learning` block into a `SKILL.md` missing it. Every skill
+  in the repo carries that block. The store resolves per skill: the sibling
+  `LESSONS.md` in a writable source checkout, else a durable, update-safe file at
+  `~/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md` for read-only
+  installs.
 
 ## More Detail
 

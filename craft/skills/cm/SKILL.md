@@ -10,6 +10,15 @@ license: MIT
 
 # Commit Message Formatting
 
+## Self-learning
+
+Read this skill's lessons first and obey them: the sibling `LESSONS.md`, plus —
+when this skill's directory is not writable (an installed copy) —
+`$HOME/.agent-data/ctx42-skills/lessons/craft/cm.md`. When the user corrects
+you, or you catch your own mistake, append the fix as a one-line rule to
+whichever is writable (the sibling in a source checkout, else the `.agent-data`
+file, creating it), then report where — so it never recurs.
+
 ## Invocation
 
 - With commit hash: generate from that commit's diff.

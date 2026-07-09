@@ -18,6 +18,15 @@ confirmed change at a time**. This skill **edits the source file** — it is the
 write counterpart to the read-only `review`. It never restates a rule; it
 reuses the standard and self-checks every edit against it.
 
+## Self-learning
+
+Read this skill's lessons first and obey them: the sibling `LESSONS.md`, plus —
+when this skill's directory is not writable (an installed copy) —
+`$HOME/.agent-data/ctx42-skills/lessons/srd/edit.md`. When the user corrects
+you, or you catch your own mistake, append the fix as a one-line rule to
+whichever is writable (the sibling in a source checkout, else the `.agent-data`
+file, creating it), then report where — so it never recurs.
+
 ## Boundaries
 
 - **Role:** the write-only editor of an existing SRD — apply changes one

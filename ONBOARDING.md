@@ -60,7 +60,7 @@ List available skills. They are namespaced by plugin, e.g.:
 
 - `golang`: `/golang:style`, `/golang:review`, `/golang:cover`, `/golang:reshape`
 - `srd`: `/srd:create`, `/srd:review`, `/srd:edit`, `/srd:system-check`
-- `craft`: `/craft:cm`, `/craft:grill-me`, `/craft:skill-smith`, `/craft:readme-smith`
+- `craft`: `/craft:cm`, `/craft:grill-me`, `/craft:skill-smith`, `/craft:readme-smith`, `/craft:enhance-skills`
 
 Each skill has its own `README.md` with usage examples.
 
@@ -72,10 +72,11 @@ Each skill has its own `README.md` with usage examples.
 your data, stored once per machine (shared by Claude and Grok) at:
 
 ```
-${XDG_DATA_HOME:-~/.local/share}/ctx42-srd/memory.md
+~/.agent-data/ctx42-skills/memory.md
 ```
 
-It is created on first use from the shipped template and survives plugin updates.
+It is created on first use from the shipped template and survives plugin updates
+(older installs migrate from `${XDG_DATA_HOME:-~/.local/share}/ctx42-srd/`).
 Nothing to set up; back this file up if the knowledge is valuable.
 
 ---
