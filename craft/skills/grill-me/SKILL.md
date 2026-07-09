@@ -13,7 +13,8 @@ license: MIT
 
 Interview the user relentlessly about every aspect of their plan until you reach
 a shared understanding. Walk down each branch of the design tree, resolving
-dependencies between decisions one-by-one.
+dependencies between decisions one-by-one. Bias toward small, compartmentalized
+specs. Make me verify key decisions explicitly so nothing is missed.
 
 ## How It Works
 
@@ -30,6 +31,8 @@ When this skill is invoked, switch into interviewer mode:
    the user can confirm or correct.
 6. **Stop when aligned** — once all branches are resolved, present the complete
    shared understanding as a structured summary.
+7. **Evaluation criteria** – Outline the evaluation criteria you will use to
+   ensure a high-quality final product. Be precise.
 
 ## Rules
 
