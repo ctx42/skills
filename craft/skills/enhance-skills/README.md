@@ -33,9 +33,10 @@ its store to one of two places:
 - **In-place** — running from a writable source checkout: the sibling
   `LESSONS.md` next to `SKILL.md`. Committed here, lessons ship to everyone.
 - **External** — running from a read-only or update-clobbered install
-  (`~/.claude/plugins/cache/…`): `$HOME/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md`.
-  `$HOME`-rooted so it is visible and survives plugin updates on Linux, macOS,
-  and Windows.
+  (`~/.claude/plugins/cache/…`), the durable store
+  `$HOME/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md`. It is
+  `$HOME`-rooted, so it stays visible and survives plugin updates on Linux,
+  macOS, and Windows.
 
 Reading unions both when both exist (shipped lessons plus local ones); writing
 goes only to the writable one. The store is created lazily, on the first lesson.
@@ -71,8 +72,8 @@ real bug"), the user runs `/craft:enhance-skills`.
 **Request:** Harvest while the used skill runs from `~/.claude/plugins/cache/…`.
 
 **Expected:**
-- Resolves the store to `$HOME/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md`,
-  not the cache.
+- Resolves the store to
+  `$HOME/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md`, not the cache.
 - Creates parent dirs and writes the rule there; names the path in the report.
 - Does not write into the cache even if the OS reports it writable.
 

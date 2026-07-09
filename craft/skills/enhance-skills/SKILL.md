@@ -92,19 +92,21 @@ Block to insert (verbatim, with `<plugin>/<skill>` resolved to the real names):
 
 ## Lesson format
 
-A lessons file is a flat list of one-line imperative rules, newest appended last:
+A lessons file is a flat list of imperative rules, one per bullet, newest last:
 
     # Lessons
 
     Rules learned for the `<skill>` skill. Read before running; obey each line.
 
-    - <one-line imperative rule, stated so it generalizes past this task>
+    - <imperative rule, stated so it generalizes past this task>
 
-- One rule per line, imperative, terse — the bar of a style rule.
+- One rule per bullet, imperative, terse — the bar of a style rule.
+- Conform to the repo markdown style: wrap at ~80 columns, continuation lines
+  indented two spaces (like the wrapped rule bullets in the `golang:style` skill).
 - Concrete and general: "Derive the commit type from the diff, not the branch
   name" — not "the user wanted fix not feat here".
 - No dates, ticket ids, or task-specific nouns. A lesson outlives its task.
-- Dedup: fold a near-duplicate into the existing line; never add a twin.
+- Dedup: fold a near-duplicate into the existing rule; never add a twin.
 - Create the file with the `# Lessons` header on the first lesson; append after.
 
 ## Output
