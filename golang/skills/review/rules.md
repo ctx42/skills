@@ -23,6 +23,7 @@ Keyed entries:
 - Reusable package ships a README (Production)
 - Package godoc lives in the package-named file (Production)
 - Output belongs to the entry point, not leaf functions (Production)
+- Read the environment through the ring (Production + Test)
 - Name the overflow (Production + Test)
 - Blank line between distinct groups (Production + Test)
 - Three-letter receivers and matching locals (Production)
@@ -221,6 +222,40 @@ injected writer used for error/result reporting) anywhere but the command entry
 point; a function returning an `int` exit code instead of an `error`; a
 function that both prints an error and returns (or absorbs) it.
 
+## Read the environment through the ring (Production + Test)
+
+Why: the ring (`*ring.Ring`) is the project's injected process environment —
+one seam the whole program reads env, args, and streams through. A function
+that calls `os.Getenv` directly reaches around that seam: it can't be exercised
+with a controlled environment, forces tests to mutate the real process env with
+`t.Setenv` (global, serializing, leak-prone), and hides an input the signature
+should declare. Taking `*ring.Ring` makes the dependency explicit and the code
+testable in isolation.
+
+Production: accept `*ring.Ring` and read via `rng.EnvGet`/`rng.EnvLookup`; never
+`os.Getenv`. Test: set the value on the ring with `rng.EnvSet`, never `t.Setenv`
+— and set it *after* constructing the ring, capturing any working-directory-
+relative fixture path into a local first, since `rng.EnvSet` mutates the ring in
+place at any point before the code under test reads it.
+
+```go
+// avoid — reaches around the seam; test must mutate global process env:
+func LogFilename() string {
+	if id := os.Getenv("BUILD_ID"); id != "" { /* ... */ }
+}
+t.Setenv("BUILD_ID", "123")
+
+// prefer — dependency declared; test sets it on the ring:
+func LogFilename(rng *ring.Ring) string {
+	if id := rng.EnvGet("BUILD_ID"); id != "" { /* ... */ }
+}
+rng := tst.Ring()
+rng.EnvSet("BUILD_ID", "123")
+```
+
+Detect: `os.Getenv`/`os.LookupEnv` in a function that has (or could take) a
+`*ring.Ring`; `t.Setenv` in a test whose subject reads env through a ring.
+
 ## Name the overflow (Production + Test)
 
 Why: when a call or literal pushes past 80 cols, hoisting the overflowing piece
@@ -318,6 +353,10 @@ func pageBody(t tester.T, d pageData) []byte {
 const pageTpl = "testdata/page.tpl.yml"
 body := goldkit.Create(t, pageTpl, d).Body()
 ```
+
+Relation: the same holds in production — a one-line func used at a single call
+site (e.g. `func isX(f) bool { return slices.Contains(xs, f) }`) adds a name and
+indirection without hiding complexity; inline it at the caller.
 
 ## Assert on distinctive output, not shared tokens (Test)
 

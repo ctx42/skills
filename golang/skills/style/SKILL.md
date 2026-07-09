@@ -52,6 +52,8 @@ one-line rule to whichever is writable (creating it) and report where.
   (`pag.f()`, not `f(pag)`); drop the type from its name (`encode`, not
   `encodePage`). Stay a func only when a signature contract (sort, http,
   callback) or deliberate typelessness (`helpers.go`) requires.
+- Don't wrap a single expression in a one-line function used at a single call
+  site; inline it (Test has the same rule for helpers).
 - Receivers are a ~three-letter type abbreviation, not a single letter:
   `pag *page`, `cfg *config`.
 - A local of type `T` reuses `T`'s receiver name (`pag` for `*page`, `cfg` for
@@ -68,6 +70,9 @@ one-line rule to whichever is writable (creating it) and report where.
 - Every exported symbol and the package have godoc.
 - Put the package godoc comment in the file named after the package (`foo.go`
   in package `foo`) when one exists; don't keep a separate `doc.go` for it.
+- Keep package-wide top-level declarations (exported consts/vars) in the
+  package-named file, not a separate topic-named file; same principle as the
+  package-godoc rule above.
 - Godoc states only what the signature can't; never restate the obvious.
 - In godoc prose name the type, not the receiver variable.
 - No godoc on interface-implementing methods.
@@ -78,6 +83,8 @@ one-line rule to whichever is writable (creating it) and report where.
   uses `:=`.
 - Never write output (errors included) to stdout/stderr from library/leaf/mid-level
   functions; return an error (`%w`) or output as a value.
+- A function that needs an environment variable takes `*ring.Ring` and reads it
+  via `rng.EnvGet`/`EnvLookup`; never `os.Getenv`.
 - Discard an intentionally-ignored return explicitly with `_` (`_, _ =
   fmt.Fprintf(w, ...)`); never leave it bare, so the discard reads as deliberate.
 - Export sentinel errors as `ErrXxx`; unexported as `errXxx`.
@@ -120,6 +127,9 @@ one-line rule to whichever is writable (creating it) and report where.
   stacked `ErrorContain` calls.
 - Hoist an expected literal into a `want` local only to keep the assertion
   within 80 cols; inline it when the call already fits.
+- Hoist a multi-line structured-data literal (JSON, YAML) passed to a call into
+  a pretty-printed backtick raw-string local; don't inline it or split it across
+  `+`-joined segments to fit the line limit.
 - Name the actual value `have` and the expected value `want`, never `got`; when
   several of each coexist in one scope, suffix as `hXxx`/`wXxx` naming the value.
 - `have` is the value under test (the `--- When ---` result); it overrides
@@ -132,6 +142,8 @@ one-line rule to whichever is writable (creating it) and report where.
 - Use oskit filesystem helpers in arrange/readback (`oskit.Create`, `Write`,
   `MkdirAll`, `ReadFile`/`ReadFileStr`), not `os.*` wrapped in `assert.NoError`
   (nor `os.ReadFile` plus error handling and a `string(...)` conversion).
+- Set an environment variable for code under test with `rng.EnvSet`, never
+  `t.Setenv`.
 - Every new func/method (exported or not) ships with tests in the same change.
 - When a test guards a struct's field count, a new field must both bump the
   count and gain an assertion in the same change — never bump the count alone.
