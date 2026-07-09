@@ -34,6 +34,8 @@ rule's full text or narrate.
   aligns; keep `\n` explicit, never a raw backtick string for multi-line content.
 - Separate multi-line switch cases with a blank line; none before the first.
 - Comments are full sentences: capital start, terminal period.
+- Godoc prose is grammatically correct English: articles, subject-verb
+  agreement, restrictive "that" vs "which".
 - Comments explain the code; never trace it to a spec — no requirement/ticket
   ids in code comments (`// CLI-4`, `// JIRA-123`).
 - No name stutter: `pkg.Thing`, not `pkg.PkgThing`; exempt a name fixed by an
@@ -57,6 +59,8 @@ rule's full text or narrate.
   naming the group; keep each member's own godoc. Reserve standalone `const`
   for a value with no relatives.
 - Every exported symbol and the package have godoc.
+- Put the package godoc comment in the file named after the package (`foo.go`
+  in package `foo`) when one exists; don't keep a separate `doc.go` for it.
 - Godoc states only what the signature can't; never restate the obvious.
 - In godoc prose name the type, not the receiver variable.
 - No godoc on interface-implementing methods.

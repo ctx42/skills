@@ -21,6 +21,7 @@ Keyed entries:
 - Use godoc cross-references (Production)
 - Example functions for public APIs (Production)
 - Reusable package ships a README (Production)
+- Package godoc lives in the package-named file (Production)
 - Output belongs to the entry point, not leaf functions (Production)
 - Name the overflow (Production + Test)
 - Blank line between distinct groups (Production + Test)
@@ -165,6 +166,18 @@ test-only) whose directory has no `README.md` and no `doc.go` package-overview
 comment beyond a one-line synopsis; or one present but missing the essentials —
 stated purpose, import path, and at least one runnable usage snippet. Scope to
 the module root and each public sub-package; do not demand a README per file.
+
+## Package godoc lives in the package-named file (Production)
+
+Why: a reader looking for the package overview expects it on the file named
+after the package (`foo.go` in package `foo`); a standalone `doc.go` holding
+only the `package` comment is an extra file to find and maintain.
+Detect: a `doc.go` whose sole content is the package doc comment while a
+package-named file exists — move the comment there and delete `doc.go`.
+Relation: the README rule above still accepts a `doc.go` package overview as a
+README substitute; that only applies when no package-named file exists to host
+the comment. When one exists, it wins and `doc.go` should not carry the package
+godoc.
 
 ## Output belongs to the entry point, not leaf functions (Production)
 
