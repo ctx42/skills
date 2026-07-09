@@ -60,10 +60,10 @@ Forge a complete, standard-compliant skill end-to-end.
    keep it under ~500 lines. Use progressive disclosure — push large reference
    material into sibling files linked one level deep, because agents only preview
    nested files and deeper chains read as incomplete. Reference content obeys the
-   same conciseness test as the body, and the workflow must consult it on demand —
-   never preload a whole reference each run. Carry the output-discipline
-   line (standards.md) where the skill describes its output — terse output is
-   mandatory, not optional.
+   same conciseness test as the body, and the workflow must consult it on
+   demand — never preload a whole reference each run. Carry the
+   output-discipline line (standards.md) where the skill describes its output —
+   terse output is mandatory, not optional.
 6. **Write `README.md`.** Concise usage + when-to-use, and an `## Evaluations`
    section holding the step-4 scenarios.
 7. **Validate & refine.** Dry-run the skill against its evals; where it

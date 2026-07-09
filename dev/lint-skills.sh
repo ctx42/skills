@@ -9,7 +9,8 @@
 #     carries no forbidden platform-extension keys (strict-portable rule),
 #   - the body uses no dynamic injection (!`cmd`) or $ARGUMENTS / $N,
 #   - README.md has an `## Evaluations` section,
-#   - every bundled .md reference over ~100 lines starts with a Contents list.
+#   - every bundled .md reference over ~100 lines starts with a Contents list,
+#   - Markdown prose wraps at ~80 columns (warning only).
 #
 # It then cross-checks .claude-plugin/marketplace.json (if present): every plugin
 # `source` must be a real plugin directory (with .claude-plugin/plugin.json), and
@@ -40,6 +41,39 @@ warn() { echo "WARN   $1"; warnings=$((warnings + 1)); }
 # Print the YAML frontmatter block (between the first two --- lines) of a file.
 frontmatter() {
     awk 'NR==1 && $0=="---"{f=1; next} f && $0=="---"{exit} f' "$1"
+}
+
+# The house wrap: Markdown prose lines stay within ~80 columns (standards.md,
+# Content hygiene). 80 is the target; lines up to a few over are tolerated only
+# when unbreakable, which the heuristic below already exempts.
+WRAP_LIMIT=80
+
+# Warn on Markdown prose wider than WRAP_LIMIT. Skips fenced code blocks and
+# table rows (aligned columns legitimately run wide), and flags a line only when
+# it stays breakable past the limit — a space at or after the limit means it
+# could have wrapped. Long URLs, paths, and links (no trailing space) are exempt.
+# Width is display columns, not bytes: each UTF-8 multibyte sequence (arrows,
+# em-dashes, …) collapses to one column first, since mawk's length() counts
+# bytes. Rare double-width glyphs (emoji) undercount by one — acceptable slack.
+check_wrap() {
+    local f="$1" out
+    [ -f "$f" ] || return 0
+    out="$(awk -v L="$WRAP_LIMIT" '
+        /^[[:space:]]*```/ { fence = !fence; next }
+        fence              { next }
+        /^[[:space:]]*\|/   { next }
+        {
+            s = $0
+            gsub(/[\300-\367][\200-\277]*/, ".", s)
+            if (length(s) <= L) next
+            if (substr(s, L + 1) ~ / /) printf "%d (%d cols)\n", NR, length(s)
+        }
+    ' "$f")"
+    [ -n "$out" ] || return 0
+    local line
+    while IFS= read -r line; do
+        warn "${f#"$SKILLS_SRC"/}:$line exceeds ${WRAP_LIMIT}-col wrap"
+    done <<<"$out"
 }
 
 lint_skill() {
@@ -86,11 +120,17 @@ lint_skill() {
             || err "$name: README.md has no '## Evaluations' section"
     fi
 
-    # Bundled .md references over ~100 lines start with a Contents list.
+    # Every Markdown file in the skill wraps prose at ~80 columns.
+    check_wrap "$skill_md"
+    check_wrap "$readme"
+
+    # Bundled .md references over ~100 lines start with a Contents list, and
+    # wrap like every other Markdown file.
     local f lines
     for f in "$dir"/*.md "$dir"/references/*.md "$dir"/assets/*.md; do
         [ -f "$f" ] || continue
         case "$(basename "$f")" in SKILL.md|README.md) continue ;; esac
+        check_wrap "$f"
         lines="$(wc -l <"$f")"
         if [ "$lines" -gt 100 ]; then
             head -25 "$f" | grep -qiE '^#+[[:space:]]+Contents|^Contents' \

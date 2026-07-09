@@ -76,8 +76,8 @@ Install the `## Self-learning` block as the first `## ` section of the target
 `SKILL.md` — immediately before its current first `## ` heading (append if the
 file has none). Skip if the block already exists. Fill `<plugin>` and `<skill>`
 from the target's path. Do not create any lessons file; the store appears lazily
-on the first lesson. Retrofit edits `SKILL.md`, so it needs an in-place checkout —
-on a read-only install, report that and stop.
+on the first lesson. Retrofit edits `SKILL.md`, so it needs an in-place
+checkout — on a read-only install, report that and stop.
 
 Block to insert (verbatim, with `<plugin>/<skill>` resolved to the real names):
 

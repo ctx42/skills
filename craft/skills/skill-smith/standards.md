@@ -168,6 +168,11 @@ Match specificity to task fragility:
 - Concrete examples beat abstract description — show input/output pairs when
   output quality depends on format.
 - Provide one default with an escape hatch, not a menu of options.
+- **Wrap Markdown prose at ~80 columns.** Reflow every edited paragraph so no
+  line exceeds 80; exempt code fences, table rows, and unbreakable tokens (URLs,
+  paths, links). `dev/lint-skills.sh` warns on breakable over-width lines.
+- **Align table columns** — pad cells so `|` delimiters line up in the source;
+  re-pad the whole table when adding a row.
 
 ## Scripts & bundled files
 
@@ -221,6 +226,8 @@ Mandatory and written before finalizing (eval-driven development):
 - [ ] Body under ~500 lines, dense, consistent terms, no time-sensitive info.
 - [ ] Output discipline: body carries the terse-output line; no framing or
       restating mandated; payload always stated in full.
+- [ ] Markdown prose wraps at ~80 cols (code fences, tables, unbreakable tokens
+      exempt); tables have aligned columns.
 - [ ] References one level deep; files named for content; ToC if > ~100 lines.
 - [ ] References earn their tokens too: no restating the model's knowledge or the
       rule they key to; entries don't collapse to one shared principle.
