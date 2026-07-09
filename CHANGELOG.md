@@ -1,3 +1,12 @@
+## v0.11.0 (Thu, 09 Jul 2026 14:04:42 UTC)
+- docs(srd): prefer three- or four-letter requirement codes.
+- docs(srd): update SRD template with formatting changes and RFC link addition.
+- feat(srd): cache glossary digest, regenerate only on change.
+- docs(srd): escape pipe in template status cell.
+- docs(readme-smith): add lessons store.
+- refactor(system-check): scope memory store under srd/.
+- feat(lint): warn on Markdown lines over 80 columns.
+
 ## v0.10.0 (Thu, 09 Jul 2026 12:06:42 UTC)
 - docs(golang): add rule to break over-width table rows positionally.
 - feat(golang): plan and chunk broad review fix jobs.
