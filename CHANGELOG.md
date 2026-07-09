@@ -1,3 +1,11 @@
+## v0.10.0 (Thu, 09 Jul 2026 12:06:42 UTC)
+- docs(golang): add rule to break over-width table rows positionally.
+- feat(golang): plan and chunk broad review fix jobs.
+- docs(golang): add godoc placement and grammar rules.
+- feat(grill-me): bias toward small specs and explicit evaluation.
+- feat: add skill self-learning and the enhance-skills skill.
+- docs: wrap skill lessons to the house markdown style.
+
 ## v0.9.0 (Mon, 06 Jul 2026 16:37:50 UTC)
 - feat(golang): add reshape skill for library API proposals.
 
