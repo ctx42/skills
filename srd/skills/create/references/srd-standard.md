@@ -289,6 +289,10 @@ demonstration, or analysis.
 **REQ-7:** A requirement MUST NOT carry an example, a note, or any other extra
 text. It MUST be the rule and nothing more.
 
+**REQ-8:** A requirement identifier's letter prefix (its code) SHOULD be three
+or four letters long. A code of another length MAY be used only when no clear
+three- or four-letter code fits the group.
+
 ## Glossary Discipline
 
 **GLO-1:** A glossary entry MUST only define a term. It MUST NOT describe system

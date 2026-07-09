@@ -103,8 +103,9 @@ contradictions; surface a decision that blocks another before continuing.
 
 ### 2. Group and number
 
-Cluster the requirements into logical groups. Propose a short uppercase prefix
-per group (e.g. `AUTH`, `DATA`, `UI`). Show the grouping and prefixes and let the
+Cluster the requirements into logical groups. Propose an uppercase prefix per
+group, three or four letters where one fits (REQ-8, e.g. `AUTH`, `DATA`,
+`VIEW`). Show the grouping and prefixes and let the
 user rename or merge. Then number each group from 1 in order (REQ-2 `**PFX-1:**`,
 REQ-3 unique, REQ-4 in order). Do the same for scope items (`SC-`, `OSC-`).
 Default to flat numbers; use one-letter sub-numbering (`**GR-1a:**`,

@@ -71,6 +71,8 @@ feedback loop, repeated until clean.
   (REQ-2)
 - Each identifier is unique in the document? (REQ-3)
 - Identifiers run in number order within their group? (REQ-4)
+- Identifier code (letter prefix) is three or four letters where one fits?
+  (REQ-8)
 - Each requirement is verifiable by test, inspection, demonstration, or
   analysis? (REQ-5)
 - No vague quality (`secure`, `fast`, `user-friendly`) — verifiable criteria
