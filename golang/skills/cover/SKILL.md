@@ -59,9 +59,6 @@ State the resolved kind and the function/file set before measuring.
 - `include=all` — also attempt the deferred complex lines (build the needed
   fakes/scaffolding); still report anything un-coverable.
 
-Plan-first applies to file, package, and module targets; function and line
-targets run straight.
-
 ## Per-function loop
 
 For each target function `Foo` (or method `T.Bar`), work in strict order.
@@ -142,11 +139,8 @@ finish and verify one function before starting the next.
 
 ## Module mode
 
-Walk packages **alphabetically and sequentially** — no coverage ranking, no
-subagent fan-out. Within each package, files alphabetically; within each file,
-functions top to bottom. The `packages` filter restricts which packages run;
-`max_tests` caps the whole run. Report which packages were covered and which
-were skipped.
+Walk order is in Target; `packages`/`max_tests` in Controls. Report which
+packages were covered and which were skipped.
 
 ## Un-coverable categories
 

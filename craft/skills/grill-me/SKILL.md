@@ -11,10 +11,8 @@ license: MIT
 
 # Grill Me
 
-Interview the user relentlessly about every aspect of their plan until you reach
-a shared understanding. Walk down each branch of the design tree, resolving
-dependencies between decisions one-by-one. Bias toward small, compartmentalized
-specs. Make me verify key decisions explicitly so nothing is missed.
+Interview the user relentlessly about every aspect of their plan until you both
+reach a shared understanding. Bias toward small, compartmentalized specs.
 
 ## Self-learning
 

@@ -57,20 +57,16 @@ one-line rule to whichever is writable (creating it) and report where.
 
 When the project is **Go**, examples belong in the README, and the
 `:project:doc-eg` gomake target is available, generate examples from runnable
-code instead of hand-writing snippets — so the README can never drift from code
-that compiles. This is the "verify commands" rule applied to examples: each
-example is proven by `go test`, not by inspection.
+code instead of hand-writing snippets, so the README can't drift from code that
+compiles.
 
 1. **Detect.** Run `gomake --help` and confirm `:project:doc-eg` is listed. If
    absent, hand-write examples as usual.
 2. **Author runnable examples first.** Write them as Go testable `Example…`
    functions in `_test.go`; run `go test ./...` until they pass.
-3. **Mark the spots.** At each place an example belongs, write a one-line marker
-   keyed as `<!-- gmdoceg:<relpath>/<ExampleFuncName> -->`, where `relpath` is the
-   example package's directory relative to the Markdown file (e.g.
-   `pkg/foo/ExampleNew` for a root README; drop the prefix only when the
-   `_test.go` sits in the file's own directory) — immediately above an empty (or
-   existing) ```go fence. See `references/template.md` for the exact form.
+3. **Mark the spots.** Above each ```go fence where an example belongs, write a
+   one-line `<!-- gmdoceg:… -->` marker — see `references/template.md` for the
+   exact key form.
 4. **Inject with gomake.** Run `gomake :project:doc-eg`; it fills each marked
    fence with the matching `Example…` function's body and `// Output:` block.
 5. **Never hand-edit injected fences or ship unbacked snippets.** To change an
@@ -136,7 +132,7 @@ Inspect (static):
       — never both; its entries match the actual headings.
 - [ ] Import/install path matches the manifest; badges point at the real hosting
       remote (`git remote -v`) and a target that resolves; no visibility guessed
-      or `GOPRIVATE`/auth step added from the host URL alone.
+      or `GOPRIVATE` added from the host URL (see Non-negotiables).
 - [ ] Admonition syntax is valid GitHub form (`> [!NOTE]`, `> [!TIP]`, …).
 - [ ] No raw HTML tags (`<div>`, `<img>`, `<details>`, …); plain GFM only. HTML
       comments (`<!-- TOC -->`, `<!-- gmdoceg:… -->`) are the only exception.

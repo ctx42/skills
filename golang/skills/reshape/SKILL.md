@@ -73,15 +73,13 @@ no rigid script.
    matching, awkward multi-returns, type assertions, a hand-rolled loop that
    wants an iterator, test scaffolding the library could ship.
 4. **Brainstorm broadly** across the archetypes below — force at least one
-   structural option, not only local tweaks. Consult `change-catalog.md` for an
-   archetype's shape and example when drafting its proposal.
+   structural option, not only local tweaks.
 5. **Score and rank** by the impact rubric.
 6. Report (below). Change nothing.
 
 ## Change archetypes
 
-The brainstorm engine — reach past the obvious. Detail + example per archetype in
-`change-catalog.md`.
+The brainstorm engine — reach past the obvious.
 
 - **options-constructor** — functional options replace inline struct-building or
   a long positional param list.

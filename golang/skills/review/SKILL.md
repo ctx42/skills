@@ -6,11 +6,9 @@ description: >
   style rules, the deeper criteria in rules.md, and general correctness
   (bugs, edge cases, error handling). The default review reasons only, running
   no build or test tools; an opt-in fix path applies findings and runs the test
-  suite to prove them. Broad fix jobs are planned to a file and applied package
-  by package, consulting before each commit. Honors budget controls (packages,
-  max_issues, depth, plan_first). Also grows the rule list —
-  from a plain-language prompt or by mining the current editing session for your
-  feedback.
+  suite to prove them. Honors budget controls (packages, max_issues, depth,
+  plan_first). Also grows the rule list — from a plain-language prompt or by
+  mining the current editing session for your feedback.
 license: MIT
 ---
 
@@ -109,7 +107,9 @@ were left unreported.
   (each gets `style`, `rules.md`, the `depth`, and a share of `max_issues`),
   then synthesize one merged report, re-ranking findings to the global
   `max_issues` cap. Keeps the main context lean.
-- Always report which packages were reviewed and which, if any, were skipped.
+- Always report which packages were reviewed and which were skipped; never
+  silently truncate — if the target is too large, do the highest-risk packages
+  first and say what you skipped.
 
 ### Output
 
@@ -122,11 +122,6 @@ End with a one-line verdict (ship / fix-first) and the per-severity counts. For
 a module, give the verdict per package plus an overall summary. Report budget
 usage: `depth`, packages/files reviewed, and whether you stayed under
 `max_issues` (and how many findings went unreported).
-
-### Scope control
-
-Bound the work to the resolved target. If even that is too large, review the
-highest-risk packages first and say what you skipped. Never silently truncate.
 
 ### Applying fixes
 

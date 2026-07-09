@@ -14,9 +14,7 @@ license: MIT
 # edit
 
 Drive an existing SRD toward the SRD standard by editing the source, **one
-confirmed change at a time**. This skill **edits the source file** — it is the
-write counterpart to the read-only `review`. It never restates a rule; it
-reuses the standard and self-checks every edit against it.
+confirmed change at a time** — the write counterpart to the read-only `review`.
 
 ## Self-learning
 
@@ -189,10 +187,8 @@ text**, or **free description** ("the login timeout rule").
 
 ## Deliverable
 
-The skill **edits the source file in place**. It writes no other file, except
-that feedback mode deletes fully-fixed findings from `<srd>.review.md` (see
-"Review-file upkeep"). Close every session with an in-chat summary — a manifest
-of approved edits, not a re-narration of diffs the user already saw:
+Close every session with an in-chat summary — a manifest of approved edits, not
+a re-narration of diffs the user already saw:
 
 - What changed: entry/id, one line each.
 - What was flagged and left (frozen-id conflicts, metadata gaps, anything the

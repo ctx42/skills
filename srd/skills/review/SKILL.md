@@ -13,9 +13,8 @@ license: MIT
 
 # review
 
-Review an SRD someone else wrote and report what fails the SRD standard. This
-skill is **read-only** — it never edits the source. It produces findings the
-author acts on.
+Review an SRD someone else wrote and report what fails the SRD standard. It is
+**read-only** — it never edits the source.
 
 ## Self-learning
 

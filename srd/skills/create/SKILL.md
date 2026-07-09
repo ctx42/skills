@@ -13,8 +13,7 @@ license: MIT
 # create
 
 Author a brand-new SRD by interviewing the user, drafting against the SRD
-standard, and self-checking the draft before saving it. This skill does not
-review or audit SRDs written elsewhere.
+standard, and self-checking the draft before saving it.
 
 ## Self-learning
 

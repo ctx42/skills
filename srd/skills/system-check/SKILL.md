@@ -19,10 +19,9 @@ Review an SRD from the seat of the engineer who has to build it. The question
 that drives every check: *can I implement and test this exactly as written,
 without coming back to guess?*
 
-This skill is a **thin orchestration layer**. It does not re-run the standard
-checks — it delegates those to `srd:review` — and it never rewrites prose. Its
-own value is the **system-knowledge layer**: judging the SRD against what is
-already known about the target platform, as captured in `memory.md`.
+This skill is a **thin orchestration layer**: it delegates the standard checks
+to `srd:review` and adds the **system-knowledge layer** — judging the SRD
+against the target platform captured in `memory.md`.
 
 ## Self-learning
 
@@ -76,12 +75,10 @@ never load it.
 **First run and migration** (do once; confirm the file change with the user):
 
 - `$MEM` exists → use it.
-- `$MEM` does not exist, but a prior store does → offer to move it to `$MEM`,
-  then use it. Check, in order:
-  `$HOME/.agent-data/ctx42-skills/memory.md` (the earlier bundle-root location),
-  `${XDG_DATA_HOME:-$HOME/.local/share}/srd-system-check/memory.md` and
-  `${XDG_DATA_HOME:-$HOME/.local/share}/ctx42-srd/memory.md` (older locations),
-  and an old `memory.md` in this skill's directory (a pre-move or dev checkout).
+- `$MEM` absent but a prior store exists → offer to move it, then use it. Check
+  in order: `$HOME/.agent-data/ctx42-skills/memory.md` (old bundle root),
+  `${XDG_DATA_HOME:-$HOME/.local/share}/{srd-system-check,ctx42-srd}/memory.md`
+  (older), and an old `memory.md` in this skill's directory.
 - Neither exists → seed `$MEM` from `memory.template.md` in this skill's
   directory.
 
@@ -229,10 +226,9 @@ Bad:
 
 `memory.md` is the durable system knowledge base — a curated, growing list of
 atomic one-line facts that lets the implementer confront the SRD without
-re-reading the whole platform. Maintaining it is a first-class job of this skill.
-It lives in one fixed per-machine location, not this skill's directory (see
-[Where memory.md lives](#where-memorymd-lives)); a fresh machine seeds it from
-`memory.template.md`.
+re-reading the whole platform. Maintaining it is a first-class job of this
+skill; it lives per-machine, not in this skill's directory (see
+[Where memory.md lives](#where-memorymd-lives)).
 
 Format:
 

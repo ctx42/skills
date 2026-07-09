@@ -31,22 +31,18 @@ review. They only see the diff and the message.
 
 - State **what** changed and **why** in product/code terms (bugs fixed,
   behavior, API, tests).
-- Match detail to reader impact. Spend words on what changes for a user of
-  the software—behavior, API, bug fixes, CLI/output—and describe those
-  precisely. Internal or mechanical cleanups with no user-visible effect
-  (lint/style fixes, formatting, renames, dependency bumps, test-only
-  tweaks) get a one-sentence summary, not a per-edit account. When a commit
-  mixes both, lead with the user-facing change and fold the cleanup into a
-  single closing sentence.
+- Match detail to reader impact. Describe user-facing changes (behavior, API,
+  bug fixes, CLI/output) precisely; give mechanical cleanups (lint, formatting,
+  renames, dep bumps, test tweaks) a one-sentence summary, not a per-edit
+  account. When a commit mixes both, lead with the user-facing change and fold
+  the cleanup into one closing sentence.
 - A body is optional. If the summary line already conveys the change and
   there is nothing user-facing to explain, omit the body entirely rather
   than manufacturing detail.
-- Do **not** reference internal process the reader cannot know: remediation
+- Do **not** reference internal process the reader cannot know — remediation
   phases, review plans, skill names, "as discussed", ticket/session context,
-  or paths like `tmp/*-plan.md` unless the diff itself only touches those
-  files.
-- Do **not** label work with project-local milestones ("phase 1", "follow-up
-  from the review") when the diff is normal library/CLI fixes.
+  project milestones ("phase 1"), or `tmp/*-plan.md` paths — unless the diff
+  itself only touches those files.
 - Prefer concrete symbols and files: `` `TargetNameFromContext` ``,
   `` `Prepare` ``, not umbrella slogans that hide the actual edits.
 
@@ -87,11 +83,9 @@ If the change affects exported symbols or observable behavior for callers:
   `` `WithCause` ``.
 - When referencing prior commits: `Commit <short-sha> ("summary") ...`
 
-**High clarity standard**: Write bodies with the same precision and structure
-expected in excellent Go godoc—direct, specific, reader-friendly. Precision
-means saying the right thing concisely, not cataloguing every edit: prefer the
+**High clarity standard**: Write bodies with godoc-level precision — the
 smallest body that fully explains the user-facing change and its motivation.
-Do not enumerate mechanical changes line by line when one sentence covers them.
+Never enumerate mechanical edits line by line when one sentence covers them.
 
 ## Footers
 

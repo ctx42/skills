@@ -50,18 +50,14 @@ Forge a complete, standard-compliant skill end-to-end.
    fails, and encode each failure as a request + expected-behavior checks (**≥ 1
    asserting terse output**). These evals are the spec the body must pass, not a
    closing formality.
-5. **Write `SKILL.md`.** Strict-portable frontmatter (`name` + `description`
-   only, plus allowed optional) — non-standard fields break portability, so a
-   runtime that doesn't read them silently drops the behavior. Write the
-   **minimum** dense imperative body that passes the evals — the body is
-   always-loaded token cost, so cut anything that doesn't raise success rate;
-   keep it under ~500 lines. Use progressive disclosure — push large reference
-   material into sibling files linked one level deep, because agents only preview
-   nested files and deeper chains read as incomplete. Reference content obeys the
-   same conciseness test as the body, and the workflow must consult it on
-   demand — never preload a whole reference each run. Carry the
-   output-discipline line (standards.md) where the skill describes its output —
-   terse output is mandatory, not optional.
+5. **Write `SKILL.md`.** Strict-portable frontmatter (`name` + `description`,
+   plus allowed optional) — non-standard fields break portability. Write the
+   **minimum** dense imperative body that passes the evals; it's always-loaded
+   token cost, so cut anything that doesn't raise success rate, and keep it under
+   ~500 lines. Use progressive disclosure — push large reference material into
+   sibling files linked one level deep; reference content obeys the body's
+   conciseness test and is consulted on demand, never preloaded. Carry the
+   output-discipline line (`standards.md`) where the skill describes its output.
 6. **Write `README.md`.** Concise usage + when-to-use, and an `## Evaluations`
    section holding the step-4 scenarios.
 7. **Validate & refine.** Dry-run the skill against its evals; where it
@@ -85,8 +81,7 @@ the skill's job and triggers. Then the reload reminder.
 ## Improve mode
 
 Audit one named skill against the standard, report, then fix on confirmation.
-Reasoning only in the audit phase — no edits until the user approves, because
-edits are hard to unwind and a report-first pass lets the user redirect scope.
+Reasoning only until the user approves — no edits during the audit.
 
 Default scope is the **single** skill named. Audit a whole category only if the
 user asks.

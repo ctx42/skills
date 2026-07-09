@@ -31,22 +31,20 @@ one-line rule to whichever is writable (creating it) and report where.
 
 ## Lessons store
 
-Every skill's lessons resolve to one of two places; resolve per skill, and use
-the same resolution for both reading and writing:
+Every skill's lessons resolve to one of two places; resolve per skill and use
+the same resolution for reading and writing:
 
-- **In-place** — the skill's own directory is writable (a source checkout or a
-  `--plugin-dir` working copy): the sibling `LESSONS.md`. Lessons committed here
-  ship to everyone.
-- **External** — the skill runs from a read-only or update-clobbered install
-  (any path under `.../plugins/cache/`):
-  `$HOME/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md`. `$HOME`-rooted
-  so it stays visible and survives plugin updates on Linux, macOS, and Windows.
+- **In-place** — directory writable (source checkout or `--plugin-dir` copy):
+  sibling `LESSONS.md`; committed here, lessons ship to everyone.
+- **External** — read-only or update-clobbered install (under
+  `.../plugins/cache/`):
+  `$HOME/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md`, `$HOME`-rooted
+  to survive plugin updates.
 
-Resolve the skill's on-disk directory from the base directory the host reports
-when the skill is invoked. Read **both** files when both exist — shipped lessons
-plus local ones — and obey the union. Write only to the writable one: the sibling
-in a checkout, else the external file (create parent dirs). Never write into
-`.../plugins/cache/` even if the OS reports it writable; a plugin update wipes it.
+Resolve the directory from the base dir the host reports. Read **both** files
+when both exist and obey the union; write only to the writable one (create
+parent dirs). Never write under `.../plugins/cache/` even if the OS says it's
+writable — a plugin update wipes it.
 
 ## Harvest
 
@@ -98,7 +96,7 @@ A lessons file is a flat list of imperative rules, one per bullet, newest last:
 
 - One rule per bullet, imperative, terse — the bar of a style rule.
 - Conform to the repo markdown style: wrap at ~80 columns, continuation lines
-  indented two spaces (like the wrapped rule bullets in the `golang:style` skill).
+  indented two spaces.
 - Concrete and general: "Derive the commit type from the diff, not the branch
   name" — not "the user wanted fix not feat here".
 - No dates, ticket ids, or task-specific nouns. A lesson outlives its task.
