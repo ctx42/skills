@@ -1,16 +1,22 @@
 # SRD Standard
 
-The rule set every SRD must satisfy. `create` authors against these rules,
-`edit` edits against them, and `review` reviews against them. Each rule
-keeps its identifier so a finding can cite it. The checks that verify these
-rules live in [srd-checklist.md](srd-checklist.md); each skill applies its own
-action policy on a finding.
+<!-- Derived from Confluence page 1949564932 ("Guidelines for Software
+     Requirements Documents"), last synced at page_version 15. Do not edit
+     rule text here; see CONTRIBUTING.md "Syncing the SRD standard". -->
+
+The rule set every SRD must satisfy. An SRD states what a system or feature
+must do — clearly enough that an engineer can build it and a reviewer can
+verify it. `create` authors against these rules, `edit` edits against them,
+and `review` reviews against them; each rule is a checkable statement and
+keeps its identifier so a finding can cite it, and each skill applies its own
+action policy on a finding. Check in document-section order (metadata,
+Introduction, Glossary, Scope, Requirements); for cross-cutting checks run the
+consistency pass in [authoring-guide.md](authoring-guide.md), which also holds
+the house additions (US English, sub-numbering, one term per concept).
 
 ## Contents
 
-- Introduction
 - Glossary
-- Scope (`SC`, `OSC`)
 - Requirements: Document Structure (`STR`), Status and Changes (`STA`),
   Language and Style (`LANG`), Requirement Form (`REQ`), Glossary Discipline
   (`GLO`), Scope Discipline (`SCO`), Markdown Export (`MD`)
@@ -31,27 +37,6 @@ written:
 > [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and
 > [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) when, and only when, they
 > appear in all capitals, as shown here.
-
-# Introduction
-
-A Software Requirement Document (SRD) is a written specification: a document
-that states what a system or feature must do. It must be clear enough that an
-engineer can build the feature, and a reviewer can confirm it was built
-correctly. An SRD is not a design document or a project plan. It records the
-rules the work must meet. It does not say how the code is built or when it
-ships.
-
-We write SRDs so that the intent is recorded once, in a clear way, and shared
-with everyone who works on it. A good SRD lets an engineer start without
-guessing. It lets a reviewer write a test for each rule. It lets a new team
-member understand the system by reading it. A weak SRD hides decisions behind
-vague words. It buries rules inside definitions. It leaves gaps that appear
-later as extra work.
-
-This standard is for everyone in that process. This includes product owners and
-analysts who capture the intent, engineers who build it, and reviewers who
-approve it. It explains the shape every SRD should have, the language to use,
-and the common mistakes to avoid.
 
 # Glossary
 
@@ -94,79 +79,9 @@ A statement of something the document will define or deliver.
 
 A statement of something the document does not cover on purpose.
 
-## Design Tool
-
-A software application used to create and review user-interface designs.
-
-## Initiative
-
-A large piece of work, tracked in the ticketing system, that groups related
-features and tasks under one goal.
-
-## Ticketing System
-
-The software application used to plan and follow initiatives, features, and
-tasks.
-
-## Markdown
-
-A simple text format that uses plain marks, such as # for headings and \* for
-lists, to show structure in plain text.
-
-## Status
-
-The current state of an SRD in its life cycle. The status is one of:
-
-- `In Progress`: The SRD is still being written or changed.
-- `Proposed`: The SRD is ready for review. It may still change significantly
-  until accepted or rejected.
-- `Accepted`: The SRD has been reviewed and approved for use. Its requirements
-  are now stable.
-- `Rejected`: The SRD has been reviewed and turned down.
-
-## User Interface (UI)
-
-The parts of the system that a user sees and works with, such as screens,
-buttons, and forms.
-
 ## Quality Bar
 
 The lowest standard an SRD must meet to be accepted.
-
-# Scope
-
-## In Scope
-
-**SC-1:** The required sections of an SRD and the order in which they appear.
-
-**SC-2:** The metadata fields an SRD must contain and how they link to the
-ticketing system and the design tool.
-
-**SC-3:** The status values and the rules for changing an SRD across its life
-cycle.
-
-**SC-4:** The language and style used in an SRD document.
-
-**SC-5:** The form, numbering, and labeling of individual requirements.
-
-**SC-6:** The rules for glossary entries.
-
-**SC-7:** The rules for scope statements.
-
-**SC-8:** The quality bar an SRD must meet to be accepted.
-
-**SC-9:** The Markdown format used when an SRD is exported to Markdown.
-
-## Out of Scope
-
-**OSC-1:** The detailed steps, meetings, and tools used to review and approve an
-SRD, beyond the rules in this document.
-
-**OSC-2:** The choice of editor, platform, or tool used to write an SRD.
-
-**OSC-3:** Project management topics such as scheduling, estimates.
-
-**OSC-4:** The subject-specific content of any single SRD.
 
 # Requirements
 

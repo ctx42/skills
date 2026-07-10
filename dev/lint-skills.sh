@@ -15,6 +15,9 @@
 # It then cross-checks .claude-plugin/marketplace.json (if present): every plugin
 # `source` must be a real plugin directory (with .claude-plugin/plugin.json), and
 # every skill on disk must live under exactly one plugin's skills/ directory.
+# On machines with the vr checkout it also runs dev/sync-srd-standard.sh
+# (warning only) to catch drift between srd-standard.md and its Confluence
+# source.
 #
 # No external dependencies (pure bash + coreutils; no jq).
 #
@@ -213,6 +216,17 @@ if [ -x "$SKILLS_SRC/dev/version.sh" ]; then
         || err "manifest versions drifted from VER (run ./dev/version.sh sync)"
 else
     warn "skipping version-drift check (dev/version.sh missing or not executable)"
+fi
+
+# srd-standard.md must match its Confluence source per the divergence ledger.
+# A warning, not an error: the source mirror exists only on machines with the
+# vr checkout (elsewhere the script SKIPs and passes), and a red lint on those
+# machines would train people to ignore it.
+if [ -x "$SKILLS_SRC/dev/sync-srd-standard.sh" ]; then
+    if ! sync_out="$("$SKILLS_SRC/dev/sync-srd-standard.sh" verify 2>&1)"; then
+        warn "srd-standard.md drifted from its source (dev/sync-srd-standard.sh diff):"
+        printf '%s\n' "$sync_out" | sed 's/^/       /'
+    fi
 fi
 
 echo "----"

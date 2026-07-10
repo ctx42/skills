@@ -140,6 +140,38 @@ Supporting commands (you rarely run these directly):
 fails the lint gate as a backstop. The hook fails closed: if a manifest cannot be
 written, the commit aborts rather than releasing drift.
 
+## Syncing the SRD standard
+
+`srd/skills/create/references/srd-standard.md` is **derived** from a
+Confluence page (id `1949564932`, mirrored by cfsync into the private `vr`
+checkout) and trimmed for agent use — never edit rule text only in the repo.
+Every deliberate difference is recorded in `dev/srd-standard-sync.tsv`;
+`dev/sync-srd-standard.sh verify` proves the two stay in sync and
+`lint-skills.sh` runs it as a warning on machines that have the source
+(elsewhere it skips). Override the source path with `SRD_STANDARD_SRC`.
+
+**Source changed** (someone edited the Confluence page):
+
+1. `cfsync pull` the mirror, then `./dev/sync-srd-standard.sh diff`.
+2. Apply the per-unit diffs to the repo copy, keeping the trims — the
+   transform spec is in the script header.
+3. Refresh changed ledger hashes (`./dev/sync-srd-standard.sh hash '<unit>'`)
+   and bump the `page_version` in the copy's provenance header.
+4. A `page_version` bump can also mean an edit inside a **frozen node** — the
+   Bad→Good example expands and the Quality Bar list render only as
+   `<!-- adf:… -->` placeholders, so their content is invisible locally. Open
+   the page, re-check them, and update `authoring-guide.md` / the transcribed
+   Quality Bar by hand.
+5. Run `./dev/sync-srd-standard.sh verify` and `./dev/lint-skills.sh`, and
+   re-check the srd:review fixture eval
+   (`srd/skills/review/assets/flawed-srd.md`) — its finding set must not
+   shrink.
+
+**Rule change conceived here**: edit the local mirror, `cfsync push`, then
+follow the source-changed flow. Until pushed, record the rule as
+`RULE:<id>	-	<sha>` (repo-only) in the ledger — `REQ-8` is the standing
+example.
+
 ## Renaming a Skill
 
 1. Rename the directory (keep the `name:` frontmatter in `SKILL.md` in sync).
