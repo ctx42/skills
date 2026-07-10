@@ -20,9 +20,9 @@ or rename `create`, or this skill loses its standard.
 - **Feedback (review-driven)**: `/edit path/to/srd.md path/to/srd.review.md`
     - Takes a `<srd>.review.md` from `review` **or feedback pasted inline**.
       Works findings blocker → major → minor, fixing each interactively.
-    - The only write to the review file is pruning fully-fixed findings
-      (deleting the file once empty); it never adds or rewrites findings.
-      Re-run `review … check` afterward to reclassify what remains.
+    - Never writes the review file — `review` owns it across all modes. Re-run
+      `review … check` afterward to tick off what landed and reclassify the
+      rest.
 
 - **Polish (quick mechanical pass)**: `/edit path/to/srd.md polish`
     - Mechanical cleanup only (wrapping, US spelling, numbering format, markdown,
@@ -54,8 +54,8 @@ or rename `create`, or this skill loses its standard.
 
 - **No metadata edits** — never fills Owners/Initiative/Designs, sets back-links,
   or changes `Status`. It only flags those gaps. Acceptance stays a human call.
-- **No review-file authoring** — it edits the source; `review` owns
-  `<srd>.review.md`. Feedback mode's only touch is pruning fully-fixed findings.
+- **No review-file writes** — it edits the source only; `review` owns
+  `<srd>.review.md` across all modes and `edit` never touches it.
 - **No silent edits** — every change is confirmed; mechanical ones too.
 
 ## When to Use
@@ -91,11 +91,11 @@ Request: `/edit specs/login.md` where `Status: Accepted` and `GR-3a` reads
 Request: `/edit specs/login.md specs/login.review.md`.
 - Parses findings from the review file and works them **blocker → major →
   minor**.
-- Fixes each interactively (one change, confirm, re-validate); prunes each
-  fully-fixed finding from `login.review.md` but never adds or rewrites findings.
-- Closes by telling the user to run `review specs/login.md check` to
-  reclassify the findings, plus an in-chat summary of what changed and what was
-  left flagged.
+- Fixes each interactively (one change, confirm, re-validate), referencing
+  findings by number; leaves `login.review.md` untouched.
+- Closes by telling the user to run `review specs/login.md check` to tick off
+  what landed and reclassify the rest, plus an in-chat summary of what changed
+  and what was left flagged.
 
 **Scenario 3 — Targeted edit by description.**
 Request: `/edit specs/login.md fix the vague "fast" requirement`.

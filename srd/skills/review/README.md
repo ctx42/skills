@@ -26,9 +26,17 @@ Bar; the review checks every rule) and
 classes). review adds only the review method; it never restates a rule. Do
 not move or rename `create`, or this skill loses its standard.
 
-The review file is always `<srd>.review.md` next to the source. Findings are
-grouped **by document section** (Metadata → Introduction → Glossary → Scope →
-Requirements), each citing a rule id and tagged:
+The review file is always `<srd>.review.md` next to the source. Each finding
+carries a **permanent global number** (`#1..#N`, never reused or renumbered) and
+is **atomic** — one indivisible fix, verifiable by a single yes/no. Open
+findings are `[ ]` checkboxes grouped **by document section** (Metadata →
+Introduction → Glossary → Scope → Requirements), each citing a rule id
+(namespaced `SRD:`, e.g. `(SRD:REQ-1)`) and tagged. File metadata (`prepared`,
+`updated` with a timestamp, `source`) sits in YAML frontmatter. Below the open
+findings, a `## Resolved` section holds ticked `[x]` findings (flat,
+sorted by number) and a `## Withdrawn` section holds findings dropped as
+invalid. Findings are separated by a blank line so a long list reads as
+distinct blocks. Tags:
 
 - **blocker** — breaks Quality-Bar acceptance (non-atomic, unverifiable, scope
   gap, undefined term, rule hidden in glossary/metadata, duplicate/out-of-order
@@ -43,18 +51,20 @@ rules (STA-*) that authoring leaves as placeholders.
 ## Usage
 
 ```
-/review path/to/srd.md            review (default): write srd.review.md
+/review path/to/srd.md            review (default): resolve fixed + append new
 /review path/to/srd.md walk       interactive, section by section
-/review path/to/srd.md check      re-check srd.review.md vs the current SRD
-/review path/to/srd.md feedback   terse plain-text list for email/ticket
+/review path/to/srd.md check      re-verify open findings vs the current SRD
+/review path/to/srd.md feedback   terse plain-text list of open tasks
 ```
 
 ## What to Expect
 
-- A `srd.review.md` file with all findings grouped by section, each tagged and
-  citing its rule id, plus a one-line severity tally.
-- On a re-run, resolved findings are deleted and new ones appended — the file
-  is updated in place, never rewritten from scratch.
+- A `srd.review.md` file: numbered `[ ]` open tasks grouped by section, each
+  tagged and citing its rule id, plus `## Resolved` and `## Withdrawn` sections,
+  and a task-oriented closing tally.
+- On a re-run, fixed findings are ticked and moved to `## Resolved` (keeping
+  their number) and new ones appended — the file is updated in place, never
+  rewritten from scratch; numbers are never reused.
 - The skill never edits the SRD and never declares it `Accepted` — acceptance is
   a human decision.
 
@@ -93,11 +103,13 @@ design though it changes the UI.
 `specs/login.review.md`.
 
 **Expected behavior:**
-- Classifies each prior finding fixed / partial / not-addressed against the
-  current text, in a short status table.
-- Flags any new defect introduced by the edits.
-- Updates `login.review.md`: deletes resolved findings, annotates partials with
-  `*(Partial — …)*`, appends new defects, and bumps the `Updated:` date.
+- Classifies each open finding fixed / partial / not-addressed against the
+  current text, in a short status table keyed by finding number.
+- Re-verifies only — does not hunt for new defects.
+- Updates `login.review.md`: ticks fixed findings and moves them to
+  `## Resolved`, annotates partials with `*(Partial — …)*`, moves any invalid
+  finding to `## Withdrawn` with a reason, keeps every number, and bumps the
+  `updated:` frontmatter timestamp.
 
 ### 4. Feedback export for a ticket
 
@@ -106,9 +118,10 @@ design though it changes the UI.
 **Expected behavior:**
 - Emits plain text grouped by section heading, one bullet per open issue, no
   file write.
-- Keeps the SRD's own requirement ids (e.g. `GR-3a:`) but drops the standard
-  rule-id citations and severity tags; uses no markdown beyond bullets.
-- Omits any issue already resolved.
+- Keeps the finding number and the SRD's own requirement id (e.g. `#7 GR-3a:`)
+  but drops the checkbox, the standard rule-id citations, and severity tags;
+  uses no markdown beyond bullets.
+- Lists open findings only — omits Resolved and Withdrawn.
 
 ### 5. Walk records only confirmed findings
 

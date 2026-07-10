@@ -20,9 +20,9 @@ confirmed change at a time** — the write counterpart to the read-only `review`
 - **Must not:** invent or restate rules — defer all format, style, logic, and
   rules to `create`'s reference files; edit metadata (Owners, Initiative,
   Designs), set back-links, or change `Status` — only flag those gaps
-  (STR-2..7, STA-*). Acceptance stays a human decision. The only write to
-  `<srd>.review.md` allowed is deleting a fully-fixed finding in feedback mode
-  (see feedback); every other mode leaves the review file untouched.
+  (STR-2..7, STA-*). Acceptance stays a human decision. **Never write
+  `<srd>.review.md`** — `review` owns that file across all modes; `edit` only
+  reads it.
 
 ## Sources of truth
 
@@ -127,35 +127,21 @@ Detect the mode from the user's words; the default is interactive.
 
 ### feedback
 
-Apply findings from a review, deleting each finding as it is fully fixed.
+Apply findings from a review. **Never write the review file** — `review` owns
+it. After editing, tell the user to run `review <srd> check` to reclassify
+what landed.
 
 1. Input is a `<srd>.review.md` path **or feedback pasted inline** (email,
    ticket, chat). Parse the findings from either.
 2. Run the session-start steps.
 3. Work findings in **severity order — blocker → major → minor** (use the
-   review's tags; for untagged pasted feedback, judge severity from the rule).
+   review's tags and finding numbers; for untagged pasted feedback, judge
+   severity from the rule).
 4. For each finding, run the edit-discipline loop: propose the fix, apply on
-   approval, re-validate. When the fix **fully** resolves a finding parsed from
-   an on-disk `<srd>.review.md`, delete that finding from the file per
-   "Review-file upkeep". A partial or declined fix leaves the finding untouched.
-5. Close with the full consistency pass and the chat summary.
-
-#### Review-file upkeep
-
-Feedback mode only, and only for findings parsed from an on-disk
-`<srd>.review.md` — pasted-inline feedback has no file to update. On each
-**full** fix, in the edit-discipline loop right after apply + re-validate:
-
-1. Delete the finding's bullet, with its indented continuation lines, from the
-   review file.
-2. If the file carries a summary or per-severity count line, re-tally it.
-3. Bump the `Updated:` date to today.
-4. Remove a section heading (Metadata, Introduction, Glossary, Scope,
-   Requirements) once its last bullet is gone.
-5. When the last finding is deleted, delete the whole `<srd>.review.md` file.
-
-Deletion is the only edit — never strike through, annotate, or add findings; a
-partial or declined fix leaves its finding in place.
+   approval, re-validate. Reference findings by their number in the chat
+   summary; leave the review file untouched regardless of outcome.
+5. Close with the full consistency pass and the chat summary, then point the
+   user to `review <srd> check`.
 
 ### polish
 
