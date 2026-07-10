@@ -17,6 +17,11 @@ high-quality, Linux kernel-style bodies.
 **From a specific commit**
 `/cm <commit-hash>`
 
+**Arguments** (combinable, e.g. `/cm micro apply`)
+- `micro` — summary line only, no body.
+- `minimal` — summary line plus one short paragraph only.
+- `apply` — commit the message directly, without asking to confirm.
+
 The skill always derives the message from the actual diff. It produces:
 - Proper type/scope/summary line (≤50 chars recommended)
 - Kernel-style body explaining *why* the change was made
@@ -86,3 +91,22 @@ user-visible behavior change.
 - Reserves per-symbol detail for changes that affect a user of the software
   (behavior, API, bug fixes); a mixed commit leads with those and folds the
   cleanup into one closing sentence.
+
+### 6. Verbosity arguments
+
+**Request:** `/cm micro`, then `/cm minimal`, on the same staged diff.
+
+**Expected behavior:**
+- `micro` emits the summary line only — no body, no footers (unless the change
+  is breaking).
+- `minimal` emits the summary line plus a single short paragraph explaining the
+  most important *why*, not a full multi-paragraph body.
+
+### 7. Commit with `apply`
+
+**Request:** `/cm apply` (or `/cm micro apply`) with a staged diff.
+
+**Expected behavior:**
+- Generates the message, then runs `git commit` via heredoc without asking for
+  confirmation.
+- Combines with a verbosity argument: `micro apply` commits a one-line message.

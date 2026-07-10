@@ -17,6 +17,23 @@ license: MIT
 
 Always derive the message from the diff only.
 
+## Arguments
+
+Detect from the user's words; they combine (e.g. `micro apply`). Default (none
+given): full-length message, presented without committing.
+
+Verbosity — mutually exclusive, default full length:
+
+- `micro` → summary line **only**, no body. Add `!` + `BREAKING CHANGE:` footer
+  only when the change is breaking.
+- `minimal` → summary line plus **one** short paragraph explaining the single
+  most important *why*. `Refs:` only if a breaking change applies.
+
+Commit control:
+
+- `apply` → commit the generated message directly via heredoc without asking —
+  `git commit`, or `git commit --amend` for a hash invocation.
+
 ## Describe changes only
 
 Write for any reader of `git log`, not for someone who sat in planning or
@@ -98,8 +115,9 @@ Present the full message in a fenced code block with **zero leading whitespace**
 on every line.
 
 The message is the deliverable. Run `git commit` / `git commit --amend` (via
-heredoc) only when the invocation itself asks to commit or amend — never
-propose committing; the user decides when.
+heredoc) only when the invocation asks to commit or amend — the `apply`
+argument, or wording like "and amend it". Otherwise never propose committing;
+the user decides when.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
