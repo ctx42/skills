@@ -19,7 +19,7 @@ high-quality, Linux kernel-style bodies.
 
 **Arguments** (combinable, e.g. `/cm micro apply`)
 - `micro` — summary line only, no body.
-- `minimal` — summary line plus one short paragraph only.
+- `mini` — summary line plus one short paragraph only.
 - `apply` — commit the message directly, without asking to confirm.
 
 The skill always derives the message from the actual diff. It produces:
@@ -94,12 +94,12 @@ user-visible behavior change.
 
 ### 6. Verbosity arguments
 
-**Request:** `/cm micro`, then `/cm minimal`, on the same staged diff.
+**Request:** `/cm micro`, then `/cm mini`, on the same staged diff.
 
 **Expected behavior:**
 - `micro` emits the summary line only — no body, no footers (unless the change
   is breaking).
-- `minimal` emits the summary line plus a single short paragraph explaining the
+- `mini` emits the summary line plus a single short paragraph explaining the
   most important *why*, not a full multi-paragraph body.
 
 ### 7. Commit with `apply`

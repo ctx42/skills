@@ -26,7 +26,7 @@ Verbosity — mutually exclusive, default full length:
 
 - `micro` → summary line **only**, no body. Add `!` + `BREAKING CHANGE:` footer
   only when the change is breaking.
-- `minimal` → summary line plus **one** short paragraph explaining the single
+- `mini` → summary line plus **one** short paragraph explaining the single
   most important *why*. `Refs:` only if a breaking change applies.
 
 Commit control:
