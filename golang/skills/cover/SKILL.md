@@ -2,9 +2,8 @@
 name: cover
 description: >
   Improves Go test coverage one function at a time, measuring each function
-  from its own direct test only. Plan-first for a file, package, or module;
-  runs straight for a single function or line. Reports deferred and
-  un-coverable lines with reasons. Honors max_tests, packages, include=all.
+  from its own direct test only. Use to raise coverage of a function, a
+  line, a file, a package, or a module.
 license: MIT
 ---
 
@@ -21,16 +20,10 @@ function picks up incidentally from other functions' tests does not count. The
 function — never the package — is the unit of work.
 
 Sources of truth:
-- `../style/SKILL.md` — Test rules; obey them in every test written.
+- `../style/SKILL.md` (eager: the Test section) — obey it in every test
+  written; Production rules apply only through inheritance.
 - The package's own tests, then a sibling package, for assertion/helper
   conventions.
-
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/golang/cover.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
 
 ## Target
 
@@ -46,9 +39,9 @@ always work it one function/method at a time.
 - **package** (default) — a path like `./pkg/foo` or an import path. Files
   **alphabetically**; within each, functions **top to bottom**. Plan-first.
 - **module** (opt-in) — `./...`, a `go.mod` dir, or an explicit "module".
-  Packages **alphabetically and sequentially** — no coverage ranking, no
-  fan-out; within each package, files alphabetically; within each file,
-  functions top to bottom. Plan-first.
+  Packages **alphabetically**, sequentially by default (see `fanout` in
+  Controls) — no coverage ranking; within each package, files alphabetically;
+  within each file, functions top to bottom. Plan-first.
 
 State the resolved kind and the function/file set before measuring.
 
@@ -58,6 +51,10 @@ State the resolved kind and the function/file set before measuring.
 - `packages=a,b` — module mode: restrict to these packages.
 - `include=all` — also attempt the deferred complex lines (build the needed
   fakes/scaffolding); still report anything un-coverable.
+- `fanout` — module mode: dispatch one subagent per package (each gets the
+  style Test rules and this per-function loop for its package) and merge the
+  per-package reports. Use on large modules to keep the main context lean;
+  packages are independent, so ordering is preserved per package.
 
 ## Per-function loop
 
@@ -129,18 +126,13 @@ finish and verify one function before starting the next.
 
 ## Verify
 
-- Per function: re-run its direct-test family (must pass) and confirm its
-  coverage rose (check the profile, not just the headline percentage).
-- End of run — final pass:
-  1. Run `gofmt -l` on every edited `*_test.go` file; fix any issues.
-  2. Run `go test -v -race ./<pkg>` and display the full output. Every
-     `Test_Foo` in the target `*_test.go` file must appear as `--- PASS`.
-  3. Present the before/after coverage table, one row per function in scope.
+End of run — final pass (per-function verification already happened in loop
+step 4):
 
-## Module mode
-
-Walk order is in Target; `packages`/`max_tests` in Controls. Report which
-packages were covered and which were skipped.
+1. Run `gofmt -l` on every edited `*_test.go` file; fix any issues.
+2. Run `go test -v -race ./<pkg>` and display the full output. Every
+   `Test_Foo` in the target `*_test.go` file must appear as `--- PASS`.
+3. Present the before/after coverage table, one row per function in scope.
 
 ## Un-coverable categories
 
@@ -157,7 +149,15 @@ Never attempt; always name the line and the reason:
 - Tests added: `file:Test_Foo` + what each covers.
 - Deferred lines: `file:line — reason`.
 - Un-coverable lines: `file:line — reason`.
+- Module mode: which packages were covered and which were skipped.
 - Never skip a line silently. Suggest running `/review` on the new tests.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
+
+## Self-learning
+
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/golang/cover.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.

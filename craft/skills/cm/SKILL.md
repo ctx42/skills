@@ -10,13 +10,6 @@ license: MIT
 
 # Commit Message Formatting
 
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/craft/cm.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
-
 ## Invocation
 
 - With commit hash: generate from that commit's diff.
@@ -104,9 +97,16 @@ Never add an AI `Co-Authored-By` trailer (e.g.
 Present the full message in a fenced code block with **zero leading whitespace**
 on every line.
 
-Then ask: "Commit with this message?" (or "Amend?").
-
-Use `git commit` or `git commit --amend` via heredoc.
+The message is the deliverable. Run `git commit` / `git commit --amend` (via
+heredoc) only when the invocation itself asks to commit or amend — never
+propose committing; the user decides when.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
+
+## Self-learning
+
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/craft/cm.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.

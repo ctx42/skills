@@ -2,7 +2,7 @@
 
 Guide for AI agents working in this repository.
 
-This repository is a collection of for the reusable skills use by both Grok
+This repository is a collection of reusable skills used by both Grok
 and Claude. Skills ship as **Claude Code plugins**, grouped into `golang`,
 `srd`, and `craft`. Each skill is a directory under a group's `skills/`
 folder with a `SKILL.md` (the prompt) and a `README.md` (human usage guide).
@@ -37,78 +37,41 @@ claude --plugin-dir ./srd      # repeat the flag for more groups
 
 ## Active Skill Catalog
 
+One line per skill for orientation; each skill's `SKILL.md` description is the
+source of truth.
+
 ### golang
 
-- `style` — The enforced Go style guide. Has a `Production` section (for
-  `*.go`) and a `Test` section (for `*_test.go`). Read it before writing or
-  editing any Go file and follow it. It is the canonical, terse ruleset.
-- `review` — The done-time review entrypoint. Run it after edits and a
-  feature are complete: it checks the changed Go code against the `style`
-  rules, the deeper criteria in `review/rules.md`, and general correctness
-  (bugs, edge cases, error handling). Reasoning only — it does not run tools.
-  It also owns rule editing: a free-form suggestion becomes a terse rule in
-  `style`, or `/review learn` mines the current editing session's feedback into
-  rules (use it instead of hand-editing `style`).
-- `cover` — Improves test coverage. Executing skill: it runs `go test
-  -coverprofile`, edits/creates `*_test.go`, and re-runs to verify. Governing
-  rule: a function's coverage counts only from its own style-named direct
-  test, measured in isolation on that function's own lines. Targets a single
-  function, a line, a file, a package, or a module; honors `max_tests`,
-  `packages`, `include=all`.
-- `reshape` — Consumer-driven API review. Given a library the project depends
-  on, it maps every call site, diagnoses the friction, and proposes ranked,
-  impact-scored changes to that **library's** API that would simplify the
-  consuming code. Reasoning only — read-only, edits nothing. Brainstorms across
-  a broad archetype catalog (`reshape/references/change-catalog.md`) and detects
-  whether the library is locally editable (concrete diffs) or external (public
-  surface). Honors `max`.
+- `style` — the enforced Go style rules (Production + Test); read before any
+  `.go` edit.
+- `review` — done-time review of finished Go code; also owns adding and
+  learning style rules.
+- `cover` — raises Go test coverage per function, measured from direct tests
+  only.
+- `reshape` — proposes consumer-driven API changes to a library the project
+  uses; read-only.
 
 ### srd
 
-- `create` — Author a brand-new Software Requirement Document (SRD) to the
-  SRD standard. Interviews the user along the fixed SRD spine, proposes
-  requirement groups and prefixes, reuses the shared glossary, drafts the
-  document from a template, and self-checks the draft against the standard's
-  rules (`references/srd-standard.md`) before writing the file. Authoring only.
-- `review` — Read-only review of an SRD someone else wrote, against the same
-  SRD standard (reused from `../create/references/`, not duplicated). Writes
-  findings to a `<srd>.review.md` beside the source — grouped by section, each
-  citing a rule id and tagged blocker / major / minor. Never edits the source.
-- `edit` — The write counterpart to `review`: edits an existing SRD in
-  place against the same SRD standard. Every session starts with an approval gate
-  that governs id rules. Proposes one change at a time with before/after, applies
-  only on confirmation, and re-validates after each. Writes no file but the SRD.
-- `system-check` — Reviews an SRD for build-readiness from the implementing
-  engineer's seat. Delegates standard/logic/consistency checks to `review`,
-  then adds a system-knowledge layer confronting the SRD against a curated,
-  growing `memory.md` (see [STRUCTURE.md](./STRUCTURE.md#system-check-memory)
-  for where memory lives). Merges both into one colleague-voice
-  `<srd>.questions.md`, walked one question at a time. Modes: review (default),
-  memory.
+- `create` — interviews, drafts, and self-checks a new SRD; owns the shared
+  SRD references.
+- `review` — read-only SRD review; findings go to `<srd>.review.md` beside the
+  source.
+- `edit` — edits an existing SRD in place, one confirmed change at a time.
+- `system-check` — build-readiness questions for an SRD; owns
+  `<srd>.questions.md` and the platform-knowledge memory.
 
 ### craft
 
-- `cm` — Conventional commit messages with kernel-style bodies.
-- `grill-me` — Relentless planning interview; walks the whole design tree before
-  any code is written.
-- `skill-smith` — Author new skills and improve existing ones. Two modes: create
-  (scaffold a full skill end-to-end under a group) and improve (audit a named
-  skill against `craft/skills/skill-smith/standards.md`, then fix on
-  confirmation). Owns the authoring standard; defers to this file and
-  CONTRIBUTING.md for repo mechanics.
-- `readme-smith` — Author and improve a project's `README.md`. Two modes: create
-  (scan the repo, ask only the gaps, draft to a distilled house structure) and
-  improve (audit an existing README, report by severity, fix on confirmation).
-  Structure and style come from `craft/skills/readme-smith/references/template.md`;
-  never fabricates facts and runs the install/quickstart commands it ships.
-- `enhance-skills` — Turn corrections into durable skill improvements. Harvest
-  mode scans the conversation for corrections and self-caught mistakes and
-  appends one-line rules to each used skill's lessons store; retrofit mode
-  installs the `## Self-learning` block into a `SKILL.md` missing it. Every skill
-  in the repo carries that block. The store resolves per skill: the sibling
-  `LESSONS.md` in a writable source checkout, else a durable, update-safe file at
-  `~/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md` for read-only
-  installs.
+- `cm` — Conventional Commit messages with kernel-style bodies, from the diff
+  only.
+- `grill-me` — relentless planning interview until shared understanding.
+- `skill-smith` — authors and audits skills; owns the authoring standard
+  (`standards.md`).
+- `readme-smith` — authors and audits project READMEs against its
+  `references/template.md`.
+- `enhance-skills` — harvests session corrections into per-skill lessons;
+  retrofits the `## Self-learning` block.
 
 ## More Detail
 

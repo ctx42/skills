@@ -18,7 +18,10 @@ as Claude Code plugins.
 ├── AGENTS.md                       # Guide for AI agents working in this repo
 ├── dev/                            # Maintainer scripts (no jq / external deps)
 │   ├── lint-skills.sh              # Checks skills against the authoring standard
-│   └── version.sh                  # Syncs manifest versions with the VER file
+│   ├── version.sh                  # Syncs manifest versions with the VER file
+│   ├── token-report.sh             # Per-skill always-loaded token surface
+│   ├── sync-srd-standard.sh        # Verifies srd-standard.md vs its Confluence source
+│   └── srd-standard-sync.tsv       # Divergence ledger for that sync
 ├── .claude-plugin/
 │   └── marketplace.json            # Marketplace catalog: the three plugins below
 │
@@ -98,9 +101,8 @@ The `srd/` segment scopes it to the `srd` skills, so only they load it. The
 `craft:enhance-skills` self-learning mechanism uses the same root:
 `~/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md` for skills that run
 from a read-only install. The repo ships only `memory.template.md`, used to seed
-`memory.md` on a fresh machine (older installs migrate from the earlier
-bundle-root `~/.agent-data/ctx42-skills/memory.md` or
-`${XDG_DATA_HOME:-~/.local/share}/{srd-system-check,ctx42-srd}/`). See each
-skill's `SKILL.md` for the resolution and migration rules.
+`memory.md` on a fresh machine; older installs migrate per
+`srd/skills/system-check/references/memory-migration.md`. See each skill's
+`SKILL.md` for the resolution rules.
 
 ---

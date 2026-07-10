@@ -77,10 +77,9 @@ your data, stored once per machine (shared by Claude and Grok) at:
 ```
 
 The `srd/` segment scopes it to the `srd` skills, so only they load it. It is
-created on first use from the shipped template and survives plugin updates
-(older installs migrate from the earlier bundle-root
-`~/.agent-data/ctx42-skills/memory.md` or
-`${XDG_DATA_HOME:-~/.local/share}/{srd-system-check,ctx42-srd}/`).
+created on first use from the shipped template and survives plugin updates;
+older installs migrate per
+`srd/skills/system-check/references/memory-migration.md`.
 Nothing to set up; back this file up if the knowledge is valuable.
 
 ---

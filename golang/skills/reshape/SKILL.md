@@ -1,14 +1,11 @@
 ---
 name: reshape
 description: >
-  Studies how a Go project consumes a given library and proposes ranked,
-  impact-scored changes to that library's API that would make the consuming
-  code cleaner. Read-only: it proposes, edits nothing. Brainstorms across a
-  broad catalog of change archetypes — not just obvious tweaks — and detects
-  whether the library source is locally editable (concrete diffs) or external
-  (public surface). Use when asked how a dependency's API could change to
-  simplify the code that uses it, for an API wishlist, or for consumer-driven
-  API design.
+  Studies how a Go project consumes a given library and proposes ranked
+  changes to that library's API that would simplify the consuming code;
+  read-only. Use when asked how a dependency's API could change to clean up
+  the code that uses it, for an API wishlist, or for consumer-driven API
+  design.
 license: MIT
 ---
 
@@ -24,17 +21,11 @@ the *payoff* shown in before/after, not the change itself — never propose
 refactoring only the call sites with the API left as-is.
 
 Sources of truth:
-- `../style/SKILL.md` — Go idioms the proposals must respect (accept interfaces,
-  functional options, `%w`, `ErrXxx`, useful zero value).
-- `references/change-catalog.md` — each archetype's detail + Go example, keyed to
-  the list below. Consult an entry when drafting that proposal; don't preload it.
-
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/golang/reshape.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
+- `../style/SKILL.md` (eager) — Go idioms the proposals must respect (accept
+  interfaces, functional options, `%w`, `ErrXxx`, useful zero value).
+- `references/change-catalog.md` (on-demand: per archetype) — each archetype's
+  detail + Go example, keyed to the list below. Consult an entry when drafting
+  that proposal; don't preload it.
 
 ## Target
 
@@ -137,3 +128,10 @@ Open with the ranked payload — no preamble.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
+
+## Self-learning
+
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/golang/reshape.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.

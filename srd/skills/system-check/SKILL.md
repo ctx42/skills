@@ -1,15 +1,11 @@
 ---
 name: system-check
 description: >
-  Reviews a Software Requirement Document (SRD) as the engineer who must build
-  it. Delegates standard, logic, and consistency checks to review,
-  then adds a system-knowledge layer — confronting the SRD against a curated
-  memory of the target platform to surface contradictions with documented API
-  rules, services, or glossary, terms undefined in the system, and gaps that
-  block implementation. Presents everything as one author-facing question list,
-  walked one question at a time, and grows its memory from the answers. Use when
-  asked to review an SRD for build-readiness, ask implementation questions about
-  an SRD, or check what SRD questions remain open.
+  Reviews a Software Requirement Document (SRD) as the engineer who must
+  build it, surfacing the questions that block implementation. Use when
+  asked to review an SRD for build-readiness, ask implementation questions
+  about an SRD, check which SRD questions remain open, or curate the
+  platform-knowledge memory.
 license: MIT
 ---
 
@@ -22,13 +18,6 @@ without coming back to guess?*
 This skill is a **thin orchestration layer**: it delegates the standard checks
 to `srd:review` and adds the **system-knowledge layer** — judging the SRD
 against the target platform captured in `memory.md`.
-
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/srd/system-check.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
 
 ## Boundaries
 
@@ -72,15 +61,9 @@ MEM="$MEM_DIR/memory.md"   # the memory.md every step below reads and writes
 The `srd` segment scopes this base to `srd` skills; `craft` and `golang`
 never load it.
 
-**First run and migration** (do once; confirm the file change with the user):
-
-- `$MEM` exists → use it.
-- `$MEM` absent but a prior store exists → offer to move it, then use it. Check
-  in order: `$HOME/.agent-data/ctx42-skills/memory.md` (old bundle root),
-  `${XDG_DATA_HOME:-$HOME/.local/share}/{srd-system-check,ctx42-srd}/memory.md`
-  (older), and an old `memory.md` in this skill's directory.
-- Neither exists → seed `$MEM` from `memory.template.md` in this skill's
-  directory.
+**First run** (do once): if `$MEM` exists, use it. Otherwise follow
+[references/memory-migration.md](references/memory-migration.md) — it locates
+a legacy store to migrate, or seeds `$MEM` from `memory.template.md`.
 
 ## Invocation
 
@@ -261,3 +244,10 @@ Writing rules:
   and `memory.md`.
 - One change at a time; confirm each file edit.
 - Keep both companion files within 80 columns.
+
+## Self-learning
+
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/srd/system-check.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.

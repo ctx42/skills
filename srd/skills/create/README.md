@@ -35,9 +35,8 @@ SRD written elsewhere.
 6. **Writes** the `.md` file to a path you name and lists the outstanding
    follow-ups.
 
-The rule set lives in `references/srd-standard.md`; the action-neutral
-verification checklist in
-`references/srd-checklist.md`; house extensions (US English, sub-numbering,
+The rule set lives in `references/srd-standard.md` (each rule is a checkable
+statement with an id); house extensions (US English, sub-numbering,
 defect examples) in `references/authoring-guide.md`; shared operating procedures
 (glossary resolution) in `references/srd-procedures.md`; the skeleton in
 `assets/srd-template.md`; the glossary fingerprint in

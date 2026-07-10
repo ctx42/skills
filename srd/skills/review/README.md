@@ -19,10 +19,9 @@ the author acts on. To create a new SRD, use `create`.
 
 ## How It Works
 
-The rules and checklist are reused from `create` —
+The rules are reused from `create` —
 `../create/references/srd-standard.md` (STR/STA/LANG/REQ/GLO/SCO/MD/Quality
-Bar), `../create/references/srd-checklist.md` (the action-neutral
-verification checklist the review runs), and
+Bar; the review checks every rule) and
 `../create/references/authoring-guide.md` (house extensions + defect
 classes). review adds only the review method; it never restates a rule. Do
 not move or rename `create`, or this skill loses its standard.
@@ -54,8 +53,8 @@ rules (STA-*) that authoring leaves as placeholders.
 
 - A `srd.review.md` file with all findings grouped by section, each tagged and
   citing its rule id, plus a one-line severity tally.
-- On a re-run, resolved findings struck through and new ones appended — the file
-  accumulates rather than being rewritten.
+- On a re-run, resolved findings are deleted and new ones appended — the file
+  is updated in place, never rewritten from scratch.
 - The skill never edits the SRD and never declares it `Accepted` — acceptance is
   a human decision.
 
@@ -97,7 +96,7 @@ design though it changes the UI.
 - Classifies each prior finding fixed / partial / not-addressed against the
   current text, in a short status table.
 - Flags any new defect introduced by the edits.
-- Updates `login.review.md`: strikes resolved findings, annotates partials with
+- Updates `login.review.md`: deletes resolved findings, annotates partials with
   `*(Partial — …)*`, appends new defects, and bumps the `Updated:` date.
 
 ### 4. Feedback export for a ticket
@@ -121,7 +120,22 @@ design though it changes the UI.
 - Writes only confirmed findings to `login.review.md`, as author-facing
   guidance, and never edits `login.md`.
 
-### 6. Terse output
+### 6. Fixture regression
+
+**Request:** `/review` on `assets/flawed-srd.md` (the bundled deliberately
+defective sample).
+
+**Expected behavior:**
+- Finds at least: GR-1 non-atomic (REQ-1); duplicate id GR-3 (REQ-3); "fast"
+  unverifiable (REQ-6); SC-2 uncovered (SCO-2); GR-4 contradicts OSC-1
+  (SCO-3); behavior in the Export Job glossary entry (GLO-1/2); a single owner
+  (STR-2); missing Initiative link (STR-3); `Accepted` with an unapproved
+  design and unmet Quality Bar (STA-2/STA-3); MUST in the Introduction
+  (LANG-3); British spellings (minor).
+- Serves as the before/after gate whenever the shared references change: the
+  finding set must not shrink.
+
+### 7. Terse output
 
 **Request:** `/review specs/login.md`.
 

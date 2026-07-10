@@ -53,6 +53,12 @@ highest-leverage field.
 
 - **Third person.** "Reviews X", not "I review X" or "You can review X".
 - State **what it does AND when to use it** — include concrete trigger terms.
+- **No workflow leak.** Say *when to use it*, never how it works: no mode
+  lists, control/flag names, file paths, or step summaries. An agent acts on a
+  leaked summary and skips the body — the very steps the skill exists to
+  enforce. Every clause serves discovery.
+- **Size.** Aim ≤ ~350 chars (hard limit 1024) — the description is paid in
+  every session, for every skill, whether or not it fires.
 - Specific, not vague. ✗ "Helps with documents" ✓ "Extracts text and tables
   from PDFs. Use when the user mentions PDFs, forms, or extraction."
 - Put the key use case first (listing text is truncated downstream).
@@ -137,6 +143,8 @@ files (on demand). Exploit it:
 - Name bundled files for their content (`standards.md`, `rules.md`), not
   `doc2.md`. Use forward slashes always.
 - Any reference file over ~100 lines starts with a Contents list.
+- **Label every Sources-of-truth entry** `(eager)` or `(on-demand: <when>)`,
+  so a workflow step cannot silently preload a file meant for per-need reads.
 - Structure is necessary, not sufficient: a well-formed reference (one hop, ToC,
   named for content) can still bloat with restated or duplicated content — audit
   the content by the conciseness tests, and confirm the workflow reads it on
@@ -206,6 +214,8 @@ Mandatory and written before finalizing (eval-driven development):
 - Windows paths (`scripts\x.py`) — always forward slashes.
 - Offering too many options — pick a default.
 - Vague names (`helper`, `utils`) or vague descriptions.
+- A description that narrates the workflow (modes, controls, paths) instead of
+  when-to-use.
 - Deeply nested references.
 - Preloading a whole reference each run — negates the on-demand saving; consult
   keyed references per-need.
@@ -220,7 +230,9 @@ Mandatory and written before finalizing (eval-driven development):
 
 - [ ] `name` equals dir name; lowercase-hyphen; no reserved words / org prefix.
 - [ ] Frontmatter is `name` + `description` (+ allowed optional only).
-- [ ] Description: third person, what + when, specific triggers, key use first.
+- [ ] Description: third person, what + when, specific triggers, key use
+      first, no workflow leak (no modes, controls, paths, or step summaries),
+      aim ≤ ~350 chars.
 - [ ] Token performance: always-loaded surface (description + body) carries only
       what raises success rate; on-demand detail pushed to references.
 - [ ] Body under ~500 lines, dense, consistent terms, no time-sensitive info.
@@ -228,7 +240,8 @@ Mandatory and written before finalizing (eval-driven development):
       restating mandated; payload always stated in full.
 - [ ] Markdown prose wraps at ~80 cols (code fences, tables, unbreakable tokens
       exempt); tables have aligned columns.
-- [ ] References one level deep; files named for content; ToC if > ~100 lines.
+- [ ] References one level deep; files named for content; ToC if > ~100 lines;
+      sources-of-truth entries labeled eager / on-demand.
 - [ ] References earn their tokens too: no restating the model's knowledge or the
       rule they key to; entries don't collapse to one shared principle.
 - [ ] On-demand references are consulted per-need, not preloaded whole each run.

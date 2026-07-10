@@ -39,16 +39,19 @@ See `SKILL.md` for the full message structure and quality rules.
   chars recommended.
 - Body wraps at 72 cols and explains *why*, referencing concrete symbols in
   backticks.
-- Presents the full message in a zero-indent code block, then asks to commit.
+- Presents the full message in a zero-indent code block and stops — it does
+  not run or propose `git commit` unless the invocation asked to commit.
 
 ### 2. Amend the previous commit
 
-**Request:** `/cm <commit-hash>` for an existing commit whose message is weak.
+**Request:** `/cm <commit-hash> and amend it` for an existing commit whose
+message is weak.
 
 **Expected behavior:**
 - Regenerates the message from that commit's diff.
-- Offers `git commit --amend` (not a new commit) via heredoc.
-- Asks "Amend?" before running anything.
+- Amends via `git commit --amend` (not a new commit) through a heredoc,
+  because the invocation asked for the amend; a bare `/cm <commit-hash>` would
+  only present the message.
 
 ### 3. Breaking change
 
@@ -66,9 +69,9 @@ See `SKILL.md` for the full message structure and quality rules.
 
 **Expected behavior:**
 - No preamble or narration ("Let me look at the diff…"); opens with the message.
-- Presents the commit message once in a zero-indent code block, then the single
-  "Commit with this message?" prompt — no restating of the diff or the message
-  the user can already see.
+- Presents the commit message once in a zero-indent code block and nothing
+  else — no restating of the diff or the message the user can already see, no
+  unprompted offer to commit.
 
 ### 5. Detail matched to impact
 

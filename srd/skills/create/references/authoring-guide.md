@@ -28,6 +28,9 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
 - **Terminology consistency.** Use one term per concept throughout. Do not mix
   synonyms for the same thing (e.g. `MFA` / `2FA` / `two-factor`); pick one and
   define it once.
+- **Template wiki macros are deliberate.** The template's `[[TOC]]`, the
+  `[[!Status]]` macro, and the `[!INFO]` notice target the wiki the SRD is
+  exported to, not GFM — do not "fix" them to GitHub forms.
 
 ## Consistency pass
 

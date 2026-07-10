@@ -2,10 +2,8 @@
 name: grill-me
 description: >
   Interviews the user relentlessly about a plan until both reach a shared
-  understanding, walking the design tree one branch at a time and resolving
-  dependencies between decisions before moving on. Use before building
-  something, when the plan still has open questions, unstated assumptions, or
-  conflicting choices.
+  understanding. Use before building something, when the plan still has open
+  questions, unstated assumptions, or conflicting choices.
 license: MIT
 ---
 
@@ -13,13 +11,6 @@ license: MIT
 
 Interview the user relentlessly about every aspect of their plan until you both
 reach a shared understanding. Bias toward small, compartmentalized specs.
-
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/craft/grill-me.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
 
 ## How It Works
 
@@ -35,9 +26,10 @@ When this skill is invoked, switch into interviewer mode:
 5. **Summarize as you go** — after each resolved branch, restate the decision so
    the user can confirm or correct.
 6. **Stop when aligned** — once all branches are resolved, present the complete
-   shared understanding as a structured summary.
-7. **Evaluation criteria** – Outline the evaluation criteria you will use to
-   ensure a high-quality final product. Be precise.
+   shared understanding as a structured summary; give each resolved branch the
+   precise acceptance criteria that will verify it in the final product.
+7. **Offer to persist** — offer to write that summary to a file the user names,
+   so the agreement survives the session; on decline, leave it in chat.
 
 ## Rules
 
@@ -50,3 +42,10 @@ When this skill is invoked, switch into interviewer mode:
   but never pad it.
 - **Track progress.** Keep a mental map of resolved vs. open branches so the
   user knows how much is left.
+
+## Self-learning
+
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/craft/grill-me.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.

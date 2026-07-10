@@ -1,12 +1,12 @@
 # <SRD Title>
 
-|                    |                                                               |
-|--------------------|---------------------------------------------------------------|
-| ****Objective****  | <one or two plain sentences: what this SRD specifies          |
-| ****Initiative**** | <TODO: link to the ticketing initiative — must link back>     |
-| ****Owners****     | <TODO: @primary-owner>, <TODO: @secondary-owner>              |
-| ****Status****     | [[!In progress\|color=blue;style=bold]]                       |
-| ****Designs****    | <N/A — or TODO: link to the approved design — must link back> |
+|                |                                                               |
+|----------------|---------------------------------------------------------------|
+| **Objective**  | <one or two plain sentences: what this SRD specifies>         |
+| **Initiative** | <TODO: link to the ticketing initiative — must link back>     |
+| **Owners**     | <TODO: @primary-owner>, <TODO: @secondary-owner>              |
+| **Status**     | [[!In Progress\|color=blue;style=bold]]                       |
+| **Designs**    | <N/A — or TODO: link to the approved design — must link back> |
 
 [[TOC]]
 

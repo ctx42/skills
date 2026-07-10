@@ -1,13 +1,10 @@
 ---
 name: edit
 description: >
-  Interactively improves an existing Software Requirement Document (SRD) by
-  editing it in place against the SRD standard, one confirmed change at a
-  time. Use when asked to edit, improve, fix, revise, or clean up an SRD, or to
-  apply the findings from a review `<srd>.review.md` or pasted feedback.
-  Walks the SRD entry by entry, proposes one change at a time with before/after,
-  guards requirement ids on approved documents, and re-validates after each
-  edit. The write counterpart to the read-only review.
+  Improves an existing Software Requirement Document (SRD) by editing it in
+  place against the SRD standard, one confirmed change at a time. Use when
+  asked to edit, improve, fix, revise, or clean up an SRD, or to apply
+  findings from a review file or pasted feedback.
 license: MIT
 ---
 
@@ -15,13 +12,6 @@ license: MIT
 
 Drive an existing SRD toward the SRD standard by editing the source, **one
 confirmed change at a time** — the write counterpart to the read-only `review`.
-
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/srd/edit.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
 
 ## Boundaries
 
@@ -43,20 +33,21 @@ reuse them, never duplicate. **This skill depends on `../create/references/*`,
 user; do not proceed.** Read these before editing:
 
 - [../create/references/srd-standard.md](../create/references/srd-standard.md)
-  — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, `MD`, Quality
-  Bar). Every edit and check defers to these ids.
-- [../create/references/srd-checklist.md](../create/references/srd-checklist.md)
-  — the action-neutral verification checklist; re-validation runs it.
+  (eager) — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, `MD`,
+  Quality Bar). Every edit and check defers to these ids; re-validation
+  checks against them directly.
 - [../create/references/authoring-guide.md](../create/references/authoring-guide.md)
-  — house extensions (US English, sub-numbering, terminology consistency, the
-  consistency pass) and the Bad→Good defect classes to fix toward.
+  (eager) — house extensions (US English, sub-numbering, terminology
+  consistency, the consistency pass) and the Bad→Good defect classes to fix
+  toward.
 - [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
-  — shared operating procedures (glossary resolution).
+  (on-demand: session start) — shared operating procedures (glossary
+  resolution).
 - [../create/assets/srd-template.md](../create/assets/srd-template.md)
-  — the required section order; consult it when restructuring.
+  (on-demand: restructuring) — the required section order.
 - [../create/scripts/glossary-fingerprint.sh](../create/scripts/glossary-fingerprint.sh)
-  — hashes the shared glossary so its term digest is rebuilt only on change; the
-  digest keeps term edits linking, not redefining.
+  (run, not read) — hashes the shared glossary so its term digest is rebuilt
+  only on change; the digest keeps term edits linking, not redefining.
 
 ## Session start (every mode)
 
@@ -94,15 +85,17 @@ All interactive editing follows the same loop. Per change:
    id), the **before** and **after** text, and a one-line rationale.
 2. Apply only on explicit approval. Never batch unrelated changes. Never edit
    without confirmation.
-3. **Re-validate the affected entry + cross-refs** immediately against
-   [../create/references/srd-checklist.md](../create/references/srd-checklist.md),
+3. **Re-validate the affected entry + cross-refs** immediately against the
+   rules in
+   [../create/references/srd-standard.md](../create/references/srd-standard.md),
    focusing on the checks the edit can touch: scope coverage (SCO-2/3), id
    uniqueness/order (REQ-3/4), term use (GLO-3), and any requirement that
    references or is referenced by the edit. Report if the fix introduced a new
    problem.
-4. At **session end**, run the full checklist plus the consistency pass in
-   [../create/references/authoring-guide.md](../create/references/authoring-guide.md)
-   over the whole document, and report what remains.
+4. At **session end**, re-check the whole document against every rule in the
+   standard plus the consistency pass in
+   [../create/references/authoring-guide.md](../create/references/authoring-guide.md),
+   and report what remains.
 
 Write every edit to the LANG, MD, and REQ rules in
 [../create/references/srd-standard.md](../create/references/srd-standard.md)
@@ -197,3 +190,10 @@ a re-narration of diffs the user already saw:
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
+
+## Self-learning
+
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/srd/edit.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.

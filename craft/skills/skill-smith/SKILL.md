@@ -25,13 +25,6 @@ Sources of truth (read once per run):
   a plugin group's `skills/` dir), naming, the catalog-doc update list, the
   plugin dev loop, retiring. Do not duplicate it; follow it.
 
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/craft/skill-smith.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
-
 ## Create mode
 
 Forge a complete, standard-compliant skill end-to-end.
@@ -95,14 +88,16 @@ user asks.
 3. **Audit** against the standard, in this order:
    - **Frontmatter** — strict-portable set only; `name` equals dir name; no
      forbidden/misspelled fields (e.g. `user_invocable`); description is third
-     person, what + when, specific triggers.
+     person, what + when, specific triggers, no workflow leak (when-to-use
+     only, no modes/controls/paths), aim ≤ ~350 chars.
    - **Body** — conciseness (redundant explanation, > ~500 lines), consistent
      terms, no time-sensitive info, right degree of freedom.
    - **Output discipline** — body carries the terse-output line; output/report
      steps mandate no framing and no restating of shown content; payload stated
      in full. Flag duplicate or repeating summaries.
    - **Structure** — progressive disclosure, references one level deep, files
-     named for content, ToC on long files.
+     named for content, ToC on long files, sources-of-truth entries labeled
+     eager / on-demand.
    - **Reference content** — read each reference, not just its structure: apply
      the body's conciseness test to it (cut what the model already knows), flag
      entries that restate the rule or file they key to or that collapse to one
@@ -134,3 +129,10 @@ skill, re-audit it in improve mode.
 
 Report tersely in both modes: no preamble or narration; state each fact once;
 don't restate output the user can already see.
+
+## Self-learning
+
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/craft/skill-smith.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.

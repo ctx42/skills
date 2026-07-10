@@ -1,14 +1,11 @@
 ---
 name: review
 description: >
-  Done-time Go quality review. Runs after edits and features are complete on the
-  current diff, a package, or a whole module. Checks Go code against the
-  style rules, the deeper criteria in rules.md, and general correctness
-  (bugs, edge cases, error handling). The default review reasons only, running
-  no build or test tools; an opt-in fix path applies findings and runs the test
-  suite to prove them. Honors budget controls (packages, max_issues, depth,
-  plan_first). Also grows the rule list — from a plain-language prompt or by
-  mining the current editing session for your feedback.
+  Done-time Go quality review: checks finished code — the current diff, a
+  package, or a whole module — against the project style rules and for
+  general correctness (bugs, edge cases, error handling). Use after edits or
+  a feature are complete, and to add, change, or learn style rules from
+  feedback.
 license: MIT
 ---
 
@@ -24,19 +21,12 @@ Final-gate review for Go code. Pick the mode from the invocation:
   proposes rules.
 
 Sources of truth:
-- `../style/SKILL.md` — canonical terse rules (Production + Test).
-- `rules.md` — deeper rationale / examples / how-to-detect, keyed
-  to those rules. Consult it for non-obvious rules.
+- `../style/SKILL.md` (eager) — canonical terse rules (Production + Test).
+- `rules.md` (on-demand: per keyed entry) — deeper rationale / examples /
+  how-to-detect, keyed to those rules. Consult it for non-obvious rules.
 
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
-
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/golang/review.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
 
 ## Check mode
 
@@ -62,8 +52,8 @@ Parse and respect these controls from the invocation:
 
 Default to plan-first: if the target is broad (whole module, many packages, or
 large LOC) and no budget was given, switch to `plan_first` automatically,
-propose defaults (`max_issues=25`, `depth=standard`, the package list), and ask
-before the full review.
+propose defaults (the caps above, the package list), and ask before the full
+review.
 
 Depth:
 - `light` — only blockers and major maintainability; minimal examples.
@@ -125,130 +115,19 @@ usage: `depth`, packages/files reviewed, and whether you stayed under
 
 ### Applying fixes
 
-When asked to change code (apply findings, fix, refactor), every code change
-ships with accompanying tests in the same change — new behavior gets new tests,
-changed behavior gets updated tests. This covers behavioral changes, not pure
-no-ops like renames or comment edits.
+When asked to change code (apply findings, fix, refactor), read
+[references/fixing.md](references/fixing.md) first and follow it. Check mode
+itself stays reason-only.
 
-**Refactors: enumerate before editing.** Before a rename, signature change, or
-interface change, use the `LSP` tool to find everything the edit must touch —
-`findReferences` for every call site, `goToImplementation` for every implementer
-— so the definition and all its dependents change together. The tool only
-locates code; the edits themselves still go through Edit/Write, and it performs
-no rename for you. Re-query after writing, since a pre-edit result goes stale.
-LSP is not the safety net: the `go test ./... -race` gate below remains the
-proof that no caller broke. If no Go language server is configured, fall back to
-grep to enumerate call sites.
+## Rule-edit and Learn modes
 
-**Logical bugs: prove before fixing.** For any correctness, concurrency, or
-performance finding — a behavioral bug at any severity (pure style, doc, and
-naming are exempt) — reproduce it before touching the fix:
+When either mode triggers, read
+[references/rule-editing.md](references/rule-editing.md) first and follow it.
+Both modes write to `style` and `rules.md`, and never without confirmation.
 
-1. Write a test (or a benchmark for performance) and run it against the
-   current code to show it **fails**; capture the red output.
-2. Apply the fix and show the same test/benchmark now **passes**.
-3. Report both states — the bug was real and the fix resolves it.
+## Self-learning
 
-A bug is **always reported**, whether or not it can be proven. If it genuinely
-cannot be reproduced by a test or benchmark (cost-prohibitive or very hard —
-unreachable branch, untestable side effect, disproportionate scaffolding), **do
-not apply the fix**: report the bug, state that a fix is available but cannot be
-proven by test/benchmark, say why, and let the user decide whether to implement
-it.
-
-For a non-bug change where a test is merely coverage and is impossible or
-cost-prohibitive, do not skip it silently: **warn the user**, name the change
-left untested, and say why.
-
-Run the whole-module suite, not just the changed package:
-
-- **Before editing**, run `go test ./... -race` for a green baseline. If it is
-  already red, **stop and report** the pre-existing failures; do not edit.
-- **After editing**, run `go test ./... -race` again — in a chunked job (below),
-  after each chunk so every chunk ends green. The job is not done until it passes
-  for the whole module. A failing or unrun suite means not done — never report
-  success without it.
-
-(This gate is for the fix path only; Check mode stays reason-only.)
-
-**Committing.** The fix path may `git commit` applied fixes, but **never without
-an explicit consult**. Propose the commit — a conventional-commit summary of the
-change — and commit only on approval; the user decides commit-now or defer. Never
-commit a red or unrun suite.
-
-**Big fix jobs: plan, chunk, consult.** When the fix job is broad — findings span
-several packages or large LOC — do not edit straight through:
-
-1. Write an ordered plan to a gitignored scratch file (`tmp/review-fix-plan.md`):
-   one entry per chunk, each naming the package (or file) it covers, the findings
-   to fix there, and status boxes (fixed / tests green / committed). A chunk is one
-   package; split a large package (many findings or big files) into file-level
-   chunks and note the split. Show the plan and get a go-ahead before chunk 1.
-2. Work chunks in order. Per chunk: apply its fixes under the rules above, run the
-   whole-module gate so the chunk ends green, and tick its plan boxes.
-3. Consult after each chunk that produced edits or a decision — show the change and
-   the green result, then ask commit-now-or-defer per **Committing**. Auto-continue
-   only a chunk that needed no fixes. Never proceed past an unmade decision.
-
-## Rule-edit mode
-
-Triggered when the input is a preference or asks to add/change/remove a rule.
-
-> **Writes must reach the repo.** This mode edits `../style/SKILL.md` and
-> `rules.md` in place, relative to the running plugin copy. Rules only stick if
-> that copy is the git clone (loaded via `claude --plugin-dir ./golang`), so the
-> change can be committed and shared. If this skill is running from a marketplace
-> install (a copy under `~/.claude/plugins/cache/`), the edit lands in that
-> throwaway copy and is lost on the next update — warn the user and have them
-> re-run from the clone before writing.
-
-1. Read `style`'s `SKILL.md`.
-2. Turn the input into rule entries shaped per **How a rule entry should
-   look** below. If the scope is ambiguous, ask one quick question.
-3. Detect duplicate or conflicting rules; show them and the proposed change,
-   then **wait** for confirmation before writing. Never silently overwrite a
-   conflicting rule.
-4. Write the rule to `style`; add a keyed `rules.md` entry only when the
-   rule is non-obvious.
-5. Show the before/after diff.
-
-## Learn mode
-
-Triggered when asked to learn from the session / your feedback (e.g. `/review
-learn`). Turns the corrections you gave while editing Go this session into
-durable rules. Same repo-copy caveat and write path as Rule-edit mode.
-
-1. Warn if running from a marketplace copy (see Rule-edit mode) before writing.
-2. Gather two signals since the last /clear: (a) feedback you gave on Go code —
-   corrections, "do X not Y", requested renames/refactors, accepted or rejected
-   suggestions; (b) the diff those turns produced (`git diff` and the session's
-   edits). Pair each piece of feedback with the before/after hunk that resolved
-   it. The diff corroborates and illustrates feedback — it is not an independent
-   source; never mine a rule from code the user never commented on.
-3. Keep only **generalizable convention** — a rule that applies beyond the one
-   site. Drop task-specific instructions (one-off logic, a lone rename with no
-   pattern). When unsure, keep it as a candidate and let the user cut it.
-4. Distill each into a terse rule per **How a rule entry should look**, using the
-   paired hunk as its before/after example; classify Production/Test/both;
-   dedupe against existing `style` rules.
-5. Present candidates as a list — each with its provenance (the session moment
-   that prompted it), flagging duplicates/conflicts. **Wait** for the user to
-   pick which to keep; never write unpicked or conflicting rules.
-6. Write the chosen rules via Rule-edit mode's path (steps 4–5): `style` line +
-   keyed `rules.md` entry when non-obvious; show the before/after diff.
-
-### How a rule entry should look
-
-- One rule = one concept = one dense imperative line.
-- State it generically: name the construct, not the site — no project
-  identifiers, domain nouns, or file names in the prose (`the receiver`, not
-  `page`).
-- Cut every word the rule survives without.
-- Scope it Production (`*.go`), Test (`*_test.go`), or both; place it in that
-  section, grouped near related rules.
-- Examples may show only generic Go syntax (`ErrXxx`, `[Type]`,
-  `//nolint:name`); never project-specific identifiers.
-- Prefer no example when the prose stands alone; add one only to remove
-  ambiguity.
-- Deeper rationale or detection detail goes in `rules.md`, keyed to the rule
-  and only when non-obvious; keep both files lean.
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/golang/review.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.

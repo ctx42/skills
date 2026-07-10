@@ -1,12 +1,10 @@
 ---
 name: create
 description: >
-  Authors a new Software Requirement Document (SRD) by interviewing the user,
-  then drafts it to the SRD standard and self-checks the draft. Use when
-  asked to create, write, draft, or start an SRD or a software requirements
-  document or spec. Walks the fixed SRD structure one branch at a time, proposes
-  requirement groups, reuses the shared glossary, and validates the result
-  against the standard's rules before writing the file.
+  Authors a new Software Requirement Document (SRD) by interviewing the
+  user, then drafts it to the SRD standard and self-checks the draft. Use
+  when asked to create, write, draft, or start an SRD, a software
+  requirements document, or a spec.
 license: MIT
 ---
 
@@ -14,13 +12,6 @@ license: MIT
 
 Author a brand-new SRD by interviewing the user, drafting against the SRD
 standard, and self-checking the draft before saving it.
-
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/srd/create.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
 
 ## Boundaries
 
@@ -34,21 +25,21 @@ one-line rule to whichever is writable (creating it) and report where.
 
 ## Sources of truth
 
-- [references/srd-standard.md](references/srd-standard.md) — the SRD rule set
-  (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, `MD`, Quality Bar). Both the
-  drafting and the self-check defer to it. Read it before drafting.
-- [references/authoring-guide.md](references/authoring-guide.md) — house
-  extensions to the standard's rules (US English, sub-numbering, terminology
-  consistency, the consistency pass) and Bad→Good defect examples to draft
-  against and check for. Its examples never go into the SRD (REQ-7).
-- [references/srd-checklist.md](references/srd-checklist.md) — the action-neutral
-  verification checklist, every check tied to a rule id. The self-check runs it.
-- [references/srd-procedures.md](references/srd-procedures.md) — shared operating
-  procedures (glossary resolution).
-- [assets/srd-template.md](assets/srd-template.md) — the SRD skeleton, in the
-  required section order with the keyword notice. Fill it; do not restructure it.
-- [scripts/glossary-fingerprint.sh](scripts/glossary-fingerprint.sh) — hashes the
-  shared glossary so its term digest is rebuilt only when the glossary changes.
+- [references/srd-standard.md](references/srd-standard.md) (eager) — the SRD
+  rule set (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, `MD`, Quality Bar).
+  Both the drafting and the self-check defer to it. Read it before drafting.
+- [references/authoring-guide.md](references/authoring-guide.md) (eager) —
+  house extensions to the standard's rules (US English, sub-numbering,
+  terminology consistency, the consistency pass) and Bad→Good defect examples
+  to draft against and check for. Its examples never go into the SRD (REQ-7).
+- [references/srd-procedures.md](references/srd-procedures.md) (on-demand:
+  step 0) — shared operating procedures (glossary resolution).
+- [assets/srd-template.md](assets/srd-template.md) (on-demand: step 3) — the
+  SRD skeleton, in the required section order with the keyword notice. Fill
+  it; do not restructure it.
+- [scripts/glossary-fingerprint.sh](scripts/glossary-fingerprint.sh) (run, not
+  read) — hashes the shared glossary so its term digest is rebuilt only when
+  the glossary changes.
 
 Two hard constraints, every run: the SRD MUST contain **no** `Example`/`Don't`/
 `Do` annotations (REQ-7), and a normative keyword (MUST, SHALL, …) MUST appear
@@ -128,8 +119,10 @@ keyword notice → Introduction → Glossary → Scope → Requirements. Specifi
 
 ### 4. Self-check
 
-Run every check in [references/srd-checklist.md](references/srd-checklist.md)
-against the draft, recognizing the defect classes in
+Check the draft against every rule in
+[references/srd-standard.md](references/srd-standard.md), in document-section
+order (metadata → Introduction → Glossary → Scope → Requirements), recognizing
+the defect classes in
 [references/authoring-guide.md](references/authoring-guide.md). Loop until the
 mechanical checks all pass. This is `create`'s action policy on a finding:
 
@@ -165,3 +158,10 @@ create, anything reported).
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
+
+## Self-learning
+
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/srd/create.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.

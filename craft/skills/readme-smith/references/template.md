@@ -9,7 +9,6 @@ actually needs; omit empty ones. Order is the default, not a straitjacket.
 - Section blueprint
 - Header snippet
 - Navigation (one aid, or none)
-- Go example markers (gomake)
 - Style rules
 - Admonitions
 - Excluded sections
@@ -88,37 +87,6 @@ block. Two is the most common breakage. Choose by length and host:
 Whichever you use, every anchor must resolve to a real heading. If the repo
 already carries a `<!-- TOC -->` block (IDE- or tool-generated), keep that one
 and do not also add a nav line.
-
-## Go example markers (gomake)
-
-When the `:project:doc-eg` gomake target exists (see the skill's *Go example
-injection* workflow), do not hand-write Go example snippets. Author each as a
-testable `Example…` function in `_test.go`, then place a one-line marker where
-it belongs, directly above a `go` fence:
-
-````markdown
-Use a buffer for stdout to capture program output without touching `os.Stdout`:
-
-<!-- gmdoceg:pkg/foo/ExampleNew -->
-```go
-```
-````
-
-`gomake :project:doc-eg` fills each fence with the named function's body and its
-`// Output:` block. The marker key is `<relpath>/<FuncName>`: the exact `Example…`
-function name (Go conventions: `ExampleType_method`, `ExampleFunc_suffix`)
-prefixed by the example package's directory **relative to the Markdown file** —
-e.g. `pkg/foo/ExampleNew` for a README at the repo root. Drop the prefix only
-when the `_test.go` lives in the same directory as the file (`relpath` `.`). A
-bare `<!-- gmdoceg:ExampleNew -->` silently no-ops when the example is in a
-subpackage. One marker per example; the tool refreshes the fence in place —
-never hand-edit the fence content, edit the function and re-run.
-
-The injected body *and its `// Output:`* land verbatim in the fence, so the
-function must obey **No horizontal scroll** (above): keep its lines short and
-split long output rather than printing one wide line. A dump like
-`fmt.Printf("%q\n", wireBytes)` overflows — print the value in pieces (e.g. loop
-over `bytes.Split(b, []byte("\r\n"))`, one `%q` per line) instead.
 
 ## Style rules
 

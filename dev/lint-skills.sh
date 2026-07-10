@@ -7,7 +7,12 @@
 #   - SKILL.md and README.md both exist,
 #   - frontmatter has name + description, name equals the directory name, and
 #     carries no forbidden platform-extension keys (strict-portable rule),
+#   - the description stays near the ~350-char aim (warns past 500) and uses
+#     no first/second person (warning only),
 #   - the body uses no dynamic injection (!`cmd`) or $ARGUMENTS / $N,
+#   - the body carries the output-discipline line ("Report tersely" or the
+#     "no preamble or narration" phrasing),
+#   - the body has a `## Self-learning` block (warning only),
 #   - README.md has an `## Evaluations` section,
 #   - every bundled .md reference over ~100 lines starts with a Contents list,
 #   - Markdown prose wraps at ~80 columns (warning only).
@@ -109,6 +114,26 @@ lint_skill() {
             && err "$name: forbidden frontmatter key '$key'"
     done
 
+    # Description size and point of view (standards.md, Description quality).
+    # The aim is ~350 chars; warn only past 500 so a trigger-rich description
+    # has headroom. Joins a folded/plain scalar into one string first.
+    local desc
+    desc="$(awk '
+        /^description:/ {
+            d = 1
+            sub(/^description:[[:space:]]*[>|]?[[:space:]]*/, "")
+            if (length($0)) printf "%s ", $0
+            next
+        }
+        d && /^[a-zA-Z_-]+:/ { d = 0 }
+        d { sub(/^[[:space:]]+/, ""); printf "%s ", $0 }
+    ' <<<"$fm")"
+    desc="${desc% }"
+    [ "${#desc}" -gt 500 ] \
+        && warn "$name: description is ${#desc} chars (aim <= ~350)"
+    grep -qiE '(^|[^a-zA-Z])(I|you|your)([^a-zA-Z]|$)' <<<"$desc" \
+        && warn "$name: description uses first/second person"
+
     # Body must not use dynamic injection or argument substitution. Dynamic
     # injection is !`cmd` — a bang then a backtick opening a command; a
     # backtick-quoted bang (`!`) is fine, so require a command char after.
@@ -116,6 +141,15 @@ lint_skill() {
         && err "$name: SKILL.md uses dynamic injection (!\`cmd\`)"
     grep -qE '\$ARGUMENTS|\$[0-9]' "$skill_md" \
         && err "$name: SKILL.md uses \$ARGUMENTS / \$N substitution"
+
+    # Body carries the output-discipline line (standards.md mandates it; the
+    # canonical wording is "Report tersely: …", grill-me embeds the phrasing).
+    grep -qiE 'report tersely|no preamble or narration' "$skill_md" \
+        || err "$name: SKILL.md lacks the output-discipline line"
+
+    # Body carries the Self-learning block (every skill in this repo does).
+    grep -q '^## Self-learning' "$skill_md" \
+        || warn "$name: SKILL.md has no '## Self-learning' block"
 
     # README has an Evaluations section.
     if [ -f "$readme" ]; then

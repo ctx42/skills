@@ -43,6 +43,8 @@ Targets:
 - `packages=a,b` — module mode only; restrict to these packages.
 - `include=all` — attempt the deferred complex lines (fakes, scaffolding) too;
   still reports anything genuinely un-coverable.
+- `fanout` — module mode only; one subagent per package, merged report. Keeps
+  the main context lean on large modules.
 
 ## Relationship to style and review
 

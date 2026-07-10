@@ -21,7 +21,8 @@ unstated assumptions, or choices that might conflict.
 2. Grills one branch at a time, starting with the highest-impact unknowns.
 3. Names dependencies between decisions explicitly.
 4. Restates each resolved decision so you can confirm or correct it.
-5. Stops when everything is aligned and presents a structured summary.
+5. Stops when everything is aligned and presents a structured summary, with
+   acceptance criteria per resolved decision, offering to save it to a file.
 
 ## Usage
 
@@ -65,7 +66,10 @@ also "data must always be fresh."
 
 **Expected behavior:**
 - Stops interviewing.
-- Presents the complete shared understanding as a single structured summary.
+- Presents the complete shared understanding as a single structured summary,
+  each resolved branch carrying its acceptance criteria.
+- Offers to write the summary to a file the user names; writes nothing
+  without a yes.
 - Writes no implementation code.
 
 ### 4. Terse output

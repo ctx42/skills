@@ -1,13 +1,10 @@
 ---
 name: review
 description: >
-  Reviews an existing Software Requirement Document (SRD) written by someone
-  else for consistency, logic, and conformance to the SRD standard, and
-  writes the findings to a review file beside the source. Use when asked to
-  review, audit, critique, or check an SRD or software requirements document, or
-  to re-check whether prior review findings were fixed. Read-only: it never
-  edits the source; it produces findings grouped by document section, each
-  citing a standard rule id and tagged blocker, major, or minor.
+  Reviews an existing Software Requirement Document (SRD) for consistency,
+  logic, and conformance to the SRD standard; read-only, findings go to a
+  review file beside the source. Use when asked to review, audit, critique,
+  or check an SRD, or to re-check whether prior review findings were fixed.
 license: MIT
 ---
 
@@ -15,13 +12,6 @@ license: MIT
 
 Review an SRD someone else wrote and report what fails the SRD standard. It is
 **read-only** — it never edits the source.
-
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/srd/review.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
 
 ## Boundaries
 
@@ -42,13 +32,13 @@ referenced file is missing at run time, stop and tell the user; do not
 proceed.** Read these before reviewing:
 
 - [../create/references/srd-standard.md](../create/references/srd-standard.md)
-  — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, `MD`, Quality
-  Bar). Every finding cites one of these ids.
-- [../create/references/srd-checklist.md](../create/references/srd-checklist.md)
-  — the action-neutral verification checklist the review runs.
+  (eager) — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, `MD`,
+  Quality Bar). The review checks every rule; every finding cites one of
+  these ids.
 - [../create/references/authoring-guide.md](../create/references/authoring-guide.md)
-  — house extensions (US English, sub-numbering, terminology consistency) and
-  the Bad→Good defect classes to recognize; includes the consistency pass.
+  (eager) — house extensions (US English, sub-numbering, terminology
+  consistency) and the Bad→Good defect classes to recognize; includes the
+  consistency pass.
 
 **Apply the full rule set.** `create` leaves STR-2..7 (≥ 2 owners,
 Initiative link + back-link, Designs link + back-link, Designs `N/A` when no UI
@@ -114,9 +104,10 @@ Source: `path/to/srd.md`
 ## review (default)
 
 1. Read the entire SRD top to bottom.
-2. Run every check in
-   [../create/references/srd-checklist.md](../create/references/srd-checklist.md)
-   against it, including the consistency pass.
+2. Check it against every rule in
+   [../create/references/srd-standard.md](../create/references/srd-standard.md),
+   in document-section order, including the consistency pass and the house
+   additions.
 3. Write all findings to the review file, grouped and tagged as above.
 4. If the review file already exists, do not rewrite it — delete resolved
    items, keep open ones, append new findings to their section, and bump
@@ -161,7 +152,13 @@ Emit plain text for an email or ticket — no file write:
 ## Consistency pass
 
 Run the consistency pass in
-[../create/references/authoring-guide.md](../create/references/authoring-guide.md)
-(also summarized in the Consistency section of the checklist). Report each
-consistency finding under the section where the conflict surfaces, citing the
-rule id or `(consistency)`.
+[../create/references/authoring-guide.md](../create/references/authoring-guide.md).
+Report each consistency finding under the section where the conflict surfaces,
+citing the rule id or `(consistency)`.
+
+## Self-learning
+
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/srd/review.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.

@@ -13,8 +13,9 @@ It reports findings; it does not change code unless you ask.
 When you ask it to apply findings, the fix path proves bugs with tests and runs
 the module suite. A broad fix job is first planned to a scratch file and applied
 package by package (a big package splits to file level), running the whole-module
-`go test ./... -race` gate per chunk. It never `git commit`s without an explicit
-consult and stops to ask commit-now-or-defer after each chunk that changed code.
+`go test ./... -race` gate per chunk. It never commits — each chunk lands as a
+self-contained, separately committable change, and it pauses after each changed
+chunk for a go-ahead.
 
 It also owns the rule list: describe a preference in plain words and it becomes
 a durable rule in `style`. Or run `/review learn` to turn the feedback you gave
@@ -72,6 +73,8 @@ another with `fmt.Errorf` using `%v`.
 **Expected behavior:**
 - Resolves the target to the current diff and lists the files in scope.
 - Reasons only — runs no gofmt, vet, linter, or `go test`.
+- Reads neither `references/fixing.md` nor `references/rule-editing.md` — the
+  default check loads only `style` and per-need `rules.md` entries.
 - Reports findings grouped Blocker / Should-fix / Nit, each with `file:line`,
   the rule id or dimension (`style: %w`, `correctness`), and a minimal fix;
   ends with a ship/fix-first verdict and per-severity counts.
@@ -121,8 +124,9 @@ several packages.
   before editing; splits a large package to file-level chunks.
 - Works chunks in order, running `go test ./... -race` per chunk so each ends
   green, ticking the plan boxes.
-- Stops after each changed chunk to ask commit-now-or-defer; never `git commit`s
-  without that consult and never proceeds past an unmade decision.
+- Pauses after each changed chunk for a go-ahead and never proceeds past an
+  unmade decision; it never runs `git commit` — chunks land as separately
+  committable changes for the user.
 
 ### 6. Terse output
 

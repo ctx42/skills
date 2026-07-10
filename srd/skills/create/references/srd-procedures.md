@@ -1,8 +1,7 @@
 # SRD Shared Procedures
 
 Operating procedures shared by the SRD skills. These are not rules
-([srd-standard.md](srd-standard.md)), not checks
-([srd-checklist.md](srd-checklist.md)), and not drafting aids
+([srd-standard.md](srd-standard.md)) and not drafting aids
 ([authoring-guide.md](authoring-guide.md)) — they are steps a skill runs.
 `create` and `edit` cite this file instead of restating the steps.
 

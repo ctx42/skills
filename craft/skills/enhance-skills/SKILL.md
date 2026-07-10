@@ -1,15 +1,11 @@
 ---
 name: enhance-skills
 description: >
-  Records lessons learned during a conversation into the skills that were used,
-  so the same mistake never repeats, and retrofits the self-learning mechanism
-  into skills that lack it. Harvest mode scans the current conversation for
-  corrections and self-caught mistakes, then appends one-line rules to each used
-  skill's lessons store (a sibling LESSONS.md in a source checkout, else a
-  durable file under $HOME/.agent-data); retrofit mode installs the
-  `## Self-learning` block into any SKILL.md missing it. Use when asked to
-  enhance the skills used in this conversation, capture a correction so it does
-  not happen again, record lessons learned, or make skills self-improving.
+  Records lessons learned during a conversation into the skills that were
+  used, so the same mistake never repeats, and retrofits the self-learning
+  mechanism into skills that lack it. Use when asked to enhance the skills
+  used in this conversation, record lessons learned, capture a correction so
+  it does not repeat, or make skills self-improving.
 license: MIT
 ---
 
@@ -21,13 +17,6 @@ Turn corrections into durable skill improvements. Pick the mode from the request
   "don't make that mistake again". Scan this conversation and write lessons.
 - **Retrofit** — "add self-learning to `<skill>`", or automatically when Harvest
   meets a skill whose `SKILL.md` has no `## Self-learning` block.
-
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/craft/enhance-skills.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
 
 ## Lessons store
 
@@ -45,6 +34,11 @@ Resolve the directory from the base dir the host reports. Read **both** files
 when both exist and obey the union; write only to the writable one (create
 parent dirs). Never write under `.../plugins/cache/` even if the OS says it's
 writable — a plugin update wipes it.
+
+When the resolved store is a writable sibling `LESSONS.md` and the external
+file also exists, offer to merge the external lessons into `LESSONS.md`
+(dedup per Lesson format) and delete the external file — lessons collected on
+a read-only install otherwise stay stranded there.
 
 ## Harvest
 
@@ -68,12 +62,13 @@ writable — a plugin update wipes it.
 
 ## Retrofit
 
-Install the `## Self-learning` block as the first `## ` section of the target
-`SKILL.md` — immediately before its current first `## ` heading (append if the
-file has none). Skip if the block already exists. Fill `<plugin>` and `<skill>`
-from the target's path. Do not create any lessons file; the store appears lazily
-on the first lesson. Retrofit edits `SKILL.md`, so it needs an in-place
-checkout — on a read-only install, report that and stop.
+Install the `## Self-learning` block as the last `## ` section of the target
+`SKILL.md` — append it at the end of the file, so the job owns the top of the
+body and the constant block sits last. Skip if the block already exists. Fill
+`<plugin>` and `<skill>` from the target's path. Do not create any lessons
+file; the store appears lazily on the first lesson. Retrofit edits `SKILL.md`,
+so it needs an in-place checkout — on a read-only install, report that and
+stop.
 
 Block to insert (verbatim, with `<plugin>/<skill>` resolved to the real names):
 
@@ -110,3 +105,10 @@ output the user can already see. Per touched skill, list the file written and th
 rules added (or the block installed). Always name the resolved path so the user
 knows whether a lesson shipped (sibling `LESSONS.md`) or stayed local
 (`.agent-data`); never fabricate a write you could not perform.
+
+## Self-learning
+
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/craft/enhance-skills.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.

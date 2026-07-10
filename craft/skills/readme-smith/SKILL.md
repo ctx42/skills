@@ -1,14 +1,10 @@
 ---
 name: readme-smith
 description: >
-  Authors and upgrades README.md files for software projects. Create mode scans
-  the repo, interviews the user only for gaps it cannot infer, and drafts a
-  README to a distilled house structure (header/logo, badges, overview,
-  features, install, usage, config); improve mode audits an existing README
-  against the same rules and fixes it on confirmation. Enforces GFM, GitHub
-  admonitions, restrained emoji, no fabricated facts, and verifies that
-  install/quickstart commands actually run. Use when asked to create, write,
-  draft, review, or improve a README or a project's front-page documentation.
+  Authors and improves README.md files for software projects, grounded in
+  the actual repo — never fabricates facts and verifies the commands it
+  ships. Use when asked to create, write, draft, review, or improve a README
+  or a project's front-page documentation.
 ---
 
 # readme-smith
@@ -29,13 +25,6 @@ Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. The README is the payload — write it in full;
 do not also paste it back into chat.
 
-## Self-learning
-
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/craft/readme-smith.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
-
 ## Non-negotiables (both modes)
 
 - **Never fabricate.** A claim, command, version, or number you cannot verify
@@ -55,23 +44,11 @@ one-line rule to whichever is writable (creating it) and report where.
 
 ## Go example injection (gomake)
 
-When the project is **Go**, examples belong in the README, and the
-`:project:doc-eg` gomake target is available, generate examples from runnable
-code instead of hand-writing snippets, so the README can't drift from code that
-compiles.
-
-1. **Detect.** Run `gomake --help` and confirm `:project:doc-eg` is listed. If
-   absent, hand-write examples as usual.
-2. **Author runnable examples first.** Write them as Go testable `Example…`
-   functions in `_test.go`; run `go test ./...` until they pass.
-3. **Mark the spots.** Above each ```go fence where an example belongs, write a
-   one-line `<!-- gmdoceg:… -->` marker — see `references/template.md` for the
-   exact key form.
-4. **Inject with gomake.** Run `gomake :project:doc-eg`; it fills each marked
-   fence with the matching `Example…` function's body and `// Output:` block.
-5. **Never hand-edit injected fences or ship unbacked snippets.** To change an
-   injected example, edit its `Example…` function and re-run the target. A `go`
-   snippet not backed by a passing `Example…` function is drift.
+When the project is **Go** and examples belong in the README, read
+[references/gomake.md](references/gomake.md) and follow it: if the
+`:project:doc-eg` gomake target exists, examples are generated from testable
+`Example…` functions and injected — never hand-written — so the README cannot
+drift from code that compiles.
 
 ## Create mode
 
@@ -153,3 +130,10 @@ Run (dynamic):
 `readme-smith` obeys the repo authoring standard (strict-portable frontmatter, a
 README with ≥ 3 evals, references one level deep). When you change this skill,
 re-audit it with `skill-smith` in improve mode.
+
+## Self-learning
+
+Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/craft/readme-smith.md` when this
+directory is read-only. On a correction or self-caught mistake, append a
+one-line rule to whichever is writable (creating it) and report where.
