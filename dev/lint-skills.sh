@@ -19,10 +19,11 @@
 #
 # It then cross-checks .claude-plugin/marketplace.json (if present): every plugin
 # `source` must be a real plugin directory (with .claude-plugin/plugin.json), and
-# every skill on disk must live under exactly one plugin's skills/ directory.
-# On machines with the vr checkout it also runs dev/sync-srd-standard.sh
+# every shipped skill on disk must live under exactly one plugin's skills/
+# directory (skills under .claude/skills/ are project-local and exempt).
+# On machines with the vr checkout it also runs dev/check-srd-standard.sh
 # (warning only) to catch drift between srd-standard.md and its Confluence
-# source.
+# source; regenerating it is the srd-sync skill's job.
 #
 # No external dependencies (pure bash + coreutils; no jq).
 #
@@ -170,7 +171,9 @@ lint_skill() {
         check_wrap "$f"
         lines="$(wc -l <"$f")"
         if [ "$lines" -gt 100 ]; then
-            head -25 "$f" | grep -qiE '^#+[[:space:]]+Contents|^Contents' \
+            # head -40, not -25: the generated provenance banner pushes the
+            # `## Contents` heading down in srd-standard.md.
+            head -40 "$f" | grep -qiE '^#+[[:space:]]+Contents|^Contents' \
                 || warn "${f#"$SKILLS_SRC"/}: $lines lines, no Contents list"
         fi
     done
@@ -222,9 +225,13 @@ check_marketplace() {
             || err "marketplace: plugin '$name' source '$src' has no .claude-plugin/plugin.json"
     done < <(plugin_entries "$MARKETPLACE")
 
-    # Every skill on disk must sit under exactly one plugin source's skills/ dir.
+    # Every shipped skill must sit under exactly one plugin source's skills/
+    # dir. Skills under .claude/skills/ are project-local maintainer tools (not
+    # shipped via the marketplace), so they are exempt from this rule but still
+    # get every per-skill quality check above.
     local sp hits
     for sp in "${SKILL_PATHS[@]}"; do
+        case "$sp" in .claude/skills/*) continue ;; esac
         hits=0
         for src in "${sources[@]}"; do
             case "$sp" in "$src"/skills/*) hits=$((hits + 1)) ;; esac
@@ -239,7 +246,8 @@ while IFS= read -r skill_md; do
     dir="$(dirname "$skill_md")"
     SKILL_PATHS+=("${dir#"$SKILLS_SRC"/}")
     lint_skill "$dir"
-done < <(find "$SKILLS_SRC" -name SKILL.md | sort)
+done < <(find "$SKILLS_SRC" -path '*/.claude/worktrees' -prune -o \
+    -path "$SKILLS_SRC/tmp" -prune -o -name SKILL.md -print | sort)
 
 check_marketplace
 
@@ -252,15 +260,18 @@ else
     warn "skipping version-drift check (dev/version.sh missing or not executable)"
 fi
 
-# srd-standard.md must match its Confluence source per the divergence ledger.
-# A warning, not an error: the source mirror exists only on machines with the
-# vr checkout (elsewhere the script SKIPs and passes), and a red lint on those
-# machines would train people to ignore it.
-if [ -x "$SKILLS_SRC/dev/sync-srd-standard.sh" ]; then
-    if ! sync_out="$("$SKILLS_SRC/dev/sync-srd-standard.sh" verify 2>&1)"; then
-        warn "srd-standard.md drifted from its source (dev/sync-srd-standard.sh diff):"
+# srd-standard.md must stay current with its Confluence source. A warning, not
+# an error: the source mirror exists only on machines with the vr checkout
+# (elsewhere the check SKIPs and passes), and a red lint on those machines
+# would train people to ignore it. Regeneration is the srd-sync skill; this is
+# only the passive page_version tripwire.
+if [ -x "$SKILLS_SRC/dev/check-srd-standard.sh" ]; then
+    if ! sync_out="$("$SKILLS_SRC/dev/check-srd-standard.sh" 2>&1)"; then
+        warn "srd-standard.md drifted from its source (run the srd-sync skill):"
         printf '%s\n' "$sync_out" | sed 's/^/       /'
     fi
+else
+    warn "skipping SRD drift check (dev/check-srd-standard.sh missing or not executable)"
 fi
 
 echo "----"

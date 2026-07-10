@@ -142,35 +142,52 @@ written, the commit aborts rather than releasing drift.
 
 ## Syncing the SRD standard
 
-`srd/skills/create/references/srd-standard.md` is **derived** from a
-Confluence page (id `1949564932`, mirrored by cfsync into the private `vr`
-checkout) and trimmed for agent use — never edit rule text only in the repo.
-Every deliberate difference is recorded in `dev/srd-standard-sync.tsv`;
-`dev/sync-srd-standard.sh verify` proves the two stay in sync and
-`lint-skills.sh` runs it as a warning on machines that have the source
-(elsewhere it skips). Override the source path with `SRD_STANDARD_SRC`.
+`srd/skills/create/references/srd-standard.md` is a **generated artifact** —
+never edit it by hand. It is assembled from a Confluence page (id `1949564932`,
+mirrored by cfsync into the private `vr` checkout), trimmed for agent use, and
+two hand-maintained frame files in `dev/`:
+
+```
+srd-standard.md = dev/srd-standard.header.md + transform(source) + dev/srd-standard.footer.md
+```
+
+There is **no reword layer**: the copy mirrors the source text exactly, minus
+the trims, so any editorial change must be made in Confluence. Override the
+source path with `SRD_STANDARD_SRC`.
+
+Regeneration is the **`srd-sync` skill** (`.claude/skills/srd-sync/`) — an
+LLM-driven task, not a script, because it runs rarely and with a human in the
+loop; its `SKILL.md` owns the transform, the diff buckets, and the checks. Two
+scripts support it: `dev/srd-subst.sh` applies the deterministic
+vr-internal-reference swaps so an LLM never edits rule text, and
+`dev/check-srd-standard.sh` is the passive tripwire — it compares the source
+`page_version` to the version in the copy's provenance banner, and
+`lint-skills.sh` runs it as a warning where the source exists (elsewhere it
+SKIPs and passes).
 
 **Source changed** (someone edited the Confluence page):
 
-1. `cfsync pull` the mirror, then `./dev/sync-srd-standard.sh diff`.
-2. Apply the per-unit diffs to the repo copy, keeping the trims — the
-   transform spec is in the script header.
-3. Refresh changed ledger hashes (`./dev/sync-srd-standard.sh hash '<unit>'`)
-   and bump the `page_version` in the copy's provenance header.
-4. A `page_version` bump can also mean an edit inside a **frozen node** — the
-   Bad→Good example expands and the Quality Bar list render only as
-   `<!-- adf:… -->` placeholders, so their content is invisible locally. Open
-   the page, re-check them, and update `authoring-guide.md` / the transcribed
-   Quality Bar by hand.
-5. Run `./dev/sync-srd-standard.sh verify` and `./dev/lint-skills.sh`, and
-   re-check the srd:review fixture eval
-   (`srd/skills/review/assets/flawed-srd.md`) — its finding set must not
-   shrink.
+1. `cfsync pull` the mirror.
+2. Review the **frozen nodes** first — the Bad→Good example expands and the
+   Quality Bar list are not in the export, so a `page_version` bump can hide an
+   edit inside them. Open the page, re-check them, and update
+   `srd/skills/create/references/authoring-guide.md` and
+   `dev/srd-standard.footer.md` (the transcribed Quality Bar) by hand.
+3. Invoke the `srd-sync` skill and review its reported diffs. LOCAL-ONLY and
+   TEXT DIFFERS units are debt — push them upstream to Confluence and re-sync,
+   or accept losing them (a write adopts the source wording). If the source
+   grew a new top-level section, the skill hard-stops until the transform is
+   extended.
+4. After the skill writes, run `./dev/lint-skills.sh` and re-check the
+   srd:review fixture eval (`srd/skills/review/assets/flawed-srd.md`) — its
+   finding set must not shrink.
 
-**Rule change conceived here**: edit the local mirror, `cfsync push`, then
-follow the source-changed flow. Until pushed, record the rule as
-`RULE:<id>	-	<sha>` (repo-only) in the ledger — `REQ-8` is the standing
-example.
+**Rule change conceived here**: a rule added to the local mirror is part of the
+sync source — it surfaces as SOURCE-ONLY and a write bakes it in. Never run
+srd-sync with unpushed mirror edits: add the rule to the mirror, `cfsync push`,
+`cfsync pull` (confirms the page took it and bumps `page_version`), then run the
+source-changed flow above. If you must sync first, `cfsync pull` to clobber the
+local edit.
 
 ## Renaming a Skill
 

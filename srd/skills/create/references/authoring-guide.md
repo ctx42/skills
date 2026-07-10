@@ -48,7 +48,17 @@ This pass is the self-check's feedback loop — repeat it until it is clean.
 
 ## Defect classes (Bad → Good)
 
+<!-- Each Bad→Good section below transcribes a Confluence expand block; its
+     localId is annotated at the section. untranscribed expand: blocks — source
+     examples with no section here yet; check them on the next page_version bump:
+     2b66f741-45ad-4225-8f24-c69401b968d5 (follows LANG-1),
+     c6f67fef-67b2-441f-9341-66c10dcd685e (follows LANG-3),
+     6fec97d9-b0a9-4d67-a462-2f51e0c35bd8 (follows LANG-6),
+     ee6f5ac1-261a-42bc-8ad7-70c0c2934499 (follows LANG-7),
+     d724bbc4-efcd-49a8-abd7-f0bd6200cd0f (follows REQ-2) -->
+
 ### Glossary pollution — behavior hidden in a definition (GLO-1/2)
+<!-- expand: 563d87a5-e660-4203-887b-17c549fbd7f2 (follows GLO-1) -->
 
 Bad:
 > **Recovery Codes** — One-time codes that let a user regain access when their
@@ -60,6 +70,7 @@ Good — definition only; the behavior moves to a requirement:
 > primary authentication method is unavailable.
 
 ### Non-atomic requirement — several rules in one (REQ-1)
+<!-- expand: 9f74c18d-837b-46c7-aaff-b27e00b6936b (follows REQ-1) -->
 
 Bad:
 > **GR-5:** The QR code MUST be 300×300 px, the user MUST be told to scan it, and
@@ -73,6 +84,7 @@ Good — one rule each (sub-numbered because they form one cluster):
 > registers the passkey.
 
 ### Vague / unverifiable quality (REQ-6)
+<!-- expand: ba9af145-8228-428f-bafa-e1508d24b9ec (follows REQ-6) -->
 
 Bad:
 > **GR-7:** The system SHALL use strong authentication appropriate to the data.
@@ -82,6 +94,7 @@ Good — concrete, testable:
 > administrative action on data classified `Restricted`.
 
 ### Scope gap — In Scope item with no requirement (SCO-2)
+<!-- expand: 01267af0-60b6-4c15-a8e6-545c66d420e8 (follows SCO-2) -->
 
 Bad: `In Scope` declares "file handling" but no requirement addresses it.
 Good: either add a requirement that covers file handling, or narrow the scope

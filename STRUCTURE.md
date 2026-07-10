@@ -20,8 +20,12 @@ as Claude Code plugins.
 │   ├── lint-skills.sh              # Checks skills against the authoring standard
 │   ├── version.sh                  # Syncs manifest versions with the VER file
 │   ├── token-report.sh             # Per-skill always-loaded token surface
-│   ├── sync-srd-standard.sh        # Verifies srd-standard.md vs its Confluence source
-│   └── srd-standard-sync.tsv       # Divergence ledger for that sync
+│   ├── check-srd-standard.sh       # Passive tripwire: source page_version vs the copy's provenance banner
+│   ├── srd-subst.sh                # Deterministic vr-internal-reference swaps for the srd-sync skill
+│   ├── srd-standard.header.md      # Hand-maintained frame prepended to srd-standard.md (srd-sync skill)
+│   └── srd-standard.footer.md      # Hand-maintained frame appended to srd-standard.md (Quality Bar)
+├── .claude/
+│   └── skills/srd-sync/            # Project-local maintainer skill: regenerate srd-standard.md (not shipped)
 ├── .claude-plugin/
 │   └── marketplace.json            # Marketplace catalog: the three plugins below
 │
