@@ -59,6 +59,8 @@ rule's full text or narrate.
 - A method returns only its named result; leave presentation (trailing
   newline, padding) to the caller.
 - No naked returns in non-trivial functions.
+- Order a function body so cheap, fallible checks (config reads, validation)
+  run before expensive or side-effecting work; fail fast before the heavy work.
 
 ### Declarations & files
 
