@@ -48,9 +48,10 @@ This pass is the self-check's feedback loop — repeat it until it is clean.
 
 ## Defect classes (Bad → Good)
 
-<!-- Each Bad→Good section below transcribes a Confluence expand block; its
-     localId is annotated at the section. untranscribed expand: blocks — source
-     examples with no section here yet; check them on the next page_version bump:
+<!-- Each Bad→Good section below transcribes an upstream source example block;
+     its localId is annotated at the section. untranscribed example blocks —
+     source examples with no section here yet; check them on the next
+     page_version bump:
      2b66f741-45ad-4225-8f24-c69401b968d5 (follows LANG-1),
      c6f67fef-67b2-441f-9341-66c10dcd685e (follows LANG-3),
      6fec97d9-b0a9-4d67-a462-2f51e0c35bd8 (follows LANG-6),

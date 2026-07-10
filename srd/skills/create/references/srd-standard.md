@@ -1,9 +1,9 @@
 # SRD Standard
 
 <!-- GENERATED FILE — do not edit by hand; page_version 16. Assembled by the
-     srd-sync skill from dev/srd-standard.header.md, the Confluence page
-     1949564932 ("Guidelines for Software Requirements Documents"), and
-     dev/srd-standard.footer.md. Edit the frame files or the Confluence source,
+     srd-sync skill from dev/srd-standard.header.md, the upstream
+     "Guidelines for Software Requirements Documents" source, and
+     dev/srd-standard.footer.md. Edit the frame files or the upstream source,
      then re-run srd-sync. See CONTRIBUTING.md "Syncing the SRD standard". -->
 
 The rule set every SRD must satisfy. An SRD states what a system or feature

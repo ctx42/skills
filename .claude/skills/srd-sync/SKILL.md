@@ -47,9 +47,9 @@ one blank line between the parts, with one edit to the header on the way in:
 
   ```
   <!-- GENERATED FILE — do not edit by hand; page_version NN. Assembled by the
-       srd-sync skill from dev/srd-standard.header.md, the Confluence page
-       1949564932 ("Guidelines for Software Requirements Documents"), and
-       dev/srd-standard.footer.md. Edit the frame files or the Confluence
+       srd-sync skill from dev/srd-standard.header.md, the upstream
+       "Guidelines for Software Requirements Documents" source, and
+       dev/srd-standard.footer.md. Edit the frame files or the upstream
        source, then re-run srd-sync. See CONTRIBUTING.md "Syncing the SRD
        standard". -->
   ```
