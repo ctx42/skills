@@ -7,3 +7,4 @@
 # plugin data dir at runtime; the repo ships only memory.template.md. A local
 # copy here (from before the move, or dev use) is kept out of version control.
 srd/skills/system-check/memory.md
+/tmp/
