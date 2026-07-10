@@ -1,3 +1,18 @@
+## v0.12.0 (Fri, 10 Jul 2026 18:48:49 UTC)
+- docs: shorten the shared Self-learning block in every skill.
+- docs: trim per-skill duplication from SKILL.md files.
+- feat(golang): add env-through-ring and three more style rules.
+- docs(review): record lesson to keep segmented multi-line strings.
+- docs(srd): drop redundant SRD validation checklist.
+- feat(srd): verify srd-standard.md against its source.
+- docs: slim skills' always-loaded surface and add token tooling.
+- feat(srd): drive srd-standard sync from a skill.
+- feat(golang): add fail-fast ordering style rule.
+- chore: git-ignore the /tmp scratch directory.
+- docs(srd): keep Confluence out of user-facing skills.
+- feat(srd): track review findings as numbered tasks.
+- feat(cm): add micro, minimal, and apply arguments.
+
 ## v0.11.0 (Thu, 09 Jul 2026 14:04:42 UTC)
 - docs(srd): prefer three- or four-letter requirement codes.
 - docs(srd): update SRD template with formatting changes and RFC link addition.
