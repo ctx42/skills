@@ -20,7 +20,7 @@ those), and it runs the install/quickstart commands it ships to prove they work.
 ```
 /readme-smith create a README for this project      # create mode
 /readme-smith improve the README                    # audit + fix existing
-/readme-smith review README.md                       # audit by path
+/readme-smith review README.md                      # audit by path
 ```
 
 You don't need a mode keyword — it infers create vs improve from the request. No

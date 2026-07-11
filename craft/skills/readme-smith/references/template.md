@@ -6,6 +6,7 @@ actually needs; omit empty ones. Order is the default, not a straitjacket.
 
 ## Contents
 
+- Root README vs member README
 - Section blueprint
 - Header snippet
 - Navigation (one aid, or none)
@@ -14,9 +15,35 @@ actually needs; omit empty ones. Order is the default, not a straitjacket.
 - Excluded sections
 - Anti-patterns
 
+## Root README vs member README
+
+A repository with more than one package has one **root/main README** and one
+**member README** per package. They are different documents — do not give a
+member the root's furniture:
+
+- **Root/main README** — carries the badges row and, uniquely, may keep a
+  `## License` section (see Excluded sections). Acts as an index: a Packages
+  table (plus any target/command tables) linking *down* to each member. No fixed
+  section order — it is an index, not a project page. Covers installing the whole
+  (e.g. the binary), not each package's `go get`.
+- **Member README** — **no badges, no License section, no link up to the root.**
+  Focuses on its one package and goes deeper (overview, features, prerequisites,
+  usage, configuration). May link *sideways* to a sibling package only when it
+  actually uses it.
+
+Detect the mode: it is a **root README** when it sits at the module/repo root
+*and* the repo has member packages with their own READMEs; otherwise it is a
+**member README**. A single-package repo has only the root form, which then also
+carries the full project page.
+
+When creating or improving a member README, read the sibling members first and
+match their section set, prerequisites format, and tone — a repo's READMEs read
+as a set.
+
 ## Section blueprint
 
-1. **Header** — a badges row (each badge on its own line), the project name as
+1. **Header** — a badges row (each badge on its own line; **root/main README
+   only** — see Root README vs member README), the project name as
    `#` H1, a one-line tagline (what it is + for whom), and a logo/demo image
    (plain `![](…)`) if the repo has one. Plain GFM, left-aligned — no wrapping
    `<div>`. Add a single navigation aid only per **Navigation** below.
@@ -42,20 +69,22 @@ Plain GFM only — **no raw HTML tags** (`<div>`, `<img>`, `<p align>`,
 header is correct. HTML *comments* are fine — they render nothing and carry the
 `<!-- TOC -->` and `<!-- gmdoceg:… -->` markers.
 
-Adapt; drop any line whose fact you cannot verify. Badges on their own lines at
-the top, then the title and tagline. Each badge must point at the project's real
-hosting remote (`git remote -v`) and a fact that exists — CI that runs there, a
-published package, the declared license. Omit any badge whose URL you cannot
-confirm resolves; never invent one from an org name. Do **not** infer a repo's
-visibility (public/private) from its host — a `bitbucket.org`/`gitlab.com`/
-self-hosted URL is not evidence of "private," and a `github.com` URL is not
-evidence of "public." Add a logo with a plain image link only if the file
+Adapt; drop any line whose fact you cannot verify. Badges live on the root/main
+README only — a member README opens straight at the title. Badges on their own
+lines at the top, then the title and tagline. Each badge must point at the
+project's real hosting remote (`git remote -v`) and a fact that exists — CI that
+runs there, a published package, the declared license. Omit any badge whose URL
+you cannot confirm resolves; never invent one from an org name. Do **not** infer
+a repo's visibility (public/private) from its host — a `bitbucket.org`/
+`gitlab.com`/self-hosted URL is not evidence of "private," and a `github.com` URL
+is not evidence of "public." Add a logo with a plain image link only if the file
 exists in the repo.
 
 ```markdown
-[![CI](badge-url)](link)
-[![Go Report Card](badge-url)](link)
-[![GoDoc](badge-url)](link)
+[![Go](ci-badge-url)](ci-link)
+[![Go Reference](pkg.go.dev-badge-url)](pkg.go.dev-link)
+[![Go Version](go-version-badge-url)](go.mod)
+[![License](license-badge-url)](LICENSE.md)
 
 # ProjectName
 
@@ -113,7 +142,8 @@ and do not also add a nav line.
   its box width; keep every line in a fence readable (aim ≤ ~80, hard cap ~100
   chars) so it wraps in prose but fits in code. Break long commands with `\`,
   long strings across lines, and long example output into shorter pieces.
-- **Badges** reference verifiable facts only (CI that exists, a published
+- **Badges** appear on the **root/main README only** (see Root README vs member
+  README) and reference verifiable facts only (CI that exists, a published
   package, the declared license/runtime) on the real hosting remote. Omit any
   whose URL you cannot confirm resolves.
 - **Navigation anchors** must resolve to real heading anchors (lowercase, spaces
@@ -123,31 +153,17 @@ and do not also add a nav line.
 
 ## Admonitions
 
-Use GitHub admonition syntax for genuine callouts, not decoration:
-
-```markdown
-> [!NOTE]
-> Useful information the reader should know.
-
-> [!TIP]
-> A helpful shortcut.
-
-> [!IMPORTANT]
-> Essential to success.
-
-> [!WARNING]
-> Risk of a mistake.
-
-> [!CAUTION]
-> Risk of a damaging or irreversible outcome.
-```
+Use GitHub admonitions for genuine callouts, not decoration. Five types, each a
+`>`-prefixed blockquote: `[!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`,
+`[!CAUTION]`.
 
 ## Excluded sections
 
 Do **not** author these as README sections — dedicated files own them. Link to
 the file in one line at most if genuinely helpful.
 
-- License → `LICENSE` / `LICENSE.md`
+- License → `LICENSE` / `LICENSE.md`. **Exception:** a `## License` section is
+  allowed on the **root/main README only**; member READMEs never carry one.
 - Contributing → `CONTRIBUTING.md`
 - Changelog → `CHANGELOG.md`
 - Code of Conduct → `CODE_OF_CONDUCT.md`
@@ -157,6 +173,11 @@ the file in one line at most if genuinely helpful.
 
 - Raw HTML tags (`<div align="center">`, `<img>`, `<details>`) — plain GFM only.
 - Two navigation aids (a nav line *and* a `<!-- TOC -->` block) — pick one.
+- Two headings with identical text (colliding anchors), e.g. `### As a library`
+  twice — rename one (`Use as a library`).
+- Badges or a `## License` section on a member README — root/main README only.
+- A member README linking up to the root, or the root missing a link down to a
+  member.
 - Setup before the reader knows what the project is.
 - Emoji on every heading; badge walls of unverifiable facts.
 - Code fences with no language; nav links to missing anchors.

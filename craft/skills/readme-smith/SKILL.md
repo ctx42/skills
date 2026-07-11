@@ -16,10 +16,10 @@ Forge and repair a project's `README.md`. Pick the mode from the request:
 
 If ambiguous, ask one question: create new or improve existing?
 
-The single source of truth for structure and style is
-[`references/template.md`](references/template.md) — the section blueprint, the
-style rules (emoji, GFM, admonitions, logo, excluded sections), and the
-self-check checklist. Read it once per run. Every decision defers to it.
+README structure and style come from
+[`references/template.md`](references/template.md) *(eager: read once per run)* —
+the section blueprint, the style rules (emoji, GFM, admonitions, logo, excluded
+sections), and the self-check checklist. Every decision defers to it.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. The README is the payload — write it in full;
@@ -27,25 +27,24 @@ do not also paste it back into chat.
 
 ## Non-negotiables (both modes)
 
+These two bite before drafting; `references/template.md` (loaded every run)
+holds the full rules and the Verify checklist re-checks them.
+
 - **Never fabricate.** A claim, command, version, or number you cannot verify
   from the repo or the user is a gap. Ask; if still unknown, leave an explicit
   `<!-- TODO: … -->` marker. Never invent install steps or benchmark figures.
-  The path comes from the manifest (`go.mod` module, `package.json` name, …) and
-  `git remote -v` — never from an org name or a sibling repo. For Go, `go get`,
-  badges, and pkg.go.dev take the module; a Go `import` takes the package (module
-  + subdir). Do not claim a repo's visibility or add `GOPRIVATE`/auth steps from
-  its host URL alone; the host does not reveal public vs private.
-- **Excluded sections.** Do not author License, Contributing, Changelog, Code of
-  Conduct, or Security as README content — dedicated files own them. Link to
-  those files in one line at most.
 - **Verify commands.** Every install and quickstart command you ship must be
   executed and made to pass (see Verify). A command you cannot run is marked, not
   guessed.
 
+Read paths from the manifest (never an org name or sibling repo), keep Go module
+vs import distinct, and follow the excluded-section and root-vs-member rules — all
+per `references/template.md`.
+
 ## Go example injection (gomake)
 
 When the project is **Go** and examples belong in the README, read
-[references/gomake.md](references/gomake.md) and follow it: if the
+[references/gomake.md](references/gomake.md) *(on-demand)* and follow it: if the
 `:project:doc-eg` gomake target exists, examples are generated from testable
 `Example…` functions and injected — never hand-written — so the README cannot
 drift from code that compiles.
@@ -56,7 +55,11 @@ drift from code that compiles.
    (`package.json`, `go.mod`, `pyproject.toml`, `Cargo.toml`, …), the entrypoint
    / main command, any existing docs, `examples/`, CI config, and `.github/` or
    `assets/` for a logo/icon or demo media. Note the language, install method,
-   run command, and public surface.
+   run command, and public surface. Decide **root vs member** (see
+   Non-negotiables): a repo root with member packages that have their own READMEs
+   is a root README; a package subdir is a member. When writing a member, read
+   the sibling members and match their section set, prerequisites format, and
+   tone.
 2. **Ask only the gaps.** From the scan, list what code cannot reveal —
    positioning (what problem, for whom), audience, notable features to lead with,
    roadmap. Ask those in one batched round. Do not ask what the repo already
@@ -80,7 +83,10 @@ confirmation. Reasoning only until the user approves — no edits during the aud
 2. **Audit** against `references/template.md`, checking:
    - **Structure** — sections present and ordered per the blueprint; no excluded
      sections authored as content; exactly one navigation aid (or none), not both
-     a nav line and a TOC block; its entries match headings.
+     a nav line and a TOC block; its entries match headings; no two headings
+     share the same text (colliding anchors). Root/member correct: a member has
+     no badges and no `## License`, and does not link up to the root; the root
+     indexes its members.
    - **Accuracy** — commands, versions, and paths match the repo; no stale or
      fabricated claims; badges reference verifiable facts.
    - **Style** — GFM used well, code fences declare a language, admonitions valid
@@ -107,6 +113,11 @@ Inspect (static):
       not dumped on one wide line.
 - [ ] Exactly one navigation aid (a nav line XOR a `<!-- TOC -->` block), or none
       — never both; its entries match the actual headings.
+- [ ] No two headings share the same text (GitHub auto-suffixes the duplicate's
+      anchor, breaking links) — e.g. not two `### As a library`.
+- [ ] Badges and any `## License` section appear on the root/main README only; a
+      member README has neither and does not link up to the root, while the root
+      links down to every member.
 - [ ] Import/install path matches the manifest; badges point at the real hosting
       remote (`git remote -v`) and a target that resolves; no visibility guessed
       or `GOPRIVATE` added from the host URL (see Non-negotiables).
@@ -135,5 +146,8 @@ re-audit it with `skill-smith` in improve mode.
 
 Read this skill's lessons and obey them: sibling `LESSONS.md`, else
 `$HOME/.agent-data/ctx42-skills/lessons/craft/readme-smith.md` when this
-directory is read-only. On a correction or self-caught mistake, append a
-one-line rule to whichever is writable (creating it) and report where.
+directory is read-only. On a correction or self-caught mistake, first draft the
+lesson **generically** — a rule for any README, not tied to the one file at hand
+— and present it for the user's approval. Only once approved, append the
+one-line rule to whichever is writable (creating it) and report where. Never
+append an unapproved lesson.
