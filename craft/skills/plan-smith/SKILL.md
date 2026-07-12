@@ -34,14 +34,27 @@ A summary table first, so status is visible at a glance:
 ```
 ## Summary
 
-| # | Item              | Status |
-| - | ----------------- | ------ |
-| 1 | <short item name> | Y      |
-| 2 | <short item name> | N      |
-| 3 | <short item name> | X      |
+| #  | Item              | Status |
+|----|-------------------|--------|
+| 1  | <short item name> | Y      |
+| 2  | <short item name> | N      |
+| 3  | <short item name> | X      |
 
 Legend: Y implemented · N not yet · X rejected
 ```
+
+Keep the **Item** cell to a short name (≤ ~30 chars); the item's own section
+carries the detail. Align the table so the `|` delimiters line up vertically:
+
+- Each column's width is its widest cell's content.
+- Header and body cells: one leading and one trailing space around the content,
+  then pad the trailing side with spaces to the column width.
+- Separator row: fill each cell with dashes **flush to the pipes, no
+  surrounding spaces** (`|----|`, never `| -- |`), exactly as many dashes as the
+  cell is wide.
+
+Compute the widths from the widest cell — don't eyeball it — then verify the
+header, separator, and every body row have identical character width.
 
 Then one section per item, numbered to match the table, each led by a checkbox:
 
@@ -97,6 +110,9 @@ item keeps `[ ]`, is tagged `X`, and states why in one line — never delete it.
   verifiable, not asserted.
 
 - Table and sections stay in sync: same numbering, same statuses.
+
+- Keep summary Item names short and pad the table so columns align — a long
+  name in one row must not skew the `|` delimiters (see Format).
 
 ## Self-learning
 
