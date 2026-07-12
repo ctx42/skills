@@ -1,9 +1,8 @@
 ---
 name: cover
 description: >
-  Improves Go test coverage one function at a time, measuring each function
-  from its own direct test only. Use to raise coverage of a function, a
-  line, a file, a package, or a module.
+  Improves Go test coverage one function at a time. Use to raise coverage of a
+  function, a line, a file, a package, or a module.
 license: MIT
 ---
 
@@ -22,24 +21,24 @@ function — never the package — is the unit of work.
 Sources of truth:
 - `../style/SKILL.md` (eager: the Test section) — obey it in every test
   written; Production rules apply only through inheritance.
-- The package's own tests, then a sibling package, for assertion/helper
-  conventions.
+- The package's own tests, then a sibling package (on-demand: when writing) —
+  for assertion/helper conventions.
 
 ## Target
 
 Resolve the invocation to one of five execution kinds. Each fixes an order;
 always work it one function/method at a time.
 
-- **function / method** — `func=Foo` or `func=T.Bar`. Just that one. Run
+- function / method — `func=Foo` or `func=T.Bar`. Just that one. Run
   straight (no plan gate), then report.
-- **line** — `path/to/foo.go:42`. Resolve to the enclosing function/method and
+- line — `path/to/foo.go:42`. Resolve to the enclosing function/method and
   run its full per-function loop. Run straight, then report.
-- **file** — `path/to/foo.go`. Every function/method in the file, **top to
-  bottom**. Plan-first.
-- **package** (default) — a path like `./pkg/foo` or an import path. Files
-  **alphabetically**; within each, functions **top to bottom**. Plan-first.
-- **module** (opt-in) — `./...`, a `go.mod` dir, or an explicit "module".
-  Packages **alphabetically**, sequentially by default (see `fanout` in
+- file — `path/to/foo.go`. Every function/method in the file, top to
+  bottom. Plan-first.
+- package (default) — a path like `./pkg/foo` or an import path. Files
+  alphabetically; within each, functions top to bottom. Plan-first.
+- module (opt-in) — `./...`, a `go.mod` dir, or an explicit "module".
+  Packages alphabetically, sequentially by default (see `fanout` in
   Controls) — no coverage ranking; within each package, files alphabetically;
   within each file, functions top to bottom. Plan-first.
 
@@ -61,23 +60,23 @@ State the resolved kind and the function/file set before measuring.
 For each target function `Foo` (or method `T.Bar`), work in strict order.
 **Never start function B until function A's loop is complete and verified.**
 
-1. **Map to its direct-test family** by style naming: every test whose name
+1. Map to its direct-test family by style naming: every test whose name
    starts with `Test_Foo` (`Test_Foo`, `Test_Foo_tabular`, `Test_Foo_EdgeCase`,
    …); for a method `T.Bar`, every `Test_T_Bar…`. This `Test_Foo` prefix family
    is the only contract for "directly tests Foo" — a different function
    `Foobar` is excluded by the `_`/end-of-name anchor below. No test in the
-   family, or only off-convention names, means the function is **uncovered** —
+   family, or only off-convention names, means the function is uncovered —
    scaffold `Test_Foo`.
-2. **Measure in isolation:** `go test -run '^Test_Foo($|_)'
+2. Measure in isolation: `go test -run '^Test_Foo($|_)'
    -coverprofile=<tmp> ./<pkg>` (methods: `^Test_T_Bar($|_)`). Read coverage of
-   **only Foo's own line range** from the profile; ignore lines it hits in
+   only Foo's own line range from the profile; ignore lines it hits in
    callees.
-3. **Add the targeted cases** — table rows, subtests, or assertions, each aimed
+3. Add the targeted cases — table rows, subtests, or assertions, each aimed
    at a specific uncovered line or branch (easy or light-fake only, unless
    `include=all`; respect `max_tests`). Defer lines needing heavy scaffolding,
    concurrency, time, randomness, or external I/O (report them); never attempt
    un-coverable lines.
-4. **Re-measure once.** Re-run Foo's direct-test family and re-read the profile;
+4. Re-measure once. Re-run Foo's direct-test family and re-read the profile;
    confirm Foo's target lines went from 0 to hit. If some target line did not
    rise, bisect — narrow to the case meant to cover it, fix or drop it — until
    every coverable line of Foo is hit or deferred.
@@ -87,13 +86,13 @@ direct-test rule.
 
 ## Classify each uncovered line
 
-- **easy** — reachable with a pure test, a simple branch, an
+- easy — reachable with a pure test, a simple branch, an
   input-triggerable error path, an extra table row, or a light fake the
   project already provides (e.g. `tester.Spy`). Cover it now.
-- **complex (deferred)** — needs heavy scaffolding, concurrency, time,
+- complex (deferred) — needs heavy scaffolding, concurrency, time,
   randomness, or external systems. Skip on the default pass; report. Cover it
   only under `include=all`.
-- **un-coverable** — see the list below. Never attempt; report with the
+- un-coverable — see the list below. Never attempt; report with the
   reason.
 
 ## Plan (file / package / module)

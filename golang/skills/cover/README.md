@@ -24,11 +24,11 @@ them.
 ```
 
 Targets:
-- **single function** (`func=`, or `file.go:line`) — runs straight, no
+- single function (`func=`, or `file.go:line`) — runs straight, no
   approval gate, then reports.
-- **package** (default, `./pkg/foo`) — iterates function by function,
+- package (default, `./pkg/foo`) — iterates function by function,
   plan-first.
-- **module** (`./...`, a `go.mod` dir, or "module") — packages → functions,
+- module (`./...`, a `go.mod` dir, or "module") — packages → functions,
   sequentially with no fan-out, plan-first.
 
 ## Controls
