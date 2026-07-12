@@ -9,7 +9,7 @@ duplicates it.
 
 ## Contents
 
-- Frontmatter (strict-portable)
+- Frontmatter
 - Description quality
 - Token performance
 - Body: conciseness
@@ -20,10 +20,8 @@ duplicates it.
 - Content hygiene
 - Scripts & bundled files
 - Evaluations
-- Anti-patterns
-- Authoring checklist
 
-## Frontmatter (strict-portable)
+## Frontmatter
 
 This repo's skills ship as Claude Code plugins and run in **both** Claude and
 Grok (Grok reads Claude marketplaces and plugins directly). Both read the
@@ -32,8 +30,9 @@ only standard fields.
 
 - **Required:** `name`, `description`.
 - `name` — lowercase, hyphens/numbers only, ≤ 64 chars, **must equal the parent
-  directory name**. No reserved words (`anthropic`, `claude`). No org or
-  vendor prefix. Prefer gerund (`writing-x`) or a short verb; match repo terseness.
+  directory name**. No reserved words (`anthropic`, `claude`), no org/vendor
+  prefix, no vague names (`helper`, `utils`). Prefer a gerund (`writing-x`) or
+  short verb.
 - `description` — see next section. ≤ 1024 chars.
 - **Allowed optional** (standard, portable): `license`, `version`, `tags`,
   `author`, `metadata`. Use sparingly.
@@ -48,7 +47,7 @@ only standard fields.
 
 ## Description quality
 
-The description is how the agent decides to load the skill. It is the single
+The description is how the agent decides to load the skill — its single
 highest-leverage field.
 
 - **Third person.** "Reviews X", not "I review X" or "You can review X".
@@ -84,8 +83,8 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
   eagerly loads a whole reference every run (`read rules.md once`) makes it
   always-loaded in practice — consult a keyed or large reference per-need, never
   preload it wholesale.
-- Shortest phrasing that stays unambiguous wins. Terse-but-precise beats verbose;
-  it also beats cryptic — do not compress past the point of clarity.
+- Shortest phrasing that stays unambiguous wins — terse-but-precise, never
+  cryptic; don't compress past clarity.
 - Judge by tokens-to-outcome, not line count — a padded 400-line body can cost
   more than a lean 500-line one.
 
@@ -110,9 +109,9 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
 
 ## Output discipline
 
-Conciseness above governs the static body. This governs what a running skill
-**says back** each turn — a recurring, per-run token cost that the body rules
-never touch. Every skill this repo ships must make its agent report tersely.
+Conciseness governs the static body; this governs what a running skill **says
+back** each turn — a per-run cost the body rules never touch. Every skill must
+make its agent report tersely.
 
 - **Cut framing.** No preamble ("I'll now review…"), no step narration ("Let me
   read the file"), no closing filler ("Hope this helps"). Open with the payload.
@@ -145,10 +144,9 @@ files (on demand). Exploit it:
 - Any reference file over ~100 lines starts with a Contents list.
 - **Label every Sources-of-truth entry** `(eager)` or `(on-demand: <when>)`,
   so a workflow step cannot silently preload a file meant for per-need reads.
-- Structure is necessary, not sufficient: a well-formed reference (one hop, ToC,
-  named for content) can still bloat with restated or duplicated content — audit
-  the content by the conciseness tests, and confirm the workflow reads it on
-  demand rather than preloading it whole.
+- Structure is necessary, not sufficient — a one-hop, ToC'd, well-named
+  reference can still bloat with restated content or be preloaded whole. Apply
+  the Token-performance and Body-conciseness tests to it too.
 
 ## Degrees of freedom
 
@@ -181,6 +179,11 @@ Match specificity to task fragility:
   paths, links). `dev/lint-skills.sh` warns on breakable over-width lines.
 - **Align table columns** — pad cells so `|` delimiters line up in the source;
   re-pad the whole table when adding a row.
+- **Plain, spaced lists.** In `SKILL.md` bodies and READMEs, write list items as
+  plain sentences — no bold-label lead-ins — and put a blank line between items
+  for readability. Reserve `**bold**` for genuine emphasis in prose. Dense
+  references (this file included) may keep tight, unspaced lists — token economy
+  wins there.
 
 ## Scripts & bundled files
 
@@ -208,48 +211,3 @@ Mandatory and written before finalizing (eval-driven development):
 - Develop iteratively — author the skill, run it on the scenarios, observe where
   it struggles, refine. Strengthen the description first when it fails to
   trigger.
-
-## Anti-patterns
-
-- Windows paths (`scripts\x.py`) — always forward slashes.
-- Offering too many options — pick a default.
-- Vague names (`helper`, `utils`) or vague descriptions.
-- A description that narrates the workflow (modes, controls, paths) instead of
-  when-to-use.
-- Deeply nested references.
-- Preloading a whole reference each run — negates the on-demand saving; consult
-  keyed references per-need.
-- A reference that restates the rule or file it keys to, or repeats itself — bloat
-  dressed as detail.
-- Chatty runtime output — preamble, narration, or a closing summary that restates
-  what the user already sees.
-- Frontmatter beyond the strict-portable set.
-- Restating CONTRIBUTING.md mechanics here — reference it.
-
-## Authoring checklist
-
-- [ ] `name` equals dir name; lowercase-hyphen; no reserved words / org prefix.
-- [ ] Frontmatter is `name` + `description` (+ allowed optional only).
-- [ ] Description: third person, what + when, specific triggers, key use
-      first, no workflow leak (no modes, controls, paths, or step summaries),
-      aim ≤ ~350 chars.
-- [ ] Token performance: always-loaded surface (description + body) carries only
-      what raises success rate; on-demand detail pushed to references.
-- [ ] Body under ~500 lines, dense, consistent terms, no time-sensitive info.
-- [ ] Output discipline: body carries the terse-output line; no framing or
-      restating mandated; payload always stated in full.
-- [ ] Markdown prose wraps at ~80 cols (code fences, tables, unbreakable tokens
-      exempt); tables have aligned columns.
-- [ ] References one level deep; files named for content; ToC if > ~100 lines;
-      sources-of-truth entries labeled eager / on-demand.
-- [ ] References earn their tokens too: no restating the model's knowledge or the
-      rule they key to; entries don't collapse to one shared principle.
-- [ ] On-demand references are consulted per-need, not preloaded whole each run.
-- [ ] Degrees of freedom match task fragility.
-- [ ] Multi-step work has clear steps / checklist; quality work has a feedback
-      loop.
-- [ ] Scripts (if any) solve-not-punt, no voodoo constants, deps stated.
-- [ ] `README.md` exists with usage and `## Evaluations` (≥ 3 scenarios, ≥ 1
-      asserting terse output).
-- [ ] Skill lives under a plugin group's `skills/` dir; catalog docs updated and
-      `dev/lint-skills.sh` passes — per CONTRIBUTING.md.
