@@ -3,9 +3,9 @@
 A living, token-optimized Go style guide that both you and AI agents follow
 when writing Go. Production code and test code have separate rule sets.
 
-The rule list is maintained **only** through `/review` — describe what you
-want in plain words and it becomes a durable rule, or run `/review learn` to
-turn a whole editing session's feedback into rules. Do not hand-edit
+The rule list is maintained **only** through `golang:review` — describe what
+you want in plain words and it becomes a durable rule, or run `golang:review
+learn` to turn a whole editing session's feedback into rules. Do not hand-edit
 `SKILL.md` for routine changes.
 
 ## Make agents follow it automatically

@@ -1,9 +1,8 @@
 ---
 name: style
 description: >
-  Enforced Go coding style for this project; production code (non-_test.go)
-  and test code (_test.go) follow different rules. Read before writing or
-  editing any .go file.
+  Enforced Go coding style for this project, covering both production and
+  test code. Read before writing or editing any .go file.
 license: MIT
 ---
 
@@ -12,7 +11,8 @@ license: MIT
 Authoritative Go style rules. Apply the **Production** section to `*.go` and
 the **Test** section to `*_test.go`. Test code inherits Production unless a
 Test rule overrides it. Do not hand-edit this file ad hoc — change rules with
-`/review` (state a preference, or `/review learn` to mine an editing session).
+`golang:review` (state a preference, or `golang:review learn` to mine an
+editing session).
 
 Report tersely: when citing a rule, name it and the fix; don't restate the
 rule's full text or narrate.
@@ -97,7 +97,8 @@ rule's full text or narrate.
 - Reuse an already-declared `err` with `=`; only the first check in a scope
   uses `:=`.
 - Discard an intentionally-ignored return explicitly with `_` (`_, _ =
-  fmt.Fprintf(w, ...)`); never leave it bare, so the discard reads as deliberate.
+  fmt.Fprintf(w, ...)`); never leave it bare, so the discard reads as
+  deliberate.
 - Export sentinel errors as `ErrXxx`; unexported as `errXxx`.
 - Keep wrap context short and meaningful; no `failed to ...` prefixes.
 - Match errors with `errors.Is`/`errors.As`, never `==`.
@@ -150,7 +151,8 @@ rule's full text or narrate.
 
 - Name tests `Test_Func` and `Test_Type_Method`; add `_tabular` for table tests.
 - Subtest names use only `[a-zA-Z0-9 _-]`; keep them flat, no `/`.
-- Keep subtest names terse — name the condition or trigger, not a full sentence.
+- Keep subtest names terse — name the condition or trigger, not a full
+  sentence.
 - Error-path subtest names start with `error - ` then the failure condition;
   don't restate "returns error".
 - Name the actual value `have` and the expected value `want`, never `got`; when
