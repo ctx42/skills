@@ -34,13 +34,14 @@ against the target platform captured in `memory.md`.
 
 ## Support files
 
-- **`memory.md`** — the target platform's system knowledge base. Read it first
-  every run. Atomic one-fact-per-line, grouped by topic, each line carrying the
-  source it came from. It is **user data, not shipped content** — resolve its
+- **`memory.md`** (eager) — the target platform's system knowledge base. Read it
+  first every run. Atomic one-fact-per-line, grouped by topic, each line carrying
+  the source it came from. It is **user data, not shipped content** — resolve its
   location per [Where memory.md lives](#where-memorymd-lives) below, not by
   assuming this skill's directory. See [Memory](#memory).
-- **`memory.template.md`** (this skill's directory) — the empty scaffold used to
-  seed a fresh `memory.md`. Read-only; never write facts here.
+- **`memory.template.md`** (on-demand: first run) — the empty scaffold in this
+  skill's directory, used to seed a fresh `memory.md`. Read-only; never write
+  facts here.
 
 ### Where memory.md lives
 
@@ -237,13 +238,7 @@ Writing rules:
   feature ticket that surfaced it — memory describes the system, not the review.
 - Do not cite a reference as proof a term is undefined unless that reference is
   known complete (some glossaries are partial — see the note in `memory.md`).
-
-## Guardrails
-
-- Never edit the SRD or `<srd>.review.md`. You write only `<srd>.questions.md`
-  and `memory.md`.
-- One change at a time; confirm each file edit.
-- Keep both companion files within 80 columns.
+- Keep each line within 80 columns.
 
 ## Self-learning
 
