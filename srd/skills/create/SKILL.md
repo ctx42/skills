@@ -1,8 +1,7 @@
 ---
 name: create
 description: >
-  Authors a new Software Requirement Document (SRD) by interviewing the
-  user, then drafts it to the SRD standard and self-checks the draft. Use
+  Authors a new Software Requirement Document (SRD) to the SRD standard. Use
   when asked to create, write, draft, or start an SRD, a software
   requirements document, or a spec.
 license: MIT
@@ -25,13 +24,15 @@ standard, and self-checking the draft before saving it.
 
 ## Sources of truth
 
-- [references/srd-standard.md](references/srd-standard.md) (eager) — the SRD
-  rule set (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, `MD`, Quality Bar).
-  Both the drafting and the self-check defer to it. Read it before drafting.
-- [references/authoring-guide.md](references/authoring-guide.md) (eager) —
-  house extensions to the standard's rules (US English, sub-numbering,
-  terminology consistency, the consistency pass) and Bad→Good defect examples
-  to draft against and check for. Its examples never go into the SRD (REQ-7).
+- [references/srd-standard.md](references/srd-standard.md) (on-demand:
+  steps 3–4) — the SRD rule set (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`,
+  `MD`, Quality Bar). Both the drafting and the self-check defer to it; read it
+  before drafting. Not needed during glossary resolution or the interview.
+- [references/authoring-guide.md](references/authoring-guide.md) (on-demand:
+  steps 2–4) — house extensions to the standard's rules (US English,
+  sub-numbering, terminology consistency, the consistency pass) and Bad→Good
+  defect examples to draft against and check for. Its examples never go into
+  the SRD (REQ-7). Not needed during the interview.
 - [references/srd-procedures.md](references/srd-procedures.md) (on-demand:
   step 0) — shared operating procedures (glossary resolution).
 - [assets/srd-template.md](assets/srd-template.md) (on-demand: step 3) — the
@@ -40,10 +41,6 @@ standard, and self-checking the draft before saving it.
 - [scripts/glossary-fingerprint.sh](scripts/glossary-fingerprint.sh) (run, not
   read) — hashes the shared glossary so its term digest is rebuilt only when
   the glossary changes.
-
-Two hard constraints, every run: the SRD MUST contain **no** `Example`/`Don't`/
-`Do` annotations (REQ-7), and a normative keyword (MUST, SHALL, …) MUST appear
-**only** inside `Requirements`, in all-capitals (LANG-3, LANG-4).
 
 ## Workflow
 
@@ -93,8 +90,8 @@ contradictions; surface a decision that blocks another before continuing.
 
 Cluster the requirements into logical groups. Propose an uppercase prefix per
 group, three or four letters where one fits (REQ-8, e.g. `AUTH`, `DATA`,
-`VIEW`). Show the grouping and prefixes and let the
-user rename or merge. Then number each group from 1 in order (REQ-2 `**PFX-1:**`,
+`VIEW`). Show the grouping and prefixes and let the user rename or merge. Then
+number each group from 1 in order (REQ-2 `**PFX-1:**`,
 REQ-3 unique, REQ-4 in order). Do the same for scope items (`SC-`, `OSC-`).
 Default to flat numbers; use one-letter sub-numbering (`**GR-1a:**`,
 `**GR-1b:**`) only for a tight cluster of related rules — see the authoring
