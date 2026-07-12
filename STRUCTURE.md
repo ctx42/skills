@@ -48,6 +48,7 @@ as Claude Code plugins.
     └── skills/
         ├── cm/                     # Conventional commit messages
         ├── grill-me/               # Planning interview
+        ├── plan-smith/             # Write and track implementation plans
         ├── skill-smith/            # Author and improve skills
         ├── readme-smith/           # Author and improve project READMEs
         └── enhance-skills/         # Record lessons into skills; self-learning

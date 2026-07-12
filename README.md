@@ -31,14 +31,14 @@ own manifest and a `skills/` folder:
 │   └── skills/{create,review,edit,system-check}/
 └── craft/
     ├── .claude-plugin/plugin.json
-    └── skills/{cm,grill-me,skill-smith,readme-smith,enhance-skills}/
+    └── skills/{cm,grill-me,plan-smith,skill-smith,readme-smith,enhance-skills}/
 ```
 
-| Plugin   | Skills                                                            | Purpose                                                                      |
-|----------|-------------------------------------------------------------------|------------------------------------------------------------------------------|
-| `golang` | `style`, `review`, `cover`, `reshape`                             | Go write-time style, done-time review, test coverage, API proposals          |
-| `srd`    | `create`, `review`, `edit`, `system-check`                        | Software Requirement Document lifecycle                                      |
-| `craft`  | `cm`, `grill-me`, `skill-smith`, `readme-smith`, `enhance-skills` | Commit messages, planning interview, skill + README authoring, self-learning |
+| Plugin   | Skills                                                                          | Purpose                                                                                     |
+|----------|---------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| `golang` | `style`, `review`, `cover`, `reshape`                                           | Go write-time style, done-time review, test coverage, API proposals                         |
+| `srd`    | `create`, `review`, `edit`, `system-check`                                      | Software Requirement Document lifecycle                                                     |
+| `craft`  | `cm`, `grill-me`, `plan-smith`, `skill-smith`, `readme-smith`, `enhance-skills` | Commit messages, planning interview, plan tracking, skill + README authoring, self-learning |
 
 Plugin skills are **namespaced** by their plugin (e.g. `/srd:review`),
 so they never silently shadow a personal or project skill of the same name.
