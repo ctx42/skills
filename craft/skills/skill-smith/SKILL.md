@@ -101,6 +101,14 @@ names the file (and line if useful), the `standards.md` rule it violates, and a
 minimal fix. End with a verdict (compliant / fix-first) and per-severity counts,
 then offer to apply the fixes.
 
+## Measure (optional)
+
+Prove a skill works instead of eyeballing it: A/B its README scenarios with and
+without the skill loaded, grade the delta, and test whether the description
+triggers. Follow `references/evals.md`. Run it as the last create step, inside
+improve when a skill's value is in doubt, or standalone on request. Report the
+result table and verdict; make no edits from a Measure run without confirmation.
+
 ## Self-application
 
 `skill-smith` obeys its own standard. When you change this skill, re-audit it in

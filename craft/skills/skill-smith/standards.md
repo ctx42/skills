@@ -56,6 +56,9 @@ highest-leverage field.
   lists, control/flag names, file paths, or step summaries. An agent acts on a
   leaked summary and skips the body — the very steps the skill exists to
   enforce. Every clause serves discovery.
+- **Lean pushy on *when*.** Agents tend to under-trigger, so make the use-cases
+  assertive ("Use when…") and cover oblique phrasings — while still never
+  leaking *how* (above).
 - **Size.** Aim ≤ ~350 chars (hard limit 1024) — the description is paid in
   every session, for every skill, whether or not it fires.
 - Specific, not vague. ✗ "Helps with documents" ✓ "Extracts text and tables
@@ -211,3 +214,7 @@ Mandatory and written before finalizing (eval-driven development):
 - Develop iteratively — author the skill, run it on the scenarios, observe where
   it struggles, refine. Strengthen the description first when it fails to
   trigger.
+- Test across the models the skill targets — guidance that suits a strong model
+  can under-serve a smaller one.
+- To measure a skill empirically (baseline A/B, trigger test), use the Measure
+  step — `references/evals.md`.

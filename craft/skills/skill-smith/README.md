@@ -20,6 +20,7 @@ optional fields). It enforces [standards.md](standards.md), and defers to
 /skill-smith create a skill that lints Markdown tables   # create mode
 /skill-smith improve cover                               # improve, one skill
 /skill-smith review cm                                   # audit by name
+/skill-smith measure grill-me                            # A/B benchmark a skill
 ```
 
 You don't need a mode keyword — it infers create vs improve from the request.
@@ -111,6 +112,23 @@ Expected behavior:
   tokens only if the read is deferred.
 
 - Reports findings by severity; makes no edits before confirmation.
+
+### 6. Measure a skill's real effect
+
+Request: `/skill-smith measure cm`
+
+Expected behavior:
+
+- Builds a rubric from the skill's README scenarios and runs each with and
+  without the skill loaded in fresh subagents, per `references/evals.md`.
+
+- Grades the delta and reports a per-scenario table plus a trigger
+  recall/precision score.
+
+- States a verdict (earns its tokens / no measurable effect) and makes no edits
+  from the run without confirmation.
+
+- Opens with the result table — no preamble or narration.
 
 ## Relationship to other skills
 
