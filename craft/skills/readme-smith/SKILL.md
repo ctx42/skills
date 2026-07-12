@@ -138,7 +138,7 @@ Run (dynamic):
 
 ## Self-application
 
-`readme-smith` obeys the repo authoring standard (strict-portable frontmatter, a
+`readme-smith` obeys the repo authoring standard (portable frontmatter, a
 README with ≥ 3 evals, references one level deep). When you change this skill,
 re-audit it with `skill-smith` in improve mode.
 
