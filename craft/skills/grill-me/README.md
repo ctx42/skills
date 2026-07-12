@@ -27,8 +27,9 @@ unstated assumptions, or choices that might conflict.
 
 4. Restates each resolved decision so you can confirm or correct it.
 
-5. Stops when everything is aligned and presents a structured summary, with
-   acceptance criteria per resolved decision, offering to save it to a file.
+5. Stops when everything is aligned and presents a structured summary with
+   acceptance criteria per decision, then offers to hand it to `plan-smith` as a
+   tracked plan.
 
 ## Usage
 
@@ -87,8 +88,8 @@ Expected behavior:
 - Presents the complete shared understanding as a single structured summary,
   each resolved branch carrying its acceptance criteria.
 
-- Offers to write the summary to a file the user names; writes nothing without a
-  yes.
+- Offers to hand the result to `plan-smith` as a tracked plan; writes nothing
+  without a yes.
 
 - Writes no implementation code.
 

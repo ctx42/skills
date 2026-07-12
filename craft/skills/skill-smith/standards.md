@@ -169,6 +169,10 @@ Match specificity to task fragility:
   "validator" can be a script or a reference doc the agent checks against.
 - For risky/batch work, emit a verifiable intermediate plan and validate it
   before executing.
+- Don't hand-roll a plan as a deliverable. When a skill's output is a
+  multi-step plan the user will keep and track, defer to the `plan-smith` skill
+  (checkbox items + a Y/N/X status table) instead of inventing a format.
+  Internal progress checklists the agent ticks off mid-run are exempt.
 
 ## Content hygiene
 

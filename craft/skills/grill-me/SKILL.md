@@ -34,8 +34,9 @@ branch by branch, until you both share one understanding of the plan.
    shared understanding as a structured summary; give each resolved branch the
    precise acceptance criteria that will verify it in the final product.
 
-7. Offer to persist — propose writing that summary to a file the user names, so
-   the agreement survives the session; on decline, leave it in chat.
+7. Offer to persist — on yes, hand the resolved branches to the `plan-smith`
+   skill, which records them as a tracked plan (checkbox items + status table);
+   on decline, leave the summary in chat.
 
 ## Rules
 
