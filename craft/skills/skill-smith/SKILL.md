@@ -117,7 +117,7 @@ result table and verdict; make no edits from a Measure run without confirmation.
 `skill-smith` obeys its own standard. When you change this skill, re-audit it in
 improve mode.
 
-Report tersely in both modes: no preamble or narration; state each fact once;
+Report tersely in every mode: no preamble or narration; state each fact once;
 don't restate output the user can already see.
 
 ## Self-learning

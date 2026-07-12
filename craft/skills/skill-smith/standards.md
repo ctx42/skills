@@ -4,7 +4,7 @@ The canonical ruleset `skill-smith` writes and audits against. Fuses Anthropic's
 [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
 with this repo's house rules. Terse by design: every rule is one enforceable
 line. Repo mechanics (catalog updates, naming, syncing, retiring) live in
-[CONTRIBUTING.md](../CONTRIBUTING.md) — this doc references it, never
+[CONTRIBUTING.md](../../../CONTRIBUTING.md) — this doc references it, never
 duplicates it.
 
 ## Contents

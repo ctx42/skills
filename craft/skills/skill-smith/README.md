@@ -1,18 +1,21 @@
 # skill-smith
 
-Forge new skills and repair existing ones in this repo. One skill, two modes,
+Forge new skills and repair existing ones in this repo. One skill, three modes,
 chosen from how you ask:
 
 - Create — describe a capability and it scaffolds the whole skill: directory,
-  `SKILL.md`, `README.md` (with evals), catalog-doc updates, and the sync.
+  `SKILL.md`, `README.md` (with evals), and catalog-doc updates.
 
 - Improve — name an existing skill and it audits against the authoring standard,
   reports findings by severity, then fixes them on your confirmation.
 
+- Measure — name a skill and it A/B-benchmarks its README scenarios with and
+  without the skill loaded, then tests whether the description triggers.
+
 The rule it lives by: every skill must be valid in both Claude and Grok, so
 frontmatter is portable — `name` + `description` only (plus standard
 optional fields). It enforces [standards.md](standards.md), and defers to
-[CONTRIBUTING.md](../CONTRIBUTING.md) for repo mechanics.
+[CONTRIBUTING.md](../../../CONTRIBUTING.md) for repo mechanics.
 
 ## Usage
 
@@ -54,7 +57,8 @@ Expected behavior:
 
 ### 2. Improve an existing skill with a portability violation
 
-Request: `/skill-smith improve cm`
+Request: `/skill-smith improve` a skill that declares `user_invocable: true` and
+whose README has no `## Evaluations` section.
 
 Expected behavior:
 
