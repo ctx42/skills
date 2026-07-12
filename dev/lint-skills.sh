@@ -9,6 +9,7 @@
 #     carries no forbidden platform-extension keys (strict-portable rule),
 #   - the description stays near the ~350-char aim (warns past 500) and uses
 #     no first/second person (warning only),
+#   - the SKILL.md body stays under ~500 lines / ~5000 tokens (warning only),
 #   - the body uses no dynamic injection (!`cmd`) or $ARGUMENTS / $N,
 #   - the body carries the output-discipline line ("Report tersely" or the
 #     "no preamble or narration" phrasing),
@@ -134,6 +135,19 @@ lint_skill() {
         && warn "$name: description is ${#desc} chars (aim <= ~350)"
     grep -qiE '(^|[^a-zA-Z])(I|you|your)([^a-zA-Z]|$)' <<<"$desc" \
         && warn "$name: description uses first/second person"
+
+    # Body size (standards.md, Token performance): the always-loaded SKILL.md
+    # body should stay under ~500 lines / ~5000 tokens. Tokens are estimated as
+    # bytes/4 (no tokenizer dependency). Warnings only — the limits are soft
+    # aims. (A stricter `skills-ref validate` gate can be added here once that
+    # tool is a repo dependency; the script is dependency-free today.)
+    local body_lines body_tokens
+    body_lines="$(wc -l <"$skill_md")"
+    body_tokens=$(( $(wc -c <"$skill_md") / 4 ))
+    [ "$body_lines" -gt 500 ] \
+        && warn "$name: SKILL.md is $body_lines lines (aim <= ~500)"
+    [ "$body_tokens" -gt 5000 ] \
+        && warn "$name: SKILL.md is ~$body_tokens tokens (aim <= ~5000)"
 
     # Body must not use dynamic injection or argument substitution. Dynamic
     # injection is !`cmd` — a bang then a backtick opening a command; a
