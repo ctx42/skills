@@ -20,9 +20,9 @@ responsibilities upstream, …), then ranks by impact so the biggest win leads.
 ```
 
 Targets:
-- **library** — an import path, module path, or short package name the project
+- library — an import path, module path, or short package name the project
   imports; consumer scope defaults to the current module.
-- **scoped** (`in ./pkg/foo`) — restrict the call-site analysis to that package.
+- scoped (`in ./pkg/foo`) — restrict the call-site analysis to that package.
 
 Controls:
 - `max=N` — cap on proposals reported (default 8), highest impact first.
