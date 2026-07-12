@@ -2,9 +2,9 @@
 name: review
 description: >
   Reviews an existing Software Requirement Document (SRD) for consistency,
-  logic, and conformance to the SRD standard; read-only, findings go to a
-  review file beside the source. Use when asked to review, audit, critique,
-  or check an SRD, or to re-check whether prior review findings were fixed.
+  logic, and conformance to the SRD standard, without editing it. Use when
+  asked to review, audit, critique, or check an SRD, or to re-check whether
+  prior review findings were fixed.
 license: MIT
 ---
 

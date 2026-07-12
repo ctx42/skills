@@ -2,27 +2,25 @@
 name: edit
 description: >
   Improves an existing Software Requirement Document (SRD) by editing it in
-  place against the SRD standard, one confirmed change at a time. Use when
-  asked to edit, improve, fix, revise, or clean up an SRD, or to apply
-  findings from a review file or pasted feedback.
+  place against the SRD standard. Use when asked to edit, improve, fix,
+  revise, or clean up an SRD, or to apply findings from a review file or
+  pasted feedback.
 license: MIT
 ---
 
 # edit
 
-Drive an existing SRD toward the SRD standard by editing the source, **one
-confirmed change at a time** — the write counterpart to the read-only `review`.
+Drive an existing SRD toward the SRD standard by editing the source in place.
 
 ## Boundaries
 
-- **Role:** the write-only editor of an existing SRD — apply changes one
-  confirmed edit at a time. The counterpart to the read-only `review`.
-- **Must not:** invent or restate rules — defer all format, style, logic, and
-  rules to `create`'s reference files; edit metadata (Owners, Initiative,
-  Designs), set back-links, or change `Status` — only flag those gaps
-  (STR-2..7, STA-*). Acceptance stays a human decision. **Never write
-  `<srd>.review.md`** — `review` owns that file across all modes; `edit` only
-  reads it.
+The write-only editor of an existing SRD, applying changes one confirmed edit
+at a time — the counterpart to the read-only `review`. It must not invent or
+restate rules (defer all format, style, logic, and rules to `create`'s
+reference files), nor edit metadata (Owners, Initiative, Designs), set
+back-links, or change `Status` — only flag those gaps (STR-2..7, STA-*).
+Acceptance stays a human decision. It never writes `<srd>.review.md` —
+`review` owns that file across all modes; `edit` only reads it.
 
 ## Sources of truth
 
