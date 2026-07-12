@@ -1,3 +1,30 @@
+## v0.13.0 (Sun, 12 Jul 2026 21:09:16 UTC)
+- docs(cm): rename minimal verbosity argument to mini.
+- docs(readme-smith): trim duplicated rules and refresh badges.
+- docs(grill-me): tighten prose and reformat lists.
+- feat(grill-me): broaden description triggers and sharpen evals.
+- docs(readme-smith): rename "strict-portable" to "portable".
+- feat(skill-smith): enforce plain lists and cut standards duplication.
+- feat(skill-smith): add eval-harness (Measure mode).
+- feat(skill-smith): surface Measure mode, add eval templates.
+- feat(plan-smith): add plan authoring and tracking skill.
+- feat(lint): warn on oversized SKILL.md bodies.
+- feat(craft): make plan-smith the canonical plan writer.
+- chore(skill-smith): drop tracked lessons log.
+- docs(craft): generalize spaced-list rule, tighten cm skill.
+- style(cm): space prose-step lists in SKILL.md.
+- docs(skill-smith): fix post-Measure doc drift.
+- fix(cm): widen description for oblique triggers.
+- docs(readme-smith): dedup verify checks, fix reference drift.
+- docs(plan-smith): align summary-table columns.
+- docs(create): shrink always-loaded token surface.
+- docs(srd): cut workflow leaks from edit/review descriptions.
+- docs(system-check): cut duplicated guardrails recap.
+- docs(style): trim description leak, fix rule-edit pointer.
+- docs(review): honest rules.md load label, drop bold lead-ins.
+- docs(reshape): drop bold list lead-ins, link change catalog.
+- docs(cover): drop bold list lead-ins, trim description.
+
 ## v0.12.0 (Fri, 10 Jul 2026 18:48:49 UTC)
 - docs: shorten the shared Self-learning block in every skill.
 - docs: trim per-skill duplication from SKILL.md files.
