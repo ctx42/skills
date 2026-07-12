@@ -14,6 +14,7 @@ author's environment and does not change what the measured skill ships.
 - Discipline skills
 - Verdict
 - Degrade gracefully
+- Templates
 
 ## Rubric
 
@@ -108,3 +109,45 @@ Then trigger recall/precision and a one-line call:
 No subagents (some claude.ai / restricted runtimes): run each leg sequentially
 in a fresh context, skip blinding, and say so in the report. A stated smaller
 run beats a silent full-coverage claim.
+
+## Templates
+
+Copy and fill these; they keep runs consistent across skills.
+
+Rubric — one object per scenario (the shape Anthropic's tooling uses):
+
+```json
+[
+  {
+    "skill": "grill-me",
+    "query": "I want to add caching to the API.",
+    "files": [],
+    "expected_behavior": [
+      "Maps the decision tree (what to cache, invalidation, store, TTL, keys)",
+      "Asks the highest-impact unknown first, one topic at a time — no bundling",
+      "Does not start designing or writing code",
+      "Opens with the question — no preamble or narration"
+    ]
+  }
+]
+```
+
+Grader (spawn per assertion, or one grader over the set):
+
+```
+You grade skill evals. Given one rubric assertion and a candidate's OUTPUT
+plus its transcript, answer PASS or FAIL and quote the single line of evidence.
+Judge only the assertion; ignore style unless the assertion is about style.
+The two outputs for a task are labelled A and B — you are NOT told which used
+the skill; do not guess or favour either.
+```
+
+Trigger query set (label each; ~8–10 per side; 60/40 tune/validation):
+
+```
+should-fire:
+- <a real task the skill targets>
+- <an oblique phrasing that never names the domain>
+should-not-fire (near-miss):
+- <an adjacent task that shares keywords but needs something else>
+```

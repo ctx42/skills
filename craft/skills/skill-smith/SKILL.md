@@ -1,9 +1,9 @@
 ---
 name: skill-smith
 description: >
-  Authors new skills and audits existing ones against the repo's authoring
-  standard. Use when asked to create, write, scaffold, review, or improve a
-  skill.
+  Authors new skills, audits existing ones against the repo's authoring
+  standard, and measures whether a skill actually works. Use when asked to
+  create, write, scaffold, review, improve, or benchmark/measure a skill.
 license: MIT
 ---
 
@@ -17,7 +17,10 @@ Forge and repair skills. Pick the mode from the request:
 - Improve — the user names an existing skill (path or name) to review or
   upgrade.
 
-If the request is ambiguous, ask one question: create new or improve existing?
+- Measure — the user wants to benchmark or validate whether a skill works
+  (A/B against a baseline, trigger test). See the Measure section.
+
+If the request is ambiguous, ask one question: create, improve, or measure?
 
 Sources of truth:
 
