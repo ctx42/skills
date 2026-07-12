@@ -3,7 +3,9 @@ name: grill-me
 description: >
   Interviews the user relentlessly about a plan until both reach a shared
   understanding. Use before building something, when the plan still has open
-  questions, unstated assumptions, or conflicting choices.
+  questions, unstated assumptions, or conflicting choices — or to pressure-test
+  a plan, poke holes in an approach, or interrogate a design or spec before
+  coding.
 license: MIT
 ---
 
@@ -17,7 +19,7 @@ branch by branch, until you both share one understanding of the plan.
 1. Read the plan — understand what the user has described so far.
 
 2. Map the decision tree — every branch: architecture, data model, UX, edge
-   cases, deployment, dependencies.
+   cases, deployment, external deps.
 
 3. Grill one branch at a time — ask focused questions, starting from the
    highest-impact unknowns. Don't move on until the branch is resolved.

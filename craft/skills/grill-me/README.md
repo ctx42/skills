@@ -23,8 +23,7 @@ unstated assumptions, or choices that might conflict.
 
 2. Grills one branch at a time, starting with the highest-impact unknowns.
 
-3. Names dependencies between decisions explicitly — when one constrains
-   another, the link is stated before moving on.
+3. Names dependencies between decisions explicitly.
 
 4. Restates each resolved decision so you can confirm or correct it.
 
@@ -65,14 +64,17 @@ Expected behavior:
 
 ### 2. Contradictory choices
 
-Request: During the interview the user says "cache everything forever" and also
-"data must always be fresh."
+Request: Earlier in the interview the user set "the app must work fully
+offline," and now, on a later branch, says "every save syncs to the server
+immediately for real-time collaboration."
 
 Expected behavior:
 
-- Pushes back and names the contradiction explicitly.
+- Connects the two separately-stated decisions and names the conflict
+  (offline-first vs. immediate server sync) — not just an obvious oxymoron.
 
-- Does not silently pick one; holds the branch open until the user resolves it.
+- Does not silently pick one; holds both branches open until the user resolves
+  the tension.
 
 ### 3. Alignment reached
 
