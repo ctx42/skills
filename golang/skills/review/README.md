@@ -7,15 +7,15 @@ finished. It reviews the changed Go code against:
 - the deeper criteria in `rules.md` (why / example / how to detect),
 - general correctness: bugs, edge cases, and error handling.
 
-It reasons about the code only — it does not run gofmt, vet, linters, or tests.
-It reports findings; it does not change code unless you ask.
+It reasons about the code only — it does not run gofmt, vet, linters, or
+tests. It reports findings; it does not change code unless you ask.
 
 When you ask it to apply findings, the fix path proves bugs with tests and runs
-the module suite. A broad fix job is first planned to a scratch file and applied
-package by package (a big package splits to file level), running the whole-module
-`go test ./... -race` gate per chunk. It never commits — each chunk lands as a
-self-contained, separately committable change, and it pauses after each changed
-chunk for a go-ahead.
+the module suite. A broad fix job is first planned to a scratch file and
+applied package by package (a big package splits to file level), running the
+whole-module `go test ./... -race` gate per chunk. It never commits — each
+chunk lands as a self-contained, separately committable change, and it pauses
+after each changed chunk for a go-ahead.
 
 It also owns the rule list: describe a preference in plain words and it becomes
 a durable rule in `style`. Or run `/review learn` to turn the feedback you gave
@@ -120,8 +120,8 @@ several packages.
 
 **Expected behavior:**
 - Detects the broad scope and writes an ordered plan to `tmp/review-fix-plan.md`
-  — one chunk per package, findings listed, status boxes — and gets a go-ahead
-  before editing; splits a large package to file-level chunks.
+  — one chunk per package, findings listed, status boxes — and gets a
+  go-ahead before editing; splits a large package to file-level chunks.
 - Works chunks in order, running `go test ./... -race` per chunk so each ends
   green, ticking the plan boxes.
 - Pauses after each changed chunk for a go-ahead and never proceeds past an

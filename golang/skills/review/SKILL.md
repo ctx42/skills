@@ -13,17 +13,18 @@ license: MIT
 
 Final-gate review for Go code. Pick the mode from the invocation:
 
-- **Check** (default) — audit finished code.
-- **Rule edit** — when the input is a style preference or asks to
+- Check (default) — audit finished code.
+- Rule edit — when the input is a style preference or asks to
   `add`/`change`/`remove` a rule.
-- **Learn** — when asked to learn from this session / your feedback; mines the
+- Learn — when asked to learn from this session / your feedback; mines the
   current editing session (since the last /clear) for convention feedback and
   proposes rules.
 
 Sources of truth:
 - `../style/SKILL.md` (eager) — canonical terse rules (Production + Test).
-- `rules.md` (on-demand: per keyed entry) — deeper rationale / examples /
-  how-to-detect, keyed to those rules. Consult it for non-obvious rules.
+- `rules.md` — the **Principles** section is read each check (the reasoning
+  backbone); keyed entries are on-demand per rule. Deeper rationale / examples
+  / how-to-detect, keyed to those rules.
 
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
@@ -70,12 +71,12 @@ were left unreported.
    section. Reason from those principles; open a specific keyed `rules.md` entry
    only when about to flag its rule — never preload the whole file.
 3. Review each file, in this order:
-   - **Rules**: every applicable style rule (Production for `*.go`, Test for
+   - Rules: every applicable style rule (Production for `*.go`, Test for
      `*_test.go`); use `rules.md` for detection detail.
-   - **Correctness**: bugs, wrong logic, nil/bounds, ignored errors, data races.
-   - **Edge cases**: empty/large/concurrent inputs and every error path.
-   - **Error handling & API**: wrapping, sentinels, boundaries, easy misuse.
-   - **Cross-boundary verify** (`depth=standard`+): before reporting any claim
+   - Correctness: bugs, wrong logic, nil/bounds, ignored errors, data races.
+   - Edge cases: empty/large/concurrent inputs and every error path.
+   - Error handling & API: wrapping, sentinels, boundaries, easy misuse.
+   - Cross-boundary verify (`depth=standard`+): before reporting any claim
      that reaches beyond the diff — a symbol is unused, all callers handle an
      error/nil, an interface is fully implemented, a suspect branch is
      reachable — confirm it with the `LSP` tool (`findReferences`,
@@ -91,9 +92,9 @@ were left unreported.
 
 ### Scale
 
-- **Single package or small module (<= ~6 packages)**: review in this context,
+- Single package or small module (<= ~6 packages): review in this context,
   package by package, highest-risk first.
-- **Larger module (> ~6 packages)**: fan out one review subagent per package
+- Larger module (> ~6 packages): fan out one review subagent per package
   (each gets `style`, `rules.md`, the `depth`, and a share of `max_issues`),
   then synthesize one merged report, re-ranking findings to the global
   `max_issues` cap. Keeps the main context lean.

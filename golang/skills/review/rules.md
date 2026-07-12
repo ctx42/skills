@@ -9,8 +9,8 @@ its rule; don't preload the file. Grows via `/review add`.
 ## Contents
 
 **Principles** — earn every token · name for what it is · separate groups ·
-output & errors at the right layer · keep functions pure · assertions must fail ·
-name the overflow.
+output & errors at the right layer · keep functions pure · assertions must
+fail · name the overflow.
 
 Keyed entries:
 
@@ -51,9 +51,9 @@ Reason from these; reach for a keyed entry only for a rule's non-obvious detail.
 3. **Separate distinct multi-line groups with a blank line** — switch cases,
    test topic groups, const groups. Group by subject, not by statement type.
 4. **Handle output and errors at the right layer.** A leaf returns values and
-   errors; the command entry point owns the streams and the exit code. Wrap with
-   `%w` (hide the cause with `%v` only deliberately), match with
-   `errors.Is`/`errors.As` never `==`, handle each error exactly once.
+   errors; the command entry point owns the streams, the exit code, and
+   presentation. The wrapping/matching mechanics live in `style` — the
+   principle here is *which layer* owns each concern.
 5. **Keep functions pure and reusable** — return the computed value; leave
    presentation (trailing newline, padding) and destination (stdout/stderr) to
    the caller.
