@@ -186,11 +186,12 @@ Match specificity to task fragility:
   paths, links). `dev/lint-skills.sh` warns on breakable over-width lines.
 - **Align table columns** — pad cells so `|` delimiters line up in the source;
   re-pad the whole table when adding a row.
-- **Plain, spaced lists.** In `SKILL.md` bodies and READMEs, write list items as
-  plain sentences — no bold-label lead-ins — and put a blank line between items
-  for readability. Reserve `**bold**` for genuine emphasis in prose. Dense
-  references (this file included) may keep tight, unspaced lists — token economy
-  wins there.
+- **Plain, spaced lists.** Write list items as plain sentences — no bold-label
+  lead-ins — and reserve `**bold**` for genuine emphasis in prose. Space items
+  with a blank line when they are prose steps; keep them tight and unspaced
+  when they are dense enumerations (type/flag/option lists, short spec fields,
+  reference entries), where a value per line scans better and token economy
+  wins. Applies to `SKILL.md` bodies, READMEs, and references alike.
 
 ## Scripts & bundled files
 

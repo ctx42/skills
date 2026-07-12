@@ -90,7 +90,7 @@ explicit counter in the skill; repeat until no excuse survives.
 Report one table, most-to-least decisive:
 
 | Scenario | Baseline | With skill | Δ  |
-| -------- | -------- | ---------- | -- |
+|----------|----------|------------|----|
 | <name>   | 2/4      | 4/4        | +2 |
 
 Then trigger recall/precision and a one-line call:

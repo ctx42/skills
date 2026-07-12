@@ -2,9 +2,7 @@
 name: cm
 description: >
   Writes and amends git commit messages using Conventional Commits with a Linux
-  kernel-style body, held to a high standard of clarity, structure, and
-  precision (aligned with excellent godoc quality). Use when writing or amending
-  a commit message.
+  kernel-style body. Use when writing or amending a commit message.
 license: MIT
 ---
 
@@ -13,7 +11,7 @@ license: MIT
 ## Invocation
 
 - With commit hash: generate from that commit's diff.
-- Otherwise: generate from current staged/unstaged diff.
+- Otherwise: generate from the current staged/unstaged diff.
 
 Always derive the message from the diff only.
 
@@ -93,13 +91,12 @@ If the change affects exported symbols or observable behavior for callers:
   `` `WithCause` ``.
 - When referencing prior commits: `Commit <short-sha> ("summary") ...`
 
-**High clarity standard**: Write bodies with godoc-level precision — the
+**High-clarity standard**: Write bodies with godoc-level precision — the
 smallest body that fully explains the user-facing change and its motivation.
-Never enumerate mechanical edits line by line when one sentence covers them.
 
 ## Footers
 
-Only two allowed:
+Only two are allowed:
 
 - `BREAKING CHANGE: ...` (when `!` is used)
 - `Refs: <sha>[, <sha>...]`
@@ -114,7 +111,7 @@ Never add an AI `Co-Authored-By` trailer (e.g.
 Present the full message in a fenced code block with **zero leading whitespace**
 on every line.
 
-The message is the deliverable. Run `git commit` / `git commit --amend` (via
+The message is deliverable. Run `git commit` / `git commit --amend` (via
 heredoc) only when the invocation asks to commit or amend — the `apply`
 argument, or wording like "and amend it". Otherwise never propose committing;
 the user decides when.
