@@ -47,6 +47,26 @@ user; do not proceed.** Read these before editing:
   (run, not read) — hashes the shared glossary so its term digest is rebuilt
   only on change; the digest keeps term edits linking, not redefining.
 
+## Documentation corpus (when available)
+
+Some setups expose the platform's live documentation over an MCP server — the
+read tools `search` (query + optional `k`), `get_doc` (document id), and
+`list_docs` (no args), e.g. `mcp__<name>__search`. When a new or changed
+requirement asserts something about existing system behaviour, `search` the
+corpus to confirm it before accepting the edit. Degrade MCP → REST mirror
+(`curl 'http://<host>:7777/search?q=TEXT&k=5'`, `.../docs/<id>`) → scoped
+Grep/Read over a local corpus checkout, falling through only when a step
+genuinely is not there. Absent a corpus, edit offline as before.
+
+### Reporting a doc gap
+
+When the corpus **cannot confirm** such a claim — missing, wrong, incomplete, or
+ambiguous docs — that is a *documentation* gap, not an SRD defect. Hand it to
+`srd:report-doc-gap`, which owns capture, the grill, and the confirmed filing;
+invoke it on discovery — it buffers the gap without interrupting the edit — and
+at session start, where it drains any gaps left unfiled. Editing the SRD text
+stays this skill's job; only corpus deficiencies cross to `report-doc-gap`.
+
 ## Session start (every mode)
 
 Before any edit:
@@ -89,7 +109,10 @@ All interactive editing follows the same loop. Per change:
    focusing on the checks the edit can touch: scope coverage (SCO-2/3), id
    uniqueness/order (REQ-3/4), term use (GLO-3), and any requirement that
    references or is referenced by the edit. Report if the fix introduced a new
-   problem.
+   problem. When the edit asserts a claim about existing system behaviour and a
+   corpus is available, confirm it against the docs (see
+   [Documentation corpus](#documentation-corpus-when-available)) and delegate
+   any doc gap to `srd:report-doc-gap`.
 4. At **session end**, re-check the whole document against every rule in the
    standard plus the consistency pass in
    [../create/references/authoring-guide.md](../create/references/authoring-guide.md),

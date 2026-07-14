@@ -46,6 +46,29 @@ change) and STA-* (valid Status; not `Accepted` without an approved design or
 the Quality Bar) as placeholders. A finished SRD under review must satisfy
 them — flag every gap.
 
+## Documentation corpus (when available)
+
+Some setups expose the platform's live documentation over an MCP server — the
+read tools `search` (query + optional `k`), `get_doc` (document id), and
+`list_docs` (no args), e.g. `mcp__<name>__search`. When present, run a
+**facts-vs-corpus pass** beside the rule checks: for every requirement that
+asserts something about existing system behaviour ("the gateway retries 3×",
+"the API returns Y"), `search` the corpus to confirm it. Degrade MCP → REST
+mirror (`curl 'http://<host>:7777/search?q=TEXT&k=5'`, `.../docs/<id>`) →
+scoped Grep/Read over a local corpus checkout, falling through only when a step
+genuinely is not there. Absent a corpus, skip the pass and review offline as
+before. This stays read-only — it queries the docs, never edits the SRD.
+
+### Reporting a doc gap
+
+When the corpus **cannot confirm** such a claim — missing, wrong, incomplete, or
+ambiguous docs — that is a *documentation* gap, not an SRD finding: it never
+enters `<srd>.review.md`. Hand it to `srd:report-doc-gap`, which owns capture,
+the grill, and the confirmed filing; invoke it on discovery — it buffers the gap
+without interrupting the review — and at session start, where it drains any gaps
+left unfiled. SRD-standard defects stay in the review file as always; only
+corpus deficiencies cross to `report-doc-gap`.
+
 ## Severity
 
 Tag each finding:
@@ -171,7 +194,10 @@ source: path/to/srd.md
 2. Check it against every rule in
    [../create/references/srd-standard.md](../create/references/srd-standard.md),
    in document-section order, including the consistency pass and the house
-   additions.
+   additions. When a corpus is available, also run the facts-vs-corpus pass
+   (see [Documentation corpus](#documentation-corpus-when-available)) and
+   delegate any doc gap to `srd:report-doc-gap`, keeping it out of the review
+   file.
 3. If the review file does not exist, create it and write all findings with
    fresh numbers starting at `#1`, grouped and tagged as above.
 4. If it already exists, do not rewrite it. First **resolve**: re-verify open
