@@ -30,7 +30,7 @@ grill, and the filing; the calling skill owns only its primary flow.
   caller's own findings (see [The boundary](#the-doc-gap-vs-srd-gap-boundary)).
 - **Depends on:** an `mcp-doc` server with a gap store — the `report_gap` tool
   (or the `POST /gaps` REST mirror). Absent, capture still runs but filing
-  degrades to noting the gap in output (see [Confirm and file](#confirm-and-file)).
+  degrades to noting the gap in output (see [Confirm and file](#d-confirm-and-file)).
 
 ## The doc-gap vs SRD-gap boundary
 
@@ -177,7 +177,7 @@ line of what is missing. Never file without it. Everything else is auto-filled
 Opt-out has two granularities: **this gap** ("skip the questions, just take
 what's missing") and **this session** (a minimal-capture toggle — stop grilling
 for every remaining gap, take one line each). Opt-out drops extraction depth
-**only**; it does not skip confirmation — the [Confirm and file](#confirm-and-file)
+**only**; it does not skip confirmation — the [Confirm and file](#d-confirm-and-file)
 gate still applies to every record, minimal or grilled.
 
 ### D. Confirm and file
