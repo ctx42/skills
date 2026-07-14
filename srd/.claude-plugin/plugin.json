@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
   "name": "srd",
-  "description": "Software Requirement Document lifecycle: author (create), review read-only (review), edit in place (edit), and build-readiness system check (system-check), all against one SRD standard.",
-  "version": "0.13.0",
+  "description": "Software Requirement Document lifecycle: author (create), review read-only (review), edit in place (edit), build-readiness system check (system-check), and close the documentation-gap loop (doc-gap), all against one SRD standard.",
+  "version": "0.14.0",
   "author": {
     "name": "Rafal Zajac",
     "email": "rzajac@gmail.com"

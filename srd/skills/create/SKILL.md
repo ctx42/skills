@@ -42,6 +42,54 @@ standard, and self-checking the draft before saving it.
   read) — hashes the shared glossary so its term digest is rebuilt only when
   the glossary changes.
 
+## Documentation corpus (when available)
+
+Some setups expose the platform's live documentation over an MCP server —
+tools shaped `search` (query + optional `k`), `get_doc` (document id), and
+`list_docs` (no args), e.g. `mcp__<name>__search`. When present, use them to
+ground factual claims against the real docs instead of guessing; when absent
+the skill runs fully offline as before. Degrade in this order, falling through
+only when a step genuinely is not there — not on one failed call:
+
+1. The MCP corpus tools above (preferred).
+2. The server's REST mirror via curl, when a server runs but MCP is not wired
+   into this client:
+   `curl 'http://<host>:7777/search?q=TEXT&k=5'`,
+   `curl 'http://<host>:7777/docs/<id>'` — same engine, same results.
+3. Targeted Grep/Read over a local corpus checkout, scoped to the relevant
+   subdirectory — a stopgap, never a blind whole-corpus read.
+
+Default to `search` with `k` about 5; reach for `get_doc` only when a hit needs
+its full table or context; use `list_docs` to orient first.
+
+### Reporting a doc gap (when the store is enabled)
+
+When a corpus lookup **cannot confirm a claim** — the content is missing,
+wrong, incomplete, or ambiguous — the same server may accept a gap report:
+`report_gap` (MCP), or `POST /gaps` on the REST mirror. These exist only when
+the server is configured with a gap store; absent, note the gap in your output
+and move on. The fix is published to Confluence by hand later — reporting only
+captures the gap, it does not change the corpus.
+
+**Propose, never file silently.** Formulate the full record, show it to the
+user, and file only on their yes — the backlog is human-curated, so noise is
+the enemy. One gap per distinct missing fact.
+
+Fill the record so a later person plus agent can write the article without this
+session:
+
+- `kind` — `missing` (nothing found), `wrong`, `incomplete`, or `ambiguous`.
+- `topic` — short label for the missing knowledge.
+- `demand` — why the gap blocks the SRD work at hand.
+- `detail` — what is missing, wrong, incomplete, or ambiguous.
+- `target_claim` — the specific fact the docs should state, when known.
+- `doc_id`, `heading_path`, `source_url` — copied **verbatim** from the
+  `search`/`get_doc` hit the gap is about; all empty when nothing relevant was
+  found.
+- `search_terms` — the queries you tried, so a reviewer can tell genuinely
+  absent content from content that exists but does not rank.
+- `srd_ref` — the SRD id and section that raised it (e.g. `SRD-42 §4.3`).
+
 ## Workflow
 
 Copy this checklist and tick it off:
@@ -75,13 +123,22 @@ time**, in this order, and restate each resolved branch before moving on:
 5. **Requirements** — pull out the actual rules. For each, push until it is:
    atomic (REQ-1), about what *the system* does (LANG-1, LANG-5), and verifiable
    with concrete criteria — reject vague qualities like "secure" or "fast" and
-   ask for the measurable form (REQ-5, REQ-6).
+   ask for the measurable form (REQ-5, REQ-6). When the user states a fact about
+   the existing system ("the system already does X", "the API returns Y") and a
+   corpus is available, verify it with `search` before accepting — surface any
+   contradiction immediately in interview voice, never silently accept or fix.
+   When the corpus cannot confirm the claim (missing, wrong, incomplete, or
+   ambiguous docs), propose a doc gap (see
+   [Reporting a doc gap](#reporting-a-doc-gap-when-the-store-is-enabled)).
 6. **Terms** — as terms surface, check them against the glossary digest. Mark
-   each as already-defined (link to it) or needs a local Glossary entry.
+   each as already-defined (link to it) or needs a local Glossary entry. When a
+   corpus is available, `search` it before asking the user to define a term — it
+   may already define it, or name the same concept differently (a naming
+   conflict to surface).
 
 Do not collect Owners, Initiative links, or Designs links — those are left as
-marked placeholders (this skill stays offline). Status is always `In Progress`
-for a new draft.
+marked placeholders (the skill fetches no such links). Status is always
+`In Progress` for a new draft.
 
 Interview style: relentless, focused, no bundled questions; push back on
 contradictions; surface a decision that blocks another before continuing.
@@ -139,9 +196,13 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    glossary discipline (GLO-1/2); scope coverage and conflicts — every In Scope
    item needs ≥ 1 requirement and none may contradict Out of Scope (SCO-2/3);
    duplicate or overlapping requirements and terminology drift (authoring
-   guide); and any Quality Bar item not yet met. Items left as marked
-   placeholders (Initiative, Designs, Owners, back-links) are always reported as
-   outstanding human follow-ups.
+   guide); and any Quality Bar item not yet met. When a corpus is available,
+   also flag any requirement whose claim about existing system behavior could
+   not be verified against it — a *facts* gap, distinct from the format checks
+   above. For each such facts gap, propose a doc gap to the user (see
+   [Reporting a doc gap](#reporting-a-doc-gap-when-the-store-is-enabled)). Items
+   left as marked placeholders (Initiative, Designs, Owners, back-links) are
+   always reported as outstanding human follow-ups.
 
 Do not mark the draft acceptable: a new SRD is `In Progress` and acceptance
 (STA-3, Quality Bar) is a human decision.

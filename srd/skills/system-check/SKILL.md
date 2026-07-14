@@ -62,9 +62,59 @@ MEM="$MEM_DIR/memory.md"   # the memory.md every step below reads and writes
 The `srd` segment scopes this base to `srd` skills; `craft` and `golang`
 never load it.
 
+## Documentation corpus (when available)
+
+The system-knowledge layer confronts the SRD against the platform's live docs.
+Two backends, in priority order:
+
+1. **MCP corpus tools** — when a documentation-corpus MCP server is present
+   (tools shaped `search`, `get_doc`, `list_docs`, e.g. `mcp__<name>__search`),
+   use them. Preferred: always fresh, no space root needed. Its REST mirror via
+   curl (`/search?q=…&k=5`, `/docs/<id>`) is the same engine when a server runs
+   but MCP is not wired into this client.
+2. **Space-root files** — else read Markdown under the `memory.md` space root,
+   as described below.
+
+With neither, run on `memory.md` facts alone. Under the MCP backend a source
+pointer is a **document id** (from `list_docs`/`search`), not a space-root path,
+and the space root goes unused. Default to `search` with `k` about 5; `get_doc`
+for a full doc; `list_docs` to orient. Fall through the ladder only when a step
+genuinely is not there, not on one failed call.
+
 **First run** (do once): if `$MEM` exists, use it. Otherwise follow
 [references/memory-migration.md](references/memory-migration.md) — it locates
 a legacy store to migrate, or seeds `$MEM` from `memory.template.md`.
+
+### Reporting a doc gap (when the store is enabled)
+
+When confronting the SRD shows the **docs themselves** fall short — the fact is
+missing, wrong, incomplete, or ambiguous, not merely that the SRD is unclear —
+the same server may accept a gap report: `report_gap` (MCP), or `POST /gaps` on
+the REST mirror. These exist only when the server is configured with a gap
+store; absent, raise it as a question and move on. The fix is published to
+Confluence by hand later — reporting only captures the gap, it does not change
+the corpus.
+
+**Propose, never file silently.** Formulate the full record, show it to the
+user, and file only on their yes — the backlog is human-curated, so noise is
+the enemy. One gap per distinct missing fact. This is a doc gap, not a
+`memory.md` fact: report content the platform docs should carry, not tribal
+knowledge learned in the walk.
+
+Fill the record so a later person plus agent can write the article without this
+session:
+
+- `kind` — `missing` (nothing found), `wrong`, `incomplete`, or `ambiguous`.
+- `topic` — short label for the missing knowledge.
+- `demand` — why the gap blocks answering the implementation question at hand.
+- `detail` — what is missing, wrong, incomplete, or ambiguous.
+- `target_claim` — the specific fact the docs should state, when known.
+- `doc_id`, `heading_path`, `source_url` — copied **verbatim** from the
+  `search`/`get_doc` hit the gap is about; all empty when nothing relevant was
+  found.
+- `search_terms` — the queries you tried, so a reviewer can tell genuinely
+  absent content from content that exists but does not rank.
+- `srd_ref` — the SRD and requirement id that raised it (e.g. `GR-4`).
 
 ## Invocation
 
@@ -81,10 +131,13 @@ Detect the mode from the user's words.
 1. **Validate memory.** Read `memory.md`. It may be **empty** — a fresh checkout
    with no facts yet. That is fine: skip the system-knowledge layer for now, lean
    on the review layer alone, and start growing memory from the answers. If it
-   has facts, check the space root declared in its header: when it is set and
-   resolves, use it for live-doc lookups; when it is unset (a placeholder) or
-   does not resolve, ask the user for it once — and if they have no space docs,
-   proceed without the live-doc layer rather than stopping.
+   has facts, resolve the live-doc backend (see
+   [Documentation corpus](#documentation-corpus-when-available)): prefer the MCP
+   corpus tools when present. Otherwise check the space root declared in the
+   header: when it is set and resolves, use it for live-doc lookups; when it is
+   unset (a placeholder) or does not resolve, ask the user for it once — and if
+   they have no corpus and no space docs, proceed without the live-doc layer
+   rather than stopping.
 2. **Get the review without clobbering it.**
    - `<srd>.review.md` exists → read it as-is. Do **not** run `srd:review` —
      never risk overwriting the author's file.
@@ -94,8 +147,9 @@ Detect the mode from the user's words.
      question. Drop its severity tag and rule id (keep the severity only to order
      the walk, step 5).
    - **System confrontation** — the layer only this skill does. Confront the SRD
-     against `memory.md` and the live space docs it points to. If memory is empty
-     and no space root is configured, **skip this layer**: the review reduces to
+     against `memory.md` and the live docs — via the corpus tools, or the space
+     docs its pointers reference. If memory is empty and no live-doc backend is
+     configured, **skip this layer**: the review reduces to
      the `srd:review` findings, and you begin populating memory from the answers.
      Raise a question
      when the SRD: contradicts a documented API rule, service behavior, or
@@ -103,14 +157,18 @@ Detect the mode from the user's words.
      undefined in the system; or cannot be built without knowing something the
      system does not pin down ("can't build X without knowing Y").
    - Before raising any "is this defined / documented?" question, **look it up
-     first** — in `memory.md`, then in the space docs its source pointers
+     first** — in `memory.md`, then in the corpus (`search`, then `get_doc`), or
+     the space docs its source pointers
      reference. Only ask if it genuinely is not there or what you found is
      partial — then say what you found and what it fails to cover. A competent
-     engineer does not ask what they could have looked up.
-   - **Memory health** — when a fact you consult cites a path that no longer
-     resolves under the space root, raise it as a question too (e.g. "`memory`
-     points to `Services/Foo.md` — renamed or removed?") and offer to fix the
-     pointer.
+     engineer does not ask what they could have looked up. When the lookup shows
+     the docs are the thing at fault — missing, wrong, incomplete, or ambiguous
+     — also propose a doc gap (see
+     [Reporting a doc gap](#reporting-a-doc-gap-when-the-store-is-enabled)).
+   - **Memory health** — when a fact you consult cites a source that no longer
+     resolves — a corpus id absent from `list_docs`, or a path missing under the
+     space root — raise it as a question too (e.g. "`memory` points to
+     `Services/Foo.md` — renamed or removed?") and offer to fix the pointer.
 4. **Write `<srd>.questions.md`** next to the SRD (open questions only). Format
    per [Questions file](#questions-file).
 5. **Walk one question at a time** (see [Walk](#walk)), ordered: was-blocker
@@ -157,11 +215,14 @@ exists is **resume mode**:
 
 `/system-check memory` curates `memory.md` only — no SRD involved:
 
-1. Check the header space root. If it is unset or does not resolve, ask the user
-   for it; if they have no space docs, leave it as a placeholder and skip the
+1. Resolve the live-doc backend (see
+   [Documentation corpus](#documentation-corpus-when-available)). Under the
+   space root, check its header value: if unset or unresolved, ask for it; if
+   they have no corpus and no space docs, leave it a placeholder and skip the
    pointer checks below (an empty memory has nothing to validate yet).
-2. Validate every source pointer resolves under the root. Report each broken
-   one and offer a fix (corrected path, or `[unwritten]` if the doc is gone).
+2. Validate every source pointer resolves — a corpus id present in `list_docs`,
+   or a path under the space root. Report each broken one and offer a fix
+   (corrected id/path, or `[unwritten]` if the doc is gone).
 3. Flag duplicate or overlapping facts; offer to merge.
 4. Offer to regroup facts whose topic heading no longer fits.
 
@@ -216,13 +277,15 @@ skill; it lives per-machine, not in this skill's directory (see
 
 Format:
 
-- A **header line declares the space root** — the local path every source
-  pointer is relative to. It is machine-specific and set by each user; the
-  seeded file carries it as a placeholder, and the skill runs without the
-  live-doc layer until it is set.
+- A **header line declares the space root** — the local path a file-backed
+  source pointer is relative to. It is machine-specific and set by each user;
+  the seeded file carries it as a placeholder. It is unused when the MCP corpus
+  backend is active, and the skill runs without the live-doc layer until either
+  a corpus is present or the root is set.
 - **One fact per line, grouped under a topic heading.** Each line states the
-  fact succinctly and ends with the source in brackets: `[Services/Some
-  Service.md]` for a documented fact, `[unwritten]` for tribal knowledge that
+  fact succinctly and ends with the source in brackets: a corpus **document id**
+  under the MCP backend, or a space-root-relative path like `[Services/Some
+  Service.md]` for a documented fact; `[unwritten]` for tribal knowledge that
   lives in no doc. Use `[same]` to repeat the previous line's source.
 
 Writing rules:
