@@ -162,6 +162,25 @@ for every remaining gap, take one line each). Opt-out drops extraction depth
 **only**; it does not skip confirmation — the [Confirm and file](#confirm-and-file)
 gate still applies to every record, minimal or grilled.
 
+### D. Confirm and file
+
+Show the finder the assembled record and file **only on their yes** — propose,
+never file silently; the backlog is human-curated, so noise is the enemy. On a
+correction, adjust and re-show; on a no, discard it. Either outcome (filed or
+discarded) removes the record from the buffer; the file is deleted once empty.
+
+On yes, file through the [gap channel](#the-gap-channel): `report_gap` (MCP), or
+`POST /gaps` on the REST mirror. Record the returned `id` (`gap-NNNN`) in your
+report. Filing only records the gap — it does not change the corpus; the gap now
+sits `open` for `srd:resolve-doc-gaps` to close later.
+
+If no gap store is configured (neither `report_gap` nor `POST /gaps` exists),
+filing is impossible: say so, note the gap in the caller's output, and leave it
+in the buffer for a session where the store is reachable. Never invent a store.
+
+Report tersely: no preamble or narration; state each fact once; don't restate
+output the user can already see.
+
 ## Self-learning
 
 Read this skill's lessons and obey them: sibling `LESSONS.md`, else
