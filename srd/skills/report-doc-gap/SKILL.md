@@ -101,6 +101,18 @@ discovery** (capture).
 
 Detailed phases follow.
 
+### A. Drain
+
+Read this SRD's buffer at two moments: **on skill start** (resume — a prior
+session may have cleared with gaps unfiled) and **at each flow checkpoint** (the
+end of a natural phase, e.g. after the interview, after a review pass).
+
+Empty buffer: say nothing, let the caller proceed. Otherwise surface the
+pending gaps — count and topics — and offer to work them now: "N unreported doc
+gaps for `SRD-42`; work them now or keep going?" Never force it; on defer the
+gaps stay buffered for the next checkpoint or session. On accept, work them one
+at a time through phases C and D.
+
 ### B. Capture on discovery
 
 When a caller hands over a gap, write a **light** record to the buffer at once
