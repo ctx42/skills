@@ -97,11 +97,16 @@ to the existing page, not a duplicate.
 
 ### 3. Extract the knowledge
 
-The gap records say what is missing, not what is true — only the user holds the
-facts. Run `craft:grill-me` on the cluster to pull out exactly what the page
-must state: each gap's `target_claim` confirmed or corrected, the surrounding
-context a reader needs, and any terms/synonyms. Grill until every gap in the
-cluster has a concrete, verifiable answer; do not draft from guesses.
+The gap records say what is missing, not necessarily what is true — the facts
+live with the user. But a record filed by `srd:report-doc-gap` in its heavy
+mode may already carry captured knowledge in `detail`/`target_claim` (a
+head-start from the SRD author); read those first and treat them as a starting
+point, not gospel. Run `craft:grill-me` on the cluster to pull out exactly what
+the page must state: each gap's `target_claim` confirmed or corrected, the
+surrounding context a reader needs, and any terms/synonyms — grilling to fill
+what the record leaves open rather than re-asking what it already answers. Grill
+until every gap in the cluster has a concrete, verifiable answer; do not draft
+from guesses.
 
 ### 4. Draft
 
