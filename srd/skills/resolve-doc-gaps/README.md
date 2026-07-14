@@ -1,4 +1,4 @@
-# doc-gap
+# resolve-doc-gaps
 
 Closes the **documentation-gap loop**. SRD-authoring sessions report gaps —
 missing, wrong, incomplete, or ambiguous docs — to an `mcp-doc` server through
@@ -41,7 +41,7 @@ publish to Confluence, and never writes into the corpus.
 ## Usage
 
 ```
-/doc-gap
+/resolve-doc-gaps
 ```
 
 Point it at a client wired to an `mcp-doc` server that has a gap store, or one
@@ -60,7 +60,7 @@ whose REST `/gaps` endpoints are reachable.
 
 ### 1. No gap store configured
 
-**Request:** `/doc-gap` against a retrieval-only server.
+**Request:** `/resolve-doc-gaps` against a retrieval-only server.
 
 **Expected behavior:**
 - Probes for `list_gaps` / `GET /gaps`, finds neither, and stops with a clear
@@ -68,7 +68,7 @@ whose REST `/gaps` endpoints are reachable.
 
 ### 2. Cluster and draft
 
-**Request:** `/doc-gap` with three open gaps, two of them the same missing fact
+**Request:** `/resolve-doc-gaps` with three open gaps, two of them the same missing fact
 reported by different sessions.
 
 **Expected behavior:**

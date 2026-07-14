@@ -1,5 +1,5 @@
 ---
-name: doc-gap
+name: resolve-doc-gaps
 description: >
   Closes the documentation-gap loop: lists gaps reported to an mcp-doc server,
   clusters related ones, extracts the missing knowledge from the user, drafts a
@@ -9,7 +9,7 @@ description: >
 license: MIT
 ---
 
-# doc-gap
+# resolve-doc-gaps
 
 Close the loop opened by `report_gap`: turn reported documentation gaps into a
 publishable page. SRD-authoring sessions file gaps (via `srd:create` and
@@ -134,6 +134,6 @@ output the user can already see.
 ## Self-learning
 
 Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/srd/doc-gap.md` when this
+`$HOME/.agent-data/ctx42-skills/lessons/srd/resolve-doc-gaps.md` when this
 directory is read-only. On a correction or self-caught mistake, append a
 one-line rule to whichever is writable (creating it) and report where.
