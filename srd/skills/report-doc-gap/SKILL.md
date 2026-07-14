@@ -32,6 +32,24 @@ grill, and the filing; the calling skill owns only its primary flow.
   (or the `POST /gaps` REST mirror). Absent, capture still runs but filing
   degrades to noting the gap in output (see [Confirm and file](#confirm-and-file)).
 
+## The doc-gap vs SRD-gap boundary
+
+Only **documentation-corpus** deficiencies belong here. The trigger is uniform
+across the four callers: *a fact the SRD work needs cannot be confirmed against
+the corpus* because the content is missing, wrong, incomplete, or ambiguous.
+
+An **SRD gap** is not a doc gap and must never be filed: unmet `STR-*`/`STA-*`
+rules, undefined terms, missing owners, logical holes in the document under
+work. Those stay in the caller's own findings. The line:
+
+- "The SRD's §4 has no owner list" → SRD gap; the caller reports it, not this
+  skill.
+- "The SRD claims the gateway retries 3×, but no corpus doc states the retry
+  count and I cannot confirm it" → doc gap; hand it here.
+
+When unsure, ask: is the deficiency in the **SRD** or in the **docs**? Only the
+latter crosses into the buffer.
+
 ## The gap channel
 
 Reach `report_gap` by, in priority order:
