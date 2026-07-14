@@ -68,6 +68,24 @@ without this session:
   content from content that exists but does not rank.
 - `srd_ref` — the SRD id and section that raised it (e.g. `SRD-42 §4.3`).
 
+## The buffer
+
+Captured gaps live in a per-SRD buffer until filed, so a session that clears
+mid-flow loses nothing.
+
+- **Location:** `$HOME/.agent-data/ctx42-skills/srd/docgaps/<srd-id>.json` —
+  outside every corpus source by construction, so it is never indexed or
+  clobbered by cfsync, and mirrors where the lessons files live.
+- **Key:** the SRD id (present from creation onward, e.g. `SRD-42`). All four
+  SRD skills share one buffer per SRD id on this machine — a reviewer's session
+  appends to the same file an author's session started. Before an id exists,
+  key off the SRD's absolute file path, then rename the file to the id once
+  assigned.
+- **Contents:** a JSON array of gap records (the [record fields](#the-gap-record),
+  filled as far as capture/grill got them). Buffered means unconfirmed; a record
+  is **removed on filing or discard**, and the file is **deleted when it
+  empties**.
+
 ## Workflow
 
 Two entry points. Callers invoke this skill **at start** (drain) and **on gap
