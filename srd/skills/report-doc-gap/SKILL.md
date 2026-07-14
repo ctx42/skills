@@ -101,6 +101,22 @@ discovery** (capture).
 
 Detailed phases follow.
 
+### B. Capture on discovery
+
+When a caller hands over a gap, write a **light** record to the buffer at once
+and return — no user interruption, no grill, no MCP call. Capture is silent and
+cheap; depth and confirmation come later at drain.
+
+Fill only what is free at this moment: `detail` (the caller's one-line "what is
+missing"), plus whatever the caller already holds — `kind`, `topic`, `srd_ref`,
+and the `doc_id`/`heading_path`/`source_url`/`search_terms` from the corpus
+lookups that exposed the gap. Leave the rest empty.
+
+One record per **distinct** missing fact. If the same fact is already buffered
+for this SRD, merge into the existing record (widen `search_terms`, keep the
+richer `detail`) rather than adding a duplicate — repeats are a priority signal
+the reviewer reads, not new gaps.
+
 ## Self-learning
 
 Read this skill's lessons and obey them: sibling `LESSONS.md`, else
