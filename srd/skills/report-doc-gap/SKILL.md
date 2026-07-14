@@ -129,6 +129,26 @@ for this SRD, merge into the existing record (widen `search_terms`, keep the
 richer `detail`) rather than adding a duplicate — repeats are a priority signal
 the reviewer reads, not new gaps.
 
+### C. Grill at chosen depth
+
+Working a buffered gap, ask the finder how deep to go — **light** or **heavy**
+(or opt out entirely, see [Opt-out](#opt-out)). Depth is theirs to pick per gap:
+understanding the system is intrinsic to good SRD work, so some gaps deserve a
+full extraction and others a one-liner.
+
+- **Light** — confirm or sharpen the one-line `detail`; set `target_claim` if the
+  fact is already obvious. No interview.
+- **Heavy** — invoke `craft:grill-me` on the gap to pull out an article's worth
+  of knowledge: the `target_claim` confirmed or corrected, the surrounding
+  context a reader needs, and any terms or synonyms. Fold the result into
+  `detail` and `target_claim` as prose (the record fields carry it; no schema
+  change).
+
+The finder here may not be the person who later writes the doc, and this grill
+does **not** replace the resolve-time one. `srd:resolve-doc-gaps` still runs its
+own authoring grill when the page is written; whatever is captured here is a
+head-start for it, not a substitute.
+
 ## Self-learning
 
 Read this skill's lessons and obey them: sibling `LESSONS.md`, else
