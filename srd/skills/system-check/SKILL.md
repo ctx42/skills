@@ -85,36 +85,16 @@ genuinely is not there, not on one failed call.
 [references/memory-migration.md](references/memory-migration.md) — it locates
 a legacy store to migrate, or seeds `$MEM` from `memory.template.md`.
 
-### Reporting a doc gap (when the store is enabled)
+### Reporting a doc gap
 
 When confronting the SRD shows the **docs themselves** fall short — the fact is
 missing, wrong, incomplete, or ambiguous, not merely that the SRD is unclear —
-the same server may accept a gap report: `report_gap` (MCP), or `POST /gaps` on
-the REST mirror. These exist only when the server is configured with a gap
-store; absent, raise it as a question and move on. The fix is published to
-Confluence by hand later — reporting only captures the gap, it does not change
-the corpus.
-
-**Propose, never file silently.** Formulate the full record, show it to the
-user, and file only on their yes — the backlog is human-curated, so noise is
-the enemy. One gap per distinct missing fact. This is a doc gap, not a
-`memory.md` fact: report content the platform docs should carry, not tribal
-knowledge learned in the walk.
-
-Fill the record so a later person plus agent can write the article without this
-session:
-
-- `kind` — `missing` (nothing found), `wrong`, `incomplete`, or `ambiguous`.
-- `topic` — short label for the missing knowledge.
-- `demand` — why the gap blocks answering the implementation question at hand.
-- `detail` — what is missing, wrong, incomplete, or ambiguous.
-- `target_claim` — the specific fact the docs should state, when known.
-- `doc_id`, `heading_path`, `source_url` — copied **verbatim** from the
-  `search`/`get_doc` hit the gap is about; all empty when nothing relevant was
-  found.
-- `search_terms` — the queries you tried, so a reviewer can tell genuinely
-  absent content from content that exists but does not rank.
-- `srd_ref` — the SRD and requirement id that raised it (e.g. `GR-4`).
+hand the gap to `srd:report-doc-gap`, which owns capture, the grill, and the
+confirmed `report_gap` filing; this skill only spots the gap and delegates. This
+is a doc gap, not a `memory.md` fact: report content the platform docs should
+carry, not tribal knowledge learned in the walk. Invoke it on discovery — it
+buffers the gap without interrupting the check — and at session start, where it
+drains any gaps left unfiled.
 
 ## Invocation
 
@@ -163,8 +143,8 @@ Detect the mode from the user's words.
      partial — then say what you found and what it fails to cover. A competent
      engineer does not ask what they could have looked up. When the lookup shows
      the docs are the thing at fault — missing, wrong, incomplete, or ambiguous
-     — also propose a doc gap (see
-     [Reporting a doc gap](#reporting-a-doc-gap-when-the-store-is-enabled)).
+     — also hand it to `srd:report-doc-gap` (see
+     [Reporting a doc gap](#reporting-a-doc-gap)).
    - **Memory health** — when a fact you consult cites a source that no longer
      resolves — a corpus id absent from `list_docs`, or a path missing under the
      space root — raise it as a question too (e.g. "`memory` points to

@@ -62,33 +62,15 @@ only when a step genuinely is not there — not on one failed call:
 Default to `search` with `k` about 5; reach for `get_doc` only when a hit needs
 its full table or context; use `list_docs` to orient first.
 
-### Reporting a doc gap (when the store is enabled)
+### Reporting a doc gap
 
-When a corpus lookup **cannot confirm a claim** — the content is missing,
-wrong, incomplete, or ambiguous — the same server may accept a gap report:
-`report_gap` (MCP), or `POST /gaps` on the REST mirror. These exist only when
-the server is configured with a gap store; absent, note the gap in your output
-and move on. The fix is published to Confluence by hand later — reporting only
-captures the gap, it does not change the corpus.
-
-**Propose, never file silently.** Formulate the full record, show it to the
-user, and file only on their yes — the backlog is human-curated, so noise is
-the enemy. One gap per distinct missing fact.
-
-Fill the record so a later person plus agent can write the article without this
-session:
-
-- `kind` — `missing` (nothing found), `wrong`, `incomplete`, or `ambiguous`.
-- `topic` — short label for the missing knowledge.
-- `demand` — why the gap blocks the SRD work at hand.
-- `detail` — what is missing, wrong, incomplete, or ambiguous.
-- `target_claim` — the specific fact the docs should state, when known.
-- `doc_id`, `heading_path`, `source_url` — copied **verbatim** from the
-  `search`/`get_doc` hit the gap is about; all empty when nothing relevant was
-  found.
-- `search_terms` — the queries you tried, so a reviewer can tell genuinely
-  absent content from content that exists but does not rank.
-- `srd_ref` — the SRD id and section that raised it (e.g. `SRD-42 §4.3`).
+When a corpus lookup **cannot confirm a claim** — content missing, wrong,
+incomplete, or ambiguous — hand the gap to `srd:report-doc-gap`. That skill owns
+capture, the grill, and the confirmed `report_gap` filing; this skill only spots
+the gap and delegates. Invoke it the moment a gap surfaces — it buffers the gap
+without interrupting the interview — and again at session start, where it drains
+any gaps a prior session left unfiled. Report only *documentation* gaps here;
+SRD-document defects stay in this skill's own findings.
 
 ## Workflow
 
@@ -128,8 +110,8 @@ time**, in this order, and restate each resolved branch before moving on:
    corpus is available, verify it with `search` before accepting — surface any
    contradiction immediately in interview voice, never silently accept or fix.
    When the corpus cannot confirm the claim (missing, wrong, incomplete, or
-   ambiguous docs), propose a doc gap (see
-   [Reporting a doc gap](#reporting-a-doc-gap-when-the-store-is-enabled)).
+   ambiguous docs), hand it to `srd:report-doc-gap` (see
+   [Reporting a doc gap](#reporting-a-doc-gap)).
 6. **Terms** — as terms surface, check them against the glossary digest. Mark
    each as already-defined (link to it) or needs a local Glossary entry. When a
    corpus is available, `search` it before asking the user to define a term — it
@@ -199,8 +181,8 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    guide); and any Quality Bar item not yet met. When a corpus is available,
    also flag any requirement whose claim about existing system behavior could
    not be verified against it — a *facts* gap, distinct from the format checks
-   above. For each such facts gap, propose a doc gap to the user (see
-   [Reporting a doc gap](#reporting-a-doc-gap-when-the-store-is-enabled)). Items
+   above. For each such facts gap, hand it to `srd:report-doc-gap` (see
+   [Reporting a doc gap](#reporting-a-doc-gap)). Items
    left as marked placeholders (Initiative, Designs, Owners, back-links) are
    always reported as outstanding human follow-ups.
 
