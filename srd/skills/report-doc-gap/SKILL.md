@@ -149,6 +149,19 @@ does **not** replace the resolve-time one. `srd:resolve-doc-gaps` still runs its
 own authoring grill when the page is written; whatever is captured here is a
 head-start for it, not a substitute.
 
+#### Opt-out
+
+The finder can skip the grill. The floor is a **single** field: `detail` — one
+line of what is missing. Never file without it. Everything else is auto-filled
+(`srd_ref`, the corpus-lookup fields, `kind`, `topic`) or left empty;
+`target_claim` stays empty for the resolve-time author to establish.
+
+Opt-out has two granularities: **this gap** ("skip the questions, just take
+what's missing") and **this session** (a minimal-capture toggle — stop grilling
+for every remaining gap, take one line each). Opt-out drops extraction depth
+**only**; it does not skip confirmation — the [Confirm and file](#confirm-and-file)
+gate still applies to every record, minimal or grilled.
+
 ## Self-learning
 
 Read this skill's lessons and obey them: sibling `LESSONS.md`, else
