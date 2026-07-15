@@ -44,16 +44,17 @@ standard, and self-checking the draft before saving it.
 
 ## Documentation corpus (when available)
 
-Some setups expose the platform's live documentation over an MCP server —
-tools shaped `search` (query + optional `k`), `get_doc` (document id), and
-`list_docs` (no args), e.g. `mcp__<name>__search`. When present, use them to
-ground factual claims against the real docs instead of guessing; when absent
-the skill runs fully offline as before. Degrade in this order, falling through
-only when a step genuinely is not there — not on one failed call:
+Some setups expose the platform's live documentation over the `srd-doc` MCP
+server — tools `mcp__srd-doc__search` (query + optional `k`),
+`mcp__srd-doc__get_doc` (document id), and `mcp__srd-doc__list_docs` (no args).
+When present, use them to ground factual claims against the real docs instead
+of guessing; when absent the skill runs fully offline as before. Degrade in
+this order, falling through only when a step genuinely is not there — not on
+one failed call:
 
-1. The MCP corpus tools above (preferred).
-2. The server's REST mirror via curl, when a server runs but MCP is not wired
-   into this client:
+1. The `srd-doc` MCP corpus tools above (preferred).
+2. The `srd-doc` server's REST mirror via curl, when it runs but MCP is not
+   wired into this client:
    `curl 'http://<host>:7777/search?q=TEXT&k=5'`,
    `curl 'http://<host>:7777/docs/<id>'` — same engine, same results.
 3. Targeted Grep/Read over a local corpus checkout, scoped to the relevant

@@ -48,13 +48,14 @@ them — flag every gap.
 
 ## Documentation corpus (when available)
 
-Some setups expose the platform's live documentation over an MCP server — the
-read tools `search` (query + optional `k`), `get_doc` (document id), and
-`list_docs` (no args), e.g. `mcp__<name>__search`. When present, run a
-**facts-vs-corpus pass** beside the rule checks: for every requirement that
-asserts something about existing system behaviour ("the gateway retries 3×",
-"the API returns Y"), `search` the corpus to confirm it. Degrade MCP → REST
-mirror (`curl 'http://<host>:7777/search?q=TEXT&k=5'`, `.../docs/<id>`) →
+Some setups expose the platform's live documentation over the `srd-doc` MCP
+server — the read tools `mcp__srd-doc__search` (query + optional `k`),
+`mcp__srd-doc__get_doc` (document id), and `mcp__srd-doc__list_docs` (no args).
+When present, run a **facts-vs-corpus pass** beside the rule checks: for every
+requirement that asserts something about existing system behaviour ("the
+gateway retries 3×", "the API returns Y"), `search` the corpus to confirm it.
+Degrade MCP → the `srd-doc` REST mirror
+(`curl 'http://<host>:7777/search?q=TEXT&k=5'`, `.../docs/<id>`) →
 scoped Grep/Read over a local corpus checkout, falling through only when a step
 genuinely is not there. Absent a corpus, skip the pass and review offline as
 before. This stays read-only — it queries the docs, never edits the SRD.

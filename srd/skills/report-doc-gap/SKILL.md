@@ -2,7 +2,7 @@
 name: report-doc-gap
 description: >
   Captures documentation gaps found while authoring or reviewing an SRD and
-  files them to an mcp-doc server. The four SRD skills (create, edit, review,
+  files them to the srd-doc server. The four SRD skills (create, edit, review,
   system-check) delegate here: it buffers each gap, grills the finder for
   context at a user-chosen depth, and files it via report_gap only on
   confirmation. Use when an SRD skill hits a corpus gap it cannot confirm a
@@ -28,7 +28,7 @@ grill, and the filing; the calling skill owns only its primary flow.
   draft the fix (that is `srd:resolve-doc-gaps`), never report an **SRD** gap —
   unmet `STR-*`/`STA-*` rules and logical holes in the document stay in the
   caller's own findings (see [The boundary](#the-doc-gap-vs-srd-gap-boundary)).
-- **Depends on:** an `mcp-doc` server with a gap store — the `report_gap` tool
+- **Depends on:** the `srd-doc` server with a gap store — the `report_gap` tool
   (or the `POST /gaps` REST mirror). Absent, capture still runs but filing
   degrades to noting the gap in output (see [Confirm and file](#d-confirm-and-file)).
 
@@ -54,12 +54,12 @@ latter crosses into the buffer.
 
 Reach `report_gap` by, in priority order:
 
-1. **MCP** — `report_gap` with the record below, e.g. `mcp__<name>__report_gap`;
-   returns the assigned `id` (`gap-NNNN`). Preferred. The read tools `search`,
+1. **MCP** — `mcp__srd-doc__report_gap` with the record below; returns the
+   assigned `id` (`gap-NNNN`). Preferred. The read tools `mcp__srd-doc__search`,
    `get_doc`, `list_docs` come from the same server — the caller uses them to
    decide a claim is unconfirmable before handing the gap here.
-2. **REST mirror** — same server when MCP is not wired into this client:
-   `POST /gaps` with the record as a JSON body.
+2. **REST mirror** — the same `srd-doc` server when MCP is not wired into this
+   client: `POST /gaps` with the record as a JSON body.
 
 Fall through only when a step genuinely is not there, not on one failed call.
 If neither exists, the store is not enabled — capture to the buffer, but say
@@ -187,10 +187,11 @@ never file silently; the backlog is human-curated, so noise is the enemy. On a
 correction, adjust and re-show; on a no, discard it. Either outcome (filed or
 discarded) removes the record from the buffer; the file is deleted once empty.
 
-On yes, file through the [gap channel](#the-gap-channel): `report_gap` (MCP), or
-`POST /gaps` on the REST mirror. Record the returned `id` (`gap-NNNN`) in your
-report. Filing only records the gap — it does not change the corpus; the gap now
-sits `open` for `srd:resolve-doc-gaps` to close later.
+On yes, file through the [gap channel](#the-gap-channel):
+`mcp__srd-doc__report_gap` (MCP), or `POST /gaps` on the REST mirror. Record the
+returned `id` (`gap-NNNN`) in your report. Filing only records the gap — it does
+not change the corpus; the gap now sits `open` for `srd:resolve-doc-gaps` to
+close later.
 
 If no gap store is configured (neither `report_gap` nor `POST /gaps` exists),
 filing is impossible: say so, note the gap in the caller's output, and leave it

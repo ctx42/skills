@@ -1,7 +1,7 @@
 # resolve-doc-gaps
 
 Closes the **documentation-gap loop**. SRD-authoring sessions report gaps —
-missing, wrong, incomplete, or ambiguous docs — to an `mcp-doc` server through
+missing, wrong, incomplete, or ambiguous docs — to the `srd-doc` server through
 `report_gap`. This skill works that backlog: it lists the gaps, clusters the
 ones a single article can cover, interviews you for the missing knowledge,
 drafts a retrieval-friendly Markdown page, and records the published URL once
@@ -13,7 +13,7 @@ publish to Confluence, and never writes into the corpus.
 
 ## When to Use
 
-- You want to work the doc-gap backlog an `mcp-doc` server has collected.
+- You want to work the doc-gap backlog the `srd-doc` server has collected.
 - You have one or more reported gaps and want a publishable page that fills
   them.
 - You have published a page and want the gaps it covers marked resolved.
@@ -44,7 +44,7 @@ publish to Confluence, and never writes into the corpus.
 /resolve-doc-gaps
 ```
 
-Point it at a client wired to an `mcp-doc` server that has a gap store, or one
+Point it at a client wired to the `srd-doc` server with a gap store, or one
 whose REST `/gaps` endpoints are reachable.
 
 ## What to Expect

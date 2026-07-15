@@ -1,6 +1,6 @@
 # Authoring a page for retrieval
 
-The doc-gap draft is published into a corpus served by `mcp-doc`: **BM25
+The doc-gap draft is published into a corpus served by `srd-doc`: **BM25
 keyword search over section chunks**, no semantic matching. A page is found
 only by the words it contains and ranked by where those words sit. These rules
 mirror the server's own `docs/authoring.md`; apply them to every draft so the

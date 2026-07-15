@@ -49,11 +49,12 @@ user; do not proceed.** Read these before editing:
 
 ## Documentation corpus (when available)
 
-Some setups expose the platform's live documentation over an MCP server — the
-read tools `search` (query + optional `k`), `get_doc` (document id), and
-`list_docs` (no args), e.g. `mcp__<name>__search`. When a new or changed
-requirement asserts something about existing system behaviour, `search` the
-corpus to confirm it before accepting the edit. Degrade MCP → REST mirror
+Some setups expose the platform's live documentation over the `srd-doc` MCP
+server — the read tools `mcp__srd-doc__search` (query + optional `k`),
+`mcp__srd-doc__get_doc` (document id), and `mcp__srd-doc__list_docs` (no args).
+When a new or changed requirement asserts something about existing system
+behaviour, `search` the corpus to confirm it before accepting the edit. Degrade
+MCP → the `srd-doc` REST mirror
 (`curl 'http://<host>:7777/search?q=TEXT&k=5'`, `.../docs/<id>`) → scoped
 Grep/Read over a local corpus checkout, falling through only when a step
 genuinely is not there. Absent a corpus, edit offline as before.

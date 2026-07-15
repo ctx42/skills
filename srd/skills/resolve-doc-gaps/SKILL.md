@@ -1,7 +1,7 @@
 ---
 name: resolve-doc-gaps
 description: >
-  Closes the documentation-gap loop: lists gaps reported to an mcp-doc server,
+  Closes the documentation-gap loop: lists gaps reported to the srd-doc server,
   clusters related ones, extracts the missing knowledge from the user, drafts a
   retrieval-friendly Markdown page, and records the published URL on resolve.
   Use when asked to work the doc-gap backlog, write up reported documentation
@@ -25,7 +25,7 @@ where the human published it.
   hand; this skill only drafts and records the URL. Never write a draft into a
   corpus source directory (cfsync would clobber it and it would pollute the
   index). Never edit the corpus or author an SRD (that is `srd:create`).
-- **Depends on:** an `mcp-doc` server configured with a gap store — the
+- **Depends on:** the `srd-doc` server configured with a gap store — the
   `list_gaps` / `resolve_gap` tools (or the `/gaps` REST endpoints). If the gap
   channel is absent, stop and tell the user; there is nothing to work.
 
@@ -38,16 +38,16 @@ where the human published it.
 
 ## The gap channel
 
-The same `mcp-doc` server that serves the corpus accepts and returns gaps when
+The same `srd-doc` server that serves the corpus accepts and returns gaps when
 it is configured with a gap store. Reach the channel by, in priority order:
 
-1. **MCP gap tools** — `list_gaps` (optional `status`), `resolve_gap`
-   (`gap_id`, `published_url`, optional `note`), e.g. `mcp__<name>__list_gaps`.
-   Preferred. The read tools `search`, `get_doc`, `list_docs` come from the
-   same server — use them to check what the corpus already holds.
-2. **REST mirror** — same server, when MCP is not wired into this client:
-   `GET /gaps?status=open`, `POST /gaps/{id}/resolve` with a JSON body
-   `{"published_url": "…", "note": "…"}`; `GET /search?q=…&k=5`,
+1. **MCP gap tools** — `mcp__srd-doc__list_gaps` (optional `status`),
+   `mcp__srd-doc__resolve_gap` (`gap_id`, `published_url`, optional `note`).
+   Preferred. The read tools `mcp__srd-doc__search`, `get_doc`, `list_docs`
+   come from the same server — use them to check what the corpus already holds.
+2. **REST mirror** — the same `srd-doc` server, when MCP is not wired into
+   this client: `GET /gaps?status=open`, `POST /gaps/{id}/resolve` with a JSON
+   body `{"published_url": "…", "note": "…"}`; `GET /search?q=…&k=5`,
    `GET /docs/<id>`.
 
 Fall through only when a step genuinely is not there, not on one failed call.

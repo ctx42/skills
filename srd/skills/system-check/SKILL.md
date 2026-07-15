@@ -67,11 +67,11 @@ never load it.
 The system-knowledge layer confronts the SRD against the platform's live docs.
 Two backends, in priority order:
 
-1. **MCP corpus tools** — when a documentation-corpus MCP server is present
-   (tools shaped `search`, `get_doc`, `list_docs`, e.g. `mcp__<name>__search`),
+1. **MCP corpus tools** — when the `srd-doc` MCP server is present (tools
+   `mcp__srd-doc__search`, `mcp__srd-doc__get_doc`, `mcp__srd-doc__list_docs`),
    use them. Preferred: always fresh, no space root needed. Its REST mirror via
-   curl (`/search?q=…&k=5`, `/docs/<id>`) is the same engine when a server runs
-   but MCP is not wired into this client.
+   curl (`/search?q=…&k=5`, `/docs/<id>`) is the same engine when the server
+   runs but MCP is not wired into this client.
 2. **Space-root files** — else read Markdown under the `memory.md` space root,
    as described below.
 
