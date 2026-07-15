@@ -47,7 +47,7 @@ State the resolved target and the exact package/file set before reviewing.
 Parse and respect these controls from the invocation:
 - `packages=a,b` — restrict to these packages within the target.
 - `max_issues=N` — hard cap on findings reported (default 25).
-- `depth=light|standard|exhaustive` — default `standard`.
+- `depth=light|standard|full` — default `standard`.
 - `plan_first` — produce a short prioritized plan plus the top findings, then
   stop for approval before the full pass.
 
@@ -59,7 +59,7 @@ review.
 Depth:
 - `light` — only blockers and major maintainability; minimal examples.
 - `standard` — balanced coverage of the target.
-- `exhaustive` — full deep review; use sparingly.
+- `full` — deep review of everything; use sparingly.
 
 Stop at `max_issues`; report highest-severity first and say how many findings
 were left unreported.

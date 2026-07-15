@@ -44,13 +44,13 @@ Example invocations:
 
 ```
 /review ./... max_issues=15 depth=light
-/review ./pkg/foo depth=exhaustive
+/review ./pkg/foo depth=full
 /review ./... plan_first          # plan + top findings, then stop
 /review ./... packages=parser,lexer
 ```
 
 - `max_issues=N` — cap on findings (default 25).
-- `depth=light|standard|exhaustive` — default standard.
+- `depth=light|standard|full` — default standard.
 - `plan_first` — short prioritized plan first, then stop for approval.
 - `packages=a,b` — restrict to these packages.
 
