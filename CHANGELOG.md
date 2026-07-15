@@ -1,3 +1,22 @@
+## v0.14.0 (Wed, 15 Jul 2026 16:45:11 UTC)
+- feat(srd): add doc-gap skill and documentation-corpus grounding.
+- docs(doc-gap): add README for the doc-gap skill.
+- refactor(srd): rename doc-gap skill to resolve-doc-gaps.
+- feat(srd): add report-doc-gap producer skill.
+- feat(srd): define report-doc-gap buffer store.
+- feat(srd): capture doc gaps light on discovery.
+- feat(srd): drain the gap buffer on resume and checkpoints.
+- feat(srd): grill gaps at a user-chosen depth.
+- feat(srd): allow opting out of the gap grill.
+- feat(srd): file gaps only after confirmation.
+- feat(srd): draw the doc-gap vs SRD-gap boundary.
+- fix(srd): correct broken anchor links in report-doc-gap.
+- refactor(srd): delegate gap reporting to report-doc-gap.
+- feat(srd): let edit and review find and report doc gaps.
+- docs(srd): note report-time knowledge in resolve-doc-gaps.
+- docs(review): clarify fix reporting rules, discourage diffs.
+- docs(srd): pin skills to the srd-doc MCP server.
+
 ## v0.13.0 (Sun, 12 Jul 2026 21:09:16 UTC)
 - docs(cm): rename minimal verbosity argument to mini.
 - docs(readme-smith): trim duplicated rules and refresh badges.
