@@ -56,6 +56,8 @@ rule's full text or narrate.
   callback) or deliberate typelessness (`helpers.go`) requires.
 - Don't wrap a single expression in a one-line function used at a single call
   site; inline it (Test has the same rule for helpers).
+- Export only symbols used or intended outside the package; keep
+  package-internal helpers unexported.
 - A method returns only its named result; leave presentation (trailing
   newline, padding) to the caller.
 - No naked returns in non-trivial functions.
@@ -86,7 +88,8 @@ rule's full text or narrate.
 - Godoc states only what the signature can't; never restate the obvious.
 - In godoc prose name the type, not the receiver variable.
 - No godoc on interface-implementing methods.
-- Use godoc cross-references: `[Type]`, `[pkg.Symbol]`.
+- Use godoc cross-references for exported symbols only: `[Type]`,
+  `[pkg.Symbol]`; name unexported identifiers in plain text.
 - nolint: no space `//nolint:name`; line-level at end of line; func-scoped as
   the last godoc line after an empty `//`; comma-join multiple (`a,b`).
 
@@ -142,7 +145,8 @@ rule's full text or narrate.
   order the `--- When ---` call uses them; keep a variable's setup next to its
   declaration.
 - Separate distinct topics within a `--- Given ---`/`--- Then ---` block with a
-  blank line; group statements by the subject they set up or verify.
+  blank line; group statements by the subject they set up or verify; no blank
+  line between consecutive same-subject assertions.
 - In `foo_test.go` with a matching `foo.go`, test functions follow the
   declaration order of their subject in `foo.go`; `Test_Foo` precedes
   `Test_Foo_tabular`; files without a 1-to-1 name match are exempt.
@@ -155,8 +159,10 @@ rule's full text or narrate.
   sentence.
 - Error-path subtest names start with `error - ` then the failure condition;
   don't restate "returns error".
-- Name the actual value `have` and the expected value `want`, never `got`; when
-  several of each coexist in one scope, suffix as `hXxx`/`wXxx` naming the value.
+- Name the actual value `have` and the expected value `want`, never `got`;
+  reassign `want` for sequential expectations; only when two expected values
+  are live in the same assertion region, suffix as `wXxx` (same for
+  `have`/`hXxx`).
 - `have` is the value under test (the `--- When ---` result); it overrides
   receiver-mirroring. Given subjects and secondary Then values keep descriptive
   names.
@@ -174,6 +180,8 @@ rule's full text or narrate.
   stacked `ErrorContain` calls.
 - Hoist an expected literal into a `want` local only to keep the assertion
   within 80 cols; inline it when the call already fits.
+- Don't hoist a short string literal into a local when the inlined form fits;
+  inline at each use even if repeated.
 - Hoist a multi-line structured-data literal (JSON, YAML) passed to a call into
   a pretty-printed backtick raw-string local; don't inline it or split it across
   `+`-joined segments to fit the line limit.

@@ -131,11 +131,10 @@ func (e *Encoder) WriteTo(w io.Writer) (int64, error) { ... }
 ## Use godoc cross-references (Production)
 
 Why: `[Type]`/`[pkg.Symbol]` render as links and stay greppable; bare names rot
-on rename.
-Detect: prose naming another in-package symbol without brackets ("source for
-Makefile code" → "source for [Makefile] code"). Skip the comment's own leading
-name and lowercase concepts ("a target"). When editing a comment, apply to the
-whole comment, not just the line you came for.
+on rename. Bracket only exported symbols — unexported names are plain text.
+Detect: prose naming another in-package exported symbol without brackets, or
+brackets around an unexported identifier. Skip the comment's own leading name
+and lowercase concepts. When editing a comment, fix the whole comment.
 
 ## Example functions for public APIs (Production)
 
@@ -270,11 +269,11 @@ stay on one line and the value gets a name. Three forms:
   indented code (it must start at column 0 and hides trailing whitespace);
 - a long expected value in a test → a `want` local.
 
-Inverse: don't hoist when the inlined call already fits <=80 — a `want` that
-saves no width is needless indirection.
+Inverse: don't hoist when the inlined form already fits <=80 — a short `want`
+or fixture string local that saves no width is needless, even if repeated.
 Detect: a call wrapped only to fit length; a multi-line backtick string in
 indented code; quoted segments where the first trails the `:=` and the rest hang
-below it misaligned.
+below it misaligned; a short string local whose literal fits at every use.
 
 ```go
 // format local:
@@ -293,26 +292,17 @@ assert.Equal(t, want, tst.Stderr())
 
 ## Blank line between distinct groups (Production + Test)
 
-Why: multi-line groups serving different subjects read as one wall when run
-together; a blank line between them makes each scannable. Group by the subject,
-not by statement type. Applies to multi-line switch cases (none before the
-first; one-line cases need no spacing) and to statement groups inside a
-`--- Given ---`/`--- Then ---` block (assert the return, then inspect a recorded
-request, then check auth).
-Detect: three-plus consecutive statements splitting into distinct subjects (a
-fresh `:=` target read/asserted, a different value under inspection) with no
-blank line between the groups; multi-line switch cases with no blank between.
+Why: multi-line groups serving different subjects need a blank between them;
+same-subject consecutive asserts stay packed (a blank every line is noise).
+Detect: distinct subjects with no blank between groups; multi-line switch cases
+with no blank between; or a blank between consecutive same-subject asserts.
 
 ```go
-// test block — return value, request, auth each their own group:
 assert.NoError(t, err)
 assert.Contain(t, "ok (v3)", have)
 
 req := srv.Request(0)
 assert.Equal(t, "/api/v2/pages/1", req.URL.Path)
-
-user, pass, ok := req.BasicAuth()
-assert.True(t, ok)
 ```
 
 ## Three-letter receivers and matching locals (Production)

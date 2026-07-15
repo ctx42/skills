@@ -51,16 +51,15 @@ durable rules. Same repo-copy caveat and write path as Rule-edit mode.
 
 ## How a rule entry should look
 
-- One rule = one concept = one dense imperative line.
+- One rule = one concept = one dense imperative line in `style`.
 - State it generically: name the construct, not the site — no project
   identifiers, domain nouns, or file names in the prose (`the receiver`, not
   `page`).
 - Cut every word the rule survives without.
 - Scope it Production (`*.go`), Test (`*_test.go`), or both; place it in that
   section, grouped near related rules.
-- Examples may show only generic Go syntax (`ErrXxx`, `[Type]`,
-  `//nolint:name`); never project-specific identifiers.
-- Prefer no example when the prose stands alone; add one only to remove
-  ambiguity.
-- Deeper rationale or detection detail goes in `rules.md`, keyed to the rule
-  and only when non-obvious; keep both files lean.
+- Prefer no example; add one only when the rule is ambiguous without it, using
+  only generic Go syntax (`ErrXxx`, `[Type]`, `//nolint:name`).
+- Keyed `rules.md` entry only when non-obvious: ≤2 short sentences (Why +
+  Detect); no code fence unless the prose alone is ambiguous. Drop the entry
+  when the style line is enough.

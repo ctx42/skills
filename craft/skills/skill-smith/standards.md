@@ -95,6 +95,12 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
 
 - **Assume the model is already smart.** Add only what it does not know. Cut any
   sentence that explains a common concept.
+- **One rule = one dense imperative line** in the body or style list. Expand in a
+  reference only when the line alone is not enough to enforce.
+- **Keyed / reference entries stay short.** Why + Detect in ≤2 sentences; no
+  multi-paragraph rationale. Prefer no example; a code fence only when the rule
+  is ambiguous without one (fragile format, non-obvious shape). Drop the entry
+  when the body line is enough.
 - **These tests apply to every loaded file, not just the body.** A reference must
   also cut what the model already knows: a keyed reference that restates the terse
   rule it keys to, or whose entries collapse to one shared principle, is
@@ -104,7 +110,8 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
   token cost. Keep the body **under ~500 lines**; split sooner if it sprawls.
 - Imperative and dense. State what to do, not why — **unless the why lets the
   agent generalize** to cases the skill did not spell out; then state the rule,
-  then the reason. Keep bare imperatives for fragile, one-right-way steps.
+  then the reason in one short clause. Keep bare imperatives for fragile,
+  one-right-way steps.
 - One consistent term per concept throughout (don't mix "field/box/element").
 - **Model-agnostic.** Write for "the agent", never a named product. No "ask
   Claude", "in Grok", "Claude will…". Naming a runtime breaks portability and

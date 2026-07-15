@@ -86,8 +86,10 @@ scope is the single skill named; audit a whole category only if asked.
    skip:
 
    - Reference content — read each reference's prose, not just its structure;
-     flag entries that restate the rule they key to or collapse to one shared
-     principle, and any step that reads a whole reference eagerly each run.
+     flag entries that restate the rule they key to, collapse to one shared
+     principle, run past ~2 sentences of Why/Detect, or ship a code fence the
+     prose already makes clear; flag any step that eagerly loads a whole
+     reference each run.
 
    - Output discipline — the body carries the terse-output line and no step
      mandates framing or restating shown content.
