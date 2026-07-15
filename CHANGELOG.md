@@ -1,3 +1,7 @@
+## v0.15.0 (Wed, 15 Jul 2026 19:06:31 UTC)
+- docs: tighten rule and reference terseness across skills.
+- docs(review): rename depth=exhaustive to depth=full.
+
 ## v0.14.0 (Wed, 15 Jul 2026 16:45:11 UTC)
 - feat(srd): add doc-gap skill and documentation-corpus grounding.
 - docs(doc-gap): add README for the doc-gap skill.
