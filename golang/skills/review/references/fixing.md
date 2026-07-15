@@ -5,6 +5,12 @@ reason-only. Every code change ships with accompanying tests in the same
 change — new behavior gets new tests, changed behavior gets updated tests.
 This covers behavioral changes, not pure no-ops like renames or comment edits.
 
+**Never print diffs of applied fixes.** The edits are already on disk; the user
+reviews them in git or their editor. Report each change in one line
+(`file:sym — what changed`) plus the test/gate result — never paste the changed
+code, a before/after block, or a diff back. Saves tokens. Red/green test proof
+output (below) is not a diff — report it.
+
 **Refactors: enumerate before editing.** Before a rename, signature change, or
 interface change, use the `LSP` tool to find everything the edit must touch —
 `findReferences` for every call site, `goToImplementation` for every implementer
@@ -58,6 +64,7 @@ several packages or large LOC — do not edit straight through:
    note the split. Show the plan and get a go-ahead before chunk 1.
 2. Work chunks in order. Per chunk: apply its fixes under the rules above, run the
    whole-module gate so the chunk ends green, and tick its plan boxes.
-3. Consult after each chunk that produced edits or a decision — show the change
-   and the green result, then wait for a go-ahead. Auto-continue only a chunk
-   that needed no fixes. Never proceed past an unmade decision.
+3. Consult after each chunk that produced edits or a decision — report what
+   changed (one line per fix, no diff) and the green result, then wait for a
+   go-ahead. Auto-continue only a chunk that needed no fixes. Never proceed past
+   an unmade decision.
