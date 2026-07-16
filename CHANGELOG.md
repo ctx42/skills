@@ -1,3 +1,8 @@
+## v0.16.0 (Thu, 16 Jul 2026 17:20:42 UTC)
+- feat(craft): add doc-smith skill.
+- docs(skill-smith): require US English in authored content.
+- refactor(doc-smith): rename proofread mode to proof.
+
 ## v0.15.0 (Wed, 15 Jul 2026 19:06:31 UTC)
 - docs: tighten rule and reference terseness across skills.
 - docs(review): rename depth=exhaustive to depth=full.
