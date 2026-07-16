@@ -199,6 +199,10 @@ Match specificity to task fragility:
   when they are dense enumerations (type/flag/option lists, short spec fields,
   reference entries), where a value per line scans better and token economy
   wins. Applies to `SKILL.md` bodies, READMEs, and references alike.
+- **US English.** Write skill files and any content a skill authors in US
+  English spelling and conventions ("color", "canceled", "-ize"). When a skill
+  edits a target that consistently uses another variety, match it and flag
+  mixed usage rather than convert wholesale.
 
 ## Scripts & bundled files
 
