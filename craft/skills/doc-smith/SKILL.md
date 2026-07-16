@@ -1,24 +1,24 @@
 ---
 name: doc-smith
 description: >
-  Writes, audits, proofreads, and collaboratively revises technical
-  documentation and user manuals, catching contradictions, terminology drift,
-  repetition, structural gaps, and dubious technical claims across a whole
-  document. Use when asked to create, audit, review, proofread, check, or work
-  through technical docs, a user manual, or product documentation.
+  Writes, audits, proofs, and collaboratively revises technical documentation
+  and user manuals, catching contradictions, terminology drift, repetition,
+  structural gaps, and dubious technical claims across a whole document. Use
+  when asked to create, audit, review, proof, proofread, check, or work through
+  technical docs, a user manual, or product documentation.
 ---
 
 # doc-smith
 
-Write, audit, and proofread technical documentation and user manuals. Markdown
+Write, audit, and proof technical documentation and user manuals. Markdown
 is the assumed format. Pick the mode from the request:
 
 - Create — draft a new document or section from scratch.
 - Audit — review an existing doc; report findings, edit nothing until approved.
-- Proofread — fix an existing doc in place (grammar, clarity, consistency).
+- Proof — fix an existing doc in place (grammar, clarity, consistency).
 - Revise — work through the doc with the user, one paragraph at a time.
 
-If ambiguous, ask one question: create, audit, proofread, or revise?
+If ambiguous, ask one question: create, audit, proof, or revise?
 
 Scope a run to the file — or the named set/directory — the user gives, and
 treat it as **one document**: consistency is judged across all of it. If the
@@ -30,7 +30,7 @@ Structure, prose rules, and the defect taxonomy come from
 per run)*. Every judgment defers to it.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
-output the user can already see. In create and proofread the document is the
+output the user can already see. In create and proof the document is the
 payload — write it in full; do not also paste it back into chat.
 
 ## Model the whole document first (all modes)
@@ -51,7 +51,7 @@ taxonomy — the defects that only cross-distance modeling catches (contradictio
 terminology drift, repetition, gaps) hide between sections, not in any one line.
 Cite both locations for every contradiction.
 
-This cross-document pass is the core of audit and proofread, and the self-review
+This cross-document pass is the core of audit and proof, and the self-review
 of create.
 
 After any edit, re-check it against the ledger before moving on: a change that
@@ -109,7 +109,7 @@ authorship beats confident fabrication.
 5. Fix on confirmation. Apply approved findings; state what changed; do not paste
    the whole document back.
 
-## Proofread mode
+## Proof mode
 
 Fix in place. Reserve edits for what has one right answer; flag the rest.
 

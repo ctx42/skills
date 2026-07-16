@@ -102,7 +102,7 @@ Register example — the same facts, sub-B1 fragments raised to fluent B1:
 
 ## Defect taxonomy
 
-What audit reports and proofread fixes. Detection heuristic per class:
+What audit reports and proof fixes. Detection heuristic per class:
 
 - Contradiction — two claims about the same entity that can't both hold. Detect
   from the ledger's entity/claim list, not by local reading; cite both spots.
@@ -117,13 +117,13 @@ What audit reports and proofread fixes. Detection heuristic per class:
 - Clarity defect — passive/future voice, buried instruction, undefined term,
   filler, or a step with more than one action.
 - Formatting defect — prose over the doc's wrap width, misaligned table columns,
-  or bold-label list lead-ins. Proofread reflows, re-pads, and rewrites to plain
+  or bold-label list lead-ins. Proof reflows, re-pads, and rewrites to plain
   items; audit flags. Respect the doc's own convention over the house default.
 - Spelling-variety defect — non-US spelling in a US doc, or English varieties
-  mixed within one doc. Proofread normalizes to the doc's variety (US default);
+  mixed within one doc. Proof normalizes to the doc's variety (US default);
   audit flags.
 - Flat/choppy prose — grammatical but sub-register: fragmentary or staccato
-  sentences, missing connectives, unidiomatic phrasing. Proofread fixes it
+  sentences, missing connectives, unidiomatic phrasing. Proof fixes it
   upward to fluent B1; distinct from filler (cut, not rewritten) and from
   vocabulary level (tracks the audience).
 - Dubious technical claim — an assertion that looks factually wrong about a

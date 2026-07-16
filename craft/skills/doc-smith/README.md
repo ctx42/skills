@@ -1,6 +1,6 @@
 # doc-smith
 
-Write, audit, proofread, and revise technical documentation and user manuals. One
+Write, audit, proof, and revise technical documentation and user manuals. One
 skill, four modes, chosen from how you ask:
 
 - Create — draft a new document or section. It fixes the audience and purpose,
@@ -8,7 +8,7 @@ skill, four modes, chosen from how you ask:
   standard.
 - Audit — name an existing doc and it models the whole document, then reports
   findings by severity, editing nothing until you approve.
-- Proofread — fixes an existing doc in place (grammar, clarity, consistency),
+- Proof — fixes an existing doc in place (grammar, clarity, consistency),
   flagging what it can't safely decide.
 - Revise — works through the doc with you one paragraph at a time, and after each
   change re-checks that it still fits the rest of the document.
@@ -29,14 +29,14 @@ taxonomy audit reports against.
 ```
 /doc-smith create a user manual for the admin console   # create mode
 /doc-smith audit docs/manual.md                         # report findings
-/doc-smith proofread docs/guide.md                      # fix in place
+/doc-smith proof docs/guide.md                          # fix in place
 /doc-smith work through docs/guide.md with me           # revise, paragraph by paragraph
 /doc-smith check these three files as one manual        # named set
 ```
 
-You don't need a mode keyword — it infers create vs audit vs proofread vs revise
-from the request. Point it at a file or a named set and it treats them as one
-document.
+You don't need a mode keyword — it infers create vs audit vs proof vs revise
+from the request ("proofread" works too). Point it at a file or a named set
+and it treats them as one document.
 
 ## Evaluations
 
@@ -54,7 +54,7 @@ sections later, and repeats the browser claim twice more.
 
 ### 2. Flag a dubious technical claim instead of rewriting it
 
-**Request:** `/doc-smith proofread docs/api-guide.md` — clean prose except one
+**Request:** `/doc-smith proof docs/api-guide.md` — clean prose except one
 line claiming "REST APIs are stateful by design."
 
 **Expected behavior:**
@@ -118,7 +118,7 @@ early paragraph, the user renames "workspace" to "project".
 
 ### 7. Normalize spelling and formatting to convention
 
-**Request:** `/doc-smith proofread docs/guide.md` — the doc mixes "colour" and
+**Request:** `/doc-smith proof docs/guide.md` — the doc mixes "colour" and
 "color", and has a misaligned Markdown table.
 
 **Expected behavior:**
