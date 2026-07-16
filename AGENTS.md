@@ -72,6 +72,9 @@ source of truth.
   (`standards.md`).
 - `readme-smith` — authors and audits project READMEs against its
   `references/template.md`.
+- `doc-smith` — writes, audits, proofreads, and collaboratively revises
+  technical docs and user manuals; models the whole document to catch
+  contradictions, drift, and gaps, and re-checks each edit against the rest.
 - `enhance-skills` — harvests session corrections into per-skill lessons;
   retrofits the `## Self-learning` block.
 
