@@ -48,6 +48,11 @@ Unlike `create`, the review applies the **full** standard — including the
 owners count, Initiative/Designs links and back-links (STR-2..7) and Status
 rules (STA-*) that authoring leaves as placeholders.
 
+It recognizes the two draft scaffolds (In Scope `--- TODO ---` marker and a
+`## TODO` section): while the marker stands it does not flag SCO-2 against In
+Scope, and it reports an unresolved marker or a non-empty `## TODO` as a blocker
+for acceptance.
+
 ## Usage
 
 ```

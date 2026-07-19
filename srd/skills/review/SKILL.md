@@ -75,10 +75,13 @@ corpus deficiencies cross to `report-doc-gap`.
 Tag each finding:
 
 - **blocker** — breaks Quality-Bar acceptance: non-atomic (REQ-1), unverifiable
-  (REQ-5/6), uncovered `In Scope` item (SCO-2), requirement contradicting `Out
+  (REQ-5/6), uncovered `In Scope` item (SCO-2 — suspended while the In Scope
+  `--- TODO ---` marker stands), requirement contradicting `Out
   of Scope` (SCO-3), undefined term (GLO-3/STR-10), rule hidden in a glossary
   entry or metadata (GLO-1/2), duplicate or out-of-order id (REQ-3/4), missing
-  required link or back-link (STR-2..7), invalid or over-claimed Status (STA-*).
+  required link or back-link (STR-2..7), invalid or over-claimed Status (STA-*),
+  an unresolved draft scaffold — the In Scope `--- TODO ---` marker or a
+  non-empty `## TODO` section (see the authoring guide's house additions).
 - **major** — real defect, does not block: style (LANG-1/2/5/6/7), terminology
   drift, overlapping or duplicate requirements.
 - **minor** — cosmetic: line over 80 columns (MD-2), British spelling, spacing,
