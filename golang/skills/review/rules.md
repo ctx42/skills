@@ -34,6 +34,7 @@ Keyed entries:
 - Test order mirrors source order (Test)
 - Field-count guard forces new-field coverage (Test)
 - Break an over-width table row positionally (Test)
+- Empty Given section (Test)
 
 ## Principles
 
@@ -485,3 +486,12 @@ keep the values positional.
 
 Detect: a multi-line table-row literal using `field: value` keys, or a
 single-line row past the width limit that should wrap.
+
+## Empty Given section (Test)
+
+Why: a `--- Given ---` marker with no statements under it is noise — the
+`--- When ---`/`--- Then ---` structure reads fine without it. Keep the marker
+only when there is real arrange, including When-argument prep per the
+prepare-in-Given rule.
+Detect: a `// --- Given ---` line followed immediately (a blank line aside) by
+`// --- When ---`, with no statements between.
