@@ -31,8 +31,8 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 ├── golang/                         # Plugin: Go workflow
 │   ├── .claude-plugin/plugin.json
 │   └── skills/
-│       ├── style/               # Enforced Go style ruleset (prod + test)
-│       ├── review/              # Done-time Go review + rule editing
+│       ├── style/               # Go style ruleset + style-only pass (prod + test)
+│       ├── review/              # Done-time Go review (delegates style) + rule editing
 │       ├── cover/               # Per-function Go test coverage improvement
 │       ├── doc/                 # Per-item godoc + comment fix and completion
 │       └── reshape/             # Consumer-driven library API-change proposals
@@ -85,7 +85,9 @@ Skills in the same plugin are copied together into the plugin cache, so they
 reference each other with relative paths from their own directory:
 
 - `review`, `edit`, and `system-check` read `../create/references/*`.
-- `review`, `cover`, and `doc` read `../style/SKILL.md`.
+- `cover` and `doc` read `../style/SKILL.md`; `review` invokes `golang:style`
+  for the style pass and writes rule edits to `../style/SKILL.md` +
+  `../style/rules.md`.
 
 Keep these skills within the same plugin so the `../sibling` paths resolve.
 

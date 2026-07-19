@@ -42,10 +42,10 @@ source of truth.
 
 ### golang
 
-- `style` — the enforced Go style rules (Production + Test); read before any
-  `.go` edit.
-- `review` — done-time review of finished Go code; also owns adding and
-  learning style rules.
+- `style` — the enforced Go style rules (Production + Test): read before any
+  `.go` edit, or run it on a target for a style-only check-and-fix pass.
+- `review` — done-time review of finished Go code; delegates the style pass to
+  `style` and adds correctness; also owns adding and learning style rules.
 - `cover` — raises Go test coverage per function, measured from direct tests
   only.
 - `doc` — fixes and completes in-source godoc and comments per documentable

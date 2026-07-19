@@ -23,10 +23,11 @@ the first token. Pick the mode from it:
   /clear) for convention feedback and proposes rules.
 
 Sources of truth:
-- `../style/SKILL.md` (eager) — canonical terse rules (Production + Test).
-- `rules.md` — the **Principles** section is read each check (the reasoning
-  backbone); keyed entries are on-demand per rule. Deeper rationale / examples
-  / how-to-detect, keyed to those rules.
+- `golang:style` (on-demand: Check mode) — owns the style rules and their
+  detection; review delegates the whole style dimension to it and reviews only
+  correctness itself.
+- `../style/SKILL.md`, `../style/rules.md` (on-demand: Rule-edit/Learn) — the
+  terse rules and their keyed detection detail; those modes write here.
 
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
@@ -79,12 +80,11 @@ were left unreported.
 ### Workflow
 
 1. Resolve the target and budget (above) and list the packages/files in scope.
-2. Read `style`'s `SKILL.md` in full and skim `rules.md`'s **Principles**
-   section. Reason from those principles; open a specific keyed `rules.md` entry
-   only when about to flag its rule — never preload the whole file.
-3. Review each file, in this order:
-   - Rules: every applicable style rule (Production for `*.go`, Test for
-     `*_test.go`); use `rules.md` for detection detail.
+2. Style dimension — invoke `golang:style` with the resolved target and budget
+   (`packages`, `max_issues`, `depth`), instructing it to report offenses only.
+   Take its offense list as the style findings; do not re-derive style rules
+   here.
+3. Review each file for what style does not cover, in this order:
    - Correctness: bugs, wrong logic, nil/bounds, ignored errors, data races.
    - Edge cases: empty/large/concurrent inputs and every error path.
    - Error handling & API: wrapping, sentinels, boundaries, easy misuse.
@@ -100,16 +100,18 @@ were left unreported.
 4. Reason only. Do not run gofmt, go vet, golangci-lint, or go test — judge by
    reading the code. The `LSP` tool is permitted: it is read-only semantic
    navigation, not the build/test toolchain, and does not mutate code.
-5. Report findings (below). Do not change code unless asked.
+5. Merge the style offenses with the correctness findings and report (below).
+   Do not change code unless asked.
 
 ### Scale
 
 - Single package or small module (<= ~6 packages): review in this context,
   package by package, highest-risk first.
-- Larger module (> ~6 packages): fan out one review subagent per package
-  (each gets `style`, `rules.md`, the `depth`, and a share of `max_issues`),
-  then synthesize one merged report, re-ranking findings to the global
-  `max_issues` cap. Keeps the main context lean.
+- Larger module (> ~6 packages): fan out one review subagent per package (each
+  invokes `golang:style` on its package for the style offenses and reviews
+  correctness itself, with the `depth` and a share of `max_issues`), then
+  synthesize one merged report, re-ranking findings to the global `max_issues`
+  cap. Keeps the main context lean.
 - Always report which packages were reviewed and which were skipped; never
   silently truncate — if the target is too large, do the highest-risk packages
   first and say what you skipped.
@@ -136,7 +138,8 @@ itself stays reason-only.
 
 When either mode triggers, read
 [references/rule-editing.md](references/rule-editing.md) first and follow it.
-Both modes write to `style` and `rules.md`, and never without confirmation.
+Both modes write to `../style/SKILL.md` and `../style/rules.md`, and never
+without confirmation.
 
 ## Self-learning
 

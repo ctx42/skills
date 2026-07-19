@@ -1,10 +1,11 @@
-# review deep rules
+# Go style — deep rules
 
-The reviewer reasons from the **Principles** below; the terse rule of record for
-every convention lives in `../style/SKILL.md`. The keyed entries here add only
-what a capable reviewer can't infer from that one-line rule — a non-obvious
-detection heuristic or an exemption. Consult an entry when you're about to flag
-its rule; don't preload the file. Grows via `/review add`.
+The style checker reasons from the **Principles** below; the terse rule of
+record for every convention lives in `SKILL.md` (same directory). The keyed
+entries here add only what a capable reviewer can't infer from that one-line
+rule — a non-obvious detection heuristic or an exemption. Consult an entry when
+you're about to flag its rule; don't preload the file. Grows via `golang:review
+add`.
 
 ## Contents
 
