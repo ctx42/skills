@@ -6,6 +6,8 @@ description: >
   document, fix, correct stale or inaccurate comments, or fill missing godoc
   across a function, a line, a file, a package, or a module.
 license: MIT
+argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | module]
+  [max_changes=N] [packages=a,b] [only=godoc|exported] [fanout]"
 ---
 
 # doc
@@ -29,8 +31,10 @@ Sources of truth:
 
 ## Target
 
-Resolve the invocation to one of five execution kinds. Each fixes an order;
-always work it one documentable item at a time.
+`$1` is the target token; read controls from the rest of `$ARGUMENTS`. Resolve
+`$1` to one of five execution kinds (fall back to the user's prose if it is not
+one of the forms below). Each fixes an order; always work it one documentable
+item at a time.
 
 - function / method — `func=Foo` or `func=T.Bar`. Its godoc plus its body's
   inline comments. Run straight (no plan gate), then report.
@@ -52,6 +56,7 @@ State the resolved kind and the item set before reading.
 
 ## Controls
 
+Read from `$ARGUMENTS`, any order after the target:
 - `max_changes=N` — hard cap on comments changed this run; report what is left.
 - `packages=a,b` — module mode: restrict to these packages.
 - `only=godoc` — skip inline body comments; touch declaration and package

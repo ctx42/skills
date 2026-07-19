@@ -7,6 +7,7 @@ description: >
   the code that uses it, for an API wishlist, or for consumer-driven API
   design.
 license: MIT
+argument-hint: "LIB [in ./pkg] [max=N]"
 ---
 
 # reshape
@@ -29,12 +30,13 @@ Sources of truth:
 
 ## Target
 
-Resolve the invocation:
-- library — `reshape <lib>` where `<lib>` is an import path
-  (`github.com/x/y/pkg/must`), a module path, or a short package name the project
-  imports. Consumer scope defaults to the current module.
-- scoped — `reshape <lib> in ./pkg/foo` restricts the consumer to that
-  package (or path list).
+`$1` is the library; read the scope and control from the rest of `$ARGUMENTS`
+(fall back to the user's prose if empty):
+- library — `$1` is an import path (`github.com/x/y/pkg/must`), a module path,
+  or a short package name the project imports. Consumer scope defaults to the
+  current module.
+- scoped — `in ./pkg/foo` restricts the consumer to that package (or path
+  list).
 - Control: `max=N` caps the proposals reported (default 8), highest impact first.
 
 State the resolved library, the consumer scope, and the call-site count before

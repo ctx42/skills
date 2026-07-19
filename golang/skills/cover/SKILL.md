@@ -4,6 +4,8 @@ description: >
   Improves Go test coverage one function at a time. Use to raise coverage of a
   function, a line, a file, a package, or a module.
 license: MIT
+argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | module]
+  [max_tests=N] [packages=a,b] [include=all] [fanout]"
 ---
 
 # cover
@@ -26,8 +28,10 @@ Sources of truth:
 
 ## Target
 
-Resolve the invocation to one of five execution kinds. Each fixes an order;
-always work it one function/method at a time.
+`$1` is the target token; read controls from the rest of `$ARGUMENTS`. Resolve
+`$1` to one of five execution kinds (fall back to the user's prose if it is not
+one of the forms below). Each fixes an order; always work it one function/method
+at a time.
 
 - function / method — `func=Foo` or `func=T.Bar`. Just that one. Run
   straight (no plan gate), then report.
@@ -46,6 +50,7 @@ State the resolved kind and the function/file set before measuring.
 
 ## Controls
 
+Read from `$ARGUMENTS`, any order after the target:
 - `max_tests=N` — hard cap on tests/cases added this run; report what is left.
 - `packages=a,b` — module mode: restrict to these packages.
 - `include=all` — also attempt the deferred complex lines (build the needed

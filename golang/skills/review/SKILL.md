@@ -7,18 +7,20 @@ description: >
   a feature are complete, and to add, change, or learn style rules from
   feedback.
 license: MIT
+argument-hint: "[TARGET | add RULE | remove RULE | learn]
+  [packages=a,b] [max_issues=N] [depth=light|standard|full] [plan_first] [fix]"
 ---
 
 # review
 
-Final-gate review for Go code. Pick the mode from the invocation:
+Final-gate review for Go code. Read the invocation from `$ARGUMENTS`; `$1` is
+the first token. Pick the mode from it:
 
-- Check (default) — audit finished code.
-- Rule edit — when the input is a style preference or asks to
-  `add`/`change`/`remove` a rule.
-- Learn — when asked to learn from this session / your feedback; mines the
-  current editing session (since the last /clear) for convention feedback and
-  proposes rules.
+- Check (default) — a target token or empty input; audit finished code.
+- Rule edit — `$1` is `add`/`change`/`remove`, or the input is a plain style
+  preference.
+- Learn — `$1` is `learn`; mines the current editing session (since the last
+  /clear) for convention feedback and proposes rules.
 
 Sources of truth:
 - `../style/SKILL.md` (eager) — canonical terse rules (Production + Test).
@@ -29,12 +31,21 @@ Sources of truth:
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
 
+## Working diff (injected)
+
+!`git diff HEAD`
+
+This is the default review target when `$1` is empty. A package or module
+invocation (`$1` names a path / `./...` / a `go.mod` dir) ignores this diff and
+reads the named target instead.
+
 ## Check mode
 
 ### Target
 
-Resolve what to review from the invocation:
-- **no target** — the current git diff vs the base branch (staged + unstaged).
+`$1` is the target token:
+- **empty** — review the injected working diff (above); if it is empty, fall
+  back to the current git diff vs the base branch (staged + unstaged).
 - **a package** — a path like `./pkg/foo` or an import path; review that one
   package's `.go` files.
 - **a module / many packages** — `./...`, a directory containing `go.mod`, or
@@ -44,12 +55,13 @@ State the resolved target and the exact package/file set before reviewing.
 
 ### Budget & scope
 
-Parse and respect these controls from the invocation:
+Read these controls from `$ARGUMENTS` (any order, after the target):
 - `packages=a,b` — restrict to these packages within the target.
 - `max_issues=N` — hard cap on findings reported (default 25).
 - `depth=light|standard|full` — default `standard`.
 - `plan_first` — produce a short prioritized plan plus the top findings, then
   stop for approval before the full pass.
+- `fix` — after reviewing, apply the findings (see Applying fixes).
 
 Default to plan-first: if the target is broad (whole module, many packages, or
 large LOC) and no budget was given, switch to `plan_first` automatically,
