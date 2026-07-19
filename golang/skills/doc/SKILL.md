@@ -6,7 +6,7 @@ description: >
   document, fix, correct stale or inaccurate comments, or fill missing godoc
   across a function, a line, a file, a package, or a module.
 license: MIT
-argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | module]
+argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg* | module]
   [max_changes=N] [packages=a,b] [only=godoc|exported] [fanout]"
 ---
 

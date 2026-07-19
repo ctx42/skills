@@ -4,7 +4,7 @@ description: >
   Writes and amends git commit messages using Conventional Commits with a Linux
   kernel-style body. Use when writing or amending a commit message, or when
   describing or summarizing staged changes for the git log.
-argument-hint: "[micro|mini|full] [apply] [<hash>]"
+argument-hint: "[micro|mini*|full] [apply] [<hash>]"
 license: MIT
 ---
 

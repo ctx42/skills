@@ -4,7 +4,7 @@ description: >
   Improves Go test coverage one function at a time. Use to raise coverage of a
   function, a line, a file, a package, or a module.
 license: MIT
-argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | module]
+argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg* | module]
   [max_tests=N] [packages=a,b] [include=all] [fanout]"
 ---
 

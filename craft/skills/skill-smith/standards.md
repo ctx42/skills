@@ -49,8 +49,12 @@ Adopt these where they raise success rate or clarity; skip them when prose
 already suffices.
 
 - `argument-hint` — declare the argument shape so it shows in the invocation UI,
-  e.g. `argument-hint: "[micro|mini|full] [apply] [<hash>]"`. Add it to every
-  skill that takes arguments; omit it for an arg-less skill.
+  e.g. `argument-hint: "[micro|mini*|full] [apply] [<hash>]"`. Add it to every
+  skill that takes arguments; omit it for an arg-less skill. Suffix the default
+  option in a mutually-exclusive group with `*` (`mini*`) — the one used when
+  that choice is omitted; add it only when a listed option is genuinely the
+  default. The hint is display-only, never parsed: the default is still defined
+  in the body, and `*` only surfaces it.
 - `$ARGUMENTS` / `$N` — read invocation arguments in the body directly instead
   of "detect from the user's prose": `$ARGUMENTS` for the whole string, `$1`/`$2`
   for positional tokens. Keep a prose fallback only for genuinely free-form input.

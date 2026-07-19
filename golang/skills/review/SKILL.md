@@ -7,8 +7,8 @@ description: >
   a feature are complete, and to add, change, or learn style rules from
   feedback.
 license: MIT
-argument-hint: "[TARGET | add RULE | remove RULE | learn]
-  [packages=a,b] [max_issues=N] [depth=light|standard|full] [plan_first] [fix]"
+argument-hint: "[TARGET* | add RULE | remove RULE | learn]
+  [packages=a,b] [max_issues=N] [depth=light|standard*|full] [plan_first] [fix]"
 ---
 
 # review
