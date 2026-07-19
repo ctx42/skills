@@ -22,7 +22,7 @@ Turn the target skill's `README.md` `## Evaluations` into a checkable rubric:
 each scenario's request is the task; each expected-behavior bullet is one
 assertion, phrased so a grader can mark it pass/fail from the output alone. Drop
 or split any bullet that isn't objectively verifiable. Add the terse-output
-assertion if the scenarios lack one. Record each scenario in the portable shape
+assertion if the scenarios lack one. Record each scenario in the shape
 Anthropic's tooling uses — `{skills, query, files, expected_behavior[]}` — so
 runs are reproducible.
 

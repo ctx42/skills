@@ -4,12 +4,14 @@ description: >
   Authors new skills, audits existing ones against the repo's authoring
   standard, and measures whether a skill actually works. Use when asked to
   create, write, scaffold, review, improve, or benchmark/measure a skill.
+argument-hint: "[create|improve|measure] [<skill name or path>]"
 license: MIT
 ---
 
 # skill-smith
 
-Forge and repair skills. Pick the mode from the request:
+Forge and repair skills. Parse `$ARGUMENTS` for the mode (`$1`) and target
+skill (`$2`); fall back to the user's prose when empty:
 
 - Create — the user describes a new capability, workflow, or knowledge area to
   package as a skill.
@@ -20,7 +22,7 @@ Forge and repair skills. Pick the mode from the request:
 - Measure — the user wants to benchmark or validate whether a skill works
   (A/B against a baseline, trigger test). See the Measure section.
 
-If the request is ambiguous, ask one question: create, improve, or measure?
+If the mode is still ambiguous, ask one question: create, improve, or measure?
 
 Sources of truth:
 
@@ -48,8 +50,9 @@ Forge a complete, standard-compliant skill end-to-end.
    are the spec the body must pass.
 
 5. Write `SKILL.md`. The minimum dense imperative body that passes the evals,
-   per `standards.md` — portable frontmatter, token economy, ≤ ~500
-   lines, progressive disclosure, and the output-discipline line where the
+   per `standards.md` — adopt the Claude-native affordances where they earn
+   their place (see its "Claude-native frontmatter" section), token economy, ≤
+   ~500 lines, progressive disclosure, and the output-discipline line where the
    skill describes its output.
 
 6. Write `README.md`. Concise usage + when-to-use, and an `## Evaluations`

@@ -12,9 +12,10 @@ chosen from how you ask:
 - Measure — name a skill and it A/B-benchmarks its README scenarios with and
   without the skill loaded, then tests whether the description triggers.
 
-The rule it lives by: every skill must be valid in both Claude and Grok, so
-frontmatter is portable — `name` + `description` only (plus standard
-optional fields). It enforces [standards.md](standards.md), and defers to
+It targets Claude Code only: skills carry `name` + `description` plus the
+Claude-native affordances (`argument-hint`, `$ARGUMENTS`/`$N`, dynamic
+injection) wherever they earn their place. It enforces
+[standards.md](standards.md), and defers to
 [CONTRIBUTING.md](../../../CONTRIBUTING.md) for repo mechanics.
 
 ## Usage
@@ -44,26 +45,28 @@ tables`
 
 Expected behavior:
 
-- Asks for / proposes a portable name equal to the dir name (e.g.
-  `csv-to-markdown`), no reserved words.
+- Asks for / proposes a name equal to the dir name (e.g. `csv-to-markdown`),
+  no reserved words.
 
-- Writes `SKILL.md` with portable frontmatter (`name` + `description`
-  only) and a third-person, what + when description.
+- Writes `SKILL.md` with valid frontmatter (`name` + `description`, plus
+  `argument-hint` if it takes arguments) and a third-person, what + when
+  description.
 
 - Writes `README.md` including an `## Evaluations` section with ≥ 3 scenarios.
 
 - Lists the catalog-doc updates per CONTRIBUTING.md and reminds you to run
   `/reload-plugins`.
 
-### 2. Improve an existing skill with a portability violation
+### 2. Improve an existing skill with an invalid frontmatter field
 
 Request: `/skill-smith improve` a skill that declares `user_invocable: true` and
 whose README has no `## Evaluations` section.
 
 Expected behavior:
 
-- Reports `user_invocable: true` as a Blocker: non-portable platform field and
-  misspelled (`user-invocable`); recommends removing it.
+- Reports `user_invocable: true` as a Blocker: not a valid Claude Code
+  frontmatter key (Claude Code gates invocation with
+  `disable-model-invocation`); recommends removing it.
 
 - Confirms `name` equals the dir name and the description is well-formed.
 

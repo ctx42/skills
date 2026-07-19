@@ -10,6 +10,7 @@ duplicates it.
 ## Contents
 
 - Frontmatter
+- Claude-native frontmatter
 - Description quality
 - Token performance
 - Body: conciseness
@@ -23,10 +24,9 @@ duplicates it.
 
 ## Frontmatter
 
-This repo's skills ship as Claude Code plugins and run in **both** Claude and
-Grok (Grok reads Claude marketplaces and plugins directly). Both read the
-[agentskills.io](https://agentskills.io/specification) open standard, so write
-only standard fields.
+This repo's skills ship as Claude Code plugins and target **Claude Code only**.
+Write for the Claude Code feature set; the native affordances below are
+encouraged where they earn their place.
 
 - **Required:** `name`, `description`.
 - `name` — lowercase, hyphens/numbers only, ≤ 64 chars, **must equal the parent
@@ -34,16 +34,30 @@ only standard fields.
   prefix, no vague names (`helper`, `utils`). Prefer a gerund (`writing-x`) or
   short verb.
 - `description` — see next section. ≤ 1024 chars.
-- **Allowed optional** (standard, portable): `license`, `version`, `tags`,
-  `author`, `metadata`. Use sparingly.
-- **Forbidden** (platform extensions — break portability): `user-invocable`,
-  `user_invocable`, `disable-model-invocation`, `when_to_use`, `arguments`,
-  `argument-hint`, `context`, `agent`, `allowed-tools`, `disallowed-tools`.
-- **Forbidden in body:** dynamic injection (`` !`cmd` ``), `$ARGUMENTS` / `$N`
-  substitution. Detect mode and arguments by reading the user's prose instead.
-- Side-effecting skills (commit, deploy, edits, sync) cannot use
-  `disable-model-invocation` here — rely on permission prompts and explicit
-  confirmation in the body before any irreversible step.
+- **Optional metadata:** `license`, `version`, `tags`, `author`, `metadata`.
+  Use sparingly.
+- **Claude-native affordances (allowed):** `argument-hint` (surface a skill's
+  arguments in the invocation UI), `$ARGUMENTS` / `$N` body substitution, and
+  dynamic injection (`` !`cmd` ``). See "Claude-native frontmatter" below.
+- Other Claude Code keys (`allowed-tools`, `disable-model-invocation`, `model`,
+  `agent`, …) are permitted when a skill genuinely needs them; default to
+  omitting them.
+
+## Claude-native frontmatter
+
+Adopt these where they raise success rate or clarity; skip them when prose
+already suffices.
+
+- `argument-hint` — declare the argument shape so it shows in the invocation UI,
+  e.g. `argument-hint: "[micro|mini|full] [apply] [<hash>]"`. Add it to every
+  skill that takes arguments; omit it for an arg-less skill.
+- `$ARGUMENTS` / `$N` — read invocation arguments in the body directly instead
+  of "detect from the user's prose": `$ARGUMENTS` for the whole string, `$1`/`$2`
+  for positional tokens. Keep a prose fallback only for genuinely free-form input.
+- Dynamic injection `` !`cmd` `` — fold command output into context at load time
+  for a skill whose input is repo or tool state, e.g. `` !`git diff --cached` ``
+  for a commit-message skill, so the body works from real data instead of telling
+  the agent to fetch it. Keep injected commands read-only and cheap.
 
 ## Description quality
 
@@ -64,13 +78,12 @@ highest-leverage field.
 - Specific, not vague. ✗ "Helps with documents" ✓ "Extracts text and tables
   from PDFs. Use when the user mentions PDFs, forms, or extraction."
 - Put the key use case first (listing text is truncated downstream).
-- Include triggers **naturally** — Grok's validator penalizes keyword-stuffed
-  descriptions. Write a real sentence, not a tag dump.
+- Include triggers **naturally** — write a real sentence, not a keyword-stuffed
+  tag dump.
 - **YAML scalar safety.** A plain scalar breaks on `: ` (colon-space) or a
   leading `>`/`<`. Use a folded block scalar (`description: >`) for multi-line
-  or any description containing a colon — it is valid YAML, supported by both
-  Claude and Grok, and is the repo default. Never "fix" a colon by deleting the
-  block scalar.
+  or any description containing a colon — it is valid YAML and the repo default.
+  Never "fix" a colon by deleting the block scalar.
 
 ## Token performance
 
@@ -113,9 +126,8 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
   then the reason in one short clause. Keep bare imperatives for fragile,
   one-right-way steps.
 - One consistent term per concept throughout (don't mix "field/box/element").
-- **Model-agnostic.** Write for "the agent", never a named product. No "ask
-  Claude", "in Grok", "Claude will…". Naming a runtime breaks portability and
-  wastes tokens for the other.
+- **Address the agent.** Write for "the agent"; you may name Claude Code
+  features where a skill relies on them.
 
 ## Output discipline
 
@@ -143,8 +155,8 @@ Three load levels: metadata (always) → `SKILL.md` body (on trigger) → bundle
 files (on demand). Exploit it:
 
 - `SKILL.md` is a table of contents that points to detail; move large reference
-  material, schemas, and long examples into sibling files. Conventional layout
-  (agentskills.io): `scripts/` (executable code), `references/` (docs loaded on
+  material, schemas, and long examples into sibling files. Conventional layout:
+  `scripts/` (executable code), `references/` (docs loaded on
   demand), `assets/` (templates, examples). Use these names; avoid deep nesting.
 - **References one level deep.** Every bundled file links directly from
   `SKILL.md`. Never chain `SKILL.md` → a.md → b.md — the agent may only preview
@@ -206,7 +218,7 @@ Match specificity to task fragility:
 
 ## Scripts & bundled files
 
-Scripts are portable, so allowed. When you include them:
+Scripts are allowed. When you include them:
 
 - **Solve, don't punt** — handle errors in the script rather than failing to the
   agent.

@@ -5,12 +5,10 @@
 # A "skill" is any directory containing a SKILL.md. For each
 # skill this script checks:
 #   - SKILL.md and README.md both exist,
-#   - frontmatter has name + description, name equals the directory name, and
-#     carries no forbidden platform-extension keys (strict-portable rule),
+#   - frontmatter has name + description, name equals the directory name,
 #   - the description stays near the ~350-char aim (warns past 500) and uses
 #     no first/second person (warning only),
 #   - the SKILL.md body stays under ~500 lines / ~5000 tokens (warning only),
-#   - the body uses no dynamic injection (!`cmd`) or $ARGUMENTS / $N,
 #   - the body carries the output-discipline line ("Report tersely" or the
 #     "no preamble or narration" phrasing),
 #   - the body has a `## Self-learning` block (warning only),
@@ -35,12 +33,6 @@ shopt -s nullglob
 # The script lives in dev/; the repo root is one level up.
 SKILLS_SRC="$(cd "$(dirname "$0")/.." && pwd)"
 MARKETPLACE="$SKILLS_SRC/.claude-plugin/marketplace.json"
-
-# Frontmatter keys that break Grok/Claude portability (standards.md).
-FORBIDDEN_KEYS=(
-    user-invocable user_invocable disable-model-invocation when_to_use
-    arguments argument-hint context agent allowed-tools disallowed-tools
-)
 
 errors=0
 warnings=0
@@ -109,13 +101,6 @@ lint_skill() {
     [ "$declared" = "$name" ] \
         || err "$name: frontmatter name '$declared' != directory '$name'"
 
-    # No forbidden frontmatter keys.
-    local key
-    for key in "${FORBIDDEN_KEYS[@]}"; do
-        grep -qE "^${key}:" <<<"$fm" \
-            && err "$name: forbidden frontmatter key '$key'"
-    done
-
     # Description size and point of view (standards.md, Description quality).
     # The aim is ~350 chars; warn only past 500 so a trigger-rich description
     # has headroom. Joins a folded/plain scalar into one string first.
@@ -148,14 +133,6 @@ lint_skill() {
         && warn "$name: SKILL.md is $body_lines lines (aim <= ~500)"
     [ "$body_tokens" -gt 5000 ] \
         && warn "$name: SKILL.md is ~$body_tokens tokens (aim <= ~5000)"
-
-    # Body must not use dynamic injection or argument substitution. Dynamic
-    # injection is !`cmd` — a bang then a backtick opening a command; a
-    # backtick-quoted bang (`!`) is fine, so require a command char after.
-    grep -qE '!`[^`[:space:]]' "$skill_md" \
-        && err "$name: SKILL.md uses dynamic injection (!\`cmd\`)"
-    grep -qE '\$ARGUMENTS|\$[0-9]' "$skill_md" \
-        && err "$name: SKILL.md uses \$ARGUMENTS / \$N substitution"
 
     # Body carries the output-discipline line (standards.md mandates it; the
     # canonical wording is "Report tersely: …", grill-me embeds the phrasing).
