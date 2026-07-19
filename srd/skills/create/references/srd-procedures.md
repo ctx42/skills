@@ -40,3 +40,21 @@ glossary path (file or directory); the last content hash from
 digest body. Nothing about the glossary lives in the skill directory or in
 `$HOME/.agent-data` — only in project memory, so each project resolves to its own
 glossary automatically.
+
+## Derive In Scope from requirements
+
+In Scope items are the deliverables the requirements implement (SCO-2), so they
+are best written after the requirements settle. Run this when `### In Scope`
+holds the `--- TODO ---` marker (see the authoring guide's house additions) and
+the user signals the requirements are complete or asks to fill In Scope:
+
+1. Read every requirement group and cluster them by the distinct capability each
+   delivers.
+2. Draft one candidate `SC-n` item per capability — atomic and verifiable
+   (SCO-1), each covered by ≥ 1 requirement (SCO-2), none contradicting Out of
+   Scope (SCO-3). Phrase each as a deliverable, not a restated requirement.
+3. Present the candidates and let the user edit them point by point through the
+   calling skill's confirm-each loop: keep, reword, merge, split, or drop each.
+4. Replace the `--- TODO ---` marker with the confirmed `SC-n` items, numbered
+   from 1 in order. Re-run the In-Scope-coverage check now that the marker is
+   gone.

@@ -28,7 +28,10 @@ SRD written elsewhere.
    confirm or rename, then it numbers them.
 4. **Drafts** the SRD in the required order with the RFC 2119 / 8174 keyword
    notice. Owners, Initiative, and Designs links are left as marked `TODO`
-   placeholders — the skill stays offline.
+   placeholders — the skill stays offline. In Scope may be deferred as a
+   `--- TODO ---` marker (derived from the requirements later), and a `## TODO`
+   section can hold open authoring issues; both must be resolved before
+   acceptance.
 5. **Self-checks** the draft: auto-fixes mechanical issues (numbering, section
    order, keyword capitalization, 80-column wrap, stray examples) and reports
    what needs your judgment (links, verifiability, scope coverage, Quality Bar).

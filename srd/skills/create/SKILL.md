@@ -100,7 +100,11 @@ time**, in this order, and restate each resolved branch before moving on:
 1. **Objective** — what this SRD specifies, in one or two sentences.
 2. **UI change?** — yes sets `Designs` to a TODO link placeholder; no sets it to
    `N/A` (STR-5, STR-7).
-3. **In Scope** — the atomic, verifiable things it delivers (SCO-1).
+3. **In Scope** — the atomic, verifiable things it delivers (SCO-1). MAY be
+   deferred: because In Scope derives from the requirements, the user may leave
+   the `--- TODO ---` marker and derive `SC-n` items after the requirements
+   settle (derivation procedure in
+   [references/srd-procedures.md](references/srd-procedures.md)).
 4. **Out of Scope** — what it deliberately excludes (STR-11). Requirements must
    not contradict these (SCO-3).
 5. **Requirements** — pull out the actual rules. For each, push until it is:
@@ -148,6 +152,9 @@ keyword notice → Introduction → Glossary → Scope → Requirements. Specifi
   will not do (STR-9). No normative keywords here.
 - Glossary defines only terms not in the shared glossary; each entry defines the
   term and nothing else (GLO-1).
+- Scope: In Scope MAY hold the `--- TODO ---` marker instead of `SC-n` items when
+  deferred (derive them from the requirements before acceptance). Add a `## TODO`
+  section as the last section only when there are open authoring issues to track.
 - Requirements: one rule each, `the system` as subject, normative keywords in
   all-capitals, no examples or notes.
 - Write in US English (`color`, `behavior`, `standardize`) and use one term per
@@ -184,8 +191,9 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    not be verified against it — a *facts* gap, distinct from the format checks
    above. For each such facts gap, hand it to `srd:report-doc-gap` (see
    [Reporting a doc gap](#reporting-a-doc-gap)). Items
-   left as marked placeholders (Initiative, Designs, Owners, back-links) are
-   always reported as outstanding human follow-ups.
+   left as marked placeholders (Initiative, Designs, Owners, back-links, an
+   unresolved In Scope `--- TODO ---` marker, and any non-empty `## TODO`
+   section) are always reported as outstanding human follow-ups.
 
 Do not mark the draft acceptable: a new SRD is `In Progress` and acceptance
 (STA-3, Quality Bar) is a human decision.

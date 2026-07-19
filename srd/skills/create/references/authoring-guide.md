@@ -31,6 +31,21 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
 - **Template wiki macros are deliberate.** The template's `[[TOC]]`, the
   `[[!Status]]` macro, and the `[!INFO]` notice target the wiki the SRD is
   exported to, not GFM — do not "fix" them to GitHub forms.
+- **In Scope MAY be deferred.** In Scope items derive from the requirements
+  (SCO-2), so an SRD MAY leave `### In Scope` holding a single `--- TODO ---`
+  marker line while the requirements are still in flux. While the marker stands,
+  the In-Scope-coverage checks (SCO-2, Quality Bar 2) are suspended — In Scope
+  is knowingly pending, not defective. Replace the marker with real `SC-n` items
+  derived from the settled requirements (see the derivation procedure in
+  [srd-procedures.md](srd-procedures.md)) before the SRD is `Accepted`. An
+  unresolved marker is a house blocker for acceptance: always flag it, never
+  keep it silently, and never remove it without deriving the items.
+- **`## TODO` scaffold.** An SRD MAY carry a `## TODO` section as its last
+  section (after Requirements; STR-14) — a numbered list of open authoring
+  issues the human must return to. These are working notes, not requirements:
+  they carry no normative keywords and are exempt from REQ-7 (they sit outside
+  any requirement). It MUST be empty or removed before the SRD is `Accepted`; a
+  non-empty `## TODO` is a house blocker for acceptance and is always flagged.
 
 ## Consistency pass
 
@@ -39,10 +54,15 @@ and confirm:
 
 - No earlier requirement was invalidated or contradicted by a later one.
 - Every `In Scope` item is still covered by ≥ 1 requirement (SCO-2); no
-  requirement contradicts `Out of Scope` (SCO-3).
+  requirement contradicts `Out of Scope` (SCO-3). While `### In Scope` holds
+  only the `--- TODO ---` marker, skip the coverage check — confirm instead that
+  the marker still stands alone (In Scope is knowingly pending).
 - Numbering is still unique and in order, with no collisions or large gaps.
 - Each term is used consistently and is still defined (locally or in the company
   glossary).
+- Draft scaffolds: any `## TODO` section is the last section and well-formed (a
+  numbered list); a non-empty `## TODO` or an unresolved In Scope `--- TODO ---`
+  marker is flagged as blocking acceptance.
 
 This pass is the self-check's feedback loop — repeat it until it is clean.
 
