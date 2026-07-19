@@ -141,6 +141,8 @@ rule's full text or narrate.
   assertions; move any case needing different assertions to its own test.
 - Prepare every value passed to the `--- When ---` call in `--- Given ---`;
   never construct an argument inline in the call.
+- Omit the `--- Given ---` marker when the subtest has no arrange step;
+  never leave an empty `--- Given ---` section.
 - Declare those `--- Given ---` argument variables in the same left-to-right
   order the `--- When ---` call uses them; keep a variable's setup next to its
   declaration.
