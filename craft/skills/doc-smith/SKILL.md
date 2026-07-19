@@ -6,12 +6,14 @@ description: >
   structural gaps, and dubious technical claims across a whole document. Use
   when asked to create, audit, review, proof, proofread, check, or work through
   technical docs, a user manual, or product documentation.
+argument-hint: "[create|audit|proof|revise] [<file>...]"
 ---
 
 # doc-smith
 
 Write, audit, and proof technical documentation and user manuals. Markdown
-is the assumed format. Pick the mode from the request:
+is the assumed format. Pick the mode from `$ARGUMENTS` when given (a mode word
+and any target file(s)), else from the request:
 
 - Create — draft a new document or section from scratch.
 - Audit — review an existing doc; report findings, edit nothing until approved.
@@ -154,9 +156,9 @@ reprint the whole document.
 
 ## Self-application
 
-`doc-smith` obeys the repo authoring standard (portable frontmatter, a README
-with ≥ 3 evals, references one level deep). When you change this skill, re-audit
-it with `skill-smith` in improve mode.
+`doc-smith` obeys the repo authoring standard (Claude-native frontmatter, a
+README with ≥ 3 evals, references one level deep). When you change this skill,
+re-audit it with `skill-smith` in improve mode.
 
 ## Self-learning
 

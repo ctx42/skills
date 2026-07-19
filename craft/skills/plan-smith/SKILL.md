@@ -5,13 +5,15 @@ description: >
   summary table (Y implemented, N not yet, X rejected), and updates that table
   over time. Use when asked to write, draft, structure, track, or update a
   plan, task list, or implementation checklist.
+argument-hint: "[write <brief> | update <plan-file>]"
 license: MIT
 ---
 
 # plan-smith
 
 Turn a brief into a tracked plan, and keep its status current. Pick the mode
-from the request:
+from `$ARGUMENTS` when given (a mode word like `write`/`update` and a plan-file
+path), else from the request:
 
 - Create — write a new plan from a description, a spec, or a shared
   understanding reached with `grill-me`.

@@ -6,12 +6,15 @@ description: >
   mechanism into skills that lack it. Use when asked to enhance the skills
   used in this conversation, record lessons learned, capture a correction so
   it does not repeat, or make skills self-improving.
+argument-hint: "[<skill> to retrofit]"
 license: MIT
 ---
 
 # enhance-skills
 
-Turn corrections into durable skill improvements. Pick the mode from the request:
+Turn corrections into durable skill improvements. Pick the mode from
+`$ARGUMENTS` when given (a skill name/path selects Retrofit), else from the
+request:
 
 - **Harvest** (default) — "enhance the skills I used", "record what you learned",
   "don't make that mistake again". Scan this conversation and write lessons.

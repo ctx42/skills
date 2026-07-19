@@ -6,6 +6,7 @@ description: >
   questions, unstated assumptions, or conflicting choices — or to pressure-test
   a plan, poke holes in an approach, or interrogate a design or spec before
   coding.
+argument-hint: "[plan or approach to interrogate]"
 license: MIT
 ---
 
@@ -16,7 +17,8 @@ branch by branch, until you both share one understanding of the plan.
 
 ## How It Works
 
-1. Read the plan — understand what the user has described so far.
+1. Read the plan — from `$ARGUMENTS` when given, else what the user has
+   described in the conversation so far.
 
 2. Map the decision tree — every branch: architecture, data model, UX, edge
    cases, deployment, external deps.

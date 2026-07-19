@@ -5,11 +5,13 @@ description: >
   the actual repo — never fabricates facts and verifies the commands it
   ships. Use when asked to create, write, draft, review, or improve a README
   or a project's front-page documentation.
+argument-hint: "[create | improve <readme-path>]"
 ---
 
 # readme-smith
 
-Forge and repair a project's `README.md`. Pick the mode from the request:
+Forge and repair a project's `README.md`. Pick the mode from `$ARGUMENTS` when
+given (a mode word and any README path), else from the request:
 
 - Create — no usable README exists, or the user asks for a new/rewritten one.
 - Improve — the user names an existing README to review or upgrade.
@@ -135,7 +137,7 @@ Run (dynamic):
 
 ## Self-application
 
-`readme-smith` obeys the repo authoring standard (portable frontmatter, a
+`readme-smith` obeys the repo authoring standard (Claude-native frontmatter, a
 README with ≥ 3 evals, references one level deep). When you change this skill,
 re-audit it with `skill-smith` in improve mode.
 

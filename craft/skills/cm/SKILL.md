@@ -4,6 +4,7 @@ description: >
   Writes and amends git commit messages using Conventional Commits with a Linux
   kernel-style body. Use when writing or amending a commit message, or when
   describing or summarizing staged changes for the git log.
+argument-hint: "[micro|mini|full] [apply] [<hash>]"
 license: MIT
 ---
 
@@ -11,15 +12,28 @@ license: MIT
 
 ## Invocation
 
-- With commit hash: generate from that commit's diff.
-- Otherwise: generate from the current staged/unstaged diff.
+Read arguments from `$ARGUMENTS` (whitespace-separated tokens, any order); when
+empty, fall back to the user's prose.
+
+- A hex token (`<hash>`) selects a commit: derive from that commit's diff
+  (`git show <hash>`) and ignore the injected working diff below.
+- Otherwise: derive from the current staged/unstaged diff (injected below).
 
 Always derive the message from the diff only.
 
+## Working tree (injected)
+
+The current diff, injected at load. A `<hash>` invocation ignores this and uses
+that commit's diff (`git show <hash>`) instead.
+
+!`git diff --cached --stat; echo; git diff --stat`
+
+!`git diff --cached`
+
 ## Arguments
 
-Detect from the user's words; they combine (e.g. `micro apply`). Default (none
-given): `mini`, presented without committing.
+Tokens combine (e.g. `micro apply`). Default (none given): `mini`, presented
+without committing.
 
 Verbosity — mutually exclusive, default `mini`:
 
