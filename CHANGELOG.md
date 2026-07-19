@@ -1,3 +1,10 @@
+## v0.18.0 (Sun, 19 Jul 2026 15:56:06 UTC)
+- feat(skill-smith): drop Grok support, adopt Claude-native frontmatter.
+- docs: retarget skill catalog at Claude Code only.
+- feat(golang): adopt argument-hint, $ARGUMENTS, and diff injection.
+- feat(srd): adopt argument-hint and $ARGUMENTS.
+- feat(craft): adopt argument-hint, $ARGUMENTS, and cm diff injection.
+
 ## v0.17.0 (Sun, 19 Jul 2026 15:15:03 UTC)
 - feat(cm): default to mini verbosity.
 - docs(doc-smith): record glossary-scope lesson.
