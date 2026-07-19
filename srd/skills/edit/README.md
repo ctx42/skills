@@ -58,6 +58,22 @@ or rename `create`, or this skill loses its standard.
   `<srd>.review.md` across all modes and `edit` never touches it.
 - **No silent edits** — every change is confirmed; mechanical ones too.
 
+## Draft Scaffolds
+
+Two working scaffolds live in a draft SRD (defined in `create`'s authoring
+guide); `edit` maintains both and flags them as blockers for `Accepted`.
+
+- **In Scope `--- TODO ---` marker** — In Scope derives from the requirements, so
+  `### In Scope` may hold just this marker until the requirements settle. While
+  it stands, `edit` suppresses In-Scope-coverage complaints (SCO-2) and will not
+  invent scope items. When you signal the requirements are done (or ask to fill
+  In Scope), it derives candidate `SC-n` items from the requirement groups and
+  walks them **point by point** for you to keep, reword, merge, split, or drop,
+  then replaces the marker.
+- **`## TODO` section** — a numbered list of open issues to return to, kept as
+  the last section. Say **"Add X to TODO"** at any time and `edit` appends it as
+  the next item (no confirm loop — the instruction is the confirmation).
+
 ## When to Use
 
 - After `create` produces a draft and you want to tighten it.
@@ -119,3 +135,20 @@ Request: `/edit specs/login.md`.
   (location, before/after, rule id).
 - The closing summary is a manifest of approved edits — one line each — not a
   re-narration of diffs the user already saw.
+
+**Scenario 6 — Generate In Scope from settled requirements.**
+Request: `/edit specs/login.md`, then partway through: "the requirements are
+final now — fill in the In Scope."
+- Before the signal, `### In Scope` holds only `--- TODO ---`; `edit` never
+  flags SCO-2 against it and never fabricates scope items.
+- On the signal, derives candidate `SC-n` items from the requirement groups and
+  walks them **point by point** (confirm/edit each), then replaces the marker
+  with the confirmed items and re-runs the SCO-2/3 coverage check.
+
+**Scenario 7 — Add to TODO on demand.**
+Request: mid-session, "Add: confirm the lockout threshold with security to
+TODO."
+- Appends it as the next numbered item in the `## TODO` section (creating the
+  section as the last one if absent), without the propose-and-confirm loop.
+- Renumbers nothing else; reports only the single line added. At session end the
+  non-empty `## TODO` is flagged as a follow-up that blocks `Accepted`.

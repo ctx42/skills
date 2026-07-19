@@ -19,8 +19,12 @@ at a time — the counterpart to the read-only `review`. It must not invent or
 restate rules (defer all format, style, logic, and rules to `create`'s
 reference files), nor edit metadata (Owners, Initiative, Designs), set
 back-links, or change `Status` — only flag those gaps (STR-2..7, STA-*).
-Acceptance stays a human decision. It never writes `<srd>.review.md` —
-`review` owns that file across all modes; `edit` only reads it.
+Acceptance stays a human decision. It maintains the two draft scaffolds — the In
+Scope `--- TODO ---` marker and the `## TODO` section (see
+[Draft scaffolds](#draft-scaffolds)) — but resolves them only on the user's
+signal, never silently, and flags both as acceptance blockers. It never writes
+`<srd>.review.md` — `review` owns that file across all modes; `edit` only reads
+it.
 
 ## Sources of truth
 
@@ -39,8 +43,9 @@ user; do not proceed.** Read these before editing:
   consistency, the consistency pass) and the Bad→Good defect classes to fix
   toward.
 - [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
-  (on-demand: session start) — shared operating procedures (glossary
-  resolution).
+  (on-demand: session start for glossary; In Scope generation for the derivation
+  procedure) — shared operating procedures (glossary resolution; deriving In
+  Scope from the settled requirements).
 - [../create/assets/srd-template.md](../create/assets/srd-template.md)
   (on-demand: restructuring) — the required section order.
 - [../create/scripts/glossary-fingerprint.sh](../create/scripts/glossary-fingerprint.sh)
@@ -107,7 +112,9 @@ All interactive editing follows the same loop. Per change:
 3. **Re-validate the affected entry + cross-refs** immediately against the
    rules in
    [../create/references/srd-standard.md](../create/references/srd-standard.md),
-   focusing on the checks the edit can touch: scope coverage (SCO-2/3), id
+   focusing on the checks the edit can touch: scope coverage (SCO-2/3 —
+   suspended while the In Scope `--- TODO ---` marker stands, see
+   [Draft scaffolds](#draft-scaffolds)), id
    uniqueness/order (REQ-3/4), term use (GLO-3), and any requirement that
    references or is referenced by the edit. Report if the fix introduced a new
    problem. When the edit asserts a claim about existing system behaviour and a
@@ -124,6 +131,41 @@ Write every edit to the LANG, MD, and REQ rules in
 (US English and one term per concept per the authoring guide). When an edit
 restructures sections, follow the order in
 [../create/assets/srd-template.md](../create/assets/srd-template.md).
+
+## Draft scaffolds
+
+Two working scaffolds live in a draft SRD (see the House additions in
+[../create/references/authoring-guide.md](../create/references/authoring-guide.md)).
+Recognize and maintain them across every mode; never remove either silently, and
+flag both at session end as human follow-ups that block `Accepted`:
+
+- In Scope `--- TODO ---` marker — while `### In Scope` holds only this marker,
+  In Scope is knowingly pending: suppress every SCO-2 / In-Scope-coverage
+  complaint everywhere (the front-loaded issue summary, re-validation, and the
+  consistency pass), and do not fabricate `SC-n` items early. Resolve it only via
+  the generation step below.
+- `## TODO` section — a numbered list of open issues the human must return to,
+  kept as the document's last section.
+
+### Add to TODO (any time)
+
+When the user says "Add X to TODO" (or similar) at any point in the session,
+append X as the next numbered item in the `## TODO` section — creating the
+section as the last section if it is absent. The instruction is itself the
+confirmation, so apply it without the propose-and-confirm loop; renumber nothing
+else and report only the one line added.
+
+### Generate In Scope (on the user's signal)
+
+Only when the In Scope marker is present **and** the user signals the
+requirements are complete (or asks to fill In Scope): run the In Scope
+derivation procedure in
+[../create/references/srd-procedures.md](../create/references/srd-procedures.md)
+and walk its candidate `SC-n` items point by point through the edit-discipline
+loop, applying each confirmed item. Replace the marker with the confirmed items,
+then re-run the In-Scope-coverage check (SCO-2/3) now that it applies again. Do
+not trigger this on your own — never derive In Scope while the user is still
+shaping requirements.
 
 ## Modes
 
@@ -194,7 +236,9 @@ a re-narration of diffs the user already saw:
 - What changed: entry/id, one line each.
 - What was flagged and left (frozen-id conflicts, metadata gaps, anything the
   user declined).
-- Outstanding human follow-ups (placeholders, back-links, Status).
+- Outstanding human follow-ups (placeholders, back-links, Status), including an
+  unresolved In Scope `--- TODO ---` marker and any non-empty `## TODO` section
+  — both block `Accepted`.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
