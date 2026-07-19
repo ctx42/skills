@@ -1,3 +1,13 @@
+## v0.18.0 (Sun, 19 Jul 2026 16:09:33 UTC)
+- feat(skill-smith): drop Grok support, adopt Claude-native frontmatter.
+- docs: retarget skill catalog at Claude Code only.
+- feat(golang): adopt argument-hint, $ARGUMENTS, and diff injection.
+- feat(srd): adopt argument-hint and $ARGUMENTS.
+- feat(craft): adopt argument-hint, $ARGUMENTS, and cm diff injection.
+- Bump version to v0.18.0.
+- docs(doc): refine interface-method godoc handling.
+- docs(skill-smith): add argument-hint default-marker convention.
+
 ## v0.18.0 (Sun, 19 Jul 2026 15:56:06 UTC)
 - feat(skill-smith): drop Grok support, adopt Claude-native frontmatter.
 - docs: retarget skill catalog at Claude Code only.
