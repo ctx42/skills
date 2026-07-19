@@ -48,6 +48,8 @@ source of truth.
   learning style rules.
 - `cover` — raises Go test coverage per function, measured from direct tests
   only.
+- `doc` — fixes and completes in-source godoc and comments per documentable
+  item; edits and verifies.
 - `reshape` — proposes consumer-driven API changes to a library the project
   uses; read-only.
 

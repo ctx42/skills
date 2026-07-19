@@ -25,7 +25,7 @@ own manifest and a `skills/` folder:
 │
 ├── golang/
 │   ├── .claude-plugin/plugin.json
-│   └── skills/{style,review,cover,reshape}/
+│   └── skills/{style,review,cover,doc,reshape}/
 ├── srd/
 │   ├── .claude-plugin/plugin.json
 │   └── skills/{create,review,edit,system-check}/
@@ -36,7 +36,7 @@ own manifest and a `skills/` folder:
 
 | Plugin   | Skills                                                                                       | Purpose                                                                                       |
 |----------|----------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| `golang` | `style`, `review`, `cover`, `reshape`                                                        | Go write-time style, done-time review, test coverage, API proposals                           |
+| `golang` | `style`, `review`, `cover`, `doc`, `reshape`                                                 | Go write-time style, done-time review, test coverage, doc fixing, API proposals               |
 | `srd`    | `create`, `review`, `edit`, `system-check`                                                   | Software Requirement Document lifecycle                                                       |
 | `craft`  | `cm`, `grill-me`, `plan-smith`, `skill-smith`, `readme-smith`, `doc-smith`, `enhance-skills` | Commit messages, planning interview, plan tracking, skill/README/doc authoring, self-learning |
 

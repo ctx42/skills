@@ -35,6 +35,7 @@ as Claude Code plugins.
 │       ├── style/               # Enforced Go style ruleset (prod + test)
 │       ├── review/              # Done-time Go review + rule editing
 │       ├── cover/               # Per-function Go test coverage improvement
+│       ├── doc/                 # Per-item godoc + comment fix and completion
 │       └── reshape/             # Consumer-driven library API-change proposals
 ├── srd/                            # Plugin: SRD lifecycle
 │   ├── .claude-plugin/plugin.json
@@ -87,7 +88,7 @@ Skills in the same plugin are copied together into the plugin cache, so they
 reference each other with relative paths from their own directory:
 
 - `review`, `edit`, and `system-check` read `../create/references/*`.
-- `review` and `cover` read `../style/SKILL.md`.
+- `review`, `cover`, and `doc` read `../style/SKILL.md`.
 
 Keep these skills within the same plugin so the `../sibling` paths resolve.
 
