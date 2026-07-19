@@ -19,7 +19,8 @@ high-quality, Linux kernel-style bodies.
 
 **Arguments** (combinable, e.g. `/cm micro apply`)
 - `micro` — summary line only, no body.
-- `mini` — summary line plus one short paragraph only.
+- `mini` — summary line plus one short paragraph only (default).
+- `full` — full-length multi-paragraph kernel-style body.
 - `apply` — commit the message directly, without asking to confirm.
 
 The skill always derives the message from the actual diff. It produces:
@@ -42,8 +43,9 @@ See `SKILL.md` for the full message structure and quality rules.
 - Derives the message only from the diff, not from conversation context.
 - Summary line is `feat(...)`-style, imperative, lowercase, no period, ≤ 50
   chars recommended.
-- Body wraps at 72 cols and explains *why*, referencing concrete symbols in
-  backticks.
+- Defaults to `mini`: summary line plus a single short paragraph (not a
+  multi-paragraph body) that wraps at 72 cols, explains *why*, and references
+  concrete symbols in backticks.
 - Presents the full message in a zero-indent code block and stops — it does
   not run or propose `git commit` unless the invocation asked to commit.
 
@@ -94,13 +96,13 @@ user-visible behavior change.
 
 ### 6. Verbosity arguments
 
-**Request:** `/cm micro`, then `/cm mini`, on the same staged diff.
+**Request:** `/cm micro`, then `/cm full`, on the same staged diff.
 
 **Expected behavior:**
 - `micro` emits the summary line only — no body, no footers (unless the change
   is breaking).
-- `mini` emits the summary line plus a single short paragraph explaining the
-  most important *why*, not a full multi-paragraph body.
+- `full` emits the summary line plus a full-length multi-paragraph kernel-style
+  body, unlike the default `mini` single paragraph.
 
 ### 7. Commit with `apply`
 

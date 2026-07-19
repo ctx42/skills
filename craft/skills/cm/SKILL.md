@@ -19,15 +19,18 @@ Always derive the message from the diff only.
 ## Arguments
 
 Detect from the user's words; they combine (e.g. `micro apply`). Default (none
-given): full-length message, presented without committing.
+given): `mini`, presented without committing.
 
-Verbosity — mutually exclusive, default full length:
+Verbosity — mutually exclusive, default `mini`:
 
 - `micro` → summary line **only**, no body. Add `!` + `BREAKING CHANGE:` footer
   only when the change is breaking.
 
 - `mini` → summary line plus **one** short paragraph explaining the single
   most important *why*. `Refs:` only if a breaking change applies.
+
+- `full` → full-length multi-paragraph kernel-style body per the sections
+  below.
 
 Commit control:
 
