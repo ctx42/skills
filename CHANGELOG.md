@@ -1,3 +1,15 @@
+## v0.17.0 (Sun, 19 Jul 2026 15:15:03 UTC)
+- feat(cm): default to mini verbosity.
+- docs(doc-smith): record glossary-scope lesson.
+- docs(grill-me): add lesson on plain-prose grilling.
+- docs(review): add empty Given section rule.
+- docs(style): forbid empty Given section marker.
+- feat(srd): let create defer In Scope and track TODOs.
+- feat(srd): maintain draft scaffolds in edit.
+- docs(srd): record edit skill lessons.
+- feat(srd): recognize draft scaffolds in review.
+- feat(golang): add doc skill.
+
 ## v0.16.0 (Thu, 16 Jul 2026 17:20:42 UTC)
 - feat(craft): add doc-smith skill.
 - docs(skill-smith): require US English in authored content.
