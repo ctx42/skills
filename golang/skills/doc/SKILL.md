@@ -87,6 +87,14 @@ Change the comment only for an item that fires.
    variable instead of the type. Fix per style.
 6. restates code — an inline comment narrates what the next line plainly does
    instead of explaining why. Tighten to the why, or delete it.
+7. interface-method godoc — a method implementing an interface (pinned by a
+   `var _ Iface = (*T)(nil)` assertion) carries godoc. Remove it when the
+   method does nothing unexpected vs. the interface contract; keep it,
+   expanded to name the surprise (a side effect, an empty/zero return on
+   success, state left unrecorded), when it does. Never add godoc to an
+   unremarkable one. If the method carries a `//nolint` directive, never
+   delete the block — keep the directive verbatim and give it a godoc: terse
+   if unremarkable, expanded if unexpected.
 
 ## Accuracy
 
@@ -124,8 +132,6 @@ Never edit these; name them in the report when in scope:
 - magic directive comments (`//go:build`, `//go:embed`, `//go:generate`,
   `//nolint`, `//export`) — they are code, never reflow or reword them.
 - generated files marked `DO NOT EDIT`.
-- godoc on an interface-implementing method — style forbids it; flag an
-  existing one for removal, never add one.
 - a comment whose intent cannot be confirmed from the code — flag it, do not
   guess.
 
