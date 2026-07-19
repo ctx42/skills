@@ -4,6 +4,7 @@ description: >
   Authors a new Software Requirement Document (SRD) to the SRD standard. Use
   when asked to create, write, draft, or start an SRD, a software
   requirements document, or a spec.
+argument-hint: "[<what the SRD should specify>]"
 license: MIT
 ---
 
@@ -93,6 +94,10 @@ fingerprint it, and load or regenerate its term digest. The digest lets the SRD
 satisfy GLO-3 / STR-10 without redefining known terms.
 
 ### 1. Interview
+
+When the invocation carries a seed (`$ARGUMENTS`), treat it as the user's
+opening Objective and restate it for confirmation instead of asking cold; with
+no seed, open with the Objective question.
 
 Drive the conversation; do not wait to be fed content. Ask **one branch at a
 time**, in this order, and restate each resolved branch before moving on:

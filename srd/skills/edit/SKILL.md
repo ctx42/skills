@@ -5,6 +5,7 @@ description: >
   place against the SRD standard. Use when asked to edit, improve, fix,
   revise, or clean up an SRD, or to apply findings from a review file or
   pasted feedback.
+argument-hint: "<path to SRD> [review-file | polish | target]"
 license: MIT
 ---
 
@@ -169,13 +170,14 @@ shaping requirements.
 
 ## Modes
 
-Detect the mode from the user's words; the default is interactive.
+`$1` is the SRD path; `$2` selects the mode (interactive when omitted). With no
+`$ARGUMENTS`, ask which SRD to edit; fall back to the user's prose for free-form
+input.
 
-- `edit path/to/srd.md` → **interactive** (default).
-- `edit path/to/srd.md <path>.review.md` (or with pasted feedback) →
-  **feedback**.
-- `edit path/to/srd.md polish` → **polish**.
-- `edit path/to/srd.md <id | "quoted text" | description>` → **targeted**.
+- `$1` only → **interactive** (default).
+- `$1` + a `<path>.review.md` (or pasted feedback) → **feedback**.
+- `$1` + `polish` → **polish**.
+- `$1` + `<id | "quoted text" | description>` → **targeted**.
 
 ### interactive (default)
 

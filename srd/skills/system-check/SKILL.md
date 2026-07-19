@@ -6,6 +6,7 @@ description: >
   asked to review an SRD for build-readiness, ask implementation questions
   about an SRD, check which SRD questions remain open, or curate the
   platform-knowledge memory.
+argument-hint: "<path to SRD> | memory"
 license: MIT
 ---
 
@@ -98,12 +99,14 @@ drains any gaps left unfiled.
 
 ## Invocation
 
-Detect the mode from the user's words.
+`$1` is the SRD path, or the literal `memory` to curate the knowledge base. With
+no `$ARGUMENTS`, ask which SRD to check; fall back to the user's prose for
+free-form input.
 
-- `/system-check path/to/srd.md` → **review** (default): the full flow below.
-  Re-running on an SRD that already has a `<srd>.questions.md` resumes the open
-  questions (see [Re-run](#re-run-after-an-edit)).
-- `/system-check memory` → **memory**: curate `memory.md` only, no SRD. See
+- `$1` = an SRD path → **review** (default): the full flow below. Re-running on
+  an SRD that already has a `<srd>.questions.md` resumes the open questions (see
+  [Re-run](#re-run-after-an-edit)).
+- `$1` = `memory` → **memory**: curate `memory.md` only, no SRD. See
   [Memory mode](#memory-mode).
 
 ## review (default)

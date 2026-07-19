@@ -5,6 +5,7 @@ description: >
   logic, and conformance to the SRD standard, without editing it. Use when
   asked to review, audit, critique, or check an SRD, or to re-check whether
   prior review findings were fixed.
+argument-hint: "<path to SRD> [walk | check | feedback]"
 license: MIT
 ---
 
@@ -90,17 +91,18 @@ Tag each finding:
 ## Modes
 
 The review file is always `<srd>.review.md` next to the source — auto-derived,
-never passed as an argument. Detect the mode from the user's words:
+never passed as an argument. `$1` is the SRD path; `$2` selects the mode
+(default **review** when omitted). With no `$ARGUMENTS`, ask which SRD to
+review; fall back to the user's prose for free-form input.
 
-- `/review path/to/srd.md` → **review** (default): read the whole SRD, write
-  the review file.
-- `/review path/to/srd.md walk` → **walk**: interactive, section by section;
-  record only findings the user confirms.
-- `/review path/to/srd.md check` → **check**: re-verify the existing review
-  file's open findings against the current SRD; tick/move fixed ones, withdraw
-  invalid ones. Does not hunt for new defects.
-- `/review path/to/srd.md feedback` → **feedback**: emit a terse plain-text
-  issue list of open tasks for an email or ticket. No file write.
+- `$1` only → **review** (default): read the whole SRD, write the review file.
+- `$1` + `walk` → **walk**: interactive, section by section; record only
+  findings the user confirms.
+- `$1` + `check` → **check**: re-verify the existing review file's open findings
+  against the current SRD; tick/move fixed ones, withdraw invalid ones. Does not
+  hunt for new defects.
+- `$1` + `feedback` → **feedback**: emit a terse plain-text issue list of open
+  tasks for an email or ticket. No file write.
 
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
