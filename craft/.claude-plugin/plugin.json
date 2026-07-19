@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
   "name": "craft",
   "description": "Cross-cutting engineering-craft aids: Conventional Commit messages (cm), a relentless planning interview (grill-me), a plan author/tracker (plan-smith), a skill author/auditor (skill-smith), a README author (readme-smith), and skill self-learning (enhance-skills).",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "author": {
     "name": "Rafal Zajac",
     "email": "rzajac@gmail.com"

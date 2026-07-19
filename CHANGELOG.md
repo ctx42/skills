@@ -1,3 +1,6 @@
+## v0.19.0 (Sun, 19 Jul 2026 20:33:35 UTC)
+- feat(golang): make style a runnable pass, delegated from review.
+
 ## v0.18.0 (Sun, 19 Jul 2026 16:09:33 UTC)
 - feat(skill-smith): drop Grok support, adopt Claude-native frontmatter.
 - docs: retarget skill catalog at Claude Code only.
