@@ -30,7 +30,7 @@ actually uses well from one that sits inert or, worse, quietly misleads it.
 11. [Output discipline](#11-output-discipline)
 12. [Scripts and bundled files](#12-scripts-and-bundled-files)
 13. [Content hygiene and maintainability](#13-content-hygiene-and-maintainability)
-14. [Portability](#14-portability)
+14. [Native affordances](#14-native-affordances)
 15. [Evaluation-driven authoring](#15-evaluation-driven-authoring)
 16. [Anti-patterns catalog](#16-anti-patterns-catalog)
 17. [The scorecard](#17-the-scorecard)
@@ -176,8 +176,7 @@ description: >
 [the body: how to do the job]
 ```
 
-The frontmatter conventions worth committing to memory, because they hold across
-every runtime that reads this format:
+The frontmatter conventions worth committing to memory:
 
 | Field         | Required | Constraints                                                                                                         |
 |---------------|----------|---------------------------------------------------------------------------------------------------------------------|
@@ -187,13 +186,14 @@ every runtime that reads this format:
 | `metadata`    | no       | a flat map of string→string for things like `author`, `version`                                                     |
 
 Two rules on that table are load-bearing. First, **keep the field set minimal.**
-The two required fields plus, at most, `license` and `metadata` are the portable
-core. Everything else you may have seen — tool restrictions, invocation toggles,
-argument declarations, model pins — is a runtime-specific extension that other
-agents silently ignore ([§14](#14-portability)). Second, **avoid a bare colon or
-a leading `>`/`<` inside a plain scalar** — they break YAML parsing. When a
-description spans lines or contains a colon, use a folded block scalar
-(`description: >`), as above. It is valid, portable, and the safe default.
+The two required fields plus, at most, `license` and `metadata` cover almost
+every skill. Claude Code reads more — tool-permission fields, invocation
+toggles, argument declarations, model or effort pins — and you may reach for one
+when a skill genuinely needs it ([§14](#14-native-affordances)); but omit them by
+default, since every extra key is a line to maintain for no gain. Second, **avoid
+a bare colon or a leading `>`/`<` inside a plain scalar** — they break YAML
+parsing. When a description spans lines or contains a colon, use a folded block
+scalar (`description: >`), as above. It is valid YAML and the safe default.
 
 The body has no required format, but the good ones share a spine: a short
 orientation, then the steps, examples, and edge cases, with heavy detail pushed
@@ -291,8 +291,8 @@ conventions, your constraints, your hard-won gotchas, the specific shape you wan
 
 This single reframing — *assume the reader is smart; add only the gap* — prevents
 most bad skill bodies. Before every sentence, ask: **does the model already know
-this?** If yes, cut it. A paragraph explaining that "PDF stands for Portable
-Document Format and is a common way to store documents" is pure distractor tokens:
+this?** If yes, cut it. A paragraph explaining that "a PDF is a common file
+format for storing text and images" is pure distractor tokens:
 it costs budget, dilutes attention, and teaches nothing. Multiply that waste across
 a library and you have burned half the context window before the user has asked
 anything.
@@ -300,8 +300,8 @@ anything.
 Compare:
 
 > **Bloated (~150 tokens)**
-> "PDF (Portable Document Format) files are a common file format that contains
-> text, images, and other content. To work with them in Python, you'll need a
+> "PDF files are a common file format that contains text, images, and other
+> content. To work with them in Python, you'll need a
 > library. There are several options, but a good one is pdfplumber, which you can
 > install and then use to open a file and extract its text page by page…"
 
@@ -574,37 +574,57 @@ ephemeral facts.** Reasoning ages slowly; dated facts age overnight.
 
 ---
 
-## 14. Portability
+## 14. Native affordances
 
-The skill format is an open standard that many agents now read, and that is a
-quiet superpower — a well-authored skill can run unchanged across a whole
-ecosystem. But it only holds if you stay within the portable core.
+These skills target **Claude Code only**, and that narrowing is a license, not a
+constraint: you write for one runtime's full feature set instead of hewing to a
+lowest-common-denominator core. Reach for the native affordances below wherever
+they raise a skill's success rate — but reach *deliberately*, because each one
+adds a line to maintain and, misused, a new way to fail.
 
-**The portable core, honored everywhere:** the `name` and `description` fields, a
-plain-Markdown body, and — as inert documentation only — `license` and `metadata`.
-Author to this set and your skill travels.
+**Keep the frontmatter minimal by default.** `name` and `description` are
+required; `license` and `metadata` cover almost everything else. Claude Code also
+reads tool-permission fields, invocation toggles, argument declarations, and
+model or effort pins — use one when a skill genuinely needs it, but omit it by
+default. A key you don't need is a standing cost with no upside, and it invites
+the next reader to wonder what it's load-bearing for.
 
-**Everything else is a platform-specific extension** that other runtimes silently
-strip or ignore: tool-permission fields, model-invocation toggles, argument
-declarations, model or effort pins, execution-context directives. They may be
-genuinely useful on the runtime that supports them — but *never rely on them for
-correctness or, especially, for security*, because off-platform they simply vanish
-and the skill runs with defaults. A skill whose safety depends on a tool
-restriction that another agent ignores is a skill with a hole in it.
+**Three body-level affordances are worth knowing, and worth using where they
+fit.** Each replaces a fuzzier "have the agent figure it out" with a precise
+mechanism, so adopt it exactly when the input is precise enough to earn it:
 
-Two portability traps worth naming:
+- **`argument-hint`** declares a skill's argument shape so it surfaces in the
+  invocation UI, e.g. `argument-hint: "[micro|mini|full] [<hash>]"`. Add it to
+  any skill that takes positional arguments; skip it for an argument-less one.
+- **`$ARGUMENTS` / `$N` substitution** lets the body read invocation arguments
+  directly — `$ARGUMENTS` for the whole string, `$1`/`$2` for positional tokens
+  — instead of instructing the agent to infer them from the user's prose. Prefer
+  it when the input is *structured* (a mode flag, a commit hash, a path). Keep a
+  prose fallback only for genuinely free-form input, where reading the user's
+  phrasing is more robust than positional parsing.
+- **Dynamic injection `` !`cmd` ``** folds a command's output into context at
+  load time, so a skill whose real input is repo or tool state works from live
+  data instead of telling the agent to go fetch it — e.g. `` !`git diff
+  --cached` `` for a commit-message skill. Keep the injected command read-only
+  and cheap; it runs on every load.
 
-- **`SKILL.md` is case-sensitive.** `skill.md` or `Skill.md` will be ignored on a
-  case-sensitive filesystem. Get the capitalization exact.
-- **Dynamic body features are not portable.** Inline shell execution and argument
-  substitution (`$ARGUMENTS`, `$1`, `` !`cmd` ``) are runtime-specific. For a
-  portable skill, detect mode and arguments by *reading the user's prose* in the
-  body rather than relying on substitution the next runtime won't perform.
+Use each where it earns its place, and not otherwise. A skill that takes only
+free-form natural language gains nothing from `$ARGUMENTS`, and forcing it in
+just adds a brittle parsing step; a skill that never reads repo state has no use
+for injection. The test is the one that governs the rest of this document: does
+it raise the success rate, or is it ceremony?
+
+One trap that has nothing to do with which fields you use: **`SKILL.md` is
+case-sensitive.** `skill.md` or `Skill.md` will be ignored on a case-sensitive
+filesystem. Get the capitalization exact.
 
 For anything with side effects — commits, deploys, file edits, external sends —
-don't lean on a platform's invocation-guard field to protect the user. Build the
-guardrail into the body: state the irreversible step explicitly and require
-confirmation before it. That protection travels; a frontmatter flag does not.
+don't lean on a frontmatter invocation-guard *alone* to protect the user. Build
+the guardrail into the body as well: state the irreversible step explicitly and
+require confirmation before it. A field can be misconfigured, overridden, or
+simply forgotten; an instruction the agent must read and act on is the sturdier
+protection, and it documents the intent in the place the agent is actually
+looking.
 
 ---
 
@@ -688,7 +708,7 @@ A consolidated list of the failure modes named throughout, for fast reference.
 | Scripts that punt errors to the agent         | agent must interpret raw failures               | solve in the script; clear messages          |
 | Voodoo constants                              | agent can't reason about unexplained values     | justify every magic number                   |
 | Time-conditional instructions ("before Aug…") | silently wrong once the date passes             | structure by state: current vs. old patterns |
-| Relying on non-portable frontmatter           | silently ignored off-platform; security holes   | portable core; guardrails in the body        |
+| Frontmatter flag as the sole safety guardrail | a field can be misconfigured or bypassed        | enforce the guardrail in the body too        |
 | Windows-style backslash paths                 | break on other systems                          | forward slashes always                       |
 | Shipping untested                             | deploying untested code                         | eval-driven; watch it fail first             |
 
@@ -705,7 +725,7 @@ with **no zero in any Critical row** is in excellent shape.
 |----|------------------------|----------|-----|---------------------------------------------------------------------------------------|
 | 1  | Description — triggers | Critical | 15  | Third person; states *when*; concrete trigger terms; leads with the primary case      |
 | 2  | Description — no leak  | Critical | 10  | Describes *when to use*, not the step-by-step workflow                                |
-| 3  | Frontmatter validity   | Critical | 10  | Portable core only; `name` matches dir; valid YAML; within limits                     |
+| 3  | Frontmatter validity   | Critical | 10  | Minimal fields; `name` matches dir; valid YAML; within limits                         |
 | 4  | Body density           | Critical | 15  | Assumes a capable reader; no explaining the known; every line earns its tokens        |
 | 5  | Degrees of freedom     | Standard | 10  | Specificity matches task fragility; neither brittle nor vague                         |
 | 6  | Progressive disclosure | Standard | 10  | Lean body; detail in references one level deep; ToCs; domain-split; run-vs-read clear |
@@ -763,8 +783,10 @@ every commit.
 
 What's wrong: name has a space and capitals and doesn't match a valid directory
 ([§6](#6-naming)); description is first person, vague, and non-triggering
-([§5](#5-the-description-the-highest-leverage-field)); frontmatter carries
-non-portable fields ([§14](#14-portability)); the body explains what git and
+([§5](#5-the-description-the-highest-leverage-field)); frontmatter carries keys
+the skill doesn't need — `allowed-tools`, and an explicit
+`disable-model-invocation` that only restates the default
+([§14](#14-native-affordances)); the body explains what git and
 commits are ([§7](#7-the-body-writing-for-a-capable-reader)); bare `ALWAYS`/`NEVER`
 with no reasoning ([§7](#7-the-body-writing-for-a-capable-reader)); offers a menu
 of formats instead of one default ([§16](#16-anti-patterns-catalog)); the steps
@@ -813,11 +835,12 @@ Report tersely: show the message and the confirmation prompt, nothing else.
 
 What changed and why: valid gerund name matching its directory; a third-person
 description that states *when* and carries triggers without leaking the procedure;
-portable frontmatter, folded scalar for the colon-bearing description; a body that
+minimal frontmatter — just `name` and `description` — with a folded scalar for
+the colon-bearing description; a body that
 assumes git fluency and spends its tokens only on *this team's* rule (required
 scope) — with the reasoning attached, so the model generalizes; one format, no
 menu; concrete steps including a confirmation gate before the irreversible commit
-([§14](#14-portability)); real examples that calibrate style
+([§14](#14-native-affordances)); real examples that calibrate style
 ([§11](#11-output-discipline)); a state-based rule instead of a dated conditional;
 and an explicit terse-output line.
 
@@ -829,8 +852,8 @@ The fast pre-flight. Every box should be tickable before a skill ships.
 
 - [ ] `name` is lowercase-hyphen, ≤ 64 chars, equals the directory name, no
       reserved words.
-- [ ] Frontmatter is the portable core (`name` + `description`, plus `license`/
-      `metadata` only if needed); no runtime-specific fields relied on.
+- [ ] Frontmatter is minimal (`name` + `description`, plus `license`/`metadata`
+      or a native key only when the skill genuinely needs it).
 - [ ] `description` is third person, states *what* + *when*, leads with the
       primary case, carries concrete triggers, and does **not** leak the workflow.
 - [ ] YAML is valid — folded scalar (`description: >`) for any colon or multi-line.
@@ -848,7 +871,7 @@ The fast pre-flight. Every box should be tickable before a skill ships.
       validate→fix loop; risky work validates a plan before executing.
 - [ ] Body mandates terse output; payload is always stated in full.
 - [ ] No time-conditional content; legacy detail is quarantined and dated.
-- [ ] Irreversible steps confirm in the body, not via a non-portable flag.
+- [ ] Irreversible steps confirm in the body, not by a frontmatter flag alone.
 - [ ] ≥ 3 evaluations built from observed failures; ≥ 1 asserts terse output; the
       skill was watched failing *without* it first.
 - [ ] Scores 90+ on [the scorecard](#17-the-scorecard) with no zero in a Critical
@@ -874,9 +897,10 @@ quoting it; the sources below are where to go deeper on any one thread.
 - **Anthropic Engineering — Writing effective tools for agents.** Token-efficient
   interfaces; how output becomes next-turn input.
   `anthropic.com/engineering/writing-tools-for-agents`
-- **The Agent Skills open specification.** The portable field set, naming rules,
-  and directory layout that make a skill travel across runtimes.
-  `agentskills.io/specification`
+- **Claude Code — slash commands and skill frontmatter.** The native affordances
+  this repo builds on: `argument-hint`, `$ARGUMENTS`/`$N` substitution, and
+  dynamic `` !`cmd` `` injection, plus the extra frontmatter keys Claude Code
+  reads. `docs.claude.com/en/docs/claude-code/slash-commands`
 - **Chroma — Context Rot.** The empirical backbone for "bloat degrades
   performance": measured reliability decline as input grows.
   `trychroma.com/research/context-rot`

@@ -1,8 +1,7 @@
 # Onboarding Guide: Setting Up the Skills
 
-This guide sets up the skills on a new machine so that both **Grok** and
-**Claude** can use them. The skills ship as Claude Code plugins from this repo's
-marketplace; Grok reads the same catalog directly.
+This guide sets up the skills on a new machine so that **Claude** can use them.
+The skills ship as Claude Code plugins from this repo's marketplace.
 
 ---
 
@@ -20,18 +19,7 @@ marketplace.
 /plugin install craft@ctx42-skills
 ```
 
-### Grok
-
-Grok reads Claude marketplaces and plugins directly, so a Claude install is
-already visible. To manage it from Grok instead:
-
-```shell
-grok plugin marketplace add ctx42/skills
-grok plugin install srd@ctx42-skills
-```
-
-Update later with `/plugin marketplace update ctx42-skills` (Claude) or
-`grok plugin update` (Grok).
+Update later with `/plugin marketplace update ctx42-skills`.
 
 ---
 
@@ -71,7 +59,7 @@ Each skill has its own `README.md` with usage examples.
 ## 4. system-check memory
 
 `system-check` builds a curated platform-knowledge base as you use it. It is
-your data, stored once per machine (shared by Claude and Grok) at:
+your data, stored once per machine at:
 
 ```
 ~/.agent-data/ctx42-skills/srd/memory.md
@@ -93,11 +81,10 @@ Nothing to set up; back this file up if the knowledge is valuable.
 - **Editing a skill has no effect**: a marketplace-installed copy is cached. Use
   `--plugin-dir ./<group>` + `/reload-plugins` for live edits, or
   `claude plugin marketplace update ctx42-skills` after pushing.
-- **Old symlinks**: earlier setups symlinked skills into `~/.claude/skills/` and
-  `~/.grok/skills/`. Remove any that point into this repo — the plugin install
-  replaces them, and leaving them causes duplicate skills.
+- **Old symlinks**: earlier setups symlinked skills into `~/.claude/skills/`.
+  Remove any that point into this repo — the plugin install replaces them, and
+  leaving them causes duplicate skills.
 
 ---
 
-That's it. This setup keeps both Grok and Claude aligned with the same
-engineering standards.
+That's it. This setup keeps Claude aligned with the same engineering standards.

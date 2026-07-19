@@ -1,9 +1,7 @@
 # Skills
 
-This repository is a collection of for the reusable skills use by both **Grok** 
-and **Claude** AI agents. The skills ship as **Claude Code plugins**; Grok 
-reads the same Claude marketplace ad plugins directly, so one catalog serves
-both tools.
+This repository is a collection of reusable skills for **Claude** AI agents.
+The skills ship as **Claude Code plugins**.
 
 ## Purpose
 
@@ -116,16 +114,6 @@ dotfiles:
 
 Use an **absolute** path (no `~`), and see [Develop](#develop) for how edits to
 the clone reach your sessions.
-
-### Grok
-
-Grok reads Claude marketplaces and plugins directly, so a Claude install is
-picked up automatically. To manage it from Grok instead:
-
-```shell
-grok plugin marketplace add ctx42/skills
-grok plugin install srd@ctx42-skills
-```
 
 ## Develop
 

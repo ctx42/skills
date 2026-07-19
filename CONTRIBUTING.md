@@ -41,10 +41,12 @@ Every skill needs its own directory containing:
 - `README.md` — concise human usage examples and when-to-use guidance, with an
   `## Evaluations` section (≥ 3 scenarios, ≥ 1 asserting terse output)
 
-Use **strict-portable** frontmatter — `name` + `description` only (plus the
-allowed optional `license`/`version`/`tags`/`author`/`metadata`). Do **not** add
-platform extensions such as `user_invocable`; they break Grok/Claude
-portability. See `craft/skills/skill-smith/standards.md` for the full ruleset.
+Frontmatter requires `name` + `description`; optional metadata (`license`/
+`version`/`tags`/`author`/`metadata`) is allowed but used sparingly.
+Claude-native affordances are permitted and encouraged where they earn their
+place: `argument-hint`, `$ARGUMENTS`/`$N` body substitution, and dynamic
+injection (`` !`cmd` ``). See `craft/skills/skill-smith/standards.md` for the
+full ruleset — this file does not duplicate it.
 
 ```markdown
 ---
@@ -81,12 +83,12 @@ Before committing a new or changed skill, run the linter:
 
 It checks every skill against the mechanical parts of
 `craft/skills/skill-smith/standards.md`: `SKILL.md` + `README.md` present,
-strict-portable frontmatter (`name` + `description`, `name` equals the directory,
-no forbidden keys), no dynamic injection or `$ARGUMENTS` in the body, an
-`## Evaluations` section in the README, and a Contents list on any bundled
-reference over ~100 lines. It also verifies each plugin `source` is a real plugin
-directory and every skill sits under exactly one plugin's `skills/` dir. It edits
-nothing and exits non-zero on any error.
+frontmatter carries `name` + `description` with `name` equal to the directory,
+the body carries the output-discipline line, an `## Evaluations` section in the
+README, and a Contents list on any bundled reference over ~100 lines. It also
+verifies each plugin `source` is a real plugin directory and every skill sits
+under exactly one plugin's `skills/` dir. It edits nothing and exits non-zero on
+any error.
 
 ## Documentation
 

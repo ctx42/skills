@@ -2,8 +2,7 @@
 
 This document describes the organization of the central skills repository.
 
-It holds reusable skills used by both **Grok** and **Claude**. The skills ship
-as Claude Code plugins.
+It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 
 ---
 
@@ -65,7 +64,7 @@ Each plugin is a directory with a `.claude-plugin/plugin.json` manifest and a
 
 ## The Plugin Model
 
-Both Claude and Grok consume the skills as plugins, not as loose skill folders:
+Claude consumes the skills as plugins, not as loose skill folders:
 
 - `.claude-plugin/marketplace.json` lists the three plugins, each pointing at its
   group directory via `source` (e.g. `"./srd"`). Skills inside a group are
@@ -73,8 +72,6 @@ Both Claude and Grok consume the skills as plugins, not as loose skill folders:
   individually.
 - Each group's `.claude-plugin/plugin.json` names the plugin. That name becomes
   the skill namespace: `create` is invoked as `/srd:create`.
-- Grok reads Claude marketplaces and plugins directly, so the same catalog serves
-  both tools with no separate wiring.
 
 Install and update commands are in [README.md](./README.md#install); the
 edit-test dev loop (`--plugin-dir` + `/reload-plugins`) is in
@@ -98,7 +95,7 @@ Keep these skills within the same plugin so the `../sibling` paths resolve.
 
 `system-check` keeps a curated platform-knowledge base. It is **user data,
 not shipped content**, so it lives outside the repo at one fixed, `$HOME`-rooted,
-per-machine path shared by Claude and Grok:
+per-machine path:
 
 ```
 ~/.agent-data/ctx42-skills/srd/memory.md

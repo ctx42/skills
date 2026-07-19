@@ -2,15 +2,15 @@
 
 Guide for AI agents working in this repository.
 
-This repository is a collection of reusable skills used by both Grok
-and Claude. Skills ship as **Claude Code plugins**, grouped into `golang`,
-`srd`, and `craft`. Each skill is a directory under a group's `skills/`
-folder with a `SKILL.md` (the prompt) and a `README.md` (human usage guide).
+This repository is a collection of reusable skills for Claude. Skills ship as
+**Claude Code plugins**, grouped into `golang`, `srd`, and `craft`. Each skill
+is a directory under a group's `skills/` folder with a `SKILL.md` (the prompt)
+and a `README.md` (human usage guide).
 
 ## Golden Rules
 
 1. **Edit only in this repo.** The installed copies under
-   `~/.claude/plugins/cache/` (and Grok's cache) are generated; never edit there.
+   `~/.claude/plugins/cache/` are generated; never edit there.
 2. **Keep `SKILL.md` token-optimized.** These prompts are loaded into context.
    Prefer short, dense, imperative wording over prose.
 3. **Skills live under a group.** A skill's path is `<group>/skills/<name>/`.
@@ -85,4 +85,4 @@ source of truth.
 - [README.md](./README.md) — overview, install, and dev loop
 - [STRUCTURE.md](./STRUCTURE.md) — directory map and the plugin model
 - [CONTRIBUTING.md](./CONTRIBUTING.md) — how to add, rename, and retire skills
-- [ONBOARDING.md](./ONBOARDING.md) — machine setup for Grok and Claude
+- [ONBOARDING.md](./ONBOARDING.md) — machine setup
