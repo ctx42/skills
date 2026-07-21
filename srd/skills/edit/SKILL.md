@@ -108,8 +108,16 @@ All interactive editing follows the same loop. Per change:
 
 1. Propose **exactly one** change: its location/id, the problem (cite the rule
    id), the **before** and **after** text, and a one-line rationale.
-2. Apply only on explicit approval. Never batch unrelated changes. Never edit
-   without confirmation.
+2. Close each proposal by offering the choices **(Yes / yes Next / Skip /
+   Edit)** — the capital letter is the key — and apply only on explicit
+   approval, reading the verb:
+   - `Y` (Yes) — apply this change, then **stay on the current entry** and
+     propose its next issue; advance only once the entry is exhausted.
+   - `YN` (Yes Next) — apply this change and **move on to the next entry**,
+     leaving any remaining issues on this one flagged.
+   - `S` (Skip) — change nothing; leave the issue flagged.
+   - `E` (Edit) — apply the user's amended text in place of the proposal.
+   Never batch unrelated changes. Never edit without confirmation.
 3. **Re-validate the affected entry + cross-refs** immediately against the
    rules in
    [../create/references/srd-standard.md](../create/references/srd-standard.md),
