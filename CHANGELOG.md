@@ -1,3 +1,8 @@
+## v0.20.0 (Tue, 21 Jul 2026 19:09:59 UTC)
+- docs(doc-smith): add em-dash rule and usage notes.
+- docs(doc-smith): record four whole-document review lessons.
+- feat(srd-edit): add Yes/Next/Skip/Edit choices to edit loop.
+
 ## v0.19.0 (Sun, 19 Jul 2026 20:33:35 UTC)
 - feat(golang): make style a runnable pass, delegated from review.
 

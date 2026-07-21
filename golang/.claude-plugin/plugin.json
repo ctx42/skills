@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
   "name": "golang",
   "description": "Go workflow: enforced write-time style (style), done-time quality review (review), per-function test-coverage improvement (cover), and in-source documentation fixing (doc).",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "author": {
     "name": "Rafal Zajac",
     "email": "rzajac@gmail.com"
