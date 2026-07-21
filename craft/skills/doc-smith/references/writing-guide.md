@@ -62,6 +62,9 @@ Typical order; include only what the product needs, omit empty sections:
 - Cut filler ("simply", "just", "in order to", "please note that").
 - When cutting filler, keep the sentence grammatically whole — trim the padding,
   don't strip it to a fragment or leave clipped clauses that read as choppy.
+- Use the em dash (—) sparingly: at most about one per paragraph. Prefer commas,
+  parentheses, or a new sentence; reserve the em dash for a genuine abrupt break
+  or parenthetical aside.
 - Define an acronym or product term on first use; then use it consistently.
 - Headings are specific and parallel in grammar ("Installing X", "Configuring X",
   not "Installation" then "How to configure").
@@ -116,6 +119,10 @@ What audit reports and proof fixes. Detection heuristic per class:
   that never appears; a task a reader cannot finish from the text.
 - Clarity defect — passive/future voice, buried instruction, undefined term,
   filler, or a step with more than one action.
+- Em-dash overuse — em dashes where a comma, parentheses, or a sentence break
+  reads better, or more than roughly one per paragraph. Proof rewrites the
+  excess to lighter punctuation; audit flags. Keep dashes marking a genuine
+  break.
 - Formatting defect — prose over the doc's wrap width, misaligned table columns,
   or bold-label list lead-ins. Proof reflows, re-pads, and rewrites to plain
   items; audit flags. Respect the doc's own convention over the house default.

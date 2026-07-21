@@ -34,9 +34,14 @@ taxonomy audit reports against.
 /doc-smith check these three files as one manual        # named set
 ```
 
-You don't need a mode keyword — it infers create vs audit vs proof vs revise
-from the request ("proofread" works too). Point it at a file or a named set
-and it treats them as one document.
+Pass a mode word and file(s) as arguments (`create|audit|proof|revise`
+`[<file>...]`), or skip the keyword and it infers create vs audit vs proof vs
+revise from the request ("proofread" works too). Point it at a file or a named
+set and it treats them as one document.
+
+To add net-new content — a whole doc or a new section — use `create`; to change
+what's already there, use `proof` (fix in place) or `revise` (paragraph by
+paragraph with you).
 
 ## Evaluations
 
