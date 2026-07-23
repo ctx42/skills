@@ -1,3 +1,8 @@
+## v0.23.0 (Thu, 23 Jul 2026 11:10:45 UTC)
+- feat(srd): mark generated review/questions files ignore-push.
+- docs(srd-edit): record four edit lessons.
+- docs(srd-standard): make the glossary conditional.
+
 ## v0.22.0 (Thu, 23 Jul 2026 09:58:54 UTC)
 - feat(srd-system-check): add learn and memory-clean modes.
 
