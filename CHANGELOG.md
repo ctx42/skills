@@ -1,3 +1,6 @@
+## v0.21.0 (Thu, 23 Jul 2026 08:17:37 UTC)
+- docs(srd): stop flagging external STR-4/6 back-links.
+
 ## v0.20.0 (Tue, 21 Jul 2026 19:09:59 UTC)
 - docs(doc-smith): add em-dash rule and usage notes.
 - docs(doc-smith): record four whole-document review lessons.
