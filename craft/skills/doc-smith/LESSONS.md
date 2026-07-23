@@ -14,3 +14,8 @@
   against intent.
 - Don't cover materially-different parallel items with one symmetric statement
   true for only one — state the asymmetry.
+- When reporting proposed edits, findings, or nits, present them as a numbered
+  list so each can be addressed separately.
+- Reserve "noise" for unwanted interference; call the signal of interest
+  "signal", even when the domain colloquially calls it "noise" — the ambiguity
+  causes misunderstandings in signal-processing docs.
