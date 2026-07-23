@@ -19,7 +19,9 @@ The write-only editor of an existing SRD, applying changes one confirmed edit
 at a time — the counterpart to the read-only `review`. It must not invent or
 restate rules (defer all format, style, logic, and rules to `create`'s
 reference files), nor edit metadata (Owners, Initiative, Designs), set
-back-links, or change `Status` — only flag those gaps (STR-2..7, STA-*).
+back-links, or change `Status` — only flag those gaps (STR-2/3/5/7, STA-*).
+The back-links (STR-4/6) are external, so it checks the forward Initiative and
+Designs links are present and never flags a back-link gap.
 Acceptance stays a human decision. It maintains the two draft scaffolds — the In
 Scope `--- TODO ---` marker and the `## TODO` section (see
 [Draft scaffolds](#draft-scaffolds)) — but resolves them only on the user's
@@ -108,7 +110,7 @@ All interactive editing follows the same loop. Per change:
 
 1. Propose **exactly one** change: its location/id, the problem (cite the rule
    id), the **before** and **after** text, and a one-line rationale.
-2. Close each proposal by offering the choices **(Yes / yes Next / Skip /
+2. Close each proposal by offering the choices **(Yes / Yes Next / Skip /
    Edit)** — the capital letter is the key — and apply only on explicit
    approval, reading the verb:
    - `Y` (Yes) — apply this change, then **stay on the current entry** and

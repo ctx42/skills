@@ -185,8 +185,9 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    [references/authoring-guide.md](references/authoring-guide.md), re-reading the
    whole draft top to bottom. Repeat after any fix.
 3. **Report** the judgment checks as a short list, each citing its rule id and
-   location: missing/placeholder Owners, Initiative, Designs and any back-link
-   (STR-2..6); intro gaps (STR-9); undefined terms (STR-10/GLO-3); style
+   location: missing/placeholder Owners, Initiative, Designs (STR-2/3/5/7 — the
+   back-links STR-4/6 are external and not reported); intro gaps (STR-9);
+   undefined terms (STR-10/GLO-3); style
    (LANG-1/2/3/5/6/7); non-atomic or unverifiable requirements (REQ-1/5/6);
    glossary discipline (GLO-1/2); scope coverage and conflicts — every In Scope
    item needs ≥ 1 requirement and none may contradict Out of Scope (SCO-2/3);
@@ -196,9 +197,9 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    not be verified against it — a *facts* gap, distinct from the format checks
    above. For each such facts gap, hand it to `srd:report-doc-gap` (see
    [Reporting a doc gap](#reporting-a-doc-gap)). Items
-   left as marked placeholders (Initiative, Designs, Owners, back-links, an
-   unresolved In Scope `--- TODO ---` marker, and any non-empty `## TODO`
-   section) are always reported as outstanding human follow-ups.
+   left as marked placeholders (Initiative, Designs, Owners, an unresolved In
+   Scope `--- TODO ---` marker, and any non-empty `## TODO` section) are always
+   reported as outstanding human follow-ups.
 
 Do not mark the draft acceptable: a new SRD is `In Progress` and acceptance
 (STA-3, Quality Bar) is a human decision.
@@ -207,8 +208,8 @@ Do not mark the draft acceptable: a new SRD is `In Progress` and acceptance
 
 Write the SRD as a single `.md` file to the path the user gives (ask if they have
 not said). Then summarize: the file path, the requirement groups and counts, and
-the outstanding human follow-ups from step 4 (placeholders to fill, back-links to
-create, anything reported).
+the outstanding human follow-ups from step 4 (placeholders to fill, anything
+reported).
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.

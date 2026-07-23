@@ -42,10 +42,13 @@ proceed.** Read these before reviewing:
   consistency pass.
 
 **Apply the full rule set.** `create` leaves STR-2..7 (≥ 2 owners,
-Initiative link + back-link, Designs link + back-link, Designs `N/A` when no UI
-change) and STA-* (valid Status; not `Accepted` without an approved design or
-the Quality Bar) as placeholders. A finished SRD under review must satisfy
-them — flag every gap.
+Initiative link, Designs link or `N/A` when no UI change) and STA-* (valid
+Status; not `Accepted` without an approved design or the Quality Bar) as
+placeholders. A finished SRD under review must satisfy them — flag every gap.
+Exception: the back-links (STR-4, STR-6) live in the external ticket and design
+tool, outside the SRD artifact — the review only checks that the forward
+Initiative and Designs links are present in the metadata, and never raises a
+back-link finding.
 
 ## Documentation corpus (when available)
 
@@ -80,7 +83,8 @@ Tag each finding:
   `--- TODO ---` marker stands), requirement contradicting `Out
   of Scope` (SCO-3), undefined term (GLO-3/STR-10), rule hidden in a glossary
   entry or metadata (GLO-1/2), duplicate or out-of-order id (REQ-3/4), missing
-  required link or back-link (STR-2..7), invalid or over-claimed Status (STA-*),
+  required forward link (STR-2/3/5/7; back-links STR-4/6 are external, never
+  flagged), invalid or over-claimed Status (STA-*),
   an unresolved draft scaffold — the In Scope `--- TODO ---` marker or a
   non-empty `## TODO` section (see the authoring guide's house additions).
 - **major** — real defect, does not block: style (LANG-1/2/5/6/7), terminology
