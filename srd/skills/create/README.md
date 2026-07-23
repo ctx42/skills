@@ -58,11 +58,11 @@ questioning.
 
 ## What to Expect
 
-- A new `In Progress` SRD as a single Markdown file at the path you choose.
+- A new `IN PROGRESS` SRD as a single Markdown file at the path you choose.
 - Marked placeholders for anything that needs an external system (ticketing
   initiative, approved design, owners) plus a back-link reminder.
 - A short report of what still needs a human decision before the SRD can be
-  accepted. The skill never marks an SRD `Accepted` — that is a human call.
+  accepted. The skill never marks an SRD `ACCEPTED` — that is a human call.
 
 ## Evaluations
 
@@ -79,7 +79,7 @@ questioning.
   ("the system MUST require a reset token that expires after 15 minutes") per
   REQ-6, and keeps each requirement atomic (REQ-1).
 - Produces the sections in the required order with the keyword notice, Status
-  `In Progress`, and TODO placeholders for Owners/Initiative/Designs.
+  `IN PROGRESS`, and TODO placeholders for Owners/Initiative/Designs.
 
 ### 2. Reuse the shared glossary
 
@@ -104,7 +104,7 @@ glossary (e.g. "Audit Log") and a brand-new term.
 - Reports the judgment issues citing rule ids: the non-atomic requirement should
   be split (REQ-1) and the uncovered `In Scope` item needs a requirement
   (SCO-2).
-- Does not declare the SRD acceptable or set its Status to `Accepted`.
+- Does not declare the SRD acceptable or set its Status to `ACCEPTED`.
 
 ### 4. No UI change sets Designs to N/A
 

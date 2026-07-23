@@ -81,7 +81,7 @@ stays this skill's job; only corpus deficiencies cross to `report-doc-gap`.
 Before any edit:
 
 1. **Read** the whole SRD top to bottom.
-2. **Approval gate.** Read the `Status` metadata, pre-fill approved (`Accepted`)
+2. **Approval gate.** Read the `Status` metadata, pre-fill approved (`ACCEPTED`)
    vs in-progress (anything else), then **show it and ask the user to confirm or
    override**. The answer governs id rules for the whole session — never trust
    `Status` silently.
@@ -148,7 +148,7 @@ restructures sections, follow the order in
 Two working scaffolds live in a draft SRD (see the House additions in
 [../create/references/authoring-guide.md](../create/references/authoring-guide.md)).
 Recognize and maintain them across every mode; never remove either silently, and
-flag both at session end as human follow-ups that block `Accepted`:
+flag both at session end as human follow-ups that block `ACCEPTED`:
 
 - In Scope `--- TODO ---` marker — while `### In Scope` holds only this marker,
   In Scope is knowingly pending: suppress every SCO-2 / In-Scope-coverage
@@ -250,7 +250,7 @@ a re-narration of diffs the user already saw:
   user declined).
 - Outstanding human follow-ups (placeholders, back-links, Status), including an
   unresolved In Scope `--- TODO ---` marker and any non-empty `## TODO` section
-  — both block `Accepted`.
+  — both block `ACCEPTED`.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.

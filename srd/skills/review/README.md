@@ -70,7 +70,7 @@ for acceptance.
 - On a re-run, fixed findings are ticked and moved to `## Resolved` (keeping
   their number) and new ones appended — the file is updated in place, never
   rewritten from scratch; numbers are never reused.
-- The skill never edits the SRD and never declares it `Accepted` — acceptance is
+- The skill never edits the SRD and never declares it `ACCEPTED` — acceptance is
   a human decision.
 
 ## Evaluations
@@ -93,12 +93,12 @@ and a line runs to 96 columns.
 ### 2. Applies rules create only stubs
 
 **Request:** `/review specs/api.md` on an SRD whose metadata lists a single
-owner, has no Initiative link, and is marked `Status: Accepted` with no approved
+owner, has no Initiative link, and is marked `Status: ACCEPTED` with no approved
 design though it changes the UI.
 
 **Expected behavior:**
 - Flags the single owner (STR-2), the missing Initiative link and back-link
-  (STR-3/4), and the `Accepted` status without an approved design (STA-2) — all
+  (STR-3/4), and the `ACCEPTED` status without an approved design (STA-2) — all
   **blocker** — instead of treating them as expected placeholders.
 - Records them under the Metadata section of the review file.
 
@@ -147,7 +147,7 @@ defective sample).
 - Finds at least: GR-1 non-atomic (REQ-1); duplicate id GR-3 (REQ-3); "fast"
   unverifiable (REQ-6); SC-2 uncovered (SCO-2); GR-4 contradicts OSC-1
   (SCO-3); behavior in the Export Job glossary entry (GLO-1/2); a single owner
-  (STR-2); missing Initiative link (STR-3); `Accepted` with an unapproved
+  (STR-2); missing Initiative link (STR-3); `ACCEPTED` with an unapproved
   design and unmet Quality Bar (STA-2/STA-3); MUST in the Introduction
   (LANG-3); British spellings (minor).
 - Serves as the before/after gate whenever the shared references change: the

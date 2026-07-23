@@ -7,7 +7,7 @@
 | **Objective**  | Define rules for exporting widgets. |
 | **Initiative** | N/A                                 |
 | **Owners**     | @alice                              |
-| **Status**     | Accepted                            |
+| **Status**     | ACCEPTED                            |
 | **Designs**    | <TODO: link to the design>          |
 
 > [!INFO]

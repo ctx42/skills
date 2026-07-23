@@ -5,7 +5,7 @@
 | **Objective**  | <one or two plain sentences: what this SRD specifies>         |
 | **Initiative** | <TODO: link to the ticketing initiative — must link back>     |
 | **Owners**     | <TODO: @primary-owner>, <TODO: @secondary-owner>              |
-| **Status**     | [[!In Progress\|color=blue;style=bold]]                       |
+| **Status**     | [[!IN PROGRESS\|color=blue;style=bold]]                       |
 | **Designs**    | <N/A — or TODO: link to the approved design — must link back> |
 
 [[TOC]]
@@ -39,7 +39,7 @@ glossary. Each entry defines the term and nothing else — no behavior, no rules
 <!-- In Scope derives from the requirements. Leave the `--- TODO ---` marker
      below until the requirements settle, then replace it with SC-n items — one
      per delivered capability, e.g. `**SC-1:** <An atomic, verifiable thing this
-     SRD delivers.>`. Resolve the marker before Status becomes Accepted. -->
+     SRD delivers.>`. Resolve the marker before Status becomes ACCEPTED. -->
 
 --- TODO ---
 
@@ -59,7 +59,7 @@ glossary. Each entry defines the term and nothing else — no behavior, no rules
 
 <!-- Optional working section: open authoring issues to return to, as a numbered
      list. Not requirements — no normative keywords. Add items as they arise;
-     this section MUST be empty or removed before Status becomes Accepted. Drop
+     this section MUST be empty or removed before Status becomes ACCEPTED. Drop
      the whole section if there are no open issues. -->
 
 1. <Open issue the author must resolve.>

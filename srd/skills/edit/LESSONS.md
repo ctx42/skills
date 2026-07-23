@@ -3,7 +3,7 @@
 Rules learned for the `edit` skill. Read before running; obey each line.
 
 - Never propose changing an SRD's Status or list status advancement (e.g. to
-  "Accepted") as a follow-up — Status transitions are solely the human's
+  "ACCEPTED") as a follow-up — Status transitions are solely the human's
   decision; flag only a malformed STA-* value, never a transition.
 - Never propose pushing or publishing an SRD (to Confluence or anywhere), and
   never frame "push before the next pull" or similar sync action as a

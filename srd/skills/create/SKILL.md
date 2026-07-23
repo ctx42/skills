@@ -20,7 +20,7 @@ standard, and self-checking the draft before saving it.
   files under `references/`, `assets/`, and `scripts/` are owned here; the other
   SRD skills read them.
 - **Must not:** review or audit an SRD written elsewhere (that is `review`);
-  edit an existing SRD as a service (that is `edit`); mark an SRD `Accepted`
+  edit an existing SRD as a service (that is `edit`); mark an SRD `ACCEPTED`
   — acceptance is a human decision (STA-3).
 
 ## Sources of truth
@@ -130,7 +130,7 @@ time**, in this order, and restate each resolved branch before moving on:
 
 Do not collect Owners, Initiative links, or Designs links — those are left as
 marked placeholders (the skill fetches no such links). Status is always
-`In Progress` for a new draft.
+`IN PROGRESS` for a new draft.
 
 Interview style: relentless, focused, no bundled questions; push back on
 contradictions; surface a decision that blocks another before continuing.
@@ -179,7 +179,7 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    keyword notice placement (STR-8), identifier format/uniqueness/order
    (REQ-2/3/4), keyword capitalization (LANG-4), stray example or note text
    (REQ-7), 80-column wrap (MD-2), valid Markdown (MD-1), Status defaulting to
-   `In Progress`, Designs `N/A` when the user said no UI change, British → US
+   `IN PROGRESS`, Designs `N/A` when the user said no UI change, British → US
    spelling.
 2. **Consistency pass** — run the consistency pass in
    [references/authoring-guide.md](references/authoring-guide.md), re-reading the
@@ -201,7 +201,7 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    Scope `--- TODO ---` marker, and any non-empty `## TODO` section) are always
    reported as outstanding human follow-ups.
 
-Do not mark the draft acceptable: a new SRD is `In Progress` and acceptance
+Do not mark the draft acceptable: a new SRD is `IN PROGRESS` and acceptance
 (STA-3, Quality Bar) is a human decision.
 
 ### 5. Write

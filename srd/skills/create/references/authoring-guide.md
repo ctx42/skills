@@ -37,14 +37,14 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   the In-Scope-coverage checks (SCO-2, Quality Bar 2) are suspended — In Scope
   is knowingly pending, not defective. Replace the marker with real `SC-n` items
   derived from the settled requirements (see the derivation procedure in
-  [srd-procedures.md](srd-procedures.md)) before the SRD is `Accepted`. An
+  [srd-procedures.md](srd-procedures.md)) before the SRD is `ACCEPTED`. An
   unresolved marker is a house blocker for acceptance: always flag it, never
   keep it silently, and never remove it without deriving the items.
 - **`## TODO` scaffold.** An SRD MAY carry a `## TODO` section as its last
   section (after Requirements; STR-14) — a numbered list of open authoring
   issues the human must return to. These are working notes, not requirements:
   they carry no normative keywords and are exempt from REQ-7 (they sit outside
-  any requirement). It MUST be empty or removed before the SRD is `Accepted`; a
+  any requirement). It MUST be empty or removed before the SRD is `ACCEPTED`; a
   non-empty `## TODO` is a house blocker for acceptance and is always flagged.
 
 ## Consistency pass

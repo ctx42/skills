@@ -61,7 +61,7 @@ or rename `create`, or this skill loses its standard.
 ## Draft Scaffolds
 
 Two working scaffolds live in a draft SRD (defined in `create`'s authoring
-guide); `edit` maintains both and flags them as blockers for `Accepted`.
+guide); `edit` maintains both and flags them as blockers for `ACCEPTED`.
 
 - **In Scope `--- TODO ---` marker** — In Scope derives from the requirements, so
   `### In Scope` may hold just this marker until the requirements settle. While
@@ -90,9 +90,9 @@ guide); `edit` maintains both and flags them as blockers for `Accepted`.
 ## Evaluations
 
 **Scenario 1 — Interactive edit of a non-atomic requirement on an approved SRD.**
-Request: `/edit specs/login.md` where `Status: Accepted` and `GR-3a` reads
+Request: `/edit specs/login.md` where `Status: ACCEPTED` and `GR-3a` reads
 "The system SHALL validate the token and log the attempt."
-- Runs the approval gate first: reads `Status: Accepted`, states it, and asks the
+- Runs the approval gate first: reads `Status: ACCEPTED`, states it, and asks the
   user to confirm before editing. Resolves the glossary.
 - Front-loads a grouped issue summary, then walks entry by entry; for `GR-3a`
   proposes **one** change — split into two atomic rules (REQ-1) — with location,
@@ -151,4 +151,4 @@ TODO."
 - Appends it as the next numbered item in the `## TODO` section (creating the
   section as the last one if absent), without the propose-and-confirm loop.
 - Renumbers nothing else; reports only the single line added. At session end the
-  non-empty `## TODO` is flagged as a follow-up that blocks `Accepted`.
+  non-empty `## TODO` is flagged as a follow-up that blocks `ACCEPTED`.

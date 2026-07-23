@@ -43,7 +43,7 @@ proceed.** Read these before reviewing:
 
 **Apply the full rule set.** `create` leaves STR-2..7 (≥ 2 owners,
 Initiative link, Designs link or `N/A` when no UI change) and STA-* (valid
-Status; not `Accepted` without an approved design or the Quality Bar) as
+Status; not `ACCEPTED` without an approved design or the Quality Bar) as
 placeholders. A finished SRD under review must satisfy them — flag every gap.
 Exception: the back-links (STR-4, STR-6) live in the external ticket and design
 tool, outside the SRD artifact — the review only checks that the forward

@@ -135,29 +135,29 @@ sections.
 
 ## Status and Changes
 
-**STA-1:** The "Status" field MUST be one of: "In Progress", "Proposed",
-"Accepted", or "Rejected".
+**STA-1:** The "Status" field MUST be one of: "IN PROGRESS", "PROPOSED",
+"ACCEPTED", or "REJECTED".
 
 **STA-2:** An SRD that requires changes to the UI MUST NOT have a "Status" of
-"Accepted" unless the linked design is also approved.
+"ACCEPTED" unless the linked design is also approved.
 
-**STA-3:** An SRD MUST NOT have a "Status" of "Accepted" unless it meets the
+**STA-3:** An SRD MUST NOT have a "Status" of "ACCEPTED" unless it meets the
 Quality Bar.
 
-**STA-4:** After an SRD is "Accepted", an edit MUST NOT add, remove, or change a
+**STA-4:** After an SRD is "ACCEPTED", an edit MUST NOT add, remove, or change a
 requirement, unless the approving authority agrees to the change.
 
-**STA-5:** An "Accepted" SRD MAY receive edits that do not change its
+**STA-5:** An "ACCEPTED" SRD MAY receive edits that do not change its
 requirements, such as fixing a typo or making a statement or requirement
 clearer.
 
-**STA-6:** Before an SRD is "Accepted", the author MAY renumber its requirements
+**STA-6:** Before an SRD is "ACCEPTED", the author MAY renumber its requirements
 freely.
 
-**STA-7:** After an SRD is "Accepted", the author MUST NOT renumber its
+**STA-7:** After an SRD is "ACCEPTED", the author MUST NOT renumber its
 requirements.
 
-**STA-8:** After an SRD is "Accepted", the author MUST show a removed
+**STA-8:** After an SRD is "ACCEPTED", the author MUST show a removed
 requirement with strikethrough (crossed-out text) and MUST keep its identifier.
 
 ## Language and Style
