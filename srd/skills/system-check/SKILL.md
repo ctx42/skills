@@ -5,8 +5,9 @@ description: >
   build it, surfacing the questions that block implementation. Use when
   asked to review an SRD for build-readiness, ask implementation questions
   about an SRD, check which SRD questions remain open, or curate the
-  platform-knowledge memory.
-argument-hint: "<path to SRD> | memory"
+  platform-knowledge memory — including banking durable system facts the current
+  session surfaced and pruning facts the docs now cover.
+argument-hint: "<path to SRD> | memory | learn | memory-clean"
 license: MIT
 ---
 
@@ -99,15 +100,19 @@ drains any gaps left unfiled.
 
 ## Invocation
 
-`$1` is the SRD path, or the literal `memory` to curate the knowledge base. With
-no `$ARGUMENTS`, ask which SRD to check; fall back to the user's prose for
-free-form input.
+`$1` is the SRD path, or a literal mode word. With no `$ARGUMENTS`, ask which SRD
+to check; fall back to the user's prose for free-form input.
 
 - `$1` = an SRD path → **review** (default): the full flow below. Re-running on
   an SRD that already has a `<srd>.questions.md` resumes the open questions (see
   [Re-run](#re-run-after-an-edit)).
-- `$1` = `memory` → **memory**: curate `memory.md` only, no SRD. See
+- `$1` = `memory` → **memory**: curate `memory.md` structurally, no SRD. See
   [Memory mode](#memory-mode).
+- `$1` = `learn` → **learn**: harvest durable system facts from the current
+  session into `memory.md`, keeping only what memory and the corpus do not
+  already cover. See [Learn mode](#learn).
+- `$1` = `memory-clean` → **memory-clean**: prune `memory.md` of facts the
+  `srd-doc` corpus now covers. See [Memory-clean mode](#memory-clean).
 
 ## review (default)
 
@@ -211,6 +216,48 @@ exists is **resume mode**:
 
 One change at a time; confirm each edit. Make no change silently.
 
+## learn
+
+`/system-check learn` harvests durable system facts learned in the **current
+session** into `memory.md` — no SRD, no walk. Use it to bank what this
+conversation taught you about the platform before it scrolls away.
+
+1. Resolve `$MEM` and the live-doc backend (see
+   [Documentation corpus](#documentation-corpus-when-available)). The `srd-doc`
+   corpus is the coverage oracle: with it present, a candidate the corpus
+   already documents is dropped; absent, proceed but dedup against `memory.md`
+   alone and tell the user coverage was not checked.
+2. Scan this session for **durable, reusable system facts** — the same bar as a
+   memory write: a general platform fact, not one specific to an SRD, ticket, or
+   this review. Restatements of the SRD currently in play do not qualify.
+3. Keep a candidate only when all hold: not already in `memory.md`; not covered
+   by the corpus (`search`, then `get_doc` to confirm); a system fact, not
+   review context. What survives is tribal knowledge → source `[unwritten]`.
+4. Show each surviving line with its target topic heading, confirm one at a
+   time, write only on approval — per the [Memory](#memory) writing rules.
+
+Report tersely: state what was banked and what was dropped as already-covered,
+once — do not re-print `memory.md`.
+
+## memory-clean
+
+`/system-check memory-clean` reconciles `memory.md` against the live corpus and
+prunes what the corpus now covers — memory is the tribal layer and documented
+facts are fetched live, so a fact the docs carry does not belong here. No SRD.
+
+1. Resolve the backend. `srd-doc` is **required**: without a corpus there is
+   nothing to reconcile against — say so and stop.
+2. For each fact, `search` the corpus (then `get_doc` to confirm) for coverage.
+   When the corpus fully covers the fact, offer to **remove** it (the default —
+   the corpus serves it live); the escape hatch is to repoint an `[unwritten]`
+   line to the covering doc id instead. Leave partially-covered facts, noting
+   what the doc omits.
+3. One change at a time; confirm each; nothing silent.
+
+This is the coverage pass only; for structural curation (broken pointers,
+duplicates, regrouping) run [`memory`](#memory-mode). Report the counts —
+removed, repointed, kept — once.
+
 ## Questions file
 
 ```
@@ -257,6 +304,11 @@ atomic one-line facts that lets the implementer confront the SRD without
 re-reading the whole platform. Maintaining it is a first-class job of this
 skill; it lives per-machine, not in this skill's directory (see
 [Where memory.md lives](#where-memorymd-lives)).
+
+Prefer facts the corpus does **not** carry: memory is the tribal layer, and
+documented facts are fetched live from `srd-doc`. A doc-id line is allowed as
+provenance but becomes a removal candidate once the corpus fully covers it —
+[`memory-clean`](#memory-clean) prunes memory back to that.
 
 Format:
 

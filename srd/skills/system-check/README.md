@@ -24,7 +24,12 @@ question at a time. It produces questions, never rewrites.
   `[unwritten]`). A header line declares the absolute space root; pointers are
   relative to it. The skill validates the root every run and flags any pointer
   that no longer resolves. Maintaining memory is a first-class job — facts are
-  added from answers during the walk, always with your confirmation.
+  added from answers during the walk, always with your confirmation. Memory is
+  the **tribal layer**: it prefers what the docs do not carry, and
+  `memory-clean` prunes back any fact the `srd-doc` corpus now covers.
+- **Learn.** `learn` sweeps the current conversation for durable platform facts,
+  keeps only those neither `memory.md` nor the corpus already covers, and banks
+  each as `[unwritten]` on your confirmation — no SRD needed.
 - **Delegation.** For the standard checks the skill reuses `srd:review` instead
   of re-implementing them. It never writes `<srd>.review.md`:
   - if that file exists, it is read as-is (review is **not** run, so the
@@ -41,7 +46,9 @@ question at a time. It produces questions, never rewrites.
 
 ```
 /system-check path/to/srd.md   review + walk (resumes open questions on re-run)
-/system-check memory           curate memory.md only (validate, dedupe, regroup)
+/system-check memory           curate memory.md structurally (validate, dedupe, regroup)
+/system-check learn            bank durable system facts learned this session into memory
+/system-check memory-clean     prune memory of facts the srd-doc corpus now covers
 ```
 
 On a re-run after the SRD was edited, the skill runs `srd:review … check`
@@ -119,3 +126,29 @@ renamed in the space.
   `specs/labeling.questions.md`, 6 open questions") without re-listing the
   questions already in the file.
 - Opens the walk with the first question, not a summary of what it just did.
+
+### 6. Learn banks only uncovered session facts
+
+**Request:** `/system-check learn` after a conversation surfaced two platform
+facts — one the `srd-doc` corpus already documents, one tribal (in no doc).
+
+**Expected behavior:**
+- Resolves the corpus, then drops the documented fact after a `search`/`get_doc`
+  confirmation and keeps only the tribal one.
+- Shows the surviving line and its target topic heading, writes it as
+  `[unwritten]` only on confirmation, and does not restate the SRD in play.
+- Reports what was banked and what was dropped as already-covered, without
+  re-printing `memory.md`.
+
+### 7. memory-clean prunes corpus-covered facts
+
+**Request:** `/system-check memory-clean` when the corpus is present and one
+`memory.md` line is now fully documented in an srd-doc page.
+
+**Expected behavior:**
+- Requires the corpus; would stop if none were reachable.
+- Confirms coverage via `search`/`get_doc`, then offers to remove the covered
+  line by default (repoint to the doc id as the escape hatch), one change at a
+  time, nothing silent.
+- Leaves partially-covered facts in place and reports removed/repointed/kept
+  counts once.
