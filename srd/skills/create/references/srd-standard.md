@@ -219,8 +219,10 @@ behavior, rules, or required actions.
 to the "Requirements" section. If it repeats another rule, it MUST be removed
 instead.
 
-**GLO-3:** Every term used in a requirement MUST be defined, either in the SRD's
-"Glossary" section or in the shared glossary.
+**GLO-3:** Every term used in a requirement that needs a definition MUST be
+defined, either in the SRD's "Glossary" section or in the shared glossary.
+Proper names — product, service, tool, and device names — do not need a
+definition.
 
 ## Scope Discipline
 
@@ -242,9 +244,9 @@ Markdown.
 
 An SRD is acceptable when all of these are true:
 
-1. An engineer who is new to the topic can read the introduction, glossary,
-   scope, and one requirements group, and then describe correctly what the
-   system must do.
+1. An engineer who is new to the topic can read the introduction, glossary (if
+   present), scope, and one requirements group, and then describe correctly
+   what the system must do.
 2. Every "In Scope" item is covered by the requirements, with no conflict.
 3. A reviewer can write a test or check for every requirement, without asking
    the author for help.
