@@ -1,3 +1,6 @@
+## v0.22.0 (Thu, 23 Jul 2026 09:58:54 UTC)
+- feat(srd-system-check): add learn and memory-clean modes.
+
 ## v0.21.0 (Thu, 23 Jul 2026 08:17:37 UTC)
 - docs(srd): stop flagging external STR-4/6 back-links.
 
