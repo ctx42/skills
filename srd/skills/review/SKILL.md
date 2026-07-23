@@ -160,13 +160,15 @@ section — so a long list reads as distinct blocks, not a wall of text. One
 blank line after a section heading before its first finding; never two.
 
 The metadata is YAML frontmatter with lowercase keys; `prepared` and `updated`
-carry a date **and time**.
+carry a date **and time**. Include `cfsync-plugin: ignore-push` verbatim so the
+Confluence sync never pushes this generated artifact.
 
 ```
 ---
 prepared: YYYY-MM-DD HH:MM
 updated: YYYY-MM-DD HH:MM
 source: path/to/srd.md
+cfsync-plugin: ignore-push
 ---
 
 # SRD Review — <Document Title>

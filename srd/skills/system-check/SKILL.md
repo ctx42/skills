@@ -260,7 +260,14 @@ removed, repointed, kept — once.
 
 ## Questions file
 
+Open with YAML frontmatter carrying `cfsync-plugin: ignore-push` verbatim, so
+the Confluence sync never pushes this generated artifact.
+
 ```
+---
+cfsync-plugin: ignore-push
+---
+
 # SRD Questions — <Document Title>
 
 Source: `path/to/srd.md`
