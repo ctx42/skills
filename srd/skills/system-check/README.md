@@ -10,6 +10,19 @@ layer** — confronting the SRD against a curated memory of the target platform
 — and presents the whole thing as one author-facing question list it walks one
 question at a time. It produces questions, never rewrites.
 
+## Usage
+
+```
+/system-check path/to/srd.md   review + walk (default): resumes open questions on re-run
+/system-check memory           curate memory.md structurally (validate, dedupe, regroup)
+/system-check learn            bank durable system facts learned this session into memory
+/system-check memory-clean     prune memory of facts the srd-doc corpus now covers
+```
+
+On a re-run after the SRD was edited, the skill runs `srd:review … check`
+(non-destructive: strikes fixed, appends new), drops open questions the edit
+answered, re-runs system confrontation, and walks the refreshed open set.
+
 ## When to Use
 
 - You receive an SRD and need to know whether the team can build it as written.
@@ -41,19 +54,6 @@ question at a time. It produces questions, never rewrites.
   (was-blocker first, then system + was-major, then was-minor) — but no severity
   tags or rule ids ever appear in the file. Answering a question removes it and
   offers to save any durable fact to memory.
-
-## Usage
-
-```
-/system-check path/to/srd.md   review + walk (resumes open questions on re-run)
-/system-check memory           curate memory.md structurally (validate, dedupe, regroup)
-/system-check learn            bank durable system facts learned this session into memory
-/system-check memory-clean     prune memory of facts the srd-doc corpus now covers
-```
-
-On a re-run after the SRD was edited, the skill runs `srd:review … check`
-(non-destructive: strikes fixed, appends new), drops open questions the edit
-answered, re-runs system confrontation, and walks the refreshed open set.
 
 ## What to Expect
 

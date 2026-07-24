@@ -11,6 +11,12 @@ It is a **consumer** skill: it turns reported gaps into a publishable draft. It
 does not report gaps (that is `srd:create` / `srd:system-check`), does not
 publish to Confluence, and never writes into the corpus.
 
+## Usage
+
+```
+/resolve-doc-gaps   list, cluster, draft, and resolve the doc-gap backlog (default)
+```
+
 ## When to Use
 
 - You want to work the doc-gap backlog the `srd-doc` server has collected.
@@ -37,15 +43,6 @@ publish to Confluence, and never writes into the corpus.
    index.
 7. **Resolves** every gap in the cluster with the URL once you publish to
    Confluence by hand.
-
-## Usage
-
-```
-/resolve-doc-gaps
-```
-
-Point it at a client wired to the `srd-doc` server with a gap store, or one
-whose REST `/gaps` endpoints are reachable.
 
 ## What to Expect
 

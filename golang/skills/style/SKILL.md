@@ -18,9 +18,10 @@ Two uses:
 
 - Reference — read the rules below and apply the **Production** section to
   `*.go`, the **Test** section to `*_test.go` (Test inherits Production unless a
-  Test rule overrides it). This is the default when loaded before writing Go.
-- Run a pass — invoked with a target (`$ARGUMENTS` non-empty): check finished
-  code against these rules and propose fixes. Read
+  Test rule overrides it). This is the default when the skill is loaded as
+  context before writing Go, rather than invoked as a command.
+- Run a pass — invoked as `/style [target]`: check finished code against these
+  rules and propose fixes; with no target it checks the current git diff. Read
   [references/checking.md](references/checking.md) and follow it; per-rule
   detection detail lives in [rules.md](rules.md).
 

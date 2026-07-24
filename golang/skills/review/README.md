@@ -24,13 +24,16 @@ across a whole editing session into rules.
 ## Usage
 
 ```
-/review                                    # review the current git diff
-/review ./pkg/foo                          # review one package
-/review ./...                              # review the whole module
-/review /path/to/project                   # review that module (go.mod dir)
-/review add "no naked returns in tests"    # add or refine a rule
-/review remove "the compile-time check rule"
-/review learn                              # mine this session's feedback into rules
+/review                                       check (default): review the current git diff
+/review ./pkg/foo                             review one package
+/review ./...                                 review the whole module
+/review /path/to/project                      review that module (a go.mod dir)
+/review ./... max_issues=15 depth=light       cap findings; set review depth
+/review ./... plan_first                      plan + top findings, then stop for approval
+/review ./pkg/foo fix                         review, then apply the findings
+/review add "no naked returns in tests"       add or refine a style rule
+/review remove "the compile-time check rule"  remove a style rule
+/review learn                                 mine this session's feedback into rules
 ```
 
 Targets: no argument reviews the current diff; a package path/import reviews

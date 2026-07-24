@@ -18,18 +18,10 @@ those), and it runs the install/quickstart commands it ships to prove they work.
 ## Usage
 
 ```
-/readme-smith create a README for this project      # create mode
-/readme-smith improve the README                    # audit + fix existing
-/readme-smith review README.md                      # audit by path
+/readme-smith                        (default) infer create vs improve from the request; asks if ambiguous
+/readme-smith create <desc>          scan the repo and draft a new README.md, grounded in real code
+/readme-smith improve <readme-path>  audit an existing README, report findings, fix on confirmation
 ```
-
-You don't need a mode keyword — it infers create vs improve from the request. No
-usable README → CREATE. Point at an existing one → IMPROVE.
-
-- **Create** grounds everything in a repo scan, asks positioning/audience gaps in
-  one batched round, drafts, verifies, and writes `README.md`.
-- **Improve** reports before it edits: findings grouped Blocker / Should-fix /
-  Nit, each citing the rule it breaks.
 
 ## Evaluations
 

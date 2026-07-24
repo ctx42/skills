@@ -21,20 +21,11 @@ injection) wherever they earn their place. It enforces
 ## Usage
 
 ```
-/skill-smith create a skill that lints Markdown tables   # create mode
-/skill-smith improve cover                               # improve, one skill
-/skill-smith review cm                                   # audit by name
-/skill-smith measure grill-me                            # A/B benchmark a skill
+/skill-smith                  (default) infer create/improve/measure from the request; asks if ambiguous
+/skill-smith create <desc>    scaffold a whole new standard-compliant skill with evals
+/skill-smith improve <skill>  audit a skill against the standard, report, fix on confirmation
+/skill-smith measure <skill>  A/B-benchmark the skill's README scenarios and test triggering
 ```
-
-You don't need a mode keyword — it infers create vs improve from the request.
-Create new capability → CREATE. Name an existing skill → IMPROVE.
-
-- Create asks only what it can't infer (name, group, triggers), then scaffolds
-  under the group's `skills/` dir and reminds you to `/reload-plugins`.
-
-- Improve defaults to the single skill you name, deep. It reports before it
-  edits.
 
 ## Evaluations
 

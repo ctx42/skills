@@ -18,20 +18,18 @@ the result.
 ## Usage
 
 ```
-/doc func=Foo                         # one function's godoc + body comments
-/doc func=T.Bar                       # one method
-/doc pkg/svc/foo.go:42                # item enclosing that line
-/doc ./pkg/foo                        # a package, plan-first
-/doc module packages=svc,api          # module opt-in, selected packages
-/doc ./pkg/foo only=exported max_changes=10
+/doc ./pkg/foo                package (default): iterate item by item, plan-first
+/doc func=Foo                 one function's godoc + body comments; runs straight
+/doc func=T.Bar               one method
+/doc pkg/svc/foo.go:42        the item enclosing that line
+/doc pkg/svc/foo.go           every item in the file, plan-first
+/doc module                   every package, sequential, plan-first
+/doc ./pkg/foo max_changes=8  cap comments changed this run
+/doc module packages=svc,api  module mode: restrict to these packages
+/doc ./pkg/foo only=godoc     skip inline body comments
+/doc ./pkg/foo only=exported  package comment + exported symbols only
+/doc module fanout            module mode: one subagent per package, merged
 ```
-
-Targets:
-- single function (`func=`, or `file.go:line`) — runs straight, no approval
-  gate, then reports.
-- package (default, `./pkg/foo`) — iterates item by item, plan-first.
-- module (`./...`, a `go.mod` dir, or "module") — packages → items,
-  sequentially by default (opt into `fanout`), plan-first.
 
 A documentable item is the package comment, a declaration's godoc, or one
 function's inline comments.

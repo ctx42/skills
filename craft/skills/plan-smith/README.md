@@ -8,6 +8,14 @@ lands or gets dropped.
 Pairs with `grill-me`: grill-me reaches a shared understanding, plan-smith turns
 it into the tracked plan.
 
+## Usage
+
+```
+/plan-smith                     (default) ask whether to write a new plan or update an existing one
+/plan-smith write <brief>       create a tracked plan from a brief or a grill-me summary
+/plan-smith update <plan-file>  re-read the plan and refresh each item's checkbox and status
+```
+
 ## When to Use
 
 - You've settled what to build and want it captured as a checklist with status.
@@ -15,16 +23,6 @@ it into the tracked plan.
 - You have a plan in chat and want it persisted and trackable.
 
 - You're returning to a plan and want its status table brought up to date.
-
-## Usage
-
-```
-/plan-smith write a plan for <thing>      # create mode
-/plan-smith update tmp/x-plan.md          # refresh statuses
-```
-
-It writes to a file you name (or `tmp/<slug>-plan.md`) and confirms before
-overwriting.
 
 ## Format
 

@@ -3,35 +3,21 @@
 Writes and amends git commit messages following Conventional Commits format with
 high-quality, Linux kernel-style bodies.
 
+## Usage
+
+```
+/cm         mini message from the staged diff (default): summary + one why paragraph, not committed
+/cm micro   summary line only, no body
+/cm full    full multi-paragraph kernel-style body
+/cm apply   generate the message then commit directly, no confirm (combines, e.g. micro apply)
+/cm <hash>  derive the message from that commit's diff instead of the staged diff
+```
+
 ## When to Use
 
 - Before committing changes
 - When amending the last commit
 - To produce clear, professional commit history
-
-## Usage
-
-**From staged changes**
-`/cm`
-
-**From a specific commit**
-`/cm <commit-hash>`
-
-**Arguments** (combinable, e.g. `/cm micro apply`)
-- `micro` — summary line only, no body.
-- `mini` — summary line plus one short paragraph only (default).
-- `full` — full-length multi-paragraph kernel-style body.
-- `apply` — commit the message directly, without asking to confirm.
-
-The skill always derives the message from the actual diff. It produces:
-- Proper type/scope/summary line (≤50 chars recommended)
-- Kernel-style body explaining *why* the change was made
-- `BREAKING CHANGE:` footer when appropriate
-- `Refs:` trailer only
-
-Messages are held to the same clarity standard as excellent godoc.
-
-See `SKILL.md` for the full message structure and quality rules.
 
 ## Evaluations
 

@@ -27,21 +27,12 @@ taxonomy audit reports against.
 ## Usage
 
 ```
-/doc-smith create a user manual for the admin console   # create mode
-/doc-smith audit docs/manual.md                         # report findings
-/doc-smith proof docs/guide.md                          # fix in place
-/doc-smith work through docs/guide.md with me           # revise, paragraph by paragraph
-/doc-smith check these three files as one manual        # named set
+/doc-smith                   (default) infer the mode from your request; asks if ambiguous
+/doc-smith create <desc>     draft a new document or section from scratch
+/doc-smith audit <file>...   review, report findings by severity, edit nothing until approved
+/doc-smith proof <file>...   fix in place: grammar, clarity, consistency
+/doc-smith revise <file>...  work through the doc with you, one paragraph at a time
 ```
-
-Pass a mode word and file(s) as arguments (`create|audit|proof|revise`
-`[<file>...]`), or skip the keyword and it infers create vs audit vs proof vs
-revise from the request ("proofread" works too). Point it at a file or a named
-set and it treats them as one document.
-
-To add net-new content — a whole doc or a new section — use `create`; to change
-what's already there, use `proof` (fix in place) or `revise` (paragraph by
-paragraph with you).
 
 ## Evaluations
 

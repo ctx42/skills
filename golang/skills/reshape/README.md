@@ -14,18 +14,10 @@ responsibilities upstream, …), then ranks by impact so the biggest win leads.
 ## Usage
 
 ```
-/reshape github.com/ctx42/testing/pkg/must     # whole module, default consumer scope
-/reshape must in ./pkg/render                   # restrict the consumer to one package
-/reshape oskit max=5                            # cap to the top 5 proposals
+/reshape github.com/x/y/must   default: map call sites across the whole module
+/reshape must in ./pkg/render  restrict the consumer scope to one package
+/reshape must max=5            cap proposals reported (highest impact; default 8)
 ```
-
-Targets:
-- library — an import path, module path, or short package name the project
-  imports; consumer scope defaults to the current module.
-- scoped (`in ./pkg/foo`) — restrict the call-site analysis to that package.
-
-Controls:
-- `max=N` — cap on proposals reported (default 8), highest impact first.
 
 It detects whether the library source is editable (local module / `replace` /
 `go.work` → concrete diffs) or external (public surface → API-shape proposals

@@ -8,6 +8,13 @@ standard, and writes it to a Markdown file.
 It is an **author** skill: it creates new SRDs. It does not review or audit an
 SRD written elsewhere.
 
+## Usage
+
+```
+/create                            author a new SRD by interview (default)
+/create <what it should specify>   seed the opening Objective, then interview
+```
+
 ## When to Use
 
 - You need a new SRD and want it to meet the house standard the first time.
@@ -46,15 +53,6 @@ defect examples) in `references/authoring-guide.md`; shared operating procedures
 `scripts/glossary-fingerprint.sh`.
 The `edit` and `review` skills read these same files — `create` owns
 them.
-
-## Usage
-
-```
-/create
-```
-
-Then describe what the system or feature must do. The agent takes over the
-questioning.
 
 ## What to Expect
 

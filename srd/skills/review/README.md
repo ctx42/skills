@@ -9,6 +9,17 @@ source.
 It is a **read-only review** skill: it never edits the SRD. It produces findings
 the author acts on. To create a new SRD, use `create`.
 
+## Usage
+
+```
+/review path/to/srd.md            review (default): resolve fixed + append new
+/review path/to/srd.md walk       interactive, section by section
+/review path/to/srd.md check      re-verify open findings vs the current SRD
+/review path/to/srd.md check #4,6  re-verify only findings #4 and #6
+/review path/to/srd.md errata     re-sort existing findings into ## Errata
+/review path/to/srd.md feedback   terse plain-text list of open tasks
+```
+
 ## When to Use
 
 - Someone hands you an SRD and asks whether it meets the house standard.
@@ -55,17 +66,6 @@ It recognizes the two draft scaffolds (In Scope `--- TODO ---` marker and a
 `## TODO` section): while the marker stands it does not flag SCO-2 against In
 Scope, and it reports an unresolved marker or a non-empty `## TODO` as a blocker
 for acceptance.
-
-## Usage
-
-```
-/review path/to/srd.md            review (default): resolve fixed + append new
-/review path/to/srd.md walk       interactive, section by section
-/review path/to/srd.md check      re-verify open findings vs the current SRD
-/review path/to/srd.md check #4,6  re-verify only findings #4 and #6
-/review path/to/srd.md errata     re-sort existing findings into ## Errata
-/review path/to/srd.md feedback   terse plain-text list of open tasks
-```
 
 ## What to Expect
 

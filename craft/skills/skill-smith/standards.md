@@ -231,6 +231,25 @@ Scripts are allowed. When you include them:
   algorithm" (read as reference).
 - Don't assume packages are installed — state dependencies.
 
+## README structure
+
+- **Usage section, near the top.** Every skill's `README.md` MUST carry a
+  `## Usage` section immediately after the H1 title and its one-line intro,
+  before any other `##` section. It holds a single fenced code block showcasing
+  invocation examples — one line per mode: the invocation with representative
+  arguments, then a terse description. The no-argument / default invocation comes
+  first, marked `(default)`. Align the description column with padding so the
+  block reads as a table. Model it on `srd/skills/review/README.md`:
+
+  ```
+  /review path/to/srd.md            review (default): resolve fixed + append new
+  /review path/to/srd.md walk       interactive, section by section
+  /review path/to/srd.md check      re-verify open findings vs the current SRD
+  /review path/to/srd.md check #4,6  re-verify only findings #4 and #6
+  /review path/to/srd.md errata     re-sort existing findings into ## Errata
+  /review path/to/srd.md feedback   terse plain-text list of open tasks
+  ```
+
 ## Evaluations
 
 Mandatory and written before finalizing (eval-driven development):

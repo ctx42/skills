@@ -6,6 +6,16 @@ plus the `dev/srd-standard.header.md` / `dev/srd-standard.footer.md` frame,
 reports local edits that should be pushed upstream, and self-verifies that the
 copy mirrors the source verbatim.
 
+## Usage
+
+```
+/srd-sync   regenerate srd-standard.md from Confluence, report divergences (default)
+```
+
+`cfsync pull` the mirror first so the source is current. Then invoke; review the
+reported diffs and push any LOCAL-ONLY / reworded units to Confluence before
+confirming the write.
+
 See [SKILL.md](SKILL.md) for the transform rules, the diff buckets, and the
 consistency checks. `dev/srd-subst.sh` owns the deterministic
 vr-internal-reference swaps, so an LLM never edits rule text to make one.
@@ -14,14 +24,6 @@ Project-local (`.claude/skills/`), not shipped in any plugin — it depends on
 the vr checkout that plugin users do not have. The passive drift tripwire that
 lint runs is `dev/check-srd-standard.sh` (compares one `page_version` number);
 this skill does the actual regeneration.
-
-## Usage
-
-1. `cfsync pull` the mirror so the source is current.
-2. Invoke the skill ("sync the SRD standard" / "regenerate srd-standard from
-   Confluence").
-3. Review the reported diffs; push any LOCAL-ONLY / reworded units to Confluence
-   first if you want them kept, then confirm the write.
 
 ## When to use
 

@@ -9,6 +9,16 @@ files (`../create/references/*`, `../create/assets/*`,
 `../create/scripts/*`); this skill cites them, never restates them. Do not move
 or rename `create`, or this skill loses its standard.
 
+## Usage
+
+```
+/edit path/to/srd.md                         interactive: front-load issues, then walk entry by entry (default)
+/edit path/to/srd.md path/to/srd.review.md   feedback: apply a review file or pasted feedback, blocker→major→minor
+/edit path/to/srd.md autofix                 bulk-apply the review's ## Errata block behind one confirmation
+/edit path/to/srd.md polish                  mechanical-only cleanup (spelling, numbering, keywords), confirm each
+/edit path/to/srd.md GR-3a                   targeted: edit one entry by id, quoted text, or description
+```
+
 ## Modes
 
 - **Interactive (default)**: `/edit path/to/srd.md`

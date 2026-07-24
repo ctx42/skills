@@ -13,6 +13,18 @@ want in plain words and it becomes a durable rule, or run `golang:review learn`
 to turn a whole editing session's feedback into rules. Do not hand-edit
 `SKILL.md` for routine changes.
 
+## Usage
+
+```
+/style                                  style-check the current git diff (default)
+/style ./pkg/foo                        style-check one package
+/style ./...                            check the whole module
+/style /path/to/project                 check that module (a go.mod dir)
+/style ./pkg/foo fix                    apply every offense's fix without asking
+/style ./... plan_first                 list offenses only, then stop
+/style ./... max_issues=15 depth=light  cap offenses; set depth
+```
+
 ## Make agents follow it automatically
 
 For agents to apply the rules "when editing Go files", paste this directive into

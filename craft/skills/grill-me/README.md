@@ -9,6 +9,13 @@ the dependencies between decisions before moving on.
 Use it before building something, while the plan still has open questions,
 unstated assumptions, or choices that might conflict.
 
+## Usage
+
+```
+/grill-me                     interview about the plan described so far in the conversation (default)
+/grill-me <plan or approach>  interrogate the plan or approach given as the argument
+```
+
 ## When to Use
 
 - Starting a non-trivial feature, refactor, or new tool.
@@ -30,15 +37,6 @@ unstated assumptions, or choices that might conflict.
 5. Stops when everything is aligned and presents a structured summary with
    acceptance criteria per decision, then offers to hand it to `plan-smith` as a
    tracked plan.
-
-## Usage
-
-```
-/grill-me
-```
-
-Then describe the plan you want interrogated. The skill does not write code —
-it is for planning only.
 
 ## What to Expect
 

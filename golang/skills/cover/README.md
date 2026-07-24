@@ -15,21 +15,17 @@ them.
 ## Usage
 
 ```
-/cover func=Foo                       # one function, by name
-/cover func=T.Bar                     # one method
-/cover pkg/svc/foo.go:42              # function enclosing that line
-/cover ./pkg/foo                      # a package, plan-first
-/cover module packages=svc,api        # module opt-in, selected packages
-/cover func=Bar include=all max_tests=5
+/cover ./pkg/foo                package (default): iterate function by function, plan-first
+/cover func=Foo                 one function by name; runs straight, then reports
+/cover func=T.Bar               one method
+/cover pkg/svc/foo.go:42        the function enclosing that line
+/cover pkg/svc/foo.go           every function in the file, plan-first
+/cover module                   every package, sequential, plan-first
+/cover ./pkg/foo max_tests=8    cap tests/cases added this run
+/cover module packages=svc,api  module mode: restrict to these packages
+/cover func=Foo include=all     also attempt the deferred complex lines
+/cover module fanout            module mode: one subagent per package, merged
 ```
-
-Targets:
-- single function (`func=`, or `file.go:line`) — runs straight, no
-  approval gate, then reports.
-- package (default, `./pkg/foo`) — iterates function by function,
-  plan-first.
-- module (`./...`, a `go.mod` dir, or "module") — packages → functions,
-  sequentially with no fan-out, plan-first.
 
 ## Controls
 

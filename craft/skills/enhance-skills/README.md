@@ -10,6 +10,13 @@ lessons on its own during a run; `enhance-skills` is the batch engine that sweep
 a whole conversation after the fact and back-fills what the inline mechanism
 missed.
 
+## Usage
+
+```
+/enhance-skills          harvest lessons from this conversation into the skills used (default)
+/enhance-skills <skill>  retrofit the ## Self-learning block into that skill's SKILL.md
+```
+
 ## When to use
 
 - "Enhance the skills I used in this conversation."
