@@ -5,7 +5,7 @@ description: >
   place against the SRD standard. Use when asked to edit, improve, fix,
   revise, or clean up an SRD, or to apply findings from a review file or
   pasted feedback.
-argument-hint: "<path to SRD> [review-file | polish | target]"
+argument-hint: "<path to SRD> [review-file | autofix | polish | target]"
 license: MIT
 ---
 

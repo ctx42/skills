@@ -5,7 +5,7 @@ description: >
   logic, and conformance to the SRD standard, without editing it. Use when
   asked to review, audit, critique, or check an SRD, or to re-check whether
   prior review findings were fixed.
-argument-hint: "<path to SRD> [walk | check | feedback]"
+argument-hint: "<path to SRD> [walk | check | errata | feedback]"
 license: MIT
 ---
 

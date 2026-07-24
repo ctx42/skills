@@ -31,7 +31,10 @@ carries a **permanent global number** (`#1..#N`, never reused or renumbered) and
 is **atomic** — one indivisible fix, verifiable by a single yes/no. Open
 findings are `[ ]` checkboxes grouped **by document section** (Metadata →
 Introduction → Glossary → Scope → Requirements), each citing a rule id
-(namespaced `SRD:`, e.g. `(SRD:REQ-1)`) and tagged. File metadata (`prepared`,
+(namespaced `SRD:`, e.g. `(SRD:REQ-1)`) and tagged. Mechanical,
+meaning-preserving findings (spelling, punctuation, stray emphasis, spacing)
+are collected instead into a `## Errata` block at the very top, so the author
+can bulk-apply them with `edit <srd> autofix`. File metadata (`prepared`,
 `updated` with a timestamp, `source`) sits in YAML frontmatter. Below the open
 findings, a `## Resolved` section holds ticked `[x]` findings (flat,
 sorted by number) and a `## Withdrawn` section holds findings dropped as
@@ -59,6 +62,7 @@ for acceptance.
 /review path/to/srd.md            review (default): resolve fixed + append new
 /review path/to/srd.md walk       interactive, section by section
 /review path/to/srd.md check      re-verify open findings vs the current SRD
+/review path/to/srd.md errata     re-sort existing findings into ## Errata
 /review path/to/srd.md feedback   terse plain-text list of open tasks
 ```
 

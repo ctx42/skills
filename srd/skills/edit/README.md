@@ -24,6 +24,12 @@ or rename `create`, or this skill loses its standard.
       `review … check` afterward to tick off what landed and reclassify the
       rest.
 
+- **Autofix (bulk errata)**: `/edit path/to/srd.md autofix`
+    - Applies the `## Errata` block of `<srd>.review.md` — the mechanical,
+      meaning-preserving findings `review` recorded — behind a **single** batch
+      confirmation, not the per-change loop. Never re-scans the SRD and never
+      writes the review file; run `review … check` afterward to reclassify.
+
 - **Polish (quick mechanical pass)**: `/edit path/to/srd.md polish`
     - Mechanical cleanup only (wrapping, US spelling, numbering format, markdown,
       keyword caps, stray examples), still confirming each change. No
