@@ -5,7 +5,7 @@ description: >
   place against the SRD standard. Use when asked to edit, improve, fix,
   revise, or clean up an SRD, or to apply findings from a review file or
   pasted feedback.
-argument-hint: "<path to SRD> [review-file | autofix | polish | target]"
+argument-hint: "<path to SRD> [review-file | autofix | polish | target | line | #n]"
 license: MIT
 ---
 
@@ -182,10 +182,17 @@ shaping requirements.
 
 `$1` is the SRD path; `$2` selects the mode (interactive when omitted). With no
 `$ARGUMENTS`, ask which SRD to edit; fall back to the user's prose for free-form
-input.
+input. `$2` tokens are unambiguous: a bare integer is a line number, a
+`#`-prefixed integer a review finding number, `autofix`/`polish` the literal
+modes, a `.review.md` path the feedback file; anything else is a targeted
+locator.
 
 - `$1` only → **interactive** (default).
+- `$1` + a bare line number (`123`) → **interactive** entered at a start point
+  (see interactive).
 - `$1` + a `<path>.review.md` (or pasted feedback) → **feedback**.
+- `$1` + `#n` (review finding number) → **feedback** entered at finding `#n`
+  (see feedback); needs an existing `<srd>.review.md`.
 - `$1` + `autofix` → **autofix**: bulk-apply the `## Errata` block of
   `<srd>.review.md` behind a single confirmation.
 - `$1` + `polish` → **polish**.
@@ -202,6 +209,11 @@ input.
    fix the user approves. Move to the next entry only after the current one is
    resolved or skipped.
 4. Close with the full consistency pass and the chat summary.
+
+**Start point (`$1` + line number).** Resolve the line to the entry or paragraph
+at or nearest to it, skip the front-load (step 2), and begin the walk (step 3)
+there, continuing in document order to the end. Session start and the closing
+consistency pass still run.
 
 ### feedback
 
@@ -220,6 +232,13 @@ what landed.
    summary; leave the review file untouched regardless of outcome.
 5. Close with the full consistency pass and the chat summary, then point the
    user to `review <srd> check`.
+
+**Start point (`$1` + `#n`).** Requires an existing `<srd>.review.md`; if it is
+absent, say so and stop. Enter at finding `#n` instead of the severity order:
+after each finding is resolved or skipped, default to the next finding by
+number, or jump to any finding the user names by number. Everything else — the
+edit-discipline loop, re-validation, leaving the review file untouched, the
+closing hand-off — is unchanged.
 
 ### autofix
 

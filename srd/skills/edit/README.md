@@ -13,7 +13,9 @@ or rename `create`, or this skill loses its standard.
 
 ```
 /edit path/to/srd.md                         interactive: front-load issues, then walk entry by entry (default)
+/edit path/to/srd.md 123                     interactive from a start point: resolve line 123 to the nearest entry, walk from there
 /edit path/to/srd.md path/to/srd.review.md   feedback: apply a review file or pasted feedback, blocker→major→minor
+/edit path/to/srd.md #2                      feedback from a start point: start at review finding #2, then next / jump by number
 /edit path/to/srd.md autofix                 bulk-apply the review's ## Errata block behind one confirmation
 /edit path/to/srd.md polish                  mechanical-only cleanup (spelling, numbering, keywords), confirm each
 /edit path/to/srd.md GR-3a                   targeted: edit one entry by id, quoted text, or description
@@ -26,6 +28,9 @@ or rename `create`, or this skill loses its standard.
       entry by entry — each requirement, glossary term, and scope item —
       proposing one change at a time with before/after and rationale, applying
       only on approval, and re-validating after each.
+    - **Start point**: `/edit path/to/srd.md 123` resolves line 123 to the entry
+      or paragraph at or nearest it, skips the front-load, and walks from there
+      to the end.
 
 - **Feedback (review-driven)**: `/edit path/to/srd.md path/to/srd.review.md`
     - Takes a `<srd>.review.md` from `review` **or feedback pasted inline**.
@@ -33,6 +38,9 @@ or rename `create`, or this skill loses its standard.
     - Never writes the review file — `review` owns it across all modes. Re-run
       `review … check` afterward to tick off what landed and reclassify the
       rest.
+    - **Start point**: `/edit path/to/srd.md #2` needs an existing review file;
+      it enters at finding #2, then after each finding advances to the next by
+      number or jumps to any number you name.
 
 - **Autofix (bulk errata)**: `/edit path/to/srd.md autofix`
     - Applies the `## Errata` block of `<srd>.review.md` — the mechanical,
@@ -182,3 +190,18 @@ Request: `/edit specs/login.md autofix` with a `specs/login.review.md` whose
 - Does not write `login.review.md` itself; hands off to `review specs/login.md
   check #n #n #n` scoped to the three errata, which ticks them into
   `## Resolved`. Closes with a manifest naming what was applied and reclassified.
+
+**Scenario 9 — Interactive from a line-number start point.**
+Request: `/edit specs/login.md 210`.
+- Runs session start, then resolves line 210 to the entry or paragraph at or
+  nearest it (e.g. `GR-4b`) instead of front-loading a whole-document summary.
+- Begins the entry-by-entry walk there and continues in document order to the
+  end; the closing consistency pass still covers the whole document.
+
+**Scenario 10 — Feedback from a `#n` start point with jump navigation.**
+Request: `/edit specs/login.md #2` with an existing `specs/login.review.md`.
+- Enters at finding #2 (not severity order); if the review file is absent, says
+  so and stops.
+- After each finding is resolved or skipped, defaults to the next finding by
+  number, or jumps to any number the user names. Leaves the review file
+  untouched and closes by pointing to `review specs/login.md check`.
