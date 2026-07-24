@@ -33,7 +33,7 @@ SRD written elsewhere.
    section can hold open authoring issues; both must be resolved before
    acceptance.
 5. **Self-checks** the draft: auto-fixes mechanical issues (numbering, section
-   order, keyword capitalization, 80-column wrap, stray examples) and reports
+   order, keyword capitalization, stray examples) and reports
    what needs your judgment (links, verifiability, scope coverage, Quality Bar).
 6. **Writes** the `.md` file to a path you name and lists the outstanding
    follow-ups.

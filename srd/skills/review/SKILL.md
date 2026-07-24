@@ -89,8 +89,7 @@ Tag each finding:
   non-empty `## TODO` section (see the authoring guide's house additions).
 - **major** — real defect, does not block: style (LANG-1/2/5/6/7), terminology
   drift, overlapping or duplicate requirements.
-- **minor** — cosmetic: line over 80 columns (MD-2), British spelling, spacing,
-  punctuation.
+- **minor** — cosmetic: British spelling, spacing, punctuation.
 
 ## Modes
 
@@ -137,9 +136,8 @@ SRD's own id — requirement (`GR-3a`), scope item (`SC-12`), or glossary term �
 or, when no id fits, to the section name plus a short quote of the offending
 text. Line numbers shift with formatting and are unreliable; never cite them.
 
-**Wrap every line of the review file at 80 columns** — the review enforces MD-2
-on SRDs, so its own output must obey it too. Break long findings onto
-continuation lines indented two spaces (aligning under the bullet text).
+Break a long finding onto continuation lines indented two spaces (aligning
+under the bullet text). Line length is not constrained.
 
 Layout, in order:
 
@@ -181,7 +179,8 @@ cfsync-plugin: ignore-push
 - [ ] #5 [major] GR-7 and GR-9 state the same limit in different words — merge
   or remove one. (SRD:consistency)
 
-- [ ] #8 [minor] GR-12 runs past 80 columns — wrap. (SRD:MD-2)
+- [ ] #8 [minor] VIEW-4 uses British "colour" — change to US "color".
+  (SRD:LANG-1)
 
 ---
 

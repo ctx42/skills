@@ -222,7 +222,7 @@ what landed.
 ### polish
 
 Mechanical-only cleanup, still **confirm each** change (same loop). Scope is
-limited to: 80-column wrap (MD-2), British → US spelling, identifier
+limited to: British → US spelling, identifier
 format/order (REQ-2/3/4 — subject to the approval gate), keyword capitalization
 (LANG-4), valid Markdown (MD-1), stray example/note text (REQ-7), spacing and
 punctuation. Do not rewrite requirement meaning or restructure. Close with the

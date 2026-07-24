@@ -291,7 +291,7 @@ Open questions only. Resolved items are removed; durable facts go to memory.md.
 - **No tags.** No severity, no rule ids, no `[type]` brackets — those guide your
   analysis and the walk order, never the file.
 - Questions are not list items: each begins with its bold `Qn` id, separated by
-  one blank line. Lines stay within 80 columns.
+  one blank line.
 - **Sequential ids** in walk order (`Q1`, `Q2`, …), stable across re-runs — when
   one is removed, do not renumber the survivors.
 
@@ -343,7 +343,6 @@ Writing rules:
   feature ticket that surfaced it — memory describes the system, not the review.
 - Do not cite a reference as proof a term is undefined unless that reference is
   known complete (some glossaries are partial — see the note in `memory.md`).
-- Keep each line within 80 columns.
 
 ## Self-learning
 

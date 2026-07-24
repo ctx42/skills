@@ -79,14 +79,14 @@ for acceptance.
 
 **Request:** `/review specs/login.md` where `GR-3a` reads "The system SHALL
 validate the token and log the attempt", an `In Scope` item has no requirement,
-and a line runs to 96 columns.
+and one requirement uses British spelling.
 
 **Expected behavior:**
 - Reads the whole SRD, then writes `specs/login.review.md` — makes no edit to
   `login.md`.
 - Groups findings by document section; tags the two-rule requirement
   **blocker** citing REQ-1, the uncovered scope item **blocker** citing SCO-2,
-  and the long line **minor** citing MD-2.
+  and the British spelling **minor** citing LANG-1.
 - Closes with a per-severity count and whether a blocker stands between the SRD
   and the Quality Bar.
 

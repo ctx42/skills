@@ -123,7 +123,7 @@ Request: `/edit specs/login.md fix the vague "fast" requirement`.
 
 **Scenario 4 — Polish pass leaves metadata and meaning untouched.**
 Request: `/edit specs/login.md polish` on an in-progress draft.
-- Confirms each mechanical fix (80-column wrap, British→US spelling, keyword
+- Confirms each mechanical fix (British→US spelling, keyword
   caps, stray example text) — applies none silently.
 - Does not rewrite requirement meaning, restructure, fill Owners/Initiative/
   Designs, or change `Status`; flags those gaps instead.

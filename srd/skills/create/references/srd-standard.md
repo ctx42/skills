@@ -237,9 +237,6 @@ definition.
 **MD-1:** When an SRD is exported to Markdown, the result MUST be valid
 Markdown.
 
-**MD-2:** When an SRD is exported to Markdown, a line SHOULD NOT be longer than
-80 columns (characters).
-
 # Quality Bar
 
 An SRD is acceptable when all of these are true:

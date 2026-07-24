@@ -164,7 +164,7 @@ keyword notice → Introduction → Glossary → Scope → Requirements. Specifi
   all-capitals, no examples or notes.
 - Write in US English (`color`, `behavior`, `standardize`) and use one term per
   concept throughout (see the authoring guide).
-- Keep lines ≤ 80 columns (MD-2); valid Markdown (MD-1).
+- Valid Markdown (MD-1).
 
 ### 4. Self-check
 
@@ -178,7 +178,7 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
 1. **Auto-fix** the mechanical checks (no judgment): section order (STR-13),
    keyword notice placement (STR-8), identifier format/uniqueness/order
    (REQ-2/3/4), keyword capitalization (LANG-4), stray example or note text
-   (REQ-7), 80-column wrap (MD-2), valid Markdown (MD-1), Status defaulting to
+   (REQ-7), valid Markdown (MD-1), Status defaulting to
    `IN PROGRESS`, Designs `N/A` when the user said no UI change, British → US
    spelling.
 2. **Consistency pass** — run the consistency pass in
