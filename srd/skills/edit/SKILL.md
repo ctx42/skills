@@ -186,6 +186,8 @@ input.
 
 - `$1` only → **interactive** (default).
 - `$1` + a `<path>.review.md` (or pasted feedback) → **feedback**.
+- `$1` + `autofix` → **autofix**: bulk-apply the `## Errata` block of
+  `<srd>.review.md` behind a single confirmation.
 - `$1` + `polish` → **polish**.
 - `$1` + `<id | "quoted text" | description>` → **targeted**.
 
@@ -218,6 +220,29 @@ what landed.
    summary; leave the review file untouched regardless of outcome.
 5. Close with the full consistency pass and the chat summary, then point the
    user to `review <srd> check`.
+
+### autofix
+
+Bulk-apply the errata `review` already recorded — the fast path for surface
+fixes, so the author can clear them in one pass before consistency work.
+
+Source of truth is the **`## Errata` block of `<srd>.review.md`** (auto-derived
+beside the source). Apply only what it lists; **never re-scan** the SRD for new
+mechanical issues — that is `polish`'s job. Errata is meaning-preserving and
+never touches ids, so the id-approval gate and glossary resolution do not apply;
+still **read the whole SRD first** to locate each anchor.
+
+1. If there is no review file or its `## Errata` block is empty, say so and
+   stop.
+2. Present the batch: list every open errata finding (number, id/anchor, the
+   fix). The user may name numbers to exclude; default is all.
+3. **One confirmation** for the whole batch — `Yes` applies every included
+   finding, `No` applies nothing. Not the per-item loop.
+4. On `Yes`, apply each fix at its anchor (by id or quoted text, never line
+   number). Skip any finding whose anchor no longer matches and report it.
+5. **Never write the review file** — `review` owns it. Close with the manifest
+   (see Deliverable) and tell the user to run `review <srd> check` to reclassify
+   the applied findings as resolved.
 
 ### polish
 
