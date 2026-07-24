@@ -141,12 +141,22 @@ under the bullet text). Line length is not constrained.
 
 Layout, in order:
 
-1. **Open findings**, grouped by document section: Metadata, Introduction,
-   Glossary, Scope, Requirements. Omit a section with no open findings.
-2. A `---` line, then `## Resolved`: fixed findings as `- [x] #7 …`, a flat
+1. `## Errata` **first**, at the very top of the open findings — every open
+   finding whose fix is *mechanical and meaning-preserving* per the errata class
+   in the authoring guide (spelling, punctuation, stray/wrong emphasis, spacing;
+   **not** line-wrapping, and **not** any ambiguous case — classify
+   conservatively). Grouped here instead of under its document section, so the
+   author can bulk-apply the block via `edit autofix`. The literal heading
+   `## Errata` is the machine anchor `edit autofix` locates; do not rename it.
+   Errata findings keep their global number, their `[minor]` tag, and their
+   citation, exactly like any other finding. Omit the section when empty.
+2. **Open findings**, grouped by document section: Metadata, Introduction,
+   Glossary, Scope, Requirements. Omit a section with no open findings. An errata
+   finding lives in `## Errata`, never also under its document section.
+3. A `---` line, then `## Resolved`: fixed findings as `- [x] #7 …`, a flat
    list **sorted by number** (section grouping dropped), keeping the text and
    rule id.
-3. A `---` line, then `## Withdrawn` (last): `- #9 … (withdrawn: <reason>)` —
+4. A `---` line, then `## Withdrawn` (last): `- #9 … (withdrawn: <reason>)` —
    **no checkbox**, keeps the number.
 
 A finding lives in exactly one place. **Regression:** a resolved finding that
@@ -171,6 +181,16 @@ cfsync-plugin: ignore-push
 
 # SRD Review — <Document Title>
 
+## Errata
+
+- [ ] #8 [minor] VIEW-4 uses British "colour" — change to US "color".
+  (SRD:LANG-1)
+
+- [ ] #10 [minor] GR-3a: doubled space after "sensor" — collapse to one.
+  (SRD:LANG-7)
+
+---
+
 ## Requirements
 
 - [ ] #3 [blocker] GR-3a: states two rules ("validate ... and log ...") — split
@@ -178,9 +198,6 @@ cfsync-plugin: ignore-push
 
 - [ ] #5 [major] GR-7 and GR-9 state the same limit in different words — merge
   or remove one. (SRD:consistency)
-
-- [ ] #8 [minor] VIEW-4 uses British "colour" — change to US "color".
-  (SRD:LANG-1)
 
 ---
 
@@ -210,11 +227,13 @@ cfsync-plugin: ignore-push
    delegate any doc gap to `srd:report-doc-gap`, keeping it out of the review
    file.
 3. If the review file does not exist, create it and write all findings with
-   fresh numbers starting at `#1`, grouped and tagged as above.
+   fresh numbers starting at `#1`, grouped and tagged as above — every errata
+   finding under `## Errata`, the rest under their document section.
 4. If it already exists, do not rewrite it. First **resolve**: re-verify open
    findings and tick+move each fixed one to `## Resolved` (a regression moves
    back to its open section, same number). Then **append** newly found defects
-   to their open section with fresh numbers. Bump the `updated:` frontmatter.
+   with fresh numbers — errata to `## Errata`, the rest to their document
+   section. Bump the `updated:` frontmatter.
 5. Close with the task-oriented summary (see Closing).
 
 ## walk
