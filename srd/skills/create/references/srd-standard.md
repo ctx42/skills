@@ -21,7 +21,7 @@ the house additions (US English, sub-numbering, one term per concept).
 - Glossary
 - Requirements: Document Structure (`STR`), Status and Changes (`STA`),
   Language and Style (`LANG`), Requirement Form (`REQ`), Glossary Discipline
-  (`GLO`), Scope Discipline (`SCO`), Markdown Export (`MD`)
+  (`GLO`), Scope Discipline (`SCO`)
 - Quality Bar
 
 Two things belong to the standard and MUST NOT be copied into the SRD being
@@ -118,7 +118,7 @@ purpose of the document, and at a high level, what the system will and will not
 do.
 
 **STR-10:** When an SRD uses terms that need a definition and are not in the
-shared glossary, it MUST have a glossary that defines them.
+Company Glossary, it MUST have a glossary that defines them.
 
 **STR-11:** An SRD MUST have exactly one Scope section. The Scope section MUST
 contain an "In Scope" part and an "Out of Scope" part.
@@ -220,7 +220,7 @@ to the "Requirements" section. If it repeats another rule, it MUST be removed
 instead.
 
 **GLO-3:** Every term used in a requirement that needs a definition MUST be
-defined, either in the SRD's "Glossary" section or in the shared glossary.
+defined, either in the SRD's "Glossary" section or in the Company Glossary.
 Proper names — product, service, tool, and device names — do not need a
 definition.
 
@@ -231,11 +231,6 @@ definition.
 **SCO-2:** Every "In Scope" item MUST be covered by at least one requirement.
 
 **SCO-3:** A requirement MUST NOT go against an "Out of Scope" item.
-
-## Markdown Export
-
-**MD-1:** When an SRD is exported to Markdown, the result MUST be valid
-Markdown.
 
 # Quality Bar
 

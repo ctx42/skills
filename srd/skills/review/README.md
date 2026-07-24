@@ -20,7 +20,7 @@ the author acts on. To create a new SRD, use `create`.
 ## How It Works
 
 The rules are reused from `create` —
-`../create/references/srd-standard.md` (STR/STA/LANG/REQ/GLO/SCO/MD/Quality
+`../create/references/srd-standard.md` (STR/STA/LANG/REQ/GLO/SCO/Quality
 Bar; the review checks every rule) and
 `../create/references/authoring-guide.md` (house extensions + defect
 classes). review adds only the review method; it never restates a rule. Do

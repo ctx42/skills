@@ -27,7 +27,7 @@ standard, and self-checking the draft before saving it.
 
 - [references/srd-standard.md](references/srd-standard.md) (on-demand:
   steps 3–4) — the SRD rule set (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`,
-  `MD`, Quality Bar). Both the drafting and the self-check defer to it; read it
+  Quality Bar). Both the drafting and the self-check defer to it; read it
   before drafting. Not needed during glossary resolution or the interview.
 - [references/authoring-guide.md](references/authoring-guide.md) (on-demand:
   steps 2–4) — house extensions to the standard's rules (US English,
@@ -40,7 +40,7 @@ standard, and self-checking the draft before saving it.
   SRD skeleton, in the required section order with the keyword notice. Fill
   it; do not restructure it.
 - [scripts/glossary-fingerprint.sh](scripts/glossary-fingerprint.sh) (run, not
-  read) — hashes the shared glossary so its term digest is rebuilt only when
+  read) — hashes the Company Glossary so its term digest is rebuilt only when
   the glossary changes.
 
 ## Documentation corpus (when available)
@@ -78,7 +78,7 @@ SRD-document defects stay in this skill's own findings.
 
 Copy this checklist and tick it off:
 
-- [ ] 0. Resolve the shared glossary and load its term digest.
+- [ ] 0. Resolve the Company Glossary and load its term digest.
 - [ ] 1. Interview the user along the SRD spine.
 - [ ] 2. Propose requirement groups and prefixes; get confirmation.
 - [ ] 3. Draft the SRD from the template.
@@ -155,7 +155,7 @@ keyword notice → Introduction → Glossary → Scope → Requirements. Specifi
   and (when UI changes) `Designs` as clearly-marked `<TODO: …>` placeholders.
 - Introduction states the purpose and, at a high level, what the system will and
   will not do (STR-9). No normative keywords here.
-- Glossary defines only terms not in the shared glossary; each entry defines the
+- Glossary defines only terms not in the Company Glossary; each entry defines the
   term and nothing else (GLO-1).
 - Scope: In Scope MAY hold the `--- TODO ---` marker instead of `SC-n` items when
   deferred (derive them from the requirements before acceptance). Add a `## TODO`
@@ -164,7 +164,7 @@ keyword notice → Introduction → Glossary → Scope → Requirements. Specifi
   all-capitals, no examples or notes.
 - Write in US English (`color`, `behavior`, `standardize`) and use one term per
   concept throughout (see the authoring guide).
-- Valid Markdown (MD-1).
+- Valid Markdown.
 
 ### 4. Self-check
 
@@ -178,7 +178,7 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
 1. **Auto-fix** the mechanical checks (no judgment): section order (STR-13),
    keyword notice placement (STR-8), identifier format/uniqueness/order
    (REQ-2/3/4), keyword capitalization (LANG-4), stray example or note text
-   (REQ-7), valid Markdown (MD-1), Status defaulting to
+   (REQ-7), valid Markdown, Status defaulting to
    `IN PROGRESS`, Designs `N/A` when the user said no UI change, British → US
    spelling.
 2. **Consistency pass** — run the consistency pass in

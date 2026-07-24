@@ -5,9 +5,9 @@ Operating procedures shared by the SRD skills. These are not rules
 ([authoring-guide.md](authoring-guide.md)) — they are steps a skill runs.
 `create` and `edit` cite this file instead of restating the steps.
 
-## Resolve the shared glossary
+## Resolve the Company Glossary
 
-The shared glossary lets an SRD satisfy GLO-3 / STR-10 without redefining terms
+The Company Glossary lets an SRD satisfy GLO-3 / STR-10 without redefining terms
 defined elsewhere. Each project has its own glossary — a single Markdown file or
 a directory of Markdown documents. Its path, a content hash, and a
 model-synthesized **digest** of its terms are remembered per project (see

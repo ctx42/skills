@@ -33,7 +33,7 @@ referenced file is missing at run time, stop and tell the user; do not
 proceed.** Read these before reviewing:
 
 - [../create/references/srd-standard.md](../create/references/srd-standard.md)
-  (eager) — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, `MD`,
+  (eager) — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`,
   Quality Bar). The review checks every rule; every finding cites one of
   these ids.
 - [../create/references/authoring-guide.md](../create/references/authoring-guide.md)

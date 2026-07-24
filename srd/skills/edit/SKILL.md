@@ -38,7 +38,7 @@ reuse them, never duplicate. **This skill depends on `../create/references/*`,
 user; do not proceed.** Read these before editing:
 
 - [../create/references/srd-standard.md](../create/references/srd-standard.md)
-  (eager) — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, `MD`,
+  (eager) — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`,
   Quality Bar). Every edit and check defers to these ids; re-validation
   checks against them directly.
 - [../create/references/authoring-guide.md](../create/references/authoring-guide.md)
@@ -52,7 +52,7 @@ user; do not proceed.** Read these before editing:
 - [../create/assets/srd-template.md](../create/assets/srd-template.md)
   (on-demand: restructuring) — the required section order.
 - [../create/scripts/glossary-fingerprint.sh](../create/scripts/glossary-fingerprint.sh)
-  (run, not read) — hashes the shared glossary so its term digest is rebuilt
+  (run, not read) — hashes the Company Glossary so its term digest is rebuilt
   only on change; the digest keeps term edits linking, not redefining.
 
 ## Documentation corpus (when available)
@@ -224,7 +224,7 @@ what landed.
 Mechanical-only cleanup, still **confirm each** change (same loop). Scope is
 limited to: British → US spelling, identifier
 format/order (REQ-2/3/4 — subject to the approval gate), keyword capitalization
-(LANG-4), valid Markdown (MD-1), stray example/note text (REQ-7), spacing and
+(LANG-4), valid Markdown, stray example/note text (REQ-7), spacing and
 punctuation. Do not rewrite requirement meaning or restructure. Close with the
 chat summary.
 

@@ -17,7 +17,7 @@ SRD written elsewhere.
 
 ## How It Works
 
-1. **Resolves the shared glossary** — a single Markdown file or a directory of
+1. **Resolves the Company Glossary** — a single Markdown file or a directory of
    them, remembered per project. It fingerprints the docs and loads a cached term
    digest, regenerating the digest only when the glossary changed, so known terms
    are linked, not redefined.
@@ -81,14 +81,14 @@ questioning.
 - Produces the sections in the required order with the keyword notice, Status
   `IN PROGRESS`, and TODO placeholders for Owners/Initiative/Designs.
 
-### 2. Reuse the shared glossary
+### 2. Reuse the Company Glossary
 
 **Request:** During the interview the user uses a term already defined in the
 glossary (e.g. "Audit Log") and a brand-new term.
 
 **Expected behavior:**
 - Recognizes the known term from the glossary digest and does not add a
-  local Glossary entry for it; links or refers to the shared glossary instead
+  local Glossary entry for it; links or refers to the Company Glossary instead
   (GLO-3 / STR-10).
 - Adds a local Glossary entry only for the genuinely new term, defining it and
   nothing else — no behavior or rules in the entry (GLO-1).
