@@ -1,3 +1,20 @@
+## v0.24.0 (Fri, 24 Jul 2026 18:50:06 UTC)
+- docs(srd): write SRD status values in uppercase.
+- docs(doc-smith): record two review lessons.
+- feat(srd): drop the 80-column line limit (MD-2).
+- docs(srd): rename shared glossary to Company Glossary, drop MD rules.
+- docs(srd): define errata class in authoring guide.
+- feat(srd): group errata into a top block in review output.
+- feat(srd): add review errata retrofit mode.
+- feat(srd): list errata in review feedback output.
+- feat(srd): add edit autofix mode for bulk errata.
+- docs(srd): document errata and autofix modes.
+- docs(srd): complete README coverage of errata and autofix.
+- feat(srd): scope review check to named findings.
+- feat(srd): retire MD namespace, add comma check ids.
+- docs(skills): add Usage section to every skill readme.
+- feat(srd): add line and #n start points to edit.
+
 ## v0.23.0 (Thu, 23 Jul 2026 11:10:45 UTC)
 - feat(srd): mark generated review/questions files ignore-push.
 - docs(srd-edit): record four edit lessons.
