@@ -104,6 +104,8 @@ review; fall back to the user's prose for free-form input.
 - `$1` + `check` → **check**: re-verify the existing review file's open findings
   against the current SRD; tick/move fixed ones, withdraw invalid ones. Does not
   hunt for new defects.
+- `$1` + `errata` → **errata**: reorganize an existing review file so errata
+  findings sit in `## Errata`. Reclassify only; does not hunt for new defects.
 - `$1` + `feedback` → **feedback**: emit a terse plain-text issue list of open
   tasks for an email or ticket. No file write.
 
@@ -262,6 +264,25 @@ hunt for new defects. Keep every number; bump the `updated:` frontmatter.
    author justified the text), move it to `## Withdrawn` with a reason. No other
    mode withdraws.
 3. Report a short status table: number, current state, assessment.
+
+## errata
+
+Reorganize an **existing** review file so its errata sit in `## Errata` — a
+one-time retrofit for files written before the block existed, and a re-sort on
+demand. **Reclassify only — never hunt for new defects** (like `check`). Keep
+every number; bump the `updated:` frontmatter.
+
+1. For each open finding, test it against the errata class in
+   [../create/references/authoring-guide.md](../create/references/authoring-guide.md).
+   If it qualifies and is not already under `## Errata`, move it there —
+   **keeping its number**, `[minor]` tag, and citation; create the `## Errata`
+   section at the top if absent. Classify conservatively: leave ambiguous
+   findings where they are.
+2. Leave every non-errata finding, and every already-placed errata finding,
+   untouched. The pass is **idempotent** — a second run changes nothing.
+3. If the review file does not exist, fall through to a normal **review**.
+4. Report which numbers moved (e.g. "moved #4, #6, #9 to Errata"); say so when
+   none moved.
 
 ## feedback
 
