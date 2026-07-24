@@ -25,6 +25,11 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   it shallow; do not nest deeper than one letter. Plain `**GR-1:**`, `**GR-2:**`
   remains the default; reach for suffixes only when several rules form one tight
   cluster.
+- **STR-9 "will and will not do".** An introduction satisfies STR-9 with its
+  purpose plus a high-level account of what the system *will* do; the exclusions
+  ("will not") are carried by Out of Scope, not restated in the intro. Do not
+  raise an intro finding for a missing explicit "will not do" when Out of Scope
+  is present.
 - **Terminology consistency.** Use one term per concept throughout. Do not mix
   synonyms for the same thing (e.g. `MFA` / `2FA` / `two-factor`); pick one and
   define it once.
@@ -50,7 +55,7 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   only surface form — glyphs, spacing, emphasis markers, or the spelling of a
   clearly-intended word — and never what a requirement *says*, is **errata**:
   spelling / typos, punctuation, stray or wrong bold/emphasis, misplaced spaces
-  (open-ended list). Line-wrapping (MD-2) is **not** errata, and neither is any
+  (open-ended list). Line-wrapping is **not** errata, and neither is any
   ambiguous case that might change meaning — classify **conservatively**: when
   in doubt, not errata. Errata is safe to apply in bulk without per-item review;
   everything else needs author judgment. (`review` groups errata for bulk fixing;

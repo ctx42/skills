@@ -137,7 +137,7 @@ All interactive editing follows the same loop. Per change:
    [../create/references/authoring-guide.md](../create/references/authoring-guide.md),
    and report what remains.
 
-Write every edit to the LANG, MD, and REQ rules in
+Write every edit to the LANG and REQ rules in
 [../create/references/srd-standard.md](../create/references/srd-standard.md)
 (US English and one term per concept per the authoring guide). When an edit
 restructures sections, follow the order in

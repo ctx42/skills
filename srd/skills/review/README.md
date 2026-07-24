@@ -62,7 +62,7 @@ for acceptance.
 /review path/to/srd.md            review (default): resolve fixed + append new
 /review path/to/srd.md walk       interactive, section by section
 /review path/to/srd.md check      re-verify open findings vs the current SRD
-/review path/to/srd.md check #4 #6  re-verify only findings #4 and #6
+/review path/to/srd.md check #4,6  re-verify only findings #4 and #6
 /review path/to/srd.md errata     re-sort existing findings into ## Errata
 /review path/to/srd.md feedback   terse plain-text list of open tasks
 ```

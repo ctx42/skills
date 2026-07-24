@@ -5,7 +5,7 @@ description: >
   logic, and conformance to the SRD standard, without editing it. Use when
   asked to review, audit, critique, or check an SRD, or to re-check whether
   prior review findings were fixed.
-argument-hint: "<path to SRD> [walk | check [#n…] | errata | feedback]"
+argument-hint: "<path to SRD> [walk | check [#n,n…] | errata | feedback]"
 license: MIT
 ---
 
@@ -103,8 +103,8 @@ review; fall back to the user's prose for free-form input.
   findings the user confirms.
 - `$1` + `check` → **check**: re-verify the existing review file's open findings
   against the current SRD; tick/move fixed ones, withdraw invalid ones. Does not
-  hunt for new defects. Trailing finding numbers (`check #4 #6`) scope it to
-  those findings only; omitted, it checks every open finding.
+  hunt for new defects. Trailing finding numbers (`check #4,6` or `check #4 #6`)
+  scope it to those findings only; omitted, it checks every open finding.
 - `$1` + `errata` → **errata**: reorganize an existing review file so errata
   findings sit in `## Errata`. Reclassify only; does not hunt for new defects.
 - `$1` + `feedback` → **feedback**: emit a terse plain-text issue list of open
@@ -131,13 +131,18 @@ Open finding shape — number first, then severity:
 `- [ ] #7 [blocker] GR-3a: problem — fix. (SRD:REQ-1)`
 
 Close each finding with its rule-id citation **namespaced `SRD:`** — e.g.
-`(SRD:REQ-1)`, `(SRD:GLO-3)` — marking it an SRD-standard rule (STR, STA, LANG,
-REQ, GLO, SCO, MD). A consistency-pass finding cites `(SRD:consistency)`.
+`(SRD:REQ-1)`, `(SRD:GLO-3)` — marking it an SRD-standard rule. The only rule
+namespaces are `STR`, `STA`, `LANG`, `REQ`, `GLO`, and `SCO`; never cite a rule
+absent from
+[../create/references/srd-standard.md](../create/references/srd-standard.md)
+(e.g. a defunct `MD-*`). A consistency-pass finding cites `(SRD:consistency)`.
 
 **Locate by identifier, never by line number.** Anchor each finding to the
 SRD's own id — requirement (`GR-3a`), scope item (`SC-12`), or glossary term —
-or, when no id fits, to the section name plus a short quote of the offending
-text. Line numbers shift with formatting and are unreliable; never cite them.
+or, when no id fits, to the section name **verbatim** plus a short quote of the
+offending text. Use only ids and headings that actually appear in the SRD; never
+invent section shorthand such as `§1.3` — the SRD does not use `§`. Line numbers
+shift with formatting and are unreliable; never cite them.
 
 Break a long finding onto continuation lines indented two spaces (aligning
 under the bullet text). Line length is not constrained.
@@ -256,10 +261,11 @@ Go section by section in document order. For each section:
 Given the current SRD and its existing review file, **re-verify only** — do not
 hunt for new defects. Keep every number; bump the `updated:` frontmatter.
 
-Trailing finding numbers (`check #4 #6`) **scope the pass** to just those
-findings; the rest stay untouched. Report any listed number that is absent or
-already resolved/withdrawn, and check the rest. Omitted, check every open
-finding.
+Trailing finding numbers **scope the pass** to just those findings; the rest
+stay untouched. Accept them comma- or space-separated, `#` optional —
+`check #4,6`, `check #4 #6`, `check 4,6` all name findings #4 and #6. Report any
+listed number that is absent or already resolved/withdrawn, and check the rest.
+Omitted, check every open finding.
 
 1. For each finding in scope, judge it against the current text and map its
    state:
@@ -267,9 +273,10 @@ finding.
    - **partial** → stays `[ ]` in its section with `*(Partial — …)*` appended.
      Never ticks.
    - **not addressed** → stays `[ ]`, untouched.
-2. **Withdrawal is check-only:** if a finding proves invalid (mistaken, or the
-   author justified the text), move it to `## Withdrawn` with a reason. No other
-   mode withdraws.
+2. **Withdrawal is check-only:** if a finding proves invalid (mistaken, the
+   author justified the text, or it cites a rule absent from the standard such
+   as a defunct `MD-*`), move it to `## Withdrawn` with a reason. Never carry a
+   non-enforceable finding open. No other mode withdraws.
 3. Report a short status table: number, current state, assessment.
 
 ## errata
