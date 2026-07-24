@@ -69,8 +69,9 @@ for acceptance.
 ## What to Expect
 
 - A `srd.review.md` file: numbered `[ ]` open tasks grouped by section, each
-  tagged and citing its rule id, plus `## Resolved` and `## Withdrawn` sections,
-  and a task-oriented closing tally.
+  tagged and citing its rule id, with mechanical fixes collected in a `## Errata`
+  block at the top, plus `## Resolved` and `## Withdrawn` sections, and a
+  task-oriented closing tally.
 - On a re-run, fixed findings are ticked and moved to `## Resolved` (keeping
   their number) and new ones appended — the file is updated in place, never
   rewritten from scratch; numbers are never reused.
@@ -89,8 +90,9 @@ and one requirement uses British spelling.
 - Reads the whole SRD, then writes `specs/login.review.md` — makes no edit to
   `login.md`.
 - Groups findings by document section; tags the two-rule requirement
-  **blocker** citing REQ-1, the uncovered scope item **blocker** citing SCO-2,
-  and the British spelling **minor** citing LANG-1.
+  **blocker** citing REQ-1 and the uncovered scope item **blocker** citing
+  SCO-2. Collects the British spelling into the `## Errata` block at the top,
+  tagged **minor** citing LANG-1.
 - Closes with a per-severity count and whether a blocker stands between the SRD
   and the Quality Bar.
 
@@ -126,7 +128,7 @@ design though it changes the UI.
 
 **Expected behavior:**
 - Emits plain text grouped by section heading, one bullet per open issue, no
-  file write.
+  file write; lists the `Errata` group first when it holds open findings.
 - Keeps the finding number and the SRD's own requirement id (e.g. `#7 GR-3a:`)
   but drops the checkbox, the standard rule-id citations, and severity tags;
   uses no markdown beyond bullets.
@@ -166,3 +168,15 @@ defective sample).
 - Writes the findings to the review file and closes with a short pointer plus
   per-severity counts — no re-listing of the findings already written to the
   file.
+
+### 8. Errata retrofit of an existing review
+
+**Request:** `/review specs/login.md errata` with an existing
+`specs/login.review.md` written before the `## Errata` block existed, holding a
+British-spelling finding `#4` under Requirements and a scope blocker `#2`.
+
+**Expected behavior:**
+- Moves `#4` into a `## Errata` block at the top, keeping its number, `[minor]`
+  tag, and citation; leaves the blocker `#2` under its section.
+- Reclassifies only — hunts no new defects; a second run changes nothing
+  (idempotent); bumps the `updated:` timestamp and reports the moved number.

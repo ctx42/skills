@@ -158,3 +158,13 @@ TODO."
   section as the last one if absent), without the propose-and-confirm loop.
 - Renumbers nothing else; reports only the single line added. At session end the
   non-empty `## TODO` is flagged as a follow-up that blocks `ACCEPTED`.
+
+**Scenario 8 — Autofix bulk-applies the Errata block.**
+Request: `/edit specs/login.md autofix` with a `specs/login.review.md` whose
+`## Errata` block holds three findings.
+- Reads only the `## Errata` block — does not re-scan the SRD for new mechanical
+  issues.
+- Lists the three fixes and takes **one** confirmation for the whole batch, not
+  the per-change loop; on approval applies all three at their anchors.
+- Leaves `login.review.md` untouched and closes by telling the user to run
+  `review specs/login.md check` to reclassify the applied findings.
