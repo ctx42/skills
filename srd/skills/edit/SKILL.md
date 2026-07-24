@@ -26,8 +26,8 @@ Acceptance stays a human decision. It maintains the two draft scaffolds — the 
 Scope `--- TODO ---` marker and the `## TODO` section (see
 [Draft scaffolds](#draft-scaffolds)) — but resolves them only on the user's
 signal, never silently, and flags both as acceptance blockers. It never writes
-`<srd>.review.md` — `review` owns that file across all modes; `edit` only reads
-it.
+`<srd>.review.md` — `review` owns that file across all modes; `edit` reads it,
+and in `autofix` hands off to `review <srd> check` to update it.
 
 ## Sources of truth
 
@@ -240,9 +240,13 @@ still **read the whole SRD first** to locate each anchor.
    finding, `No` applies nothing. Not the per-item loop.
 4. On `Yes`, apply each fix at its anchor (by id or quoted text, never line
    number). Skip any finding whose anchor no longer matches and report it.
-5. **Never write the review file** — `review` owns it. Close with the manifest
-   (see Deliverable) and tell the user to run `review <srd> check` to reclassify
-   the applied findings as resolved.
+5. **Never write the review file directly** — `review` owns it. When anything
+   was applied, hand off to `review <srd> check #n…` scoped to exactly the
+   applied errata numbers: `review` re-verifies its own file and moves those
+   fixed errata to `## Resolved`, leaving other findings untouched. Skip the
+   hand-off only if nothing landed.
+6. Close with the manifest (see Deliverable), naming which findings `check`
+   reclassified.
 
 ### polish
 

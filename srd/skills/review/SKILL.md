@@ -5,7 +5,7 @@ description: >
   logic, and conformance to the SRD standard, without editing it. Use when
   asked to review, audit, critique, or check an SRD, or to re-check whether
   prior review findings were fixed.
-argument-hint: "<path to SRD> [walk | check | errata | feedback]"
+argument-hint: "<path to SRD> [walk | check [#n…] | errata | feedback]"
 license: MIT
 ---
 
@@ -103,7 +103,8 @@ review; fall back to the user's prose for free-form input.
   findings the user confirms.
 - `$1` + `check` → **check**: re-verify the existing review file's open findings
   against the current SRD; tick/move fixed ones, withdraw invalid ones. Does not
-  hunt for new defects.
+  hunt for new defects. Trailing finding numbers (`check #4 #6`) scope it to
+  those findings only; omitted, it checks every open finding.
 - `$1` + `errata` → **errata**: reorganize an existing review file so errata
   findings sit in `## Errata`. Reclassify only; does not hunt for new defects.
 - `$1` + `feedback` → **feedback**: emit a terse plain-text issue list of open
@@ -255,7 +256,13 @@ Go section by section in document order. For each section:
 Given the current SRD and its existing review file, **re-verify only** — do not
 hunt for new defects. Keep every number; bump the `updated:` frontmatter.
 
-1. For each open finding, judge it against the current text and map its state:
+Trailing finding numbers (`check #4 #6`) **scope the pass** to just those
+findings; the rest stay untouched. Report any listed number that is absent or
+already resolved/withdrawn, and check the rest. Omitted, check every open
+finding.
+
+1. For each finding in scope, judge it against the current text and map its
+   state:
    - **fixed** → tick `[x]` and move to `## Resolved`.
    - **partial** → stays `[ ]` in its section with `*(Partial — …)*` appended.
      Never ticks.

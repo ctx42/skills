@@ -27,8 +27,11 @@ or rename `create`, or this skill loses its standard.
 - **Autofix (bulk errata)**: `/edit path/to/srd.md autofix`
     - Applies the `## Errata` block of `<srd>.review.md` — the mechanical,
       meaning-preserving findings `review` recorded — behind a **single** batch
-      confirmation, not the per-change loop. Never re-scans the SRD and never
-      writes the review file; run `review … check` afterward to reclassify.
+      confirmation, not the per-change loop. Never re-scans the SRD. It never
+      writes the review file itself; instead it hands off to `review … check`
+      scoped to the applied errata numbers, so `review` reclassifies just those
+      fixed errata into `## Resolved` automatically, leaving other findings
+      untouched.
 
 - **Polish (quick mechanical pass)**: `/edit path/to/srd.md polish`
     - Mechanical cleanup only (wrapping, US spelling, numbering format, markdown,
@@ -166,5 +169,6 @@ Request: `/edit specs/login.md autofix` with a `specs/login.review.md` whose
   issues.
 - Lists the three fixes and takes **one** confirmation for the whole batch, not
   the per-change loop; on approval applies all three at their anchors.
-- Leaves `login.review.md` untouched and closes by telling the user to run
-  `review specs/login.md check` to reclassify the applied findings.
+- Does not write `login.review.md` itself; hands off to `review specs/login.md
+  check #n #n #n` scoped to the three errata, which ticks them into
+  `## Resolved`. Closes with a manifest naming what was applied and reclassified.
