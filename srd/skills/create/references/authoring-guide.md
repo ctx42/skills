@@ -46,6 +46,15 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   they carry no normative keywords and are exempt from REQ-7 (they sit outside
   any requirement). It MUST be empty or removed before the SRD is `ACCEPTED`; a
   non-empty `## TODO` is a house blocker for acceptance and is always flagged.
+- **Errata class (mechanical, meaning-preserving).** A defect whose fix changes
+  only surface form — glyphs, spacing, emphasis markers, or the spelling of a
+  clearly-intended word — and never what a requirement *says*, is **errata**:
+  spelling / typos, punctuation, stray or wrong bold/emphasis, misplaced spaces
+  (open-ended list). Line-wrapping (MD-2) is **not** errata, and neither is any
+  ambiguous case that might change meaning — classify **conservatively**: when
+  in doubt, not errata. Errata is safe to apply in bulk without per-item review;
+  everything else needs author judgment. (`review` groups errata for bulk fixing;
+  `edit autofix` applies them.)
 
 ## Consistency pass
 
