@@ -289,7 +289,8 @@ every number; bump the `updated:` frontmatter.
 Emit plain text for an email or ticket — no file write:
 
 - Title: `<Document Title> — Review Feedback`.
-- Group by section name as a plain heading (no markdown symbols).
+- Group by section name as a plain heading (no markdown symbols). `## Errata`
+  is one such group — list it first, as `Errata`, when it holds open findings.
 - One bullet per **open** finding, **blank-line separated** (as in the review
   file). Keep the finding number and the SRD's own requirement id (e.g.
   `#7 GR-3a:`), then a one-line problem-and-fix. Drop the checkbox, the severity
