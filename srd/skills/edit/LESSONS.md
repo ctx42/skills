@@ -24,6 +24,9 @@ Rules learned for the `edit` skill. Read before running; obey each line.
 - When a requirement would restate rules already defined in an authoritative
   platform doc, link to that doc and state only the minimal SRD-level constraint;
   do not duplicate the full mechanics in the SRD.
+- Before flagging a device/product model named in a requirement, check whether the
+  UI surface or feature itself exists only for those models; when it does, the
+  model name is the correct scope — never propose generalizing it away.
 - Drop catch-all "features not explicitly addressed behave identically / stay
   unchanged" requirements — an SRD specifies only what changes; unspecified
   areas are unchanged by default (also weakly verifiable, REQ-5/LANG-7).
