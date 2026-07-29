@@ -85,6 +85,18 @@ or rename `create`, or this skill loses its standard.
   `<srd>.review.md` across all modes and `edit` never touches it.
 - **No silent edits** — every change is confirmed; mechanical ones too.
 
+## Decision Log
+
+Each applied edit is written straight to `<srd>.decisions.md` beside the source
+— what changed and *why*, in prose an author can read without knowing the SRD
+standard. Your own rationale is what gets recorded, tidied into clean sentences.
+
+- Written **after every edit**, so nothing is lost if the session dies mid-flow.
+- **Accumulates** across sessions: one file per SRD, newest session block first.
+- Applied edits only — what you skipped or declined stays in `<srd>.review.md`.
+- The newest block is the change summary to hand the author; the closing manifest
+  points at it.
+
 ## Draft Scaffolds
 
 Two working scaffolds live in a draft SRD (defined in `create`'s authoring

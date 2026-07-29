@@ -27,7 +27,9 @@ Scope `--- TODO ---` marker and the `## TODO` section (see
 [Draft scaffolds](#draft-scaffolds)) — but resolves them only on the user's
 signal, never silently, and flags both as acceptance blockers. It never writes
 `<srd>.review.md` — `review` owns that file across all modes; `edit` reads it,
-and in `autofix` hands off to `review <srd> check` to update it.
+and in `autofix` hands off to `review <srd> check` to update it. It **owns**
+`<srd>.decisions.md` — the author-facing log of what it changed and why (see
+[Decision log](#decision-log)); no other skill writes that file.
 
 ## Sources of truth
 
@@ -120,6 +122,10 @@ All interactive editing follows the same loop. Per change:
    - `S` (Skip) — change nothing; leave the issue flagged.
    - `E` (Edit) — apply the user's amended text in place of the proposal.
    Never batch unrelated changes. Never edit without confirmation.
+   **Ask one question at a time.** Never trail a proposal with a paragraph of
+   loose questions or asides; anything held over goes in an `## Open questions`
+   **numbered list** — one line each, no rationale — so the user can answer by
+   number ("1 yes, 2 skip"). Carry the list forward, renumbered, until it empties.
 3. **Re-validate the affected entry + cross-refs** immediately against the
    rules in
    [../create/references/srd-standard.md](../create/references/srd-standard.md),
@@ -132,7 +138,9 @@ All interactive editing follows the same loop. Per change:
    corpus is available, confirm it against the docs (see
    [Documentation corpus](#documentation-corpus-when-available)) and delegate
    any doc gap to `srd:report-doc-gap`.
-4. At **session end**, re-check the whole document against every rule in the
+4. **Log the change** in `<srd>.decisions.md` before proposing the next one (see
+   [Decision log](#decision-log)).
+5. At **session end**, re-check the whole document against every rule in the
    standard plus the consistency pass in
    [../create/references/authoring-guide.md](../create/references/authoring-guide.md),
    and report what remains.
@@ -142,6 +150,45 @@ Write every edit to the LANG and REQ rules in
 (US English and one term per concept per the authoring guide). When an edit
 restructures sections, follow the order in
 [../create/assets/srd-template.md](../create/assets/srd-template.md).
+
+## Decision log
+
+Record every applied edit in `<srd>.decisions.md` beside the source — the
+author-facing account of *what changed and why*, which a diff cannot carry.
+
+- **Write after each applied edit**, never batched to session end: a session that
+  clears mid-flow must lose nothing.
+- **Accumulate** — one file per SRD, `##` session blocks newest first. Never
+  rewrite or prune an earlier block.
+- **Record** the entry/id, the change stated in prose (not a diff), and the
+  reason: the user's rationale when they gave one, the proposal's when it stood
+  unamended.
+- **Rephrase the user's words** into clean prose — fix typos, expand shorthand,
+  drop the conversational frame — keeping the decision and reason intact. Never
+  invent a reason the user did not give.
+- **Applied edits only.** Skipped, declined, and flagged-but-unfixed issues stay
+  in `<srd>.review.md`.
+- Write for the SRD's **author**, not a reviewer: name the surface in the SRD's
+  own words; cite a rule id only where the user did.
+- Create the file on the first write, frontmatter and title included;
+  `cfsync-plugin: ignore-push` keeps the Confluence sync from pushing it.
+
+````
+---
+cfsync-plugin: ignore-push
+---
+
+# Changes — <Document Title>
+
+## 2026-07-27
+
+### Details page
+
+DET-14 was removed. Retention and data accessibility are not part of this SRD,
+so the requirement and its open "retention period to be confirmed" note went
+with it. DET-13 still covers keeping historical measurements available after a
+channel is reassigned.
+````
 
 ## Draft scaffolds
 
@@ -299,6 +346,8 @@ a re-narration of diffs the user already saw:
 - Outstanding human follow-ups (placeholders, back-links, Status), including an
   unresolved In Scope `--- TODO ---` marker and any non-empty `## TODO` section
   — both block `ACCEPTED`.
+- The path to `<srd>.decisions.md`, whose newest session block is the summary to
+  hand the author.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.

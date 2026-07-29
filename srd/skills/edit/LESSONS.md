@@ -30,3 +30,6 @@ Rules learned for the `edit` skill. Read before running; obey each line.
 - Drop catch-all "features not explicitly addressed behave identically / stay
   unchanged" requirements — an SRD specifies only what changes; unspecified
   areas are unchanged by default (also weakly verifiable, REQ-5/LANG-7).
+- Never trail a proposal with a paragraph of loose "things I'd flag" questions;
+  ask ONE question at a time, and carry anything held over as a short numbered
+  list (one line each) the user can answer by number.
