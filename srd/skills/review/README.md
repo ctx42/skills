@@ -50,13 +50,38 @@ can bulk-apply them with `edit <srd> autofix`. File metadata (`prepared`,
 findings, a `## Resolved` section holds ticked `[x]` findings (flat,
 sorted by number) and a `## Withdrawn` section holds findings dropped as
 invalid. Findings are separated by a blank line so a long list reads as
-distinct blocks. Tags:
+distinct blocks. Severity tags:
 
 - **blocker** — breaks Quality-Bar acceptance (non-atomic, unverifiable, scope
   gap, undefined term, rule hidden in glossary/metadata, duplicate/out-of-order
   id, missing required link or back-link, invalid Status).
 - **major** — real but non-blocking (style, terminology drift, overlap).
 - **minor** — cosmetic (wrap, spelling, spacing).
+
+Every finding also carries a **category** naming what kind of defect it is, in
+the same bracket as the severity and after it — `[major, logical]`. A finding
+that genuinely carries two gets both, primary first: `[major, logical,
+redundancy]`. Severity always occupies the first slot, so the two never blur.
+The table is in **precedence order**; when a finding fits more than one, the
+higher entry leads.
+
+| Category      | What it means                                                 | Typical rules               |
+| ------------- | ------------------------------------------------------------- | --------------------------- |
+| structure     | Required part of the document absent, or Status invalid       | STR-*, STA-*                |
+| logical       | Two rules conflict, or no rule covers a case                  | consistency                 |
+| coverage      | In Scope item with no requirement; rule stated only in a Note | SCO-2, SCO-3                |
+| reference     | A link, ticket id, or claim about the live system is wrong    | —                           |
+| redundancy    | Two rules say the same thing, or one subsumes the other       | consistency                 |
+| verifiability | Vague quality, unmeasurable criterion, open-ended list        | REQ-5, REQ-6, LANG-7        |
+| atomicity     | More than one rule per item; example or note inside a rule    | REQ-1, REQ-7, LANG-5, SCO-1 |
+| terminology   | One concept under many names; undefined term; casing drift    | GLO-1, GLO-2, GLO-3         |
+| linguistic    | Grammar, spelling, missing word, wrong subject or keyword     | LANG-1..4, LANG-6           |
+| format        | Markup, bold identifiers, id numbering, punctuation, spacing  | REQ-2, REQ-3, REQ-4, REQ-8  |
+
+Category is independent of the `## Errata` block: an errata finding is always
+`[format]` or `[linguistic]`, but many `[format]` and `[linguistic]` findings are
+not errata — renumbering ids and rewriting a requirement's subject both change
+meaning or references, so they need author judgment.
 
 Unlike `create`, the review applies the **full** standard — including the
 owners count, Initiative/Designs links and back-links (STR-2..7) and Status
@@ -91,9 +116,9 @@ and one requirement uses British spelling.
 - Reads the whole SRD, then writes `specs/login.review.md` — makes no edit to
   `login.md`.
 - Groups findings by document section; tags the two-rule requirement
-  **blocker** citing REQ-1 and the uncovered scope item **blocker** citing
-  SCO-2. Collects the British spelling into the `## Errata` block at the top,
-  tagged **minor** citing LANG-1.
+  `[blocker, atomicity]` citing REQ-1 and the uncovered scope item
+  `[blocker, coverage]` citing SCO-2. Collects the British spelling into the
+  `## Errata` block at the top, tagged `[minor, linguistic]` citing LANG-1.
 - Closes with a per-severity count and whether a blocker stands between the SRD
   and the Quality Bar.
 
@@ -178,6 +203,6 @@ British-spelling finding `#4` under Requirements and a scope blocker `#2`.
 
 **Expected behavior:**
 - Moves `#4` into a `## Errata` block at the top, keeping its number, `[minor]`
-  tag, and citation; leaves the blocker `#2` under its section.
+  tag, category, and citation; leaves the blocker `#2` under its section.
 - Reclassifies only — hunts no new defects; a second run changes nothing
   (idempotent); bumps the `updated:` timestamp and reports the moved number.

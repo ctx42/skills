@@ -91,6 +91,51 @@ Tag each finding:
   drift, overlapping or duplicate requirements.
 - **minor** — cosmetic: British spelling, spacing, punctuation.
 
+## Category
+
+Also tag each finding with **one** category — two only when it genuinely carries
+two — inside the **same bracket** as the severity, comma-separated, severity
+first and the primary category next: `[major, logical, redundancy]`. Lowercase,
+and mandatory on every finding in every section (open, `## Errata`,
+`## Resolved`, `## Withdrawn`). Never a third category.
+
+**One bracket only.** Never split severity and category into two brackets —
+adjacent `][` is CommonMark's full-reference-link syntax and renders as a broken
+link in Obsidian. A single bracket is a shortcut reference link, which renders
+literally; a second one immediately after is not.
+
+Categories are listed in **precedence order**: when a finding fits more than one,
+the higher entry leads and the lower becomes the second tag.
+
+- **structure** — a required part of the document is absent or malformed, or its
+  lifecycle state is invalid (STR-*, STA-*).
+- **logical** — two rules conflict, a case no rule covers, precedence between
+  rules unstated.
+- **coverage** — an `In Scope` item no requirement covers, a requirement
+  contradicting `Out of Scope`, or a rule stated only in a Note or the
+  Introduction (SCO-2, SCO-3).
+- **reference** — a link, ticket id, or claim about the live system that is wrong
+  or stale.
+- **redundancy** — two rules state the same thing, or one subsumes the other.
+- **verifiability** — a vague quality, an unmeasurable criterion, an open-ended
+  list (REQ-5, REQ-6, LANG-7).
+- **atomicity** — one item carrying more than one rule, an example or note inside
+  a rule, a rule stating appearance instead of behavior (REQ-1, REQ-7, LANG-5,
+  SCO-1).
+- **terminology** — one concept under many names, an undefined term, casing that
+  drifts from the glossary (GLO-1, GLO-2, GLO-3).
+- **linguistic** — grammar, spelling, a missing word, the wrong subject or voice,
+  a misplaced or lowercase normative keyword (LANG-1, LANG-2, LANG-3, LANG-4,
+  LANG-6).
+- **format** — markup, bold identifiers, id numbering, punctuation, spacing
+  (REQ-2, REQ-3, REQ-4, REQ-8).
+
+Two boundaries: `reference` covers a wrong *pointer or fact* while `terminology`
+covers a diverging *word choice*, so an SRD that renames an existing platform
+concept is `terminology`. Category is orthogonal to `## Errata` — an errata
+finding is `[format]` or `[linguistic]`, but not every `[format]` or
+`[linguistic]` finding is errata.
+
 ## Modes
 
 The review file is always `<srd>.review.md` next to the source — auto-derived,
@@ -126,9 +171,9 @@ yes/no. The boundary is **independent verifiability**: if two edits can be
 verified or resolved separately, they are two findings, even when they share
 one root cause. No bullet says "do A and B".
 
-Open finding shape — number first, then severity:
+Open finding shape — number first, then severity, then category:
 
-`- [ ] #7 [blocker] GR-3a: problem — fix. (SRD:REQ-1)`
+`- [ ] #7 [blocker, atomicity] GR-3a: problem — fix. (SRD:REQ-1)`
 
 Close each finding with its rule-id citation **namespaced `SRD:`** — e.g.
 `(SRD:REQ-1)`, `(SRD:GLO-3)` — marking it an SRD-standard rule. The only rule
@@ -144,8 +189,10 @@ offending text. Use only ids and headings that actually appear in the SRD; never
 invent section shorthand such as `§1.3` — the SRD does not use `§`. Line numbers
 shift with formatting and are unreliable; never cite them.
 
-Break a long finding onto continuation lines indented two spaces (aligning
-under the bullet text). Line length is not constrained.
+Wrap every finding at **80 columns**, breaking onto continuation lines indented
+two spaces (aligning under the bullet text). A single unbreakable token — a long
+URL or path — may overflow; nothing else may. A `*(Partial — …)*` note starts its
+own continuation line.
 
 Layout, in order:
 
@@ -156,8 +203,9 @@ Layout, in order:
    conservatively). Grouped here instead of under its document section, so the
    author can bulk-apply the block via `edit autofix`. The literal heading
    `## Errata` is the machine anchor `edit autofix` locates; do not rename it.
-   Errata findings keep their global number, their `[minor]` tag, and their
-   citation, exactly like any other finding. Omit the section when empty.
+   Errata findings keep their global number, their `[minor]` tag, their category,
+   and their citation, exactly like any other finding. Omit the section when
+   empty.
 2. **Open findings**, grouped by document section: Metadata, Introduction,
    Glossary, Scope, Requirements. Omit a section with no open findings. An errata
    finding lives in `## Errata`, never also under its document section.
@@ -191,37 +239,38 @@ cfsync-plugin: ignore-push
 
 ## Errata
 
-- [ ] #8 [minor] VIEW-4 uses British "colour" — change to US "color".
-  (SRD:LANG-1)
+- [ ] #8 [minor, linguistic] VIEW-4 uses British "colour" — change to US
+  "color". (SRD:LANG-1)
 
-- [ ] #10 [minor] GR-3a: doubled space after "sensor" — collapse to one.
-  (SRD:LANG-7)
+- [ ] #10 [minor, format] GR-3a: doubled space after "sensor" — collapse to one.
+  (SRD:LANG-2)
 
 ---
 
 ## Requirements
 
-- [ ] #3 [blocker] GR-3a: states two rules ("validate ... and log ...") — split
-  into one rule each. (SRD:REQ-1)
+- [ ] #3 [blocker, atomicity] GR-3a: states two rules ("validate ... and log
+  ...") — split into one rule each. (SRD:REQ-1)
 
-- [ ] #5 [major] GR-7 and GR-9 state the same limit in different words — merge
-  or remove one. (SRD:consistency)
+- [ ] #5 [major, redundancy] GR-7 and GR-9 state the same limit in different
+  words — merge or remove one. (SRD:consistency)
 
 ---
 
 ## Resolved
 
-- [x] #1 [blocker] SC-2 In Scope item had no requirement — added GR-11.
-  (SRD:SCO-2)
+- [x] #1 [blocker, coverage] SC-2 In Scope item had no requirement — added
+  GR-11. (SRD:SCO-2)
 
-- [x] #4 [minor] British spelling "behaviour" — changed to US. (SRD:LANG-1)
+- [x] #4 [minor, linguistic] British spelling "behaviour" — changed to US.
+  (SRD:LANG-1)
 
 ---
 
 ## Withdrawn
 
-- #2 [major] GR-5 seemed to overlap GR-6 (withdrawn: distinct triggers,
-  confirmed by author).
+- #2 [major, redundancy] GR-5 seemed to overlap GR-6 (withdrawn: distinct
+  triggers, confirmed by author).
 ```
 
 ## review (default)
@@ -289,9 +338,9 @@ every number; bump the `updated:` frontmatter.
 1. For each open finding, test it against the errata class in
    [../create/references/authoring-guide.md](../create/references/authoring-guide.md).
    If it qualifies and is not already under `## Errata`, move it there —
-   **keeping its number**, `[minor]` tag, and citation; create the `## Errata`
-   section at the top if absent. Classify conservatively: leave ambiguous
-   findings where they are.
+   **keeping its number**, `[minor]` tag, category, and citation; create the
+   `## Errata` section at the top if absent. Classify conservatively: leave
+   ambiguous findings where they are.
 2. Leave every non-errata finding, and every already-placed errata finding,
    untouched. The pass is **idempotent** — a second run changes nothing.
 3. If the review file does not exist, fall through to a normal **review**.
@@ -308,7 +357,8 @@ Emit plain text for an email or ticket — no file write:
 - One bullet per **open** finding, **blank-line separated** (as in the review
   file). Keep the finding number and the SRD's own requirement id (e.g.
   `#7 GR-3a:`), then a one-line problem-and-fix. Drop the checkbox, the severity
-  tag, and the standard rule-id citation. No bold, no multi-line bullets.
+  tag, the category tag, and the standard rule-id citation. No bold, no
+  multi-line bullets.
 - List open findings only — omit Resolved and Withdrawn.
 
 ## Closing
