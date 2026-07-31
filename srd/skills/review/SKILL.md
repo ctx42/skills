@@ -197,15 +197,28 @@ own continuation line.
 Layout, in order:
 
 1. `## Errata` **first**, at the very top of the open findings — every open
-   finding whose fix is *mechanical and meaning-preserving* per the errata class
-   in the authoring guide (spelling, punctuation, stray/wrong emphasis, spacing;
-   **not** line-wrapping, and **not** any ambiguous case — classify
-   conservatively). Grouped here instead of under its document section, so the
-   author can bulk-apply the block via `edit autofix`. The literal heading
-   `## Errata` is the machine anchor `edit autofix` locates; do not rename it.
-   Errata findings keep their global number, their `[minor]` tag, their category,
-   and their citation, exactly like any other finding. Omit the section when
-   empty.
+   finding that passes the gate and allowlist of the errata class in
+   [../create/references/authoring-guide.md](../create/references/authoring-guide.md).
+   Grouped here instead of under its document section, so the author can
+   bulk-apply the block via `edit autofix`. The literal heading `## Errata` is
+   the machine anchor `edit autofix` locates; do not rename it. Errata findings
+   keep their global number, their `[minor]` tag, their category, and their
+   citation, exactly like any other finding. Omit the section when empty.
+
+   **Every errata finding MUST state its fix as an exact substitution**
+   `` `old` → `new` `` — that is the gate, so a finding that cannot carry
+   one does not belong here. Two shapes, no others:
+
+   - *Literal* — quote both sides in backticks:
+     `` REG-4: `Authentiction` → `Authentication`. ``
+   - *Coded* — whitespace and glyph classes only, where quoting the span is
+     forbidden: name the class and a neighboring word, and `autofix` derives the
+     fix (`two consecutive spaces before the word "in" — collapse to one`).
+
+   A finding fixing one substitution repeated across sites MUST list **every**
+   site, so `autofix` can verify the count. Never bundle two different
+   substitutions into one finding — they are independently verifiable, so they
+   are separate findings.
 2. **Open findings**, grouped by document section: Metadata, Introduction,
    Glossary, Scope, Requirements. Omit a section with no open findings. An errata
    finding lives in `## Errata`, never also under its document section.
@@ -239,10 +252,14 @@ cfsync-plugin: ignore-push
 
 ## Errata
 
-- [ ] #8 [minor, linguistic] VIEW-4 uses British "colour" — change to US
-  "color". (SRD:LANG-1)
+- [ ] #8 [minor, linguistic] VIEW-4 uses British spelling: `colour` → `color`.
+  (SRD:LANG-1)
 
-- [ ] #10 [minor, format] GR-3a: doubled space after "sensor" — collapse to one.
+- [ ] #10 [minor, format] GR-3a: two consecutive spaces after the word "sensor"
+  — collapse to one. (SRD:LANG-2)
+
+- [ ] #12 [minor, linguistic] GR-6, GR-9 and DET-2 drop the infinitive:
+  `force users re-authenticate` → `force users to re-authenticate`.
   (SRD:LANG-2)
 
 ---
@@ -335,12 +352,22 @@ one-time retrofit for files written before the block existed, and a re-sort on
 demand. **Reclassify only — never hunt for new defects** (like `check`). Keep
 every number; bump the `updated:` frontmatter.
 
-1. For each open finding, test it against the errata class in
+1. For each open finding, test it against the gate and allowlist of the errata
+   class in
    [../create/references/authoring-guide.md](../create/references/authoring-guide.md).
    If it qualifies and is not already under `## Errata`, move it there —
    **keeping its number**, `[minor]` tag, category, and citation; create the
    `## Errata` section at the top if absent. Classify conservatively: leave
    ambiguous findings where they are.
+   A qualifying finding written as prose ("fix the spelling") is **rewritten**
+   into the substitution shape as it moves — that is what makes it appliable.
+   One finding naming several different fixes is **split** into one finding per
+   substitution — each qualifying one moves to `## Errata` with a new number,
+   while anything that fails the gate stays where it is under the original
+   number, rewritten to name only the sites left. When every part qualifies, the
+   original number goes with the first substitution and nothing is left behind.
+   Report each split. (Splitting is not hunting — the defects were already
+   recorded.)
 2. Leave every non-errata finding, and every already-placed errata finding,
    untouched. The pass is **idempotent** — a second run changes nothing.
 3. If the review file does not exist, fall through to a normal **review**.

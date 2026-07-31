@@ -43,9 +43,13 @@ is **atomic** — one indivisible fix, verifiable by a single yes/no. Open
 findings are `[ ]` checkboxes grouped **by document section** (Metadata →
 Introduction → Glossary → Scope → Requirements), each citing a rule id
 (namespaced `SRD:`, e.g. `(SRD:REQ-1)`) and tagged. Mechanical,
-meaning-preserving findings (spelling, punctuation, stray emphasis, spacing)
-are collected instead into a `## Errata` block at the very top, so the author
-can bulk-apply them with `edit <srd> autofix`. File metadata (`prepared`,
+meaning-preserving findings (spelling, grammar repairs with one correct form,
+punctuation, stray emphasis, spacing) are collected instead into a `## Errata`
+block at the very top, so the author can bulk-apply them with
+`edit <srd> autofix`. An errata finding always states its fix as an exact
+substitution — `` `old` → `new` ``, or a whitespace/glyph class plus a
+neighboring word — which is what makes it appliable unreviewed; a fix that
+needs prose to describe is not errata. File metadata (`prepared`,
 `updated` with a timestamp, `source`) sits in YAML frontmatter. Below the open
 findings, a `## Resolved` section holds ticked `[x]` findings (flat,
 sorted by number) and a `## Withdrawn` section holds findings dropped as
@@ -118,7 +122,8 @@ and one requirement uses British spelling.
 - Groups findings by document section; tags the two-rule requirement
   `[blocker, atomicity]` citing REQ-1 and the uncovered scope item
   `[blocker, coverage]` citing SCO-2. Collects the British spelling into the
-  `## Errata` block at the top, tagged `[minor, linguistic]` citing LANG-1.
+  `## Errata` block at the top, tagged `[minor, linguistic]` citing LANG-1 and
+  stating the substitution (`` `behaviour` → `behavior` ``).
 - Closes with a per-severity count and whether a blocker stands between the SRD
   and the Quality Bar.
 
@@ -203,6 +208,7 @@ British-spelling finding `#4` under Requirements and a scope blocker `#2`.
 
 **Expected behavior:**
 - Moves `#4` into a `## Errata` block at the top, keeping its number, `[minor]`
-  tag, category, and citation; leaves the blocker `#2` under its section.
+  tag, category, and citation, and rewriting its prose fix into the substitution
+  shape; leaves the blocker `#2` under its section.
 - Reclassifies only — hunts no new defects; a second run changes nothing
   (idempotent); bumps the `updated:` timestamp and reports the moved number.

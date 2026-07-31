@@ -45,7 +45,11 @@ or rename `create`, or this skill loses its standard.
 - **Autofix (bulk errata)**: `/edit path/to/srd.md autofix`
     - Applies the `## Errata` block of `<srd>.review.md` — the mechanical,
       meaning-preserving findings `review` recorded — behind a **single** batch
-      confirmation, not the per-change loop. Never re-scans the SRD. It never
+      confirmation, not the per-change loop. Never re-scans the SRD. Each fix is
+      an exact `old → new` substitution, **verified at its anchor before the
+      write**: it applies only where `old` matches exactly once inside the entry
+      the finding names, and reports — rather than guesses — anything stale,
+      ambiguous, or missing a substitution. It never
       writes the review file itself; instead it hands off to `review … check`
       scoped to the applied errata numbers, so `review` reclassifies just those
       fixed errata into `## Resolved` automatically, leaving other findings
@@ -197,8 +201,10 @@ Request: `/edit specs/login.md autofix` with a `specs/login.review.md` whose
 `## Errata` block holds three findings.
 - Reads only the `## Errata` block — does not re-scan the SRD for new mechanical
   issues.
-- Lists the three fixes and takes **one** confirmation for the whole batch, not
-  the per-change loop; on approval applies all three at their anchors.
+- Lists the three substitutions and takes **one** confirmation for the whole
+  batch, not the per-change loop; on approval verifies each `old` at its anchor
+  and applies the two that match exactly once, reporting the third as stale
+  because its anchor no longer contains the quoted text.
 - Does not write `login.review.md` itself; hands off to `review specs/login.md
   check #n #n #n` scoped to the three errata, which ticks them into
   `## Resolved`. Closes with a manifest naming what was applied and reclassified.

@@ -300,19 +300,33 @@ still **read the whole SRD first** to locate each anchor.
 
 1. If there is no review file or its `## Errata` block is empty, say so and
    stop.
-2. Present the batch: list every open errata finding (number, id/anchor, the
-   fix). The user may name numbers to exclude; default is all.
-3. **One confirmation** for the whole batch — `Yes` applies every included
+2. Parse each open errata finding into its anchor and its fix, which the errata
+   class states as an exact substitution — either *literal*
+   (`` `old` → `new` ``) or *coded* (a whitespace/glyph class plus a
+   neighboring word; derive the canonical fix from the class). A finding
+   carrying **neither** shape is not appliable: exclude it, report it as
+   malformed, and tell the user to re-run `review <srd> errata` to restate it.
+3. Present the batch: list every appliable finding (number, id/anchor, the
+   substitution). The user may name numbers to exclude; default is all.
+4. **One confirmation** for the whole batch — `Yes` applies every included
    finding, `No` applies nothing. Not the per-item loop.
-4. On `Yes`, apply each fix at its anchor (by id or quoted text, never line
-   number). Skip any finding whose anchor no longer matches and report it.
-5. **Never write the review file directly** — `review` owns it. When anything
+5. On `Yes`, **verify before every write**. For each finding, scope the search
+   to its anchor — the requirement entry, glossary entry, or section heading
+   it names, never the whole document — and count occurrences of `old`:
+   - **exactly one** → apply the substitution there.
+   - **zero** → the anchor is stale; change nothing and report it.
+   - **more than one**, and the finding did not name that many sites →
+     ambiguous; change nothing and report it. Never guess which one was meant.
+   A multi-site finding is verified per site and applies only to sites that
+   match; report any site that did not. Never substitute by whole-document
+   search-and-replace, and never widen a substitution beyond the quoted `old`.
+6. **Never write the review file directly** — `review` owns it. When anything
    was applied, hand off to `review <srd> check #n…` scoped to exactly the
    applied errata numbers: `review` re-verifies its own file and moves those
    fixed errata to `## Resolved`, leaving other findings untouched. Skip the
    hand-off only if nothing landed.
-6. Close with the manifest (see Deliverable), naming which findings `check`
-   reclassified.
+7. Close with the manifest (see Deliverable), naming which findings `check`
+   reclassified, plus every finding skipped as stale, ambiguous, or malformed.
 
 ### polish
 
