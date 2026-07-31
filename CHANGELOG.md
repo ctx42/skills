@@ -1,3 +1,9 @@
+## v0.25.0 (Fri, 31 Jul 2026 14:33:17 UTC)
+- feat(srd): classify STR-8 keyword notice as errata.
+- feat(srd): add decision log to edit skill.
+- docs(srd): clarify severity and category tagging in review files.
+- feat(srd): require exact substitutions for errata.
+
 ## v0.24.0 (Fri, 24 Jul 2026 18:50:06 UTC)
 - docs(srd): write SRD status values in uppercase.
 - docs(doc-smith): record two review lessons.
