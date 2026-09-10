@@ -25,8 +25,10 @@ the house additions (US English, sub-numbering, one term per concept).
 Two things belong to the standard and MUST NOT be copied into the SRD being
 written:
 
-- The rule identifiers (`STR-*`, `REQ-*`, …) name the rules; they are not part
-  of a user's document.
+- The rule identifiers (`STR-*`, `REQ-*`, …) name this standard's own rules, so
+  never carry them into an SRD as if they were its requirements. The letter
+  codes are not reserved: an SRD MAY number its own requirements `REQ-1`,
+  `REQ-2`, … if that suits the document.
 - A real SRD carries no `Example` / `Don't` / `Do` annotations. They are a
   teaching device only (REQ-7); the Bad→Good examples live in
   [authoring-guide.md](authoring-guide.md).
