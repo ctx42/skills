@@ -1,15 +1,20 @@
 # Skill Authoring Standards
 
-The canonical ruleset `skill-smith` writes and audits against. Fuses Anthropic's
-[skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
-with this repo's house rules. Terse by design: every rule is one enforceable
-line. Repo mechanics (catalog updates, naming, syncing, retiring) live in
-[CONTRIBUTING.md](../../../CONTRIBUTING.md) — this doc references it, never
-duplicates it.
+The canonical ruleset `skill-smith` writes and audits against. Fuses the Agent
+Skills authoring guidance with hard-won house rules. Terse by design: every
+rule is one enforceable line. Placement, catalog updates, renaming and
+retiring belong to the project hosting the skill — follow its conventions;
+this doc covers authoring only.
+
+Rules marked **(house)** are this project's preferences, not requirements of
+the Agent Skills standard. Keep them in a project that shares them; drop or
+replace them in one that does not. Everything unmarked comes from the standard
+or from how skills demonstrably behave.
 
 ## Contents
 
 - Scope
+- Depending on other skills
 - Frontmatter
 - Claude-native frontmatter
 - Description quality
@@ -37,11 +42,28 @@ One skill covers one coherent unit of work — size it like a function.
 - Split a skill that needs two unrelated trigger sets; merge two that always
   fire together.
 
+## Depending on other skills
+
+- Depend by name when you want work done — invoke `group:skill` instead of
+  reading its files. The name is the interface and the layout is
+  implementation; invocation resolves across plugins where a path cannot, and
+  the callee's body never enters your context.
+- Depend by file only for a rule you must apply exactly, and only inside your
+  own plugin, where the files are cached together. Never cross a plugin
+  boundary by path — it does not resolve.
+- To tell them apart: if you can name the outcome in one sentence without
+  describing the steps, it is a capability — delegate it. If you are reaching
+  for one specific rule or template, it is knowledge — read the file.
+- Never copy another skill's knowledge to look self-contained. One source with
+  several readers beats several copies drifting apart in silence.
+- Two skills that invoke each other will loop; a shared reference will not, so
+  mutual dependence belongs in a file.
+
 ## Frontmatter
 
-This repo's skills ship as Claude Code plugins and target **Claude Code only**.
-Write for the Claude Code feature set; the native affordances below are
-encouraged where they earn their place.
+These rules target **Claude Code**, where skills ship as plugins. Write for the
+Claude Code feature set; the native affordances below are encouraged where they
+earn their place.
 
 - Required: `name`, `description`.
 - `name` — lowercase letters, digits, and hyphens only; ≤ 64 chars; no leading,
@@ -51,8 +73,8 @@ encouraged where they earn their place.
 - `description` — see next section. ≤ 1024 chars.
 - `compatibility` — one line, ≤ 500 chars, only when the skill has a real
   environment requirement (a host product, a system package, network access).
-- Optional metadata: `license`, `version`, `tags`, `author`, `metadata`.
-  Use sparingly.
+- (house) Optional metadata: `license`, `version`, `tags`, `author`,
+  `metadata`. Use sparingly.
 - Claude-native affordances (allowed): `argument-hint` (surface a skill's
   arguments in the invocation UI), `$ARGUMENTS` / `$N` body substitution, and
   dynamic injection (`` !`cmd` ``). See "Claude-native frontmatter" below.
@@ -100,8 +122,8 @@ highest-leverage field.
 - Lean pushy on when: agents tend to under-trigger, so make the use-cases
   assertive ("Use when…") and cover oblique phrasings — while still never
   leaking *how* (above).
-- Size: aim ≤ ~350 chars (hard limit 1024) — the description is paid in every
-  session, for every skill, whether or not it fires.
+- (house) Size: aim ≤ ~350 chars (hard limit 1024) — the description is paid
+  in every session, for every skill, whether or not it fires.
 - Specific, not vague. ✗ "Helps with documents" ✓ "Extracts text and tables
   from PDFs. Use when the user mentions PDFs, forms, or extraction."
 - Put the key use case first (listing text is truncated downstream).
@@ -114,7 +136,7 @@ highest-leverage field.
   tag dump.
 - YAML scalar safety: a plain scalar breaks on `: ` (colon-space) or a leading
   `>`/`<`. Use a folded block scalar (`description: >`) for multi-line or any
-  description containing a colon — it is valid YAML and the repo default. Never
+  description containing a colon — it is valid YAML and the default here. Never
   "fix" a colon by deleting the block scalar.
 
 ## Token performance
@@ -166,8 +188,8 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
 - One consistent term per concept throughout (don't mix "field/box/element").
 - Address the agent: write for "the agent"; you may name Claude Code features
   where a skill relies on them.
-- Every `SKILL.md` ends with the `## Self-learning` block; `enhance-skills`
-  owns its wording and `dev/lint-skills.sh` warns when it is missing.
+- (house) Every `SKILL.md` ends with a `## Self-learning` block;
+  `enhance-skills` owns its wording.
 
 ## Output discipline
 
@@ -183,7 +205,7 @@ make its agent report tersely.
 - Never cut the payload: terseness applies to framing and restating only. The
   substantive result — findings, diffs, the written artifact, a required
   status table — is always stated in full. A review still lists every finding.
-- Every skill carries the rule in its body: a produced `SKILL.md` must
+- (house) Every skill carries the rule in its body: a produced `SKILL.md` must
   contain an explicit output-discipline line so the rule bites at runtime, not
   only when skill-smith is authoring. Canonical wording: *Report tersely: no
   preamble or narration; state each fact once; don't restate output the user can
@@ -210,8 +232,15 @@ files (on demand). Exploit it:
 - Point at the section, not the file, when a reference is large: tell the agent
   to grep it or read the named heading. "See `rules.md`" invites a whole-file
   read and quietly undoes the deferral.
-- Label every Sources-of-truth entry `(eager)` or `(on-demand: <when>)`,
+- (house) Label every Sources-of-truth entry `(eager)` or `(on-demand:
+  <when>)`,
   so a workflow step cannot silently preload a file meant for per-need reads.
+- Bundle what you reference. A path leaving the skill directory is a bet on
+  the environment: inside the skill is guaranteed, inside the plugin is cached
+  with it, outside the plugin is neither. Reach outside only when the skill is
+  already bound to that environment for other reasons — then declare the
+  binding in `compatibility` and keep the read on-demand. An eager read that
+  resolves to nothing runs the skill with its foundation missing, and silently.
 - Structure is necessary, not sufficient — a one-hop, ToC'd, well-named
   reference can still bloat with restated content or be preloaded whole. Apply
   the Token-performance and Body-conciseness tests to it too.
@@ -236,7 +265,7 @@ Match specificity to task fragility:
   "validator" can be a script or a reference doc the agent checks against.
 - For risky/batch work, emit a verifiable intermediate plan and validate it
   before executing.
-- Don't hand-roll a plan as a deliverable. When a skill's output is a
+- (house) Don't hand-roll a plan as a deliverable. When a skill's output is a
   multi-step plan the user will keep and track, defer to the `plan-smith` skill
   (checkbox items + a Y/N/X status table) instead of inventing a format.
   Internal progress checklists the agent ticks off mid-run are exempt.
@@ -278,18 +307,18 @@ that defy a reasonable assumption, which the agent gets wrong unless told.
   template ("use this structure") or a starting point ("adapt as the task
   needs") — an unmarked template gets followed too rigidly or ignored.
 - Provide one default with an escape hatch, not a menu of options.
-- Wrap Markdown prose at ~80 columns: reflow every edited paragraph so no
-  line exceeds 80; exempt code fences, table rows, and unbreakable tokens (URLs,
-  paths, links). `dev/lint-skills.sh` warns on breakable over-width lines.
-- Align table columns — pad cells so `|` delimiters line up in the source;
-  re-pad the whole table when adding a row.
-- Plain, spaced lists: write list items as plain sentences — no bold-label
-  lead-ins — and reserve `**bold**` for genuine emphasis in prose. Space items
-  with a blank line when they are prose steps; keep them tight and unspaced
-  when they are dense enumerations (type/flag/option lists, short spec fields,
-  reference entries), where a value per line scans better and token economy
-  wins. Applies to `SKILL.md` bodies and bundled references alike.
-- US English: write skill files and any content a skill authors in US
+- (house) Wrap Markdown prose at ~80 columns: reflow every edited paragraph
+  so no line exceeds 80; exempt code fences, table rows, and unbreakable
+  tokens (URLs, paths, links).
+- (house) Align table columns — pad cells so `|` delimiters line up in the
+  source; re-pad the whole table when adding a row.
+- (house) Plain, spaced lists: write list items as plain sentences — no
+  bold-label lead-ins — and reserve `**bold**` for genuine emphasis in prose.
+  Space items with a blank line when they are prose steps; keep them tight and
+  unspaced when they are dense enumerations (type/flag/option lists, short spec
+  fields, reference entries), where a value per line scans better and token
+  economy wins. Applies to `SKILL.md` bodies and bundled references alike.
+- (house) US English: write skill files and any content a skill authors in US
   English spelling and conventions ("color", "canceled", "-ize"). When a skill
   edits a target that consistently uses another variety, match it and flag
   mixed usage rather than convert wholesale.
@@ -321,15 +350,14 @@ include them:
 ## Usage block
 
 - Skills ship no `README.md`. Everything a user or agent needs is in `SKILL.md`,
-  its bundled files, and `evals/evals.json`. Project-level READMEs are
-  `readme-smith`'s job, not a skill's.
-- Usage section, near the top: every `SKILL.md` MUST carry a `## Usage` section
-  immediately after the H1 title, before any other `##` section. It holds a
-  single fenced code block showcasing invocation examples — one line per mode:
+  its bundled files, and `evals/evals.json`. A project-level README is a
+  separate document with a separate audience.
+- (house) Usage section, near the top: every `SKILL.md` MUST carry a `## Usage`
+  section immediately after the H1 title, before any other `##` section. It
+  holds a single fenced code block of invocation examples — one line per mode:
   the invocation with representative arguments, then a terse description. The
   no-argument / default invocation comes first, marked `(default)`. Align the
-  description column with padding so the block reads as a table. Model it on
-  `srd/skills/review`:
+  description column with padding so the block reads as a table. For example:
 
   ```
   /review path/to/srd.md             review (default): resolve fixed + append new

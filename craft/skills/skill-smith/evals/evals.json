@@ -11,7 +11,7 @@
         "Proposes a name equal to the directory name (e.g. csv-to-markdown), with no reserved word",
         "Writes SKILL.md with valid frontmatter (name + description, plus argument-hint if it takes arguments), a third-person what + when description, a ## Usage block, the output-discipline line, and a closing ## Self-learning block",
         "Writes evals/evals.json with at least 3 scenarios before writing the body",
-        "Lists the catalog-doc updates per CONTRIBUTING.md and reminds the user to run /reload-plugins"
+        "Follows the project's own conventions for placement and catalog updates rather than inventing a layout, and reminds the user to reload"
       ]
     },
     {

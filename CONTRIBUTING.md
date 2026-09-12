@@ -9,6 +9,11 @@ repository. Skills ship as Claude Code plugins, grouped into `golang`,
 - Skills grouped into plugins by purpose
 - High-quality and focused skills
 
+> Agents get these mechanics from
+> `craft/skills/skill-smith/references/repo-mechanics.md`, which skill-smith
+> bundles so it stays self-contained. Changing placement, the catalog list, or
+> the rename/retire steps here means changing them there too.
+
 ## Where to Place a New Skill
 
 A skill lives at `<group>/skills/<skill-name>/`. Pick the group by purpose:

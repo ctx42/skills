@@ -80,8 +80,12 @@ check_wrap() {
 }
 
 lint_skill() {
-    local dir="$1" name skill_md readme evals fm
+    local dir="$1" name rel skill_md readme evals fm
     name="$(basename "$dir")"
+    # Report by repo-relative path, not basename: two groups can hold skills of
+    # the same name (golang/skills/review and srd/skills/review), and a bare
+    # name leaves the reader guessing which one a finding belongs to.
+    rel="${dir#"$SKILLS_SRC"/}"
     skill_md="$dir/SKILL.md"
     readme="$dir/README.md"
     evals="$dir/evals/evals.json"
@@ -90,16 +94,16 @@ lint_skill() {
 
     # name + description present.
     grep -qE '^name:[[:space:]]' <<<"$fm" \
-        || err "$name: frontmatter missing 'name:'"
+        || err "$rel: frontmatter missing 'name:'"
     grep -qE '^description:[[:space:]]*([|>].*)?$|^description:[[:space:]]*\S' \
-        <<<"$fm" || err "$name: frontmatter missing 'description:'"
+        <<<"$fm" || err "$rel: frontmatter missing 'description:'"
 
     # name equals directory name.
     local declared
     declared="$(grep -E '^name:[[:space:]]' <<<"$fm" \
         | head -1 | sed -E 's/^name:[[:space:]]*//; s/[[:space:]]*$//')"
     [ "$declared" = "$name" ] \
-        || err "$name: frontmatter name '$declared' != directory '$name'"
+        || err "$rel: frontmatter name '$declared' != directory '$name'"
 
     # Description size and point of view (standards.md, Description quality).
     # The aim is ~350 chars; warn only past 500 so a trigger-rich description
@@ -117,9 +121,9 @@ lint_skill() {
     ' <<<"$fm")"
     desc="${desc% }"
     [ "${#desc}" -gt 500 ] \
-        && warn "$name: description is ${#desc} chars (aim <= ~350)"
+        && warn "$rel: description is ${#desc} chars (aim <= ~350)"
     grep -qiE '(^|[^a-zA-Z])(I|you|your)([^a-zA-Z]|$)' <<<"$desc" \
-        && warn "$name: description uses first/second person"
+        && warn "$rel: description uses first/second person"
 
     # Body size (standards.md, Token performance): the always-loaded SKILL.md
     # body should stay under ~500 lines / ~5000 tokens. Tokens are estimated as
@@ -130,27 +134,27 @@ lint_skill() {
     body_lines="$(wc -l <"$skill_md")"
     body_tokens=$(( $(wc -c <"$skill_md") / 4 ))
     [ "$body_lines" -gt 500 ] \
-        && warn "$name: SKILL.md is $body_lines lines (aim <= ~500)"
+        && warn "$rel: SKILL.md is $body_lines lines (aim <= ~500)"
     [ "$body_tokens" -gt 5000 ] \
-        && warn "$name: SKILL.md is ~$body_tokens tokens (aim <= ~5000)"
+        && warn "$rel: SKILL.md is ~$body_tokens tokens (aim <= ~5000)"
 
     # Body carries the output-discipline line (standards.md mandates it; the
     # canonical wording is "Report tersely: …", grill-me embeds the phrasing).
     grep -qiE 'report tersely|no preamble or narration' "$skill_md" \
-        || err "$name: SKILL.md lacks the output-discipline line"
+        || err "$rel: SKILL.md lacks the output-discipline line"
 
     # Body carries the Self-learning block (every skill in this repo does).
     grep -q '^## Self-learning' "$skill_md" \
-        || warn "$name: SKILL.md has no '## Self-learning' block"
+        || warn "$rel: SKILL.md has no '## Self-learning' block"
 
     # SKILL.md carries the Usage block (standards.md, Usage block). A skill not
     # yet migrated still keeps Usage in its README, so this only hardens to an
     # error once that README is gone.
     if ! grep -qE '^##[[:space:]]+Usage' "$skill_md"; then
         if [ -f "$readme" ]; then
-            warn "$name: '## Usage' still in README.md — move it to SKILL.md"
+            warn "$rel: '## Usage' still in README.md — move it to SKILL.md"
         else
-            err "$name: SKILL.md has no '## Usage' section"
+            err "$rel: SKILL.md has no '## Usage' section"
         fi
     fi
 
@@ -163,19 +167,19 @@ lint_skill() {
         local n
         n="$(grep -co '"query"[[:space:]]*:' "$evals" || true)"
         [ "$n" -ge 3 ] \
-            || err "$name: evals/evals.json has $n scenario(s) (want >= 3)"
+            || err "$rel: evals/evals.json has $n scenario(s) (want >= 3)"
         grep -q '"expected_behavior"' "$evals" \
-            || err "$name: evals/evals.json has no 'expected_behavior' checks"
+            || err "$rel: evals/evals.json has no 'expected_behavior' checks"
     elif [ -f "$readme" ] && grep -qE '^##[[:space:]]+Evaluations' "$readme"; then
-        warn "$name: evals still in README.md — move them to evals/evals.json"
+        warn "$rel: evals still in README.md — move them to evals/evals.json"
     else
-        err "$name: no evals/evals.json (and no README.md '## Evaluations')"
+        err "$rel: no evals/evals.json (and no README.md '## Evaluations')"
     fi
 
     # Skills ship no README.md: SKILL.md and its bundled files carry everything
     # (standards.md, Usage block). Warn while the tree migrates.
     [ -f "$readme" ] \
-        && warn "$name: has a README.md — skills ship none; fold it into SKILL.md"
+        && warn "$rel: has a README.md — skills ship none; fold it into SKILL.md"
 
     # Every Markdown file in the skill wraps prose at ~80 columns.
     check_wrap "$skill_md"

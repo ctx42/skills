@@ -1,7 +1,7 @@
 ---
 name: skill-smith
 description: >
-  Authors new skills, audits existing ones against the repo's authoring
+  Authors new skills, audits existing ones against a written authoring
   standard, and measures whether a skill actually works. Use when asked to
   create, write, scaffold, review, improve, or benchmark/measure a skill. Not
   for a project's own README (readme-smith) or for recording session lessons
@@ -37,8 +37,9 @@ Sources of truth:
 
 - `standards.md` (eager in create and improve; unused by measure) — the
   authoring ruleset. Every decision defers to it.
-- `CONTRIBUTING.md` (on-demand: placing, naming, cataloging, renaming, or
-  retiring a skill) — repo mechanics. Follow it; never restate it.
+- The project's own conventions (on-demand: placing, cataloging, renaming, or
+  retiring a skill) — read `CONTRIBUTING.md`, `AGENTS.md`, or `CLAUDE.md` where
+  they exist. Follow what the project already does; never invent a layout.
 - `evals/evals.json` (on-demand: measure mode, and when auditing this skill's
   own evals) — this skill's eval scenarios.
 - `references/measuring.md` (on-demand: measure mode) — the A/B protocol.
@@ -51,16 +52,16 @@ don't restate output the user can already see.
 Build a complete, standard-compliant skill. Copy this checklist and tick it off:
 
 ```
-- [ ] 1. Scope    — one job, its triggers, its plugin group
+- [ ] 1. Scope    — one job, its triggers, where it belongs
 - [ ] 2. Name     — per standards.md, confirmed with the user
 - [ ] 3. Evals    — evals/evals.json, written before the body
 - [ ] 4. SKILL.md — the smallest body that passes them, plus ## Usage
 - [ ] 5. Validate — fresh-context run, fix, repeat, then lint clean
-- [ ] 6. Place    — <group>/skills/<name>/ + catalog docs
+- [ ] 6. Place    — where the project keeps skills, + its catalog docs
 ```
 
-1. Scope it. Settle the one job this skill does, the phrases that should
-   trigger it, and its plugin group (`golang`, `srd`, `craft`, or a new one).
+1. Scope it. Settle the one job this skill does and the phrases that should
+   trigger it. Where the project groups skills, settle which group it joins.
    Ask only what you cannot infer.
 
 2. Name it per `standards.md` Frontmatter. Confirm the name with the user.
@@ -90,14 +91,15 @@ Build a complete, standard-compliant skill. Copy this checklist and tick it off:
    every run belongs in the body, one never opened is dead weight
    (`standards.md` Observing real use).
 
-   Move on only once every eval passes. Then run `./dev/lint-skills.sh` and
-   clear every error.
+   Move on only once every eval passes. Then run the project's skill linter,
+   if it ships one, and clear every error.
 
-6. Place it at `<group>/skills/<name>/` and update the catalog docs, both per
-   `CONTRIBUTING.md`.
+6. Place it where the project keeps its skills and update whatever catalogs
+   list them. Follow the project's documented conventions; ask when it has
+   none rather than inventing a layout.
 
-Output: the new skill files, the catalog diffs, one line naming the skill's job
-and triggers, then a reminder to run `/reload-plugins`.
+Output: the new skill files, any catalog diffs, and one line naming the skill's
+job and triggers. Remind the user to reload if their host caches skills.
 
 ## Improve mode
 
@@ -116,7 +118,7 @@ Scope is the single skill named; audit a whole group only when asked.
    If none was named, ask which one.
 
 2. Read the target's `SKILL.md`, `evals/evals.json`, and every bundled file.
-   Consult `CONTRIBUTING.md` only for the mechanics it owns.
+   Consult the project's conventions only for the mechanics they own.
 
 3. Audit against `standards.md`. It is already loaded — walk its rule sections
    in Contents order instead of re-deriving them. Two checks get skipped most
@@ -133,9 +135,9 @@ Scope is the single skill named; audit a whole group only when asked.
 4. Report only. Make no edit before the user approves.
 
 5. Fix on confirmation. Apply the approved findings and show the diffs. Run
-   `./dev/lint-skills.sh` and clear every error. If the structure changed (a
-   rename, new files), follow `CONTRIBUTING.md` and remind the user to run
-   `/reload-plugins`.
+   the project's skill linter, if it ships one, and clear every error. If the
+   structure changed (a rename, new files), follow the project's conventions
+   and remind the user to reload.
 
 Output: findings grouped by severity — Blocker / Should-fix / Nit. Each finding
 names the file (and the line where it helps), the `standards.md` rule it breaks,
