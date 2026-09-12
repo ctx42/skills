@@ -110,16 +110,22 @@ On an approved SRD the gate governs content, not only ids. STA-4: adding,
 removing, or changing a requirement needs the approving authority's agreement.
 The user's `Y` is not that — it makes the edit the one they want, not one the
 standard permits. So name STA-4 in the proposal and ask whether the authority
-has agreed; without it, leave the edit marked for their ruling, unlanded.
+has agreed; without it, leave the edit marked for their ruling, unlanded. The
+decision log records only applied edits and this skill writes no review file,
+so an unlanded edit lives in the closing manifest or nowhere — list each with
+its STA-4 ask.
 Removal is the sharp case: STA-8 keeps the id and strikes the text, so "remove
 GR-4" is never a deletion (STA-7 keeps the number). Meaning-preserving
 editorial change is STA-5 and needs none of this — `polish` is that mode.
 
 The gate then decides what may happen to requirement, scope, and glossary ids:
 
-- In-progress: free to renumber a group after a split, merge, add, or remove,
-  and to fix collisions or gaps (REQ-2/3/4); update every cross-reference the
-  change touches.
+- In-progress: sub-number a split first — `GR-3` becoming `GR-3a`/`GR-3b` keeps
+  every existing cross-reference working, which is why the authoring guide's
+  own REQ-1 example does it. Renumbering the group is free here and is the
+  right move when sub-numbering cannot express the change: an item crosses
+  groups, or the numbering is already wrong (REQ-2/3/4 collisions and gaps).
+  Update every cross-reference the change touches.
 - Approved: existing ids are frozen. Additions only, via sub-numbering
   (`GR-1a`, `GR-1b`); never renumber or rename an existing id. A taken suffix
   moves down the alphabet — splitting `GR-3a` beside an existing `GR-3b` adds
@@ -161,8 +167,12 @@ Every mode but `autofix` runs this loop per change:
    Never batch unrelated changes; never edit without confirmation. Ask one
    question at a time: never trail a proposal with loose questions or asides;
    anything held over goes in an `## Open questions` numbered list — one line
-   each, no rationale — so the user answers by number ("1 yes, 2 skip"). Carry
-   the list forward, renumbered, until it empties.
+   each, no rationale — so the user answers by number ("1 yes, 2 skip"). That
+   list is terminal output, not a section of the SRD: it belongs to this
+   session, empties with it, and writing it into the document would leave
+   questions behind for the next reader to mistake for content. Carry it
+   forward in the conversation, renumbered, until it empties; what is still
+   open at the end goes in the closing manifest.
 3. Re-validate the affected entry and its cross-refs at once against the
    standard, focusing on what the edit can touch: scope coverage (SCO-2/3,
    suspended while the In Scope `--- TODO ---` marker stands), id
@@ -192,13 +202,11 @@ author-facing account of what changed and why, which a diff cannot carry.
 - Rephrase the user's words into clean prose — fix typos, expand shorthand,
   drop the conversational frame — keeping decision and reason intact. Never
   invent a reason the user did not give.
-- Every applied edit, including those reaching the file outside the loop: an
-  `autofix` batch logs one entry per substitution, Add-to-TODO logs its line.
-  Two runs that changed the same things leave the same log.
-- Skipped and flagged-but-unfixed issues are not logged. With a review file
-  they stay there; without one (interactive, polish, targeted) `edit` may not
-  create one, so the closing manifest is their only record — say which were
-  left and why.
+- Every applied edit, loop or not: `autofix` logs one entry per substitution,
+  Add-to-TODO logs its line. Same changes, same log.
+- Skipped and flagged-but-unfixed issues are not logged: they stay in the
+  review file, or — with none, since `edit` may not create one — in the closing
+  manifest, which then says which were left and why.
 - Write for the SRD's author, not a reviewer: name the surface in the SRD's own
   words; cite a rule id only where the user did.
 - Create the file on the first write, frontmatter and title included;
@@ -302,38 +310,10 @@ finding, default to the next by number or jump to any number the user names.
 
 ### autofix
 
-Bulk-apply the errata `review` recorded — the fast path for surface fixes
-before consistency work. Source of truth is the `## Errata` block of
-`<srd>.review.md`: apply only what it lists and never re-scan the SRD for new
-mechanical issues (that is `polish`). Errata is meaning-preserving and never
-touches ids.
-
-1. No review file, or an empty `## Errata` block: say so and stop.
-2. Parse each open errata finding into its anchor and its fix, which the class
-   in [../create/references/errata.md](../create/references/errata.md) states
-   as an exact substitution — literal (`` `old` → `new` ``) or coded (a
-   whitespace/glyph class plus a neighboring word; derive the canonical fix
-   from the class). A finding with neither shape is not appliable: exclude it,
-   report it as malformed, and tell the user to re-run `review <srd> errata`.
-3. Present the batch: every appliable finding (number, anchor, substitution).
-   The user may name numbers to exclude; default is all.
-4. One confirmation for the whole batch — `Yes` applies every included finding,
-   `No` applies nothing. Not the loop.
-5. On `Yes`, verify before every write: scope the search to the finding's
-   anchor — the requirement entry, glossary entry, or heading it names, never
-   the whole document — and count occurrences of `old`:
-   - exactly one → apply the substitution there.
-   - zero → stale anchor; change nothing and report it.
-   - more than one, and the finding did not name that many sites → ambiguous;
-     change nothing and report it. Never guess.
-   A multi-site finding is verified per site and applies only where it
-   matches; report each site that did not. Never substitute by whole-document
-   search-and-replace; never widen beyond the quoted `old`.
-6. When anything landed, hand off to `review <srd> check #n…` scoped to exactly
-   the applied errata numbers, so `review` moves them to `## Resolved` and
-   leaves other findings untouched. Skip the hand-off if nothing landed.
-7. The closing manifest names which findings `check` reclassified and every
-   finding skipped as stale, ambiguous, or malformed.
+Bulk-apply the `## Errata` block of `<srd>.review.md` behind one batch
+confirmation — never the edit loop, never a re-scan of the SRD. The full
+procedure is in [references/autofix.md](references/autofix.md) *(on-demand:
+this mode only)*: read it before applying anything.
 
 ### polish
 

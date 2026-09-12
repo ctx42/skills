@@ -26,7 +26,7 @@ one failed call:
    before concluding there is no corpus. Missing MCP tools are not evidence the
    server is down; they are evidence this client has no MCP wiring, which is
    the exact case this step exists for. Reporting "no corpus" without a
-   `curl 'http://localhost:7777/docs' ` is the common way to miss a corpus that
+   `curl 'http://localhost:7777/docs'` is the common way to miss a corpus that
    is running.
 3. Scoped Grep/Read over a local corpus checkout, limited to the relevant
    subdirectory. A stopgap, never a blind whole-corpus read.
