@@ -172,9 +172,18 @@ caller's one-line "what is missing") plus whatever the caller already holds
 (`kind`, `topic`, `srd_ref`, and the `doc_id`/`heading_path`/`source_url`/
 `search_terms` from the lookups that exposed the gap). Leave the rest empty.
 
-One record per distinct missing fact. If the same fact is already buffered for
-this SRD, merge into it (widen `search_terms`, keep the richer `detail`) rather
-than duplicate: repeats are a priority signal the reviewer reads, not new gaps.
+One record per distinct missing fact. Same fact means the same thing is
+missing from the documentation — same `topic`, and a `detail` that would be
+closed by the same page — not the same requirement, the same SRD, or the same
+search terms. Two SRDs needing the retry count is one gap found twice; one SRD
+needing the retry count and the timeout is two gaps.
+
+If the same fact is already buffered for this SRD, merge into it rather than
+duplicate: union `search_terms`, keep the richer `detail` and `target_claim`,
+keep the earliest `demand` and add the new one if it differs, union `srd_ref`,
+and keep the `doc_id`/`heading_path`/`source_url` already set — a later capture
+that found nothing must not blank a pointer an earlier one recorded. Repeats
+are a priority signal the reviewer reads, not new gaps.
 
 ### C. Grill at chosen depth
 
