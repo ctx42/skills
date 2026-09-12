@@ -89,7 +89,10 @@ without this session:
 
 - `kind` — `missing` (nothing found), `wrong`, `incomplete`, or `ambiguous`.
 - `topic` — short label for the missing knowledge.
-- `demand` — why the gap blocks the SRD work at hand.
+- `demand` — why the gap blocks the SRD work at hand. The capturing skill
+  fills this from what it was doing when the gap surfaced, so it survives an
+  opt-out: the finder declining the grill does not make the blocking reason
+  unknown, and every record in the store carries one.
 - `detail` — what is missing, wrong, incomplete, or ambiguous. Required: the
   one field a finder must supply even on opt-out. May carry grilled prose in
   heavy mode.
@@ -113,7 +116,13 @@ mid-flow loses nothing.
 - Key: the SRD id (e.g. `SRD-42`). All four SRD skills share one buffer per
   SRD id on this machine, so a reviewer's session appends to the file an
   author's session started. Before an id exists, key off the SRD's absolute
-  file path, then rename the file to the id once assigned.
+  file path — a path is not a filename, so derive one the same way every time:
+  `path-` plus the first 12 hex characters of the path's SHA-256
+  (`printf %s "$abs" | sha256sum`). Any other transform breaks the shared-file
+  promise, since two skills that slugify differently silently keep separate
+  buffers for one SRD. Resolve the path to absolute first; a relative path
+  keyed from two working directories does the same damage. Rename the file to
+  the id once assigned.
 - Contents: a JSON array of [gap records](#the-gap-record), filled as far as
   capture or grill got them. Buffered means unconfirmed: a record leaves on
   filing or discard, and the file is deleted when it empties.
@@ -130,9 +139,16 @@ Callers invoke this skill at start (drain) and on gap discovery (capture); the
 user invokes it directly to drain.
 
 - [ ] A. On start: drain the buffer for this SRD; offer to work pending gaps.
+      "Start" means the caller's session start, not every entry into this
+      skill. A capture (phase B) is not a start: it records and returns
+      without draining, or the no-interruption rule it exists to serve would
+      be broken by the very invocation that serves it.
 - [ ] B. On discovery: capture the gap light to the buffer, no interruption.
-- [ ] C. Working a gap: grill the finder at their chosen depth (or honor
-      opt-out); assemble the record.
+- [ ] C. Working a gap: check the channel is reachable, then grill the finder
+      at their chosen depth (or honor opt-out); assemble the record. Resolve
+      the channel first — interviewing someone about a gap that cannot then be
+      filed spends their attention for nothing. With no channel, say so, leave
+      the gap buffered, and do not open the grill.
 - [ ] D. Confirm the record, file via `report_gap`, drop it from the buffer.
 
 ### A. Drain

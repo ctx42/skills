@@ -4,7 +4,10 @@
     {
       "id": 1,
       "name": "capture-does-not-interrupt",
-      "skills": ["report-doc-gap", "review"],
+      "skills": [
+        "report-doc-gap",
+        "review"
+      ],
       "setup": "`srd:review` is mid-pass. The SRD claims \"the gateway retries 3×\"; two corpus searches find no document stating any retry count.",
       "query": "/review specs/gateway.md",
       "files": [],
@@ -17,7 +20,9 @@
     {
       "id": 2,
       "name": "drain-grill-confirm-file",
-      "skills": ["report-doc-gap"],
+      "skills": [
+        "report-doc-gap"
+      ],
       "setup": "Two gaps sit buffered for `specs/gateway.md`.",
       "query": "/report-doc-gap specs/gateway.md",
       "files": [],
@@ -31,20 +36,25 @@
     {
       "id": 3,
       "name": "an-srd-gap-is-refused",
-      "skills": ["report-doc-gap"],
-      "setup": "A caller hands over \"the SRD's §4 has no owner list\" — a defect in the document, not in the platform documentation.",
+      "skills": [
+        "report-doc-gap"
+      ],
+      "setup": "A caller hands over two items together: \"the Retention Sweep section cites a 90-day window the platform docs never state\" — a real documentation gap — and \"GR-7 and GR-9 both specify the lockout threshold and disagree\" — a defect inside the SRD, not in the documentation.",
       "query": "/report-doc-gap specs/gateway.md",
       "files": [],
       "expected_behavior": [
-        "Recognizes it as an SRD gap rather than a documentation gap",
-        "Neither buffers nor files it",
-        "Tells the caller to keep it in their own findings"
+        "Buffers the Retention Sweep item: the platform documentation is what falls short",
+        "Refuses the GR-7/GR-9 contradiction — neither buffered nor filed — because the SRD is what is wrong, not the docs",
+        "Tells the caller to keep the SRD defect in its own findings",
+        "Splits the pair rather than taking or refusing both together"
       ]
     },
     {
       "id": 4,
       "name": "opt-out-and-duplicate-merge",
-      "skills": ["report-doc-gap"],
+      "skills": [
+        "report-doc-gap"
+      ],
       "setup": "A second caller session hands over the retry-count gap already buffered for `SRD-42`, with different search terms. At drain the finder says \"skip the questions\".",
       "query": "/report-doc-gap SRD-42",
       "files": [],
@@ -57,7 +67,9 @@
     {
       "id": 5,
       "name": "terse-output-with-no-store",
-      "skills": ["report-doc-gap"],
+      "skills": [
+        "report-doc-gap"
+      ],
       "setup": "A buffer with one gap, against a server exposing neither `report_gap` nor `POST /gaps`.",
       "query": "/report-doc-gap SRD-42",
       "files": [],
@@ -65,6 +77,37 @@
         "States once that filing is unavailable, notes the gap in the output, and leaves it buffered",
         "No preamble; each fact stated once",
         "No closing restatement of what was already shown"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "declined-at-the-confirm-gate",
+      "skills": [
+        "report-doc-gap"
+      ],
+      "setup": "One buffered gap. The finder works it, then answers no at the confirmation gate — the record is wrong and they do not want it filed.",
+      "query": "/report-doc-gap SRD-42",
+      "files": [],
+      "expected_behavior": [
+        "Files nothing",
+        "Says what happened to the record, since discarding it is destructive and the finder should not have to guess",
+        "Does not silently re-buffer a record the finder rejected, nor silently drop one they only meant to amend — it asks which"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "no-channel-means-no-grill",
+      "skills": [
+        "report-doc-gap"
+      ],
+      "setup": "A buffered gap for `SRD-42`, on a machine where neither the MCP tool nor the REST mirror is reachable.",
+      "query": "/report-doc-gap SRD-42",
+      "files": [],
+      "expected_behavior": [
+        "Establishes that the channel is unreachable before opening the grill",
+        "Does not interview the finder about a gap it cannot file — their attention is spent for nothing",
+        "Says filing is unavailable, leaves the gap buffered intact, and stops",
+        "Does not retry the failed probe or invent a store"
       ]
     }
   ]
