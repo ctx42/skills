@@ -9,11 +9,6 @@ repository. Skills ship as Claude Code plugins, grouped into `golang`,
 - Skills grouped into plugins by purpose
 - High-quality and focused skills
 
-> Agents get these mechanics from
-> `craft/skills/skill-smith/references/repo-mechanics.md`, which skill-smith
-> bundles so it stays self-contained. Changing placement, the catalog list, or
-> the rename/retire steps here means changing them there too.
-
 ## Where to Place a New Skill
 
 A skill lives at `<group>/skills/<skill-name>/`. Pick the group by purpose:
@@ -56,8 +51,8 @@ Frontmatter requires `name` + `description`; optional metadata (`license`/
 `version`/`tags`/`author`/`metadata`) is allowed but used sparingly.
 Claude-native affordances are permitted and encouraged where they earn their
 place: `argument-hint`, `$ARGUMENTS`/`$N` body substitution, and dynamic
-injection (`` !`cmd` ``). See `craft/skills/skill-smith/standards.md` for the
-full ruleset — this file does not duplicate it.
+injection (`` !`cmd` ``). Beyond that, follow Anthropic's Agent Skills
+authoring guidance; `dev/lint-skills.sh` enforces the mechanical parts.
 
 ```markdown
 ---
@@ -92,10 +87,9 @@ Before committing a new or changed skill, run the linter:
 ./dev/lint-skills.sh
 ```
 
-It checks every skill against the mechanical parts of
-`craft/skills/skill-smith/standards.md`: `SKILL.md` present with a `## Usage`
-block, frontmatter carries `name` + `description` with `name` equal to the
-directory, the body carries the output-discipline line, `evals/evals.json`
+It checks the mechanical parts of the skill layout: `SKILL.md` present with a
+`## Usage` block, frontmatter carries `name` + `description` with `name` equal
+to the directory, the body carries the output-discipline line, `evals/evals.json`
 holds at least 3 scenarios, and any bundled reference over ~100 lines starts
 with a Contents list. It also
 verifies each plugin `source` is a real plugin directory and every skill sits

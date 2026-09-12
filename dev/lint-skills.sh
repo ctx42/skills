@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# Lints every skill in this repo against the authoring standard
-# (skill-smith/standards.md). Mechanical checks only — it never edits files.
+# Lints every skill in this repo against the conventions recorded in
+# CONTRIBUTING.md. Mechanical checks only — it never edits files.
 #
-# A "skill" is any directory containing a SKILL.md. For each
+# A "skill" is any directory containing a SKILL.md, excluding eval workspaces
+# (*-workspace/), which hold snapshots of skills under test rather than
+# shipped source. For each
 # skill this script checks:
 #   - SKILL.md exists and carries a `## Usage` block,
 #   - eval scenarios exist: evals/evals.json (the standard) or, for a skill not
@@ -46,8 +48,7 @@ frontmatter() {
     awk 'NR==1 && $0=="---"{f=1; next} f && $0=="---"{exit} f' "$1"
 }
 
-# The house wrap: Markdown prose lines stay within ~80 columns (standards.md,
-# Content hygiene). 80 is the target; lines up to a few over are tolerated only
+# The house wrap: Markdown prose lines stay within ~80 columns (Content hygiene). 80 is the target; lines up to a few over are tolerated only
 # when unbreakable, which the heuristic below already exempts.
 WRAP_LIMIT=80
 
@@ -105,7 +106,7 @@ lint_skill() {
     [ "$declared" = "$name" ] \
         || err "$rel: frontmatter name '$declared' != directory '$name'"
 
-    # Description size and point of view (standards.md, Description quality).
+    # Description size and point of view (Description quality).
     # The aim is ~350 chars; warn only past 500 so a trigger-rich description
     # has headroom. Joins a folded/plain scalar into one string first.
     local desc
@@ -125,7 +126,7 @@ lint_skill() {
     grep -qiE '(^|[^a-zA-Z])(I|you|your)([^a-zA-Z]|$)' <<<"$desc" \
         && warn "$rel: description uses first/second person"
 
-    # Body size (standards.md, Token performance): the always-loaded SKILL.md
+    # Body size (Token performance): the always-loaded SKILL.md
     # body should stay under ~500 lines / ~5000 tokens. Tokens are estimated as
     # bytes/4 (no tokenizer dependency). Warnings only — the limits are soft
     # aims. (A stricter `skills-ref validate` gate can be added here once that
@@ -138,7 +139,7 @@ lint_skill() {
     [ "$body_tokens" -gt 5000 ] \
         && warn "$rel: SKILL.md is ~$body_tokens tokens (aim <= ~5000)"
 
-    # Body carries the output-discipline line (standards.md mandates it; the
+    # Body carries the output-discipline line (mandatory; the
     # canonical wording is "Report tersely: …", grill-me embeds the phrasing).
     grep -qiE 'report tersely|no preamble or narration' "$skill_md" \
         || err "$rel: SKILL.md lacks the output-discipline line"
@@ -147,7 +148,7 @@ lint_skill() {
     grep -q '^## Self-learning' "$skill_md" \
         || warn "$rel: SKILL.md has no '## Self-learning' block"
 
-    # SKILL.md carries the Usage block (standards.md, Usage block). A skill not
+    # SKILL.md carries the Usage block (Usage block). A skill not
     # yet migrated still keeps Usage in its README, so this only hardens to an
     # error once that README is gone.
     if ! grep -qE '^##[[:space:]]+Usage' "$skill_md"; then
@@ -162,7 +163,7 @@ lint_skill() {
     # README.md with an '## Evaluations' section still counts, with a warning,
     # so skills can move over one at a time.
     if [ -f "$evals" ]; then
-        # Valid JSON carrying at least 3 scenarios (standards.md, Evaluations).
+        # Valid JSON carrying at least 3 scenarios (Evaluations).
         # Counts "query" keys rather than parsing JSON — this script has no jq.
         local n
         n="$(grep -co '"query"[[:space:]]*:' "$evals" || true)"
@@ -177,7 +178,7 @@ lint_skill() {
     fi
 
     # Skills ship no README.md: SKILL.md and its bundled files carry everything
-    # (standards.md, Usage block). Warn while the tree migrates.
+    # (Usage block). Warn while the tree migrates.
     [ -f "$readme" ] \
         && warn "$rel: has a README.md — skills ship none; fold it into SKILL.md"
 
@@ -270,7 +271,8 @@ while IFS= read -r skill_md; do
     SKILL_PATHS+=("${dir#"$SKILLS_SRC"/}")
     lint_skill "$dir"
 done < <(find "$SKILLS_SRC" -path '*/.claude/worktrees' -prune -o \
-    -path "$SKILLS_SRC/tmp" -prune -o -name SKILL.md -print | sort)
+    -path "$SKILLS_SRC/tmp" -prune -o -name '*-workspace' -prune -o \
+    -name SKILL.md -print | sort)
 
 check_marketplace
 
