@@ -39,14 +39,22 @@ to the file, state its path, and do not paste it back into chat.
 ## Non-negotiables (both modes)
 
 - Never fabricate. A claim, command, version, or number you cannot verify from
-  the repo or the user is a gap: ask, and if still unknown mark it.
-  - A fact the README *needs* and lacks (the license, the minimum runtime, the
-    published install command) gets a `<!-- TODO: … -->` marker.
+  the repo or the user is a gap: ask, and if still unknown mark it. Where it
+  gets marked depends on who needs to know:
+  - A fact the README *needs* and lacks, where the reader is the one left
+    stuck (the minimum runtime, the published install command) gets a
+    `<!-- TODO: … -->` marker in the file.
+  - A gap in the *repo* rather than the README — no license file, no CI, no
+    remote — goes in the reply and nowhere else. A heading whose only body is a
+    marker is worse than no heading; `references/template.md` says which
+    sections those are, and it governs.
   - A claim the README merely *makes* and cannot support (a benchmark figure, a
     download count, "battle-tested") is deleted, not marked. A TODO asking
     someone to source an invented number preserves the invention.
 - Verify commands. Run every install and quickstart command you ship (see
-  Verify); a command you cannot run is marked, not guessed. Running it is the
+  Verify); a command you cannot run is marked, not guessed — "marked" meaning
+  whichever of the three above fits, which for a command this environment
+  simply cannot run is the reply, not the file. Running it is the
   rule — passing is not always available, and a correct command the project has
   not caught up to yet is still the right command to ship.
 
@@ -69,8 +77,9 @@ that, so it gets its own yes — the approval covering the README does not reach
 it. Ask once per run, after the README work and before writing any `.go` file:
 name each file, the functions going in it, and that it becomes part of the test
 suite. On a no, hand-write the examples in create mode, or in improve mode
-leave the finding reported and the README untouched — never write the file and
-mention it afterwards.
+leave that finding reported and its fence untouched — never write the file and
+mention it afterwards. The no declines the Go source, not the run: every other
+approved fix still applies.
 
 ## Create mode
 

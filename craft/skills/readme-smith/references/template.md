@@ -138,13 +138,15 @@ stays and the hand-written nav line is the one that goes.
 - No horizontal scroll: a code fence scrolls sideways on GitHub past its box
   width; keep every fence line ≤ ~80 chars (hard cap ~100). Break long commands
   with `\`, long strings across lines, and long example output into pieces.
-- Badges: each points at the project's real hosting remote (see above) and a
-  fact that exists — CI that runs there, a published package, the declared
-  license/runtime. Omit any you cannot confirm, and say in the reply what you
-  dropped and why; never invent one from an org name, and leave no `TODO` in
-  its place — a badge is decoration, not a fact the README owes the reader. No
-  badges at all is a correct header for a project with no CI, no release, and
-  no confirmed remote.
+- Badges: each points at the project's real hosting remote (see above) and at
+  a fact that exists — CI that runs there, a published package, the declared
+  license or runtime. A manifest path is not a remote: `go.mod` records what
+  the toolchain resolves, not that a repository answers there, so it cannot
+  confirm hosting on its own. Omit any badge you cannot confirm, and say in the
+  reply what you dropped and why; never invent one from an org name, and leave
+  no `TODO` in its place — a badge is decoration, not a fact the README owes
+  the reader. No badges at all is a correct header for a project with no CI, no
+  release, and no confirmed remote.
 - Concise and skimmable: short paragraphs, meaningful headings, examples over
   prose — never a wall of prose where a table or short example would serve.
 
