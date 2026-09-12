@@ -62,7 +62,10 @@ Typical order; include only what the product needs, omit empty sections:
 - Cut filler ("simply", "just", "in order to", "please note that").
 - When cutting filler, keep the sentence grammatically whole — trim the padding,
   don't strip it to a fragment or leave clipped clauses that read as choppy.
-- Use the em dash (—) sparingly: at most about one per paragraph. Prefer commas,
+- Use the em dash (—) sparingly: at most about one per paragraph, counting a
+  list item, a table cell, and a heading each as a paragraph of its own — so a
+  ten-item list may carry ten, one apiece, and a single item carrying two is
+  the offense. Prefer commas,
   parentheses, or a new sentence; reserve the em dash for a genuine abrupt break
   or parenthetical aside.
 - Define an acronym or product term on first use; then use it consistently.

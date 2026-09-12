@@ -19,7 +19,7 @@ license: MIT
 /doc-smith create <desc>     draft a new document or section from scratch
 /doc-smith audit <file>...   the default, named explicitly
 /doc-smith proof <file>...   fix in place: grammar, clarity, consistency; flag what it can't decide
-/doc-smith revise <file>...  work through the doc with the user, one paragraph at a time
+/doc-smith revise <file>...  work through the doc with the user, one unit at a time
 ```
 
 Create, audit, proof, and revise technical documentation and user manuals;
@@ -137,8 +137,12 @@ Fix in place. Reserve edits for what has one right answer; flag the rest.
 
 ## Revise mode
 
-Work through the document with the user, one paragraph (or logical unit) at a
-time, in document order.
+Work through the document with the user, one unit at a time — a paragraph,
+or the smallest thing that can be judged whole where a paragraph is not it: a
+list, a table, a procedure's numbered step, a fenced example with the sentence
+that introduces it. Splitting one of those in half asks the user to approve
+prose whose point lands in the part they have not seen. Work in document
+order.
 
 1. Run the whole-document pass. Confirm the starting unit — the top, or a
    section the user names.
