@@ -56,13 +56,13 @@
       "skills": [
         "readme-smith"
       ],
-      "setup": "A Go library repo whose `gomake --help` lists a `:project:doc-eg` target. No README yet. The package has exported `New`, `(*Client).Do`, and `Parse`, and no `_test.go` files carrying `Example…` functions.",
+      "setup": "A Go library repo whose `gomake --list` lists a `:doc:mce` target. No README yet. The package has exported `New`, `(*Client).Do`, and `Parse`, and no `_test.go` files carrying `Example…` functions.",
       "query": "/readme-smith write a README",
       "files": [],
       "expected_behavior": [
-        "Runs `gomake --help` and confirms the `:project:doc-eg` target before deciding how to author examples",
+        "Runs `gomake --list` and confirms the `:doc:mce` target before deciding how to author examples",
         "Writes runnable `Example…` functions in `_test.go` and runs `go test ./...` until they pass, instead of pasting hand-written snippets",
-        "Marks each spot with a `<!-- gmmce:<relpath>/<FuncName> -->` comment above an empty `go` fence and runs `gomake :project:doc-eg` to fill them",
+        "Marks each spot with a `<!-- gmmce:<relpath>/<FuncName> -->` comment above an empty `go` fence and runs `gomake :doc:mce` to fill them",
         "Hand-edits no injected fence; a change to an example goes back through its `Example…` function and a re-run of the target"
       ]
     },
@@ -104,7 +104,7 @@
       "skills": [
         "readme-smith"
       ],
-      "setup": "A Go project with the `:project:doc-eg` target whose natural example prints a raw HTTP exchange in one call — `fmt.Printf(\"%q\\n\", wire)` — producing a single ~300-character output line.",
+      "setup": "A Go project with the `:doc:mce` target whose natural example prints a raw HTTP exchange in one call — `fmt.Printf(\"%q\\n\", wire)` — producing a single ~300-character output line.",
       "query": "/readme-smith write a README",
       "files": [],
       "expected_behavior": [

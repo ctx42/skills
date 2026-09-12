@@ -47,7 +47,7 @@ to the file, state its path, and do not paste it back into chat.
 
 When the project is Go and examples belong in the README, read
 [`references/gomake.md`](references/gomake.md) *(on-demand: Go project with
-README examples)* and follow it: with a `:project:doc-eg` gomake target, examples are
+README examples)* and follow it: with a `:doc:mce` gomake target, examples are
 injected from testable `Example…` functions, never hand-written.
 
 ## Create mode
@@ -89,7 +89,7 @@ No edits until the user approves the findings.
    - Style — fences declare a language, admonitions valid and non-decorative,
      emoji restrained, header plain GFM.
    - Completeness — a newcomer can install, run, and understand the project;
-     gaps are real gaps, not guesses. In a Go project with `:project:doc-eg`,
+     gaps are real gaps, not guesses. In a Go project with `:doc:mce`,
      hand-written example snippets are a finding (see Go example injection).
 
 3. Report only. Group findings Blocker / Should-fix / Nit; each names the

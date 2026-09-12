@@ -107,7 +107,7 @@ and add nothing.
 - No raw HTML tags: never `<div>`, `<img>`, `<p>`, `<center>`, `<br>`,
   `<details>`, or any rendered tag — GFM cannot center or size content, so a
   plain left-aligned header is correct. HTML comments (`<!-- TOC -->`,
-  `<!-- gmdoceg:… -->`) render nothing and are fine.
+  `<!-- gmmce:… -->`) render nothing and are fine.
 - Emoji restrained: default to none; at most a single accent in the title and
   light accents on feature bullets if the project's tone invites it, never one
   per heading or per line.
