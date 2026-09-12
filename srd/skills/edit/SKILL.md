@@ -255,9 +255,12 @@ check. Never trigger this on your own.
 ## Modes
 
 The first token is the SRD path; the next selects the mode, interactive when
-omitted. With no
-`$ARGUMENTS`, ask which SRD to edit; pasted feedback arrives as prose, not as a
-token.
+omitted. With no arguments, ask which SRD to edit.
+
+Prose after the path is feedback when it is a list of findings, targeted when
+it names one entry and what to do to it ("fix the vague 'fast' requirement").
+A single pasted finding is both: take it as targeted, which walks one entry
+with a confirmation and expects no review file.
 
 - the SRD path only → interactive.
 - path + a bare integer → interactive from that line.
