@@ -1,15 +1,14 @@
 # reshape change catalog
 
 Archetype detail for `SKILL.md`'s brainstorm list: when the friction shows, the
-API shape that removes it, and a compact Go before/after. Consult the entry for
-the archetype you're drafting; don't preload the file. Ordered as in the body.
+API shape that removes it, and a compact Go before/after. Consult only the entry
+for the archetype you're drafting.
 
 ## Contents
 
 - options-constructor
 - default-away-a-param
 - absorb-the-sequence
-- batch-or-variadic
 - iterator
 - result-type
 - sentinel-error
@@ -59,16 +58,6 @@ Change: ship the sequence as one library call that returns the end value.
 // after:  b, err := lib.ReadFile(p)
 ```
 
-## batch-or-variadic
-
-When: the consumer loops just to call a single-item API.
-Change: add a batch/variadic form that takes the slice and loops internally.
-
-```go
-// before: for _, id := range ids { lib.Add(id) }
-// after:  lib.Add(ids...)
-```
-
 ## iterator
 
 When: the consumer drives a cursor/index or a `Next()`/`Err()` pair by hand.
@@ -81,8 +70,8 @@ Change: expose a range-over-func (`iter.Seq`/`iter.Seq2`).
 
 ## result-type
 
-When: a function returns an awkward multi-value tuple the consumer must re-bundle,
-or positional booleans whose meaning isn't obvious at the call.
+When: a function returns an awkward multi-value tuple the consumer must
+re-bundle, or positional booleans whose meaning isn't obvious at the call.
 Change: return a small named struct with named fields.
 
 ```go
@@ -93,7 +82,8 @@ Change: return a small named struct with named fields.
 ## sentinel-error
 
 When: the consumer matches on error strings or asserts concrete error types.
-Change: export `ErrXxx` sentinels (or typed errors) and support `errors.Is`/`As`.
+Change: export `ErrXxx` sentinels (or typed errors) and support
+`errors.Is`/`As`.
 
 ```go
 // before: if strings.Contains(err.Error(), "not found") {...}
@@ -105,13 +95,14 @@ Change: export `ErrXxx` sentinels (or typed errors) and support `errors.Is`/`As`
 When: the consumer declares an interface only to name the library's own method
 set — for mocking, or to narrow what it depends on.
 Change: the library exports that interface; consumers reference it instead of
-re-deriving it. Watch the No-name-stutter contract when they mirror it for a
-compile-time assertion.
+re-deriving it. A consumer type that mirrors its name behind a compile-time
+assertion is a name pinned by an external contract — the `style` No name
+stutter exemption applies.
 
 ## testing-helper
 
-When: consumers hand-roll fakes, spies, or fixture setup for the library in their
-tests.
+When: consumers hand-roll fakes, spies, or fixture setup for the library in
+their tests.
 Change: ship a `libtest` subpackage or a `Spy`/`Fake`/helper the library owns.
 
 ```go
@@ -127,8 +118,8 @@ Change: a fluent builder — `lib.Build().WithX().WithY().Do()`.
 
 ## split-the-god-func
 
-When: the consumer sets a mode flag/bool and the library branches on it, and call
-sites always know their mode statically.
+When: the consumer sets a mode flag/bool and the library branches on it, and
+call sites always know their mode statically.
 Change: split into mode-specific functions.
 
 ```go
@@ -140,8 +131,8 @@ Change: split into mode-specific functions.
 
 When: the consumer orchestrates a multi-step protocol the library exposes as raw
 steps, or duplicates a loop the library could run itself.
-Change: accept a callback / handler, or return the finished value, so the library
-owns the orchestration.
+Change: accept a callback / handler, or return the finished value, so the
+library owns the orchestration.
 
 ```go
 // before: consumer opens, iterates, aggregates, closes
@@ -161,17 +152,17 @@ Change: a type-parameterized function/type removes the assertions.
 
 ## move-responsibility-upstream
 
-When: several consumers reimplement the same logic on top of the library — retry,
-pagination, normalization, config loading — because the library stops one step
-short.
-Change: the library absorbs that responsibility as a first-class API. The boldest
-archetype; justify it by the count of consumers duplicating the work.
+When: several consumers reimplement the same logic on top of the library —
+retry, pagination, normalization, config loading — because the library stops
+one step short.
+Change: the library absorbs that responsibility as a first-class API. The
+boldest archetype; justify it by the count of consumers duplicating the work.
 
 ## shed-a-leaky-return
 
 When: a function returns an `error` that can never be non-nil at the call site
-(everyone drops it with `_`), or bakes presentation (a trailing newline, padding)
-into a returned value that consumers strip.
+(everyone drops it with `_`), or bakes presentation (a trailing newline,
+padding) into a returned value that consumers strip.
 Change: drop the impossible error (return only the value), or return the clean
 value and leave presentation to the caller.
 

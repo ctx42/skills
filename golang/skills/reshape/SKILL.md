@@ -14,65 +14,57 @@ argument-hint: "LIB [in ./pkg] [max=N]"
 
 Consumer-driven API review. Point it at a library the project depends on; it
 maps every call site, diagnoses the friction, and proposes the highest-impact
-changes to the *library's* API — the ones that would most simplify the code that
-uses it. It reasons only; it edits nothing.
+changes to the *library's* API — the ones that would most simplify the code
+that uses it. It reasons only; it edits nothing.
 
 Keep the proposals on the **library** surface. The consumer simplification is
 the *payoff* shown in before/after, not the change itself — never propose
 refactoring only the call sites with the API left as-is.
 
 Sources of truth:
-- `../style/SKILL.md` (eager) — Go idioms the proposals must respect (accept
-  interfaces, functional options, `%w`, `ErrXxx`, useful zero value).
-- [references/change-catalog.md](references/change-catalog.md) (on-demand: per
-  archetype) — each archetype's detail + Go example, keyed to the list below.
-  Consult an entry when drafting that proposal; don't preload it.
+- `../style/SKILL.md` (on-demand: when drafting a proposal — its Naming,
+  Errors, and API design sections) — the Go idioms every proposed signature
+  must respect; do not restate them.
+- [references/change-catalog.md](references/change-catalog.md) (on-demand: the
+  entry for the archetype being drafted) — detection cue, API shape, and a Go
+  before/after per archetype in the list below.
 
 ## Target
 
 `$1` is the library; read the scope and control from the rest of `$ARGUMENTS`
 (fall back to the user's prose if empty):
-- library — `$1` is an import path (`github.com/x/y/pkg/must`), a module path,
-  or a short package name the project imports. Consumer scope defaults to the
-  current module.
-- scoped — `in ./pkg/foo` restricts the consumer to that package (or path
-  list).
-- Control: `max=N` caps the proposals reported (default 8), highest impact first.
-
-State the resolved library, the consumer scope, and the call-site count before
-proposing.
+- `$1` — an import path (`github.com/x/y/pkg/must`), a module path, or a short
+  package name the project imports. Consumer scope defaults to the current
+  module.
+- `in ./pkg/foo` — restricts the consumer scope to that package (or path list).
+- `max=N` — caps the proposals reported (default 8), highest impact first.
 
 ## Modifiability
 
-Detect whether the library source is editable, and say which:
+Detect whether the library source is editable:
 - local — in this repo, reachable via a `replace` directive, or a `go.work`
   module. Source is readable → propose concrete signature/type diffs.
-- external — a normal module dependency. Work from the public surface
-  (godoc / the exported API) → propose at the API-shape level; note you can't
-  diff internals, and offer a local wrapper as the fallback when a proposal can't
-  land upstream.
+- external — a normal module dependency. Work from the public surface (godoc /
+  the exported API) → propose at the API-shape level and note you can't diff
+  internals.
 
 ## Workflow
 
-High-freedom analysis — reason from the steps, the archetypes, and the rubric;
-no rigid script.
-
 1. Resolve target + modifiability (above); list the symbols the consumer uses.
 2. Map usage with the `LSP` tool: `findReferences` on each imported symbol
-   (`workspaceSymbol`/`hover` for shape), falling back to grep on the import path
-   if no language server is configured. Record every call site.
+   (`workspaceSymbol`/`hover` for shape), falling back to grep on the import
+   path if no language server is configured. Record every call site.
 3. Diagnose friction per usage pattern: repeated setup boilerplate, options
    built inline, an interface the consumer declares itself, error-string
    matching, awkward multi-returns, type assertions, a hand-rolled loop that
    wants an iterator, test scaffolding the library could ship.
-4. Brainstorm broadly across the archetypes below — force at least one
-   structural option, not only local tweaks.
+4. Brainstorm across the archetypes below — force at least one structural
+   option, not only local tweaks. Draft each candidate from its catalog entry
+   and against the `style` sections above.
 5. Score and rank by the impact rubric.
-6. Report (below). Change nothing.
+6. Report (below).
 
 ## Change archetypes
-
-The brainstorm engine — reach past the obvious.
 
 - options-constructor — functional options replace inline struct-building or
   a long positional param list.
@@ -113,9 +105,10 @@ sites and is additive outranks a flashy structural rewrite that breaks everyone.
 
 ## Output
 
-Open with the ranked payload — no preamble.
+Open with the ranked payload:
 
-1. One line: library · consumer scope · modifiability · N call sites · M proposals.
+1. One line: library · consumer scope · modifiability · N call sites ·
+   M proposals.
 2. A table ranked by impact:
 
    | # | Change (archetype) | Reach | Impact | Breakage | Effort |
@@ -125,8 +118,8 @@ Open with the ranked payload — no preamble.
      API-shape sketch when external;
    - a representative call site before → after proving the payoff;
    - one line tying it to the rubric (why this impact).
-4. Note anything deferred or needing the user's judgment; for an external library
-   offer a local wrapper where an upstream change can't land.
+4. Anything deferred or needing the user's judgment; for an external library,
+   the local wrapper to use where an upstream change can't land.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.

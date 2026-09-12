@@ -1,23 +1,24 @@
 # reshape
 
-Consumer-driven Go API review. Name a library the project depends on; `reshape`
-maps every call site, diagnoses the friction, and proposes the highest-impact
-changes to that **library's** API — the ones that would most simplify the code
-using it. It reasons only and edits nothing.
-
-**The rule it lives by:** the proposal is a change to the *library*, and the
-consumer cleanup is the payoff shown in before/after — never a refactor of the
-call sites with the API left alone. It brainstorms across a broad archetype
-catalog (options constructors, iterators, sentinel errors, moving whole
-responsibilities upstream, …), then ranks by impact so the biggest win leads.
+Proposes changes to a library's API that would most simplify the code using it.
 
 ## Usage
 
 ```
-/reshape github.com/x/y/must   default: map call sites across the whole module
-/reshape must in ./pkg/render  restrict the consumer scope to one package
-/reshape must max=5            cap proposals reported (highest impact; default 8)
+/reshape github.com/x/y/must     (default) consumer scope is the whole module
+/reshape must in ./pkg/render    restrict the consumer scope to one package
+/reshape must max=5              cap proposals reported (default 8, highest impact first)
 ```
+
+Name a library the project depends on; `reshape` maps every call site,
+diagnoses the friction, brainstorms across a broad archetype catalog (options
+constructors, iterators, sentinel errors, moving whole responsibilities
+upstream, ...), and ranks by impact so the biggest win leads. It reasons only
+and edits nothing.
+
+Every proposal is a change to the library; the consumer cleanup is the payoff
+shown in before/after — never a refactor of the call sites with the API left
+alone.
 
 It detects whether the library source is editable (local module / `replace` /
 `go.work` → concrete diffs) or external (public surface → API-shape proposals
@@ -33,11 +34,12 @@ plus a local-wrapper fallback).
 
 ### 1. Ranked, multi-archetype proposals — not just obvious tweaks
 
-**Request:** `/reshape must` where the consumer wraps most `must.Value` calls in
-the same three-line error-drop and builds an options struct inline at many sites.
+**Request:** `/reshape must` where the consumer wraps most `must.Value` calls
+in the same three-line error-drop and builds an options struct inline at many
+sites.
 
 **Expected behavior:**
-- Resolves the library and consumer scope and states the call-site count first.
+- Opens with the resolved library, consumer scope, and call-site count.
 - Proposes changes across multiple archetypes, including at least one structural
   / out-of-the-box option (e.g. absorb-the-sequence or
   move-responsibility-upstream), not only a rename or a lone one-off helper.
@@ -51,6 +53,7 @@ the same three-line error-drop and builds an options struct inline at many sites
 **Expected behavior:**
 - Every proposal is a change to `oskit`'s API; the consumer diff is the payoff,
   never a call-site-only refactor with the API unchanged.
+- Proposed signatures follow the `style` Naming, Errors, and API design rules.
 - Edits nothing — reports the proposal set and stops.
 
 ### 3. External library — public-surface proposals
@@ -67,6 +70,8 @@ the same three-line error-drop and builds an options struct inline at many sites
 **Request:** `/reshape must max=3`.
 
 **Expected behavior:**
-- Opens with the ranked table — no preamble or narration.
+- Opens with the one-line header and the ranked table — no preamble or
+  narration.
+- Reports at most three proposals.
 - States each proposal once; no closing summary that re-lists the table already
   shown.
