@@ -51,7 +51,8 @@ List available skills. They are namespaced by plugin, e.g.:
 - `craft`: `/craft:cm`, `/craft:grill-me`, `/craft:plan-smith`,
   `/craft:readme-smith`, `/craft:doc-smith`, `/craft:enhance-skills`
 
-Each skill has its own `README.md` with usage examples.
+Each skill's `SKILL.md` opens with a `## Usage` block; its `evals/evals.json`
+holds the scenarios it is expected to handle.
 
 ---
 
