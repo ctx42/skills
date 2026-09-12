@@ -8,8 +8,7 @@
 # on, not one this repo ships. Neither is source, and linting either would fail
 # on files that are meant to be flawed. For each skill this script checks:
 #   - SKILL.md exists and carries a `## Usage` block,
-#   - eval scenarios exist: evals/evals.json (the standard) or, for a skill not
-#     yet migrated, a README.md with an `## Evaluations` section (warns),
+#   - eval scenarios exist in evals/evals.json,
 #   - frontmatter has name + description, name equals the directory name,
 #   - the description stays near the ~350-char aim (warns past 500) and uses
 #     no first/second person (warning only),
@@ -150,20 +149,11 @@ lint_skill() {
     grep -q '^## Self-learning' "$skill_md" \
         || warn "$rel: SKILL.md has no '## Self-learning' block"
 
-    # SKILL.md carries the Usage block (Usage block). A skill not
-    # yet migrated still keeps Usage in its README, so this only hardens to an
-    # error once that README is gone.
-    if ! grep -qE '^##[[:space:]]+Usage' "$skill_md"; then
-        if [ -f "$readme" ]; then
-            warn "$rel: '## Usage' still in README.md — move it to SKILL.md"
-        else
-            err "$rel: SKILL.md has no '## Usage' section"
-        fi
-    fi
+    # SKILL.md carries the Usage block.
+    grep -qE '^##[[:space:]]+Usage' "$skill_md" \
+        || err "$rel: SKILL.md has no '## Usage' section"
 
-    # Eval scenarios exist. evals/evals.json is the standard; a pre-migration
-    # README.md with an '## Evaluations' section still counts, with a warning,
-    # so skills can move over one at a time.
+    # Eval scenarios exist in evals/evals.json.
     if [ -f "$evals" ]; then
         # Valid JSON carrying at least 3 scenarios (Evaluations).
         # Counts "query" keys rather than parsing JSON — this script has no jq.
@@ -173,16 +163,13 @@ lint_skill() {
             || err "$rel: evals/evals.json has $n scenario(s) (want >= 3)"
         grep -q '"expected_behavior"' "$evals" \
             || err "$rel: evals/evals.json has no 'expected_behavior' checks"
-    elif [ -f "$readme" ] && grep -qE '^##[[:space:]]+Evaluations' "$readme"; then
-        warn "$rel: evals still in README.md — move them to evals/evals.json"
     else
-        err "$rel: no evals/evals.json (and no README.md '## Evaluations')"
+        err "$rel: no evals/evals.json"
     fi
 
-    # Skills ship no README.md: SKILL.md and its bundled files carry everything
-    # (Usage block). Warn while the tree migrates.
+    # Skills ship no README.md: SKILL.md and its bundled files carry everything.
     [ -f "$readme" ] \
-        && warn "$rel: has a README.md — skills ship none; fold it into SKILL.md"
+        && err "$rel: has a README.md — skills ship none; fold it into SKILL.md"
 
     # Every Markdown file in the skill wraps prose at ~80 columns.
     check_wrap "$skill_md"

@@ -44,8 +44,9 @@ Every skill needs its own directory containing:
 
 Skills ship no `README.md`. Everything a user or agent needs lives in
 `SKILL.md`, its bundled files, and `evals/evals.json`; the repo-level
-`README.md` is where humans get oriented. Skills that still carry one are
-mid-migration and lint warns about them.
+`README.md` is where humans get oriented. A skill README is a second copy of
+what `SKILL.md` already says, kept in step by nothing — `dev/lint-skills.sh`
+fails on one.
 
 Frontmatter requires `name` + `description`; optional metadata (`license`/
 `version`/`tags`/`author`/`metadata`) is allowed but used sparingly.
@@ -90,8 +91,8 @@ Before committing a new or changed skill, run the linter:
 It checks the mechanical parts of the skill layout: `SKILL.md` present with a
 `## Usage` block, frontmatter carries `name` + `description` with `name` equal
 to the directory, the body carries the output-discipline line, `evals/evals.json`
-holds at least 3 scenarios, and any bundled reference over ~100 lines starts
-with a Contents list. It also
+holds at least 3 scenarios, no `README.md` sits in the skill directory, and any
+bundled reference over ~100 lines starts with a Contents list. It also
 verifies each plugin `source` is a real plugin directory and every skill sits
 under exactly one plugin's `skills/` dir. It edits nothing and exits non-zero on
 any error.
