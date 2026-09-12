@@ -1,0 +1,113 @@
+{
+  "skill_name": "plan-smith",
+  "evals": [
+    {
+      "id": 1,
+      "name": "write-from-brief",
+      "skills": [
+        "plan-smith"
+      ],
+      "setup": "Cold open. No prior conversation — this is the user's first message. The working directory is a Go web service repository.",
+      "query": "/plan-smith write plan the work to add SSO: provider config, login flow, session storage, and a page in the operator docs.",
+      "files": [],
+      "expected_behavior": [
+        "Writes one file containing a `## Summary` table with the Y/N/X legend and one numbered section per item, each led by a checkbox",
+        "Carries exactly the four pieces of work the brief named — no invented items such as tests, CI, monitoring, rollout, or migration, which the user did not ask for",
+        "Every item starts unchecked and `N`, since nothing has been built yet",
+        "Each item states acceptance criteria concrete enough to verify against the finished work, not a restatement of the item name",
+        "Does not silently settle a decision the brief left open — such as OIDC versus SAML, or which session store ships — and the file carries only the summary table and the numbered item sections, with no extra assumptions or open-choices section bolted on",
+        "The summary table is aligned: every row the same character width, separator dashes flush to the pipes with no surrounding spaces",
+        "Reports the path and the status counts in roughly one line, and does not paste the plan back into the reply"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "bundled-brief",
+      "skills": [
+        "plan-smith"
+      ],
+      "setup": "Cold open. No prior conversation.",
+      "query": "/plan-smith we need to get the nightly export working properly — right now it dumps everything to one CSV on the app server, which fills the disk, nobody is told when it fails, and finance says the numbers do not tie out with the dashboard. Write that up as a plan.",
+      "files": [],
+      "expected_behavior": [
+        "Splits the bundle into separate items, one per outcome — at minimum the storage/disk problem, the failure notification, and the reconciliation with the dashboard — rather than a single 'fix the export' item",
+        "Orders items by dependency and impact, putting blocking work before work that depends on it, rather than echoing the order the user happened to mention things",
+        "Asks about the piece that is genuinely underdetermined (what the numbers not tying out actually means, or where the export should go instead) rather than inventing a resolution for it",
+        "Does not pad the plan with work the user never raised, such as rewriting the export in a different language or adding a scheduler",
+        "Gives each item acceptance criteria that a reader could check"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "grill-me-handoff",
+      "skills": [
+        "plan-smith"
+      ],
+      "setup": "A grill-me interview just finished and printed its structured summary. All branches resolved:\n\n1. Scope — the export covers the currently filtered view, not the whole dataset. Verified by: exporting from a filtered report yields exactly the filtered rows.\n2. Size limit — over 100k rows the export is refused with a message telling the user to narrow the filter. Verified by: a 100,001-row selection is refused and names the filter as the fix.\n3. Format — RFC 4180, UTF-8 with a BOM so Excel opens it correctly. Verified by: the file opens in Excel with accented characters intact and round-trips through a CSV parser.\n4. Delivery — synchronous download, no email and no background job. Verified by: the request returns the file itself, and no job row is created.\n5. Permissions — anyone who can see the report can export it, no separate grant. Verified by: a viewer-role user can export, and a user who cannot open the report gets 403.\n6. Audit — every export is logged with user, timestamp, and row count. Verified by: an export writes exactly one audit row carrying those three fields.\n\nThe user has been asked whether to persist this and has just answered.",
+      "query": "Yes, turn it into a plan.",
+      "files": [],
+      "expected_behavior": [
+        "Writes the plan straight from the six resolved branches without re-interviewing the user about decisions the summary already settled",
+        "Carries each branch's own verification into that item's acceptance criteria rather than inventing different ones",
+        "Keeps all six branches as items — none dropped, none merged away, none added",
+        "Every item starts unchecked and `N`",
+        "Reports the path and the counts tersely instead of replaying the summary the user just read"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "update-mixed",
+      "skills": [
+        "plan-smith"
+      ],
+      "setup": "The plan written earlier is at `sso-plan.md` in the working directory. Work has been going on for two weeks.",
+      "query": "/plan-smith update sso-plan.md — login flow and session storage are both done and merged. We're dropping the operator docs item, the platform team is folding SSO into their own runbook instead. Provider config hasn't been started. Also, staging showed we need a way to force-logout a user across every session, that wasn't in the plan.",
+      "files": [
+        "assets/sso-plan.md"
+      ],
+      "expected_behavior": [
+        "Flips login flow and session storage to `[x]` / `Y`, leaves provider config `N`, and marks the operator docs item `X` with the one-line reason the user gave",
+        "Keeps the rejected docs item in the file with its `[ ]` checkbox and its original prose — not deleted, not renumbered away",
+        "Records the force-logout work discovered in staging as a new item appended after the existing four, so items 1-4 keep their numbers",
+        "Rewrites the summary table so every row's status matches its section's checkbox and tag, and keeps the table aligned",
+        "Leaves the untouched items' prose exactly as it was",
+        "Reports what changed and the new counts, without pasting the plan back"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "update-unverified-claim",
+      "skills": [
+        "plan-smith"
+      ],
+      "setup": "The plan is at `rate-limit-plan.md` and the implementation is in `limiter.go`, both in the working directory. The user has not looked at the code recently.",
+      "query": "/plan-smith update rate-limit-plan.md — the Redis counters and the 429 responses both landed, mark them done.",
+      "files": [
+        "assets/rate-limit-plan.md",
+        "assets/limiter.go"
+      ],
+      "expected_behavior": [
+        "Checks the claim against the code instead of flipping both items to `Y` on the user's say-so",
+        "Does not mark the Redis counters item `Y`: the counters are a per-process in-memory map, so neither of that item's stated criteria — one budget shared across processes, counters surviving a restart — holds",
+        "Names what is actually missing for the 429 item: the handler returns 429 but sends no `Retry-After` header, which its acceptance criteria require",
+        "Says plainly that the evidence contradicts the claim rather than flipping the statuses and burying a caveat underneath",
+        "Leaves item 1 alone and renumbers nothing"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "ambiguous-request",
+      "skills": [
+        "plan-smith"
+      ],
+      "setup": "Cold open. No prior conversation. The working directory contains no plan files.",
+      "query": "/plan-smith the SSO plan",
+      "files": [],
+      "expected_behavior": [
+        "Asks exactly one question — write a new plan or update an existing one — and nothing else",
+        "Writes no file and invents no plan content before the answer comes back",
+        "Opens on the question, with no preamble, no restatement of the request, and no announcement of what it is about to do"
+      ]
+    }
+  ]
+}

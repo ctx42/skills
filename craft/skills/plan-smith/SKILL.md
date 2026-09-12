@@ -11,6 +11,14 @@ license: MIT
 
 # plan-smith
 
+## Usage
+
+```
+/plan-smith <request>           infer write vs. update from the request (default)
+/plan-smith write <brief>       write a tracked plan from a brief or a grill-me summary
+/plan-smith update <plan-file>  refresh each item's checkbox and status
+```
+
 Turn a brief into a tracked plan, and keep its status current. Pick the mode
 from `$ARGUMENTS` when given (a mode word like `write`/`update` and a plan-file
 path), else from the request:
