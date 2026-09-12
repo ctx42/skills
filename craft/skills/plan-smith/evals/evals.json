@@ -80,18 +80,17 @@
       "skills": [
         "plan-smith"
       ],
-      "setup": "The plan is at `rate-limit-plan.md` and the implementation is in `limiter.go`, both in the working directory. The user has not looked at the code recently.",
+      "setup": "An existing plan with four `N` items. The user says \"items 2 and 3 are done\". The repo shows item 2 implemented and tested; item 3's code is not there at all.",
       "query": "/plan-smith update rate-limit-plan.md — the Redis counters and the 429 responses both landed, mark them done.",
       "files": [
         "assets/rate-limit-plan.md",
         "assets/limiter.go"
       ],
       "expected_behavior": [
-        "Checks the claim against the code instead of flipping both items to `Y` on the user's say-so",
-        "Does not mark the Redis counters item `Y`: the counters are a per-process in-memory map, so neither of that item's stated criteria — one budget shared across processes, counters surviving a restart — holds",
-        "Names what is actually missing for the 429 item: the handler returns 429 but sends no `Retry-After` header, which its acceptance criteria require",
-        "Says plainly that the evidence contradicts the claim rather than flipping the statuses and burying a caveat underneath",
-        "Leaves item 1 alone and renumbers nothing"
+        "Goes to the repo rather than recording the user's claim — a claim is where to look, not what to write down",
+        "Marks `Y` only what the code, a test, or a command's output actually shows",
+        "Leaves the unverifiable item `N` and names it in the report as unverified, rather than silently promoting it or silently leaving it",
+        "Does not renumber or drop any item while doing so"
       ]
     },
     {
@@ -107,6 +106,22 @@
         "Asks exactly one question — write a new plan or update an existing one — and nothing else",
         "Writes no file and invents no plan content before the answer comes back",
         "Opens on the question, with no preamble, no restatement of the request, and no announcement of what it is about to do"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "update-keeps-an-existing-table-s-widths",
+      "skills": [
+        "plan-smith"
+      ],
+      "setup": "An existing plan whose `Item` column is padded several spaces wider than its widest cell needs — written when a longer item name was in it. One item is now implemented, and the update also appends a new item.",
+      "query": "/plan-smith update tmp/sso-plan.md",
+      "files": [],
+      "expected_behavior": [
+        "Pads the appended row to the table's existing widths rather than re-padding every row down to the new minimum",
+        "Leaves untouched rows byte-identical, so the diff shows only what changed",
+        "Appends the new item at the end with a fresh number and status `N`, renumbering nothing",
+        "Keeps the `|` delimiters aligned in the source after the edit"
       ]
     }
   ]

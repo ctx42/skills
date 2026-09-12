@@ -70,7 +70,14 @@ Legend: Y implemented · N not yet · X rejected
 Keep the `Item` cell to a short name (≤ ~30 chars); the item's own section
 carries the detail. Align the table so the `|` delimiters line up vertically:
 
-- Each column's width is its widest cell's content.
+- Each column's width is its widest cell's content — counting the header as a
+  cell, and counting the `#` column against the plan's highest item number, so
+  a plan that reaches item 10 keeps `#` two wide throughout (which is why the
+  template above shows `| #  |`).
+- Widening is required, narrowing is not. When editing an existing plan whose
+  columns are already wider than the content needs, keep its widths and pad the
+  new row to match: a plan is edited far more often than it is written, and
+  re-padding a whole table to shave a space rewrites lines nobody changed.
 - Header and body cells: one leading and one trailing space around the content,
   then pad the trailing side with spaces to the column width.
 - Separator row: fill each cell with dashes flush to the pipes, no surrounding
@@ -130,15 +137,27 @@ so the record stays honest.
 1. Read the existing plan. Take its item list and current statuses as ground
    truth; never renumber or drop items.
 
-2. Set each item's new status from evidence the user gives or the repo shows:
-   implemented → `[x]` / `Y`; dropped → `X` + one-line reason; untouched → leave
-   `N`.
+2. Set each item's new status from evidence: implemented → `[x]` / `Y`;
+   dropped → `X` + one-line reason; untouched → leave `N`.
 
-3. Rewrite the summary table and the changed items' checkboxes/tags only, so
+   Evidence is what the repo shows. "I did that one" is a claim, and a claim is
+   where to look, not what to record — go and see: the code, the test, the
+   command's output. A plan's whole value is that its table can be trusted
+   without re-reading the code, which survives exactly as long as nothing is
+   marked `Y` on someone's say-so. What you could not verify stays `N` and is
+   named in the report as unverified, not silently promoted or silently left.
+
+3. Append work the plan does not carry yet, when the update surfaced some: new
+   items at the end with fresh numbers, status `N`, and the same shape as the
+   rest. Never renumber to slot one into the middle — the numbers are how the
+   table and the sections stay married.
+
+4. Rewrite the summary table and the changed items' checkboxes/tags only, so
    table and sections keep the same numbering and statuses; leave all other
    prose intact.
 
-4. Report the deltas and the new counts.
+5. Report the deltas, the new counts, and anything left `N` for want of
+   evidence.
 
 ## Self-learning
 
