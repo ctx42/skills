@@ -90,6 +90,16 @@
       "setup": "`Normalize` has no test whose name matches its direct-test family — the only test touching it is `TestNormalizeHelper`, off-convention.",
       "query": "/cover func=Normalize",
       "files": []
+    },
+    {
+      "id": 10,
+      "name": "only-and-max-changes-filters",
+      "skills": [
+        "cover"
+      ],
+      "setup": "`./pkg/svc` holds four exported functions and three unexported ones, all partly covered. The run caps the work and restricts it to exported symbols.",
+      "query": "/cover ./pkg/svc only=exported max_tests=4",
+      "files": []
     }
   ]
 }

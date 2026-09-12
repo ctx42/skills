@@ -67,6 +67,16 @@
         "The two pages and their section counts stated once",
         "No closing summary restating the sections, and no page contents echoed back"
       ]
+    },
+    {
+      "id": 8,
+      "name": "bare-capture-with-no-srd",
+      "expected_behavior": [
+        "Defaults to capture and writes the fact without asking which SRD it belongs to — a bare capture has none",
+        "Names the session as the source in the attestation line rather than inventing an SRD reference or leaving the slot blank",
+        "Leaves `srd_ref` unset rather than filling it with a placeholder",
+        "Omits the `· gap-NNNN` segment, since no gap was filed"
+      ]
     }
   ]
 }

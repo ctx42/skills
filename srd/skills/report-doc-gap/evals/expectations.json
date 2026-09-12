@@ -66,6 +66,16 @@
         "Says filing is unavailable, leaves the gap buffered intact, and stops",
         "Does not retry the failed probe or invent a store"
       ]
+    },
+    {
+      "id": 8,
+      "name": "heavy-grill-and-session-opt-out",
+      "expected_behavior": [
+        "Runs a full `craft:grill-me` extraction for the first gap, rather than a deeper version of the light questions",
+        "Honours the opt-out for the remaining two without re-asking the depth question for each",
+        "Still shows each record for confirmation before filing — opting out of the grill is not opting out of the confirmation",
+        "Takes only the one-line `detail` for the opted-out gaps, leaving `target_claim` empty"
+      ]
     }
   ]
 }

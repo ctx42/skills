@@ -87,6 +87,16 @@
         "Reports the function as uncovered and scaffolds `Test_Normalize`",
         "Does not credit the off-convention `TestNormalizeHelper` as the family"
       ]
+    },
+    {
+      "id": 10,
+      "name": "only-and-max-changes-filters",
+      "expected_behavior": [
+        "Plans only the exported functions; the three unexported ones are named as out of scope, not silently skipped",
+        "Adds at most four tests or cases across the whole run",
+        "Reports what is left under the cap, per function, so the next run can pick it up",
+        "Still finishes and verifies one function before starting the next — the cap ends the run, it does not turn it into a scatter of partial edits"
+      ]
     }
   ]
 }

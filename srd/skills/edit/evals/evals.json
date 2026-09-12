@@ -164,6 +164,16 @@
       "setup": "An `## Errata` block of three findings, two of which apply cleanly. No `specs/login.decisions.md` exists yet.",
       "query": "/edit specs/login.md autofix",
       "files": []
+    },
+    {
+      "id": 17,
+      "name": "open-questions-and-read-only-comments",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`specs/login.md` carries an HTML comment block from a prior reviewer that names `GR-9`, a requirement that never existed. During the walk a proposal raises a question the user cannot answer yet.",
+      "query": "/edit specs/login.md",
+      "files": []
     }
   ]
 }

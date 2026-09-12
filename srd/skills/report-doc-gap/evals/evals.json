@@ -71,6 +71,17 @@
       "setup": "A buffered gap for `SRD-42`, on a machine where neither the MCP tool nor the REST mirror is reachable.",
       "query": "/report-doc-gap SRD-42",
       "files": []
+    },
+    {
+      "id": 8,
+      "name": "heavy-grill-and-session-opt-out",
+      "skills": [
+        "report-doc-gap",
+        "grill-me"
+      ],
+      "setup": "Three gaps are buffered for `SRD-42`. The finder picks heavy for the first, then says \"just take the one-liners for the rest of these\".",
+      "query": "/report-doc-gap SRD-42",
+      "files": []
     }
   ]
 }

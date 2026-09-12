@@ -71,6 +71,16 @@
       "setup": "A capture run that writes two sections across two pages.",
       "query": "/kb capture",
       "files": []
+    },
+    {
+      "id": 8,
+      "name": "bare-capture-with-no-srd",
+      "skills": [
+        "kb"
+      ],
+      "setup": "A conversation with no SRD in play taught a durable platform fact, confirmed by the user. Nothing supplies an SRD id or path.",
+      "query": "/kb",
+      "files": []
     }
   ]
 }

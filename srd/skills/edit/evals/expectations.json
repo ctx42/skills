@@ -162,6 +162,16 @@
         "Logs nothing for the stale erratum it reported rather than applied",
         "Leaves the same log a per-change loop would have left for the same two edits"
       ]
+    },
+    {
+      "id": 17,
+      "name": "open-questions-and-read-only-comments",
+      "expected_behavior": [
+        "Leaves the comment block byte-for-byte unchanged — comment text is verbatim history, never edited, answered, or rewritten",
+        "Does not treat the `GR-9` reference as a broken cross-reference to repair, and does not renumber anything to make it resolve",
+        "Puts the unanswerable question in a numbered `## Open questions` list the user answers by number",
+        "Does not leave it trailing the proposal as an aside, and does not block the walk on it"
+      ]
     }
   ]
 }

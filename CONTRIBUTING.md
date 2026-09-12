@@ -46,6 +46,11 @@ Every skill needs its own directory containing:
 - `evals/expectations.json` — the pass criteria, `{id, name,
   expected_behavior[]}`, one entry per scenario id, ≥ 1 asserting terse output.
 
+A scenario may add `requires` when it cannot run on an ordinary checkout — a
+private mirror, a live service, a toolchain. Say what is needed and what a
+stand-in does and does not establish, so a run that cannot meet it reports the
+scenario blocked instead of quietly narrating one.
+
 **Two files, deliberately.** A run must be able to read a scenario without the
 rubric it will be graded on. While both lived in one file, no eval in this repo
 was blind — every agent that ran one said so unprompted, and a scenario whose
