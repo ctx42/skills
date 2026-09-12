@@ -46,6 +46,12 @@ Every skill needs its own directory containing:
 - `evals/expectations.json` — the pass criteria, `{id, name,
   expected_behavior[]}`, one entry per scenario id, ≥ 1 asserting terse output.
 
+Run them with two agents, never one: a runner that sees `evals.json` and never
+`expectations.json`, then a grader that sees `expectations.json` and never
+`SKILL.md`. Ask the runner what in the instructions was ambiguous or had to be
+guessed at — in the first full round that question found more defects than the
+pass counts did.
+
 A scenario may add `requires` when it cannot run on an ordinary checkout — a
 private mirror, a live service, a toolchain. Say what is needed and what a
 stand-in does and does not establish, so a run that cannot meet it reports the
