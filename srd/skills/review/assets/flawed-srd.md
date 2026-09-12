@@ -1,4 +1,5 @@
-<!-- Eval fixture: deliberately defective. Expected findings: README.md. -->
+<!-- Eval fixture: deliberately defective. Expected findings:
+     evals/evals.json, scenario "fixture-regression". -->
 
 # Widget Export
 

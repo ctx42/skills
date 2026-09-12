@@ -297,7 +297,10 @@ cfsync-plugin: ignore-push
    fresh numbers starting at `#1`, grouped and tagged as above.
 4. If it exists, do not rewrite it. First resolve: re-verify open findings and
    tick+move each fixed one to `## Resolved` (a regression moves back, same
-   number). Then append newly found defects with fresh numbers — errata to
+   number). Then append newly found defects with fresh numbers, assigned in
+   document order (Metadata → Introduction → Glossary → Scope → Requirements,
+   and by position within each), so two runs over the same defects number them
+   the same way — errata to
    `## Errata`, the rest to their document section. Bump `updated:`.
 5. Close with the task-oriented line (Modes), then invoke `srd:report-doc-gap`
    to offer the gaps this run buffered.
@@ -378,7 +381,9 @@ Emit plain text for an email or ticket — no file write:
 - One bullet per open finding, blank-line separated. Keep the finding number
   and the SRD's own requirement id (`#7 GR-3a:`), then a one-line
   problem-and-fix. Drop the checkbox, the severity tag, the category tag, and
-  the rule-id citation. No bold, no multi-line bullets.
+  the rule-id citation. No bold. One bullet is one paragraph — it wraps like
+  any prose, and "no multi-line bullets" means no sub-bullets and no blank
+  line inside a bullet, not a bullet that fits on one physical line.
 - Open findings only — omit Resolved and Withdrawn.
 
 ## Self-learning
