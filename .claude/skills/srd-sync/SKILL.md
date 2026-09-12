@@ -9,6 +9,17 @@ description: >
 
 # srd-sync
 
+## Usage
+
+```
+/srd-sync   regenerate srd-standard.md from Confluence, report divergences (default)
+```
+
+`cfsync pull` the mirror first so the source is current, then invoke: review
+the reported diffs and push any LOCAL-ONLY / TEXT DIFFERS units to Confluence
+before confirming the write. Project-local (`.claude/skills/`), shipped in no
+plugin — it depends on the `vr` checkout plugin users do not have.
+
 Regenerate `srd/skills/create/references/srd-standard.md` from the Confluence
 source. The copy is a **generated artifact**: source rule text trimmed for
 agent use and wrapped in a hand-maintained frame. This skill is the only thing
