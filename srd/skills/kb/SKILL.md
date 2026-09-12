@@ -44,6 +44,11 @@ memory.
   `srd:report-doc-gap`); author or edit an SRD (`srd:create`, `srd:edit`);
   publish anything to Confluence; write a fact the user has not confirmed.
 - Depends on: the `srd-doc` corpus read tools for dedup and coverage checks.
+  The corpus indexes the knowledge base under its own `kb/` prefix, and that
+  index can lag or outlive the files: a hit under `kb/` is evidence a page
+  existed, not that it is in the KB root now. Resolve every hit to a real path
+  under the root before appending to it; a hit with no file behind it is a new
+  page to write, not a page to extend.
   Without them, capture still works but every write is blind — say so and
   prefer the inbox over creating a page.
 
@@ -319,7 +324,10 @@ built in, never a bare file move.
      question came from.
    - `doc_id` values in the gap store, reached through the same `srd-doc`
      server (`mcp__srd-doc__list_gaps`, or `GET /gaps`); scan it for the old
-     ids.
+     ids. Repairing one is a write, and this skill holds only read access to
+     that store: report each stale `doc_id` with its gap id and the value it
+     should take, and leave the edit to whoever owns the record. A restructure
+     is not blocked by it — the move proceeds and the list goes in the report.
 4. Report what moved and what was repaired, counted.
 
 State plainly that references from SRDs cannot be repaired: SRDs live wherever
