@@ -45,6 +45,11 @@ branch by branch, until you both share one understanding of the subject.
 6. Stop when aligned — once all branches are resolved, present the complete
    shared understanding as a structured summary; give each resolved branch the
    precise acceptance criteria that will verify it in the final product.
+   Resolved is a property of the answer, not of the user calling it done: an
+   answer that leaves a case in its own scope unhandled keeps its branch open,
+   and the unhandled case is the next question. Acceptance criteria are the
+   test — a branch you cannot write a pass/fail check for is not resolved, and
+   a criterion that only restates the answer in other words is the tell.
 
 7. Offer to persist — on yes, hand the resolved branches to the `plan-smith`
    skill, which records them as a tracked plan (checkbox items + status table);
@@ -87,8 +92,15 @@ branch by branch, until you both share one understanding of the subject.
   answer you are about to get; the rest either becomes actionable later or
   never mattered.
 
-- Track progress. Keep the map of resolved vs. open branches and say how much
-  is left when a branch closes.
+- Track progress. Keep the map of resolved vs. open branches, name the count
+  on the opening turn so the user knows the shape of what they agreed to, and
+  say how much is left as each branch closes.
+
+- Re-audit on collapse. When an answer overturns an assumption an earlier
+  branch was resolved on, that branch reopens — and so does every other one
+  that rested on the same assumption, not just the one you were in. Say which
+  reopened and why in a line; terseness is not a reason to let a resolved
+  branch keep an answer that is now known to be wrong.
 
 ## Self-learning
 
