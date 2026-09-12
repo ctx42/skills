@@ -46,6 +46,11 @@ Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. A written or edited file is the payload: state
 its path and what changed; never paste the document back into chat.
 
+The scope line an audit opens with is the first fact, not preamble — without
+it a reader cannot tell a clean document from an unresolved target, and in a
+multi-file audit cannot tell which files were read. Narration is the sentence
+about what you are *about to* do; the scope line says what you did.
+
 ## Whole-document pass (all modes)
 
 Model the document before writing or judging — a line-by-line read misses a
@@ -87,9 +92,14 @@ rewritten or "corrected" with a fact you cannot ground.
 
 3. Draft to the guide.
 
-4. Self-review with the whole-document pass; fix before writing.
+4. Write the file(s).
 
-5. Write the file(s) and state the path.
+5. Self-review the written file with the whole-document pass, fix what it
+   finds, then state the path and what the pass changed. The review needs the
+   whole document in front of it and the document may not be pasted into chat,
+   so the file is where it lives while being reviewed — "before writing" would
+   leave a long draft nowhere to exist. Nothing is reported as finished until
+   the pass has run and its fixes are in.
 
 ## Audit mode
 
