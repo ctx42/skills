@@ -4,7 +4,9 @@
     {
       "id": 1,
       "name": "ranked-multi-archetype-proposals",
-      "skills": ["reshape"],
+      "skills": [
+        "reshape"
+      ],
       "setup": "The project calls `must.Value` at 34 sites, 28 of them wrapped in the same three-line error-drop, and builds the same options struct inline at 12 more. The library is a local module under a `replace` directive, so its source is editable.",
       "query": "/reshape must",
       "files": [],
@@ -19,8 +21,10 @@
     {
       "id": 2,
       "name": "proposals-stay-on-the-library",
-      "skills": ["reshape"],
-      "setup": "`oskit` is consumed across the module, but the run is scoped to `./pkg/render`. Several call sites could be tidied without touching `oskit` at all — the tempting wrong answer.",
+      "skills": [
+        "reshape"
+      ],
+      "setup": "`oskit` is consumed across the module, but the run is scoped to `./pkg/render`. `oskit`'s source sits in the module cache with no `replace` and no `go.work` entry, so it is external. Several call sites could be tidied without touching `oskit` at all — the tempting wrong answer.",
       "query": "/reshape oskit in ./pkg/render",
       "files": [],
       "expected_behavior": [
@@ -33,7 +37,9 @@
     {
       "id": 3,
       "name": "external-library-public-surface",
-      "skills": ["reshape"],
+      "skills": [
+        "reshape"
+      ],
       "setup": "`gopkg.in/yaml.v3` is an ordinary module dependency: no `replace`, no `go.work` entry, source in the module cache.",
       "query": "/reshape gopkg.in/yaml.v3",
       "files": [],
@@ -46,14 +52,32 @@
     {
       "id": 4,
       "name": "terse-output",
-      "skills": ["reshape"],
+      "skills": [
+        "reshape"
+      ],
       "setup": "A run whose analysis would support eight proposals, capped at three.",
       "query": "/reshape must max=3",
       "files": [],
       "expected_behavior": [
         "Opens with the one-line header and the ranked table — no preamble, no narration of mapping call sites",
-        "Reports at most three proposals, the three highest-impact ones",
+        "Reports at most three proposals, cutting from the bottom of the ranked list",
+        "Says in one line that the forced structural option was considered and what displaced it, if the cap evicted it — the cap hides nothing silently",
         "States each proposal once, with no closing summary re-listing the table already shown"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "restraint-on-an-api-that-is-fine",
+      "skills": [
+        "reshape"
+      ],
+      "setup": "A small library the consumer uses cleanly: 9 call sites, no repeated wrapper, no inline config building, no re-declared interface, no error-string matching. Nothing about the consuming code is obviously improvable by changing the library.",
+      "query": "/reshape tidy",
+      "files": [],
+      "expected_behavior": [
+        "Says the API fits its consumer and proposes little or nothing, rather than manufacturing eight proposals to fill the default cap",
+        "Does not force a structural proposal into existence when no friction supports one — the forcing rule is about not stopping at renames, not a quota",
+        "Still reports the header line with the real call-site count, so the reader can see the analysis happened"
       ]
     }
   ]

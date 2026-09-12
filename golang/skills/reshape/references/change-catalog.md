@@ -20,6 +20,7 @@ for the archetype you're drafting.
 - generics
 - move-responsibility-upstream
 - shed-a-leaky-return
+- batch-or-variadic
 
 ## options-constructor
 
@@ -170,3 +171,30 @@ value and leave presentation to the caller.
 // before: s, _ := lib.Name()   // error never occurs; every caller drops it
 // after:  s := lib.Name()
 ```
+
+## batch-or-variadic
+
+Shows as: a consumer loop whose whole body is one library call, repeated per
+element — often with its own error accumulation around it.
+
+Change: accept many where one was accepted. A variadic (`Add(items ...Item)`)
+when the set is known at the call site; a slice parameter when it is built
+first; a dedicated `AddAll` when the singular form must stay.
+
+```go
+// before — the consumer owns the loop and the error joining
+for _, it := range items {
+    if err := store.Add(it); err != nil {
+        errs = append(errs, err)
+    }
+}
+
+// after — the library owns both
+if err := store.Add(items...); err != nil {
+    return err
+}
+```
+
+Watch: a variadic silently accepts zero arguments, so say what an empty call
+does. Keep the singular form working — `Add(one)` still compiles against a
+variadic, which is what makes this additive rather than breaking.

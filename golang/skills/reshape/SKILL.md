@@ -67,8 +67,11 @@ Detect whether the library source is editable:
    matching, awkward multi-returns, type assertions, a hand-rolled loop that
    wants an iterator, test scaffolding the library could ship.
 4. Brainstorm across the archetypes below — force at least one structural
-   option, not only local tweaks. Draft each candidate from its catalog entry
-   and against the `style` sections above.
+   option, not only local tweaks. Structural means the library takes on work
+   the consumer is doing: absorb-the-sequence, move-responsibility-upstream,
+   invert-control, split-the-god-func, iterator, expose-the-interface. A
+   rename, a default, or one added helper is local. Draft each candidate from
+   its catalog entry and against the `style` sections above.
 5. Score and rank by the impact rubric.
 6. Report (below).
 
@@ -108,15 +111,27 @@ Rank each candidate by **net impact**, biggest first:
   effort, blast radius on *other* consumers.
 
 Net = reach × savings × quality, discounted by cost. Label each **High / Med /
-Low** and lead with the single biggest-impact change. A change that touches many
+Low** — High is worth doing this quarter, Med worth doing, Low worth knowing —
+and lead with the single biggest-impact change. Label the Net, after the
+discount; the table's Breakage and Effort columns show what was discounted, so
+a High beside heavy Breakage means it survived that. A change that touches many
 sites and is additive outranks a flashy structural rewrite that breaks everyone.
+
+`max=N` caps what is reported, never what is considered, and it cuts from the
+bottom of the ranked list. The forced structural option competes on Net like
+everything else: if it does not make the cut, say in one line that it was
+considered and what displaced it, so the cap does not silently hide the kind of
+proposal the brainstorm exists to surface.
 
 ## Output
 
 Open with the ranked payload:
 
 1. One line: library · consumer scope · modifiability · N call sites ·
-   M proposals.
+   M proposals. N counts call sites in the consumer scope — one per syntactic
+   call to the library, so a line calling two of its functions counts twice and
+   a call inside a loop counts once. Not files, not occurrences of the package
+   name, not per-iteration executions.
 2. A table ranked by impact:
 
    | # | Change (archetype) | Reach | Impact | Breakage | Effort |
