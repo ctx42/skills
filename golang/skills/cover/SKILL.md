@@ -38,9 +38,12 @@ whole-suite run does not count. The function — never the package — is the
 unit of work.
 
 Sources of truth:
-- `../style/SKILL.md` (on-demand: before writing a test — read only its Test
-  section) — obey it in every test written; it is the rule spec, do not
-  restate it.
+- `../style/SKILL.md` (on-demand: before writing a test — read its Test
+  section and the Production rules Test inherits, Formatting and Naming
+  above all) — obey it in every test written; it is the rule spec, do not
+  restate it. Test does not replace Production, it adds to it: a run that
+  reads Test alone writes tests that break the 80-column rule, and `gofmt -l`
+  does not measure line length, so Verify passes them.
 - The package's own tests, then a sibling package (on-demand: when writing) —
   for the assertion library and helper conventions the style rules defer to.
 
@@ -72,7 +75,11 @@ State the resolved kind and the function/file set before measuring.
 Read from `$ARGUMENTS`, any order after the target:
 - `max_tests=N` — hard cap on tests/cases added this run.
 - `packages=a,b` — module mode: restrict to these packages.
-- `include=all` — also attempt complex lines (build the fakes/scaffolding);
+- `include=all` — also attempt complex lines (build the fakes/scaffolding) in
+  `*_test.go`, which is the whole of this skill's write scope. A line reachable
+  only behind a seam the production code does not have stays deferred even
+  under this flag: report what the seam would be and leave it to the author.
+  Adding one is an API change, not a test;
   un-coverable lines stay reported, never attempted.
 - `fanout` — module mode: dispatch one subagent per package (each gets the
   style Test rules and this per-function loop for its package) and merge the
@@ -92,7 +99,14 @@ For each target function `Foo` (or method `T.Bar`), work in strict order.
    the function is uncovered — scaffold `Test_Foo`.
 2. Measure in isolation: `go test -run '^Test_Foo($|_)' -coverprofile=<tmp>
    ./<pkg>` (methods: `^Test_T_Bar($|_)`). Read coverage of only Foo's own
-   line range from the profile; ignore lines it hits in callees.
+   line range from the profile; ignore lines it hits in callees. The profile's
+   rows are `file:startLine.col,endLine.col stmts count` — select the rows
+   whose range falls inside Foo, and treat `count > 0` as hit; a rolled-up
+   percentage from `go tool cover -func` is per function but is computed from
+   whatever ran, so it cannot tell you *which* line is still dark. A family
+   that matches nothing prints `no tests to run` and still exits 0 — that is
+   an uncovered function, not a clean one, so check the family exists before
+   reading a 0% as a measurement.
 3. Classify every uncovered line (next section). Read the style Test section
    and the package's test conventions, then add one targeted case — table row,
    subtest, or assertion — per easy line or branch (complex lines too under

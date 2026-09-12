@@ -4,7 +4,9 @@
     {
       "id": 1,
       "name": "single-function-in-isolation",
-      "skills": ["cover"],
+      "skills": [
+        "cover"
+      ],
       "setup": "`Parse` has one happy-path test, `Test_Parse`, and two uncovered error branches. A caller's test, `Test_Load`, incidentally executes one of those branches, so a whole-package coverage run credits `Parse` with more than its own test earns.",
       "query": "/cover func=Parse",
       "files": [],
@@ -18,7 +20,9 @@
     {
       "id": 2,
       "name": "package-target-is-plan-first",
-      "skills": ["cover"],
+      "skills": [
+        "cover"
+      ],
       "setup": "`./pkg/svc` holds six exported functions, four of them partly covered.",
       "query": "/cover ./pkg/svc",
       "files": [],
@@ -31,7 +35,9 @@
     {
       "id": 3,
       "name": "deferred-and-uncoverable-are-reported",
-      "skills": ["cover"],
+      "skills": [
+        "cover"
+      ],
       "setup": "`Dial` has one branch reachable only behind a network seam and one defensive `return` that no input can reach. The run is repeated afterwards with `include=all`.",
       "query": "/cover func=Dial",
       "files": [],
@@ -45,7 +51,9 @@
     {
       "id": 4,
       "name": "line-target-resolves-to-its-function",
-      "skills": ["cover"],
+      "skills": [
+        "cover"
+      ],
       "setup": "Line 42 of `pkg/svc/foo.go` sits inside `Load`.",
       "query": "/cover pkg/svc/foo.go:42",
       "files": [],
@@ -58,7 +66,9 @@
     {
       "id": 5,
       "name": "module-mode-honors-its-controls",
-      "skills": ["cover"],
+      "skills": [
+        "cover"
+      ],
       "setup": "A module of nine packages, two of them `svc` and `api`.",
       "query": "/cover module packages=svc,api fanout max_tests=5",
       "files": [],
@@ -72,12 +82,15 @@
     {
       "id": 6,
       "name": "writes-into-existing-tests",
-      "skills": ["cover"],
-      "setup": "`Test_Encode_tabular` already exists for the target function. A helper in `all_test.go` loses its last caller during the edit.",
+      "skills": [
+        "cover"
+      ],
+      "setup": "`Test_Encode_tabular` already exists for the target function, covering happy-path rows. The uncovered lines are two more happy-path shapes, not error branches. A helper in `all_test.go` loses its last caller during the edit.",
       "query": "/cover pkg/svc/foo.go",
       "files": [],
       "expected_behavior": [
-        "Adds rows to `Test_Encode_tabular` rather than creating a parallel test function",
+        "Adds the two new cases as rows in `Test_Encode_tabular`, since they fit the existing table's shape, rather than creating a parallel test function",
+        "Keeps the table loop branch-free per the style Test rules — a case that would need branching in the loop body goes in its own test instead",
         "Deletes the now-unused helper from `all_test.go`, and drops the file if nothing is left in it",
         "Ends with `gofmt -l` clean and `go test -v -race` showing `--- PASS` for every test in the edited files"
       ]
@@ -85,7 +98,9 @@
     {
       "id": 7,
       "name": "terse-output",
-      "skills": ["cover"],
+      "skills": [
+        "cover"
+      ],
       "setup": "An ordinary single-function run that adds two table rows.",
       "query": "/cover func=Foo",
       "files": [],
@@ -94,6 +109,37 @@
         "Reports the before → after coverage delta, the tests added, and any deferred or un-coverable lines, each stated once",
         "No closing restatement of the table it just showed",
         "Quotes only the `--- PASS` lines for the tests it touched, not the full `go test -v` log"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "no-seam-stays-deferred-under-include-all",
+      "skills": [
+        "cover"
+      ],
+      "setup": "`Upload` calls `http.Post` directly on a package-level client with no injection point. The branch handling a failed POST is reachable only by adding a seam to the production code.",
+      "query": "/cover func=Upload include=all",
+      "files": [],
+      "expected_behavior": [
+        "Covers what it can inside `*_test.go`, which is the skill's whole write scope",
+        "Leaves the POST-failure branch deferred even under `include=all`: the flag authorizes building fakes, not editing production code",
+        "Names what the seam would be, so the author can decide, rather than adding one unasked",
+        "Does not report the function as fully covered"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "missing-test-family-is-not-zero-percent",
+      "skills": [
+        "cover"
+      ],
+      "setup": "`Normalize` has no test whose name matches its direct-test family — the only test touching it is `TestNormalizeHelper`, off-convention.",
+      "query": "/cover func=Normalize",
+      "files": [],
+      "expected_behavior": [
+        "Notices that `-run '^Test_Normalize($|_)'` matched nothing — `no tests to run`, exit 0 — rather than reading the result as a measured 0%",
+        "Reports the function as uncovered and scaffolds `Test_Normalize`",
+        "Does not credit the off-convention `TestNormalizeHelper` as the family"
       ]
     }
   ]
