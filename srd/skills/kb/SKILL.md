@@ -73,8 +73,11 @@ mkdir -p "$MEM_DIR"
 KB_ROOT="$(cat "$MEM_DIR/kb-root" 2>/dev/null)"   # absolute path to the KB dir
 ```
 
-Empty or missing: ask the user for the directory once, then write it to
-`$MEM_DIR/kb-root`. Before accepting a path, confirm two things:
+Empty or missing: ask the user for the directory, then write it to
+`$MEM_DIR/kb-root`. Ask once per usable answer, not once per session: a path
+that fails a check below is not an answer, so say why and ask again. The
+"once" is about not re-asking for a root already on file, never about
+accepting a bad one because the question was already spent.
 
 - It is **not** managed by a Confluence sync. A sync pull clobbers agent writes
   and the page silently reverts. Check the sync config (`.cfsync.yaml` or
@@ -261,6 +264,13 @@ Body rules:
   > `gap-0019`.
   ```
 
+  The source and the date are required; the `· gap-NNNN` is there only when
+  `srd:report-doc-gap` actually filed one and returned an id. Most captures
+  have none — a fact can be missing from the docs without anyone reporting
+  that as a gap — so omit the segment rather than inventing a number or
+  holding the write until a gap exists. Where there is no SRD in play (a bare
+  capture), name the session instead: `Attested session 2026-09-11`.
+
   A page-level provenance table cannot do this job: it is its own chunk, and an
   agent reading a fact never receives it.
 
@@ -337,9 +347,12 @@ which old ids were in play so the user can grep their own SRDs.
 Prefer adding a sibling page over restructuring. Restructuring is the escape
 hatch, not the growth mechanism.
 
-Report tersely: no preamble or narration; state each fact once; don't restate
-output the user can already see. A pointer ("wrote `kb/correlation.md`, 2
-sections") is enough — never re-print a page just written.
+## Output
+
+Report tersely in every mode, capture included: no preamble or narration;
+state each fact once; don't restate output the user can already see. A pointer
+("wrote `kb/correlation.md`, 2 sections") is enough — never re-print a page
+just written.
 
 ## Self-learning
 
