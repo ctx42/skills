@@ -12,8 +12,26 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg* | module]
 
 # doc
 
+## Usage
+
+```
+/doc ./pkg/foo                package (default): item by item, plan-first
+/doc func=Foo                 one function's godoc + body comments; no plan
+/doc func=T.Bar               one method
+/doc pkg/svc/foo.go:42        the item enclosing that line; no plan
+/doc pkg/svc/foo.go           every item in the file, plan-first
+/doc module                   every package, sequential, plan-first
+/doc ./pkg/foo max_changes=8  cap comments changed this run; reports the rest
+/doc module packages=svc,api  module mode: restrict to these packages
+/doc ./pkg/foo only=godoc     skip inline body comments
+/doc ./pkg/foo only=exported  package comment + exported symbols only
+/doc module fanout            module mode: one subagent per package, merged
+```
+
 Executing skill: it reads code, edits godoc and inline comments in `*.go` /
-`*_test.go`, and verifies. Unlike `golang:review` it acts on the code.
+`*_test.go`, and verifies. Unlike `golang:review` it acts on the code. Scope
+stops at in-source comments: never write an `Example*` function or a package
+`README` overview to carry what a comment should say.
 
 **Governing rule — a comment changes only when it fails the checklist.** Judge
 every documentable item against the checklist below and apply the minimal edit

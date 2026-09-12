@@ -1,0 +1,84 @@
+{
+  "skill_name": "doc",
+  "evals": [
+    {
+      "id": 1,
+      "name": "correct-but-terse-is-left-alone",
+      "skills": ["doc"],
+      "setup": "`Get`'s godoc is a single accurate sentence that already states the one thing the signature cannot — that a miss returns the zero value rather than an error.",
+      "query": "/doc func=Get",
+      "files": [],
+      "expected_behavior": [
+        "Runs the checklist and finds that no item fires",
+        "Leaves the comment byte-for-byte unchanged — no padding, no restating the signature",
+        "Reports no change line for it; shortness alone is not a defect"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "adds-only-confirmable-facts",
+      "skills": ["doc"],
+      "setup": "`Store` mutates the slice it is passed and its body suggests it is safe for concurrent use, but nothing in the code proves the concurrency claim. Its godoc states neither.",
+      "query": "/doc func=Store",
+      "files": [],
+      "expected_behavior": [
+        "Fires the missing-fact checklist item for the mutation and for concurrency",
+        "Confirms each against the body and its callers (via `LSP`) before writing it",
+        "Documents the slice mutation, which the code proves",
+        "Flags the concurrency safety as unverifiable rather than asserting it in the godoc"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "directives-and-interface-method-godoc",
+      "skills": ["doc"],
+      "setup": "`./pkg/io` carries a `//go:build` line, a `//go:generate` directive, and a `Read` method implementing `io.Reader` whose godoc restates the interface contract and nothing more.",
+      "query": "/doc ./pkg/io",
+      "files": [],
+      "expected_behavior": [
+        "Leaves both directive comments byte-for-byte unchanged and lists them as never-touch items in the plan",
+        "Plans the `Read` godoc for removal as unremarkable — it would be kept, naming the surprise, only if `Read` broke or exceeded the `io.Reader` contract",
+        "Writes nothing before approval, since a package target is plan-first"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "terse-output",
+      "skills": ["doc"],
+      "setup": "An ordinary single-function run that changes one godoc and deletes one inline comment.",
+      "query": "/doc func=Foo",
+      "files": [],
+      "expected_behavior": [
+        "Opens with the result — no preamble and no narration of reading the code",
+        "Lists changes made as `file:Symbol — item`, plus flagged and never-touched items, each stated once",
+        "No closing restatement of the edits it just listed"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "line-target-resolves-to-its-item",
+      "skills": ["doc"],
+      "setup": "Line 42 of `pkg/svc/foo.go` is inside the body of `(*Svc).Flush`, where `// increment i` sits above `i++`. The file holds four other functions.",
+      "query": "/doc pkg/svc/foo.go:42",
+      "files": [],
+      "expected_behavior": [
+        "States the resolved kind (line) and the item: `Flush`'s godoc and its body's inline comments — nothing else in the file",
+        "Presents no plan; a line target is a single item, so it runs the loop straight through",
+        "Deletes `// increment i` as a comment that only restates the code"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "module-mode-with-fanout-and-filter",
+      "skills": ["doc"],
+      "setup": "A module of eleven packages, two of them `svc` and `api`.",
+      "query": "/doc module fanout packages=svc,api",
+      "files": [],
+      "expected_behavior": [
+        "The plan lists items from `svc` and `api` only; every other package is reported as skipped",
+        "After approval, dispatches one subagent per package and merges their reports into the skill's output format",
+        "Verifies each edited package with `gofmt -l` and `go build` before reporting"
+      ]
+    }
+  ]
+}
