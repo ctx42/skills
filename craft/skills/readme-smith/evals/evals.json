@@ -62,6 +62,7 @@
       "files": [],
       "expected_behavior": [
         "Establishes from the repo — the CI gomake step — that this project uses gomake, rather than concluding it from `:doc:mce` being listed",
+        "Asks separately, before creating any `.go` file, naming the files and their functions in one batch — the README approval does not cover writing Go source",
         "Writes runnable `Example…` functions in `_test.go` and runs `go test ./...` until they pass, instead of pasting hand-written snippets",
         "Marks each spot with a `<!-- gmmce:<relpath>/<FuncName> -->` comment above an empty `go` fence and runs `gomake :doc:mce` to fill them",
         "Reads the `Found <key>` lines to confirm each marker was injected, rather than trusting the exit status or the `Writing` line",
@@ -145,6 +146,22 @@
         "Leaves the quickstart command as written and says in the reply that this environment could not run it — the reader is not warned about the author's sandbox",
         "Warns the reader about the install command with a `> [!NOTE]` naming what has to happen first, since an HTML comment is invisible to them",
         "Claims neither command works"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "declined-go-source-gate",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "A gomake project whose `pkg/store/README.md` carries a hand-written `go` snippet that does not compile. The audit findings are approved, but when asked separately about creating `pkg/store/example_test.go` the user says no.",
+      "query": "/readme-smith improve pkg/store/README.md",
+      "files": [],
+      "expected_behavior": [
+        "Applies the README-only findings on the first approval, then asks about the Go file on its own",
+        "States what the file would be — path, the `Example…` functions in it, and that it joins the test suite and CI — so the user is answering a real question",
+        "On the no, writes no `.go` file and leaves the snippet finding reported rather than silently fixing or silently dropping it",
+        "Does not write the file and mention it afterwards, and does not re-ask later in the same run"
       ]
     }
   ]

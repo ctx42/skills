@@ -60,6 +60,15 @@ an existing `<!-- gmmce:… -->` marker, a gomake config, or a gomake step in CI
 Absent those, hand-write the examples rather than introducing a tool the
 project's own contributors may not have.
 
+Injection needs `Example…` functions, and those are Go source: they join the
+test suite, CI, coverage, and the diff. Nobody asking for a README asked for
+that, so it gets its own yes — the approval covering the README does not reach
+it. Ask once per run, after the README work and before writing any `.go` file:
+name each file, the functions going in it, and that it becomes part of the test
+suite. On a no, hand-write the examples in create mode, or in improve mode
+leave the finding reported and the README untouched — never write the file and
+mention it afterwards.
+
 ## Create mode
 
 1. Scan the repo. Ground everything in real code: package manifests

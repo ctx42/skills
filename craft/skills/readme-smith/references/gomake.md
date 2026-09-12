@@ -18,7 +18,11 @@ let the target fill them. The README is written once, by the target.
    one, hand-write the examples — injected fences a contributor cannot
    regenerate are worse than snippets they can read.
 2. Author runnable examples first: Go testable `Example…` functions in
-   `_test.go`; run `go test ./...` until they pass.
+   `_test.go`; run `go test ./...` until they pass. These are new Go source
+   files in someone's repo — take the separate confirmation `SKILL.md` requires
+   before creating any of them, naming the files and their functions in one
+   batch. Without that yes there is no injection: fall back to hand-written
+   examples, or to reporting the finding.
 3. Mark the spots: above each `go` fence where an example belongs, write a
    one-line `<!-- gmmce:… -->` marker (see Marker keys).
 4. Inject: run `gomake :doc:mce`; it fills each marked fence with the matching
