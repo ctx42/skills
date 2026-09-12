@@ -12,6 +12,13 @@ license: MIT
 
 # enhance-skills
 
+## Usage
+
+```
+/enhance-skills          harvest this conversation's lessons into the skills used (default)
+/enhance-skills <skill>  retrofit the ## Self-learning block into that skill's SKILL.md
+```
+
 Turn corrections into durable skill improvements. Pick the mode from
 `$ARGUMENTS` when given (a skill name/path selects Retrofit), else from the
 request:
