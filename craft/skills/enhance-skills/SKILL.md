@@ -103,9 +103,12 @@ the target's path. Do not create a lessons file; the store appears on the first
 lesson. Retrofit edits `SKILL.md`, so it needs an in-place checkout — on a
 read-only install, report that and stop.
 
-Copy the block below with its line breaks, so every skill in the tree carries
-it byte for byte. `$HOME` stays literal — it is read when the skill runs, not
-now:
+Copy the block below word for word, then substitute `<plugin>`/`<skill>` and
+re-wrap the paragraph to 80 columns. Not byte for byte: the substituted path
+changes the line's length, so where the wrap falls differs per skill and the
+tree already carries five wrappings of the same words. The words are the
+constant; the wrapping follows the repo's own rule. `$HOME` stays literal — it
+is read when the skill runs, not now:
 
 ```
 ## Self-learning
