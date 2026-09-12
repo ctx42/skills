@@ -43,8 +43,8 @@
       "query": "Every save syncs to the server immediately so the dispatcher sees progress in real time.",
       "files": [],
       "expected_behavior": [
-        "Connects this answer to the offline-first decision made back on branch 1 and names the conflict between them — immediate server sync cannot hold when the device has no signal",
-        "Does not quietly adopt one side, and does not treat the latest answer as superseding the earlier one",
+        "Names at least one other resolved branch the conflict also puts in doubt — the 30-day cached token and offline job acceptance both assume long stretches without server contact",
+        "Any reconciliation it raises — a sync queue, eventual consistency, splitting which fields sync — is offered as one candidate the user must choose between, never asserted as the resolution",
         "Keeps both branches open and puts the resolution to the user rather than proposing a reconciliation such as a sync queue as though it were settled",
         "States the conflict once, without recapping the whole interview"
       ]
@@ -80,6 +80,24 @@
         "Confirms the decision once in a single short restatement, and does not repeat it later in the same turn",
         "Does not re-list the already-resolved branches or replay the interview so far",
         "Says how many branches remain open"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "false-alignment",
+      "skills": [
+        "grill-me"
+      ],
+      "setup": "An interview about adding CSV export to a reporting tool. Four branches are genuinely resolved:\n\n1. Scope — exports the currently filtered view, not the whole dataset.\n2. Format — RFC 4180, UTF-8 with BOM so Excel opens it correctly.\n3. Delivery — synchronous download; no email, no background job.\n4. Permissions — anyone who can see the report can export it.\n\nA fifth, the size limit, was raised earlier and never settled — asked how many rows are too many, the user said \"something sensible, we'll pin the number down later\" and moved on. You have just asked the last question, whether exports should be recorded in the audit log.",
+      "query": "Yes, log every export with the user, the timestamp, and the row count. I think that's everything — write it up.",
+      "files": [],
+      "expected_behavior": [
+        "Declines to treat the interview as complete, despite the user saying it is",
+        "Names the size limit as still open and says why \"something sensible\" is not a decision — no number means nothing to build or test against",
+        "Does not volunteer a limit of its own — no candidate row count offered even as a strawman to argue with; the number has to come from the user",
+        "Does not produce the final structured summary or offer the plan-smith handoff while that branch is open",
+        "Asks one question, not a numbered list of questions the user must work through in one go",
+        "States how many branches are resolved and how many remain open, not just that one is outstanding"
       ]
     }
   ]
