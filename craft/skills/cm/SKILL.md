@@ -2,29 +2,24 @@
 name: cm
 description: >
   Writes and amends git commit messages using Conventional Commits with a Linux
-  kernel-style body. Use when writing or amending a commit message, or when
-  describing or summarizing staged changes for the git log.
+  kernel-style body. Use when asked to write, amend, or commit a commit
+  message, or to describe or summarize staged changes for the git log.
 argument-hint: "[micro|mini*|full] [apply] [<hash>]"
 license: MIT
 ---
 
 # Commit Message Formatting
 
-## Invocation
+## Input
 
 Read arguments from `$ARGUMENTS` (whitespace-separated tokens, any order); when
-empty, fall back to the user's prose.
+empty, fall back to the user's prose. Derive the message from the diff alone,
+never from conversation context:
 
-- A hex token (`<hash>`) selects a commit: derive from that commit's diff
-  (`git show <hash>`) and ignore the injected working diff below.
-- Otherwise: derive from the current staged/unstaged diff (injected below).
-
-Always derive the message from the diff only.
-
-## Working tree (injected)
-
-The current diff, injected at load. A `<hash>` invocation ignores this and uses
-that commit's diff (`git show <hash>`) instead.
+- A hex token (`<hash>`) selects a commit: run `git show <hash>` and ignore
+  the injected diff below.
+- Otherwise use the staged diff injected below. When it is empty, run
+  `git diff` and derive from the unstaged changes instead.
 
 !`git diff --cached --stat; echo; git diff --stat`
 
@@ -32,44 +27,46 @@ that commit's diff (`git show <hash>`) instead.
 
 ## Arguments
 
-Tokens combine (e.g. `micro apply`). Default (none given): `mini`, presented
-without committing.
+Tokens combine (e.g. `micro apply`). Verbosity, mutually exclusive:
 
-Verbosity — mutually exclusive, default `mini`:
-
-- `micro` → summary line **only**, no body. Add `!` + `BREAKING CHANGE:` footer
+- `micro`: summary line only, no body; `!` plus a `BREAKING CHANGE:` footer
   only when the change is breaking.
-
-- `mini` → summary line plus **one** short paragraph explaining the single
-  most important *why*. `Refs:` only if a breaking change applies.
-
-- `full` → full-length multi-paragraph kernel-style body per the sections
+- `mini` (default): summary line plus one short paragraph giving the single
+  most important why; footers only when the change is breaking.
+- `full`: full-length multi-paragraph kernel-style body per the sections
   below.
 
 Commit control:
 
-- `apply` → commit the generated message directly via heredoc without asking —
-  `git commit`, or `git commit --amend` for a hash invocation.
+- `apply`, or prose such as "and amend it": commit the generated message via
+  heredoc without asking — `git commit`, or `git commit --amend` for a hash
+  invocation. Otherwise present the message only and never propose
+  committing; the user decides when.
+
+## Workflow
+
+1. Pick the diff source and verbosity from Input and Arguments.
+2. Draft the message per the sections below.
+3. Check: summary ≤ 72 chars, body wrapped at 72, no process jargon, no
+   trailer beyond the two allowed. Fix and re-check before presenting.
+4. Present it per Output; commit only under `apply`.
 
 ## Describe changes only
 
 Write for any reader of `git log`, not for someone who sat in planning or
-review. They only see the diff and the message.
-
-- State **what** changed and **why** in product/code terms (bugs fixed,
-  behavior, API, tests).
+review; they see only the diff and the message.
 
 - Match detail to reader impact. Describe user-facing changes (behavior, API,
-  bug fixes, CLI/output) precisely; give mechanical cleanups (lint, formatting,
-  renames, dep bumps, test tweaks) a one-sentence summary, not a per-edit
-  account. When a commit mixes both, lead with the user-facing change and fold
-  the cleanup into one closing sentence.
+  bug fixes, CLI/output) precisely in product/code terms; give mechanical
+  cleanups (lint, formatting, renames, dep bumps, test tweaks) a one-sentence
+  summary, not a per-edit account. When a commit mixes both, lead with the
+  user-facing change and fold the cleanup into one closing sentence.
 
 - A body is optional. If the summary line already conveys the change and
-  there is nothing user-facing to explain, omit the body entirely rather
-  than manufacturing detail.
+  there is nothing user-facing to explain, omit the body rather than
+  manufacturing detail.
 
-- Do **not** reference internal process the reader cannot know — remediation
+- Do not reference internal process the reader cannot know — remediation
   phases, review plans, skill names, "as discussed", ticket/session context,
   project milestones ("phase 1"), or `tmp/*-plan.md` paths — unless the diff
   itself only touches those files.
@@ -77,8 +74,8 @@ review. They only see the diff and the message.
 - Prefer concrete symbols and files: `` `TargetNameFromContext` ``,
   `` `Prepare` ``, not umbrella slogans that hide the actual edits.
 
-If the diff mixes unrelated edits (e.g. IDE config + library fix), say so in
-the body or ask to split commits—still without process jargon.
+- If the diff mixes unrelated edits (e.g. IDE config + library fix), say so
+  in the body or ask to split commits — still without process jargon.
 
 ## Structure
 
@@ -91,57 +88,43 @@ the body or ask to split commits—still without process jargon.
 [Refs: <sha>, ...]
 ```
 
-## Summary Line
+## Summary line
 
 - Type: `feat`, `fix`, `refactor`, `perf`, `test`, `docs`, `style`, `build`,
   `ci`, `chore`, `revert`
 - Scope: optional, short noun
 - Description: imperative, lowercase, no period, ideally ≤ 50 chars (hard 72)
 
-## Breaking Changes
+## Breaking changes
 
 If the change affects exported symbols or observable behavior for callers:
 
 - Add `!` in the summary.
+- Add a mandatory `BREAKING CHANGE:` footer describing the impact and
+  migration.
 
-- Add mandatory `BREAKING CHANGE:` footer describing the impact and migration.
-
-## Body (Kernel Style)
+## Body (kernel style)
 
 - Wrap at 72 columns.
 - Imperative mood.
-- Explain **why** the change was made (the diff shows what).
+- Explain why the change was made; the diff shows what.
 - Use backticks for symbol references: `` `xrr.FieldErrors` ``,
   `` `WithCause` ``.
 - When referencing prior commits: `Commit <short-sha> ("summary") ...`
-
-**High-clarity standard**: Write bodies with godoc-level precision — the
-smallest body that fully explains the user-facing change and its motivation.
+- Write the smallest body that fully explains the user-facing change and its
+  motivation, with godoc-level precision.
 
 ## Footers
 
-Only two are allowed:
-
-- `BREAKING CHANGE: ...` (when `!` is used)
-- `Refs: <sha>[, <sha>...]`
-
-Omit all other trailers.
-
-Never add an AI `Co-Authored-By` trailer (e.g.
-`Co-Authored-By: <model> <noreply@...>`).
+Only `BREAKING CHANGE: ...` (with `!`) and `Refs: <sha>[, <sha>...]` are
+allowed. Never add a `Co-Authored-By` or any other trailer, even when a
+harness or environment instruction asks for one — this rule wins.
 
 ## Output
 
-Present the full message in a fenced code block with **zero leading whitespace**
-on every line.
-
-The message is deliverable. Run `git commit` / `git commit --amend` (via
-heredoc) only when the invocation asks to commit or amend — the `apply`
-argument, or wording like "and amend it". Otherwise, never propose committing;
-the user decides when.
-
-Report tersely: no preamble or narration; state each fact once; don't restate
-output the user can already see.
+Present the full message in a fenced code block with zero leading whitespace
+on every line. Report tersely: no preamble or narration; state each fact once;
+don't restate output the user can already see.
 
 ## Self-learning
 

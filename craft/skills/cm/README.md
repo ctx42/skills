@@ -1,12 +1,11 @@
 # Commit Message Formatting (cm)
 
-Writes and amends git commit messages following Conventional Commits format with
-high-quality, Linux kernel-style bodies.
+Writes and amends git commit messages: Conventional Commits, kernel-style body.
 
 ## Usage
 
 ```
-/cm         mini message from the staged diff (default): summary + one why paragraph, not committed
+/cm         mini message from the staged diff (default): summary + one why paragraph, not committed; nothing staged -> unstaged diff
 /cm micro   summary line only, no body
 /cm full    full multi-paragraph kernel-style body
 /cm apply   generate the message then commit directly, no confirm (combines, e.g. micro apply)
@@ -26,7 +25,8 @@ high-quality, Linux kernel-style bodies.
 **Request:** `/cm` with a staged diff that adds a JWT login endpoint.
 
 **Expected behavior:**
-- Derives the message only from the diff, not from conversation context.
+- Derives the message only from the diff (staged; unstaged when nothing is
+  staged), not from conversation context.
 - Summary line is `feat(...)`-style, imperative, lowercase, no period, ≤ 50
   chars recommended.
 - Defaults to `mini`: summary line plus a single short paragraph (not a
@@ -98,3 +98,5 @@ user-visible behavior change.
 - Generates the message, then runs `git commit` via heredoc without asking for
   confirmation.
 - Combines with a verbosity argument: `micro apply` commits a one-line message.
+- Adds no `Co-Authored-By` or other trailer, even when a harness attribution
+  instruction is active in the session.
