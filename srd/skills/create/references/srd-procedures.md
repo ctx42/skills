@@ -20,8 +20,9 @@ glossary actually changes. Run this before drafting or editing:
    with an empty set (every term must then be defined locally). A remembered path
    that resolves is used **silently** — never confirmed every run; the user
    overrides it only by asking.
-4. Fingerprint the docs: `create/scripts/glossary-fingerprint.sh <path>` prints
-   one content hash covering every `*.md` under the path.
+4. Fingerprint the docs: run `glossary-fingerprint.sh <path>` from the `create`
+   skill's `scripts/` directory (`../scripts/` from this file); it prints one
+   content hash covering every `*.md` under the path.
 5. Compare the hash with the one in memory:
    - Match → use the cached digest as-is.
    - Differ, or no digest yet → read the glossary docs, synthesize a fresh digest
@@ -50,9 +51,10 @@ the user signals the requirements are complete or asks to fill In Scope:
 
 1. Read every requirement group and cluster them by the distinct capability each
    delivers.
-2. Draft one candidate `SC-n` item per capability — atomic and verifiable
-   (SCO-1), each covered by ≥ 1 requirement (SCO-2), none contradicting Out of
-   Scope (SCO-3). Phrase each as a deliverable, not a restated requirement.
+2. Draft one candidate `SC-n` item per capability — a high-level overview of
+   one change (SCO-1), each covered by ≥ 1 requirement (SCO-2), none
+   contradicting Out of Scope (SCO-3). Phrase each as a deliverable, not a
+   restated requirement.
 3. Present the candidates and let the user edit them point by point through the
    calling skill's confirm-each loop: keep, reword, merge, split, or drop each.
 4. Replace the `--- TODO ---` marker with the confirmed `SC-n` items, numbered

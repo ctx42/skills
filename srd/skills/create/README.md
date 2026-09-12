@@ -1,12 +1,7 @@
 # create
 
-Authors a brand-new **Software Requirement Document (SRD)** that conforms to the
-**SRD standard**. The agent interviews you
-along the fixed SRD spine, drafts the document, self-checks it against the
-standard, and writes it to a Markdown file.
-
-It is an **author** skill: it creates new SRDs. It does not review or audit an
-SRD written elsewhere.
+Authors a brand-new **Software Requirement Document (SRD)** to the SRD
+standard: interview, draft, self-check, write.
 
 ## Usage
 
@@ -22,37 +17,43 @@ SRD written elsewhere.
 - You want every requirement to be atomic, verifiable, and correctly numbered,
   with a clean glossary and scope.
 
+It is an author skill: it creates new SRDs. It does not review or audit an SRD
+written elsewhere (`review`) or edit an existing one (`edit`).
+
 ## How It Works
 
-1. **Resolves the Company Glossary** — a single Markdown file or a directory of
-   them, remembered per project. It fingerprints the docs and loads a cached term
-   digest, regenerating the digest only when the glossary changed, so known terms
-   are linked, not redefined.
-2. **Interviews you** one branch at a time: objective → UI change → in/out of
+1. Resolves the Company Glossary, a single Markdown file or a directory of
+   them, remembered per project. It fingerprints the docs and loads a cached
+   term digest, regenerating the digest only when the glossary changed, so
+   known terms are linked, not redefined.
+2. Interviews you one branch at a time: objective → UI change → in/out of
    scope → the actual requirements → terms. It pushes back on vague or
    non-atomic requirements.
-3. **Proposes requirement groups and prefixes** (e.g. `AUTH`, `DATA`); you
-   confirm or rename, then it numbers them.
-4. **Drafts** the SRD in the required order with the RFC 2119 / 8174 keyword
+3. Grounds claims about the existing system in the platform documentation
+   corpus when one is reachable. A claim the docs cannot confirm is handed to
+   `report-doc-gap`; a fact you confirm that the docs lack is handed to `kb`.
+   Both happen inside the interview, with no separate questions.
+4. Proposes requirement groups and prefixes (e.g. `AUTH`, `DATA`); you confirm
+   or rename, then it numbers them.
+5. Drafts the SRD in the required order with the RFC 2119 / 8174 keyword
    notice. Owners, Initiative, and Designs links are left as marked `TODO`
-   placeholders — the skill stays offline. In Scope may be deferred as a
+   placeholders; the skill fetches no links. In Scope may be deferred as a
    `--- TODO ---` marker (derived from the requirements later), and a `## TODO`
    section can hold open authoring issues; both must be resolved before
    acceptance.
-5. **Self-checks** the draft: auto-fixes mechanical issues (numbering, section
-   order, keyword capitalization, stray examples) and reports
-   what needs your judgment (links, verifiability, scope coverage, Quality Bar).
-6. **Writes** the `.md` file to a path you name and lists the outstanding
-   follow-ups.
+6. Self-checks the draft: auto-fixes mechanical issues (numbering, section
+   order, keyword capitalization, stray examples) and collects what needs your
+   judgment (links, verifiability, scope coverage, Quality Bar).
+7. Writes the `.md` file to a path you name and reports once: the path, the
+   requirement groups, and the outstanding follow-ups.
 
-The rule set lives in `references/srd-standard.md` (each rule is a checkable
-statement with an id); house extensions (US English, sub-numbering,
-defect examples) in `references/authoring-guide.md`; shared operating procedures
-(glossary resolution) in `references/srd-procedures.md`; the skeleton in
-`assets/srd-template.md`; the glossary fingerprint in
-`scripts/glossary-fingerprint.sh`.
-The `edit` and `review` skills read these same files — `create` owns
-them.
+`create` owns the files the other SRD skills read: the rule set in
+`references/srd-standard.md` (each rule a checkable statement with an id);
+house extensions and defect examples in `references/authoring-guide.md`; the
+bulk-fix errata class in `references/errata.md`; the documentation-corpus
+procedure in `references/doc-corpus.md`; shared operating procedures in
+`references/srd-procedures.md`; the skeleton in `assets/srd-template.md`; the
+glossary fingerprint in `scripts/glossary-fingerprint.sh`.
 
 ## What to Expect
 
@@ -60,7 +61,7 @@ them.
 - Marked placeholders for anything that needs an external system (ticketing
   initiative, approved design, owners) plus a back-link reminder.
 - A short report of what still needs a human decision before the SRD can be
-  accepted. The skill never marks an SRD `ACCEPTED` — that is a human call.
+  accepted. The skill never marks an SRD `ACCEPTED`; that is a human call.
 
 ## Evaluations
 
@@ -89,7 +90,7 @@ glossary (e.g. "Audit Log") and a brand-new term.
   local Glossary entry for it; links or refers to the Company Glossary instead
   (GLO-3 / STR-10).
 - Adds a local Glossary entry only for the genuinely new term, defining it and
-  nothing else — no behavior or rules in the entry (GLO-1).
+  nothing else, with no behavior or rules in the entry (GLO-1).
 
 ### 3. Self-check catches violations
 
@@ -133,6 +134,23 @@ rules under one group.
 **Expected behavior:**
 - No preamble or step narration during drafting and self-check; the report opens
   with the payload.
-- After writing, gives a short pointer — the file path, the requirement groups
-  and counts, and the outstanding human follow-ups — without re-pasting the
-  drafted SRD the user can already see.
+- After writing, gives one report: the file path, the requirement groups and
+  counts, and the outstanding human follow-ups, without re-pasting the drafted
+  SRD the user can already see and without repeating findings already shown.
+
+### 7. Undocumented platform fact surfaces in the interview
+
+**Request:** With the `srd-doc` corpus reachable, the user says "the gateway
+already retries a failed export three times" while stating a requirement; a
+corpus `search` finds no retry count.
+
+**Expected behavior:**
+- Searches the corpus before accepting the claim, and does not silently accept
+  or fix it.
+- Hands the unconfirmable claim to `report-doc-gap` and, once the user confirms
+  the fact in the branch restatement, the fact to `kb`; neither interrupts the
+  interview.
+- Asks no "bank this?" or knowledge-base question; the retry count is confirmed
+  only through the restatement of the Requirements branch.
+- Invokes `kb` to write the confirmed fact at the write step, and
+  `report-doc-gap` to offer the buffered gap.
