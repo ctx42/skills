@@ -4,7 +4,9 @@
     {
       "id": 1,
       "name": "correct-but-terse-is-left-alone",
-      "skills": ["doc"],
+      "skills": [
+        "doc"
+      ],
       "setup": "`Get`'s godoc is a single accurate sentence that already states the one thing the signature cannot — that a miss returns the zero value rather than an error.",
       "query": "/doc func=Get",
       "files": [],
@@ -17,21 +19,25 @@
     {
       "id": 2,
       "name": "adds-only-confirmable-facts",
-      "skills": ["doc"],
-      "setup": "`Store` mutates the slice it is passed and its body suggests it is safe for concurrent use, but nothing in the code proves the concurrency claim. Its godoc states neither.",
+      "skills": [
+        "doc"
+      ],
+      "setup": "`Store` mutates the slice it is passed — the body proves it. It has no mutex and no synchronization of any kind, so whether it is safe for concurrent use is simply open: the code neither establishes nor rules it out. Its godoc states neither fact.",
       "query": "/doc func=Store",
       "files": [],
       "expected_behavior": [
-        "Fires the missing-fact checklist item for the mutation and for concurrency",
-        "Confirms each against the body and its callers (via `LSP`) before writing it",
-        "Documents the slice mutation, which the code proves",
-        "Flags the concurrency safety as unverifiable rather than asserting it in the godoc"
+        "Fires the missing-fact checklist item for the slice mutation, which the body proves",
+        "Documents that mutation, naming what the caller must not assume about the slice afterwards",
+        "Writes nothing about concurrency: the absence of a mutex is not evidence of a guarantee either way, and \"not safe for concurrent use\" would be a conclusion about code nobody wrote",
+        "Treats the open question as a silence to leave or a point to flag, not a blank in the seven-category list to fill"
       ]
     },
     {
       "id": 3,
       "name": "directives-and-interface-method-godoc",
-      "skills": ["doc"],
+      "skills": [
+        "doc"
+      ],
       "setup": "`./pkg/io` carries a `//go:build` line, a `//go:generate` directive, and a `Read` method implementing `io.Reader` whose godoc restates the interface contract and nothing more.",
       "query": "/doc ./pkg/io",
       "files": [],
@@ -44,7 +50,9 @@
     {
       "id": 4,
       "name": "terse-output",
-      "skills": ["doc"],
+      "skills": [
+        "doc"
+      ],
       "setup": "An ordinary single-function run that changes one godoc and deletes one inline comment.",
       "query": "/doc func=Foo",
       "files": [],
@@ -57,7 +65,9 @@
     {
       "id": 5,
       "name": "line-target-resolves-to-its-item",
-      "skills": ["doc"],
+      "skills": [
+        "doc"
+      ],
       "setup": "Line 42 of `pkg/svc/foo.go` is inside the body of `(*Svc).Flush`, where `// increment i` sits above `i++`. The file holds four other functions.",
       "query": "/doc pkg/svc/foo.go:42",
       "files": [],
@@ -70,7 +80,9 @@
     {
       "id": 6,
       "name": "module-mode-with-fanout-and-filter",
-      "skills": ["doc"],
+      "skills": [
+        "doc"
+      ],
       "setup": "A module of eleven packages, two of them `svc` and `api`.",
       "query": "/doc module fanout packages=svc,api",
       "files": [],
@@ -78,6 +90,21 @@
         "The plan lists items from `svc` and `api` only; every other package is reported as skipped",
         "After approval, dispatches one subagent per package and merges their reports into the skill's output format",
         "Verifies each edited package with `gofmt -l` and `go build` before reporting"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "side-effect-is-not-a-surprise",
+      "skills": [
+        "doc"
+      ],
+      "setup": "Two `io.Writer` implementations, both pinned by `var _ io.Writer = (*T)(nil)` and both carrying godoc. `(*fileSink).Write` writes the bytes to a file and nothing else — the job the method exists to do, side effects and all. `(*teeSink).Write` also writes a copy to a second sink the interface knows nothing about, and returns `len(p)` even when that second write fails.",
+      "query": "/doc ./pkg/sink",
+      "files": [],
+      "expected_behavior": [
+        "Removes `(*fileSink).Write`'s godoc as unremarkable: performing its own contract is not a surprise, however many side effects it takes",
+        "Keeps `(*teeSink).Write`'s godoc and expands it to name the surprise — the second write, and the success return that hides its failure",
+        "Does not treat \"has a side effect\" as sufficient on its own to keep a comment, or both would be kept"
       ]
     }
   ]

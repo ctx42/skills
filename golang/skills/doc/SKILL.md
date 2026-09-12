@@ -42,9 +42,11 @@ work.
 
 Sources of truth:
 - `../style/SKILL.md` (on-demand: before the first comment is written — read
-  only its Production "Godoc & comments" and "Naming" sections) — obey it in
-  every comment written; it is the rule spec, do not restate it. Checklist
-  item 7 is the one place this skill departs from it.
+  its Production "Godoc & comments" and "Naming" sections, plus "Formatting"
+  and "Declarations & files", which the Verify step and the package-comment
+  rule below both cite) — obey it in every comment written; it is the rule
+  spec, do not restate it. Checklist item 7 is the one place this skill
+  departs from it.
 - The package's own comment conventions, then a sibling package's (on-demand:
   when writing) — for voice and cross-reference style.
 
@@ -101,19 +103,37 @@ Run each checklist item against the code; each is a yes/no read.
    a passed argument, nil / zero-value behavior, the error *conditions* (not
    just "returns an error"), concurrency safety, units or encoding, or a side
    effect. Add only that fact.
+
+   This item fires on a fact the code *establishes*, never on a category the
+   code leaves open. A type with no synchronization is not thereby documented
+   "not safe for concurrent use" — that is a conclusion about code nobody
+   wrote, and the next commit can falsify it. Ask what the body proves, not
+   which of the seven categories has no sentence yet: an absent guarantee is a
+   silence to leave alone or a question to flag under Accuracy, not a blank to
+   fill. The list is where to look, not a set of slots to complete.
 5. bad prose — not a full sentence, ungrammatical, or names the receiver
    variable instead of the type. Fix per style.
 6. restates code — an inline comment narrates what the next line plainly does
    instead of explaining why. Tighten to the why, or delete it.
 7. interface-method godoc — a method implementing an interface (pinned by a
    `var _ Iface = (*T)(nil)` assertion) carries godoc. Unremarkable vs. the
-   interface contract: remove it. Surprising (a side effect, an empty/zero
-   return on success, state left unrecorded): keep it, expanded to name the
+   interface contract: remove it. Surprising: keep it, expanded to name the
    surprise — the one exception to the style rule against such godoc. Never
-   add godoc to an unremarkable one. A `//nolint` directive on the method is
-   never deleted: keep it verbatim and give it the godoc it needs above it —
-   the style's one-line `// implements [Iface].` if unremarkable, expanded if
-   surprising.
+   add godoc to an unremarkable one.
+
+   Surprising means a caller holding the interface would be wrong about this
+   implementation: it does something the contract does not license (writes
+   through a second path, mutates the argument, blocks), or declines something
+   the contract implies (returns an empty/zero value on success, records
+   nothing, ignores an option). Doing the job the method exists to do is not a
+   surprise — a `Write` that writes and a `Close` that releases are exactly
+   what the contract promised, however many side effects that takes.
+
+   A `//nolint` directive on the method is never deleted: keep it verbatim.
+   The linter it silences generally wants a doc comment there, so an
+   unremarkable method under one keeps the style's one-line
+   `// implements [Iface].` instead of having its godoc removed — the
+   directive, not the method, is what makes this the exception.
 8. bad framing — godoc says a project or file lives "on disk"; a group headline
    borrows a member's contrastive phrasing instead of naming the group on its
    own terms; or a comparison equates unlike things (a project-level constant
