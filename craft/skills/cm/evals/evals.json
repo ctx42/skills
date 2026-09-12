@@ -4,7 +4,9 @@
     {
       "id": 1,
       "name": "message-from-staged-diff",
-      "skills": ["cm"],
+      "skills": [
+        "cm"
+      ],
       "setup": "A staged diff adding a JWT login endpoint: a new `handler/login.go` with `Login`, a `token.Issue` helper, and the route wired into the router. The conversation that produced it discussed session cookies at length — a design the diff does not contain.",
       "query": "/cm",
       "files": [],
@@ -18,20 +20,26 @@
     {
       "id": 2,
       "name": "amend-from-hash",
-      "skills": ["cm"],
-      "setup": "`HEAD` is a commit whose message reads \"fixes\". Its diff corrects an off-by-one in a pagination cursor.",
+      "skills": [
+        "cm"
+      ],
+      "setup": "`HEAD` is a commit whose message reads \"fixes\". Its diff corrects an off-by-one in a pagination cursor. Separately, an unrelated `.gitignore` change is sitting staged in the index — content the message is not derived from.",
       "query": "/cm HEAD and amend it",
       "files": [],
       "expected_behavior": [
-        "Regenerates the message from that commit's own diff via `git show`, ignoring the staged diff",
+        "Resolves `HEAD` as the commit selector rather than looking for a hex string and falling through to the staged diff",
+        "Regenerates the message from that commit's own diff via `git show`, ignoring the staged `.gitignore`",
         "Amends with `git commit --amend` through a heredoc rather than creating a new commit, because the request asked for the amend",
-        "A bare `/cm <hash>` would only present the message — the amend happens on the explicit ask"
+        "Does not fold the staged `.gitignore` into the amended commit — it amends the message alone and says what stayed staged",
+        "A bare `/cm <hash>` would only present the message; the amend happens on the explicit ask"
       ]
     },
     {
       "id": 3,
       "name": "breaking-change",
-      "skills": ["cm"],
+      "skills": [
+        "cm"
+      ],
       "setup": "A staged diff removing the exported `Client.DoRequest` and folding its behaviour into `Client.Do`, with every internal caller updated.",
       "query": "/cm",
       "files": [],
@@ -44,7 +52,9 @@
     {
       "id": 4,
       "name": "terse-output",
-      "skills": ["cm"],
+      "skills": [
+        "cm"
+      ],
       "setup": "Any ordinary staged diff.",
       "query": "/cm",
       "files": [],
@@ -57,7 +67,9 @@
     {
       "id": 5,
       "name": "detail-matched-to-impact",
-      "skills": ["cm"],
+      "skills": [
+        "cm"
+      ],
       "setup": "A staged diff whose only effect is satisfying the linter: a package comment added, two identifiers renamed, one `#nosec` suppression. No behaviour changes.",
       "query": "/cm",
       "files": [],
@@ -70,7 +82,9 @@
     {
       "id": 6,
       "name": "verbosity-arguments",
-      "skills": ["cm"],
+      "skills": [
+        "cm"
+      ],
       "setup": "One staged diff, invoked twice at different verbosities.",
       "query": "/cm micro, then /cm full",
       "files": [],
@@ -83,7 +97,9 @@
     {
       "id": 7,
       "name": "apply-commits-without-confirming",
-      "skills": ["cm"],
+      "skills": [
+        "cm"
+      ],
       "setup": "A staged diff, with a harness attribution instruction active in the session asking for a `Co-Authored-By` trailer.",
       "query": "/cm micro apply",
       "files": [],
@@ -91,6 +107,36 @@
         "Generates the message, then runs `git commit` through a heredoc without asking for confirmation",
         "Honours the combined tokens: `micro apply` commits a one-line message",
         "Adds no `Co-Authored-By` or other attribution trailer despite the active harness instruction"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "empty-index-falls-back-to-unstaged",
+      "skills": [
+        "cm"
+      ],
+      "setup": "Nothing is staged. The working tree carries an unstaged change adding a retry to the HTTP client.",
+      "query": "/cm",
+      "files": [],
+      "expected_behavior": [
+        "Finds the staged diff empty and derives from `git diff` — the unstaged changes — rather than reporting that there is nothing to describe",
+        "Says which diff it used, so the user knows the message does not describe a staged commit",
+        "Stages nothing itself"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "fix-that-restores-promised-behavior-is-not-breaking",
+      "skills": [
+        "cm"
+      ],
+      "setup": "A staged diff fixing a bug where `ParseDuration` accepted a negative value the docs always said it rejected. Callers relying on the buggy acceptance will now get an error, so observable behaviour changes — but only to match what was already documented. No signature changes.",
+      "query": "/cm",
+      "files": [],
+      "expected_behavior": [
+        "Writes it as `fix`, with no `!` and no `BREAKING CHANGE:` footer",
+        "Treats behaviour moving into line with the documented contract as a fix, not a break — otherwise every bug fix would carry a `!`",
+        "Mentions in the body that callers depending on the old acceptance are affected, without escalating the type"
       ]
     }
   ]

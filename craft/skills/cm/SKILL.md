@@ -26,8 +26,11 @@ Read arguments from `$ARGUMENTS` (whitespace-separated tokens, any order); when
 empty, fall back to the user's prose. Derive the message from the diff alone,
 never from conversation context:
 
-- A hex token (`<hash>`) selects a commit: run `git show <hash>` and ignore
-  the injected diff below.
+- A commit-ish token (`<hash>`) selects a commit: run `git show <hash>` and
+  ignore the injected diff below. Hex is the common form, but `HEAD`, `HEAD~2`,
+  a tag, and a branch name all name a commit — resolve with
+  `git rev-parse --verify <tok>^{commit}` and treat any token that resolves as
+  the selector. A token that does not resolve is prose, not a failed hash.
 - Otherwise use the staged diff injected below. When it is empty, run
   `git diff` and derive from the unstaged changes instead.
 
@@ -42,7 +45,10 @@ Tokens combine (e.g. `micro apply`). Verbosity, mutually exclusive:
 - `micro`: summary line only, no body; `!` plus a `BREAKING CHANGE:` footer
   only when the change is breaking.
 - `mini` (default): summary line plus one short paragraph giving the single
-  most important why; footers only when the change is breaking.
+  most important why; footers only when the change is breaking. The paragraph
+  is the ceiling, not a quota — a change whose summary line already says
+  everything (see Describe changes only) ships without one rather than padding
+  to fill the shape.
 - `full`: full-length multi-paragraph kernel-style body per the sections
   below.
 
@@ -52,6 +58,12 @@ Commit control:
   heredoc without asking — `git commit`, or `git commit --amend` for a hash
   invocation. Otherwise present the message only and never propose
   committing; the user decides when.
+- Amending rewrites a message, not a tree. `git commit --amend` folds whatever
+  is staged into the commit, so anything in the index that the message was not
+  derived from would ride along unannounced — the same content this skill just
+  ignored when reading the diff. Check the index first (`git diff --cached
+  --quiet`); when it is dirty, amend the message alone with
+  `git commit --amend --only`, and say in the reply what stayed staged.
 
 ## Workflow
 
@@ -107,7 +119,11 @@ review; they see only the diff and the message.
 
 ## Breaking changes
 
-If the change affects exported symbols or observable behavior for callers:
+If the change breaks a caller that was correct before — an exported symbol
+removed, renamed, or given a new signature; a documented behavior or default
+changed; a config key or wire format no longer accepted. A bug fix that makes
+observable behavior *match* what was already promised is not breaking, or every
+`fix` would carry a `!`:
 
 - Add `!` in the summary.
 - Add a mandatory `BREAKING CHANGE:` footer describing the impact and
