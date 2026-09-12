@@ -57,7 +57,7 @@
       "skills": [
         "review"
       ],
-      "setup": "The bundled, deliberately defective sample at `assets/flawed-srd.md`. This scenario is the before/after gate whenever the shared references change: the finding set must not shrink.",
+      "setup": "The bundled, deliberately defective sample at `assets/flawed-srd.md`, copied into the workspace. It carries planted defects across metadata, glossary, scope, and requirements.",
       "query": "/review assets/flawed-srd.md",
       "files": [
         "assets/flawed-srd.md"

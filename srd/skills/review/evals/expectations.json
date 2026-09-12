@@ -64,7 +64,8 @@
         "Finds the single owner (STR-2) and the missing Initiative link (STR-3)",
         "Finds `ACCEPTED` with an unapproved design and an unmet Quality Bar (STA-2 / STA-3)",
         "Finds MUST used in the Introduction (LANG-3)",
-        "Collects the British spellings as minor findings under `## Errata`"
+        "Collects the British spellings as minor findings under `## Errata`",
+        "This scenario is the repo's regression gate: whenever the shared references under `../create/` change, the finding set here must not shrink. A defect that stops being found is a regression in the references, not a change in the fixture."
       ]
     },
     {
