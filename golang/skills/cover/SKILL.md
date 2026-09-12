@@ -73,7 +73,12 @@ State the resolved kind and the function/file set before measuring.
 ## Controls
 
 Read from `$ARGUMENTS`, any order after the target:
-- `max_tests=N` — hard cap on tests/cases added this run.
+- `max_tests=N` — hard cap on tests/cases added this run, counted as test
+  functions created plus table rows and subtests added. Under `fanout` the cap
+  cannot be enforced live across parallel workers, so divide it before
+  dispatch: give each worker `N / packages` (minimum 1), name each worker's
+  share in the plan, and report the total actually added against `N`. Uneven
+  division goes to the packages with the most uncovered lines.
 - `packages=a,b` — module mode: restrict to these packages.
 - `include=all` — also attempt complex lines (build the fakes/scaffolding) in
   `*_test.go`, which is the whole of this skill's write scope. A line reachable
@@ -149,9 +154,11 @@ Wait for approval, then run steps 3–4 function by function.
 End of run, after every function's loop:
 
 1. Run `gofmt -l` on every edited `*_test.go` file; fix any issues.
-2. Run `go test -v -race ./<pkg>`; every test in the edited `*_test.go` files
-   must show `--- PASS`. Quote the result lines of the tests touched, not the
-   full log.
+2. Run `go test -v -race ./<pkg>`. The whole package must pass — a test this
+   run never touched going red is still this run's problem, and the most
+   likely cause is a helper it edited. Quote only the result lines of the tests
+   this run touched; report any other failure as a regression rather than
+   quoting the full log.
 
 ## Un-coverable categories
 
