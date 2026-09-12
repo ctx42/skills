@@ -10,6 +10,13 @@ license: MIT
 
 # create
 
+## Usage
+
+```
+/create                           author a new SRD by interview (default)
+/create <what it should specify>  seed the opening Objective, then interview
+```
+
 Author a brand-new SRD by interviewing the user, drafting against the SRD
 standard, and self-checking the draft before saving it.
 
