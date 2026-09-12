@@ -97,9 +97,11 @@ Tag each finding:
   acting on it is misled without the SRD being unacceptable.
 - `minor` — cosmetic: British spelling, spacing, punctuation.
 
-Every rule that can be broken has a severity here; when one genuinely fits
-none, take the nearest row rather than inventing a fourth level, and say which
-row you took it as.
+The rows are the common cases, not every rule — STR-8/9/11-13, STA-4-8 and
+REQ-2/7/8 have none. Place an unlisted rule by what breaking it costs: the
+Quality Bar (blocker), a reader who must still act (major), the eye alone
+(minor). Say which tier and why in the finding, so the next run lands in the
+same place. Never a fourth level.
 
 ## Category
 
@@ -121,7 +123,10 @@ entry leads and the lower becomes the second tag:
   contradicting Out of Scope, or a rule stated only in a Note or the
   Introduction (SCO-2, SCO-3).
 - `reference` — a link, ticket id, or claim about the live system that is
-  wrong or stale.
+  wrong or stale. The standard has no rule against being wrong about the
+  platform, so this finding cites evidence where others cite a rule: the corpus
+  doc id and heading that contradict it, or the dead link. "This is wrong" with
+  nothing to check it against is not actionable.
 - `redundancy` — two rules state the same thing, or one subsumes the other.
 - `verifiability` — a vague quality, an unmeasurable criterion, an open-ended
   list (REQ-5, REQ-6, LANG-7).
@@ -221,6 +226,9 @@ Layout, in order:
    list sorted by number, keeping the text and rule id.
 4. A `---` line, then `## Withdrawn` (last): `- #9 … (withdrawn: <reason>)` —
    no checkbox, keeps the number.
+
+All four are omitted while empty: a first review writes only the sections it
+has findings for. Empty headings promise a history the file does not have.
 
 A finding lives in exactly one place. Regression: a resolved finding that
 breaks again moves back to its open section, unticked, keeping its number.
@@ -377,6 +385,8 @@ Emit plain text for an email or ticket — no file write:
 - Title: `<Document Title> — Review Feedback`.
 - Group by section name as a plain heading (no markdown symbols). `## Errata`
   is one such group — list it first, as `Errata`, when it holds open findings.
+  An errata finding keeps its substitution in prose, not markdown:
+  `#4 GR-2: "behaviour" should read "behavior"`.
 - One bullet per open finding, blank-line separated. Keep the finding number
   and the SRD's own requirement id (`#7 GR-3a:`), then a one-line
   problem-and-fix. Drop the checkbox, the severity tag, the category tag, and

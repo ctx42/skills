@@ -52,7 +52,13 @@ Nothing outside this list is errata.
   re-authenticate`). If more than one insertion works, it is not errata.
 - Heading case matched to the document's own convention:
   `## In scope → ## In Scope` when every sibling heading is title-cased.
-- Boilerplate the standard fixes verbatim: the STR-8 keyword notice.
+- Boilerplate the standard fixes verbatim: the STR-8 keyword notice. This is
+  the one entry that cannot meet the 40-character rule above — the notice is a
+  multi-line block with two URLs — so it is quoted as the whole block and
+  applied by replacing it entire. That works because the standard fixes its
+  text: there is exactly one correct form to replace it with, which is what
+  makes the substitution safe to apply unreviewed. No other long fix inherits
+  this exemption.
 
 ## Exclusions
 
