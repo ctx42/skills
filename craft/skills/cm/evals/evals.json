@@ -9,13 +9,7 @@
       ],
       "setup": "A staged diff adding a JWT login endpoint: a new `handler/login.go` with `Login`, a `token.Issue` helper, and the route wired into the router. The conversation that produced it discussed session cookies at length — a design the diff does not contain.",
       "query": "/cm",
-      "files": [],
-      "expected_behavior": [
-        "Derives the message from the diff alone — the session-cookie discussion never reaches the message",
-        "Summary line is imperative, lowercase, `feat(...)`-shaped, no trailing period, within ~50 chars",
-        "Defaults to `mini`: the summary plus one short paragraph wrapped at 72 columns that explains why, naming concrete symbols in backticks",
-        "Presents the message once in a zero-indent code block and stops — no `git commit` run or proposed, since the invocation did not ask for it"
-      ]
+      "files": []
     },
     {
       "id": 2,
@@ -25,14 +19,7 @@
       ],
       "setup": "`HEAD` is a commit whose message reads \"fixes\". Its diff corrects an off-by-one in a pagination cursor. Separately, an unrelated `.gitignore` change is sitting staged in the index — content the message is not derived from.",
       "query": "/cm HEAD and amend it",
-      "files": [],
-      "expected_behavior": [
-        "Resolves `HEAD` as the commit selector rather than looking for a hex string and falling through to the staged diff",
-        "Regenerates the message from that commit's own diff via `git show`, ignoring the staged `.gitignore`",
-        "Amends with `git commit --amend` through a heredoc rather than creating a new commit, because the request asked for the amend",
-        "Does not fold the staged `.gitignore` into the amended commit — it amends the message alone and says what stayed staged",
-        "A bare `/cm <hash>` would only present the message; the amend happens on the explicit ask"
-      ]
+      "files": []
     },
     {
       "id": 3,
@@ -42,12 +29,7 @@
       ],
       "setup": "A staged diff removing the exported `Client.DoRequest` and folding its behaviour into `Client.Do`, with every internal caller updated.",
       "query": "/cm",
-      "files": [],
-      "expected_behavior": [
-        "Marks the summary line with `!`",
-        "Carries a `BREAKING CHANGE:` footer stating the impact and what callers must do instead",
-        "Uses no trailer other than `BREAKING CHANGE:` and `Refs:`"
-      ]
+      "files": []
     },
     {
       "id": 4,
@@ -57,12 +39,7 @@
       ],
       "setup": "Any ordinary staged diff.",
       "query": "/cm",
-      "files": [],
-      "expected_behavior": [
-        "Opens with the message — no preamble and no narration of reading the diff",
-        "Presents the commit message once, in a zero-indent code block, and nothing else",
-        "Does not restate the diff or the message afterwards, and makes no unprompted offer to commit"
-      ]
+      "files": []
     },
     {
       "id": 5,
@@ -72,12 +49,7 @@
       ],
       "setup": "A staged diff whose only effect is satisfying the linter: a package comment added, two identifiers renamed, one `#nosec` suppression. No behaviour changes.",
       "query": "/cm",
-      "files": [],
-      "expected_behavior": [
-        "Summary line captures it as `style:` or `chore:`",
-        "Sums the cleanup in one sentence, or omits the body — it does not enumerate the mechanical edits one by one",
-        "Reserves per-symbol detail for changes a user of the software would notice; in a mixed commit those lead and the cleanup folds into one closing sentence"
-      ]
+      "files": []
     },
     {
       "id": 6,
@@ -87,12 +59,7 @@
       ],
       "setup": "One staged diff, invoked twice at different verbosities.",
       "query": "/cm micro, then /cm full",
-      "files": [],
-      "expected_behavior": [
-        "`micro` emits the summary line alone — no body, no footers, unless the change is breaking",
-        "`full` emits the summary plus a full-length multi-paragraph kernel-style body",
-        "The difference between them is length of body, not a different summary line"
-      ]
+      "files": []
     },
     {
       "id": 7,
@@ -102,12 +69,7 @@
       ],
       "setup": "A staged diff, with a harness attribution instruction active in the session asking for a `Co-Authored-By` trailer.",
       "query": "/cm micro apply",
-      "files": [],
-      "expected_behavior": [
-        "Generates the message, then runs `git commit` through a heredoc without asking for confirmation",
-        "Honours the combined tokens: `micro apply` commits a one-line message",
-        "Adds no `Co-Authored-By` or other attribution trailer despite the active harness instruction"
-      ]
+      "files": []
     },
     {
       "id": 8,
@@ -117,12 +79,7 @@
       ],
       "setup": "Nothing is staged. The working tree carries an unstaged change adding a retry to the HTTP client.",
       "query": "/cm",
-      "files": [],
-      "expected_behavior": [
-        "Finds the staged diff empty and derives from `git diff` — the unstaged changes — rather than reporting that there is nothing to describe",
-        "Says which diff it used, so the user knows the message does not describe a staged commit",
-        "Stages nothing itself"
-      ]
+      "files": []
     },
     {
       "id": 9,
@@ -132,12 +89,7 @@
       ],
       "setup": "A staged diff fixing a bug where `ParseDuration` accepted a negative value the docs always said it rejected. Callers relying on the buggy acceptance will now get an error, so observable behaviour changes — but only to match what was already documented. No signature changes.",
       "query": "/cm",
-      "files": [],
-      "expected_behavior": [
-        "Writes it as `fix`, with no `!` and no `BREAKING CHANGE:` footer",
-        "Treats behaviour moving into line with the documented contract as a fix, not a break — otherwise every bug fix would carry a `!`",
-        "Mentions in the body that callers depending on the old acceptance are affected, without escalating the type"
-      ]
+      "files": []
     }
   ]
 }

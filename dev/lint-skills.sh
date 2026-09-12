@@ -8,7 +8,9 @@
 # on, not one this repo ships. Neither is source, and linting either would fail
 # on files that are meant to be flawed. For each skill this script checks:
 #   - SKILL.md exists and carries a `## Usage` block,
-#   - eval scenarios exist in evals/evals.json,
+#   - eval scenarios exist in evals/evals.json, with their pass criteria in the
+#     separate evals/expectations.json (so a run can be given the scenario
+#     without its rubric), and the two agree id for id,
 #   - frontmatter has name + description, name equals the directory name,
 #   - the description stays near the ~350-char aim (warns past 500) and uses
 #     no first/second person (warning only),
@@ -153,7 +155,11 @@ lint_skill() {
     grep -qE '^##[[:space:]]+Usage' "$skill_md" \
         || err "$rel: SKILL.md has no '## Usage' section"
 
-    # Eval scenarios exist in evals/evals.json.
+    # Eval scenarios exist in evals/evals.json, pass criteria in
+    # evals/expectations.json. They are separate files so a run can be handed a
+    # scenario without the rubric it will be graded on; keeping both in one
+    # file made every eval in this repo non-blind.
+    local expects="$dir/evals/expectations.json"
     if [ -f "$evals" ]; then
         # Valid JSON carrying at least 3 scenarios (Evaluations).
         # Counts "query" keys rather than parsing JSON — this script has no jq.
@@ -162,7 +168,22 @@ lint_skill() {
         [ "$n" -ge 3 ] \
             || err "$rel: evals/evals.json has $n scenario(s) (want >= 3)"
         grep -q '"expected_behavior"' "$evals" \
-            || err "$rel: evals/evals.json has no 'expected_behavior' checks"
+            && err "$rel: evals/evals.json carries 'expected_behavior' — it belongs in evals/expectations.json"
+        if [ -f "$expects" ]; then
+            grep -q '"expected_behavior"' "$expects" \
+                || err "$rel: evals/expectations.json has no 'expected_behavior' checks"
+            # Every scenario id has expectations, and vice versa. Compares the
+            # sorted "id": lists from both files; no jq in this script.
+            local sids eids
+            sids="$(grep -o '"id"[[:space:]]*:[[:space:]]*[0-9]*' "$evals" \
+                | grep -o '[0-9]*$' | sort -n | tr '\n' ' ')"
+            eids="$(grep -o '"id"[[:space:]]*:[[:space:]]*[0-9]*' "$expects" \
+                | grep -o '[0-9]*$' | sort -n | tr '\n' ' ')"
+            [ "$sids" = "$eids" ] \
+                || err "$rel: evals ids [$sids] != expectations ids [$eids]"
+        else
+            err "$rel: no evals/expectations.json"
+        fi
     else
         err "$rel: no evals/evals.json"
     fi

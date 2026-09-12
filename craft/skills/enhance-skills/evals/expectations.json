@@ -1,0 +1,95 @@
+{
+  "skill_name": "enhance-skills",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "no-corrections",
+      "expected_behavior": [
+        "Reports that the conversation produced no lessons and writes no file at all — no `LESSONS.md`, no `.agent-data` file",
+        "Does not manufacture a rule out of the task going well: praise, the accepted output, and the skill's own normal behaviour are not lessons",
+        "Says so in a line or two, without narrating the scan or listing what it considered and rejected"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "correction-generalized",
+      "expected_behavior": [
+        "Proposes the rule and its target file, and waits for confirmation before writing anything",
+        "States the rule as one imperative line that generalizes past this run — resource-leak severity, not \"the user disagreed about rows.Close in that loop\"",
+        "Names `golang/skills/review/LESSONS.md` as the target, not the `SKILL.md` body and not the `.agent-data` path, since the checkout is writable",
+        "Creates the file with the `# Lessons` header when writing the first rule"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "task-fact-is-not-a-lesson",
+      "expected_behavior": [
+        "Files the fabricated-claim correction as a lesson — it is a rule about how the skill works that would prevent a recurrence",
+        "Does not file the product's terminology or the output directory as lessons: both are facts about this task and this project, true today and useless to a future run elsewhere",
+        "Ends with at most one or two rules rather than one per exchange"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "attribute-to-the-driving-skill",
+      "expected_behavior": [
+        "Files the UPPERCASE rule under `srd/skills/create/` and the commit-type rule under `craft/skills/cm/` — each against the skill that was driving when the correction landed",
+        "Does not file either rule against both skills, and does not cross-file them",
+        "Does not invent a home for the `git push` correction by attaching it to whichever skill happens to be nearby: it belongs to the agent's standing instructions, and the report says so instead of writing it into a skill",
+        "Proposes all of this in one pass and waits for confirmation before writing"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "retrofit-missing-block",
+      "expected_behavior": [
+        "Appends the `## Self-learning` block verbatim as the last `## ` section of `SKILL.md`, after `## Output`, leaving the rest of the body untouched",
+        "The inserted block matches the one other skills carry line for line, so the tree stays uniform — same wording, same line breaks, only `<plugin>/<skill>` resolved",
+        "Resolves the placeholder path to `$HOME/.agent-data/ctx42-skills/lessons/craft/foo.md`, keeping `$HOME` literal",
+        "Creates no `LESSONS.md` — the store appears with the first lesson, not with the block",
+        "Reports the one file it edited, with no restatement of the block it just wrote",
+        "Reproduces the block's wording exactly, then substitutes the plugin and skill names and re-wraps to 80 columns — the words are the constant, not the line breaks",
+        "Appends it as the last `## ` section of the target `SKILL.md`, creating no lessons file"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "supersede-a-contradicted-lesson",
+      "expected_behavior": [
+        "Reads the existing `LESSONS.md` before proposing, and notices that the new correction contradicts the rule already on file",
+        "Replaces or rewrites that line so the file states one rule about plan paths, rather than appending a second line that contradicts the first",
+        "The replacement stays one imperative sentence rather than growing a clause for each case it now has to cover",
+        "Flags the supersession in the proposal so the user sees which existing line changes, not just what is added"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "read-only-install",
+      "expected_behavior": [
+        "Resolves the store to `$HOME/.agent-data/ctx42-skills/lessons/craft/cm.md` and creates its parent directories",
+        "Writes nothing under `.../plugins/cache/`, and does not retrofit or otherwise edit the installed `SKILL.md`, even if the OS reports the path writable",
+        "Names the resolved path in the report so the user can tell the lesson stayed local rather than shipping"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "terse-output",
+      "expected_behavior": [
+        "Writes all three rules: two to `golang/skills/style/LESSONS.md`, one to `craft/skills/cm/LESSONS.md`, each file created with the `# Lessons` header",
+        "Per touched skill: the path written and the rules added, each stated once",
+        "No preamble, no narration of reading or appending, and no closing summary that restates the rules just listed",
+        "Does not paste the resulting `LESSONS.md` files back"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "body-already-rules-it",
+      "expected_behavior": [
+        "Reads the skill's own `SKILL.md` before proposing, and finds the rule already there",
+        "Files no lesson: the rule was missed, not missing, and a `LESSONS.md` line repeating the body changes nothing on a future run",
+        "Says the body already rules on it rather than silently dropping the correction, and points at rewording that `SKILL.md` line as the fix that would help",
+        "Does not decide by asking the user what to do with the duplicate"
+      ]
+    }
+  ]
+}

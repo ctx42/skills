@@ -9,14 +9,7 @@
       ],
       "setup": "A Go CLI repo with no README: `go.mod` declaring `github.com/acme/portcheck`, `cmd/portcheck/main.go` wiring three flags (`-timeout`, `-json`, `-concurrency`), `internal/scan/` holding the logic, a `.github/workflows/ci.yml`, and `assets/logo.png`. `.editorconfig` sets `[*.md] max_line_length = 100`. Nothing states who the tool is for or why it exists.",
       "query": "/readme-smith write a README for this project",
-      "files": [],
-      "expected_behavior": [
-        "Scans manifests, the entrypoint, examples, CI config, and `assets/` for a logo before writing anything",
-        "Batches the gaps code cannot reveal (positioning, audience, lead features) into one round of questions and does not ask what `go.mod`, the flags, or CI already answer",
-        "Drafts to the blueprint order — header/logo, overview, features, install, usage, configuration — using the repo's real module path, flag names, and commands",
-        "Builds and runs the install and quickstart commands it ships, fixing them until they pass, or names the blocking prerequisite",
-        "Wraps prose at the repo's own 100-column `max_line_length`, not a hardcoded 80"
-      ]
+      "files": []
     },
     {
       "id": 2,
@@ -26,14 +19,7 @@
       ],
       "setup": "The same Go repo, still unpublished: no tagged release, no package on any registry, no benchmark suite, no `LICENSE` file. The user answers the positioning questions but says nothing about performance or distribution.",
       "query": "/readme-smith create a README",
-      "files": [],
-      "expected_behavior": [
-        "Invents no install command, version number, registry coordinate, or benchmark figure",
-        "Asks for each unknown once; a fact the README needs and still lacks becomes an explicit `<!-- TODO: … -->` marker rather than a plausible guess",
-        "Deletes an unsupportable claim outright instead of marking it — a TODO asking someone to source an invented number would preserve the invention",
-        "Ships no badge it cannot tie to a fact that exists, and leaves no TODO in place of one: no badges at all is a correct header here",
-        "Names the remaining `TODO` markers in the reply so the user knows what is left open"
-      ]
+      "files": []
     },
     {
       "id": 3,
@@ -43,13 +29,7 @@
       ],
       "setup": "A multi-package Go repo whose root `README.md` carries the badges and the Packages table. `pkg/store/README.md` is a member README that carries its own badges row, a `## License` section repeating the MIT text, two code fences with no language, a nav line whose `#usage` anchor points at a heading that was renamed, and a `## Contributing` section duplicating `CONTRIBUTING.md`.",
       "query": "/readme-smith improve pkg/store/README.md",
-      "files": [],
-      "expected_behavior": [
-        "Reports the badges row, the `## License` section, and the `## Contributing` section as findings — the root README and the dedicated files own those",
-        "Flags the unlabelled fences and the dead nav anchor, each citing the `references/template.md` rule it breaks",
-        "Groups findings Blocker / Should-fix / Nit with a one-line fix each, ends with a one-line verdict, and edits nothing before the user confirms",
-        "Applies the approved findings on confirmation, then re-runs Verify and states what changed"
-      ]
+      "files": []
     },
     {
       "id": 4,
@@ -59,15 +39,7 @@
       ],
       "setup": "A Go library repo that uses gomake: its CI workflow runs a gomake step and `gomake --list` lists the built-in `:doc:mce` target. No README yet. The package has exported `New`, `(*Client).Do`, and `Parse`, and no `_test.go` files carrying `Example…` functions.",
       "query": "/readme-smith write a README",
-      "files": [],
-      "expected_behavior": [
-        "Establishes from the repo — the CI gomake step — that this project uses gomake, rather than concluding it from `:doc:mce` being listed",
-        "Asks separately, before creating any `.go` file, naming the files and their functions in one batch — the README approval does not cover writing Go source",
-        "Writes runnable `Example…` functions in `_test.go` and runs `go test ./...` until they pass, instead of pasting hand-written snippets",
-        "Marks each spot with a `<!-- gmmce:<relpath>/<FuncName> -->` comment above an empty `go` fence and runs `gomake :doc:mce` to fill them",
-        "Reads the `Found <key>` lines to confirm each marker was injected, rather than trusting the exit status or the `Writing` line",
-        "Hand-edits no injected fence; a change to an example goes back through its `Example…` function and a re-run of the target"
-      ]
+      "files": []
     },
     {
       "id": 5,
@@ -77,13 +49,7 @@
       ],
       "setup": "An existing root README with an emoji on every heading, a row of nine badges (three of which 404), a `<div align=\"center\">` header block, and a `<details>` section. The user has already approved the findings; this is the fix turn.",
       "query": "/readme-smith improve README.md",
-      "files": [],
-      "expected_behavior": [
-        "Flags the per-heading emoji, the unverifiable badges, and the raw HTML tags against the style rules",
-        "After fixing, states the file path and what changed, each fact once",
-        "Does not paste the rewritten README back into chat",
-        "Opens with the payload: no preamble, no narration of the scan, no closing summary restating findings already listed"
-      ]
+      "files": []
     },
     {
       "id": 6,
@@ -93,13 +59,7 @@
       ],
       "setup": "A Go module whose `go.mod` declares `bitbucket.org/acme/foo` and whose only package lives at `pkg/foo`. `git remote -v` points at the same Bitbucket host. The project is large enough that the README runs past two screens.",
       "query": "/readme-smith create a README",
-      "files": [],
-      "expected_behavior": [
-        "Emits at most one navigation aid — a nav line or a `<!-- TOC -->` block, never both",
-        "Reads the base path from `go.mod` and `git remote -v`, not from the org name or a sibling repo, so nothing says `github.com/acme/foo`",
-        "Points `go get`, badges, and doc links at the module (`bitbucket.org/acme/foo`) but the Go `import` at the package (`bitbucket.org/acme/foo/pkg/foo`)",
-        "Asserts nothing about the repo being public or private and adds no `GOPRIVATE` or auth step from the host URL alone"
-      ]
+      "files": []
     },
     {
       "id": 7,
@@ -109,13 +69,7 @@
       ],
       "setup": "A Go project that uses gomake (a gomake step in CI) whose natural example prints a raw HTTP exchange in one call — `fmt.Printf(\"%q\\n\", wire)` — producing a single ~300-character output line.",
       "query": "/readme-smith write a README",
-      "files": [],
-      "expected_behavior": [
-        "Keeps every code-fence line within the template's width (≤ ~80 chars, hard cap ~100) so GitHub wraps nothing horizontally",
-        "Rewrites the `Example…` function to split the output across lines — one `%q` per line — and re-injects, rather than shipping the wide line",
-        "Applies the width rule to the example's source lines too, not only its `// Output:` block: the whole body lands in the fence",
-        "Re-runs `go test ./...` after the rewrite so the `// Output:` block still matches"
-      ]
+      "files": []
     },
     {
       "id": 8,
@@ -125,12 +79,7 @@
       ],
       "setup": "A Go CLI repo with no gomake config, no gomake step in CI, and no `<!-- gmmce:… -->` marker anywhere. gomake happens to be installed on this machine, so `gomake --list` lists the built-in `:doc:mce` target like it does in any directory.",
       "query": "/readme-smith write a README",
-      "files": [],
-      "expected_behavior": [
-        "Does not treat `:doc:mce` appearing in `gomake --list` as evidence about this project — the target is a built-in and lists everywhere",
-        "Finds no gomake config, CI step, or existing marker, and so hand-writes any examples the README needs",
-        "Introduces no `<!-- gmmce:… -->` marker into the README and authors no `Example…` function for injection: a contributor without gomake could not regenerate them"
-      ]
+      "files": []
     },
     {
       "id": 9,
@@ -140,14 +89,7 @@
       ],
       "setup": "Two commands the README must ship. The quickstart needs a toolchain this sandbox does not have, so it cannot be run here at all. The install command runs fine and fails for a project reason: the module is not published yet, so it will fail for a reader too.",
       "query": "/readme-smith write a README",
-      "files": [],
-      "expected_behavior": [
-        "Distinguishes the two failures rather than treating both as unverified",
-        "Treats the unpublished module as an ordinary state of a fresh project, not as a failure of the run or a reason to withhold the command",
-        "Leaves the quickstart command as written and says in the reply that this environment could not run it — the reader is not warned about the author's sandbox",
-        "Warns the reader about the install command with a `> [!NOTE]` naming what has to happen first, since an HTML comment is invisible to them",
-        "Claims neither command works"
-      ]
+      "files": []
     },
     {
       "id": 10,
@@ -157,13 +99,7 @@
       ],
       "setup": "A gomake project whose `pkg/store/README.md` carries a hand-written `go` snippet that does not compile. The audit findings are approved, but when asked separately about creating `pkg/store/example_test.go` the user says no.",
       "query": "/readme-smith improve pkg/store/README.md",
-      "files": [],
-      "expected_behavior": [
-        "Applies the README-only findings on the first approval, then asks about the Go file on its own",
-        "States what the file would be — path, the `Example…` functions in it, and that it joins the test suite and CI — so the user is answering a real question",
-        "On the no, writes no `.go` file and leaves the snippet finding reported rather than silently fixing or silently dropping it",
-        "Does not write the file and mention it afterwards, and does not re-ask later in the same run"
-      ]
+      "files": []
     }
   ]
 }

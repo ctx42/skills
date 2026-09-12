@@ -1,0 +1,66 @@
+{
+  "skill_name": "system-check",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "surfaces-a-system-contradiction",
+      "expected_behavior": [
+        "Drains `srd:report-doc-gap` and `srd:kb` for this SRD first, and says nothing about them because both buffers are empty",
+        "Runs `srd:review specs/labeling.md` once to create the review file, then reads it — and makes no edit to the SRD",
+        "Writes `specs/labeling.questions.md` merging the reframed, untagged review findings with a system question noting that `GR-4` contradicts the documented API rule",
+        "Merges the contradiction into one question when `srd:review`'s own facts-vs-corpus pass found it too, keeping the review's finding number rather than asking twice in two voices",
+        "Walks one question at a time and does not advance until the user moves on"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "resume-after-an-srd-edit",
+      "expected_behavior": [
+        "Refreshes the review layer with `srd:review` in default mode, which resolves what the edit fixed and appends what it broke",
+        "Does not use `check`: that mode re-verifies only, so the two new blockers would reach no question",
+        "Leaves the author's file intact — numbers, comments and `## Withdrawn` survive — because the default mode updates in place rather than rewriting",
+        "Turns `GR-12` and `GR-13` into questions in the refreshed set",
+        "Drops the open questions the edit answered and names which ones went",
+        "Walks only the refreshed open set"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "looks-it-up-before-asking",
+      "expected_behavior": [
+        "Searches the corpus and confirms \"Namespace\" is defined before raising it — it does not ask what it could have looked up",
+        "Restates the resolution with the tenant fact folded in, and removes the question on confirmation",
+        "Hands the fact to `srd:kb` instead of writing any file itself",
+        "Shows no separate \"bank this?\" prompt — the restatement is the confirmation"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "stale-citation-becomes-a-question",
+      "expected_behavior": [
+        "Raises the stale citation as a question alongside the others",
+        "Hands the repair to `srd:kb`, which owns knowledge-base files, rather than editing the page here",
+        "Does not silently drop the fact the stale page carried"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "terse-output",
+      "expected_behavior": [
+        "No preamble and no step narration — nothing like \"I'll now read…\" or \"Let me run review\"",
+        "Reports a one-line pointer after writing (\"wrote `specs/labeling.questions.md`, 6 open questions\") without re-listing the questions already in the file",
+        "Opens the walk with the first question rather than a summary of what it just did"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "learn-banks-only-uncovered-facts",
+      "expected_behavior": [
+        "Restates both candidates once as a single list and takes the user's confirmation as the gate",
+        "Does not restate the SRD in play — `learn` needs no SRD",
+        "Hands the confirmed facts to `srd:kb`, whose coverage check drops the documented one and banks only the tribal one",
+        "Reports what was banked and what was dropped as already covered, once, without re-printing the page"
+      ]
+    }
+  ]
+}

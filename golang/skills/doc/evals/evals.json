@@ -9,12 +9,7 @@
       ],
       "setup": "`Get`'s godoc is a single accurate sentence that already states the one thing the signature cannot — that a miss returns the zero value rather than an error.",
       "query": "/doc func=Get",
-      "files": [],
-      "expected_behavior": [
-        "Runs the checklist and finds that no item fires",
-        "Leaves the comment byte-for-byte unchanged — no padding, no restating the signature",
-        "Reports no change line for it; shortness alone is not a defect"
-      ]
+      "files": []
     },
     {
       "id": 2,
@@ -24,13 +19,7 @@
       ],
       "setup": "`Store` mutates the slice it is passed — the body proves it. It has no mutex and no synchronization of any kind, so whether it is safe for concurrent use is simply open: the code neither establishes nor rules it out. Its godoc states neither fact.",
       "query": "/doc func=Store",
-      "files": [],
-      "expected_behavior": [
-        "Fires the missing-fact checklist item for the slice mutation, which the body proves",
-        "Documents that mutation, naming what the caller must not assume about the slice afterwards",
-        "Writes nothing about concurrency: the absence of a mutex is not evidence of a guarantee either way, and \"not safe for concurrent use\" would be a conclusion about code nobody wrote",
-        "Treats the open question as a silence to leave or a point to flag, not a blank in the seven-category list to fill"
-      ]
+      "files": []
     },
     {
       "id": 3,
@@ -40,12 +29,7 @@
       ],
       "setup": "`./pkg/io` carries a `//go:build` line, a `//go:generate` directive, and a `Read` method implementing `io.Reader` whose godoc restates the interface contract and nothing more.",
       "query": "/doc ./pkg/io",
-      "files": [],
-      "expected_behavior": [
-        "Leaves both directive comments byte-for-byte unchanged and lists them as never-touch items in the plan",
-        "Plans the `Read` godoc for removal as unremarkable — it would be kept, naming the surprise, only if `Read` broke or exceeded the `io.Reader` contract",
-        "Writes nothing before approval, since a package target is plan-first"
-      ]
+      "files": []
     },
     {
       "id": 4,
@@ -55,12 +39,7 @@
       ],
       "setup": "An ordinary single-function run that changes one godoc and deletes one inline comment.",
       "query": "/doc func=Foo",
-      "files": [],
-      "expected_behavior": [
-        "Opens with the result — no preamble and no narration of reading the code",
-        "Lists changes made as `file:Symbol — item`, plus flagged and never-touched items, each stated once",
-        "No closing restatement of the edits it just listed"
-      ]
+      "files": []
     },
     {
       "id": 5,
@@ -70,12 +49,7 @@
       ],
       "setup": "Line 42 of `pkg/svc/foo.go` is inside the body of `(*Svc).Flush`, where `// increment i` sits above `i++`. The file holds four other functions.",
       "query": "/doc pkg/svc/foo.go:42",
-      "files": [],
-      "expected_behavior": [
-        "States the resolved kind (line) and the item: `Flush`'s godoc and its body's inline comments — nothing else in the file",
-        "Presents no plan; a line target is a single item, so it runs the loop straight through",
-        "Deletes `// increment i` as a comment that only restates the code"
-      ]
+      "files": []
     },
     {
       "id": 6,
@@ -85,12 +59,7 @@
       ],
       "setup": "A module of eleven packages, two of them `svc` and `api`.",
       "query": "/doc module fanout packages=svc,api",
-      "files": [],
-      "expected_behavior": [
-        "The plan lists items from `svc` and `api` only; every other package is reported as skipped",
-        "After approval, dispatches one subagent per package and merges their reports into the skill's output format",
-        "Verifies each edited package with `gofmt -l` and `go build` before reporting"
-      ]
+      "files": []
     },
     {
       "id": 7,
@@ -100,12 +69,7 @@
       ],
       "setup": "Two `io.Writer` implementations, both pinned by `var _ io.Writer = (*T)(nil)` and both carrying godoc. `(*fileSink).Write` writes the bytes to a file and nothing else — the job the method exists to do, side effects and all. `(*teeSink).Write` also writes a copy to a second sink the interface knows nothing about, and returns `len(p)` even when that second write fails.",
       "query": "/doc ./pkg/sink",
-      "files": [],
-      "expected_behavior": [
-        "Removes `(*fileSink).Write`'s godoc as unremarkable: performing its own contract is not a surprise, however many side effects it takes",
-        "Keeps `(*teeSink).Write`'s godoc and expands it to name the surprise — the second write, and the success return that hides its failure",
-        "Does not treat \"has a side effect\" as sufficient on its own to keep a comment, or both would be kept"
-      ]
+      "files": []
     }
   ]
 }

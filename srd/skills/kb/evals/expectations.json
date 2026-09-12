@@ -1,0 +1,72 @@
+{
+  "skill_name": "kb",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "appends-instead-of-fragmenting",
+      "expected_behavior": [
+        "Searches the corpus before writing and finds the existing page",
+        "Adds or updates a `##` section on that page rather than creating a second correlation page",
+        "Does not split the existing page to make room",
+        "Reports a pointer to what was written, not the page's contents"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "writes-only-what-was-attested",
+      "expected_behavior": [
+        "Writes the attested behaviour to the page body",
+        "Keeps the inferred retention period out of the body entirely",
+        "Records it as an open question, mirrored into `_open-questions.md`",
+        "Opens the section carrying undocumented content with its attestation line"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "stays-inside-the-interview",
+      "expected_behavior": [
+        "Asks nothing about valves — an adjacent subject the interview never opened",
+        "May ask what values the sensor-type field takes, because the interview already opened that subject",
+        "On \"skip that for now\", routes the question to `_open-questions.md` marked deferred and moves on without re-asking"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "refuses-a-sync-managed-root",
+      "expected_behavior": [
+        "Refuses the path and says why: a sync pull would clobber every agent write and the page would silently revert",
+        "Asks for a different directory rather than proceeding",
+        "Writes no page anywhere in the meantime"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "drains-at-start-writes-at-the-end",
+      "expected_behavior": [
+        "On the caller's start, names the two buffered candidates and offers to work them — and says nothing at all when the buffer is empty",
+        "Buffers the third fact silently on discovery, with no corpus call and no question to the user",
+        "Writes nothing until `srd:create` reaches its write step, then writes the confirmed facts and empties the buffer",
+        "Asks no \"bank this?\" question at any point"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "restructure-repairs-every-reference",
+      "expected_behavior": [
+        "Shows the proposed moves and waits for confirmation before touching a file",
+        "Moves the section with its attestation line, provenance rows, and open questions",
+        "Re-derives anchors and repairs knowledge-base page links, `_open-questions.md` rows, and the gap store's `doc_id`",
+        "States that references from SRDs cannot be repaired, and names the old ids so they can be found by hand"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "terse-output",
+      "expected_behavior": [
+        "No preamble and no narration of the search or the file writes",
+        "The two pages and their section counts stated once",
+        "No closing summary restating the sections, and no page contents echoed back"
+      ]
+    }
+  ]
+}

@@ -9,15 +9,7 @@
       ],
       "setup": "`specs/login.md` carries `Status: ACCEPTED`. `GR-3a` reads \"The system SHALL validate the token and log the attempt\" — two rules in one requirement — and `GR-3b` already exists beside it. The approving authority has not been consulted.",
       "query": "/edit specs/login.md",
-      "files": [],
-      "expected_behavior": [
-        "Runs the approval gate first: reads `Status: ACCEPTED`, states it, and asks the user to confirm before editing; resolves the glossary",
-        "Names STA-4 in the proposal and asks whether the approving authority has agreed — splitting a requirement changes it, and the user's own `Y` is not that agreement",
-        "Front-loads a grouped issue summary, then walks entry by entry",
-        "Proposes the split with location, before/after, and a one-line rationale",
-        "Splits add-only through sub-numbering and skips the taken `GR-3b`, adding `GR-3c` rather than renumbering or displacing it",
-        "Applies nothing until approved, then re-validates the affected entry and its cross-references"
-      ]
+      "files": []
     },
     {
       "id": 2,
@@ -27,13 +19,7 @@
       ],
       "setup": "`specs/login.review.md` holds findings across all three severities.",
       "query": "/edit specs/login.md specs/login.review.md",
-      "files": [],
-      "expected_behavior": [
-        "Parses the findings and works them blocker → major → minor",
-        "Fixes each through the edit loop — one change, confirm, re-validate — referring to findings by number",
-        "Leaves `login.review.md` untouched: `review` owns that file",
-        "Closes by pointing at `review specs/login.md check` to tick off what landed, plus the manifest of what changed and what was left flagged"
-      ]
+      "files": []
     },
     {
       "id": 3,
@@ -43,12 +29,7 @@
       ],
       "setup": "One requirement says the response must be \"fast\". The user names it by description rather than by id.",
       "query": "/edit specs/login.md fix the vague \"fast\" requirement",
-      "files": [],
-      "expected_behavior": [
-        "Locates the matching requirement and confirms the match before editing anything",
-        "Proposes a concrete, verifiable replacement — a measurable threshold — per REQ-5/6, with before/after",
-        "Re-validates that entry and its cross-references after applying, and reports whether anything new broke"
-      ]
+      "files": []
     },
     {
       "id": 4,
@@ -58,13 +39,7 @@
       ],
       "setup": "An in-progress draft with British spellings, a lowercase normative keyword, stray example text, and empty Owners/Initiative/Designs fields.",
       "query": "/edit specs/login.md polish",
-      "files": [],
-      "expected_behavior": [
-        "Confirms each mechanical fix — British → US spelling, keyword caps, stray example text — and applies none silently",
-        "Rewrites no requirement meaning and restructures nothing",
-        "Fills no Owners, Initiative, or Designs field and does not touch `Status`; flags those gaps instead",
-        "Closes with the manifest of the mechanical changes made"
-      ]
+      "files": []
     },
     {
       "id": 5,
@@ -74,12 +49,7 @@
       ],
       "setup": "An ordinary interactive session with several applied edits.",
       "query": "/edit specs/login.md",
-      "files": [],
-      "expected_behavior": [
-        "No preamble or narration; each proposal opens with the change itself — location, before/after, rule id",
-        "The closing manifest lists approved edits one line each, rather than re-narrating diffs the user already saw",
-        "Points at `<srd>.decisions.md` instead of re-printing its contents"
-      ]
+      "files": []
     },
     {
       "id": 6,
@@ -89,13 +59,7 @@
       ],
       "setup": "`### In Scope` holds only the `--- TODO ---` marker. Partway through the session the user says the requirements are final and asks for In Scope to be filled.",
       "query": "/edit specs/login.md",
-      "files": [],
-      "expected_behavior": [
-        "Before the signal, never flags SCO-2 against the marker and never fabricates scope items",
-        "On the signal, derives candidate `SC-n` items from the requirement groups",
-        "Walks the candidates point by point for the user to keep, reword, merge, split, or drop",
-        "Replaces the marker with the confirmed items and re-runs the SCO-2/3 coverage check"
-      ]
+      "files": []
     },
     {
       "id": 7,
@@ -105,13 +69,7 @@
       ],
       "setup": "Mid-session, with a `## TODO` section already present holding two items.",
       "query": "Add: confirm the lockout threshold with security to TODO",
-      "files": [],
-      "expected_behavior": [
-        "Appends it as the next numbered item, creating the `## TODO` section as the last one if it is absent",
-        "Skips the propose-and-confirm loop — the instruction is the confirmation",
-        "Renumbers nothing else and reports only the single line added",
-        "At session end, flags the non-empty `## TODO` as a follow-up blocking `ACCEPTED`"
-      ]
+      "files": []
     },
     {
       "id": 8,
@@ -121,15 +79,7 @@
       ],
       "setup": "`specs/login.review.md` has an `## Errata` block of three findings. Two anchors still match their quoted `old` text exactly once; the third entry has since been reworded, so its anchor no longer contains the quoted text.",
       "query": "/edit specs/login.md autofix",
-      "files": [],
-      "expected_behavior": [
-        "Reads only the `## Errata` block and does not re-scan the SRD for new mechanical issues",
-        "Skips the approval gate and glossary resolution — errata touch neither ids nor terms",
-        "Lists the three substitutions and takes one confirmation for the whole batch, not the per-change loop",
-        "Verifies each `old` at its anchor, applies the two that match exactly once, and reports the third as stale rather than guessing where it belongs",
-        "Writes no review file; hands off to `review specs/login.md check #n #n` scoped to the two applied errata",
-        "Closes with a manifest naming what was applied, reclassified, and skipped"
-      ]
+      "files": []
     },
     {
       "id": 9,
@@ -139,12 +89,7 @@
       ],
       "setup": "Line 210 of `specs/login.md` falls inside `GR-4b`.",
       "query": "/edit specs/login.md 210",
-      "files": [],
-      "expected_behavior": [
-        "Runs session start, then resolves line 210 to the entry at or nearest it instead of front-loading a whole-document summary",
-        "Begins the entry-by-entry walk there and continues in document order to the end",
-        "Still runs the closing consistency pass over the whole document, not just the walked tail"
-      ]
+      "files": []
     },
     {
       "id": 10,
@@ -154,13 +99,7 @@
       ],
       "setup": "`specs/login.review.md` exists and holds numbered findings. The run is repeated in a second scenario where the review file is absent.",
       "query": "/edit specs/login.md #2",
-      "files": [],
-      "expected_behavior": [
-        "Enters at finding #2 rather than at the top of severity order",
-        "Says so and stops when the review file is absent — it cannot invent findings",
-        "After each finding resolves or is skipped, defaults to the next by number, and jumps to any number the user names",
-        "Leaves the review file untouched and closes by pointing at `review specs/login.md check`"
-      ]
+      "files": []
     },
     {
       "id": 11,
@@ -172,14 +111,7 @@
       ],
       "setup": "The `srd-doc` corpus is reachable. The user wants `GR-2` to say the gateway retries a failed token check three times; the retry count appears in no document.",
       "query": "/edit specs/login.md GR-2",
-      "files": [],
-      "expected_behavior": [
-        "Searches the corpus before accepting the edit",
-        "Buffers the gap with `srd:report-doc-gap` silently — no interruption and no grilling mid-edit",
-        "States the retry count as a fact in the proposal; the user's `Y` attests it, so `srd:kb` buffers it too",
-        "Asks no separate \"bank this?\" question",
-        "At session end `srd:kb` writes the fact and reports a one-line pointer, and `srd:report-doc-gap` offers to work the buffered gap and respects a defer"
-      ]
+      "files": []
     },
     {
       "id": 12,
@@ -191,12 +123,7 @@
       ],
       "setup": "A previous session for this SRD ended with two unfiled doc gaps and one unwritten platform fact still buffered.",
       "query": "/edit specs/login.md",
-      "files": [],
-      "expected_behavior": [
-        "Surfaces the counts and topics from both delegates before the approval gate",
-        "Offers to work them now",
-        "On a defer, proceeds straight to the approval gate and leaves both buffers intact for the next start"
-      ]
+      "files": []
     },
     {
       "id": 13,
@@ -206,14 +133,7 @@
       ],
       "setup": "No `specs/login.decisions.md` exists yet. The user answers `Y` to one proposal with the reason \"retention isn't ours, drop it\", then `S` to the next.",
       "query": "/edit specs/login.md",
-      "files": [],
-      "expected_behavior": [
-        "Appends the applied change to `specs/login.decisions.md` before proposing the next one, so nothing is lost if the session dies mid-flow",
-        "Creates the file with `cfsync-plugin: ignore-push` front matter on the first write",
-        "Records the entry, the change in prose, and the user's reason tidied into a clean sentence — never a diff and never an invented rationale",
-        "Does not log the skipped proposal",
-        "The closing manifest points at the file's newest session block as the author's summary"
-      ]
+      "files": []
     },
     {
       "id": 14,
@@ -223,13 +143,7 @@
       ],
       "setup": "`specs/login.md` is `ACCEPTED`. A review finding says `GR-6` duplicates `GR-2` and should be removed. The approving authority has agreed to the removal.",
       "query": "/edit specs/login.md specs/login.review.md",
-      "files": [],
-      "expected_behavior": [
-        "Does not delete `GR-6`: on an approved SRD a removal strikes the text through and keeps the identifier (STA-8)",
-        "Leaves the number in place and renumbers nothing after it (STA-7)",
-        "Does not reuse `GR-6` for anything later in the run — the id retires with its requirement",
-        "Records the removal in `<srd>.decisions.md` like any other applied edit"
-      ]
+      "files": []
     },
     {
       "id": 15,
@@ -239,13 +153,7 @@
       ],
       "setup": "`specs/login.review.md` finding `#2` is a metadata gap — no Initiative link (STR-3) — which `edit` may not fix. The run is asked to enter at that finding.",
       "query": "/edit specs/login.md #2",
-      "files": [],
-      "expected_behavior": [
-        "Enters at `#2`, recognizes it is outside the mandate, and says so rather than opening a proposal it cannot apply",
-        "Names it as the author's to fix and advances to the next finding by number",
-        "Leaves the review file untouched",
-        "Carries it into the closing manifest as flagged and left"
-      ]
+      "files": []
     },
     {
       "id": 16,
@@ -255,13 +163,7 @@
       ],
       "setup": "An `## Errata` block of three findings, two of which apply cleanly. No `specs/login.decisions.md` exists yet.",
       "query": "/edit specs/login.md autofix",
-      "files": [],
-      "expected_behavior": [
-        "Writes one decision-log entry per applied substitution — the batch path logs like every other applied edit",
-        "Creates `specs/login.decisions.md` with its `cfsync-plugin: ignore-push` front matter on the first write",
-        "Logs nothing for the stale erratum it reported rather than applied",
-        "Leaves the same log a per-change loop would have left for the same two edits"
-      ]
+      "files": []
     }
   ]
 }

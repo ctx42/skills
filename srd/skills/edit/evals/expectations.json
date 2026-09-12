@@ -1,0 +1,167 @@
+{
+  "skill_name": "edit",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "interactive-non-atomic-on-approved-srd",
+      "expected_behavior": [
+        "Runs the approval gate first: reads `Status: ACCEPTED`, states it, and asks the user to confirm before editing; resolves the glossary",
+        "Names STA-4 in the proposal and asks whether the approving authority has agreed — splitting a requirement changes it, and the user's own `Y` is not that agreement",
+        "Front-loads a grouped issue summary, then walks entry by entry",
+        "Proposes the split with location, before/after, and a one-line rationale",
+        "Splits add-only through sub-numbering and skips the taken `GR-3b`, adding `GR-3c` rather than renumbering or displacing it",
+        "Applies nothing until approved, then re-validates the affected entry and its cross-references"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "apply-a-review-file",
+      "expected_behavior": [
+        "Parses the findings and works them blocker → major → minor",
+        "Fixes each through the edit loop — one change, confirm, re-validate — referring to findings by number",
+        "Leaves `login.review.md` untouched: `review` owns that file",
+        "Closes by pointing at `review specs/login.md check` to tick off what landed, plus the manifest of what changed and what was left flagged"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "targeted-edit-by-description",
+      "expected_behavior": [
+        "Locates the matching requirement and confirms the match before editing anything",
+        "Proposes a concrete, verifiable replacement — a measurable threshold — per REQ-5/6, with before/after",
+        "Re-validates that entry and its cross-references after applying, and reports whether anything new broke"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "polish-leaves-metadata-and-meaning",
+      "expected_behavior": [
+        "Confirms each mechanical fix — British → US spelling, keyword caps, stray example text — and applies none silently",
+        "Rewrites no requirement meaning and restructures nothing",
+        "Fills no Owners, Initiative, or Designs field and does not touch `Status`; flags those gaps instead",
+        "Closes with the manifest of the mechanical changes made"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "terse-output",
+      "expected_behavior": [
+        "No preamble or narration; each proposal opens with the change itself — location, before/after, rule id",
+        "The closing manifest lists approved edits one line each, rather than re-narrating diffs the user already saw",
+        "Points at `<srd>.decisions.md` instead of re-printing its contents"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "generate-in-scope-on-signal",
+      "expected_behavior": [
+        "Before the signal, never flags SCO-2 against the marker and never fabricates scope items",
+        "On the signal, derives candidate `SC-n` items from the requirement groups",
+        "Walks the candidates point by point for the user to keep, reword, merge, split, or drop",
+        "Replaces the marker with the confirmed items and re-runs the SCO-2/3 coverage check"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "add-to-todo-on-demand",
+      "expected_behavior": [
+        "Appends it as the next numbered item, creating the `## TODO` section as the last one if it is absent",
+        "Skips the propose-and-confirm loop — the instruction is the confirmation",
+        "Renumbers nothing else and reports only the single line added",
+        "At session end, flags the non-empty `## TODO` as a follow-up blocking `ACCEPTED`"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "autofix-bulk-applies-errata",
+      "expected_behavior": [
+        "Reads only the `## Errata` block and does not re-scan the SRD for new mechanical issues",
+        "Skips the approval gate and glossary resolution — errata touch neither ids nor terms",
+        "Lists the three substitutions and takes one confirmation for the whole batch, not the per-change loop",
+        "Verifies each `old` at its anchor, applies the two that match exactly once, and reports the third as stale rather than guessing where it belongs",
+        "Writes no review file; hands off to `review specs/login.md check #n #n` scoped to the two applied errata",
+        "Closes with a manifest naming what was applied, reclassified, and skipped"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "interactive-from-a-line-number",
+      "expected_behavior": [
+        "Runs session start, then resolves line 210 to the entry at or nearest it instead of front-loading a whole-document summary",
+        "Begins the entry-by-entry walk there and continues in document order to the end",
+        "Still runs the closing consistency pass over the whole document, not just the walked tail"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "feedback-from-a-finding-number",
+      "expected_behavior": [
+        "Enters at finding #2 rather than at the top of severity order",
+        "Says so and stops when the review file is absent — it cannot invent findings",
+        "After each finding resolves or is skipped, defaults to the next by number, and jumps to any number the user names",
+        "Leaves the review file untouched and closes by pointing at `review specs/login.md check`"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "corpus-grounded-edit-routes-the-unconfirmable",
+      "expected_behavior": [
+        "Searches the corpus before accepting the edit",
+        "Buffers the gap with `srd:report-doc-gap` silently — no interruption and no grilling mid-edit",
+        "States the retry count as a fact in the proposal; the user's `Y` attests it, so `srd:kb` buffers it too",
+        "Asks no separate \"bank this?\" question",
+        "At session end `srd:kb` writes the fact and reports a one-line pointer, and `srd:report-doc-gap` offers to work the buffered gap and respects a defer"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "session-start-drains-prior-buffers",
+      "expected_behavior": [
+        "Surfaces the counts and topics from both delegates before the approval gate",
+        "Offers to work them now",
+        "On a defer, proceeds straight to the approval gate and leaves both buffers intact for the next start"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "decision-log-written-per-edit",
+      "expected_behavior": [
+        "Appends the applied change to `specs/login.decisions.md` before proposing the next one, so nothing is lost if the session dies mid-flow",
+        "Creates the file with `cfsync-plugin: ignore-push` front matter on the first write",
+        "Records the entry, the change in prose, and the user's reason tidied into a clean sentence — never a diff and never an invented rationale",
+        "Does not log the skipped proposal",
+        "The closing manifest points at the file's newest session block as the author's summary"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "removal-on-an-approved-srd",
+      "expected_behavior": [
+        "Does not delete `GR-6`: on an approved SRD a removal strikes the text through and keeps the identifier (STA-8)",
+        "Leaves the number in place and renumbers nothing after it (STA-7)",
+        "Does not reuse `GR-6` for anything later in the run — the id retires with its requirement",
+        "Records the removal in `<srd>.decisions.md` like any other applied edit"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "finding-outside-the-mandate",
+      "expected_behavior": [
+        "Enters at `#2`, recognizes it is outside the mandate, and says so rather than opening a proposal it cannot apply",
+        "Names it as the author's to fix and advances to the next finding by number",
+        "Leaves the review file untouched",
+        "Carries it into the closing manifest as flagged and left"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "autofix-writes-the-decision-log",
+      "expected_behavior": [
+        "Writes one decision-log entry per applied substitution — the batch path logs like every other applied edit",
+        "Creates `specs/login.decisions.md` with its `cfsync-plugin: ignore-push` front matter on the first write",
+        "Logs nothing for the stale erratum it reported rather than applied",
+        "Leaves the same log a per-change loop would have left for the same two edits"
+      ]
+    }
+  ]
+}

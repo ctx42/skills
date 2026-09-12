@@ -9,11 +9,7 @@
       ],
       "setup": "An agent has read the skill as context and is about to edit `service.go` — production code, not a test file.",
       "query": "Add a Close method to the Service type in service.go",
-      "files": [],
-      "expected_behavior": [
-        "Applies the Production section: gofmt and goimports, lines within 80 columns, `%w` error wrapping with short context, godoc on exported symbols",
-        "Applies no Test-only rule to the production file — no `have`/`want` naming, no subtest conventions"
-      ]
+      "files": []
     },
     {
       "id": 2,
@@ -23,13 +19,7 @@
       ],
       "setup": "The same agent then writes `service_test.go`, including a table test and a helper.",
       "query": "Write tests for Service.Close in service_test.go",
-      "files": [],
-      "expected_behavior": [
-        "Applies the Test section on top of Production, not instead of it",
-        "Names tests `Test_Func` / `Test_Type_Method`, suffixes the table test `_tabular`, and uses `t.Run` subtests",
-        "Calls `t.Helper()` in helpers and reaches for `tester.Spy` when testing a helper",
-        "Keeps subtest names inside the `[a-zA-Z0-9 _-]` charset, flat, with no `/`"
-      ]
+      "files": []
     },
     {
       "id": 3,
@@ -39,15 +29,7 @@
       ],
       "setup": "`./pkg/foo` has a single-letter receiver and a godoc on an interface-implementing method. It also has an off-by-one in a loop bound — a correctness bug, not a style offense.",
       "query": "/style ./pkg/foo",
-      "files": [],
-      "expected_behavior": [
-        "Resolves the target, lists the files in scope, and reads `references/checking.md`",
-        "Reasons only for detection — runs no gofmt, vet, or linter",
-        "Opens the `rules.md` entry for the interface-method rule rather than the whole file",
-        "Reports style offenses only: the off-by-one is left to `golang:review`, not reported here",
-        "Groups findings Blocker / Should-fix / Nit with `file:line`, the rule id, and a minimal fix; ends with a clean / fix-first verdict and per-severity counts",
-        "Asks which offenses to apply rather than editing unprompted"
-      ]
+      "files": []
     },
     {
       "id": 4,
@@ -57,13 +39,7 @@
       ],
       "setup": "`./pkg/foo` has six offenses. The module test suite is green before the run.",
       "query": "/style ./pkg/foo fix",
-      "files": [],
-      "expected_behavior": [
-        "Runs `go test ./... -race` for a green baseline first, and stops without editing if that baseline is red",
-        "Applies every listed fix, then re-runs the gate",
-        "Reports each fix as one `file:sym — what changed` line plus the gate result",
-        "Prints no diffs and never commits"
-      ]
+      "files": []
     },
     {
       "id": 5,
@@ -74,11 +50,7 @@
       ],
       "setup": "`golang:review` is running a check on the current diff and invokes `style` for the style dimension.",
       "query": "/review",
-      "files": [],
-      "expected_behavior": [
-        "Runs the pass through the offense list and stops — no pick step and no edits",
-        "Returns the grouped offense list for `review` to merge with its correctness findings"
-      ]
+      "files": []
     },
     {
       "id": 6,
@@ -88,11 +60,7 @@
       ],
       "setup": "The user asks `style` directly to add a new rule.",
       "query": "/style add a rule that test helpers never return errors",
-      "files": [],
-      "expected_behavior": [
-        "Routes the request to `golang:review` rule-edit mode instead of hand-editing `SKILL.md` or `rules.md`",
-        "The resulting change is one dense rule line in `SKILL.md`, plus a keyed `rules.md` entry only where the line alone is not enough"
-      ]
+      "files": []
     },
     {
       "id": 7,
@@ -102,16 +70,7 @@
       ],
       "setup": "A 12-package module, invoked with no budget controls.",
       "query": "/style ./...",
-      "files": [],
-      "expected_behavior": [
-        "Switches to plan-first: proposes the `max_issues` and `depth` defaults and the package list, and asks before checking",
-        "Skips that prompt when the invocation already carries `packages=a,b` or `max_issues=N`",
-        "Fans out one subagent per package past ~6, each opening only the `rules.md` entries it needs",
-        "Gives workers no per-package share of `max_issues` — they report everything they find and the cap is applied once at the merge",
-        "Merged offenses carry one severity and one rule id per rule, so the same offense in two packages does not arrive as two differently-named findings",
-        "Names the packages checked and the packages skipped",
-        "At `depth=light`, skips the LSP cross-file confirmation"
-      ]
+      "files": []
     },
     {
       "id": 8,
@@ -121,13 +80,7 @@
       ],
       "setup": "An ordinary single-package pass.",
       "query": "/style ./pkg/foo",
-      "files": [],
-      "expected_behavior": [
-        "Opens with the target/file-set line and then the offenses — that line is the first fact, not preamble",
-        "No narration of reading the rules, and no restating of the invocation",
-        "States each offense once",
-        "No closing summary re-listing offenses the user can already see"
-      ]
+      "files": []
     },
     {
       "id": 9,
@@ -137,12 +90,7 @@
       ],
       "setup": "A package where `(*Conn).Close` is pinned by `var _ io.Closer = (*Conn)(nil)` and carries a full godoc restating the contract, and `(*Buffer).Close` is simply this type's own cleanup — no assertion, no interface named in its docs — but `goToImplementation` reports it as satisfying `io.Closer` all the same. Both have godoc.",
       "query": "/style ./pkg/net",
-      "files": [],
-      "expected_behavior": [
-        "Flags `(*Conn).Close`, whose assertion declares it is written to the interface",
-        "Leaves `(*Buffer).Close` alone: incidentally matching an interface is not writing to one, and `goToImplementation` matching is not the test",
-        "Does not strip godoc from ordinary `Close`/`String`/`Error` methods on the strength of a signature match"
-      ]
+      "files": []
     },
     {
       "id": 10,
@@ -152,12 +100,7 @@
       ],
       "setup": "Three packages carrying the same two offenses each: a single-letter receiver and an exported symbol with no godoc. Small enough to check in one context, so nothing merges — the point is whether one run is self-consistent across packages.",
       "query": "/style ./...",
-      "files": [],
-      "expected_behavior": [
-        "Gives the same offense the same severity in all three packages, decided from the rubric rather than per-package judgement",
-        "Gives the same offense the same rule id in all three packages, taken from the `rules.md` key rather than coined per package",
-        "Puts the missing exported godoc at Blocker and the receiver naming at Should-fix, per the rubric"
-      ]
+      "files": []
     }
   ]
 }

@@ -1,0 +1,81 @@
+{
+  "skill_name": "plan-smith",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "write-from-brief",
+      "expected_behavior": [
+        "Writes one file containing a `## Summary` table with the Y/N/X legend and one numbered section per item, each led by a checkbox",
+        "Carries exactly the four pieces of work the brief named — no invented items such as tests, CI, monitoring, rollout, or migration, which the user did not ask for",
+        "Every item starts unchecked and `N`, since nothing has been built yet",
+        "Each item states acceptance criteria concrete enough to verify against the finished work, not a restatement of the item name",
+        "Does not silently settle a decision the brief left open — such as OIDC versus SAML, or which session store ships — and the file carries only the summary table and the numbered item sections, with no extra assumptions or open-choices section bolted on",
+        "The summary table is aligned: every row the same character width, separator dashes flush to the pipes with no surrounding spaces",
+        "Reports the path and the status counts in roughly one line, and does not paste the plan back into the reply"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "bundled-brief",
+      "expected_behavior": [
+        "Splits the bundle into separate items, one per outcome — at minimum the storage/disk problem, the failure notification, and the reconciliation with the dashboard — rather than a single 'fix the export' item",
+        "Orders items by dependency and impact, putting blocking work before work that depends on it, rather than echoing the order the user happened to mention things",
+        "Asks about the piece that is genuinely underdetermined (what the numbers not tying out actually means, or where the export should go instead) rather than inventing a resolution for it",
+        "Does not pad the plan with work the user never raised, such as rewriting the export in a different language or adding a scheduler",
+        "Gives each item acceptance criteria that a reader could check"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "grill-me-handoff",
+      "expected_behavior": [
+        "Writes the plan straight from the six resolved branches without re-interviewing the user about decisions the summary already settled",
+        "Carries each branch's own verification into that item's acceptance criteria rather than inventing different ones",
+        "Keeps all six branches as items — none dropped, none merged away, none added",
+        "Every item starts unchecked and `N`",
+        "Reports the path and the counts tersely instead of replaying the summary the user just read"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "update-mixed",
+      "expected_behavior": [
+        "Flips login flow and session storage to `[x]` / `Y`, leaves provider config `N`, and marks the operator docs item `X` with the one-line reason the user gave",
+        "Keeps the rejected docs item in the file with its `[ ]` checkbox and its original prose — not deleted, not renumbered away",
+        "Records the force-logout work discovered in staging as a new item appended after the existing four, so items 1-4 keep their numbers",
+        "Rewrites the summary table so every row's status matches its section's checkbox and tag, and keeps the table aligned",
+        "Leaves the untouched items' prose exactly as it was",
+        "Reports what changed and the new counts, without pasting the plan back"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "update-unverified-claim",
+      "expected_behavior": [
+        "Goes to the repo rather than recording the user's claim — a claim is where to look, not what to write down",
+        "Marks `Y` only what the code, a test, or a command's output actually shows",
+        "Leaves the unverifiable item `N` and names it in the report as unverified, rather than silently promoting it or silently leaving it",
+        "Does not renumber or drop any item while doing so"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "ambiguous-request",
+      "expected_behavior": [
+        "Asks exactly one question — write a new plan or update an existing one — and nothing else",
+        "Writes no file and invents no plan content before the answer comes back",
+        "Opens on the question, with no preamble, no restatement of the request, and no announcement of what it is about to do"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "update-keeps-an-existing-table-s-widths",
+      "expected_behavior": [
+        "Pads the appended row to the table's existing widths rather than re-padding every row down to the new minimum",
+        "Leaves untouched rows byte-identical, so the diff shows only what changed",
+        "Appends the new item at the end with a fresh number and status `N`, renumbering nothing",
+        "Keeps the `|` delimiters aligned in the source after the edit"
+      ]
+    }
+  ]
+}

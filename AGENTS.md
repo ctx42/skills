@@ -5,7 +5,9 @@ Guide for AI agents working in this repository.
 This repository is a collection of reusable skills for Claude. Skills ship as
 **Claude Code plugins**, grouped into `golang`, `srd`, and `craft`. Each skill
 is a directory under a group's `skills/` folder with a `SKILL.md` (the prompt,
-including its `## Usage` block) and an `evals/evals.json` (its eval scenarios).
+including its `## Usage` block), an `evals/evals.json` (its eval scenarios) and
+an `evals/expectations.json` (how each is graded — separate so a run can be
+given a scenario without its rubric).
 Skills ship no `README.md`; the repo-level one orients humans.
 
 ## Golden Rules

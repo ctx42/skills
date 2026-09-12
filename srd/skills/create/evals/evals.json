@@ -4,97 +4,74 @@
     {
       "id": 1,
       "name": "author-from-a-vague-idea",
-      "skills": ["create"],
+      "skills": [
+        "create"
+      ],
       "setup": "A project with a Company Glossary directory and no SRD for the feature. The user opens with one line and nothing else pinned down.",
       "query": "/create — we need an SRD for a password reset feature",
-      "files": [],
-      "expected_behavior": [
-        "Resolves the per-project glossary (file or directory) and loads its term digest before drafting",
-        "Interviews one branch at a time — objective, UI change, in/out of scope, the rules — rather than drafting straight from the one-line idea",
-        "Rewrites a vague requirement (\"resets must be secure\") into a verifiable one (\"the system MUST require a reset token that expires after 15 minutes\") per REQ-6",
-        "Keeps each requirement atomic per REQ-1",
-        "Produces the sections in the required order with the keyword notice, Status `IN PROGRESS`, and TODO placeholders for Owners, Initiative, and Designs"
-      ]
+      "files": []
     },
     {
       "id": 2,
       "name": "reuse-the-company-glossary",
-      "skills": ["create"],
+      "skills": [
+        "create"
+      ],
       "setup": "During the interview the user uses \"Audit Log\", already defined in the Company Glossary, alongside a term the glossary has never carried.",
       "query": "/create",
-      "files": [],
-      "expected_behavior": [
-        "Recognizes the known term from the glossary digest and adds no local Glossary entry for it, linking or referring to the Company Glossary instead (GLO-3 / STR-10)",
-        "Adds a local Glossary entry only for the genuinely new term",
-        "Defines that term and nothing else — no behaviour, no rules inside the entry (GLO-1)"
-      ]
+      "files": []
     },
     {
       "id": 3,
       "name": "self-check-catches-violations",
-      "skills": ["create"],
+      "skills": [
+        "create"
+      ],
       "setup": "The draft reaching self-check contains a two-rule requirement, a lowercase \"must\", an `In Scope` item no requirement covers, and an `Example:` annotation.",
       "query": "/create",
-      "files": [],
-      "expected_behavior": [
-        "Auto-fixes the mechanical issues: capitalizes the normative keyword (LANG-4) and strips the `Example:` annotation (REQ-7)",
-        "Reports the judgment issues with rule ids: the non-atomic requirement to split (REQ-1) and the uncovered `In Scope` item needing a requirement (SCO-2)",
-        "Does not declare the SRD acceptable or set its Status to `ACCEPTED` — acceptance is a human call (STA-3)"
-      ]
+      "files": []
     },
     {
       "id": 4,
       "name": "no-ui-change-sets-designs-na",
-      "skills": ["create"],
+      "skills": [
+        "create"
+      ],
       "setup": "The user states the feature is backend-only with no UI change.",
       "query": "/create",
-      "files": [],
-      "expected_behavior": [
-        "Sets the `Designs` metadata field to `N/A` rather than a placeholder link (STR-7)",
-        "Asks for no design-tool link",
-        "Still leaves Owners and Initiative as TODO placeholders — only Designs is settled by the answer"
-      ]
+      "files": []
     },
     {
       "id": 5,
       "name": "house-extensions",
-      "skills": ["create"],
+      "skills": [
+        "create"
+      ],
       "setup": "The draft carries \"the colour MUST standardise…\", two requirements stating the same rule in different words, and a tight cluster of three related rules under one group.",
       "query": "/create",
-      "files": [],
-      "expected_behavior": [
-        "Rewrites the British spellings to US English — \"color\", \"standardize\"",
-        "Flags the duplicate or overlapping requirements to merge during the consistency pass, along with any term used inconsistently",
-        "Uses one-letter sub-numbering (`GR-1a`, `GR-1b`, `GR-1c`) for the tight cluster while keeping flat numbers elsewhere"
-      ]
+      "files": []
     },
     {
       "id": 6,
       "name": "terse-output",
-      "skills": ["create"],
+      "skills": [
+        "create"
+      ],
       "setup": "An interview that has reached the write step.",
       "query": "/create",
-      "files": [],
-      "expected_behavior": [
-        "No preamble and no step narration through drafting and self-check; the report opens with the payload",
-        "One report after writing: the file path, the requirement groups and counts, and the outstanding human follow-ups",
-        "Does not re-paste the drafted SRD, and does not repeat findings already shown"
-      ]
+      "files": []
     },
     {
       "id": 7,
       "name": "undocumented-platform-fact",
-      "skills": ["create", "report-doc-gap", "kb"],
+      "skills": [
+        "create",
+        "report-doc-gap",
+        "kb"
+      ],
       "setup": "The `srd-doc` corpus is reachable. While stating a requirement the user says \"the gateway already retries a failed export three times\"; a corpus `search` finds no retry count anywhere.",
       "query": "/create",
-      "files": [],
-      "expected_behavior": [
-        "Searches the corpus before accepting the claim, and neither silently accepts nor silently corrects it",
-        "Hands the unconfirmable claim to `report-doc-gap`, and the confirmed fact to `kb` once the user confirms it in the branch restatement",
-        "Neither hand-off interrupts the interview",
-        "Asks no \"bank this?\" or knowledge-base question — the retry count is confirmed only through the restatement of the Requirements branch",
-        "At the write step, invokes `kb` to write the confirmed fact and `report-doc-gap` to offer the buffered gap"
-      ]
+      "files": []
     }
   ]
 }

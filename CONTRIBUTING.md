@@ -39,8 +39,19 @@ Every skill needs its own directory containing:
 
 - `SKILL.md` — the prompt, with proper YAML frontmatter (below) and a
   `## Usage` block right after the H1 title
-- `evals/evals.json` — the skill's eval scenarios (≥ 3, ≥ 1 asserting terse
-  output), in the shape `{id, name, skills, query, files, expected_behavior[]}`
+- `evals/evals.json` — the skill's eval scenarios (≥ 3), in the shape
+  `{id, name, skills, setup, query, files}`. `setup` is the state the run
+  starts from; without it most expectations cannot be graded, and several were
+  found to pass no matter what the skill did.
+- `evals/expectations.json` — the pass criteria, `{id, name,
+  expected_behavior[]}`, one entry per scenario id, ≥ 1 asserting terse output.
+
+**Two files, deliberately.** A run must be able to read a scenario without the
+rubric it will be graded on. While both lived in one file, no eval in this repo
+was blind — every agent that ran one said so unprompted, and a scenario whose
+expectations you have already read measures whether the instructions are
+followable, not whether an uninformed agent follows them. The linter checks the
+ids match and that no `expected_behavior` leaks back into `evals.json`.
 
 Skills ship no `README.md`. Everything a user or agent needs lives in
 `SKILL.md`, its bundled files, and `evals/evals.json`; the repo-level

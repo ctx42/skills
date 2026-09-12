@@ -1,0 +1,104 @@
+{
+  "skill_name": "review",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "default-review-of-a-flawed-srd",
+      "expected_behavior": [
+        "Reads the whole SRD, then writes `specs/login.review.md` — and makes no edit to `login.md`",
+        "Groups findings by document section",
+        "Tags the two-rule requirement `[blocker, atomicity]` citing REQ-1, and the uncovered scope item `[blocker, coverage]` citing SCO-2",
+        "Collects the British spelling into the `## Errata` block at the top, tagged `[minor, linguistic]` citing `(SRD:house)`, stated as the substitution `` `behaviour` → `behavior` ``",
+        "Closes with a per-severity count and whether a blocker stands between the SRD and the Quality Bar"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "applies-rules-create-only-stubs",
+      "expected_behavior": [
+        "Flags the single owner (STR-2), the missing Initiative link (STR-3), and `ACCEPTED` without an approved design (STA-2), all as blockers",
+        "Does not excuse them as authoring placeholders — unlike `create`, the review applies the full standard",
+        "Raises no back-link finding: STR-4/6 live in external systems",
+        "Records all three under the Metadata section of the review file"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "check-a-prior-review",
+      "expected_behavior": [
+        "Classifies each open finding fixed / partial / not-addressed against the current text, in a short status table keyed by finding number",
+        "Re-verifies only — hunts for no new defects",
+        "Ticks fixed findings and moves them to `## Resolved`, keeping their numbers",
+        "Annotates partials with `*(Partial — …)*` and moves the invalid finding to `## Withdrawn` with a reason",
+        "Bumps the `updated:` frontmatter timestamp and reuses no number"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "feedback-export-for-a-ticket",
+      "expected_behavior": [
+        "Emits plain text grouped by section heading, one bullet per open issue, and writes no file",
+        "Lists the `Errata` group first, since it holds open findings",
+        "Keeps the finding number and the SRD's own requirement id (`#7 GR-3a:`) but drops the checkbox, rule-id citations, and severity tags",
+        "Uses no markdown beyond bullets — it is going into a ticket or an email",
+        "Lists open findings only, omitting Resolved and Withdrawn"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "walk-records-only-confirmed-findings",
+      "expected_behavior": [
+        "Goes section by section, presenting each section's findings and waiting for the user to confirm which to keep before recording anything",
+        "Writes only the confirmed findings to `login.review.md`, as author-facing guidance",
+        "Never edits `login.md`"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "fixture-regression",
+      "expected_behavior": [
+        "Finds GR-1 non-atomic (REQ-1) and the duplicate id GR-3 (REQ-3)",
+        "Finds \"fast\" unverifiable (REQ-6)",
+        "Finds SC-2 uncovered (SCO-2) and GR-4 contradicting OSC-1 (SCO-3)",
+        "Finds behaviour stated inside the Export Job glossary entry (GLO-1/2)",
+        "Finds the single owner (STR-2) and the missing Initiative link (STR-3)",
+        "Finds `ACCEPTED` with an unapproved design and an unmet Quality Bar (STA-2 / STA-3)",
+        "Finds MUST used in the Introduction (LANG-3)",
+        "Collects the British spellings as minor findings under `## Errata`"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "terse-output",
+      "expected_behavior": [
+        "Opens with the result — no preamble, no narration of reading the SRD",
+        "Writes the findings to the review file and closes with a short pointer plus per-severity counts",
+        "Does not re-list in chat the findings it just wrote to the file"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "errata-re-sort",
+      "expected_behavior": [
+        "Moves `#4` into a `## Errata` block at the top, keeping its number, `[minor]` tag, category, and citation",
+        "Rewrites its prose fix into the substitution shape that makes it appliable unreviewed",
+        "Leaves the blocker `#2` under its own section",
+        "Reclassifies only — hunts no new defects",
+        "Is idempotent: a second run changes nothing",
+        "Bumps `updated:` because something moved, and reports the moved number",
+        "A second run writes nothing at all — not even a fresh timestamp — since nothing moved",
+        "Reads the SRD to quote the `old` text exactly when rewriting the prose fix, while editing only the review file"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "facts-vs-corpus-routes-doc-gaps",
+      "expected_behavior": [
+        "Invokes `srd:report-doc-gap` first to drain the gaps left from the prior session, then searches the corpus for each claim about existing behaviour",
+        "Hands the unconfirmable `GW-2` retry count to `srd:report-doc-gap` as a doc gap — it appears nowhere in `gateway.review.md`",
+        "Records the contradicted `GW-5` timeout as a `reference` finding in the review file",
+        "After the closing tally, offers to work the buffered `GW-2` gap now or later, and never files it silently"
+      ]
+    }
+  ]
+}

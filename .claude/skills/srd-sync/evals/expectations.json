@@ -1,0 +1,90 @@
+{
+  "skill_name": "srd-sync",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "normal-sync-after-a-source-edit",
+      "expected_behavior": [
+        "Reads the source, the current copy, and the header/footer frame before proposing anything",
+        "Runs the frozen-node check and, finding nothing new or missing, reports it in one line and continues — a `page_version` bump alone is a prompt to look, not a hard stop",
+        "Reports the reworded rule under TEXT DIFFERS with both sides shown",
+        "Confirms before writing, then writes header + transformed body + footer with the provenance banner carrying the new source `page_version`",
+        "Generated rule text is the source text verbatim — no paraphrase and no re-wrap that changed words"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "verbatim-fidelity",
+      "expected_behavior": [
+        "Copies the requirement unchanged — does not tighten, fix, or summarize it, however tempting",
+        "Verifies the changed units match the source text minus the mechanical trims and substitutions, character for character, before the write"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "deterministic-substitution-via-the-script",
+      "expected_behavior": [
+        "Copies GLO-3 verbatim, then applies substitutions by piping the body through `dev/srd-subst.sh` rather than hand-editing the rule",
+        "Substitutes the body before assembling and wrapping — the shipped copy holds post-substitution words, so wrapping first splits the script's patterns across lines and it reports `matched 0 times` on text that is present",
+        "Does not treat that ordering failure as an upstream rewording, and does not touch the script's rules to force it through",
+        "Reads what the script actually substituted rather than trusting a zero exit — the assertion is a substring match, so a reworded superset can pass and produce nonsense",
+        "The final copy carries the script's replacement, and GLO-3 is not reported as a diff",
+        "Does not touch the RFC notice — it lives in the header frame"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "local-only-rule-not-upstream",
+      "expected_behavior": [
+        "Reports it as LOCAL-ONLY with its full text and says to push it upstream",
+        "Does not silently drop it",
+        "Warns that writing will remove it, before proceeding"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "frozen-node-new-example-block",
+      "expected_behavior": [
+        "Stops before assembly and reports the new id and the rule it follows",
+        "Tells the maintainer to review the Quality Bar list and the expands, and either to transcribe the block into the guide or to add its id to `dev/srd-untranscribed-examples.md`",
+        "Re-reads the footer before continuing, and writes nothing until then"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "new-top-level-section-upstream",
+      "expected_behavior": [
+        "Hard-stops with `NEW SECTION: Tooling` and writes nothing",
+        "Does not guess whether to keep or drop it",
+        "Says the transform must be extended first"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "frame-edit-and-header-consistency",
+      "expected_behavior": [
+        "Reports the intro hunk as FRAME and asks no confirmation for it",
+        "Fails the Contents check: names the stale group and tells the maintainer to update the header's Contents, then re-assembles",
+        "Blocks the write on that failure even though the diff is otherwise FRAME-only — a stale Contents line is itself a FRAME hunk and must not ride through",
+        "Passes the Notice check silently, since `in this document` → `in an SRD` is the one tolerated difference",
+        "Would treat any other Notice difference as `NOTICE DIFFERS` and hard-stop"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "source-unavailable",
+      "expected_behavior": [
+        "Reports that the source is missing and names the expected path",
+        "Writes nothing — no copy and no provenance change"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "terse-output",
+      "expected_behavior": [
+        "No preamble or step narration, and no closing summary re-dumping the file",
+        "States the frozen-node reminder and a one-line \"wrote … (page_version N)\" pointer, once"
+      ]
+    }
+  ]
+}

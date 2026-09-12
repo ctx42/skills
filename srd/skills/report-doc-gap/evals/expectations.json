@@ -1,0 +1,71 @@
+{
+  "skill_name": "report-doc-gap",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "capture-does-not-interrupt",
+      "expected_behavior": [
+        "Writes a light record — `detail`, `srd_ref`, and the `search_terms` from the failed lookups — to the per-SRD buffer and returns at once",
+        "Runs no grill and makes no `report_gap` call at capture time",
+        "Prompts the user for nothing: the caller's pass continues uninterrupted"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "drain-grill-confirm-file",
+      "expected_behavior": [
+        "Surfaces the count and the topics, and offers to work them now",
+        "Per gap asks light or heavy, assembles the record, and shows it",
+        "Files via `report_gap` only on the finder's yes, records the returned `gap-NNNN`, and drops the record from the buffer",
+        "On \"keep going\", leaves both gaps buffered and returns to the caller"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "an-srd-gap-is-refused",
+      "expected_behavior": [
+        "Buffers the Retention Sweep item: the platform documentation is what falls short",
+        "Refuses the GR-7/GR-9 contradiction — neither buffered nor filed — because the SRD is what is wrong, not the docs",
+        "Tells the caller to keep the SRD defect in its own findings",
+        "Splits the pair rather than taking or refusing both together"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "opt-out-and-duplicate-merge",
+      "expected_behavior": [
+        "Merges into the existing record — wider `search_terms`, richer `detail` — instead of adding a duplicate",
+        "Takes only the one-line `detail` and leaves `target_claim` empty, honouring the opt-out",
+        "Still shows the record for confirmation before filing: opting out of the grill is not opting out of the confirmation"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "terse-output-with-no-store",
+      "expected_behavior": [
+        "States once that filing is unavailable, notes the gap in the output, and leaves it buffered",
+        "No preamble; each fact stated once",
+        "No closing restatement of what was already shown"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "declined-at-the-confirm-gate",
+      "expected_behavior": [
+        "Files nothing",
+        "Says what happened to the record, since discarding it is destructive and the finder should not have to guess",
+        "Does not silently re-buffer a record the finder rejected, nor silently drop one they only meant to amend — it asks which"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "no-channel-means-no-grill",
+      "expected_behavior": [
+        "Establishes that the channel is unreachable before opening the grill",
+        "Does not interview the finder about a gap it cannot file — their attention is spent for nothing",
+        "Says filing is unavailable, leaves the gap buffered intact, and stops",
+        "Does not retry the failed probe or invent a store"
+      ]
+    }
+  ]
+}

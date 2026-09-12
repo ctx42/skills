@@ -1,0 +1,79 @@
+{
+  "skill_name": "review",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "review-the-current-diff",
+      "expected_behavior": [
+        "Resolves the target to the current diff and lists the files in scope",
+        "Reasons only — runs no gofmt, vet, linter, or `go test`",
+        "Invokes `golang:style` for the style dimension and judges correctness itself",
+        "Reads neither `references/fixing.md` nor `references/rule-editing.md`: this is a check run, not a fix or a rule edit",
+        "Groups findings Blocker / Should-fix / Nit, each with `file:line`, the rule id or dimension (`style: %w`, `correctness`), and a minimal fix",
+        "Ends with a ship / fix-first verdict and per-severity counts"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "broad-target-auto-plan-first",
+      "expected_behavior": [
+        "Detects the broad target and switches to plan-first on its own",
+        "Proposes the defaults it would use — `max_issues=25`, `depth=standard`, the package list — and stops for approval before the full pass",
+        "Past the approval, fans out one subagent per package and merges into one ranked report capped at `max_issues`"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "rule-edit-add-change-remove",
+      "expected_behavior": [
+        "Recognizes each as a rule edit rather than a review target",
+        "Turns the `add` into a terse imperative one-liner in the existing style, scoped to Test",
+        "Detects a duplicate or conflicting rule and waits for confirmation before writing to `../style/SKILL.md`, showing the before/after of the rule text",
+        "Rewrites the existing receiver-naming line in place for the `change` instead of adding a second rule",
+        "For the `remove`, deletes the `../style/SKILL.md` line, plus its keyed `../style/rules.md` entry and Contents row where it has one — a rule carrying no keyed entry is removed from `SKILL.md` alone"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "learn-from-the-session",
+      "expected_behavior": [
+        "Scans the session's Go feedback and pairs each item with the diff hunk that resolved it",
+        "Proposes the two genuinely new rules, each with its provenance and a before/after example",
+        "Drops the task-specific one-off",
+        "Reports the helper-naming correction as already covered rather than proposing it again — deduping against `../style/SKILL.md` happens before presenting, not after",
+        "Waits for the user to pick before writing; on confirmation writes the `../style/SKILL.md` line plus its keyed `../style/rules.md` entry and shows the diff"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "broad-fix-job-plans-and-pauses",
+      "expected_behavior": [
+        "Detects the broad scope and writes an ordered plan to `tmp/review-fix-plan.md` — one chunk per package, findings listed, status boxes — and gets a go-ahead before editing",
+        "Splits the large package into file-level chunks",
+        "Proves each bug red then green with a test named to `have`/`want`",
+        "Runs `go test ./... -race` per chunk so each chunk ends green, ticking the plan boxes as it goes",
+        "Pauses after each changed chunk for a go-ahead and never proceeds past an unmade decision",
+        "Never runs `git commit` — each chunk lands as a separately committable change"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "terse-output",
+      "expected_behavior": [
+        "Opens with the findings — no preamble, no narration of reading the rules",
+        "States each finding once and reports budget usage",
+        "No closing summary re-listing findings the user can already see"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "learn-finds-nothing-new",
+      "expected_behavior": [
+        "Says in a line that every correction is already a rule, and names which ones",
+        "Writes nothing and proposes nothing",
+        "Does not restate an existing rule as a new candidate to have something to show",
+        "Treats it as a finding worth reporting: the rules exist but are not reaching the work"
+      ]
+    }
+  ]
+}

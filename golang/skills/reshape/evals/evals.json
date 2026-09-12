@@ -9,14 +9,7 @@
       ],
       "setup": "The project calls `must.Value` at 34 sites, 28 of them wrapped in the same three-line error-drop, and builds the same options struct inline at 12 more. The library is a local module under a `replace` directive, so its source is editable.",
       "query": "/reshape must",
-      "files": [],
-      "expected_behavior": [
-        "Opens with the resolved library, the consumer scope, and the call-site count",
-        "Proposes across several archetypes, including at least one structural move — absorbing the repeated sequence, or moving a responsibility upstream — not only a rename or a single helper",
-        "Ranks by impact (reach × savings × quality, discounted by breakage and effort) and leads with the biggest win",
-        "Shows a real call site before → after for each proposal",
-        "Offers concrete diffs, since the library source is editable here"
-      ]
+      "files": []
     },
     {
       "id": 2,
@@ -26,13 +19,7 @@
       ],
       "setup": "`oskit` is consumed across the module, but the run is scoped to `./pkg/render`. `oskit`'s source sits in the module cache with no `replace` and no `go.work` entry, so it is external. Several call sites could be tidied without touching `oskit` at all — the tempting wrong answer.",
       "query": "/reshape oskit in ./pkg/render",
-      "files": [],
-      "expected_behavior": [
-        "Every proposal changes `oskit`'s API; the consumer diff is shown as the payoff, never as the proposal itself",
-        "Proposes no call-site-only refactor that leaves the API untouched",
-        "Proposed signatures follow the style Naming, Errors, and API design rules",
-        "Edits nothing — reports the proposal set and stops"
-      ]
+      "files": []
     },
     {
       "id": 3,
@@ -42,12 +29,7 @@
       ],
       "setup": "`gopkg.in/yaml.v3` is an ordinary module dependency: no `replace`, no `go.work` entry, source in the module cache.",
       "query": "/reshape gopkg.in/yaml.v3",
-      "files": [],
-      "expected_behavior": [
-        "Detects that the library is external and says so",
-        "Frames every proposal at the public-API level and notes it cannot diff internals",
-        "Offers a local wrapper as the fallback for changes that cannot land upstream"
-      ]
+      "files": []
     },
     {
       "id": 4,
@@ -57,13 +39,7 @@
       ],
       "setup": "A run whose analysis would support eight proposals, capped at three.",
       "query": "/reshape must max=3",
-      "files": [],
-      "expected_behavior": [
-        "Opens with the one-line header and the ranked table — no preamble, no narration of mapping call sites",
-        "Reports at most three proposals, cutting from the bottom of the ranked list",
-        "Says in one line that the forced structural option was considered and what displaced it, if the cap evicted it — the cap hides nothing silently",
-        "States each proposal once, with no closing summary re-listing the table already shown"
-      ]
+      "files": []
     },
     {
       "id": 5,
@@ -73,12 +49,7 @@
       ],
       "setup": "A small library the consumer uses cleanly: 9 call sites, no repeated wrapper, no inline config building, no re-declared interface, no error-string matching. Nothing about the consuming code is obviously improvable by changing the library.",
       "query": "/reshape tidy",
-      "files": [],
-      "expected_behavior": [
-        "Says the API fits its consumer and proposes little or nothing, rather than manufacturing eight proposals to fill the default cap",
-        "Does not force a structural proposal into existence when no friction supports one — the forcing rule is about not stopping at renames, not a quota",
-        "Still reports the header line with the real call-site count, so the reader can see the analysis happened"
-      ]
+      "files": []
     }
   ]
 }

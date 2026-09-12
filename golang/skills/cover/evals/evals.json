@@ -9,13 +9,7 @@
       ],
       "setup": "`Parse` has one happy-path test, `Test_Parse`, and two uncovered error branches. A caller's test, `Test_Load`, incidentally executes one of those branches, so a whole-package coverage run credits `Parse` with more than its own test earns.",
       "query": "/cover func=Parse",
-      "files": [],
-      "expected_behavior": [
-        "Runs straight through with no plan gate, mapping to the `Test_Parse` direct-test family",
-        "Measures with `-run '^Test_Parse($|_)'` and reads only `Parse`'s own line range — the coverage `Test_Load` contributes is not counted",
-        "Adds table rows aimed at the two error branches, re-measures, and confirms those lines went 0 → hit",
-        "New rows follow the style Test rules: `have`/`want`, never `got`; error subtests named `error - <condition>`"
-      ]
+      "files": []
     },
     {
       "id": 2,
@@ -25,12 +19,7 @@
       ],
       "setup": "`./pkg/svc` holds six exported functions, four of them partly covered.",
       "query": "/cover ./pkg/svc",
-      "files": [],
-      "expected_behavior": [
-        "States the resolved kind (package) and the function set before measuring",
-        "Presents a plan — per-function current coverage, proposed easy cases, deferred and un-coverable lines — and waits for approval before writing anything",
-        "Works one function to completion and verification before starting the next, rather than editing the whole package at once"
-      ]
+      "files": []
     },
     {
       "id": 3,
@@ -40,13 +29,7 @@
       ],
       "setup": "`Dial` has one branch reachable only behind a network seam and one defensive `return` that no input can reach. The run is repeated afterwards with `include=all`.",
       "query": "/cover func=Dial",
-      "files": [],
-      "expected_behavior": [
-        "Covers the easy lines, defers the network branch with a stated reason, and names the defensive branch un-coverable",
-        "Never attempts the un-coverable line",
-        "Under `include=all`, builds the fake for the network branch and covers it",
-        "Still reports the defensive `return` as un-coverable under `include=all` — the flag does not turn it into an attempt"
-      ]
+      "files": []
     },
     {
       "id": 4,
@@ -56,12 +39,7 @@
       ],
       "setup": "Line 42 of `pkg/svc/foo.go` sits inside `Load`.",
       "query": "/cover pkg/svc/foo.go:42",
-      "files": [],
-      "expected_behavior": [
-        "Resolves the target to `Load` and states the kind (line) and the function",
-        "Runs `Load`'s full per-function loop without a plan gate, since a line target is a single function",
-        "Measures with `-run '^Test_Load($|_)'`, never with whole-package coverage"
-      ]
+      "files": []
     },
     {
       "id": 5,
@@ -71,13 +49,7 @@
       ],
       "setup": "A module of nine packages, two of them `svc` and `api`.",
       "query": "/cover module packages=svc,api fanout max_tests=5",
-      "files": [],
-      "expected_behavior": [
-        "Touches only `svc` and `api`, leaving the other seven packages alone",
-        "Dispatches one subagent per package and merges their reports, listing packages covered and skipped",
-        "Adds at most five tests or cases across the whole run and reports what is left under the cap",
-        "Each subagent still finishes and verifies one function before starting the next"
-      ]
+      "files": []
     },
     {
       "id": 6,
@@ -87,13 +59,7 @@
       ],
       "setup": "`Test_Encode_tabular` already exists for the target function, covering happy-path rows. The uncovered lines are two more happy-path shapes, not error branches. A helper in `all_test.go` loses its last caller during the edit.",
       "query": "/cover pkg/svc/foo.go",
-      "files": [],
-      "expected_behavior": [
-        "Adds the two new cases as rows in `Test_Encode_tabular`, since they fit the existing table's shape, rather than creating a parallel test function",
-        "Keeps the table loop branch-free per the style Test rules — a case that would need branching in the loop body goes in its own test instead",
-        "Deletes the now-unused helper from `all_test.go`, and drops the file if nothing is left in it",
-        "Ends with `gofmt -l` clean and `go test -v -race` showing `--- PASS` for every test in the edited files"
-      ]
+      "files": []
     },
     {
       "id": 7,
@@ -103,13 +69,7 @@
       ],
       "setup": "An ordinary single-function run that adds two table rows.",
       "query": "/cover func=Foo",
-      "files": [],
-      "expected_behavior": [
-        "Opens with the result — no preamble and no narration of measuring",
-        "Reports the before → after coverage delta, the tests added, and any deferred or un-coverable lines, each stated once",
-        "No closing restatement of the table it just showed",
-        "Quotes only the `--- PASS` lines for the tests it touched, not the full `go test -v` log"
-      ]
+      "files": []
     },
     {
       "id": 8,
@@ -119,13 +79,7 @@
       ],
       "setup": "`Upload` calls `http.Post` directly on a package-level client with no injection point. The branch handling a failed POST is reachable only by adding a seam to the production code.",
       "query": "/cover func=Upload include=all",
-      "files": [],
-      "expected_behavior": [
-        "Covers what it can inside `*_test.go`, which is the skill's whole write scope",
-        "Leaves the POST-failure branch deferred even under `include=all`: the flag authorizes building fakes, not editing production code",
-        "Names what the seam would be, so the author can decide, rather than adding one unasked",
-        "Does not report the function as fully covered"
-      ]
+      "files": []
     },
     {
       "id": 9,
@@ -135,12 +89,7 @@
       ],
       "setup": "`Normalize` has no test whose name matches its direct-test family — the only test touching it is `TestNormalizeHelper`, off-convention.",
       "query": "/cover func=Normalize",
-      "files": [],
-      "expected_behavior": [
-        "Notices that `-run '^Test_Normalize($|_)'` matched nothing — `no tests to run`, exit 0 — rather than reading the result as a measured 0%",
-        "Reports the function as uncovered and scaffolds `Test_Normalize`",
-        "Does not credit the off-convention `TestNormalizeHelper` as the family"
-      ]
+      "files": []
     }
   ]
 }

@@ -1,0 +1,69 @@
+{
+  "skill_name": "doc",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "correct-but-terse-is-left-alone",
+      "expected_behavior": [
+        "Runs the checklist and finds that no item fires",
+        "Leaves the comment byte-for-byte unchanged — no padding, no restating the signature",
+        "Reports no change line for it; shortness alone is not a defect"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "adds-only-confirmable-facts",
+      "expected_behavior": [
+        "Fires the missing-fact checklist item for the slice mutation, which the body proves",
+        "Documents that mutation, naming what the caller must not assume about the slice afterwards",
+        "Writes nothing about concurrency: the absence of a mutex is not evidence of a guarantee either way, and \"not safe for concurrent use\" would be a conclusion about code nobody wrote",
+        "Treats the open question as a silence to leave or a point to flag, not a blank in the seven-category list to fill"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "directives-and-interface-method-godoc",
+      "expected_behavior": [
+        "Leaves both directive comments byte-for-byte unchanged and lists them as never-touch items in the plan",
+        "Plans the `Read` godoc for removal as unremarkable — it would be kept, naming the surprise, only if `Read` broke or exceeded the `io.Reader` contract",
+        "Writes nothing before approval, since a package target is plan-first"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "terse-output",
+      "expected_behavior": [
+        "Opens with the result — no preamble and no narration of reading the code",
+        "Lists changes made as `file:Symbol — item`, plus flagged and never-touched items, each stated once",
+        "No closing restatement of the edits it just listed"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "line-target-resolves-to-its-item",
+      "expected_behavior": [
+        "States the resolved kind (line) and the item: `Flush`'s godoc and its body's inline comments — nothing else in the file",
+        "Presents no plan; a line target is a single item, so it runs the loop straight through",
+        "Deletes `// increment i` as a comment that only restates the code"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "module-mode-with-fanout-and-filter",
+      "expected_behavior": [
+        "The plan lists items from `svc` and `api` only; every other package is reported as skipped",
+        "After approval, dispatches one subagent per package and merges their reports into the skill's output format",
+        "Verifies each edited package with `gofmt -l` and `go build` before reporting"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "side-effect-is-not-a-surprise",
+      "expected_behavior": [
+        "Removes `(*fileSink).Write`'s godoc as unremarkable: performing its own contract is not a surprise, however many side effects it takes",
+        "Keeps `(*teeSink).Write`'s godoc and expands it to name the surprise — the second write, and the success return that hides its failure",
+        "Does not treat \"has a side effect\" as sufficient on its own to keep a comment, or both would be kept"
+      ]
+    }
+  ]
+}

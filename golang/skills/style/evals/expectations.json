@@ -1,0 +1,102 @@
+{
+  "skill_name": "style",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "production-rules-while-writing",
+      "expected_behavior": [
+        "Applies the Production section: gofmt and goimports, lines within 80 columns, `%w` error wrapping with short context, godoc on exported symbols",
+        "Applies no Test-only rule to the production file — no `have`/`want` naming, no subtest conventions"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "test-rules-inherit-production",
+      "expected_behavior": [
+        "Applies the Test section on top of Production, not instead of it",
+        "Names tests `Test_Func` / `Test_Type_Method`, suffixes the table test `_tabular`, and uses `t.Run` subtests",
+        "Calls `t.Helper()` in helpers and reaches for `tester.Spy` when testing a helper",
+        "Keeps subtest names inside the `[a-zA-Z0-9 _-]` charset, flat, with no `/`"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "pass-lists-offenses-then-asks",
+      "expected_behavior": [
+        "Resolves the target, lists the files in scope, and reads `references/checking.md`",
+        "Reasons only for detection — runs no gofmt, vet, or linter",
+        "Opens the `rules.md` entry for the interface-method rule rather than the whole file",
+        "Reports style offenses only: the off-by-one is left to `golang:review`, not reported here",
+        "Groups findings Blocker / Should-fix / Nit with `file:line`, the rule id, and a minimal fix; ends with a clean / fix-first verdict and per-severity counts",
+        "Asks which offenses to apply rather than editing unprompted"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "fix-applies-everything-behind-a-green-gate",
+      "expected_behavior": [
+        "Runs `go test ./... -race` for a green baseline first, and stops without editing if that baseline is red",
+        "Applies every listed fix, then re-runs the gate",
+        "Reports each fix as one `file:sym — what changed` line plus the gate result",
+        "Prints no diffs and never commits"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "delegated-by-review",
+      "expected_behavior": [
+        "Runs the pass through the offense list and stops — no pick step and no edits",
+        "Returns the grouped offense list for `review` to merge with its correctness findings"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "rules-change-only-through-review",
+      "expected_behavior": [
+        "Routes the request to `golang:review` rule-edit mode instead of hand-editing `SKILL.md` or `rules.md`",
+        "The resulting change is one dense rule line in `SKILL.md`, plus a keyed `rules.md` entry only where the line alone is not enough"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "broad-target-auto-plan-first",
+      "expected_behavior": [
+        "Switches to plan-first: proposes the `max_issues` and `depth` defaults and the package list, and asks before checking",
+        "Skips that prompt when the invocation already carries `packages=a,b` or `max_issues=N`",
+        "Fans out one subagent per package past ~6, each opening only the `rules.md` entries it needs",
+        "Gives workers no per-package share of `max_issues` — they report everything they find and the cap is applied once at the merge",
+        "Merged offenses carry one severity and one rule id per rule, so the same offense in two packages does not arrive as two differently-named findings",
+        "Names the packages checked and the packages skipped",
+        "At `depth=light`, skips the LSP cross-file confirmation"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "terse-output",
+      "expected_behavior": [
+        "Opens with the target/file-set line and then the offenses — that line is the first fact, not preamble",
+        "No narration of reading the rules, and no restating of the invocation",
+        "States each offense once",
+        "No closing summary re-listing offenses the user can already see"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "incidental-interface-satisfaction",
+      "expected_behavior": [
+        "Flags `(*Conn).Close`, whose assertion declares it is written to the interface",
+        "Leaves `(*Buffer).Close` alone: incidentally matching an interface is not writing to one, and `goToImplementation` matching is not the test",
+        "Does not strip godoc from ordinary `Close`/`String`/`Error` methods on the strength of a signature match"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "severity-and-ids-are-stable",
+      "expected_behavior": [
+        "Gives the same offense the same severity in all three packages, decided from the rubric rather than per-package judgement",
+        "Gives the same offense the same rule id in all three packages, taken from the `rules.md` key rather than coined per package",
+        "Puts the missing exported godoc at Blocker and the receiver naming at Should-fix, per the rubric"
+      ]
+    }
+  ]
+}

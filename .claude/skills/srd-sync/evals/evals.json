@@ -9,14 +9,7 @@
       ],
       "setup": "The Confluence source advanced a version; one rule was reworded upstream. The vr checkout is present and `cfsync pull` has run.",
       "query": "Sync the SRD standard from Confluence",
-      "files": [],
-      "expected_behavior": [
-        "Reads the source, the current copy, and the header/footer frame before proposing anything",
-        "Runs the frozen-node check and, finding nothing new or missing, reports it in one line and continues — a `page_version` bump alone is a prompt to look, not a hard stop",
-        "Reports the reworded rule under TEXT DIFFERS with both sides shown",
-        "Confirms before writing, then writes header + transformed body + footer with the provenance banner carrying the new source `page_version`",
-        "Generated rule text is the source text verbatim — no paraphrase and no re-wrap that changed words"
-      ]
+      "files": []
     },
     {
       "id": 2,
@@ -26,11 +19,7 @@
       ],
       "setup": "A source requirement is wordy and awkward, and is not in the substitution set. Tightening it would plainly read better.",
       "query": "Regenerate the standard",
-      "files": [],
-      "expected_behavior": [
-        "Copies the requirement unchanged — does not tighten, fix, or summarize it, however tempting",
-        "Verifies the changed units match the source text minus the mechanical trims and substitutions, character for character, before the write"
-      ]
+      "files": []
     },
     {
       "id": 3,
@@ -40,15 +29,7 @@
       ],
       "setup": "GLO-3 in the source links the vr-internal glossary page, which the substitution set rewrites.",
       "query": "Sync the SRD standard",
-      "files": [],
-      "expected_behavior": [
-        "Copies GLO-3 verbatim, then applies substitutions by piping the body through `dev/srd-subst.sh` rather than hand-editing the rule",
-        "Substitutes the body before assembling and wrapping — the shipped copy holds post-substitution words, so wrapping first splits the script's patterns across lines and it reports `matched 0 times` on text that is present",
-        "Does not treat that ordering failure as an upstream rewording, and does not touch the script's rules to force it through",
-        "Reads what the script actually substituted rather than trusting a zero exit — the assertion is a substring match, so a reworded superset can pass and produce nonsense",
-        "The final copy carries the script's replacement, and GLO-3 is not reported as a diff",
-        "Does not touch the RFC notice — it lives in the header frame"
-      ]
+      "files": []
     },
     {
       "id": 4,
@@ -58,12 +39,7 @@
       ],
       "setup": "The local copy carries a rule that does not exist in the Confluence source.",
       "query": "Update srd-standard from the source",
-      "files": [],
-      "expected_behavior": [
-        "Reports it as LOCAL-ONLY with its full text and says to push it upstream",
-        "Does not silently drop it",
-        "Warns that writing will remove it, before proceeding"
-      ]
+      "files": []
     },
     {
       "id": 5,
@@ -73,12 +49,7 @@
       ],
       "setup": "The source `page_version` bumped and the export carries a `[[*expand:` localId that is neither an `<!-- expand: -->` anchor in `authoring-guide.md` nor listed in `dev/srd-untranscribed-examples.md`.",
       "query": "Sync the SRD standard",
-      "files": [],
-      "expected_behavior": [
-        "Stops before assembly and reports the new id and the rule it follows",
-        "Tells the maintainer to review the Quality Bar list and the expands, and either to transcribe the block into the guide or to add its id to `dev/srd-untranscribed-examples.md`",
-        "Re-reads the footer before continuing, and writes nothing until then"
-      ]
+      "files": []
     },
     {
       "id": 6,
@@ -88,12 +59,7 @@
       ],
       "setup": "The source gained a `# Tooling` heading the transform has never seen.",
       "query": "Regenerate the standard",
-      "files": [],
-      "expected_behavior": [
-        "Hard-stops with `NEW SECTION: Tooling` and writes nothing",
-        "Does not guess whether to keep or drop it",
-        "Says the transform must be extended first"
-      ]
+      "files": []
     },
     {
       "id": 7,
@@ -103,14 +69,7 @@
       ],
       "setup": "Since the last sync the header frame's intro paragraph was edited, and its Contents line still names a requirement group the source no longer has. The Notice differs from the source only by `in this document` → `in an SRD`.",
       "query": "Sync the SRD standard",
-      "files": [],
-      "expected_behavior": [
-        "Reports the intro hunk as FRAME and asks no confirmation for it",
-        "Fails the Contents check: names the stale group and tells the maintainer to update the header's Contents, then re-assembles",
-        "Blocks the write on that failure even though the diff is otherwise FRAME-only — a stale Contents line is itself a FRAME hunk and must not ride through",
-        "Passes the Notice check silently, since `in this document` → `in an SRD` is the one tolerated difference",
-        "Would treat any other Notice difference as `NOTICE DIFFERS` and hard-stop"
-      ]
+      "files": []
     },
     {
       "id": 8,
@@ -120,11 +79,7 @@
       ],
       "setup": "A machine with no vr checkout, so the cfsync mirror is absent.",
       "query": "Sync the SRD standard",
-      "files": [],
-      "expected_behavior": [
-        "Reports that the source is missing and names the expected path",
-        "Writes nothing — no copy and no provenance change"
-      ]
+      "files": []
     },
     {
       "id": 9,
@@ -134,11 +89,7 @@
       ],
       "setup": "A clean sync: a version bump with no unit diffs at all.",
       "query": "Sync the SRD standard",
-      "files": [],
-      "expected_behavior": [
-        "No preamble or step narration, and no closing summary re-dumping the file",
-        "States the frozen-node reminder and a one-line \"wrote … (page_version N)\" pointer, once"
-      ]
+      "files": []
     }
   ]
 }

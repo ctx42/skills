@@ -9,13 +9,7 @@
       ],
       "setup": "`_open-questions.md` holds 3 deferred questions and 2 unknowns; the `srd-doc` gap store holds 5 open gaps.",
       "query": "/backlog",
-      "files": [],
-      "expected_behavior": [
-        "States the three counts and stops, letting the user pick a list",
-        "Leads with `deferred` as the cheap wins",
-        "Starts no grilling and drafts no page before the user picks",
-        "No preamble; each count stated once"
-      ]
+      "files": []
     },
     {
       "id": 2,
@@ -25,13 +19,7 @@
       ],
       "setup": "One unknown asks whether a per-sensor-type propagation speed is needed. Nothing has been decided, but the corpus carries a page that reads like an answer — it states a single default speed, without saying whether per-type values are required.",
       "query": "/backlog unknowns",
-      "files": [],
-      "expected_behavior": [
-        "Does not read the corpus hit as the answer: a page that looks like it settles an open unknown is either a different question or the thing that should have closed it long ago",
-        "Establishes the row's state from the user, not from the corpus",
-        "Confirms it is still open and moves on, closing it only if the user reports that a decision was actually taken",
-        "Leaves the row under `## Open` and bumps no hit count"
-      ]
+      "files": []
     },
     {
       "id": 3,
@@ -41,13 +29,7 @@
       ],
       "setup": "Working the deferred list, the user answers one question with \"actually nobody knows that yet\" — it was filed as deferred but is really an unknown.",
       "query": "/backlog deferred",
-      "files": [],
-      "expected_behavior": [
-        "Has `srd:kb` change the row's kind from `deferred` to `unknown` in place, and says so",
-        "Writes nothing under the KB root itself — every KB write is delegated",
-        "Does not treat it as a skip or leave the row mislabeled",
-        "Does not file it as a documentation gap: it says nothing about the user manual"
-      ]
+      "files": []
     },
     {
       "id": 4,
@@ -57,13 +39,7 @@
       ],
       "setup": "Three open gaps, two of which report the same missing fact from different SRDs. The corpus covers a third of that fact already, but in an unranked page.",
       "query": "/backlog gaps",
-      "files": [],
-      "expected_behavior": [
-        "Clusters the two duplicates and surfaces the cluster size as priority",
-        "Checks the corpus before drafting, separating content that is absent from content that is present but unranked",
-        "Writes the draft outside every corpus source, the KB root included",
-        "Publishes nothing itself; once given the published URL it resolves every gap in the cluster"
-      ]
+      "files": []
     },
     {
       "id": 5,
@@ -73,13 +49,7 @@
       ],
       "setup": "The server exposes neither `list_gaps` nor `GET /gaps`. `_open-questions.md` still holds 2 deferred and 1 unknown.",
       "query": "/backlog",
-      "files": [],
-      "expected_behavior": [
-        "Opens with the counts it has and names the missing list in the same line — \"no gap store configured\" is part of the opening, not a reason to skip it",
-        "Works `deferred` and `unknowns` normally — the backends fail independently",
-        "Distinguishes a store that is absent from one that answered with an error: absent falls through, an error is reported",
-        "Invents no store and does not retry the failed probe"
-      ]
+      "files": []
     },
     {
       "id": 6,
@@ -89,12 +59,7 @@
       ],
       "setup": "A sitting that closes two deferred questions and one gap cluster.",
       "query": "/backlog",
-      "files": [],
-      "expected_behavior": [
-        "No narration of the list calls or the row moves",
-        "States what closed, once",
-        "No closing summary repeating the rows, and no drafted page echoed back into chat"
-      ]
+      "files": []
     }
   ]
 }
