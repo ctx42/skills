@@ -43,6 +43,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       ├── review/             # Read-only review of an SRD
 │       ├── edit/               # Interactive in-place editing of an SRD
 │       ├── system-check/       # Build-readiness review (system-knowledge)
+│       ├── backlog/             # Consumer: deferred, unknowns, and doc gaps
 │       └── kb/                  # Owns the knowledge base: capture and write
 └── craft/                          # Plugin: cross-cutting engineering-craft aids
     ├── .claude-plugin/plugin.json
@@ -87,6 +88,7 @@ Skills in the same plugin are copied together into the plugin cache, so they
 reference each other with relative paths from their own directory:
 
 - `review`, `edit`, and `system-check` read `../create/references/*`.
+- `backlog` reads `../kb/references/retrieval-authoring.md`, which `kb` owns.
 - `cover` and `doc` read `../style/SKILL.md`; `review` invokes `golang:style`
   for the style pass and writes rule edits to `../style/SKILL.md` +
   `../style/rules.md`.
