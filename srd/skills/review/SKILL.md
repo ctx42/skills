@@ -11,233 +11,207 @@ license: MIT
 
 # review
 
-Review an SRD someone else wrote and report what fails the SRD standard. It is
-**read-only** — it never edits the source.
+Review an SRD someone else wrote and report what fails the SRD standard,
+without editing it.
 
 ## Boundaries
 
-- **Role:** the read-only reviewer of an SRD written by someone else. Produce
+- Role: the read-only reviewer of an SRD written by someone else. Produce
   findings; the author acts on them.
-- **Owns:** the `<srd>.review.md` file beside the source — its creation,
-  structure, numbering, and lifecycle — across **all** modes (`review`, `walk`,
-  `check`, `feedback`). No other skill writes it; `edit` never touches it.
-- **Must not:** edit the source SRD or fix anything; restate or invent rules —
+- Owns: the `<srd>.review.md` file beside the source — its creation,
+  structure, numbering, and lifecycle — in every mode. No other skill writes
+  it; `edit` never touches it.
+- Must not: edit the source SRD or fix anything; restate or invent rules —
   defer all format, style, logic, and rules to `create`'s reference files.
 
 ## Sources of truth
 
-The rules, checklist, and defect classes live with `create`; this skill
-reuses them and never restates a rule. **This skill depends on
-`../create/references/*` — do not move or rename `create`. If any
-referenced file is missing at run time, stop and tell the user; do not
-proceed.** Read these before reviewing:
+The rules, checklist, and defect classes live with `create`; this skill reuses
+them and never restates a rule. It depends on `../create/references/*` — do
+not move or rename `create`. If a referenced file is missing at run time, stop
+and tell the user.
 
 - [../create/references/srd-standard.md](../create/references/srd-standard.md)
-  (eager) — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`,
-  Quality Bar). The review checks every rule; every finding cites one of
-  these ids.
+  (eager) — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, Quality
+  Bar). The review checks every rule.
 - [../create/references/authoring-guide.md](../create/references/authoring-guide.md)
-  (eager) — house extensions (US English, sub-numbering, terminology
-  consistency) and the Bad→Good defect classes to recognize; includes the
-  consistency pass.
+  (eager) — house additions (US English, sub-numbering, draft scaffolds,
+  terminology consistency), the consistency pass, and the Bad→Good defect
+  classes to recognize.
+- [../create/references/errata.md](../create/references/errata.md) (on-demand:
+  classifying a finding as errata) — the gate, allowlist, and exclusions of the
+  bulk-fix errata class.
+- [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
+  (eager) — how to reach the documentation corpus, how its sources rank, and
+  where an unconfirmed claim goes.
 
-**Apply the full rule set.** `create` leaves STR-2..7 (≥ 2 owners,
-Initiative link, Designs link or `N/A` when no UI change) and STA-* (valid
-Status; not `ACCEPTED` without an approved design or the Quality Bar) as
-placeholders. A finished SRD under review must satisfy them — flag every gap.
-Exception: the back-links (STR-4, STR-6) live in the external ticket and design
-tool, outside the SRD artifact — the review only checks that the forward
-Initiative and Designs links are present in the metadata, and never raises a
-back-link finding.
+Apply the full rule set. `create` leaves STR-2..7 (≥ 2 owners, Initiative
+link, Designs link or `N/A` when no UI change) and STA-* (valid Status; not
+`ACCEPTED` without an approved design or the Quality Bar) as placeholders; a
+finished SRD under review must satisfy them — flag every gap. Exception: the
+back-links (STR-4, STR-6) live in the external ticket and design tool, so check
+only that the forward Initiative and Designs links are present and never raise
+a back-link finding.
 
-## Documentation corpus (when available)
+## Documentation corpus
 
-Some setups expose the platform's live documentation over the `srd-doc` MCP
-server — the read tools `mcp__srd-doc__search` (query + optional `k`),
-`mcp__srd-doc__get_doc` (document id), and `mcp__srd-doc__list_docs` (no args).
-When present, run a **facts-vs-corpus pass** beside the rule checks: for every
-requirement that asserts something about existing system behaviour ("the
-gateway retries 3×", "the API returns Y"), `search` the corpus to confirm it.
-Degrade MCP → the `srd-doc` REST mirror
-(`curl 'http://<host>:7777/search?q=TEXT&k=5'`, `.../docs/<id>`) →
-scoped Grep/Read over a local corpus checkout, falling through only when a step
-genuinely is not there. Absent a corpus, skip the pass and review offline as
-before. This stays read-only — it queries the docs, never edits the SRD.
-
-### Reporting a doc gap
-
-When the corpus **cannot confirm** such a claim — missing, wrong, incomplete, or
-ambiguous docs — that is a *documentation* gap, not an SRD finding: it never
-enters `<srd>.review.md`. Hand it to `srd:report-doc-gap`, which owns capture,
-the grill, and the confirmed filing; invoke it on discovery — it buffers the gap
-without interrupting the review — and at session start, where it drains any gaps
-left unfiled. SRD-standard defects stay in the review file as always; only
-corpus deficiencies cross to `report-doc-gap`.
+Procedure, trust, and where an outcome goes: the shared corpus reference in
+Sources of truth. `review` and `walk` invoke `srd:report-doc-gap` twice: as
+their first step, to drain gaps a prior session left unfiled, and after the
+closing line, to offer the gaps this run buffered. When a corpus is reachable,
+they also run a facts-vs-corpus pass beside the rule checks: for every
+requirement that asserts something about existing system behavior ("the
+gateway retries 3×", "the API returns Y"), `search` the corpus to confirm it. A
+claim the corpus contradicts is a `reference` finding; one it cannot confirm is
+a doc gap for `srd:report-doc-gap`, never a finding in `<srd>.review.md`.
+Absent a corpus, skip the pass and review offline. `srd:kb` is not invoked: a
+review confirms no platform facts with the user.
 
 ## Severity
 
 Tag each finding:
 
-- **blocker** — breaks Quality-Bar acceptance: non-atomic (REQ-1), unverifiable
-  (REQ-5/6), uncovered `In Scope` item (SCO-2 — suspended while the In Scope
-  `--- TODO ---` marker stands), requirement contradicting `Out
-  of Scope` (SCO-3), undefined term (GLO-3/STR-10), rule hidden in a glossary
-  entry or metadata (GLO-1/2), duplicate or out-of-order id (REQ-3/4), missing
-  required forward link (STR-2/3/5/7; back-links STR-4/6 are external, never
-  flagged), invalid or over-claimed Status (STA-*),
-  an unresolved draft scaffold — the In Scope `--- TODO ---` marker or a
-  non-empty `## TODO` section (see the authoring guide's house additions).
-- **major** — real defect, does not block: style (LANG-1/2/5/6/7), terminology
+- `blocker` — breaks Quality-Bar acceptance: non-atomic (REQ-1), unverifiable
+  (REQ-5/6), uncovered In Scope item (SCO-2; suspended while the In Scope
+  `--- TODO ---` marker stands), requirement contradicting Out of Scope
+  (SCO-3), undefined term (GLO-3/STR-10), rule hidden in a glossary entry or
+  metadata (GLO-1/2), duplicate or out-of-order id (REQ-3/4), missing forward
+  link (STR-2/3/5/7), invalid or over-claimed Status (STA-*), an unresolved
+  draft scaffold — the In Scope `--- TODO ---` marker or a non-empty `## TODO`
+  section (house additions).
+- `major` — real defect, does not block: style (LANG-1/2/5/6/7), terminology
   drift, overlapping or duplicate requirements.
-- **minor** — cosmetic: British spelling, spacing, punctuation.
+- `minor` — cosmetic: British spelling, spacing, punctuation.
 
 ## Category
 
-Also tag each finding with **one** category — two only when it genuinely carries
-two — inside the **same bracket** as the severity, comma-separated, severity
-first and the primary category next: `[major, logical, redundancy]`. Lowercase,
-and mandatory on every finding in every section (open, `## Errata`,
-`## Resolved`, `## Withdrawn`). Never a third category.
+Also tag each finding with one category — two only when it genuinely carries
+two — inside the same bracket as the severity, comma-separated, severity first
+and the primary category next: `[major, logical, redundancy]`. Lowercase,
+mandatory on every finding in every section, never a third category. One
+bracket only: adjacent `][` is CommonMark reference-link syntax and renders as
+a broken link in Obsidian.
 
-**One bracket only.** Never split severity and category into two brackets —
-adjacent `][` is CommonMark's full-reference-link syntax and renders as a broken
-link in Obsidian. A single bracket is a shortcut reference link, which renders
-literally; a second one immediately after is not.
+Categories in precedence order — when a finding fits more than one, the higher
+entry leads and the lower becomes the second tag:
 
-Categories are listed in **precedence order**: when a finding fits more than one,
-the higher entry leads and the lower becomes the second tag.
-
-- **structure** — a required part of the document is absent or malformed, or its
+- `structure` — a required part of the document is absent or malformed, or its
   lifecycle state is invalid (STR-*, STA-*).
-- **logical** — two rules conflict, a case no rule covers, precedence between
+- `logical` — two rules conflict, a case no rule covers, precedence between
   rules unstated.
-- **coverage** — an `In Scope` item no requirement covers, a requirement
-  contradicting `Out of Scope`, or a rule stated only in a Note or the
+- `coverage` — an In Scope item no requirement covers, a requirement
+  contradicting Out of Scope, or a rule stated only in a Note or the
   Introduction (SCO-2, SCO-3).
-- **reference** — a link, ticket id, or claim about the live system that is wrong
-  or stale.
-- **redundancy** — two rules state the same thing, or one subsumes the other.
-- **verifiability** — a vague quality, an unmeasurable criterion, an open-ended
+- `reference` — a link, ticket id, or claim about the live system that is
+  wrong or stale.
+- `redundancy` — two rules state the same thing, or one subsumes the other.
+- `verifiability` — a vague quality, an unmeasurable criterion, an open-ended
   list (REQ-5, REQ-6, LANG-7).
-- **atomicity** — one item carrying more than one rule, an example or note inside
-  a rule, a rule stating appearance instead of behavior (REQ-1, REQ-7, LANG-5,
-  SCO-1).
-- **terminology** — one concept under many names, an undefined term, casing that
+- `atomicity` — one item carrying more than one rule, an example or note
+  inside a rule, a rule stating appearance instead of behavior (REQ-1, REQ-7,
+  LANG-5, SCO-1).
+- `terminology` — one concept under many names, an undefined term, casing that
   drifts from the glossary (GLO-1, GLO-2, GLO-3).
-- **linguistic** — grammar, spelling, a missing word, the wrong subject or voice,
-  a misplaced or lowercase normative keyword (LANG-1, LANG-2, LANG-3, LANG-4,
-  LANG-6).
-- **format** — markup, bold identifiers, id numbering, punctuation, spacing
+- `linguistic` — grammar, spelling, a missing word, the wrong subject or
+  voice, a misplaced or lowercase normative keyword (LANG-1, LANG-2, LANG-3,
+  LANG-4, LANG-6).
+- `format` — markup, bold identifiers, id numbering, punctuation, spacing
   (REQ-2, REQ-3, REQ-4, REQ-8).
 
-Two boundaries: `reference` covers a wrong *pointer or fact* while `terminology`
-covers a diverging *word choice*, so an SRD that renames an existing platform
-concept is `terminology`. Category is orthogonal to `## Errata` — an errata
-finding is `[format]` or `[linguistic]`, but not every `[format]` or
-`[linguistic]` finding is errata.
+`reference` covers a wrong pointer or fact, `terminology` a diverging word
+choice: an SRD that renames an existing platform concept is `terminology`.
+Category is orthogonal to `## Errata`: an errata finding is `format` or
+`linguistic`, but not every `format` or `linguistic` finding is errata.
 
 ## Modes
 
-The review file is always `<srd>.review.md` next to the source — auto-derived,
-never passed as an argument. `$1` is the SRD path; `$2` selects the mode
-(default **review** when omitted). With no `$ARGUMENTS`, ask which SRD to
-review; fall back to the user's prose for free-form input.
+The review file path is auto-derived, never passed as an argument. `$1` is
+the SRD path; `$2` selects the mode (default review when omitted). With no
+`$ARGUMENTS`, ask which SRD to review; fall back to the user's prose for
+free-form input.
 
-- `$1` only → **review** (default): read the whole SRD, write the review file.
-- `$1` + `walk` → **walk**: interactive, section by section; record only
-  findings the user confirms.
-- `$1` + `check` → **check**: re-verify the existing review file's open findings
-  against the current SRD; tick/move fixed ones, withdraw invalid ones. Does not
-  hunt for new defects. Trailing finding numbers (`check #4,6` or `check #4 #6`)
-  scope it to those findings only; omitted, it checks every open finding.
-- `$1` + `errata` → **errata**: reorganize an existing review file so errata
-  findings sit in `## Errata`. Reclassify only; does not hunt for new defects.
-- `$1` + `feedback` → **feedback**: emit a terse plain-text issue list of open
+- `$1` only → review (default): read the whole SRD, write the review file.
+- `$1` + `walk` → walk: interactive, section by section; record only findings
+  the user confirms.
+- `$1` + `check` → check: re-verify the review file's open findings against
+  the current SRD; tick/move fixed ones, withdraw invalid ones. Trailing
+  finding numbers scope it. Hunts no new defects.
+- `$1` + `errata` → errata: re-sort an existing review file so errata findings
+  sit in `## Errata`. Reclassify only; hunts no new defects.
+- `$1` + `feedback` → feedback: emit a terse plain-text issue list of open
   tasks for an email or ticket. No file write.
 
+A file-writing run closes with one task-oriented line — e.g. "4 of 15 tasks
+resolved, 2 withdrawn; 1 blocker still open." — plus the per-severity count of
+open findings and whether a blocker stands between the SRD and the Quality Bar.
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
 
 ## Review file format
 
-Every finding carries a **global sequential number** (`#1..#N`): a plain
-integer, permanent, never reused and never renumbered. The next number is
-`max(all numbers across open + Resolved + Withdrawn) + 1` — no stored counter;
-the file is self-describing. (Plain integers only; `a/b` suffixes belong to the
-SRD's own ids like `GR-3a`, never to findings.)
+Every finding carries a global sequential number (`#1..#N`): a plain integer,
+permanent, never reused and never renumbered. The next number is `max(all
+numbers across open + Resolved + Withdrawn) + 1` — no stored counter; the file
+is self-describing.
 
-Each finding is **atomic** — one indivisible fix, verifiable by a single
-yes/no. The boundary is **independent verifiability**: if two edits can be
-verified or resolved separately, they are two findings, even when they share
-one root cause. No bullet says "do A and B".
+Each finding is atomic — one indivisible fix, verifiable by a single yes/no. If
+two edits can be verified or resolved separately, they are two findings, even
+when they share one root cause. No bullet says "do A and B".
 
 Open finding shape — number first, then severity, then category:
 
 `- [ ] #7 [blocker, atomicity] GR-3a: problem — fix. (SRD:REQ-1)`
 
-Close each finding with its rule-id citation **namespaced `SRD:`** — e.g.
-`(SRD:REQ-1)`, `(SRD:GLO-3)` — marking it an SRD-standard rule. The only rule
-namespaces are `STR`, `STA`, `LANG`, `REQ`, `GLO`, and `SCO`; never cite a rule
-absent from
+Close each finding with its rule-id citation namespaced `SRD:` — `(SRD:REQ-1)`,
+`(SRD:GLO-3)`. The only rule namespaces are `STR`, `STA`, `LANG`, `REQ`, `GLO`,
+and `SCO`; never cite a rule absent from
 [../create/references/srd-standard.md](../create/references/srd-standard.md)
-(e.g. a defunct `MD-*`). A consistency-pass finding cites `(SRD:consistency)`.
+(e.g. a defunct `MD-*`). A consistency-pass finding cites `(SRD:consistency)`
+and sits under the section where the conflict surfaces; a house-addition
+finding (US English, draft scaffolds) cites `(SRD:house)`.
 
-**Locate by identifier, never by line number.** Anchor each finding to the
-SRD's own id — requirement (`GR-3a`), scope item (`SC-12`), or glossary term —
-or, when no id fits, to the section name **verbatim** plus a short quote of the
-offending text. Use only ids and headings that actually appear in the SRD; never
-invent section shorthand such as `§1.3` — the SRD does not use `§`. Line numbers
-shift with formatting and are unreliable; never cite them.
+Locate by identifier, never by line number: anchor each finding to the SRD's
+own id — requirement (`GR-3a`), scope item (`SC-12`), or glossary term — or,
+when no id fits, to the section name verbatim plus a short quote of the
+offending text. Never invent shorthand such as `§1.3`; line numbers shift with
+formatting. Never quote literal doubled or trailing whitespace as evidence;
+describe it in words ("two consecutive spaces before the word *in*"), because
+wrapping the review file normalizes whitespace and destroys the quoted proof.
 
-Wrap every finding at **80 columns**, breaking onto continuation lines indented
-two spaces (aligning under the bullet text). A single unbreakable token — a long
-URL or path — may overflow; nothing else may. A `*(Partial — …)*` note starts its
-own continuation line.
+Wrap every finding at 80 columns, breaking onto continuation lines indented two
+spaces. Only a single unbreakable token (a long URL or path) may overflow. A
+`*(Partial — …)*` note starts its own continuation line.
 
 Layout, in order:
 
-1. `## Errata` **first**, at the very top of the open findings — every open
-   finding that passes the gate and allowlist of the errata class in
-   [../create/references/authoring-guide.md](../create/references/authoring-guide.md).
-   Grouped here instead of under its document section, so the author can
-   bulk-apply the block via `edit autofix`. The literal heading `## Errata` is
-   the machine anchor `edit autofix` locates; do not rename it. Errata findings
-   keep their global number, their `[minor]` tag, their category, and their
-   citation, exactly like any other finding. Omit the section when empty.
-
-   **Every errata finding MUST state its fix as an exact substitution**
-   `` `old` → `new` `` — that is the gate, so a finding that cannot carry
-   one does not belong here. Two shapes, no others:
-
-   - *Literal* — quote both sides in backticks:
-     `` REG-4: `Authentiction` → `Authentication`. ``
-   - *Coded* — whitespace and glyph classes only, where quoting the span is
-     forbidden: name the class and a neighboring word, and `autofix` derives the
-     fix (`two consecutive spaces before the word "in" — collapse to one`).
-
-   A finding fixing one substitution repeated across sites MUST list **every**
-   site, so `autofix` can verify the count. Never bundle two different
-   substitutions into one finding — they are independently verifiable, so they
-   are separate findings.
-2. **Open findings**, grouped by document section: Metadata, Introduction,
-   Glossary, Scope, Requirements. Omit a section with no open findings. An errata
-   finding lives in `## Errata`, never also under its document section.
+1. `## Errata` first — every open finding that passes the gate and allowlist
+   of the errata class in
+   [../create/references/errata.md](../create/references/errata.md), grouped
+   here instead of under its document section so the author can bulk-apply the
+   block via `edit autofix`. The literal heading `## Errata` is the anchor
+   `edit autofix` locates; never rename it. Errata findings keep their global
+   number, `[minor]` tag, category, and citation. Each states its fix as the
+   exact substitution the class requires — literal `` `old` → `new` ``, or for
+   whitespace and glyph classes the class plus a neighboring word (`autofix`
+   derives the fix) — and a substitution repeated across sites lists every
+   site so `autofix` can verify the count. Two different substitutions are two
+   findings. Omit the section when empty.
+2. Open findings, grouped by document section: Metadata, Introduction,
+   Glossary, Scope, Requirements. Omit a section with no open findings. An
+   errata finding lives in `## Errata`, never also under its document section.
 3. A `---` line, then `## Resolved`: fixed findings as `- [x] #7 …`, a flat
-   list **sorted by number** (section grouping dropped), keeping the text and
-   rule id.
+   list sorted by number, keeping the text and rule id.
 4. A `---` line, then `## Withdrawn` (last): `- #9 … (withdrawn: <reason>)` —
-   **no checkbox**, keeps the number.
+   no checkbox, keeps the number.
 
-A finding lives in exactly one place. **Regression:** a resolved finding that
-breaks again moves back to its open section, unticked, keeping its original
-number — the same defect keeps its history.
+A finding lives in exactly one place. Regression: a resolved finding that
+breaks again moves back to its open section, unticked, keeping its number.
 
-Separate consecutive findings with **exactly one blank line** — in every
-section — so a long list reads as distinct blocks, not a wall of text. One
-blank line after a section heading before its first finding; never two.
+Separate consecutive findings with exactly one blank line in every section;
+one blank line after a section heading before its first finding.
 
 The metadata is YAML frontmatter with lowercase keys; `prepared` and `updated`
-carry a date **and time**. Include `cfsync-plugin: ignore-push` verbatim so the
+carry a date and time. Include `cfsync-plugin: ignore-push` verbatim so the
 Confluence sync never pushes this generated artifact.
 
 ```
@@ -253,7 +227,7 @@ cfsync-plugin: ignore-push
 ## Errata
 
 - [ ] #8 [minor, linguistic] VIEW-4 uses British spelling: `colour` → `color`.
-  (SRD:LANG-1)
+  (SRD:house)
 
 - [ ] #10 [minor, format] GR-3a: two consecutive spaces after the word "sensor"
   — collapse to one. (SRD:LANG-2)
@@ -280,7 +254,7 @@ cfsync-plugin: ignore-push
   GR-11. (SRD:SCO-2)
 
 - [x] #4 [minor, linguistic] British spelling "behaviour" — changed to US.
-  (SRD:LANG-1)
+  (SRD:house)
 
 ---
 
@@ -292,87 +266,82 @@ cfsync-plugin: ignore-push
 
 ## review (default)
 
-1. Read the entire SRD top to bottom.
+1. Invoke `srd:report-doc-gap` to drain gaps a prior session left unfiled for
+   this SRD. Read the entire SRD top to bottom.
 2. Check it against every rule in
    [../create/references/srd-standard.md](../create/references/srd-standard.md),
    in document-section order, including the consistency pass and the house
-   additions. When a corpus is available, also run the facts-vs-corpus pass
-   (see [Documentation corpus](#documentation-corpus-when-available)) and
-   delegate any doc gap to `srd:report-doc-gap`, keeping it out of the review
-   file.
+   additions of the authoring guide. When a corpus is reachable, also run the
+   facts-vs-corpus pass ([Documentation corpus](#documentation-corpus)),
+   handing each doc gap to `srd:report-doc-gap` on discovery.
 3. If the review file does not exist, create it and write all findings with
-   fresh numbers starting at `#1`, grouped and tagged as above — every errata
-   finding under `## Errata`, the rest under their document section.
-4. If it already exists, do not rewrite it. First **resolve**: re-verify open
-   findings and tick+move each fixed one to `## Resolved` (a regression moves
-   back to its open section, same number). Then **append** newly found defects
-   with fresh numbers — errata to `## Errata`, the rest to their document
-   section. Bump the `updated:` frontmatter.
-5. Close with the task-oriented summary (see Closing).
+   fresh numbers starting at `#1`, grouped and tagged as above.
+4. If it exists, do not rewrite it. First resolve: re-verify open findings and
+   tick+move each fixed one to `## Resolved` (a regression moves back, same
+   number). Then append newly found defects with fresh numbers — errata to
+   `## Errata`, the rest to their document section. Bump `updated:`.
+5. Close with the task-oriented line (Modes), then invoke `srd:report-doc-gap`
+   to offer the gaps this run buffered.
 
 ## walk
 
-Go section by section in document order. For each section:
+Drain `srd:report-doc-gap` as in review, then go section by section in
+document order. For each section:
 
-1. Read it and identify every issue.
+1. Read it and identify every issue, including the facts-vs-corpus pass when a
+   corpus is reachable.
 2. Present the findings — problem and fix for each. Record nothing yet.
 3. Wait for the user to confirm which to keep (all, some, none).
 4. Append only confirmed findings to the review file with fresh numbers,
    written as author-facing guidance. Create the file before the first write;
-   bump the `updated:` frontmatter on each.
-5. Move on only after the user confirms or skips. Never edit the source.
+   bump `updated:` on each.
+5. Move on only after the user confirms or skips.
+
+After the last section, close as in review step 5.
 
 ## check
 
-Given the current SRD and its existing review file, **re-verify only** — do not
-hunt for new defects. Keep every number; bump the `updated:` frontmatter.
+Re-verify only — hunt no new defects. Keep every number; bump `updated:`.
 
-Trailing finding numbers **scope the pass** to just those findings; the rest
-stay untouched. Accept them comma- or space-separated, `#` optional —
-`check #4,6`, `check #4 #6`, `check 4,6` all name findings #4 and #6. Report any
-listed number that is absent or already resolved/withdrawn, and check the rest.
-Omitted, check every open finding.
+Trailing finding numbers scope the pass to those findings; the rest stay
+untouched. Accept them comma- or space-separated, `#` optional — `check #4,6`,
+`check #4 #6`, `check 4,6` all name #4 and #6. Report any listed number that is
+absent or already resolved/withdrawn, and check the rest. Omitted, check every
+open finding.
 
-1. For each finding in scope, judge it against the current text and map its
-   state:
-   - **fixed** → tick `[x]` and move to `## Resolved`.
-   - **partial** → stays `[ ]` in its section with `*(Partial — …)*` appended.
-     Never ticks.
-   - **not addressed** → stays `[ ]`, untouched.
-2. **Withdrawal is check-only:** if a finding proves invalid (mistaken, the
+1. Judge each finding in scope against the current text:
+   - fixed → tick `[x]` and move to `## Resolved`.
+   - partial → stays `[ ]` in its section with `*(Partial — …)*` appended;
+     never ticks.
+   - not addressed → stays `[ ]`, untouched.
+2. Withdrawal is check-only: a finding that proves invalid (mistaken, the
    author justified the text, or it cites a rule absent from the standard such
-   as a defunct `MD-*`), move it to `## Withdrawn` with a reason. Never carry a
+   as a defunct `MD-*`) moves to `## Withdrawn` with a reason. Never carry a
    non-enforceable finding open. No other mode withdraws.
 3. Report a short status table: number, current state, assessment.
 
 ## errata
 
-Reorganize an **existing** review file so its errata sit in `## Errata` — a
-one-time retrofit for files written before the block existed, and a re-sort on
-demand. **Reclassify only — never hunt for new defects** (like `check`). Keep
-every number; bump the `updated:` frontmatter.
+Re-sort an existing review file so its errata sit in `## Errata`. Reclassify
+only — hunt no new defects. Keep every number; bump `updated:`.
 
-1. For each open finding, test it against the gate and allowlist of the errata
-   class in
-   [../create/references/authoring-guide.md](../create/references/authoring-guide.md).
-   If it qualifies and is not already under `## Errata`, move it there —
-   **keeping its number**, `[minor]` tag, category, and citation; create the
-   `## Errata` section at the top if absent. Classify conservatively: leave
-   ambiguous findings where they are.
-   A qualifying finding written as prose ("fix the spelling") is **rewritten**
-   into the substitution shape as it moves — that is what makes it appliable.
-   One finding naming several different fixes is **split** into one finding per
-   substitution — each qualifying one moves to `## Errata` with a new number,
-   while anything that fails the gate stays where it is under the original
-   number, rewritten to name only the sites left. When every part qualifies, the
-   original number goes with the first substitution and nothing is left behind.
-   Report each split. (Splitting is not hunting — the defects were already
-   recorded.)
-2. Leave every non-errata finding, and every already-placed errata finding,
-   untouched. The pass is **idempotent** — a second run changes nothing.
-3. If the review file does not exist, fall through to a normal **review**.
-4. Report which numbers moved (e.g. "moved #4, #6, #9 to Errata"); say so when
-   none moved.
+1. Test each open finding against the gate and allowlist in
+   [../create/references/errata.md](../create/references/errata.md). One that
+   qualifies and is not yet under `## Errata` moves there keeping its number,
+   `[minor]` tag, category, and citation; create the section at the top if
+   absent. Classify conservatively: leave ambiguous findings where they are. A
+   qualifying finding written as prose ("fix the spelling") is rewritten into
+   the substitution shape as it moves. One finding naming several different
+   fixes is split into one finding per substitution: each qualifying one moves
+   to `## Errata` under a new number, while anything failing the gate stays
+   under the original number, rewritten to name only the sites left; when
+   every part qualifies, the original number goes with the first substitution.
+   Report each split (the defects were already recorded, so this is not
+   hunting).
+2. Leave every other finding untouched; the pass is idempotent.
+3. If the review file does not exist, fall through to a normal review.
+4. Report which numbers moved ("moved #4, #6, #9 to Errata"); say so when none
+   moved.
 
 ## feedback
 
@@ -381,26 +350,11 @@ Emit plain text for an email or ticket — no file write:
 - Title: `<Document Title> — Review Feedback`.
 - Group by section name as a plain heading (no markdown symbols). `## Errata`
   is one such group — list it first, as `Errata`, when it holds open findings.
-- One bullet per **open** finding, **blank-line separated** (as in the review
-  file). Keep the finding number and the SRD's own requirement id (e.g.
-  `#7 GR-3a:`), then a one-line problem-and-fix. Drop the checkbox, the severity
-  tag, the category tag, and the standard rule-id citation. No bold, no
-  multi-line bullets.
-- List open findings only — omit Resolved and Withdrawn.
-
-## Closing
-
-Close a file-writing run with one **task-oriented** line — e.g. "4 of 15 tasks
-resolved, 2 withdrawn; 1 blocker still open." — alongside the per-severity
-count of open findings and whether any blocker stands between the SRD and the
-Quality Bar.
-
-## Consistency pass
-
-Run the consistency pass in
-[../create/references/authoring-guide.md](../create/references/authoring-guide.md).
-Report each consistency finding under the section where the conflict surfaces,
-citing the rule id as `(SRD:<id>)`, or `(SRD:consistency)`.
+- One bullet per open finding, blank-line separated. Keep the finding number
+  and the SRD's own requirement id (`#7 GR-3a:`), then a one-line
+  problem-and-fix. Drop the checkbox, the severity tag, the category tag, and
+  the rule-id citation. No bold, no multi-line bullets.
+- Open findings only — omit Resolved and Withdrawn.
 
 ## Self-learning
 
