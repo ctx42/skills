@@ -39,8 +39,8 @@
       "expected_behavior": [
         "Scans the session's Go feedback and pairs each item with the diff hunk that resolved it",
         "Proposes the two genuinely new rules, each with its provenance and a before/after example",
-        "Drops the task-specific one-off",
-        "Reports the helper-naming correction as already covered rather than proposing it again — deduping against `../style/SKILL.md` happens before presenting, not after",
+        "Drops the project-specific rename",
+        "Reports the `context.Context` correction as already covered rather than proposing it again — deduping against `../style/SKILL.md` happens before presenting, not after",
         "Waits for the user to pick before writing; on confirmation writes the `../style/SKILL.md` line plus its keyed `../style/rules.md` entry and shows the diff"
       ]
     },

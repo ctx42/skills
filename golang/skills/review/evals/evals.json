@@ -37,7 +37,7 @@
       "skills": [
         "review"
       ],
-      "setup": "A finished session with three corrections. Two are genuinely new: the user rejected a `context.Context` stored in a struct field, and asked that table-test case names read as the condition rather than the input value. The third — renaming a helper to say what it does — is already stated verbatim in `../style/SKILL.md`. A fourth exchange was a one-off rename specific to this project's domain.",
+      "setup": "A finished session with four corrections. Two are genuinely absent from `../style/SKILL.md`: the user rejected a package-level `var` used as mutable state between calls, and asked that a constructor returning `(*T, error)` validate its arguments before allocating. One repeats a rule the rulebook already carries verbatim — never store a `context.Context` in a struct field. The fourth was a rename specific to this project's domain vocabulary.",
       "query": "/review learn",
       "files": []
     },

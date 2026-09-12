@@ -101,6 +101,12 @@ review.
    so read them once, take the offenses, and do not consult them again while
    judging correctness — the two dimensions stay separate in the report even
    when they share a context.
+
+   One defect can be both. A `%v` wrap is a style offense and, where it breaks
+   an error chain a caller unwraps, a correctness bug. Report it once, under
+   correctness, and name the style rule it also breaks — a reader counting
+   blockers should not meet the same line twice, and correctness is the
+   severity that governs the fix.
 3. Review each file for what style does not cover, in this order:
    - Correctness: bugs, wrong logic, nil/bounds, ignored errors, data races.
    - Edge cases: empty/large/concurrent inputs and every error path.
