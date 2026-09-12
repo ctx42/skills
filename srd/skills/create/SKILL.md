@@ -180,9 +180,12 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    coverage and conflicts, every In Scope item needing ≥ 1 requirement and none
    contradicting Out of Scope (SCO-2/3); duplicate or overlapping requirements
    and terminology drift (authoring guide); any Quality Bar item not yet met.
-   When a corpus is available, also flag any requirement whose claim about
-   existing system behavior it could not confirm, a facts gap distinct from the
-   format checks, and route it per [Documentation corpus](#documentation-corpus).
+   Also flag any requirement whose claim about existing system behavior went
+   unconfirmed — a facts gap distinct from the format checks. With a corpus,
+   that means the lookup failed, and it routes per
+   [Documentation corpus](#documentation-corpus); offline it means nobody
+   checked, and it goes to the user as an open question. Either way it is
+   flagged, never assumed true because there was nothing to check it against.
    Marked placeholders (Initiative, Designs, Owners, an unresolved In Scope
    `--- TODO ---` marker, any non-empty `## TODO` section) are always
    outstanding human follow-ups.

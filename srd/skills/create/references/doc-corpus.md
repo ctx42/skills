@@ -4,7 +4,12 @@ How the SRD skills ground claims about the existing platform in its live
 documentation, and where what a lookup teaches goes. Shared by `create`,
 `review`, `edit`, and `system-check`: each skill says *when* it consults the
 corpus, this file says *how*. Absent a corpus, every skill runs offline: skip
-the lookups, never stop.
+the lookups, never stop — but skipping the lookup does not confirm the claim.
+An assertion about existing system behavior that no one checked stays
+unconfirmed, and is flagged as such, offline exactly as it would be online. The
+only thing the corpus's absence changes is who can settle it: with a corpus,
+the lookup; without one, the user. Silently accepting a platform claim because
+there was nothing to check it against is the one outcome this file rules out.
 
 ## Backends
 
