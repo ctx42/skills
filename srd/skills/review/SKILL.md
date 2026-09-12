@@ -11,6 +11,17 @@ license: MIT
 
 # review
 
+## Usage
+
+```
+/review <srd>             review (default): resolve fixed + append new
+/review <srd> walk        interactive, section by section
+/review <srd> check       re-verify open findings against the current SRD
+/review <srd> check #4,6  re-verify only findings #4 and #6
+/review <srd> errata      re-sort existing findings into ## Errata
+/review <srd> feedback    terse plain-text list of open tasks
+```
+
 Review an SRD someone else wrote and report what fails the SRD standard,
 without editing it.
 
