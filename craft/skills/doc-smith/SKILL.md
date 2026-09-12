@@ -7,9 +7,20 @@ description: >
   asked to create, audit, review, proof, proofread, check, or work through
   technical docs, a user manual, or product documentation.
 argument-hint: "[create|audit*|proof|revise] [<file>...]"
+license: MIT
 ---
 
 # doc-smith
+
+## Usage
+
+```
+/doc-smith <file>...         audit (default): report findings by severity, edit nothing until approved
+/doc-smith create <desc>     draft a new document or section from scratch
+/doc-smith audit <file>...   the default, named explicitly
+/doc-smith proof <file>...   fix in place: grammar, clarity, consistency; flag what it can't decide
+/doc-smith revise <file>...  work through the doc with the user, one paragraph at a time
+```
 
 Create, audit, proof, and revise technical documentation and user manuals;
 Markdown is the assumed format. The mode is `$1` when it is a mode word, else

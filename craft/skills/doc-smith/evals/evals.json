@@ -1,0 +1,101 @@
+{
+  "skill_name": "doc-smith",
+  "evals": [
+    {
+      "id": 1,
+      "name": "cross-document-contradiction",
+      "skills": ["doc-smith"],
+      "setup": "`docs/manual.md` calls Acme \"a hosted web platform\" in the intro and says \"Acme runs entirely in your web browser\" three sections later, repeating the browser claim twice more after that. No mode word is given.",
+      "query": "/doc-smith docs/manual.md",
+      "files": [],
+      "expected_behavior": [
+        "Defaults to audit: models the whole document before judging and edits nothing before approval",
+        "Reports the contradiction as a Blocker citing both locations, not just the later one",
+        "Flags the twice-repeated browser claim as redundancy",
+        "Numbers the findings and groups them Blocker / Should-fix / Nit"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "flag-dubious-claim",
+      "skills": ["doc-smith"],
+      "setup": "`docs/api-guide.md` is clean prose apart from one line asserting \"REST APIs are stateful by design.\"",
+      "query": "/doc-smith proof docs/api-guide.md",
+      "files": [],
+      "expected_behavior": [
+        "Fixes grammar, terminology, and clarity directly in the file",
+        "Does not silently rewrite the dubious claim — raises it as a question stating what it would expect instead and why",
+        "Lists the flagged claim among the items awaiting the user's decision",
+        "Invents no replacement fact it cannot ground"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "terse-output",
+      "skills": ["doc-smith"],
+      "setup": "An audit of `docs/manual.md` whose findings the user then approves.",
+      "query": "/doc-smith audit docs/manual.md",
+      "files": [],
+      "expected_behavior": [
+        "The report opens with the findings — no \"I'll now review…\" preamble and no step narration",
+        "Each finding is stated once; no closing summary re-lists findings already shown",
+        "After applying the fixes, states the edit classes and the file path",
+        "Does not paste the document back into chat"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "create-grounded-manual",
+      "skills": ["doc-smith"],
+      "setup": "A billing dashboard with no user documentation. The repo shows the screens and the API but says nothing about who uses it or which tasks matter.",
+      "query": "/doc-smith create a user manual for the billing dashboard",
+      "files": [],
+      "expected_behavior": [
+        "Fixes audience, product, and purpose, asking only the gaps it cannot infer — audience, key tasks, terminology — in one batched round",
+        "Uses one term per concept from the first line and a task-oriented structure (overview → prerequisites → tasks → reference → troubleshooting), omitting empty sections",
+        "Runs the whole-document self-review before writing",
+        "Writes the file, states the path, and does not paste the manual back"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "drift-across-a-set",
+      "skills": ["doc-smith"],
+      "setup": "Three files meant as one manual. `docs/install.md` calls the unit a \"workspace\"; `docs/config.md` calls the same thing a \"project\". `docs/usage.md` points the reader at a \"Backup\" section that none of the three contains.",
+      "query": "/doc-smith audit docs/install.md docs/config.md docs/usage.md as one manual",
+      "files": [],
+      "expected_behavior": [
+        "Treats the three files as one document and checks consistency across all of them, not file by file",
+        "Flags workspace/project as terminology drift, naming both files",
+        "Flags the missing Backup section as a completeness gap — a dangling reference, not a wording nit"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "revise-keeps-the-whole-coherent",
+      "skills": ["doc-smith"],
+      "setup": "`docs/guide.md` uses \"workspace\" throughout. While revising an early paragraph the user renames it to \"project\". Later paragraphs still say \"workspace\".",
+      "query": "/doc-smith work through docs/guide.md with me",
+      "files": [],
+      "expected_behavior": [
+        "Infers revise mode; moves in document order one paragraph at a time, applying only what the user agrees to and never batch-editing the file",
+        "After the rename lands, runs the coherence check and flags the later \"workspace\" paragraphs as now-inconsistent before moving on",
+        "Reports each turn as the proposed change plus the coherence-check result — not a reprint of the document"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "normalize-to-the-doc-s-own-convention",
+      "skills": ["doc-smith"],
+      "setup": "`docs/guide.md` mixes \"colour\" and \"color\" and carries a Markdown table whose columns no longer line up. The file's own prose wraps at 100 columns.",
+      "query": "/doc-smith proof docs/guide.md",
+      "files": [],
+      "expected_behavior": [
+        "Normalizes to one spelling variety — US by default, but keeps British and flags the mix if the doc is consistently British",
+        "Re-aligns the table columns and reflows to the doc's own 100-column wrap, not an imposed house default",
+        "Reports the variety mix as a spelling-variety defect",
+        "States edit classes and counts without pasting the document back"
+      ]
+    }
+  ]
+}
