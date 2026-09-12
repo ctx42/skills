@@ -74,6 +74,16 @@ A documentable item is one of: the package comment (once per package), a
 top-level declaration's godoc (type, func, method, const/var block), or the
 inline comments inside one function body.
 
+`func=Foo` names a function or, when the package has no such function and
+exactly one type carries a method of that name, that method — ambiguity across
+two types is an error, not a guess: say which types match and ask. `func=T.Bar`
+is always the method and never guesses.
+
+A line target resolves to the innermost item containing that line: a line in a
+body is that body's inline comments, and the enclosing declaration's godoc is
+*not* in scope — target the declaration by name to reach it. A line on or
+inside a declaration's doc comment is that godoc.
+
 State the resolved kind and the item set before reading.
 
 ## Controls
@@ -89,6 +99,17 @@ Read from `$ARGUMENTS`, any order after the target:
   style rules and this per-item loop for its package) and merge the per-package
   reports. Use on large modules to keep the main context lean; packages are
   independent, so ordering is preserved per package.
+
+  Merging is not accepting. Before a worker's edits enter the report, re-read
+  each added or changed comment against the checklist — item 4 above all, since
+  a worker that has the seven fact categories in front of it and a whole package
+  to get through is exactly where an unsupported claim appears. Check every
+  added fact against the code that is supposed to establish it: a concurrency
+  guarantee on a type with no synchronization, an error condition no branch
+  produces, a units claim nothing converts. Revert what the code does not carry
+  and say so in the merged report; a blind run of this skill produced precisely
+  that edit from one worker while another, on the same prompt, declined it. The
+  parent is the last checklist pass, not a stapler.
 
 ## The checklist
 

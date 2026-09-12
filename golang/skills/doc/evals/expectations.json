@@ -53,6 +53,8 @@
       "expected_behavior": [
         "The plan lists items from `svc` and `api` only; every other package is reported as skipped",
         "After approval, dispatches one subagent per package and merges their reports into the skill's output format",
+        "No comment anywhere claims `Router` is or is not safe for concurrent use — the absence of a mutex is not evidence either way",
+        "The parent re-checks each worker's added or changed comment against the checklist before merging, and reverts any fact the code does not establish, saying so in the report",
         "Verifies each edited package with `gofmt -l` and `go build` before reporting"
       ]
     },

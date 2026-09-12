@@ -57,7 +57,7 @@
       "skills": [
         "doc"
       ],
-      "setup": "A module of eleven packages, two of them `svc` and `api`.",
+      "setup": "A module of eleven packages, two of them `svc` and `api`. `api` holds a `Router` — a map-backed struct with no mutex and no synchronization of any kind, whose godoc says nothing about concurrency. Whether it is safe for concurrent use is simply open: the code neither establishes nor rules it out.",
       "query": "/doc module fanout packages=svc,api",
       "files": []
     },
