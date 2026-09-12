@@ -12,6 +12,20 @@ license: MIT
 
 # kb
 
+## Usage
+
+```
+/kb                 capture (default): drain, confirm, write
+/kb capture SRD-42  capture for one SRD, by id or path
+/kb restructure     reorganize pages and repair every reference
+```
+
+Rarely invoked by hand: `srd:create` and `srd:edit` call it themselves,
+`srd:system-check learn` banks what a non-SRD conversation taught, and
+`srd:backlog` hands it every answered, moot, or reclassified open question.
+Reach for it directly only to restructure, or to work a session's captures with
+no SRD skill driving.
+
 Single owner of the **knowledge base** (KB): Markdown pages stating what the
 platform *is* — rules, entities, behavior — written by the agent from what the
 user attests during SRD work, and served back to every agent through the
