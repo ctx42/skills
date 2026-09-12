@@ -13,6 +13,23 @@ argument-hint: "[TARGET* | add|change|remove RULE | learn] [packages=a,b]
 
 # review
 
+## Usage
+
+```
+/review                                       check (default): review the current git diff
+/review ./pkg/foo                             review one package
+/review ./...                                 review the whole module
+/review /path/to/project                      review that module (a go.mod dir)
+/review ./... max_issues=15 depth=light       cap findings; set review depth
+/review ./... packages=parser,lexer           restrict to these packages
+/review ./... plan_first                      plan + top findings, then stop for approval
+/review ./pkg/foo fix                         review, then apply the findings
+/review add "no naked returns in tests"       add a style rule
+/review change "receivers are three letters"  refine an existing style rule
+/review remove "the compile-time check rule"  remove a style rule
+/review learn                                 mine this session's feedback into rules
+```
+
 Done-time review for Go code. Read the invocation from `$ARGUMENTS`; `$1` is
 the first token. Pick the mode from it:
 
