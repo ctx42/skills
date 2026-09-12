@@ -59,8 +59,10 @@ The Check target when `$1` is empty; a named target ignores it.
 ### Target
 
 `$1` is the target token:
-- empty — review the injected working diff; if it is empty, fall back to the
-  current git diff vs the base branch (staged + unstaged).
+- empty — review the injected working diff; if it is empty, fall back to
+  `git diff HEAD` (staged and unstaged together). If that is also empty, the
+  branch's own work is the target: diff it against the base branch
+  (`git diff <base>...HEAD`) and say which of the two you reviewed.
 - a package — a path like `./pkg/foo` or an import path; review that one
   package's `.go` files.
 - a module / many packages — `./...`, a directory containing `go.mod`, or an
@@ -90,9 +92,15 @@ review.
 
 1. Resolve the target and budget (above) and list the packages/files in scope.
 2. Style dimension — invoke `golang:style` with the resolved target and budget
-   (`packages`, `max_issues`, `depth`), instructing it to report offenses only.
-   Take its offense list as the style findings; do not re-derive style rules
-   here.
+   (`packages`, `depth`), instructing it to report offenses only. Take its
+   offense list as the style findings; do not re-derive style rules here.
+
+   On the fan-out path each subagent invokes it for its own package, which
+   keeps the rulebook out of this context. Reviewing in-context there is no
+   separate process to delegate to: loading the skill brings the rules in here,
+   so read them once, take the offenses, and do not consult them again while
+   judging correctness — the two dimensions stay separate in the report even
+   when they share a context.
 3. Review each file for what style does not cover, in this order:
    - Correctness: bugs, wrong logic, nil/bounds, ignored errors, data races.
    - Edge cases: empty/large/concurrent inputs and every error path.
@@ -108,8 +116,11 @@ review.
      than asserting from the visible code. Skip at `depth=light`; reserve for
      findings that cross a file/package boundary. No language server → fall
      back to grep/read and note the reduced confidence in the finding.
-4. Reason only: do not run gofmt, go vet, golangci-lint, or go test — judge by
-   reading the code. `LSP` is allowed (read-only navigation).
+4. Reason only while reviewing: do not run gofmt, go vet, golangci-lint, or
+   go test — judge by reading the code. `LSP` is allowed (read-only
+   navigation). This governs the review, not the fix: applying findings
+   requires the test gate in `references/fixing.md`, which proves each bug red
+   then green and runs `go test ./... -race` per chunk.
 5. Merge the style offenses with the correctness findings and report (below).
    Do not change code unless asked.
 
@@ -119,9 +130,11 @@ review.
   package by package, highest-risk first.
 - Larger module (> ~6 packages): fan out one review subagent per package (each
   invokes `golang:style` on its package for the style offenses and reviews
-  correctness itself, with the `depth` and a share of `max_issues`), then
-  synthesize one merged report, re-ranking findings to the global `max_issues`
-  cap.
+  correctness itself, with the `depth`), then synthesize one merged report,
+  re-ranking findings to the global `max_issues` cap. Workers get no share of
+  the cap — they report everything they find, and the cap is applied once at
+  the merge, or a package full of nits evicts another package's blocker while
+  the global budget still has room.
 - If the target is too large, do the highest-risk packages first and name the
   skipped ones in the report; never silently truncate.
 

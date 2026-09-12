@@ -48,6 +48,12 @@ rules.
 4. Present candidates as a list — each with its provenance (the session moment
    that prompted it), flagging duplicates/conflicts. Wait for the user to pick
    which to keep; never write unpicked or conflicting rules.
+
+   When every candidate dedupes away, that is a result, not an empty run: say
+   in one line that the session's corrections are already rules, name which
+   ones, and stop. A session spent re-learning what `../style/SKILL.md` already
+   says means the rules are not reaching the work — worth the user knowing, and
+   never worth restating as a "new" rule to have something to show.
 5. Write the chosen rules via Rule-edit steps 4–5.
 
 ## How a rule entry should look

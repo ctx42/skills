@@ -4,7 +4,9 @@
     {
       "id": 1,
       "name": "review-the-current-diff",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "A staged diff that drops one error return and wraps another with `fmt.Errorf` using `%v` instead of `%w`. Nothing names a target.",
       "query": "/review",
       "files": [],
@@ -20,7 +22,9 @@
     {
       "id": 2,
       "name": "broad-target-auto-plan-first",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "A module of eleven packages. The invocation names no budget and no depth.",
       "query": "/review ./...",
       "files": [],
@@ -33,7 +37,9 @@
     {
       "id": 3,
       "name": "rule-edit-add-change-remove",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "`../style/SKILL.md` already carries a receiver-naming rule. The session issues three rule edits in turn.",
       "query": "/review add \"no naked returns in tests\", then /review change \"receivers are three letters\", then /review remove \"the compile-time check rule\"",
       "files": [],
@@ -42,27 +48,32 @@
         "Turns the `add` into a terse imperative one-liner in the existing style, scoped to Test",
         "Detects a duplicate or conflicting rule and waits for confirmation before writing to `../style/SKILL.md`, showing the before/after of the rule text",
         "Rewrites the existing receiver-naming line in place for the `change` instead of adding a second rule",
-        "For the `remove`, deletes the `../style/SKILL.md` line plus its keyed `../style/rules.md` entry and Contents row, after confirmation"
+        "For the `remove`, deletes the `../style/SKILL.md` line, plus its keyed `../style/rules.md` entry and Contents row where it has one — a rule carrying no keyed entry is removed from `SKILL.md` alone"
       ]
     },
     {
       "id": 4,
       "name": "learn-from-the-session",
-      "skills": ["review"],
-      "setup": "A finished session in which the user renamed a helper for clarity, asked to convert an `f(p *T)` function into a method, and separately asked for a one-off rename specific to this project's domain.",
+      "skills": [
+        "review"
+      ],
+      "setup": "A finished session with three corrections. Two are genuinely new: the user rejected a `context.Context` stored in a struct field, and asked that table-test case names read as the condition rather than the input value. The third — renaming a helper to say what it does — is already stated verbatim in `../style/SKILL.md`. A fourth exchange was a one-off rename specific to this project's domain.",
       "query": "/review learn",
       "files": [],
       "expected_behavior": [
         "Scans the session's Go feedback and pairs each item with the diff hunk that resolved it",
-        "Proposes only the generalizable rules — method-over-func, behaviour-named helper — each with its provenance and a before/after example",
-        "Drops the task-specific one-off and dedupes against the rules `../style/SKILL.md` already carries",
+        "Proposes the two genuinely new rules, each with its provenance and a before/after example",
+        "Drops the task-specific one-off",
+        "Reports the helper-naming correction as already covered rather than proposing it again — deduping against `../style/SKILL.md` happens before presenting, not after",
         "Waits for the user to pick before writing; on confirmation writes the `../style/SKILL.md` line plus its keyed `../style/rules.md` entry and shows the diff"
       ]
     },
     {
       "id": 5,
       "name": "broad-fix-job-plans-and-pauses",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "Findings span five packages, one of them large enough to warrant file-level chunks.",
       "query": "/review ./... fix",
       "files": [],
@@ -78,7 +89,9 @@
     {
       "id": 6,
       "name": "terse-output",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "An ordinary single-package check run.",
       "query": "/review ./pkg/foo",
       "files": [],
@@ -86,6 +99,22 @@
         "Opens with the findings — no preamble, no narration of reading the rules",
         "States each finding once and reports budget usage",
         "No closing summary re-listing findings the user can already see"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "learn-finds-nothing-new",
+      "skills": [
+        "review"
+      ],
+      "setup": "A session whose three Go corrections are all already rules in `../style/SKILL.md` — `%w` wrapping, `have`/`want` test naming, and receiver conventions. Nothing new was taught.",
+      "query": "/review learn",
+      "files": [],
+      "expected_behavior": [
+        "Says in a line that every correction is already a rule, and names which ones",
+        "Writes nothing and proposes nothing",
+        "Does not restate an existing rule as a new candidate to have something to show",
+        "Treats it as a finding worth reporting: the rules exist but are not reaching the work"
       ]
     }
   ]
