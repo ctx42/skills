@@ -109,7 +109,12 @@ swaps in at step 6.
 2. Read the source, the current copy, and both frame files.
 3. Frozen-node check. If the source `page_version` is newer than the copy's
    provenance version, the frozen nodes (the Quality Bar list and the Bad→Good
-   example expands) may have changed without showing in the export. STOP and:
+   example expands) may have changed without showing in the export. Run the
+   diff below. It stops the sync only when it finds something: a new or missing
+   `[[*expand:` id, or a Quality Bar list the maintainer has not re-checked at
+   this version. A clean check is reported in one line and the sync continues —
+   a version bump on its own is a prompt to look, not a hard stop, or no sync
+   could ever complete.
    - Diff the source's `[[*expand:` localIds against the `<!-- expand: -->`
      anchors in `srd/skills/create/references/authoring-guide.md` plus the
      list in `dev/srd-untranscribed-examples.md`. Report each new id with the
@@ -121,12 +126,19 @@ swaps in at step 6.
      continuing.
    - Re-read the footer after any edit, then continue.
 4. Transform the source into the body per the rules above.
-5. Assemble the candidate to a temp file: `header + body + footer`, one blank
-   line between, with the banner edit from Assembly.
-6. Apply substitutions: `dev/srd-subst.sh <candidate.tmp >final.tmp` (reads
-   stdin, prints the result). Its output is the final candidate. If it fails
-   its match assertion, an upstream phrase changed — update the script's rule,
-   never resolve it by accepting the source wording.
+5. Apply substitutions to the body, before assembling and before wrapping:
+   `dev/srd-subst.sh <body.tmp >body.final` (reads stdin, prints the result).
+   Order matters and only this one reproduces the shipped copy — the copy holds
+   post-substitution words, so wrapping first leaves the script's patterns
+   split across lines and it exits `matched 0 times` on text that is in fact
+   present. That failure is not the upstream-phrase-changed case: check the
+   order before touching the script's rules.
+   A genuine assertion failure means an upstream phrase changed — update the
+   script's rule, never resolve it by accepting the source wording. The
+   assertion is a substring match, so a reworded superset can still pass and
+   produce nonsense; read what it substituted, do not just check it exited 0.
+6. Assemble the final candidate: `header + body.final + footer`, one blank line
+   between, with the banner edit from Assembly, then wrap to the copy's width.
 7. `diff` the final candidate against the current copy. The hunks are the real
    changes since the last sync. Verify only the changed units
    character-for-character against the source minus the trims and the step-6
@@ -153,7 +165,12 @@ swaps in at step 6.
 8. If any LOCAL-ONLY or TEXT DIFFERS units exist, surface them and get
    explicit confirmation before writing — a write adopts the source and drops
    local-only text. When the diff is only the provenance `page_version` line
-   and FRAME hunks, proceed.
+   and FRAME hunks, proceed — unless a consistency check above failed. A stale
+   Contents line or a differing notice lives inside the header, so it arrives
+   as a FRAME hunk and would otherwise ride straight through on the
+   FRAME-only path, shipping a standard whose Contents names a group that no
+   longer exists. A failed check blocks the write regardless of which bucket
+   its hunk landed in.
 9. Write the final candidate to the copy (move the temp file into place).
 10. Run `./dev/lint-skills.sh` (must stay at 0 errors) and re-check the
     srd:review fixture eval `srd/skills/review/assets/flawed-srd.md`: its

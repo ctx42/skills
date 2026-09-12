@@ -4,12 +4,15 @@
     {
       "id": 1,
       "name": "normal-sync-after-a-source-edit",
-      "skills": ["srd-sync"],
+      "skills": [
+        "srd-sync"
+      ],
       "setup": "The Confluence source advanced a version; one rule was reworded upstream. The vr checkout is present and `cfsync pull` has run.",
       "query": "Sync the SRD standard from Confluence",
       "files": [],
       "expected_behavior": [
         "Reads the source, the current copy, and the header/footer frame before proposing anything",
+        "Runs the frozen-node check and, finding nothing new or missing, reports it in one line and continues — a `page_version` bump alone is a prompt to look, not a hard stop",
         "Reports the reworded rule under TEXT DIFFERS with both sides shown",
         "Confirms before writing, then writes header + transformed body + footer with the provenance banner carrying the new source `page_version`",
         "Generated rule text is the source text verbatim — no paraphrase and no re-wrap that changed words"
@@ -18,7 +21,9 @@
     {
       "id": 2,
       "name": "verbatim-fidelity",
-      "skills": ["srd-sync"],
+      "skills": [
+        "srd-sync"
+      ],
       "setup": "A source requirement is wordy and awkward, and is not in the substitution set. Tightening it would plainly read better.",
       "query": "Regenerate the standard",
       "files": [],
@@ -30,21 +35,27 @@
     {
       "id": 3,
       "name": "deterministic-substitution-via-the-script",
-      "skills": ["srd-sync"],
+      "skills": [
+        "srd-sync"
+      ],
       "setup": "GLO-3 in the source links the vr-internal glossary page, which the substitution set rewrites.",
       "query": "Sync the SRD standard",
       "files": [],
       "expected_behavior": [
-        "Copies GLO-3 verbatim, then applies substitutions by piping the candidate through `dev/srd-subst.sh` rather than hand-editing the rule",
-        "The final copy carries the script's replacement, and GLO-3 is not reported as a diff because the script baked the swap in",
-        "If the script's match assertion fails, updates the script's rule rather than accepting the source wording",
+        "Copies GLO-3 verbatim, then applies substitutions by piping the body through `dev/srd-subst.sh` rather than hand-editing the rule",
+        "Substitutes the body before assembling and wrapping — the shipped copy holds post-substitution words, so wrapping first splits the script's patterns across lines and it reports `matched 0 times` on text that is present",
+        "Does not treat that ordering failure as an upstream rewording, and does not touch the script's rules to force it through",
+        "Reads what the script actually substituted rather than trusting a zero exit — the assertion is a substring match, so a reworded superset can pass and produce nonsense",
+        "The final copy carries the script's replacement, and GLO-3 is not reported as a diff",
         "Does not touch the RFC notice — it lives in the header frame"
       ]
     },
     {
       "id": 4,
       "name": "local-only-rule-not-upstream",
-      "skills": ["srd-sync"],
+      "skills": [
+        "srd-sync"
+      ],
       "setup": "The local copy carries a rule that does not exist in the Confluence source.",
       "query": "Update srd-standard from the source",
       "files": [],
@@ -57,7 +68,9 @@
     {
       "id": 5,
       "name": "frozen-node-new-example-block",
-      "skills": ["srd-sync"],
+      "skills": [
+        "srd-sync"
+      ],
       "setup": "The source `page_version` bumped and the export carries a `[[*expand:` localId that is neither an `<!-- expand: -->` anchor in `authoring-guide.md` nor listed in `dev/srd-untranscribed-examples.md`.",
       "query": "Sync the SRD standard",
       "files": [],
@@ -70,7 +83,9 @@
     {
       "id": 6,
       "name": "new-top-level-section-upstream",
-      "skills": ["srd-sync"],
+      "skills": [
+        "srd-sync"
+      ],
       "setup": "The source gained a `# Tooling` heading the transform has never seen.",
       "query": "Regenerate the standard",
       "files": [],
@@ -83,13 +98,16 @@
     {
       "id": 7,
       "name": "frame-edit-and-header-consistency",
-      "skills": ["srd-sync"],
+      "skills": [
+        "srd-sync"
+      ],
       "setup": "Since the last sync the header frame's intro paragraph was edited, and its Contents line still names a requirement group the source no longer has. The Notice differs from the source only by `in this document` → `in an SRD`.",
       "query": "Sync the SRD standard",
       "files": [],
       "expected_behavior": [
         "Reports the intro hunk as FRAME and asks no confirmation for it",
         "Fails the Contents check: names the stale group and tells the maintainer to update the header's Contents, then re-assembles",
+        "Blocks the write on that failure even though the diff is otherwise FRAME-only — a stale Contents line is itself a FRAME hunk and must not ride through",
         "Passes the Notice check silently, since `in this document` → `in an SRD` is the one tolerated difference",
         "Would treat any other Notice difference as `NOTICE DIFFERS` and hard-stop"
       ]
@@ -97,7 +115,9 @@
     {
       "id": 8,
       "name": "source-unavailable",
-      "skills": ["srd-sync"],
+      "skills": [
+        "srd-sync"
+      ],
       "setup": "A machine with no vr checkout, so the cfsync mirror is absent.",
       "query": "Sync the SRD standard",
       "files": [],
@@ -109,7 +129,9 @@
     {
       "id": 9,
       "name": "terse-output",
-      "skills": ["srd-sync"],
+      "skills": [
+        "srd-sync"
+      ],
       "setup": "A clean sync: a version bump with no unit diffs at all.",
       "query": "Sync the SRD standard",
       "files": [],
