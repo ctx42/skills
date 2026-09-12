@@ -62,10 +62,12 @@ otherwise stay stranded there.
    that would have changed what the agent did. Four things look like lessons
    and are not:
 
-   - A rule the skill's body already states — read the `SKILL.md` before
-     proposing. It was missed, not missing, and a line repeating it costs
-     every future run context while changing nothing. A rule that keeps
-     getting missed needs rewording in `SKILL.md`: a skill edit, not a lesson.
+   - A rule the skill already carries — read its `SKILL.md` before proposing,
+     and the reference files it loads for the work in question, since a rule
+     stated in a reference governs the run just as firmly as one in the body.
+     It was missed, not missing, and a line repeating it costs every future run
+     context while changing nothing. A rule that keeps getting missed needs
+     rewording where it lives: a skill edit, not a lesson.
    - A fact about this project or this task: a name, a path, a version, a
      number. It outlives nothing, and the project's own instructions are its
      home.
@@ -121,6 +123,7 @@ none; absence is the normal case and needs no comment. On a correction or
 self-caught mistake, append a one-line rule to the sibling when this directory
 is writable, else to the fallback, creating it, and report where.
 
+```
 ## Lesson format
 
 A lessons file is a flat list of imperative rules, one per bullet, newest last:
@@ -149,7 +152,9 @@ Rules learned for the `<skill>` skill. Read before running; obey each line.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. Per touched skill: the file written and the
-rules added, or the block installed. Always name the resolved path so the user
+rules added, or the block installed — on the write turn the rules were on
+screen in the proposal the user just approved, so name the path and how many
+rules landed, not the rules again. Always name the resolved path so the user
 knows whether a lesson shipped (sibling `LESSONS.md`) or stayed local
 (`.agent-data`); never fabricate a write you could not perform.
 
