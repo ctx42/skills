@@ -73,16 +73,21 @@ to check; fall back to the user's prose for free-form input.
    session left buffered for this SRD, then resolve the corpus (see
    [Support files](#support-files)). With none reachable, skip the
    system-knowledge layer and run the review layer alone rather than stopping.
-2. Get the review without clobbering it:
-   - `<srd>.review.md` exists → read it as-is. Do **not** run `srd:review` —
-     never risk overwriting the author's file.
-   - absent → run `srd:review path/to/srd.md` once to create it, then read it.
+2. Get the review: run `srd:review path/to/srd.md` (default mode) and read the
+   file it leaves. That mode never rewrites an existing file — on one that
+   exists it re-verifies open findings, ticks and moves the fixed ones to
+   `## Resolved` keeping their numbers, and appends newly found defects. So an
+   author's file is refreshed, not clobbered, and a review written before the
+   last edit does not silently go stale.
 3. Build the merged question set:
    - From the review: reframe each relevant finding as a colleague-voice
      question. Drop its severity tag and rule id (keep the severity only to
      order the walk, step 5).
-   - System confrontation, the layer only this skill does: confront the SRD
-     against the corpus. Raise a question when the SRD contradicts a documented
+   - System confrontation: confront the SRD against the corpus. `srd:review`
+     runs a facts-vs-corpus pass of its own, so the two layers can land the
+     same contradiction twice — merge them into one question and keep the
+     review's finding number, rather than asking the user the same thing in two
+     voices. Raise a question when the SRD contradicts a documented
      API rule, service behavior, or glossary term; redefines or conflicts with
      another SRD; uses a term undefined in the system; or cannot be built
      without knowing something the system does not pin down ("can't build X
@@ -135,9 +140,11 @@ implementer's view.
 Re-running `/system-check path/to/srd.md` when `<srd>.questions.md` already
 exists is **resume mode**. Step 1 of review still runs; then:
 
-1. Refresh the review layer non-destructively: run `srd:review path/to/srd.md
-   check` — it strikes resolved findings, keeps open ones, appends defects the
-   edit introduced, and bumps `Updated:`. It never rewrites the file.
+1. Refresh the review layer: run `srd:review path/to/srd.md` in default mode —
+   it re-verifies and resolves what the edit fixed, appends what the edit
+   broke, keeps every number, and bumps `updated:`, without rewriting the file.
+   Not `check`: that mode re-verifies only and hunts no new defects, so an edit
+   that introduced a fresh blocker would reach no question at all.
 2. Re-check each open question against the current SRD; drop the ones the edit
    answered and tell the user which.
 3. Re-run system confrontation on the new text for fresh contradictions or gaps.
