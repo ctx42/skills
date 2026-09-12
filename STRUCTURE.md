@@ -22,6 +22,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │   ├── check-srd-standard.sh       # Passive tripwire: source page_version vs the copy's provenance banner
 │   ├── srd-subst.sh                # Deterministic vr-internal-reference swaps for the srd-sync skill
 │   ├── srd-standard.header.md      # Hand-maintained frame prepended to srd-standard.md (srd-sync skill)
+│   ├── srd-untranscribed-examples.md # Upstream example ids not yet transcribed into authoring-guide.md
 │   └── srd-standard.footer.md      # Hand-maintained frame appended to srd-standard.md (Quality Bar)
 ├── .claude/
 │   └── skills/srd-sync/            # Project-local maintainer skill: regenerate srd-standard.md (not shipped)

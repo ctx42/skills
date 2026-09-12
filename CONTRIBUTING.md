@@ -179,13 +179,15 @@ SKIPs and passes).
 2. Review the **frozen nodes** first — the Bad→Good example expands and the
    Quality Bar list are not in the export, so a `page_version` bump can hide an
    edit inside them. Open the page, re-check them, and update
-   `srd/skills/create/references/authoring-guide.md` and
+   `srd/skills/create/references/authoring-guide.md` (transcribe new expands,
+   or list their ids in `dev/srd-untranscribed-examples.md`) and
    `dev/srd-standard.footer.md` (the transcribed Quality Bar) by hand.
 3. Invoke the `srd-sync` skill and review its reported diffs. LOCAL-ONLY and
    TEXT DIFFERS units are debt — push them upstream to Confluence and re-sync,
-   or accept losing them (a write adopts the source wording). If the source
-   grew a new top-level section, the skill hard-stops until the transform is
-   extended.
+   or accept losing them (a write adopts the source wording). Hunks inside the
+   header or footer part are reported as FRAME and need no confirmation. If
+   the source grew a new top-level section, the skill hard-stops until the
+   transform is extended.
 4. After the skill writes, run `./dev/lint-skills.sh` and re-check the
    srd:review fixture eval (`srd/skills/review/assets/flawed-srd.md`) — its
    finding set must not shrink.
