@@ -26,7 +26,7 @@
       "expected_behavior": [
         "Leaves both directive comments byte-for-byte unchanged and lists them as never-touch items in the plan",
         "Plans the `Read` godoc for removal as unremarkable — it would be kept, naming the surprise, only if `Read` broke or exceeded the `io.Reader` contract",
-        "Writes nothing before approval, since a package target is plan-first"
+        "Writes nothing before approval: the plan is the run's only output on that turn, and every `.go` file's mtime is unchanged until the approval turn — check the files, not the promise"
       ]
     },
     {
@@ -42,7 +42,8 @@
       "id": 5,
       "name": "line-target-resolves-to-its-item",
       "expected_behavior": [
-        "States the resolved kind (line) and the item: `Flush`'s godoc and its body's inline comments — nothing else in the file",
+        "States the resolved kind (line) and the item it resolved to: the inline comments of `(*Svc).Flush`'s body — the innermost item containing line 42, not the enclosing declaration's godoc, which `func=Flush` would reach",
+        "Touches nothing else in the file — the four other functions keep their defects",
         "Presents no plan; a line target is a single item, so it runs the loop straight through",
         "Deletes `// increment i` as a comment that only restates the code"
       ]
