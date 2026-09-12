@@ -12,6 +12,16 @@ license: MIT
 
 # report-doc-gap
 
+## Usage
+
+```
+/report-doc-gap <srd>  work <srd>'s buffered doc gaps: grill, confirm, file each (default)
+```
+
+Rarely invoked by hand: `create`, `edit`, `review`, and `system-check` delegate
+every gap here, and `backlog` later closes what this files. Invoke it yourself
+to work one SRD's pending gaps before moving on.
+
 Producer end of the doc-gap loop: `srd:create`, `srd:edit`, `srd:review`, and
 `srd:system-check` delegate all gap handling here, and `srd:backlog` later
 closes what this files. This skill owns capture, the buffer, the grill, and the
