@@ -97,22 +97,24 @@ Keep these skills within the same plugin so the `../sibling` paths resolve.
 
 ---
 
-## system-check Memory
+## Per-machine data
 
-`system-check` keeps a curated platform-knowledge base. It is **user data,
-not shipped content**, so it lives outside the repo at one fixed, `$HOME`-rooted,
-per-machine path:
+Skills that keep user data store it outside the repo, under one fixed,
+`$HOME`-rooted root so it survives plugin updates:
 
 ```
-~/.agent-data/ctx42-skills/srd/memory.md
+~/.agent-data/ctx42-skills/srd/kb-root            the knowledge-base directory
+~/.agent-data/ctx42-skills/srd/kb/<srd-id>.json   kb capture buffer
+~/.agent-data/ctx42-skills/srd/docgaps/<srd-id>.json   doc-gap buffer
+~/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md self-learning lessons
 ```
 
-The `srd/` segment scopes it to the `srd` skills, so only they load it. The
-`craft:enhance-skills` self-learning mechanism uses the same root:
-`~/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md` for skills that run
-from a read-only install. The repo ships only `memory.template.md`, used to seed
-`memory.md` on a fresh machine; older installs migrate per
-`srd/skills/system-check/references/memory-migration.md`. See each skill's
-`SKILL.md` for the resolution rules.
+The `srd/` segment scopes that subtree to the `srd` skills, so only they load
+it. See each skill's `SKILL.md` for the resolution rules.
+
+Old pattern: `system-check` used to keep platform knowledge in a per-machine
+`memory.md` under the same root, seeded from a shipped template. That store is
+retired — platform knowledge now lives in the knowledge base, which `srd:kb`
+owns and the `srd-doc` corpus serves to every agent on every machine.
 
 ---
