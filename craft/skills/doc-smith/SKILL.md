@@ -115,7 +115,8 @@ rewritten or "corrected" with a fact you cannot ground.
    answered separately) and group them Blocker / Should-fix / Nit;
    each names the location, the problem in one line, the guide rule it breaks,
    and a minimal fix; a contradiction cites both locations. End with a verdict
-   and per-severity counts.
+   — fit to publish as it stands, or the class of defect that has to clear
+   first — and per-severity counts.
 
 5. Fix on confirmation: apply approved findings, run the coherence check, and
    state what changed.
@@ -134,6 +135,9 @@ Fix in place. Reserve edits for what has one right answer; flag the rest.
 
 4. State what changed — edit classes and counts — and list every flagged
    contradiction, ambiguity, and technical claim awaiting the user's decision.
+   Proof reports as a flat list, not audit's numbered severity groups: nothing
+   here is waiting to be triaged, the edits are already in the file, and what
+   is left is a question list the user works through.
 
 ## Revise mode
 
@@ -157,7 +161,11 @@ order.
 4. Advance only when the user is done with the unit. Track position so they can
    pause and resume. On request or at the end, run a final whole-document pass.
 
-Per turn, show the proposed revision and the coherence-check result only.
+Per turn, show the proposed revision and the coherence-check result — plus,
+where the unit has them, the findings that prompted the revision, in a line
+each. "Only" rules out narration and a re-read of the unit, not the reason the
+unit is being changed; a proposal the user cannot see the grounds for is one
+they can only rubber-stamp.
 
 ## Self-application
 

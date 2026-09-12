@@ -64,10 +64,10 @@
       "id": 7,
       "name": "normalize-to-the-doc-s-own-convention",
       "expected_behavior": [
-        "Normalizes the mixed spellings to one variety and reports the mix as a spelling-variety defect",
-        "Picks US as the default here, since the doc is mixed rather than consistently British — a consistently British doc would keep British",
+        "Normalizes to the variety the document predominantly uses, fixing the minority outliers rather than converting the whole document",
+        "Does not impose US on a document that is mostly British — US is the tiebreak only where the doc has no variety of its own",
+        "Reports the mix as a spelling-variety defect either way, since the author may have meant the other one",
         "Re-aligns the table columns and reflows to the doc's own 100-column wrap, not an imposed house default",
-        "Reports the variety mix as a spelling-variety defect",
         "States edit classes and counts without pasting the document back"
       ]
     }

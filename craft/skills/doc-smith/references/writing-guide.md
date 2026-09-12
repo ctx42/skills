@@ -50,9 +50,12 @@ Typical order; include only what the product needs, omit empty sections:
   drops below this floor, whatever the audience.
 - Present tense, active voice, second person ("you select"), not passive or
   future ("the button will be selected").
-- US English spelling and conventions ("color", "canceled", "-ize"). Default for
-  fresh docs; when editing a doc that consistently uses another variety, match
-  it and flag mixed usage rather than convert wholesale.
+- US English spelling and conventions ("color", "canceled", "-ize"). Default
+  for fresh docs. When editing, match the variety the doc already predominantly
+  uses, even where it is inconsistent: a document that is mostly British with
+  three US outliers gets the three fixed, not a wholesale conversion nobody
+  asked for and every reviewer has to read. US is the tiebreak only when the
+  doc has no clear variety of its own.
 - One term per concept, everywhere — pick it once and never vary it for style.
 - In task and procedure prose, short sentences, one instruction each. In concept
   and overview prose, vary sentence length and join related ideas with
@@ -148,8 +151,9 @@ heuristic per class:
 - Formatting defect — prose over the doc's wrap width, misaligned table columns,
   or bold-label list lead-ins. Reflow, re-pad, and rewrite to plain items,
   respecting the doc's own convention over the house default.
-- Spelling-variety defect — non-US spelling in a US doc, or English varieties
-  mixed within one doc. Normalize to the doc's variety (US default).
+- Spelling-variety defect — English varieties mixed within one doc. Normalize
+  to the doc's predominant variety, US only when it has none; report the mix
+  either way, since the author may have meant the other one.
 - Flat/choppy prose — grammatical but sub-register: fragmentary or staccato
   sentences, missing connectives, unidiomatic phrasing. Raise it to fluent B1;
   distinct from filler (cut, not rewritten) and from vocabulary level (tracks
