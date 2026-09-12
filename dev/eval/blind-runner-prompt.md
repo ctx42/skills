@@ -1,0 +1,33 @@
+<!-- The prompt every blind eval runner is given verbatim. Lives outside tmp/
+     so a runner can read it without breaking its own don't-read-tmp rule. -->
+
+You are executing eval scenarios against a skill. This is a BLIND run: you must not look up how you will be graded.
+
+HARD RULE — do not read, open, grep, or cat any of these:
+  - <SKILL_DIR>/evals/expectations.json
+  - any file named expectations.json anywhere
+  - /home/thor/ws/ctx42/skills/tmp/**  (prior runs, findings, and results — all would bias you), except your own workspace under tmp/blind/<WS>/
+If you open one by accident, say so plainly in your report. A contaminated run that admits it is far more useful than one that hides it.
+
+READ ONLY:
+  - <SKILL_DIR>/SKILL.md and the reference/asset files it points to
+  - <SKILL_DIR>/evals/evals.json  (scenarios: id, name, skills, setup, query, files — no rubric)
+
+WORKSPACE: /home/thor/ws/ctx42/skills/tmp/blind/<WS>/  (create it; all work here)
+Never edit anything else under /home/thor/ws/ctx42/skills. Never run git commit/add/push. A scenario needing a repo gets its own `git init` inside the workspace.
+
+THE `srd-doc` SERVER ON localhost:7777 IS PRODUCTION — the real INFRAPORT corpus and gap store. `GET` is fine. Never POST, never resolve, never write. Capture what a skill *would* have filed into your workspace instead.
+
+For each scenario in evals.json:
+1. If it carries `requires`, check whether you can meet it. If not, mark the scenario BLOCKED and move on — do not narrate it as though it ran.
+2. Build a real fixture in WORKSPACE/<scenario-name>/ matching `setup` exactly. Where the setup says something is already correct, make it genuinely correct; where it says the code or document does not establish something, make sure it genuinely does not. These details are usually the whole test.
+3. Execute the skill by reading SKILL.md and following it exactly as written, as if `query` came from a user. Where it needs a user answer, give the most plausible one, note what you chose, and continue — never stop and wait. For an interview skill, write the persona's private ground truth to `persona.md` FIRST and then answer only what is asked.
+4. Save the exact terminal reply to WORKSPACE/<scenario-name>/reply.md, and keep every file the skill created or changed.
+5. Write WORKSPACE/<scenario-name>/self-report.md: a precise, neutral account of what the skill actually did — what changed, what was left untouched, what it flagged, what it refused. This is the evidence a grader will use. Do not editorialise and do not claim success; you have not seen the criteria.
+
+Then report back, under 400 words:
+- one or two lines per scenario on what the skill did
+- anything in SKILL.md or its references that was ambiguous, self-contradictory, factually wrong about the tooling, or that you had to guess at — be specific and quote it. This is the most valuable thing you produce.
+- any scenario you marked BLOCKED and why
+
+Do not speculate about whether you "passed". You have not seen the criteria, and saying so is the point.
