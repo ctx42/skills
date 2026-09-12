@@ -10,6 +10,16 @@ license: MIT
 
 # Commit Message Formatting
 
+## Usage
+
+```
+/cm         mini message from the staged diff (default): summary + one why paragraph, not committed
+/cm micro   summary line only, no body
+/cm full    full multi-paragraph kernel-style body
+/cm apply   generate the message then commit directly, no confirm (combines, e.g. micro apply)
+/cm <hash>  derive the message from that commit's diff instead of the staged diff
+```
+
 ## Input
 
 Read arguments from `$ARGUMENTS` (whitespace-separated tokens, any order); when
