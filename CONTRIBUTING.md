@@ -37,10 +37,15 @@ and reference each other as `../sibling/...`, which only resolves within a plugi
 
 Every skill needs its own directory containing:
 
-- `SKILL.md` — the prompt, with proper YAML frontmatter (below)
-- `README.md` — concise human usage examples and when-to-use guidance: a
-  `## Usage` block right after the one-line intro and an `## Evaluations`
-  section (≥ 3 scenarios, ≥ 1 asserting terse output)
+- `SKILL.md` — the prompt, with proper YAML frontmatter (below) and a
+  `## Usage` block right after the H1 title
+- `evals/evals.json` — the skill's eval scenarios (≥ 3, ≥ 1 asserting terse
+  output), in the shape `{id, name, skills, query, files, expected_behavior[]}`
+
+Skills ship no `README.md`. Everything a user or agent needs lives in
+`SKILL.md`, its bundled files, and `evals/evals.json`; the repo-level
+`README.md` is where humans get oriented. Skills that still carry one are
+mid-migration and lint warns about them.
 
 Frontmatter requires `name` + `description`; optional metadata (`license`/
 `version`/`tags`/`author`/`metadata`) is allowed but used sparingly.
@@ -83,10 +88,11 @@ Before committing a new or changed skill, run the linter:
 ```
 
 It checks every skill against the mechanical parts of
-`craft/skills/skill-smith/standards.md`: `SKILL.md` + `README.md` present,
-frontmatter carries `name` + `description` with `name` equal to the directory,
-the body carries the output-discipline line, an `## Evaluations` section in the
-README, and a Contents list on any bundled reference over ~100 lines. It also
+`craft/skills/skill-smith/standards.md`: `SKILL.md` present with a `## Usage`
+block, frontmatter carries `name` + `description` with `name` equal to the
+directory, the body carries the output-discipline line, `evals/evals.json`
+holds at least 3 scenarios, and any bundled reference over ~100 lines starts
+with a Contents list. It also
 verifies each plugin `source` is a real plugin directory and every skill sits
 under exactly one plugin's `skills/` dir. It edits nothing and exits non-zero on
 any error.
@@ -95,7 +101,7 @@ any error.
 
 When adding a skill, update:
 
-- The skill's own `README.md`
+- The skill's own `SKILL.md` (`## Usage`) and `evals/evals.json`
 - Top-level `README.md`
 - `STRUCTURE.md` if it changes the overall map
 - `AGENTS.md` skill catalog

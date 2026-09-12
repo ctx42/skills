@@ -18,13 +18,14 @@ author's environment and does not change what the measured skill ships.
 
 ## Rubric
 
-Turn the target skill's `README.md` `## Evaluations` into a checkable rubric:
-each scenario's request is the task; each expected-behavior bullet is one
-assertion, phrased so a grader can mark it pass/fail from the output alone. Drop
-or split any bullet that isn't objectively verifiable. Add the terse-output
-assertion if the scenarios lack one. Record each scenario in the shape
-Anthropic's tooling uses — `{skills, query, files, expected_behavior[]}` — so
-runs are reproducible.
+The target's `evals/evals.json` is already the rubric: each scenario's `query`
+is the task, each `expected_behavior` entry is one assertion. Read it and run
+it — do not re-derive one.
+
+Repair it in place before running, then keep the repair: drop or split any
+assertion a grader cannot mark pass/fail from the output alone, and add the
+terse-output assertion if no scenario carries one. A rubric fixed only in
+memory is fixed once; a rubric fixed in the file is fixed for every later run.
 
 ## A/B protocol
 
@@ -41,7 +42,7 @@ Run every leg on each model the skill targets — guidance that suits a strong
 model can under-serve a smaller one. Record each leg's tokens and wall-clock; a
 treatment that wins but costs far more tokens may not earn its place.
 
-Overfitting guard: run the README scenarios plus at least one held-out request
+Overfitting guard: run the shipped scenarios plus at least one held-out request
 the author did not write the skill against, so a delta reflects generalization,
 not a skill tuned to its own examples.
 
@@ -65,7 +66,16 @@ the next iteration rather than carrying it forward.
 ## Trigger test
 
 The description, not the body, decides whether the skill loads, and triggering
-is the most common real-world failure. Build a labeled query set: ~8–10
+is the most common real-world failure.
+
+Start with the cheap check, which costs one turn: ask a fresh agent *"When
+would you use the `<name>` skill?"* It answers from the description alone, so
+what it says back is what the description actually communicates. A wrong or
+vague answer is a description bug — fix it before spending a full protocol run
+on it. Reach for the labeled set below when the cheap check passes and the
+skill still misfires, or when you need a number rather than an impression.
+
+Build a labeled query set: ~8–10
 should-fire prompts (real tasks the skill targets, including oblique phrasings
 and cases that never name the domain) and ~8–10 should-not-fire near-misses —
 adjacent tasks that share keywords but need something else (the valuable

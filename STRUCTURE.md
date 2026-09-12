@@ -62,7 +62,9 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 Skills are grouped into **three plugins** (`golang`, `srd`, `craft`).
 Each plugin is a directory with a `.claude-plugin/plugin.json` manifest and a
 `skills/` folder holding one directory per skill. Each skill directory has a
-`SKILL.md` (the prompt) and a `README.md` (human usage guide).
+`SKILL.md` (the prompt, including its `## Usage` block) and an
+`evals/evals.json` (its eval scenarios). Skills ship no `README.md` — the
+repo-level one orients humans.
 
 ---
 

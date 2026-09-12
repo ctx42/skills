@@ -4,8 +4,9 @@ Guide for AI agents working in this repository.
 
 This repository is a collection of reusable skills for Claude. Skills ship as
 **Claude Code plugins**, grouped into `golang`, `srd`, and `craft`. Each skill
-is a directory under a group's `skills/` folder with a `SKILL.md` (the prompt)
-and a `README.md` (human usage guide).
+is a directory under a group's `skills/` folder with a `SKILL.md` (the prompt,
+including its `## Usage` block) and an `evals/evals.json` (its eval scenarios).
+Skills ship no `README.md`; the repo-level one orients humans.
 
 ## Golden Rules
 
@@ -76,8 +77,8 @@ source of truth.
 - `grill-me` — relentless planning interview until shared understanding.
 - `plan-smith` — writes and tracks an implementation plan (checkbox items,
   Y/N/X status table).
-- `skill-smith` — authors and audits skills; owns the authoring standard
-  (`standards.md`).
+- `skill-smith` — creates, improves, and measures skills; owns the authoring
+  standard (`standards.md`).
 - `readme-smith` — authors and audits project READMEs against its
   `references/template.md`.
 - `doc-smith` — writes, audits, proofs, and collaboratively revises

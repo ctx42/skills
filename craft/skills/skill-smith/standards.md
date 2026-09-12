@@ -19,11 +19,13 @@ duplicates it.
 - Progressive disclosure
 - Degrees of freedom
 - Workflows & feedback loops
+- Instruction prominence
 - Gotchas
 - Content hygiene
 - Scripts & bundled files
-- README structure
+- Usage block
 - Evaluations
+- Observing real use
 
 ## Scope
 
@@ -57,6 +59,12 @@ encouraged where they earn their place.
 - Other Claude Code keys (`allowed-tools`, `disable-model-invocation`, `model`,
   `agent`, …) are permitted when a skill genuinely needs them; default to
   omitting them.
+- `user_invocable` is not a Claude Code key, and is a common invention —
+  invocation is gated by `disable-model-invocation`. Flag any invented key.
+- No XML angle brackets anywhere in frontmatter. It is injected verbatim into
+  the system prompt, so markup there is an instruction-injection surface, not a
+  formatting choice. (A leading `>` opening a folded scalar is YAML, not a tag,
+  and stays.)
 
 ## Claude-native frontmatter
 
@@ -97,8 +105,11 @@ highest-leverage field.
 - Specific, not vague. ✗ "Helps with documents" ✓ "Extracts text and tables
   from PDFs. Use when the user mentions PDFs, forms, or extraction."
 - Put the key use case first (listing text is truncated downstream).
-- Name the boundary when a near neighbor exists — say what the skill is *not*
-  for, so adjacent tasks that share its vocabulary stop false-triggering.
+- Name the boundary when a near neighbor exists: *Do NOT use for X — use the
+  `y` skill.* Adjacent tasks that share the vocabulary then stop false-firing.
+- Tune from the symptom. Undertriggering (never loads, users invoke it by hand)
+  — add nuance and the domain's technical keywords. Overtriggering (fires on
+  unrelated work) — add the negative trigger above and narrow the scope clause.
 - Include triggers **naturally** — write a real sentence, not a keyword-stuffed
   tag dump.
 - YAML scalar safety: a plain scalar breaks on `: ` (colon-space) or a leading
@@ -122,6 +133,9 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
   preload it wholesale.
 - Shortest phrasing that stays unambiguous wins — terse-but-precise, never
   cryptic; don't compress past clarity.
+- A bundled file costs nothing until it is read, so a long reference is fine
+  when the workflow genuinely defers it. Cut the always-loaded surface hard;
+  do not cut a deferred file just for being large.
 - Judge by tokens-to-outcome, not line count — a padded 400-line body can cost
   more than a lean 500-line one.
 
@@ -182,14 +196,20 @@ files (on demand). Exploit it:
 
 - `SKILL.md` is a table of contents that points to detail; move large reference
   material, schemas, and long examples into sibling files. Conventional layout:
-  `scripts/` (executable code), `references/` (docs loaded on
-  demand), `assets/` (templates, examples). Use these names; avoid deep nesting.
+  `scripts/` (executable code), `references/` (docs loaded on demand),
+  `assets/` (templates, examples), `evals/` (eval data). Use these names; avoid
+  deep nesting.
 - References one level deep: every bundled file links directly from
   `SKILL.md`. Never chain `SKILL.md` → a.md → b.md — the agent may only preview
   nested files.
 - Name bundled files for their content (`standards.md`, `rules.md`), not
   `doc2.md`. Use forward slashes always.
 - Any reference file over ~100 lines starts with a Contents list.
+- Split a multi-domain reference by domain (`references/finance.md`,
+  `references/sales.md`) so a task loads only its own domain, never all of them.
+- Point at the section, not the file, when a reference is large: tell the agent
+  to grep it or read the named heading. "See `rules.md`" invites a whole-file
+  read and quietly undoes the deferral.
 - Label every Sources-of-truth entry `(eager)` or `(on-demand: <when>)`,
   so a workflow step cannot silently preload a file meant for per-need reads.
 - Structure is necessary, not sufficient — a one-hop, ToC'd, well-named
@@ -210,6 +230,8 @@ Match specificity to task fragility:
 
 - Break multi-step tasks into clear numbered steps; for long ones, give a
   checklist the agent copies and ticks off.
+- Route at decision points instead of describing every branch inline: name the
+  condition, then send the agent to the one path that applies.
 - Build in validate → fix → repeat loops for quality-critical output. The
   "validator" can be a script or a reference doc the agent checks against.
 - For risky/batch work, emit a verifiable intermediate plan and validate it
@@ -218,6 +240,20 @@ Match specificity to task fragility:
   multi-step plan the user will keep and track, defer to the `plan-smith` skill
   (checkbox items + a Y/N/X status table) instead of inventing a format.
   Internal progress checklists the agent ticks off mid-run are exempt.
+
+## Instruction prominence
+
+A skill can load and still be ignored. When that happens the cause is placement
+or phrasing, not the trigger:
+
+- Put what must not be skipped at the top of its section, never buried mid-list
+  behind setup detail. Ordering is what the agent reads as priority.
+- Mark the few genuinely load-bearing steps (`## Important`, `CRITICAL:`) and
+  spend that weight sparingly — mark everything and it marks nothing.
+- Replace ambiguous directions with checkable ones. ✗ "validate properly"
+  ✓ "verify the name is non-empty and the start date is not in the past".
+- A skill the agent keeps disobeying is usually too verbose. Cut before you
+  emphasize.
 
 ## Gotchas
 
@@ -237,6 +273,10 @@ that defy a reasonable assumption, which the agent gets wrong unless told.
   an "Old patterns" section instead.
 - Concrete examples beat abstract description — show input/output pairs when
   output quality depends on format.
+- Give a template when the output has a required shape; agents match a concrete
+  structure better than a described one. Say which kind it is: an exact
+  template ("use this structure") or a starting point ("adapt as the task
+  needs") — an unmarked template gets followed too rigidly or ignored.
 - Provide one default with an escape hatch, not a menu of options.
 - Wrap Markdown prose at ~80 columns: reflow every edited paragraph so no
   line exceeds 80; exempt code fences, table rows, and unbreakable tokens (URLs,
@@ -248,7 +288,7 @@ that defy a reasonable assumption, which the agent gets wrong unless told.
   with a blank line when they are prose steps; keep them tight and unspaced
   when they are dense enumerations (type/flag/option lists, short spec fields,
   reference entries), where a value per line scans better and token economy
-  wins. Applies to `SKILL.md` bodies, READMEs, and references alike.
+  wins. Applies to `SKILL.md` bodies and bundled references alike.
 - US English: write skill files and any content a skill authors in US
   English spelling and conventions ("color", "canceled", "-ize"). When a skill
   edits a target that consistently uses another variety, match it and flag
@@ -256,7 +296,10 @@ that defy a reasonable assumption, which the agent gets wrong unless told.
 
 ## Scripts & bundled files
 
-Scripts are allowed. When you include them:
+Scripts are allowed. Reach for one when a check must hold every time: code is
+deterministic, language interpretation is not, so a validation the skill cannot
+afford to have skipped belongs in a script rather than in prose. When you
+include them:
 
 - Solve, don't punt — handle errors in the script rather than failing to the
   agent.
@@ -264,6 +307,8 @@ Scripts are allowed. When you include them:
 - Make intent explicit: "Run `x.py`…" (execute) vs "See `x.py` for the
   algorithm" (read as reference).
 - Don't assume packages are installed — state dependencies.
+- Name MCP tools fully qualified (`ServerName:tool_name`); a bare tool name can
+  fail to resolve when several servers are connected.
 - Never block on input: agents run non-interactive shells. Take every input as
   a flag, env var, or stdin, and exit with a usage line instead of prompting.
 - Document the interface in `--help` — flags, defaults, one example — since
@@ -273,15 +318,18 @@ Scripts are allowed. When you include them:
 - Make errors actionable: what was wrong, what was expected, what to try.
 - Stay idempotent and cap output size — agents retry, and harnesses truncate.
 
-## README structure
+## Usage block
 
-- Usage section, near the top: every skill's `README.md` MUST carry a
-  `## Usage` section immediately after the H1 title and its one-line intro,
-  before any other `##` section. It holds a single fenced code block showcasing
-  invocation examples — one line per mode: the invocation with representative
-  arguments, then a terse description. The no-argument / default invocation comes
-  first, marked `(default)`. Align the description column with padding so the
-  block reads as a table. Model it on `srd/skills/review/README.md`:
+- Skills ship no `README.md`. Everything a user or agent needs is in `SKILL.md`,
+  its bundled files, and `evals/evals.json`. Project-level READMEs are
+  `readme-smith`'s job, not a skill's.
+- Usage section, near the top: every `SKILL.md` MUST carry a `## Usage` section
+  immediately after the H1 title, before any other `##` section. It holds a
+  single fenced code block showcasing invocation examples — one line per mode:
+  the invocation with representative arguments, then a terse description. The
+  no-argument / default invocation comes first, marked `(default)`. Align the
+  description column with padding so the block reads as a table. Model it on
+  `srd/skills/review`:
 
   ```
   /review path/to/srd.md             review (default): resolve fixed + append new
@@ -296,9 +344,12 @@ Scripts are allowed. When you include them:
 
 Mandatory and written before finalizing (eval-driven development):
 
-- Every skill's `README.md` has an `## Evaluations` section with **at least 3
-  scenarios**. Each scenario: a representative request + the expected behavior
-  (2–4 bullet checks).
+- Evals are data, not prose: every skill carries `evals/evals.json` with **at
+  least 3 scenarios** in the shape Anthropic's tooling uses — `{id, name,
+  skills, query, files, expected_behavior[]}`, plus `setup` when the scenario
+  needs a fixture. Measure mode then runs the file instead of re-deriving a
+  rubric from prose.
+- Each scenario: a representative query + the expected behavior (2–4 checks).
 - Each check must be gradeable from the output alone: "names the rule it
   breaks", not "handles it well". Drop a check the skill-less baseline also
   passes — it measures the model, not the skill.
@@ -307,10 +358,32 @@ Mandatory and written before finalizing (eval-driven development):
   shown content.
 - Build evals from real gaps: run the task without the skill, note what failed,
   encode that as a scenario.
+- Start with one hard task, not broad coverage. Push a single challenging case
+  until it succeeds unaided, extract what you had to supply, and only then add
+  scenarios — the single case gives faster signal than a wide first sweep.
 - Develop iteratively — author the skill, run it on the scenarios, observe where
   it struggles, refine. Strengthen the description first when it fails to
   trigger.
-- Test across the models the skill targets — guidance that suits a strong model
-  can under-serve a smaller one.
+- Test across the models the skill targets, asking each its own question: does
+  a smaller model get enough guidance, and does a stronger one get over-
+  explained? Guidance tuned to one end under-serves the other.
+- Test in a fresh context, never in the session that wrote the skill. The
+  authoring conversation already holds the intent, the corrections, and the
+  reasoning the skill is supposed to supply on its own, so a dry-run there
+  passes on context the real user will not have. Author in one session, test in
+  another (a subagent counts).
 - To measure a skill empirically (baseline A/B, trigger test), use
-  `skill-smith`'s Measure mode (`references/evals.md`).
+  `skill-smith`'s Measure mode (`references/measuring.md`).
+
+## Observing real use
+
+Watch how the agent moves through the skill, not just whether it got the answer.
+Four signals, each with its own fix:
+
+- It reads files in an order you did not expect — the structure is not as
+  obvious as it looked; re-order or re-signpost.
+- It skips a reference it needed — the pointer is too weak or too buried; make
+  the link explicit and say when to follow it.
+- It reads the same reference on every run — that content belongs in the body.
+- It never opens a bundled file — the file is dead weight or badly signposted.
+  Delete it or point at it properly.

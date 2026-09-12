@@ -1,0 +1,98 @@
+{
+  "skill_name": "skill-smith",
+  "evals": [
+    {
+      "id": 1,
+      "name": "create-from-description",
+      "skills": ["skill-smith"],
+      "query": "/skill-smith create a skill that converts CSV files to Markdown tables",
+      "files": [],
+      "expected_behavior": [
+        "Proposes a name equal to the directory name (e.g. csv-to-markdown), with no reserved word",
+        "Writes SKILL.md with valid frontmatter (name + description, plus argument-hint if it takes arguments), a third-person what + when description, a ## Usage block, the output-discipline line, and a closing ## Self-learning block",
+        "Writes evals/evals.json with at least 3 scenarios before writing the body",
+        "Lists the catalog-doc updates per CONTRIBUTING.md and reminds the user to run /reload-plugins"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "invalid-frontmatter-key",
+      "skills": ["skill-smith"],
+      "setup": "A skill whose frontmatter declares `user_invocable: true` and which ships no evals/evals.json.",
+      "query": "/skill-smith improve <that skill>",
+      "files": [],
+      "expected_behavior": [
+        "Reports user_invocable as a Blocker: not a Claude Code key, invocation is gated by disable-model-invocation, and recommends removing it",
+        "Confirms name equals the directory name and the description is well-formed",
+        "Reports the missing evals/evals.json as a Should-fix",
+        "Reports findings by severity first, then offers to apply fixes, editing nothing before confirmation"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "disambiguate-mode",
+      "skills": ["skill-smith"],
+      "query": "/skill-smith help me with skills",
+      "files": [],
+      "expected_behavior": [
+        "Asks exactly one question: create, improve, or measure?",
+        "Does not create, edit, or benchmark anything until the mode is known"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "output-discipline",
+      "skills": ["skill-smith"],
+      "setup": "A skill whose body tells its agent to re-list every finding in a closing summary.",
+      "query": "/skill-smith improve <that skill>",
+      "files": [],
+      "expected_behavior": [
+        "Flags the duplicate closing summary against the Output discipline rule",
+        "Confirms the body carries the canonical terse-output line, and adds it when missing",
+        "Checks that evals/evals.json holds at least one scenario asserting terse output",
+        "Its own audit report opens with the payload, with no preamble, no narration, and no restating of findings already shown"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "reference-content-and-preloading",
+      "skills": ["skill-smith"],
+      "setup": "A skill whose keyed reference restates its own terse rules, and whose workflow reads that reference whole on every run.",
+      "query": "/skill-smith improve <that skill>",
+      "files": [],
+      "expected_behavior": [
+        "Reads the reference's content, not just its structure (one hop, Contents list, file naming)",
+        "Flags entries that restate the rule they key to, or that collapse to one shared principle, as redundant reference bloat",
+        "Flags the workflow step that preloads the whole reference: on-demand saves tokens only when the read is deferred",
+        "Reports findings by severity and makes no edit before confirmation"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "measure-real-effect",
+      "skills": ["skill-smith"],
+      "query": "/skill-smith measure cm",
+      "files": [],
+      "expected_behavior": [
+        "Builds a rubric from the target's evals/evals.json and runs each scenario with and without the skill loaded, in fresh subagents, per references/measuring.md",
+        "Grades the delta and reports a per-scenario table plus a trigger recall/precision score",
+        "States a verdict (earns its tokens / no measurable effect) and makes no edit from the run without confirmation",
+        "Opens with the result table, with no preamble or narration"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "scope-and-gotchas",
+      "skills": ["skill-smith"],
+      "setup": "A skill covering both querying a database and administering it, whose only non-obvious rule sits in a reference file as \"handle errors appropriately\".",
+      "query": "/skill-smith improve <that skill>",
+      "files": [],
+      "expected_behavior": [
+        "Flags the double scope against the Scope rule: two unrelated trigger sets belong in two skills",
+        "Flags \"handle errors appropriately\" as general advice rather than a gotcha, and asks for the concrete correction it stands in for",
+        "Flags that gotcha living in a reference: the agent cannot know to load a file about a trap it does not know exists",
+        "Reports by severity and makes no edit before confirmation"
+      ]
+    }
+  ]
+}

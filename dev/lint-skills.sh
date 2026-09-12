@@ -4,7 +4,9 @@
 #
 # A "skill" is any directory containing a SKILL.md. For each
 # skill this script checks:
-#   - SKILL.md and README.md both exist,
+#   - SKILL.md exists and carries a `## Usage` block,
+#   - eval scenarios exist: evals/evals.json (the standard) or, for a skill not
+#     yet migrated, a README.md with an `## Evaluations` section (warns),
 #   - frontmatter has name + description, name equals the directory name,
 #   - the description stays near the ~350-char aim (warns past 500) and uses
 #     no first/second person (warning only),
@@ -12,7 +14,6 @@
 #   - the body carries the output-discipline line ("Report tersely" or the
 #     "no preamble or narration" phrasing),
 #   - the body has a `## Self-learning` block (warning only),
-#   - README.md has an `## Evaluations` section,
 #   - every bundled .md reference over ~100 lines starts with a Contents list,
 #   - Markdown prose wraps at ~80 columns (warning only).
 #
@@ -79,12 +80,11 @@ check_wrap() {
 }
 
 lint_skill() {
-    local dir="$1" name skill_md readme fm
+    local dir="$1" name skill_md readme evals fm
     name="$(basename "$dir")"
     skill_md="$dir/SKILL.md"
     readme="$dir/README.md"
-
-    [ -f "$readme" ] || err "$name: missing README.md"
+    evals="$dir/evals/evals.json"
 
     fm="$(frontmatter "$skill_md")"
 
@@ -143,11 +143,39 @@ lint_skill() {
     grep -q '^## Self-learning' "$skill_md" \
         || warn "$name: SKILL.md has no '## Self-learning' block"
 
-    # README has an Evaluations section.
-    if [ -f "$readme" ]; then
-        grep -qE '^##[[:space:]]+Evaluations' "$readme" \
-            || err "$name: README.md has no '## Evaluations' section"
+    # SKILL.md carries the Usage block (standards.md, Usage block). A skill not
+    # yet migrated still keeps Usage in its README, so this only hardens to an
+    # error once that README is gone.
+    if ! grep -qE '^##[[:space:]]+Usage' "$skill_md"; then
+        if [ -f "$readme" ]; then
+            warn "$name: '## Usage' still in README.md — move it to SKILL.md"
+        else
+            err "$name: SKILL.md has no '## Usage' section"
+        fi
     fi
+
+    # Eval scenarios exist. evals/evals.json is the standard; a pre-migration
+    # README.md with an '## Evaluations' section still counts, with a warning,
+    # so skills can move over one at a time.
+    if [ -f "$evals" ]; then
+        # Valid JSON carrying at least 3 scenarios (standards.md, Evaluations).
+        # Counts "query" keys rather than parsing JSON — this script has no jq.
+        local n
+        n="$(grep -co '"query"[[:space:]]*:' "$evals" || true)"
+        [ "$n" -ge 3 ] \
+            || err "$name: evals/evals.json has $n scenario(s) (want >= 3)"
+        grep -q '"expected_behavior"' "$evals" \
+            || err "$name: evals/evals.json has no 'expected_behavior' checks"
+    elif [ -f "$readme" ] && grep -qE '^##[[:space:]]+Evaluations' "$readme"; then
+        warn "$name: evals still in README.md — move them to evals/evals.json"
+    else
+        err "$name: no evals/evals.json (and no README.md '## Evaluations')"
+    fi
+
+    # Skills ship no README.md: SKILL.md and its bundled files carry everything
+    # (standards.md, Usage block). Warn while the tree migrates.
+    [ -f "$readme" ] \
+        && warn "$name: has a README.md — skills ship none; fold it into SKILL.md"
 
     # Every Markdown file in the skill wraps prose at ~80 columns.
     check_wrap "$skill_md"
