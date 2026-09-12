@@ -7,26 +7,25 @@ description: >
   and proposes fixes to apply. Use before touching Go, or to check or fix Go
   style.
 license: MIT
-argument-hint: "[TARGET*] [packages=a,b] [max_issues=N]
+argument-hint: "[TARGET] [packages=a,b] [max_issues=N]
   [depth=light|standard*|full] [plan_first] [fix]"
 ---
 
 # style
 
-Authoritative Go style rules **and** the style-only pass that enforces them.
-Two uses:
+Authoritative Go style rules and the style-only pass that enforces them. Two
+uses:
 
-- Reference — read the rules below and apply the **Production** section to
-  `*.go`, the **Test** section to `*_test.go` (Test inherits Production unless a
-  Test rule overrides it). This is the default when the skill is loaded as
-  context before writing Go, rather than invoked as a command.
-- Run a pass — invoked as `/style [target]`: check finished code against these
-  rules and propose fixes; with no target it checks the current git diff. Read
+- Reference — when loaded as context before writing Go (the default): apply
+  the Production section to `*.go` and the Test section to `*_test.go`; Test
+  inherits Production unless a Test rule overrides it.
+- Run a pass — when invoked as `/style [target]`: check finished code against
+  these rules and propose fixes. Read
   [references/checking.md](references/checking.md) and follow it; per-rule
-  detection detail lives in [rules.md](rules.md).
+  detection detail lives in [rules.md](rules.md), opened one entry at a time.
 
-Change the rules themselves through `golang:review` (state a preference, or
-`golang:review learn` to mine an editing session); don't hand-edit them ad hoc.
+Change the rules only through `golang:review` (state a preference, or
+`golang:review learn` to mine an editing session); never hand-edit them.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see — when citing a rule, name it and the fix, not
@@ -49,7 +48,8 @@ its full text.
   across lines to fit <=80.
 - Split a string literal too long for one line into per-line `"..."` segments
   joined with `+`, led by an empty `"" +` on the opening line so every segment
-  aligns; keep `\n` explicit, never a raw backtick string for multi-line content.
+  aligns; keep `\n` explicit and never use a raw backtick string for multi-line
+  content.
 - Separate multi-line switch cases with a blank line; none before the first.
 
 ### Naming
@@ -124,14 +124,15 @@ its full text.
 
 ### Output & environment
 
-- Never write output (errors included) to stdout/stderr from library/leaf/mid-level
-  functions; return an error (`%w`) or output as a value.
+- Never write output (errors included) to stdout/stderr from library, leaf, or
+  mid-level functions; return an error (`%w`) or output as a value.
 - A function that needs an environment variable takes `*ring.Ring` and reads it
   via `rng.EnvGet`/`EnvLookup`; never `os.Getenv`.
 
 ### API design
 
-- `context.Context` is the first parameter when used; never store it in a struct.
+- `context.Context` is the first parameter when used; never store it in a
+  struct.
 - Respect `ctx.Err()`; stop work and propagate cancellation.
 - Accept interfaces, return concrete types; keep interfaces small.
 - Assert implementations at compile time: `var _ Iface = (*T)(nil)` near the
@@ -196,10 +197,8 @@ its full text.
   paths; a dispatch test must observe an outcome only that branch yields.
 - Match several substrings of one error with one `ErrorRegexp("a.*b")`, not
   stacked `ErrorContain` calls.
-- Hoist an expected literal into a `want` local only to keep the assertion
-  within 80 cols; inline it when the call already fits.
-- Don't hoist a short string literal into a local when the inlined form fits;
-  inline at each use even if repeated.
+- Hoist a literal into a `want` (or other) local only to keep the line within
+  80 cols; when the inlined form fits, inline it at each use even if repeated.
 - Hoist a multi-line structured-data literal (JSON, YAML) passed to a call into
   a pretty-printed backtick raw-string local; don't inline it or split it across
   `+`-joined segments to fit the line limit.
