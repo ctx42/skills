@@ -29,8 +29,9 @@
       "files": [],
       "expected_behavior": [
         "Invents no install command, version number, registry coordinate, or benchmark figure",
-        "Asks for each unknown once; what is still unknown afterwards becomes an explicit `<!-- TODO: … -->` marker rather than a plausible guess",
-        "Ships only badges whose URL it can tie to a fact that exists — no license badge with no `LICENSE`, no release badge with no release",
+        "Asks for each unknown once; a fact the README needs and still lacks becomes an explicit `<!-- TODO: … -->` marker rather than a plausible guess",
+        "Deletes an unsupportable claim outright instead of marking it — a TODO asking someone to source an invented number would preserve the invention",
+        "Ships no badge it cannot tie to a fact that exists, and leaves no TODO in place of one: no badges at all is a correct header here",
         "Names the remaining `TODO` markers in the reply so the user knows what is left open"
       ]
     },
@@ -56,13 +57,14 @@
       "skills": [
         "readme-smith"
       ],
-      "setup": "A Go library repo whose `gomake --list` lists a `:doc:mce` target. No README yet. The package has exported `New`, `(*Client).Do`, and `Parse`, and no `_test.go` files carrying `Example…` functions.",
+      "setup": "A Go library repo that uses gomake: its CI workflow runs a gomake step and `gomake --list` lists the built-in `:doc:mce` target. No README yet. The package has exported `New`, `(*Client).Do`, and `Parse`, and no `_test.go` files carrying `Example…` functions.",
       "query": "/readme-smith write a README",
       "files": [],
       "expected_behavior": [
-        "Runs `gomake --list` and confirms the `:doc:mce` target before deciding how to author examples",
+        "Establishes from the repo — the CI gomake step — that this project uses gomake, rather than concluding it from `:doc:mce` being listed",
         "Writes runnable `Example…` functions in `_test.go` and runs `go test ./...` until they pass, instead of pasting hand-written snippets",
         "Marks each spot with a `<!-- gmmce:<relpath>/<FuncName> -->` comment above an empty `go` fence and runs `gomake :doc:mce` to fill them",
+        "Reads the `Found <key>` lines to confirm each marker was injected, rather than trusting the exit status or the `Writing` line",
         "Hand-edits no injected fence; a change to an example goes back through its `Example…` function and a re-run of the target"
       ]
     },
@@ -104,13 +106,45 @@
       "skills": [
         "readme-smith"
       ],
-      "setup": "A Go project with the `:doc:mce` target whose natural example prints a raw HTTP exchange in one call — `fmt.Printf(\"%q\\n\", wire)` — producing a single ~300-character output line.",
+      "setup": "A Go project that uses gomake (a gomake step in CI) whose natural example prints a raw HTTP exchange in one call — `fmt.Printf(\"%q\\n\", wire)` — producing a single ~300-character output line.",
       "query": "/readme-smith write a README",
       "files": [],
       "expected_behavior": [
-        "Keeps every code-fence line within the rendered width (≤ ~100 chars) so GitHub wraps nothing horizontally",
+        "Keeps every code-fence line within the template's width (≤ ~80 chars, hard cap ~100) so GitHub wraps nothing horizontally",
         "Rewrites the `Example…` function to split the output across lines — one `%q` per line — and re-injects, rather than shipping the wide line",
+        "Applies the width rule to the example's source lines too, not only its `// Output:` block: the whole body lands in the fence",
         "Re-runs `go test ./...` after the rewrite so the `// Output:` block still matches"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "gomake-installed-but-project-does-not-use-it",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "A Go CLI repo with no gomake config, no gomake step in CI, and no `<!-- gmmce:… -->` marker anywhere. gomake happens to be installed on this machine, so `gomake --list` lists the built-in `:doc:mce` target like it does in any directory.",
+      "query": "/readme-smith write a README",
+      "files": [],
+      "expected_behavior": [
+        "Does not treat `:doc:mce` appearing in `gomake --list` as evidence about this project — the target is a built-in and lists everywhere",
+        "Finds no gomake config, CI step, or existing marker, and so hand-writes any examples the README needs",
+        "Introduces no `<!-- gmmce:… -->` marker into the README and authors no `Example…` function for injection: a contributor without gomake could not regenerate them"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "unrunnable-command-vs-unpublished-package",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "Two commands the README must ship. The quickstart needs a toolchain this sandbox does not have, so it cannot be run here at all. The install command runs fine and fails for a project reason: the module is not published yet, so it will fail for a reader too.",
+      "query": "/readme-smith write a README",
+      "files": [],
+      "expected_behavior": [
+        "Distinguishes the two failures rather than treating both as unverified",
+        "Leaves the quickstart command as written and says in the reply that this environment could not run it — the reader is not warned about the author's sandbox",
+        "Warns the reader about the install command with a `> [!NOTE]` naming what has to happen first, since an HTML comment is invisible to them",
+        "Claims neither command works"
       ]
     }
   ]

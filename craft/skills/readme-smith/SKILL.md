@@ -38,17 +38,27 @@ to the file, state its path, and do not paste it back into chat.
 ## Non-negotiables (both modes)
 
 - Never fabricate. A claim, command, version, or number you cannot verify from
-  the repo or the user is a gap: ask, and if still unknown leave an explicit
-  `<!-- TODO: … -->` marker.
+  the repo or the user is a gap: ask, and if still unknown mark it.
+  - A fact the README *needs* and lacks (the license, the minimum runtime, the
+    published install command) gets a `<!-- TODO: … -->` marker.
+  - A claim the README merely *makes* and cannot support (a benchmark figure, a
+    download count, "battle-tested") is deleted, not marked. A TODO asking
+    someone to source an invented number preserves the invention.
 - Verify commands. Execute every install and quickstart command you ship and
   make it pass (see Verify); a command you cannot run is marked, not guessed.
 
 ## Go example injection (gomake)
 
-When the project is Go and examples belong in the README, read
-[`references/gomake.md`](references/gomake.md) *(on-demand: Go project with
-README examples)* and follow it: with a `:doc:mce` gomake target, examples are
-injected from testable `Example…` functions, never hand-written.
+When the project is Go, the README wants `go` example fences, and the *project*
+uses gomake, read [`references/gomake.md`](references/gomake.md) *(on-demand:
+Go project with README examples)* and follow it: examples are injected from
+testable `Example…` functions, never hand-written.
+
+`:doc:mce` is a gomake built-in, so it lists on any machine with gomake
+installed — its presence says nothing about this project. Decide from the repo:
+an existing `<!-- gmmce:… -->` marker, a gomake config, or a gomake step in CI.
+Absent those, hand-write the examples rather than introducing a tool the
+project's own contributors may not have.
 
 ## Create mode
 
@@ -94,7 +104,11 @@ No edits until the user approves the findings.
 
 3. Report only. Group findings Blocker / Should-fix / Nit; each names the
    location, the problem in one line, the `references/template.md` rule it
-   breaks, and a minimal fix. End with a one-line verdict.
+   breaks, and a minimal fix. A gap only the user can close (the minimum
+   runtime, whether the package is published, which remote is real) is a
+   finding like any other, asked in its own line — improve mode has no separate
+   question round. End with a one-line verdict; the verdict is the ask, so add
+   no "shall I apply these?" after it.
 
 4. Fix on confirmation. Apply approved findings, then Verify. State what
    changed.
@@ -107,10 +121,11 @@ Static — re-check the draft against `references/template.md` (Root vs member,
 Navigation, Style rules, Excluded sections), then:
 
 - [ ] Every internal link and nav/TOC anchor resolves to a real heading or file.
-- [ ] Every code fence declares a language and no fence line exceeds ~100 chars
-      (long output split across lines).
-- [ ] Every gap is a `<!-- TODO: … -->` marker, not a guessed command, version,
-      or number.
+- [ ] Every code fence declares a language and every fence line stays within
+      the template's width (≤ ~80 chars, hard cap ~100), long output split
+      across lines.
+- [ ] Every gap the README needs is a `<!-- TODO: … -->` marker, not a guessed
+      command, version, or number; every claim it cannot support is gone.
 - [ ] Prose is wrapped and tables padded to the repo's `[*.md] max_line_length`
       (80 when unset), counted in characters, not bytes: an em dash is one
       column, so byte-based length checks over-report.
@@ -118,9 +133,16 @@ Navigation, Style rules, Excluded sections), then:
 Dynamic:
 
 - [ ] Execute the install and quickstart commands exactly as written and make
-      them pass, or mark the blocking prerequisite. Never ship an unrun command;
-      if the environment cannot run it (toolchain missing, permission denied),
-      say so and leave it flagged rather than claiming it works.
+      them pass. Never ship an unrun command; when one will not pass, which
+      kind of failure it is decides what to do:
+      - *This environment cannot run it* (toolchain missing, permission denied,
+        no network): the command is still right. Say so in the reply and leave
+        the README alone — do not warn the reader about your sandbox.
+      - *It runs and fails for a project reason* (module unpublished, package
+        not on the registry): it will fail for the reader too, so the reader
+        must be told. A `<!-- TODO: … -->` is invisible to them; use a
+        `> [!NOTE]` naming what has to happen first, and a TODO only for the
+        fact you are missing.
 
 ## Self-application
 

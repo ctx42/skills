@@ -58,8 +58,10 @@ section set, prerequisites format, and tone — a repo's READMEs read as a set.
 
 ## Header snippet
 
-Badges on their own lines, then title, tagline, and image. Adapt; drop any
-line whose fact you cannot verify (see Style rules: Badges).
+Badges on their own lines, then title, tagline, and image. The badges below
+are a Go project's set — swap in the ecosystem's own (npm version, PyPI, crates
+.io, the CI that actually runs) and drop any line whose fact you cannot verify
+(see Style rules: Badges).
 
 ```markdown
 [![Go](ci-badge-url)](ci-link)
@@ -98,7 +100,9 @@ Every anchor must resolve to a real heading anchor (lowercase, spaces →
 hyphens, punctuation dropped), so no two headings may share the same text
 (`### As a library` twice collides — rename one `Use as a library`). If the
 repo already carries a `<!-- TOC -->` block (IDE- or tool-generated), keep it
-and add nothing.
+and add nothing — a tool regenerates it, so deleting it only invites it back.
+Where that collides with the one-aid rule, the existing block is the aid that
+stays and the hand-written nav line is the one that goes.
 
 ## Style rules
 
@@ -120,6 +124,13 @@ and add nothing.
   (`bitbucket.org/acme/foo` ≠ `github.com/acme/foo`). In Go, `go get`, badges,
   and pkg.go.dev target the module (`github.com/acme/foo`); an `import` targets
   the package — module + subdir (`github.com/acme/foo/pkg/foo`).
+- The remote is evidence only if it is *this* project's. `git remote -v` run
+  inside a directory that is not its own git root answers for whatever repo
+  encloses it — a real-looking remote for the wrong project. Confirm
+  `git rev-parse --show-toplevel` is the project root first; when it is not,
+  or there is no repo at all, the remote is unknown and the manifest stands
+  alone. The manifest always wins a disagreement: it is what the toolchain
+  resolves.
 - Visibility: never infer public/private from the host — `bitbucket.org`,
   `gitlab.com`, or self-hosted is not evidence of "private," `github.com` not
   of "public." Add no `GOPRIVATE`/auth step unless the user confirms the repo
@@ -127,10 +138,13 @@ and add nothing.
 - No horizontal scroll: a code fence scrolls sideways on GitHub past its box
   width; keep every fence line ≤ ~80 chars (hard cap ~100). Break long commands
   with `\`, long strings across lines, and long example output into pieces.
-- Badges: each points at the project's real hosting remote (`git remote -v`)
-  and a fact that exists — CI that runs there, a published package, the
-  declared license/runtime. Omit any whose URL you cannot confirm resolves;
-  never invent one from an org name.
+- Badges: each points at the project's real hosting remote (see above) and a
+  fact that exists — CI that runs there, a published package, the declared
+  license/runtime. Omit any you cannot confirm, and say in the reply what you
+  dropped and why; never invent one from an org name, and leave no `TODO` in
+  its place — a badge is decoration, not a fact the README owes the reader. No
+  badges at all is a correct header for a project with no CI, no release, and
+  no confirmed remote.
 - Concise and skimmable: short paragraphs, meaningful headings, examples over
   prose — never a wall of prose where a table or short example would serve.
 
@@ -146,7 +160,10 @@ Do not author these as README sections — dedicated files own them; link to the
 file in one line at most if genuinely helpful:
 
 - License → `LICENSE` / `LICENSE.md` (the root/main README alone may keep a
-  `## License` section; see Root README vs member README)
+  `## License` section; see Root README vs member README). With no license file
+  in the repo there is nothing to point at: omit the section rather than
+  shipping a heading whose only body is a marker, and raise the missing license
+  in the reply — it is a repo gap, not a README one.
 - Contributing → `CONTRIBUTING.md`
 - Changelog → `CHANGELOG.md`
 - Code of Conduct → `CODE_OF_CONDUCT.md`
