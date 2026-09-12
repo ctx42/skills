@@ -62,7 +62,10 @@ Detect whether the library source is editable:
 1. Resolve target + modifiability (above); list the symbols the consumer uses.
 2. Map usage with the `LSP` tool: `findReferences` on each imported symbol
    (`workspaceSymbol`/`hover` for shape), falling back to grep on the import
-   path if no language server is configured. Record every call site.
+   path when no language server is reachable — whether none is configured or
+   the harness exposes no `LSP` tool at all; say which, and that the mapping is
+   textual, since grep cannot tell a same-named symbol on an unrelated type
+   from a real call site. Record every call site.
 3. Diagnose friction per usage pattern: repeated setup boilerplate, options
    built inline, an interface the consumer declares itself, error-string
    matching, awkward multi-returns, type assertions, a hand-rolled loop that
@@ -129,11 +132,22 @@ proposal the brainstorm exists to surface.
 Open with the ranked payload:
 
 1. One line: library · consumer scope · modifiability · N call sites ·
-   M proposals. N counts call sites in the consumer scope — one per syntactic
-   call to the library, so a line calling two of its functions counts twice and
-   a call inside a loop counts once. Not files, not occurrences of the package
+   M proposals. N counts every syntactic use of the library's surface in the
+   consumer scope: a call to one of its functions, a method call on a value it
+   owns (`src.Next()`), and a composite literal of one of its types
+   (`must.Options{…}`) each count once. A line using two of them counts twice;
+   a use inside a loop counts once. Not files, not occurrences of the package
    name, not per-iteration executions.
-2. A table ranked by impact:
+
+   N is the denominator every `Reach` is a fraction of, so both must count the
+   same way — a headline counting only calls beside a Reach counting literals
+   makes the table unreadable.
+2. A table ranked by impact — unless there are no proposals, in which case say
+   so in a sentence and stop: an empty table is a shrug with borders. Name what
+   you looked for and found absent, so the reader can tell a clean API from a
+   shallow pass. A shape worth knowing but not worth doing is a named
+   declined note there, not a `Low` row padding the table.
+
 
    | # | Change (archetype) | Reach | Impact | Breakage | Effort |
 
