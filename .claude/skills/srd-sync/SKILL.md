@@ -134,9 +134,12 @@ swaps in at step 6.
    present. That failure is not the upstream-phrase-changed case: check the
    order before touching the script's rules.
    A genuine assertion failure means an upstream phrase changed — update the
-   script's rule, never resolve it by accepting the source wording. The
-   assertion is a substring match, so a reworded superset can still pass and
-   produce nonsense; read what it substituted, do not just check it exited 0.
+   script's rule, never resolve it by accepting the source wording. The script
+   prints one `subst '<phrase>' xN` line per rule: a phrase cited by two rules
+   (the glossary link is GLO-3's and STR-10's both) reports `x2` and is
+   rewritten in both places, which is correct. It refuses outright when a
+   phrase occurs only inside a longer one, since these are substring matches
+   and "the Technology Group" sits inside "the Technology Group Lead".
 6. Assemble the final candidate: `header + body.final + footer`, one blank line
    between, with the banner edit from Assembly, then wrap to the copy's width.
 7. `diff` the final candidate against the current copy. The hunks are the real
