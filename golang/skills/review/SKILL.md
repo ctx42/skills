@@ -163,8 +163,10 @@ never write a rule without confirmation.
 
 ## Self-learning
 
-Obey this skill's lessons when it has any: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/golang/review.md` when this directory
-is read-only. Most runs have none; absence is the normal case and needs no
-comment. On a correction or self-caught mistake, append a one-line rule to
-whichever path is writable, creating it, and report where.
+Obey this skill's lessons when it has any: read both a sibling `LESSONS.md`
+and `$HOME/.agent-data/ctx42-skills/lessons/golang/review.md`, the sibling
+winning a conflict — a read-only install writes the second, and what it
+learned there stays true once the checkout is writable again. Most runs have
+none; absence is the normal case and needs no comment. On a correction or
+self-caught mistake, append a one-line rule to the sibling when this directory
+is writable, else to the fallback, creating it, and report where.
