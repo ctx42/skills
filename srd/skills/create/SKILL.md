@@ -90,9 +90,9 @@ satisfy GLO-3 / STR-10 without redefining known terms.
 
 ### 1. Interview
 
-When the invocation carries a seed (`$ARGUMENTS`), treat it as the user's
-opening Objective and restate it for confirmation instead of asking cold; with
-no seed, open with the Objective question.
+When the invocation carries a seed, treat it as the user's opening Objective
+and restate it for confirmation instead of asking cold; with no seed, open with
+the Objective question.
 
 Drive the conversation; do not wait to be fed content. Ask one branch at a
 time, in this order, and restate each resolved branch before moving on, folding

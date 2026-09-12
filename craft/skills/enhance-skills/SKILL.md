@@ -19,7 +19,7 @@ license: MIT
 /enhance-skills <skill>  retrofit the ## Self-learning block into that skill's SKILL.md
 ```
 
-Turn corrections into durable skill improvements. `$ARGUMENTS` naming a skill
+Turn corrections into durable skill improvements. An argument naming a skill
 (name or path) selects Retrofit; otherwise pick the mode from the request:
 
 - Harvest (default): "enhance the skills I used", "record what you learned",

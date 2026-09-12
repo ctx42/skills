@@ -145,8 +145,7 @@ Category is orthogonal to `## Errata`: an errata finding is `format` or
 
 The review file path is auto-derived, never passed as an argument. The first
 token is the SRD path; the next selects the mode (default review when omitted).
-With no
-`$ARGUMENTS`, ask which SRD to review; fall back to the user's prose for
+With no arguments, ask which SRD to review; fall back to the user's prose for
 free-form input.
 
 - the SRD path only → review (default): read the whole SRD, write the review file.
