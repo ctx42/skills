@@ -115,6 +115,20 @@ dotfiles:
 Use an **absolute** path (no `~`), and see [Develop](#develop) for how edits to
 the clone reach your sessions.
 
+### Apply the Go style rules automatically
+
+Installing `golang` makes the `style` rulebook available; it does not make an
+agent read it unprompted. For that, paste this into the **target project's**
+`CLAUDE.md`, so every session that edits Go there picks the rules up:
+
+```md
+## Go style
+
+Before creating or editing any `*.go` file, read the `style` skill and
+follow it: the `Production` section for non-`_test.go` files, the `Test`
+section for `_test.go` files.
+```
+
 ## Develop
 
 Iterate on a skill without reinstalling — load the group straight from the repo

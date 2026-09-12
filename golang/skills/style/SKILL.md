@@ -13,6 +13,19 @@ argument-hint: "[TARGET] [packages=a,b] [max_issues=N]
 
 # style
 
+## Usage
+
+```
+/style                                  style-check the current git diff (default)
+/style ./pkg/foo                        style-check one package
+/style ./...                            check the whole module
+/style /path/to/project                 check that module (a go.mod dir)
+/style ./pkg/foo fix                    apply every offense's fix without asking
+/style ./... plan_first                 list offenses only, then stop
+/style ./... packages=a,b               restrict a module check to these packages
+/style ./... max_issues=15 depth=light  cap offenses; set depth
+```
+
 Authoritative Go style rules and the style-only pass that enforces them. Two
 uses:
 

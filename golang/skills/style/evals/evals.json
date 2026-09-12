@@ -1,0 +1,113 @@
+{
+  "skill_name": "style",
+  "evals": [
+    {
+      "id": 1,
+      "name": "production-rules-while-writing",
+      "skills": ["style"],
+      "setup": "An agent has read the skill as context and is about to edit `service.go` — production code, not a test file.",
+      "query": "Add a Close method to the Service type in service.go",
+      "files": [],
+      "expected_behavior": [
+        "Applies the Production section: gofmt and goimports, lines within 80 columns, `%w` error wrapping with short context, godoc on exported symbols",
+        "Applies no Test-only rule to the production file — no `have`/`want` naming, no subtest conventions"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "test-rules-inherit-production",
+      "skills": ["style"],
+      "setup": "The same agent then writes `service_test.go`, including a table test and a helper.",
+      "query": "Write tests for Service.Close in service_test.go",
+      "files": [],
+      "expected_behavior": [
+        "Applies the Test section on top of Production, not instead of it",
+        "Names tests `Test_Func` / `Test_Type_Method`, suffixes the table test `_tabular`, and uses `t.Run` subtests",
+        "Calls `t.Helper()` in helpers and reaches for `tester.Spy` when testing a helper",
+        "Keeps subtest names inside the `[a-zA-Z0-9 _-]` charset, flat, with no `/`"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "pass-lists-offenses-then-asks",
+      "skills": ["style"],
+      "setup": "`./pkg/foo` has a single-letter receiver and a godoc on an interface-implementing method. It also has an off-by-one in a loop bound — a correctness bug, not a style offense.",
+      "query": "/style ./pkg/foo",
+      "files": [],
+      "expected_behavior": [
+        "Resolves the target, lists the files in scope, and reads `references/checking.md`",
+        "Reasons only for detection — runs no gofmt, vet, or linter",
+        "Opens the `rules.md` entry for the interface-method rule rather than the whole file",
+        "Reports style offenses only: the off-by-one is left to `golang:review`, not reported here",
+        "Groups findings Blocker / Should-fix / Nit with `file:line`, the rule id, and a minimal fix; ends with a clean / fix-first verdict and per-severity counts",
+        "Asks which offenses to apply rather than editing unprompted"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "fix-applies-everything-behind-a-green-gate",
+      "skills": ["style"],
+      "setup": "`./pkg/foo` has six offenses. The module test suite is green before the run.",
+      "query": "/style ./pkg/foo fix",
+      "files": [],
+      "expected_behavior": [
+        "Runs `go test ./... -race` for a green baseline first, and stops without editing if that baseline is red",
+        "Applies every listed fix, then re-runs the gate",
+        "Reports each fix as one `file:sym — what changed` line plus the gate result",
+        "Prints no diffs and never commits"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "delegated-by-review",
+      "skills": ["style", "review"],
+      "setup": "`golang:review` is running a check on the current diff and invokes `style` for the style dimension.",
+      "query": "/review",
+      "files": [],
+      "expected_behavior": [
+        "Runs the pass through the offense list and stops — no pick step and no edits",
+        "Returns the grouped offense list for `review` to merge with its correctness findings"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "rules-change-only-through-review",
+      "skills": ["style"],
+      "setup": "The user asks `style` directly to add a new rule.",
+      "query": "/style add a rule that test helpers never return errors",
+      "files": [],
+      "expected_behavior": [
+        "Routes the request to `golang:review` rule-edit mode instead of hand-editing `SKILL.md` or `rules.md`",
+        "The resulting change is one dense rule line in `SKILL.md`, plus a keyed `rules.md` entry only where the line alone is not enough"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "broad-target-auto-plan-first",
+      "skills": ["style"],
+      "setup": "A 12-package module, invoked with no budget controls.",
+      "query": "/style ./...",
+      "files": [],
+      "expected_behavior": [
+        "Switches to plan-first: proposes the `max_issues` and `depth` defaults and the package list, and asks before checking",
+        "Skips that prompt when the invocation already carries `packages=a,b` or `max_issues=N`",
+        "Fans out one subagent per package past ~6, each opening only the `rules.md` entries it needs, and merges one report re-ranked to the global `max_issues`",
+        "Names the packages checked and the packages skipped",
+        "At `depth=light`, skips the LSP cross-file confirmation"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "terse-output",
+      "skills": ["style"],
+      "setup": "An ordinary single-package pass.",
+      "query": "/style ./pkg/foo",
+      "files": [],
+      "expected_behavior": [
+        "Opens with the offenses — no preamble and no narration of reading the rules",
+        "States each offense once",
+        "No closing summary re-listing offenses the user can already see"
+      ]
+    }
+  ]
+}
