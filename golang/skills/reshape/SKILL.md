@@ -39,10 +39,11 @@ Sources of truth:
 
 ## Target
 
-`$1` is the library; read the scope and control from the rest of `$ARGUMENTS`
-(fall back to the user's prose if empty):
-- `$1` — an import path (`github.com/x/y/pkg/must`), a module path, or a short
-  package name the project imports. Consumer scope defaults to the current
+The first token of the invocation is the library; read the scope and control
+from the tokens after it (fall back to the user's prose if empty):
+
+- library — an import path (`github.com/x/y/pkg/must`), a module path, or a
+  short package name the project imports. Consumer scope defaults to the current
   module.
 - `in ./pkg/foo` — restricts the consumer scope to that package (or path list).
 - `max=N` — caps the proposals reported (default 8), highest impact first.

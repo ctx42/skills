@@ -57,13 +57,14 @@ buffer silently in between, and `srd:kb` writes when the walk ends.
 
 ## Invocation
 
-`$1` is the SRD path, or a literal mode word. With no `$ARGUMENTS`, ask which SRD
+The first token is the SRD path, or a literal mode word. With no arguments, ask
+which SRD
 to check; fall back to the user's prose for free-form input.
 
-- `$1` = an SRD path → **review** (default): the full flow below. Re-running on
+- an SRD path → **review** (default): the full flow below. Re-running on
   an SRD that already has a `<srd>.questions.md` resumes the open questions (see
   [Re-run](#re-run-after-an-srd-edit)).
-- `$1` = `learn` → **learn**: bank durable platform facts from the current
+- `learn` → **learn**: bank durable platform facts from the current
   session, no SRD. See [learn](#learn).
 
 ## review (default)

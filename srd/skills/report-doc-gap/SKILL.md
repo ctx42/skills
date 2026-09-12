@@ -133,7 +133,7 @@ mid-flow loses nothing.
 
 ## Invocation
 
-`$1` is the SRD path or id; callers pass it. A gap handed over in the
+The first token is the SRD path or id; callers pass it. A gap handed over in the
 invocation prose means capture (phase B); otherwise drain (phase A). With no
 `$ARGUMENTS`, ask which SRD.
 

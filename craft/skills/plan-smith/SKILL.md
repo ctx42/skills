@@ -19,9 +19,10 @@ license: MIT
 /plan-smith update <plan-file>  refresh each item's checkbox and status
 ```
 
-Turn a brief into a tracked plan, and keep its status current. `$1` is the
-mode when given — `write` (the rest of `$ARGUMENTS` is the brief) or `update`
-(the rest is the plan-file path); else infer the mode from the request:
+Turn a brief into a tracked plan, and keep its status current. The first token
+of the invocation is the mode when given — `write` (the rest is the brief) or
+`update` (the rest is the plan-file path); else infer the mode from the
+request:
 
 - Write — a new plan from a description, a spec, or a shared understanding
   reached with `grill-me`.

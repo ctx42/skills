@@ -104,12 +104,13 @@ writes:
 
 ## Invocation
 
-`$1` is a mode word; `$2` is the SRD path or id when one is in play. Callers
-pass both. With no `$ARGUMENTS`, default to capture.
+The first token is a mode word; the next is the SRD path or id when one is in
+play. Callers
+pass both. With no arguments, default to capture.
 
-- `$1` = `capture` (default) — buffer, confirm, and write what the session
+- `capture` (default) — buffer, confirm, and write what the session
   surfaced. The flow below.
-- `$1` = `restructure` — reorganize the KB and repair every reference. See
+- `restructure` — reorganize the KB and repair every reference. See
   [Restructure](#restructure).
 
 ## Workflow
@@ -296,7 +297,7 @@ re-confirming what backlog already confirmed with the user.
 
 ## Restructure
 
-`$1` = `restructure` reorganizes the KB. Because a document id **is** its path,
+`restructure` reorganizes the KB. Because a document id **is** its path,
 every move breaks references — so this is a deliberate operation with repair
 built in, never a bare file move.
 

@@ -23,7 +23,8 @@ license: MIT
 ```
 
 Create, audit, proof, and revise technical documentation and user manuals;
-Markdown is the assumed format. The mode is `$1` when it is a mode word, else
+Markdown is the assumed format. The mode is the first token of the invocation
+when that token is a mode word, else
 inferred from the request; when the request does not settle it, default to
 audit (it edits nothing). The remaining arguments name the target file(s);
 with no target and no clear intent, ask which mode.

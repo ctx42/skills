@@ -46,8 +46,9 @@ Sources of truth:
 
 ## Target
 
-`$1` is the target token; read controls from the rest of `$ARGUMENTS`. Resolve
-`$1` to one of five execution kinds (fall back to the user's prose if it is not
+The first token of the invocation is the target; read controls from the tokens
+after it. Resolve that target to one of five execution kinds (fall back to the
+user's prose if it is not
 one of the forms below). Each fixes an order; always work it one function/method
 at a time.
 

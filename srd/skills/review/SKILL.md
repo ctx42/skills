@@ -136,20 +136,21 @@ Category is orthogonal to `## Errata`: an errata finding is `format` or
 
 ## Modes
 
-The review file path is auto-derived, never passed as an argument. `$1` is
-the SRD path; `$2` selects the mode (default review when omitted). With no
+The review file path is auto-derived, never passed as an argument. The first
+token is the SRD path; the next selects the mode (default review when omitted).
+With no
 `$ARGUMENTS`, ask which SRD to review; fall back to the user's prose for
 free-form input.
 
-- `$1` only → review (default): read the whole SRD, write the review file.
-- `$1` + `walk` → walk: interactive, section by section; record only findings
+- the SRD path only → review (default): read the whole SRD, write the review file.
+- path + `walk` → walk: interactive, section by section; record only findings
   the user confirms.
-- `$1` + `check` → check: re-verify the review file's open findings against
+- path + `check` → check: re-verify the review file's open findings against
   the current SRD; tick/move fixed ones, withdraw invalid ones. Trailing
   finding numbers scope it. Hunts no new defects.
-- `$1` + `errata` → errata: re-sort an existing review file so errata findings
+- path + `errata` → errata: re-sort an existing review file so errata findings
   sit in `## Errata`. Reclassify only; hunts no new defects.
-- `$1` + `feedback` → feedback: emit a terse plain-text issue list of open
+- path + `feedback` → feedback: emit a terse plain-text issue list of open
   tasks for an email or ticket. No file write.
 
 A file-writing run closes with one task-oriented line — e.g. "4 of 15 tasks

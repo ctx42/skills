@@ -236,17 +236,18 @@ check. Never trigger this on your own.
 
 ## Modes
 
-`$1` is the SRD path; `$2` selects the mode, interactive when omitted. With no
+The first token is the SRD path; the next selects the mode, interactive when
+omitted. With no
 `$ARGUMENTS`, ask which SRD to edit; pasted feedback arrives as prose, not as a
 token.
 
-- `$1` only → interactive.
-- `$1` + a bare integer → interactive from that line.
-- `$1` + a `.review.md` path, or pasted feedback → feedback.
-- `$1` + `#n` → feedback from finding `#n`.
-- `$1` + `autofix` → autofix.
-- `$1` + `polish` → polish.
-- `$1` + anything else (id, quoted text, description) → targeted.
+- the SRD path only → interactive.
+- path + a bare integer → interactive from that line.
+- path + a `.review.md` path, or pasted feedback → feedback.
+- path + `#n` → feedback from finding `#n`.
+- path + `autofix` → autofix.
+- path + `polish` → polish.
+- path + anything else (id, quoted text, description) → targeted.
 
 ### interactive (default)
 
@@ -257,7 +258,7 @@ token.
    term, and scope item — running the loop for every fix the user approves.
    Move on only after the current entry is resolved or skipped.
 
-Start point (`$1` + line): resolve the line to the entry or paragraph at or
+Start point (path + line): resolve the line to the entry or paragraph at or
 nearest it, skip step 1, and begin step 2 there, continuing to the end.
 
 ### feedback
@@ -274,7 +275,7 @@ outcome.
 4. Close by pointing the user to `review <srd> check` to reclassify what
    landed.
 
-Start point (`$1` + `#n`): requires an existing `<srd>.review.md`; if absent,
+Start point (path + `#n`): requires an existing `<srd>.review.md`; if absent,
 say so and stop. Enter at finding `#n` instead of severity order; after each
 finding, default to the next by number or jump to any number the user names.
 

@@ -19,8 +19,9 @@ license: MIT
 /readme-smith improve <readme-path>   audit an existing README; fix on confirmation
 ```
 
-Create and improve a project's `README.md`. Pick the mode from `$1` when given,
-else from the request; `$2` (or the request) names the README path:
+Create and improve a project's `README.md`. Pick the mode from the first token
+of the invocation when it is a mode word, else from the request; the next token
+(or the request) names the README path:
 
 - Create — no usable README exists, or the user asks for a new/rewritten one.
 - Improve — the user names an existing README to review or upgrade.

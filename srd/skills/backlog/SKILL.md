@@ -78,10 +78,11 @@ relevant.
 
 ## Workflow
 
-`$1` names one list, or `all` (default). Copy this checklist and tick it off:
+The first token names one list, or `all` (default). Copy this checklist and
+tick it off:
 
 - [ ] 1. Open the sitting: resolve both backends, count each list, stop for
-      the user's pick. Skipped when `$1` names a list.
+      the user's pick. Skipped when a list was named.
 - [ ] 2. `deferred`: ask, hand the answer to `srd:kb`.
 - [ ] 3. `unknowns`: triage, never answer.
 - [ ] 4. `gaps`: cluster, check the corpus, grill, draft, resolve.

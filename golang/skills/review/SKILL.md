@@ -30,14 +30,14 @@ argument-hint: "[TARGET* | add|change|remove RULE | learn] [packages=a,b]
 /review learn                                 mine this session's feedback into rules
 ```
 
-Done-time review for Go code. Read the invocation from `$ARGUMENTS`; `$1` is
-the first token. Pick the mode from it:
+Done-time review for Go code. Read the invocation from the arguments and pick
+the mode from the first token:
 
 - Check (default) — a target token or empty input; audit finished code.
-- Rule edit — `$1` is `add`/`change`/`remove`, or the input is a plain style
-  preference.
-- Learn — `$1` is `learn`; mines the current editing session (since the last
-  /clear) for convention feedback and proposes rules.
+- Rule edit — the first token is `add`/`change`/`remove`, or the input is a
+  plain style preference.
+- Learn — the first token is `learn`; mines the current editing session (since
+  the last /clear) for convention feedback and proposes rules.
 
 Sources of truth:
 - `golang:style` (on-demand: Check mode) — owns the style rules and their
@@ -52,13 +52,13 @@ don't restate output the user can already see.
 
 !`git diff HEAD`
 
-The Check target when `$1` is empty; a named target ignores it.
+The Check target when no target token is given; a named target ignores it.
 
 ## Check mode
 
 ### Target
 
-`$1` is the target token:
+The target token is:
 - empty — review the injected working diff; if it is empty, fall back to
   `git diff HEAD` (staged and unstaged together). If that is also empty, the
   branch's own work is the target: diff it against the base branch

@@ -51,9 +51,35 @@ fails on one.
 Frontmatter requires `name` + `description`; optional metadata (`license`/
 `version`/`tags`/`author`/`metadata`) is allowed but used sparingly.
 Claude-native affordances are permitted and encouraged where they earn their
-place: `argument-hint`, `$ARGUMENTS`/`$N` body substitution, and dynamic
-injection (`` !`cmd` ``). Beyond that, follow Anthropic's Agent Skills
-authoring guidance; `dev/lint-skills.sh` enforces the mechanical parts.
+place: `argument-hint`, `$ARGUMENTS` body substitution, and dynamic injection
+(`` !`cmd` ``). Beyond that, follow Anthropic's Agent Skills authoring
+guidance; `dev/lint-skills.sh` enforces the mechanical parts.
+
+### Argument substitution, measured
+
+Verified against `claude -p` on 2026-09-12, because the behaviour is
+undocumented and two parts of it are surprising:
+
+| Written        | With `/skill ONE TWO THREE` | With no arguments |
+|----------------|-----------------------------|-------------------|
+| `$ARGUMENTS`   | `ONE TWO THREE`             | empty string      |
+| `$0`           | `ONE`                       | left literal      |
+| `$1`           | `TWO`                       | left literal      |
+| `$9`           | left literal (out of range) | left literal      |
+
+Two consequences, both of which bit this repo:
+
+- **Positional arguments are zero-indexed.** `$0` is the first argument, not
+  the skill name. Every skill here that read `$1` as "the first token" was
+  reading the second, silently taking the wrong word as its mode.
+- **Substitution ignores backticks and fenced code blocks.** There is no
+  escape. Prose that *explains* the convention is destroyed by it: a line
+  reading ``` `$1` is the SRD path ``` arrives as ``` `TWO` is the SRD path ```.
+
+So: use `$ARGUMENTS` where the value should be inlined, and describe positions
+in words ("the first token", "the tokens after it"). Do not write `$N` in a
+skill body, and do not write about `$ARGUMENTS` in prose that must survive
+substitution — say "with no arguments", not "with no `$ARGUMENTS`".
 
 ```markdown
 ---
