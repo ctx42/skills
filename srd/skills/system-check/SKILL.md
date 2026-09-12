@@ -121,6 +121,14 @@ question, the interaction ends in one of:
   confirms both. Then remove the item from the questions file and hand the
   fact to `srd:kb`, which captures it silently — never a separate "bank this?"
   prompt (see [Platform knowledge](#platform-knowledge)).
+
+  An answer that is about this SRD rather than the platform has nowhere to go:
+  `srd:kb` takes platform facts only, this skill does not edit the SRD, and
+  removing the item drops the decision. Keep those: collect each one as
+  `<requirement id> — <the decision, in the user's terms>` and close the run by
+  listing them as edits for `srd:edit` to apply. The question leaves the file
+  because it is answered; the answer leaves the session in that list, not in
+  the transcript.
 - More context: the user explains. Restate the same way; the question may stay
   open, get refined, or resolve.
 - Collaborate: together add, split, or refine questions in the file.
