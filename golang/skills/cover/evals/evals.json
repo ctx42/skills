@@ -93,11 +93,11 @@
     },
     {
       "id": 10,
-      "name": "only-and-max-changes-filters",
+      "name": "unrecognized-control-token",
       "skills": [
         "cover"
       ],
-      "setup": "`./pkg/svc` holds four exported functions and three unexported ones, all partly covered. The run caps the work and restricts it to exported symbols.",
+      "setup": "`./pkg/svc` holds four partly-covered functions. The invocation carries `only=exported`, which is a control the sibling `doc` skill has and this one does not.",
       "query": "/cover ./pkg/svc only=exported max_tests=4",
       "files": []
     }

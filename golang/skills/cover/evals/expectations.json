@@ -90,12 +90,12 @@
     },
     {
       "id": 10,
-      "name": "only-and-max-changes-filters",
+      "name": "unrecognized-control-token",
       "expected_behavior": [
-        "Plans only the exported functions; the three unexported ones are named as out of scope, not silently skipped",
-        "Adds at most four tests or cases across the whole run",
-        "Reports what is left under the cap, per function, so the next run can pick it up",
-        "Still finishes and verifies one function before starting the next — the cap ends the run, it does not turn it into a scatter of partial edits"
+        "Says `only=exported` is not a control this skill has, and names the ones it does",
+        "Does not silently ignore it, and does not invent the filter it sounds like — a run that quietly drops an argument leaves the user thinking it applied",
+        "Honours `max_tests=4`, which is a real control, and proceeds with defaults for the rest",
+        "Reports what is left under the cap"
       ]
     }
   ]

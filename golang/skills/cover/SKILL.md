@@ -72,10 +72,15 @@ State the resolved kind and the function/file set before measuring.
 
 ## Controls
 
-Read from `$ARGUMENTS`, any order after the target:
-- `max_tests=N` — hard cap on tests/cases added this run, counted as test
-  functions created plus table rows and subtests added. Under `fanout` the cap
-  cannot be enforced live across parallel workers, so divide it before
+Read from `$ARGUMENTS`, any order after the target. A token that is not one of
+these and is not the target is not a silent no-op: say it was not recognized,
+name the controls that exist, and run with the defaults rather than guessing
+what it meant.
+
+- `max_tests=N` — hard cap on cases added this run: count one per table row
+  or subtest, and one for a test function that holds neither. A new two-row
+  table function is two, not three — the wrapper is not itself a case. Under
+  `fanout` the cap cannot be enforced live across workers, so divide it before
   dispatch: give each worker `N / packages` (minimum 1), name each worker's
   share in the plan, and report the total actually added against `N`. Uneven
   division goes to the packages with the most uncovered lines.
@@ -104,9 +109,12 @@ For each target function `Foo` (or method `T.Bar`), work in strict order.
    the function is uncovered — scaffold `Test_Foo`.
 2. Measure in isolation: `go test -run '^Test_Foo($|_)' -coverprofile=<tmp>
    ./<pkg>` (methods: `^Test_T_Bar($|_)`). Read coverage of only Foo's own
-   line range from the profile; ignore lines it hits in callees. The profile's
-   rows are `file:startLine.col,endLine.col stmts count` — select the rows
-   whose range falls inside Foo, and treat `count > 0` as hit; a rolled-up
+   line range from the profile; ignore blocks belonging to callees. The profile's
+   rows are `file:startLine.col,endLine.col stmts count` — one row per basic
+   block, not per line, and `stmts` is how many statements that block holds.
+   Select the rows whose range falls inside Foo, treat `count > 0` as covered,
+   and report coverage as covered statements over total, which is what the
+   percentages elsewhere count; a rolled-up
    percentage from `go tool cover -func` is per function but is computed from
    whatever ran, so it cannot tell you *which* line is still dark. A family
    that matches nothing prints `no tests to run` and still exits 0 — that is
@@ -154,7 +162,8 @@ Wait for approval, then run steps 3–4 function by function.
 End of run, after every function's loop:
 
 1. Run `gofmt -l` on every edited `*_test.go` file; fix any issues.
-2. Run `go test -v -race ./<pkg>`. The whole package must pass — a test this
+2. Run `go test -v -race` over every package this run edited — `./<pkg>` for
+   one, `./...` for a module or fan-out run. Each must pass — a test this
    run never touched going red is still this run's problem, and the most
    likely cause is a helper it edited. Quote only the result lines of the tests
    this run touched; report any other failure as a regression rather than
@@ -165,7 +174,13 @@ End of run, after every function's loop:
 Never attempt; always name the line and the reason:
 - unreachable defensive branches (errors that cannot occur at the call site),
 - `init` functions,
-- clock, network, hardware, or randomness without an injection seam,
+- clock, network, hardware, or randomness *with* an injection seam nobody can
+  drive from a test — a real device, a real wall clock the code reads
+  directly. Where the only obstacle is a missing seam, the line is **deferred**,
+  not un-coverable: someone can add the seam, and this skill may not (see
+  `include=all`). Un-coverable means no test could reach it whatever the author
+  does; deferred means not from here.
+- `init` functions,
 - generated files marked `DO NOT EDIT`,
 - panic-only paths with no recoverable contract.
 
