@@ -1,0 +1,147 @@
+{
+  "skill_name": "enhance-skills",
+  "evals": [
+    {
+      "id": 1,
+      "name": "no-corrections",
+      "skills": [
+        "enhance-skills"
+      ],
+      "setup": "A finished conversation. The user ran `/craft:cm` once; the skill read the staged diff and produced a commit message the user accepted without change (\"perfect, thanks\"). Nothing else was corrected, retried, or walked back. `craft/skills/cm/SKILL.md` is a writable checkout, already carries the `## Self-learning` block, and has no sibling `LESSONS.md`.",
+      "query": "/enhance-skills",
+      "files": [],
+      "expected_behavior": [
+        "Reports that the conversation produced no lessons and writes no file at all \u2014 no `LESSONS.md`, no `.agent-data` file",
+        "Does not manufacture a rule out of the task going well: praise, the accepted output, and the skill's own normal behaviour are not lessons",
+        "Says so in a line or two, without narrating the scan or listing what it considered and rejected"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "correction-generalized",
+      "skills": [
+        "enhance-skills"
+      ],
+      "setup": "The user ran `/golang:review` on a package. The review called a `defer rows.Close()` inside a loop a style nit; the user pushed back: \"that's not a nit, it's a real leak \u2014 the file handle lives until the function returns. Flag resource leaks as bugs, not style.\" The agent agreed and re-filed it. `golang/skills/review/` is a writable checkout with the `## Self-learning` block and no sibling `LESSONS.md`.",
+      "query": "/enhance-skills",
+      "files": [],
+      "expected_behavior": [
+        "Proposes the rule and its target file, and waits for confirmation before writing anything",
+        "States the rule as one imperative line that generalizes past this run \u2014 resource-leak severity, not \"the user disagreed about rows.Close in that loop\"",
+        "Names `golang/skills/review/LESSONS.md` as the target, not the `SKILL.md` body and not the `.agent-data` path, since the checkout is writable",
+        "Creates the file with the `# Lessons` header when writing the first rule"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "task-fact-is-not-a-lesson",
+      "skills": [
+        "enhance-skills"
+      ],
+      "setup": "The user ran `/craft:doc-smith` on a user manual. Three things happened: (a) the user said \"call it the Dispatch Board, not the dispatcher screen \u2014 that's what the UI says\"; (b) the user said \"put the output in docs/ops/, not docs/\"; (c) the agent wrote a claim about retry counts that the manual never states, and the user caught it: \"you made that number up \u2014 if the source doesn't say it, don't assert it.\" `craft/skills/doc-smith/` is a writable checkout with the block and no `LESSONS.md`.",
+      "query": "/enhance-skills",
+      "files": [],
+      "expected_behavior": [
+        "Files the fabricated-claim correction as a lesson \u2014 it is a rule about how the skill works that would prevent a recurrence",
+        "Does not file the product's terminology or the output directory as lessons: both are facts about this task and this project, true today and useless to a future run elsewhere",
+        "Ends with at most one or two rules rather than one per exchange"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "attribute-to-the-driving-skill",
+      "skills": [
+        "enhance-skills"
+      ],
+      "setup": "Two skills ran. First `/srd:create` drafted an SRD; the user corrected it: \"Status values are UPPERCASE \u2014 PROPOSED, not Proposed.\" Later `/craft:cm` wrote the commit message and the user corrected that too: \"derive the type from the diff, not from the branch name.\" Between the two, with no skill driving, the agent ran `git push` unasked and the user snapped: \"never push, I do that myself.\" Both skill directories are writable checkouts carrying the block; neither has a `LESSONS.md`.",
+      "query": "/enhance-skills",
+      "files": [],
+      "expected_behavior": [
+        "Files the UPPERCASE rule under `srd/skills/create/` and the commit-type rule under `craft/skills/cm/` \u2014 each against the skill that was driving when the correction landed",
+        "Does not file either rule against both skills, and does not cross-file them",
+        "Does not invent a home for the `git push` correction by attaching it to whichever skill happens to be nearby: it belongs to the agent's standing instructions, and the report says so instead of writing it into a skill",
+        "Proposes all of this in one pass and waits for confirmation before writing"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "retrofit-missing-block",
+      "skills": [
+        "enhance-skills"
+      ],
+      "setup": "A writable checkout. `craft/skills/foo/SKILL.md` exists, ends with a `## Output` section, and has no `## Self-learning` block anywhere in it. There is no `LESSONS.md` beside it. No prior conversation.",
+      "query": "/enhance-skills craft/skills/foo",
+      "files": [],
+      "expected_behavior": [
+        "Appends the `## Self-learning` block verbatim as the last `## ` section of `SKILL.md`, after `## Output`, leaving the rest of the body untouched",
+        "The inserted block matches the one other skills carry line for line, so the tree stays uniform \u2014 same wording, same line breaks, only `<plugin>/<skill>` resolved",
+        "Resolves the placeholder path to `$HOME/.agent-data/ctx42-skills/lessons/craft/foo.md`, keeping `$HOME` literal",
+        "Creates no `LESSONS.md` \u2014 the store appears with the first lesson, not with the block",
+        "Reports the one file it edited, with no restatement of the block it just wrote"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "supersede-a-contradicted-lesson",
+      "skills": [
+        "enhance-skills"
+      ],
+      "setup": "The user ran `/craft:plan-smith`. Its sibling `LESSONS.md` already holds the rule `- Default the plan path to tmp/<slug>-plan.md without asking.` During this run the user said: \"stop guessing the path \u2014 when I've got a docs tree, put the plan in docs/plans/ and tell me, don't dump it in tmp.\" `craft/skills/plan-smith/` is a writable checkout.",
+      "query": "/enhance-skills",
+      "files": [],
+      "expected_behavior": [
+        "Reads the existing `LESSONS.md` before proposing, and notices that the new correction contradicts the rule already on file",
+        "Replaces or rewrites that line so the file states one rule about plan paths, rather than appending a second line that contradicts the first",
+        "The replacement stays one imperative sentence rather than growing a clause for each case it now has to cover",
+        "Flags the supersession in the proposal so the user sees which existing line changes, not just what is added"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "read-only-install",
+      "skills": [
+        "enhance-skills"
+      ],
+      "setup": "The used skill ran from `~/.claude/plugins/cache/ctx42-skills/craft/skills/cm/` \u2014 a plugin install, not a checkout. The user corrected it: \"stop reaching for `chore` \u2014 every commit has a real type, and `chore` tells the reader nothing.\" `cm/SKILL.md` lists `chore` among the allowed types but says nothing about avoiding it. No `.agent-data` file exists for this skill yet.",
+      "query": "/enhance-skills",
+      "files": [],
+      "expected_behavior": [
+        "Resolves the store to `$HOME/.agent-data/ctx42-skills/lessons/craft/cm.md` and creates its parent directories",
+        "Writes nothing under `.../plugins/cache/`, and does not retrofit or otherwise edit the installed `SKILL.md`, even if the OS reports the path writable",
+        "Names the resolved path in the report so the user can tell the lesson stayed local rather than shipping"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "terse-output",
+      "skills": [
+        "enhance-skills"
+      ],
+      "setup": "A long session in a writable checkout. `/golang:style` was corrected twice \u2014 it rewrote a test as table-driven when only a style offense was flagged (\"fix the offense in place, don't restructure tests I didn't ask you to touch\"), and it reported offenses inside `vendor/` (\"skip vendored and generated files, they're not ours to style\") \u2014 and `/craft:cm` once (\"stop reaching for `chore`; every commit has a real type\"). None of the three is stated in the skill bodies. Both skill directories are writable, carry the `## Self-learning` block, and have no `LESSONS.md`.\n\nThe agent has already mined and proposed these: two rules for `golang:style`, one for `craft:cm`. The user has just approved, so this is the write turn.",
+      "query": "yes, write them",
+      "files": [],
+      "expected_behavior": [
+        "Writes all three rules: two to `golang/skills/style/LESSONS.md`, one to `craft/skills/cm/LESSONS.md`, each file created with the `# Lessons` header",
+        "Per touched skill: the path written and the rules added, each stated once",
+        "No preamble, no narration of reading or appending, and no closing summary that restates the rules just listed",
+        "Does not paste the resulting `LESSONS.md` files back"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "body-already-rules-it",
+      "skills": [
+        "enhance-skills"
+      ],
+      "setup": "The user ran `/craft:cm` in a writable checkout. The commit message body came back wrapped at 80 columns and the user corrected it: \"the body wraps at 72, not 80.\" `craft/skills/cm/SKILL.md` already states `- Wrap at 72 columns.` under its `## Body` section. There is no sibling `LESSONS.md`.",
+      "query": "/enhance-skills",
+      "files": [],
+      "expected_behavior": [
+        "Reads the skill's own `SKILL.md` before proposing, and finds the rule already there",
+        "Files no lesson: the rule was missed, not missing, and a `LESSONS.md` line repeating the body changes nothing on a future run",
+        "Says the body already rules on it rather than silently dropping the correction, and points at rewording that `SKILL.md` line as the fix that would help",
+        "Does not decide by asking the user what to do with the duplicate"
+      ]
+    }
+  ]
+}

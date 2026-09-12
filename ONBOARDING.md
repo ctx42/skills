@@ -50,10 +50,10 @@ List available skills. They are namespaced by plugin, e.g.:
 - `srd`: `/srd:create`, `/srd:review`, `/srd:edit`, `/srd:system-check`,
   `/srd:report-doc-gap`, `/srd:backlog`, `/srd:kb`
 - `craft`: `/craft:cm`, `/craft:grill-me`, `/craft:plan-smith`,
-  `/craft:skill-smith`, `/craft:readme-smith`, `/craft:doc-smith`,
-  `/craft:enhance-skills`
+  `/craft:readme-smith`, `/craft:doc-smith`, `/craft:enhance-skills`
 
-Each skill has its own `README.md` with usage examples.
+Each skill's `SKILL.md` opens with a `## Usage` block; its `evals/evals.json`
+holds the scenarios it is expected to handle.
 
 ---
 
