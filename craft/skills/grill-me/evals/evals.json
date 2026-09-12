@@ -60,6 +60,16 @@
       "setup": "An interview about adding CSV export to a reporting tool. Four branches are genuinely resolved:\n\n1. Scope — exports the currently filtered view, not the whole dataset.\n2. Format — RFC 4180, UTF-8 with BOM so Excel opens it correctly.\n3. Delivery — synchronous download; no email, no background job.\n4. Permissions — anyone who can see the report can export it.\n\nA fifth, the size limit, was raised earlier and never settled — asked how many rows are too many, the user said \"something sensible, we'll pin the number down later\" and moved on. You have just asked the last question, whether exports should be recorded in the audit log.",
       "query": "Yes, log every export with the user, the timestamp, and the row count. I think that's everything — write it up.",
       "files": []
+    },
+    {
+      "id": 7,
+      "name": "branch-nobody-present-can-resolve",
+      "skills": [
+        "grill-me"
+      ],
+      "setup": "Every branch resolves except one: the rollout needs a per-tenant concurrency ceiling, and the user does not know it and cannot find out in this session — the number belongs to the platform team. The user asks to wrap up.",
+      "query": "/grill-me the multi-tenant rollout",
+      "files": []
     }
   ]
 }

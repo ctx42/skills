@@ -63,6 +63,16 @@
         "Asks one question, not a numbered list of questions the user must work through in one go",
         "States how many branches are resolved and how many remain open, not just that one is outstanding"
       ]
+    },
+    {
+      "id": 7,
+      "name": "branch-nobody-present-can-resolve",
+      "expected_behavior": [
+        "Produces the summary rather than refusing to finish — an unanswerable branch does not block alignment",
+        "Does not quietly close the branch or invent a ceiling to make the summary look complete",
+        "Carries it as open, naming who owns the answer and the question they must answer",
+        "The other branches still get acceptance criteria; only the open one lacks them"
+      ]
     }
   ]
 }
