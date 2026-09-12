@@ -1,0 +1,86 @@
+{
+  "skill_name": "grill-me",
+  "evals": [
+    {
+      "id": 1,
+      "name": "vague-plan",
+      "skills": [
+        "grill-me"
+      ],
+      "setup": "Cold open. No prior conversation — this is the user's first message.",
+      "query": "/grill-me I want to add caching to the API.",
+      "files": [],
+      "expected_behavior": [
+        "Identifies the unresolved branches of the decision — at minimum what gets cached, how it is invalidated, where it is stored, and how keys are formed",
+        "Asks about exactly one branch, not several bundled into one turn, and picks a branch whose answer constrains the others rather than a peripheral detail",
+        "States the branch count — how many are open and how many resolved — so the shape of the interview is visible from the first turn",
+        "Opens on the payload — the branch map or the question — with no greeting, no restatement of what the user asked for, and no announcement of what it is about to do"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "caller-supplied-subject",
+      "skills": [
+        "grill-me"
+      ],
+      "setup": "Another skill is driving. The conversation so far has been about renaming a Go package — nothing to do with orders or stations. `srd:report-doc-gap` has just invoked grill-me, passing a documentation gap as the argument, and expects the structured summary back in its own flow.",
+      "query": "/grill-me the docs don't say what happens to an in-flight order when a station goes offline",
+      "files": [],
+      "expected_behavior": [
+        "Interrogates the documentation gap given as the argument, not the Go package rename from the surrounding conversation",
+        "Maps branches suited to documenting a claim — what the claim actually asserts, its boundaries and exceptions, the context a reader needs, the terms and their synonyms",
+        "Does not map build-plan branches such as deployment, UX, or architecture, which do not apply to a documentation gap",
+        "Asks one focused question and writes no file"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "contradiction-across-branches",
+      "skills": [
+        "grill-me"
+      ],
+      "setup": "Four branches into an interview about a field-service mobile app.\n\nBranch 1 (data model) — resolved. The user said: \"Technicians are often in basements and rural sites with no signal, so the app must work fully offline. Everything is stored locally first.\"\n\nBranch 2 (auth) — resolved. Token cached for 30 days.\n\nBranch 3 (job assignment) — resolved. Dispatcher assigns, technician accepts.\n\nBranch 4 (sync) is now open. The interviewer has just asked how the app should handle a technician editing a job report.",
+      "query": "Every save syncs to the server immediately so the dispatcher sees progress in real time.",
+      "files": [],
+      "expected_behavior": [
+        "Connects this answer to the offline-first decision made back on branch 1 and names the conflict between them — immediate server sync cannot hold when the device has no signal",
+        "Does not quietly adopt one side, and does not treat the latest answer as superseding the earlier one",
+        "Keeps both branches open and puts the resolution to the user rather than proposing a reconciliation such as a sync queue as though it were settled",
+        "States the conflict once, without recapping the whole interview"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "alignment-reached",
+      "skills": [
+        "grill-me"
+      ],
+      "setup": "An interview about adding CSV export to a reporting tool. Five branches, all now resolved:\n\n1. Scope — exports the currently filtered view, not the whole dataset.\n2. Size limit — refuses over 100k rows and tells the user to narrow the filter.\n3. Format — RFC 4180, UTF-8 with BOM so Excel opens it correctly.\n4. Delivery — synchronous download; no email, no background job.\n5. Permissions — anyone who can see the report can export it.\n\nThe interviewer asked the last open question — whether exports should be recorded in the audit log — and the user has just answered it. No branches remain open.",
+      "query": "Yes, log every export with the user, the timestamp, and the row count.",
+      "files": [],
+      "expected_behavior": [
+        "Recognizes that no branches remain open and stops asking questions",
+        "Presents the complete shared understanding as one structured summary covering all six resolved decisions",
+        "Gives each resolved branch acceptance criteria concrete enough to verify against the finished feature, not a restatement of the decision",
+        "Offers to hand the result to plan-smith and writes no file without a yes",
+        "Writes no implementation code"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "terse-output",
+      "skills": [
+        "grill-me"
+      ],
+      "setup": "Mid-interview about a rate limiter. Two of five branches are resolved (algorithm: token bucket; scope: per API key). The interviewer has just asked where the counters should live, and the user has answered.",
+      "query": "Redis, we already run a cluster for sessions.",
+      "files": [],
+      "expected_behavior": [
+        "Opens with the confirmation or the next question — no acknowledgement phrase, no praise, no narration of what it is doing next",
+        "Confirms the decision once in a single short restatement, and does not repeat it later in the same turn",
+        "Does not re-list the already-resolved branches or replay the interview so far",
+        "Says how many branches remain open"
+      ]
+    }
+  ]
+}
