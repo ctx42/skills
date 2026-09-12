@@ -143,6 +143,7 @@
       "files": [],
       "expected_behavior": [
         "Distinguishes the two failures rather than treating both as unverified",
+        "Treats the unpublished module as an ordinary state of a fresh project, not as a failure of the run or a reason to withhold the command",
         "Leaves the quickstart command as written and says in the reply that this environment could not run it — the reader is not warned about the author's sandbox",
         "Warns the reader about the install command with a `> [!NOTE]` naming what has to happen first, since an HTML comment is invisible to them",
         "Claims neither command works"

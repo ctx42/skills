@@ -44,8 +44,10 @@ to the file, state its path, and do not paste it back into chat.
   - A claim the README merely *makes* and cannot support (a benchmark figure, a
     download count, "battle-tested") is deleted, not marked. A TODO asking
     someone to source an invented number preserves the invention.
-- Verify commands. Execute every install and quickstart command you ship and
-  make it pass (see Verify); a command you cannot run is marked, not guessed.
+- Verify commands. Run every install and quickstart command you ship (see
+  Verify); a command you cannot run is marked, not guessed. Running it is the
+  rule — passing is not always available, and a correct command the project has
+  not caught up to yet is still the right command to ship.
 
 ## Go example injection (gomake)
 
@@ -141,12 +143,15 @@ Navigation, Style rules, Excluded sections), then:
 
 Dynamic:
 
-- [ ] Execute the install and quickstart commands exactly as written and make
-      them pass. Never ship an unrun command; when one will not pass, which
-      kind of failure it is decides what to do:
+- [ ] Run the install and quickstart commands exactly as written; never ship
+      one you did not run. Expect at least one that cannot pass yet — an
+      unpublished module, a private host, a package not on a registry. On a
+      fresh or private project that is the ordinary case, not a failed run:
+      the command is right and the project has not caught up to it. Which of
+      the two kinds it is decides what happens:
       - *This environment cannot run it* (toolchain missing, permission denied,
-        no network): the command is still right. Say so in the reply and leave
-        the README alone — do not warn the reader about your sandbox.
+        no network): the reader is unaffected. Say so in the reply and leave
+        the README alone — never warn the reader about your sandbox.
       - *It runs and fails for a project reason* (module unpublished, package
         not on the registry): it will fail for the reader too, so the reader
         must be told. A `<!-- TODO: … -->` is invisible to them; use a
