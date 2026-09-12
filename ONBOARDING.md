@@ -49,8 +49,7 @@ List available skills. They are namespaced by plugin, e.g.:
 - `golang`: `/golang:style`, `/golang:review`, `/golang:cover`, `/golang:doc`, `/golang:reshape`
 - `srd`: `/srd:create`, `/srd:review`, `/srd:edit`, `/srd:system-check`
 - `craft`: `/craft:cm`, `/craft:grill-me`, `/craft:plan-smith`,
-  `/craft:skill-smith`, `/craft:readme-smith`, `/craft:doc-smith`,
-  `/craft:enhance-skills`
+  `/craft:readme-smith`, `/craft:doc-smith`, `/craft:enhance-skills`
 
 Each skill has its own `README.md` with usage examples.
 

@@ -45,8 +45,8 @@ Frontmatter requires `name` + `description`; optional metadata (`license`/
 `version`/`tags`/`author`/`metadata`) is allowed but used sparingly.
 Claude-native affordances are permitted and encouraged where they earn their
 place: `argument-hint`, `$ARGUMENTS`/`$N` body substitution, and dynamic
-injection (`` !`cmd` ``). See `craft/skills/skill-smith/standards.md` for the
-full ruleset — this file does not duplicate it.
+injection (`` !`cmd` ``). Beyond that, follow Anthropic's Agent Skills
+authoring guidance; `dev/lint-skills.sh` enforces the mechanical parts.
 
 ```markdown
 ---
@@ -81,8 +81,8 @@ Before committing a new or changed skill, run the linter:
 ./dev/lint-skills.sh
 ```
 
-It checks every skill against the mechanical parts of
-`craft/skills/skill-smith/standards.md`: `SKILL.md` + `README.md` present,
+It checks every skill against the mechanical parts of the skill layout:
+`SKILL.md` + `README.md` present,
 frontmatter carries `name` + `description` with `name` equal to the directory,
 the body carries the output-discipline line, an `## Evaluations` section in the
 README, and a Contents list on any bundled reference over ~100 lines. It also

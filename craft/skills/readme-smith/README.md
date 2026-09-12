@@ -118,4 +118,3 @@ target whose example prints a long wire dump)
 
 - `grill-me` — use it first when the project's positioning is fuzzy;
   `readme-smith` create mode asks gaps but doesn't run a full planning interview.
-- `skill-smith` — authors this skill and audits it against the repo standard.

@@ -90,4 +90,3 @@ Expected behavior:
 - `grill-me` — run first to align on what to build; plan-smith persists the
   result as a tracked plan.
 
-- `skill-smith` — authored and audits this skill.

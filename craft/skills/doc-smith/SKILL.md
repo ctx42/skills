@@ -158,7 +158,7 @@ reprint the whole document.
 
 `doc-smith` obeys the repo authoring standard (Claude-native frontmatter, a
 README with ≥ 3 evals, references one level deep). When you change this skill,
-re-audit it with `skill-smith` in improve mode.
+re-check it against `CONTRIBUTING.md` and run `./dev/lint-skills.sh`.
 
 ## Self-learning
 

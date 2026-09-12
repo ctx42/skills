@@ -70,8 +70,6 @@ source of truth.
 - `grill-me` — relentless planning interview until shared understanding.
 - `plan-smith` — writes and tracks an implementation plan (checkbox items,
   Y/N/X status table).
-- `skill-smith` — authors and audits skills; owns the authoring standard
-  (`standards.md`).
 - `readme-smith` — authors and audits project READMEs against its
   `references/template.md`.
 - `doc-smith` — writes, audits, proofs, and collaboratively revises

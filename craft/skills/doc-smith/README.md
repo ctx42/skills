@@ -131,4 +131,3 @@ early paragraph, the user renames "workspace" to "project".
   technical docs and user manuals.
 - `grill-me` — use it first when a new document's scope is fuzzy; create mode
   asks gaps but doesn't run a full planning interview.
-- `skill-smith` — authors this skill and audits it against the repo standard.

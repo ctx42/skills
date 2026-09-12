@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Lints every skill in this repo against the authoring standard
-# (skill-smith/standards.md). Mechanical checks only — it never edits files.
+# Lints every skill in this repo against the conventions recorded in
+# CONTRIBUTING.md. Mechanical checks only — it never edits files.
 #
 # A "skill" is any directory containing a SKILL.md. For each
 # skill this script checks:
@@ -45,8 +45,8 @@ frontmatter() {
     awk 'NR==1 && $0=="---"{f=1; next} f && $0=="---"{exit} f' "$1"
 }
 
-# The house wrap: Markdown prose lines stay within ~80 columns (standards.md,
-# Content hygiene). 80 is the target; lines up to a few over are tolerated only
+# The house wrap: Markdown prose lines stay within ~80 columns (Content
+# hygiene). 80 is the target; lines up to a few over are tolerated only
 # when unbreakable, which the heuristic below already exempts.
 WRAP_LIMIT=80
 
@@ -101,7 +101,7 @@ lint_skill() {
     [ "$declared" = "$name" ] \
         || err "$name: frontmatter name '$declared' != directory '$name'"
 
-    # Description size and point of view (standards.md, Description quality).
+    # Description size and point of view (Description quality).
     # The aim is ~350 chars; warn only past 500 so a trigger-rich description
     # has headroom. Joins a folded/plain scalar into one string first.
     local desc
@@ -121,7 +121,7 @@ lint_skill() {
     grep -qiE '(^|[^a-zA-Z])(I|you|your)([^a-zA-Z]|$)' <<<"$desc" \
         && warn "$name: description uses first/second person"
 
-    # Body size (standards.md, Token performance): the always-loaded SKILL.md
+    # Body size (Token performance): the always-loaded SKILL.md
     # body should stay under ~500 lines / ~5000 tokens. Tokens are estimated as
     # bytes/4 (no tokenizer dependency). Warnings only — the limits are soft
     # aims. (A stricter `skills-ref validate` gate can be added here once that
@@ -134,7 +134,7 @@ lint_skill() {
     [ "$body_tokens" -gt 5000 ] \
         && warn "$name: SKILL.md is ~$body_tokens tokens (aim <= ~5000)"
 
-    # Body carries the output-discipline line (standards.md mandates it; the
+    # Body carries the output-discipline line (mandatory; the
     # canonical wording is "Report tersely: …", grill-me embeds the phrasing).
     grep -qiE 'report tersely|no preamble or narration' "$skill_md" \
         || err "$name: SKILL.md lacks the output-discipline line"
