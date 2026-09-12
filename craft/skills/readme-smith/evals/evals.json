@@ -1,0 +1,117 @@
+{
+  "skill_name": "readme-smith",
+  "evals": [
+    {
+      "id": 1,
+      "name": "create-from-scan",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "A Go CLI repo with no README: `go.mod` declaring `github.com/acme/portcheck`, `cmd/portcheck/main.go` wiring three flags (`-timeout`, `-json`, `-concurrency`), `internal/scan/` holding the logic, a `.github/workflows/ci.yml`, and `assets/logo.png`. `.editorconfig` sets `[*.md] max_line_length = 100`. Nothing states who the tool is for or why it exists.",
+      "query": "/readme-smith write a README for this project",
+      "files": [],
+      "expected_behavior": [
+        "Scans manifests, the entrypoint, examples, CI config, and `assets/` for a logo before writing anything",
+        "Batches the gaps code cannot reveal (positioning, audience, lead features) into one round of questions and does not ask what `go.mod`, the flags, or CI already answer",
+        "Drafts to the blueprint order — header/logo, overview, features, install, usage, configuration — using the repo's real module path, flag names, and commands",
+        "Builds and runs the install and quickstart commands it ships, fixing them until they pass, or names the blocking prerequisite",
+        "Wraps prose at the repo's own 100-column `max_line_length`, not a hardcoded 80"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "no-fabrication",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "The same Go repo, still unpublished: no tagged release, no package on any registry, no benchmark suite, no `LICENSE` file. The user answers the positioning questions but says nothing about performance or distribution.",
+      "query": "/readme-smith create a README",
+      "files": [],
+      "expected_behavior": [
+        "Invents no install command, version number, registry coordinate, or benchmark figure",
+        "Asks for each unknown once; what is still unknown afterwards becomes an explicit `<!-- TODO: … -->` marker rather than a plausible guess",
+        "Ships only badges whose URL it can tie to a fact that exists — no license badge with no `LICENSE`, no release badge with no release",
+        "Names the remaining `TODO` markers in the reply so the user knows what is left open"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "improve-member-readme",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "A multi-package Go repo whose root `README.md` carries the badges and the Packages table. `pkg/store/README.md` is a member README that carries its own badges row, a `## License` section repeating the MIT text, two code fences with no language, a nav line whose `#usage` anchor points at a heading that was renamed, and a `## Contributing` section duplicating `CONTRIBUTING.md`.",
+      "query": "/readme-smith improve pkg/store/README.md",
+      "files": [],
+      "expected_behavior": [
+        "Reports the badges row, the `## License` section, and the `## Contributing` section as findings — the root README and the dedicated files own those",
+        "Flags the unlabelled fences and the dead nav anchor, each citing the `references/template.md` rule it breaks",
+        "Groups findings Blocker / Should-fix / Nit with a one-line fix each, ends with a one-line verdict, and edits nothing before the user confirms",
+        "Applies the approved findings on confirmation, then re-runs Verify and states what changed"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "gomake-example-injection",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "A Go library repo whose `gomake --help` lists a `:project:doc-eg` target. No README yet. The package has exported `New`, `(*Client).Do`, and `Parse`, and no `_test.go` files carrying `Example…` functions.",
+      "query": "/readme-smith write a README",
+      "files": [],
+      "expected_behavior": [
+        "Runs `gomake --help` and confirms the `:project:doc-eg` target before deciding how to author examples",
+        "Writes runnable `Example…` functions in `_test.go` and runs `go test ./...` until they pass, instead of pasting hand-written snippets",
+        "Marks each spot with a `<!-- gmmce:<relpath>/<FuncName> -->` comment above an empty `go` fence and runs `gomake :project:doc-eg` to fill them",
+        "Hand-edits no injected fence; a change to an example goes back through its `Example…` function and a re-run of the target"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "terse-output",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "An existing root README with an emoji on every heading, a row of nine badges (three of which 404), a `<div align=\"center\">` header block, and a `<details>` section. The user has already approved the findings; this is the fix turn.",
+      "query": "/readme-smith improve README.md",
+      "files": [],
+      "expected_behavior": [
+        "Flags the per-heading emoji, the unverifiable badges, and the raw HTML tags against the style rules",
+        "After fixing, states the file path and what changed, each fact once",
+        "Does not paste the rewritten README back into chat",
+        "Opens with the payload: no preamble, no narration of the scan, no closing summary restating findings already listed"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "one-nav-aid-and-module-paths",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "A Go module whose `go.mod` declares `bitbucket.org/acme/foo` and whose only package lives at `pkg/foo`. `git remote -v` points at the same Bitbucket host. The project is large enough that the README runs past two screens.",
+      "query": "/readme-smith create a README",
+      "files": [],
+      "expected_behavior": [
+        "Emits at most one navigation aid — a nav line or a `<!-- TOC -->` block, never both",
+        "Reads the base path from `go.mod` and `git remote -v`, not from the org name or a sibling repo, so nothing says `github.com/acme/foo`",
+        "Points `go get`, badges, and doc links at the module (`bitbucket.org/acme/foo`) but the Go `import` at the package (`bitbucket.org/acme/foo/pkg/foo`)",
+        "Asserts nothing about the repo being public or private and adds no `GOPRIVATE` or auth step from the host URL alone"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "no-wide-code-fences",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "A Go project with the `:project:doc-eg` target whose natural example prints a raw HTTP exchange in one call — `fmt.Printf(\"%q\\n\", wire)` — producing a single ~300-character output line.",
+      "query": "/readme-smith write a README",
+      "files": [],
+      "expected_behavior": [
+        "Keeps every code-fence line within the rendered width (≤ ~100 chars) so GitHub wraps nothing horizontally",
+        "Rewrites the `Example…` function to split the output across lines — one `%q` per line — and re-injects, rather than shipping the wide line",
+        "Re-runs `go test ./...` after the rewrite so the `// Output:` block still matches"
+      ]
+    }
+  ]
+}

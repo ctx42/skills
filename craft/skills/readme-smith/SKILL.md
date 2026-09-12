@@ -6,9 +6,18 @@ description: >
   ships. Use when asked to create, write, draft, review, or improve a README
   or a project's front-page documentation.
 argument-hint: "[create|improve] [<readme-path>]"
+license: MIT
 ---
 
 # readme-smith
+
+## Usage
+
+```
+/readme-smith <request>               infer create vs improve from the request (default)
+/readme-smith create [<readme-path>]  scan the repo and draft a new README from real code
+/readme-smith improve <readme-path>   audit an existing README; fix on confirmation
+```
 
 Create and improve a project's `README.md`. Pick the mode from `$1` when given,
 else from the request; `$2` (or the request) names the README path:
@@ -38,8 +47,8 @@ to the file, state its path, and do not paste it back into chat.
 
 When the project is Go and examples belong in the README, read
 [`references/gomake.md`](references/gomake.md) *(on-demand: Go project with
-README examples)* and follow it: with a `:project:doc-eg` gomake target,
-examples are injected from testable `Example…` functions, never hand-written.
+README examples)* and follow it: with a `:project:doc-eg` gomake target, examples are
+injected from testable `Example…` functions, never hand-written.
 
 ## Create mode
 
