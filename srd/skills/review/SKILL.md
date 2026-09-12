@@ -91,8 +91,15 @@ Tag each finding:
   draft scaffold — the In Scope `--- TODO ---` marker or a non-empty `## TODO`
   section (house additions).
 - `major` — real defect, does not block: style (LANG-1/2/5/6/7), terminology
-  drift, overlapping or duplicate requirements.
+  drift, overlapping or duplicate requirements, a normative keyword in the
+  wrong case or the wrong section (LANG-3/4), and any `reference` finding —
+  a wrong link, ticket id, or claim about the live system — since a reader
+  acting on it is misled without the SRD being unacceptable.
 - `minor` — cosmetic: British spelling, spacing, punctuation.
+
+Every rule that can be broken has a severity here; when one genuinely fits
+none, take the nearest row rather than inventing a fourth level, and say which
+row you took it as.
 
 ## Category
 
@@ -335,7 +342,13 @@ open finding.
 ## errata
 
 Re-sort an existing review file so its errata sit in `## Errata`. Reclassify
-only — hunt no new defects. Keep every number; bump `updated:`.
+only — hunt no new defects. Keep every number. Bump `updated:` when something
+moved; a run that changes nothing writes nothing, or the pass is not idempotent
+and a second run is indistinguishable from a first.
+
+Rewriting a prose fix into the substitution shape needs the SRD's current text
+to quote `old` exactly, so this mode reads the SRD as well as the review file.
+It still edits only the review file.
 
 1. Test each open finding against the gate and allowlist in
    [../create/references/errata.md](../create/references/errata.md). One that

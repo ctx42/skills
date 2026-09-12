@@ -4,7 +4,9 @@
     {
       "id": 1,
       "name": "default-review-of-a-flawed-srd",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "`specs/login.md`: `GR-3a` reads \"The system SHALL validate the token and log the attempt\", one `In Scope` item has no requirement covering it, and one requirement spells a word in British English.",
       "query": "/review specs/login.md",
       "files": [],
@@ -19,7 +21,9 @@
     {
       "id": 2,
       "name": "applies-rules-create-only-stubs",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "`specs/api.md` lists a single owner, carries no Initiative link, and is marked `Status: ACCEPTED` with no approved design although it changes the UI. Its back-links live in the ticket and design tool.",
       "query": "/review specs/api.md",
       "files": [],
@@ -33,7 +37,9 @@
     {
       "id": 3,
       "name": "check-a-prior-review",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "`specs/login.review.md` exists with open findings; the author has since fixed some, half-fixed one, and one finding turns out to have been invalid.",
       "query": "/review specs/login.md check",
       "files": [],
@@ -48,7 +54,9 @@
     {
       "id": 4,
       "name": "feedback-export-for-a-ticket",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "A review file with open findings across sections, an `## Errata` group holding two, plus resolved and withdrawn findings.",
       "query": "/review specs/login.md feedback",
       "files": [],
@@ -63,7 +71,9 @@
     {
       "id": 5,
       "name": "walk-records-only-confirmed-findings",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "A flawed SRD walked interactively; the user rejects some proposed findings as invalid.",
       "query": "/review specs/login.md walk",
       "files": [],
@@ -76,10 +86,14 @@
     {
       "id": 6,
       "name": "fixture-regression",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "The bundled, deliberately defective sample at `assets/flawed-srd.md`. This scenario is the before/after gate whenever the shared references change: the finding set must not shrink.",
       "query": "/review assets/flawed-srd.md",
-      "files": ["assets/flawed-srd.md"],
+      "files": [
+        "assets/flawed-srd.md"
+      ],
       "expected_behavior": [
         "Finds GR-1 non-atomic (REQ-1) and the duplicate id GR-3 (REQ-3)",
         "Finds \"fast\" unverifiable (REQ-6)",
@@ -94,7 +108,9 @@
     {
       "id": 7,
       "name": "terse-output",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "An ordinary review run that writes a dozen findings.",
       "query": "/review specs/login.md",
       "files": [],
@@ -107,7 +123,9 @@
     {
       "id": 8,
       "name": "errata-re-sort",
-      "skills": ["review"],
+      "skills": [
+        "review"
+      ],
       "setup": "`specs/login.review.md` holds a British-spelling finding `#4` under Requirements, stated as prose rather than a substitution, and a scope blocker `#2`. There is no `## Errata` block yet.",
       "query": "/review specs/login.md errata",
       "files": [],
@@ -117,13 +135,18 @@
         "Leaves the blocker `#2` under its own section",
         "Reclassifies only — hunts no new defects",
         "Is idempotent: a second run changes nothing",
-        "Bumps the `updated:` timestamp and reports the moved number"
+        "Bumps `updated:` because something moved, and reports the moved number",
+        "A second run writes nothing at all — not even a fresh timestamp — since nothing moved",
+        "Reads the SRD to quote the `old` text exactly when rewriting the prose fix, while editing only the review file"
       ]
     },
     {
       "id": 9,
       "name": "facts-vs-corpus-routes-doc-gaps",
-      "skills": ["review", "report-doc-gap"],
+      "skills": [
+        "review",
+        "report-doc-gap"
+      ],
       "setup": "The `srd-doc` corpus is reachable. `GW-2` states \"the gateway retries 3×\" and no corpus document states any retry count; `GW-5` names a timeout the corpus documents as a different value. A prior session left gaps buffered for this SRD.",
       "query": "/review specs/gateway.md",
       "files": [],
