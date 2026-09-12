@@ -2,9 +2,9 @@
 # Lints every skill in this repo against the conventions recorded in
 # CONTRIBUTING.md. Mechanical checks only — it never edits files.
 #
-# A "skill" is any directory containing a SKILL.md, excluding eval workspaces
-# (*-workspace/), which hold snapshots of skills under test rather than
-# shipped source. For each
+# A "skill" is any directory containing a SKILL.md, outside tmp/ — eval
+# workspaces live there and hold snapshots of skills under test, not shipped
+# source. For each
 # skill this script checks:
 #   - SKILL.md exists and carries a `## Usage` block,
 #   - eval scenarios exist: evals/evals.json (the standard) or, for a skill not
@@ -271,8 +271,7 @@ while IFS= read -r skill_md; do
     SKILL_PATHS+=("${dir#"$SKILLS_SRC"/}")
     lint_skill "$dir"
 done < <(find "$SKILLS_SRC" -path '*/.claude/worktrees' -prune -o \
-    -path "$SKILLS_SRC/tmp" -prune -o -name '*-workspace' -prune -o \
-    -name SKILL.md -print | sort)
+    -path "$SKILLS_SRC/tmp" -prune -o -name SKILL.md -print | sort)
 
 check_marketplace
 

@@ -8,8 +8,3 @@
 # copy here (from before the move, or dev use) is kept out of version control.
 srd/skills/system-check/memory.md
 /tmp/
-
-# Skill eval workspaces: run artifacts (outputs, grades, benchmarks) produced
-# by the skill-creator loop. The scenarios themselves are versioned in each
-# skill's evals/evals.json; only the runs are transient.
-*-workspace/
