@@ -157,6 +157,11 @@ failing-test reproduction is needed — the test gate is the proof.
 
 ## Delegated by golang:review
 
+Delegation is recognized from the invocation, not guessed: `review` says it is
+invoking for offenses only and passes the target and budget. There is no flag —
+a run that was not told it is delegated is not delegated, and asks the user
+which offenses to apply as usual.
+
 When `golang:review` invokes `style` to report offenses only, run steps 1–4 for
 the target/budget it passes and output the offense list, then stop — do not run
 Fixing. `review` merges these offenses with its correctness findings and owns

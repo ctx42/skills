@@ -165,6 +165,10 @@ its full text.
 
 ### Structure
 
+- Structure every test body with the three comment markers, in order:
+  `--- Given ---` arranges, `--- When ---` performs the single action under
+  test, `--- Then ---` asserts. They are literal comment lines
+  (`// --- Given ---`), not prose, and the rules below constrain them.
 - Table-driven subtests via `t.Run`; one case per table row.
 - When a table row exceeds the line limit, break it one element per line,
   positional in field order — never add field-name keys.
@@ -220,6 +224,12 @@ its full text.
 ### Helpers & fixtures
 
 - Call `t.Helper()` in test helpers.
+- The packages these rules name: `tester` and `assert` come from
+  `github.com/ctx42/testing/pkg/{tester,assert}`; `ring` from
+  `github.com/ctx42/ring/pkg/ring`; `oskit` from
+  `github.com/ctx42/testkit/pkg/oskit` — a different module, so it needs its
+  own `require` entry. Read the package's own imports first: a project pinning
+  different paths wins over this list.
 - Test helpers must use `tester.T` to allow testing with `tester.Spy`.
 - Use `tester.Spy` (not raw `*testing.T`) when testing test helpers.
 - Don't wrap a single expression in a test helper; inline it. If a helper only
