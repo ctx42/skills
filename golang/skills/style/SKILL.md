@@ -49,7 +49,8 @@ its full text.
 ### Formatting
 
 - gofmt + goimports always; never hand-format or reorder imports manually.
-- Lines <=80 cols including the `//` prefix; break only when over, one
+- Lines <=80 cols including the `//` prefix, counting a tab as gofmt renders
+  it (8 columns), not as one character; break only when over, one
   logical arg per line with `(` on the call line.
 - When a function signature spans multiple lines, put each parameter on its
   own line and open the body with a blank line.

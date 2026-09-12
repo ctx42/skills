@@ -85,10 +85,31 @@ no single line spells out.
 
 ## Offense list
 
-Group by severity Blocker / Should-fix / Nit. Each offense:
+Open with one line naming the resolved target and the files in scope, then the
+offenses. That line is the report's first fact, not preamble — it is what makes
+the list checkable, since a reader cannot tell an empty result from an
+unresolved target without it.
+
+Group by severity Blocker / Should-fix / Nit. Severity is a property of the
+rule, not of the reader's taste — decide it the same way every time:
+
+- Blocker — the code is wrong or will mislead: a swallowed or `%v`-wrapped
+  error, a data race the style rules forbid, an exported symbol with no godoc,
+  a name that states the opposite of what the code does.
+- Should-fix — the rule is broken and a reader pays for it, but nothing is
+  incorrect: naming, stutter, receiver conventions, test structure, ordering.
+- Nit — mechanical and local: spacing, comment wording, import grouping.
+
+Each offense:
 - `file:line` — the offense in one line.
 - the rule id (e.g. `style: %w`, `style: no-stutter`).
 - the minimal fix.
+
+Rule ids are not coined per run. Use the `rules.md` key, or the exact rule
+phrase from `SKILL.md` when the rule has no keyed entry — so the same offense
+carries the same id across packages, runs, and workers. `receiver-naming`,
+`receiver-abbr`, and `receivers` for one rule makes a merged report
+uncountable.
 
 Stop at `max_issues`, highest-severity first; say how many offenses went
 unreported. End with a one-line verdict (clean / fix-first) and per-severity
@@ -117,10 +138,22 @@ failing-test reproduction is needed — the test gate is the proof.
 
 - Single package or small module (<= ~6 packages): check in this context.
 - Larger module (> ~6 packages): fan out one subagent per package (each gets
-  `SKILL.md`, this reference, the `depth`, and a share of `max_issues`, and
-  opens `rules.md` entries per need like the parent), then merge into one report
-  re-ranked to the global `max_issues`. Report which packages were checked and
-  which were skipped; never silently truncate.
+  `SKILL.md`, this reference, and the `depth`, and opens `rules.md` entries per
+  need like the parent), then merge into one report re-ranked to the global
+  `max_issues`. Report which packages were checked and which were skipped;
+  never silently truncate.
+
+  Workers do not get a share of `max_issues` — they report every offense they
+  find, and the cap is applied once, at the merge, across the whole set. A
+  per-worker budget drops findings before anything can rank them, so a package
+  with many nits evicts another package's blocker while the global cap still
+  has room.
+
+  The merge is only performable if workers agree on ids and severity, which is
+  what the rubric and the id rule above are for: merging means concatenating,
+  sorting by severity then rule id, collapsing exact duplicates, and cutting at
+  `max_issues`. If a rule id arrives in two spellings, the merge has already
+  failed — fix the id, do not reconcile at the end.
 
 ## Delegated by golang:review
 

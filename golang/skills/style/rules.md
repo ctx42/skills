@@ -56,6 +56,15 @@ The only allowed comment is a one-line reference: `// implements
 [io.WriterTo].` Detect: a full godoc on a method whose signature matches an
 interface the type implements (confirm with `goToImplementation`).
 
+The rule is about methods written *to* an interface, not methods that happen to
+match one. Nearly every `Close() error`, `String() string`, and `Error() string`
+in Go incidentally satisfies some interface, and `goToImplementation` will say
+so — stripping their godoc on that basis would strip it from most of a
+codebase. Apply the rule only where the type declares the intent: a
+`var _ Iface = (*T)(nil)` assertion, the interface named in the type's own
+docs, or a signature that exists solely to satisfy it. A `Close` that is simply
+this type's own cleanup keeps its godoc.
+
 ## Use godoc cross-references (Production)
 
 The comment's own leading name and lowercase concepts stay plain. Detect: prose

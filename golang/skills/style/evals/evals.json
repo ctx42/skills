@@ -4,7 +4,9 @@
     {
       "id": 1,
       "name": "production-rules-while-writing",
-      "skills": ["style"],
+      "skills": [
+        "style"
+      ],
       "setup": "An agent has read the skill as context and is about to edit `service.go` — production code, not a test file.",
       "query": "Add a Close method to the Service type in service.go",
       "files": [],
@@ -16,7 +18,9 @@
     {
       "id": 2,
       "name": "test-rules-inherit-production",
-      "skills": ["style"],
+      "skills": [
+        "style"
+      ],
       "setup": "The same agent then writes `service_test.go`, including a table test and a helper.",
       "query": "Write tests for Service.Close in service_test.go",
       "files": [],
@@ -30,7 +34,9 @@
     {
       "id": 3,
       "name": "pass-lists-offenses-then-asks",
-      "skills": ["style"],
+      "skills": [
+        "style"
+      ],
       "setup": "`./pkg/foo` has a single-letter receiver and a godoc on an interface-implementing method. It also has an off-by-one in a loop bound — a correctness bug, not a style offense.",
       "query": "/style ./pkg/foo",
       "files": [],
@@ -46,7 +52,9 @@
     {
       "id": 4,
       "name": "fix-applies-everything-behind-a-green-gate",
-      "skills": ["style"],
+      "skills": [
+        "style"
+      ],
       "setup": "`./pkg/foo` has six offenses. The module test suite is green before the run.",
       "query": "/style ./pkg/foo fix",
       "files": [],
@@ -60,7 +68,10 @@
     {
       "id": 5,
       "name": "delegated-by-review",
-      "skills": ["style", "review"],
+      "skills": [
+        "style",
+        "review"
+      ],
       "setup": "`golang:review` is running a check on the current diff and invokes `style` for the style dimension.",
       "query": "/review",
       "files": [],
@@ -72,7 +83,9 @@
     {
       "id": 6,
       "name": "rules-change-only-through-review",
-      "skills": ["style"],
+      "skills": [
+        "style"
+      ],
       "setup": "The user asks `style` directly to add a new rule.",
       "query": "/style add a rule that test helpers never return errors",
       "files": [],
@@ -84,14 +97,18 @@
     {
       "id": 7,
       "name": "broad-target-auto-plan-first",
-      "skills": ["style"],
+      "skills": [
+        "style"
+      ],
       "setup": "A 12-package module, invoked with no budget controls.",
       "query": "/style ./...",
       "files": [],
       "expected_behavior": [
         "Switches to plan-first: proposes the `max_issues` and `depth` defaults and the package list, and asks before checking",
         "Skips that prompt when the invocation already carries `packages=a,b` or `max_issues=N`",
-        "Fans out one subagent per package past ~6, each opening only the `rules.md` entries it needs, and merges one report re-ranked to the global `max_issues`",
+        "Fans out one subagent per package past ~6, each opening only the `rules.md` entries it needs",
+        "Gives workers no per-package share of `max_issues` — they report everything they find and the cap is applied once at the merge",
+        "Merged offenses carry one severity and one rule id per rule, so the same offense in two packages does not arrive as two differently-named findings",
         "Names the packages checked and the packages skipped",
         "At `depth=light`, skips the LSP cross-file confirmation"
       ]
@@ -99,14 +116,47 @@
     {
       "id": 8,
       "name": "terse-output",
-      "skills": ["style"],
+      "skills": [
+        "style"
+      ],
       "setup": "An ordinary single-package pass.",
       "query": "/style ./pkg/foo",
       "files": [],
       "expected_behavior": [
-        "Opens with the offenses — no preamble and no narration of reading the rules",
+        "Opens with the target/file-set line and then the offenses — that line is the first fact, not preamble",
+        "No narration of reading the rules, and no restating of the invocation",
         "States each offense once",
         "No closing summary re-listing offenses the user can already see"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "incidental-interface-satisfaction",
+      "skills": [
+        "style"
+      ],
+      "setup": "A package where `(*Conn).Close` is pinned by `var _ io.Closer = (*Conn)(nil)` and carries a full godoc restating the contract, and `(*Buffer).Close` is simply this type's own cleanup — no assertion, no interface named in its docs — but `goToImplementation` reports it as satisfying `io.Closer` all the same. Both have godoc.",
+      "query": "/style ./pkg/net",
+      "files": [],
+      "expected_behavior": [
+        "Flags `(*Conn).Close`, whose assertion declares it is written to the interface",
+        "Leaves `(*Buffer).Close` alone: incidentally matching an interface is not writing to one, and `goToImplementation` matching is not the test",
+        "Does not strip godoc from ordinary `Close`/`String`/`Error` methods on the strength of a signature match"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "severity-and-ids-are-stable",
+      "skills": [
+        "style"
+      ],
+      "setup": "Three packages carrying the same two offenses each: a single-letter receiver and an exported symbol with no godoc. Small enough to check in one context, so nothing merges — the point is whether one run is self-consistent across packages.",
+      "query": "/style ./...",
+      "files": [],
+      "expected_behavior": [
+        "Gives the same offense the same severity in all three packages, decided from the rubric rather than per-package judgement",
+        "Gives the same offense the same rule id in all three packages, taken from the `rules.md` key rather than coined per package",
+        "Puts the missing exported godoc at Blocker and the receiver naming at Should-fix, per the rubric"
       ]
     }
   ]
