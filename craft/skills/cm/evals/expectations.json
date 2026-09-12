@@ -84,6 +84,16 @@
         "Treats behaviour moving into line with the documented contract as a fix, not a break — otherwise every bug fix would carry a `!`",
         "Mentions in the body that callers depending on the old acceptance are affected, without escalating the type"
       ]
+    },
+    {
+      "id": 10,
+      "name": "apply-with-nothing-staged",
+      "expected_behavior": [
+        "Derives the message from the unstaged diff, as the empty-index fallback requires",
+        "Does not commit: with nothing staged, `git commit` would fail or create an empty commit",
+        "Stages nothing on the user's behalf — choosing what goes into a commit is the user's call",
+        "Says plainly that the tree is unstaged and `apply` did not run, and presents the message anyway"
+      ]
     }
   ]
 }

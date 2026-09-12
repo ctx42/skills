@@ -90,6 +90,16 @@
       "setup": "A staged diff fixing a bug where `ParseDuration` accepted a negative value the docs always said it rejected. Callers relying on the buggy acceptance will now get an error, so observable behaviour changes — but only to match what was already documented. No signature changes.",
       "query": "/cm",
       "files": []
+    },
+    {
+      "id": 10,
+      "name": "apply-with-nothing-staged",
+      "skills": [
+        "cm"
+      ],
+      "setup": "Nothing is staged. The working tree carries an unstaged change adding a retry to the HTTP client. The invocation asks to commit.",
+      "query": "/cm apply",
+      "files": []
     }
   ]
 }

@@ -54,10 +54,18 @@ Tokens combine (e.g. `micro apply`). Verbosity, mutually exclusive:
 
 Commit control:
 
-- `apply`, or prose such as "and amend it": commit the generated message via
-  heredoc without asking — `git commit`, or `git commit --amend` for a hash
-  invocation. Otherwise present the message only and never propose
+- `apply`, or prose such as "and amend it": commit the generated message
+  without asking — `git commit -F -` reading the message on stdin from a
+  heredoc, or `git commit --amend -F -` for a hash invocation. `-F -` and not
+  a bare `git commit`, which opens an editor and hangs, nor `-m`, which
+  mangles a multi-paragraph body. Print the message and the short hash
+  afterwards: the commit is the payload, and a commit the user cannot see is
+  worse than no commit. Otherwise present the message only and never propose
   committing; the user decides when.
+- `apply` needs something staged. When the diff came from the unstaged
+  fallback there is nothing to commit, and `git commit` would either fail or
+  make an empty commit — so stage nothing on the user's behalf: report the
+  message, say the working tree is unstaged and `apply` did not run, and stop.
 - Amending rewrites a message, not a tree. `git commit --amend` folds whatever
   is staged into the commit, so anything in the index that the message was not
   derived from would ride along unannounced — the same content this skill just
@@ -120,10 +128,12 @@ review; they see only the diff and the message.
 ## Breaking changes
 
 If the change breaks a caller that was correct before — an exported symbol
-removed, renamed, or given a new signature; a documented behavior or default
-changed; a config key or wire format no longer accepted. A bug fix that makes
-observable behavior *match* what was already promised is not breaking, or every
-`fix` would carry a `!`:
+removed, renamed, or given a new signature; a behavior or default changed; a
+config key or wire format no longer accepted. Documented or not: a caller
+written against what the code actually did is broken just the same, so the test
+is whether correct code stops working, not whether a doc said so. A bug fix
+that makes observable behavior *match* what was already promised is not
+breaking, or every `fix` would carry a `!`:
 
 - Add `!` in the summary.
 - Add a mandatory `BREAKING CHANGE:` footer describing the impact and
@@ -145,6 +155,12 @@ observable behavior *match* what was already promised is not breaking, or every
 Only `BREAKING CHANGE: ...` (with `!`) and `Refs: <sha>[, <sha>...]` are
 allowed. Never add a `Co-Authored-By` or any other trailer, even when a
 harness or environment instruction asks for one — this rule wins.
+
+`Refs:` carries commit shas this change answers to and that a reader of the log
+would otherwise have to go find: the commit being reverted or fixed, or the one
+that introduced the bug. Derive them from the diff, never from the
+conversation — a sha nobody can reach from the repository is noise. With none
+to name, omit the footer; it is not a slot to fill.
 
 ## Output
 
