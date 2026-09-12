@@ -31,7 +31,9 @@ The write-only editor of an existing SRD, one confirmed edit at a time — the
 counterpart to the read-only `review`. It never invents or restates rules
 (format, style, logic, and rules come from `create`'s reference files) and
 never edits metadata (Owners, Initiative, Designs), sets back-links, or changes
-`Status`; it flags those gaps (STR-2/3/5/7, STA-*). It never proposes a Status
+`Status`; it flags those gaps (STR-2/3/5/7, STA-*). A finding outside that
+mandate is reported, not looped — even when the run entered at it: a feedback
+run starting at a metadata `#2` says so and advances. It never proposes a Status
 transition (flag only a malformed `STA-*` value) and never proposes pushing,
 publishing, or syncing the SRD as a follow-up. Comment blocks are read-only:
 a source of information about the SRD, never edited, answered, or rewritten,
@@ -104,14 +106,25 @@ Before any edit:
 
 ## Id rules
 
-The approval gate decides what may happen to requirement, scope, and glossary
-ids:
+On an approved SRD the gate governs content, not only ids. STA-4: adding,
+removing, or changing a requirement needs the approving authority's agreement.
+The user's `Y` is not that — it makes the edit the one they want, not one the
+standard permits. So name STA-4 in the proposal and ask whether the authority
+has agreed; without it, leave the edit marked for their ruling, unlanded.
+Removal is the sharp case: STA-8 keeps the id and strikes the text, so "remove
+GR-4" is never a deletion (STA-7 keeps the number). Meaning-preserving
+editorial change is STA-5 and needs none of this — `polish` is that mode.
+
+The gate then decides what may happen to requirement, scope, and glossary ids:
 
 - In-progress: free to renumber a group after a split, merge, add, or remove,
   and to fix collisions or gaps (REQ-2/3/4); update every cross-reference the
   change touches.
 - Approved: existing ids are frozen. Additions only, via sub-numbering
-  (`GR-1a`, `GR-1b`); never renumber or rename an existing id. If a real fix
+  (`GR-1a`, `GR-1b`); never renumber or rename an existing id. A taken suffix
+  moves down the alphabet — splitting `GR-3a` beside an existing `GR-3b` adds
+  `GR-3c`. Never reuse a suffix, a struck-through one included: the id retires
+  with its requirement. If a real fix
   cannot avoid touching an existing id, try add-only first; if that is
   impossible, present the conflict and the trade-off and leave it flagged
   unless the user explicitly approves the id change.
@@ -179,8 +192,13 @@ author-facing account of what changed and why, which a diff cannot carry.
 - Rephrase the user's words into clean prose — fix typos, expand shorthand,
   drop the conversational frame — keeping decision and reason intact. Never
   invent a reason the user did not give.
-- Applied edits only: skipped, declined, and flagged-but-unfixed issues stay in
-  `<srd>.review.md`.
+- Every applied edit, including those reaching the file outside the loop: an
+  `autofix` batch logs one entry per substitution, Add-to-TODO logs its line.
+  Two runs that changed the same things leave the same log.
+- Skipped and flagged-but-unfixed issues are not logged. With a review file
+  they stay there; without one (interactive, polish, targeted) `edit` may not
+  create one, so the closing manifest is their only record — say which were
+  left and why.
 - Write for the SRD's author, not a reviewer: name the surface in the SRD's own
   words; cite a rule id only where the user did.
 - Create the file on the first write, frontmatter and title included;

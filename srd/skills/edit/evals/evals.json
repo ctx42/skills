@@ -4,22 +4,27 @@
     {
       "id": 1,
       "name": "interactive-non-atomic-on-approved-srd",
-      "skills": ["edit"],
-      "setup": "`specs/login.md` carries `Status: ACCEPTED`. `GR-3a` reads \"The system SHALL validate the token and log the attempt\" — two rules in one requirement.",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`specs/login.md` carries `Status: ACCEPTED`. `GR-3a` reads \"The system SHALL validate the token and log the attempt\" — two rules in one requirement — and `GR-3b` already exists beside it. The approving authority has not been consulted.",
       "query": "/edit specs/login.md",
       "files": [],
       "expected_behavior": [
         "Runs the approval gate first: reads `Status: ACCEPTED`, states it, and asks the user to confirm before editing; resolves the glossary",
+        "Names STA-4 in the proposal and asks whether the approving authority has agreed — splitting a requirement changes it, and the user's own `Y` is not that agreement",
         "Front-loads a grouped issue summary, then walks entry by entry",
-        "For `GR-3a` proposes one change — split into two atomic rules (REQ-1) — with location, before/after, and a one-line rationale",
-        "Splits add-only through sub-numbering (keeps `GR-3a`, adds `GR-3b`) because ids are frozen on an approved SRD; where that is impossible, flags the conflict and waits for explicit id-change approval",
+        "Proposes the split with location, before/after, and a one-line rationale",
+        "Splits add-only through sub-numbering and skips the taken `GR-3b`, adding `GR-3c` rather than renumbering or displacing it",
         "Applies nothing until approved, then re-validates the affected entry and its cross-references"
       ]
     },
     {
       "id": 2,
       "name": "apply-a-review-file",
-      "skills": ["edit"],
+      "skills": [
+        "edit"
+      ],
       "setup": "`specs/login.review.md` holds findings across all three severities.",
       "query": "/edit specs/login.md specs/login.review.md",
       "files": [],
@@ -33,7 +38,9 @@
     {
       "id": 3,
       "name": "targeted-edit-by-description",
-      "skills": ["edit"],
+      "skills": [
+        "edit"
+      ],
       "setup": "One requirement says the response must be \"fast\". The user names it by description rather than by id.",
       "query": "/edit specs/login.md fix the vague \"fast\" requirement",
       "files": [],
@@ -46,7 +53,9 @@
     {
       "id": 4,
       "name": "polish-leaves-metadata-and-meaning",
-      "skills": ["edit"],
+      "skills": [
+        "edit"
+      ],
       "setup": "An in-progress draft with British spellings, a lowercase normative keyword, stray example text, and empty Owners/Initiative/Designs fields.",
       "query": "/edit specs/login.md polish",
       "files": [],
@@ -60,7 +69,9 @@
     {
       "id": 5,
       "name": "terse-output",
-      "skills": ["edit"],
+      "skills": [
+        "edit"
+      ],
       "setup": "An ordinary interactive session with several applied edits.",
       "query": "/edit specs/login.md",
       "files": [],
@@ -73,7 +84,9 @@
     {
       "id": 6,
       "name": "generate-in-scope-on-signal",
-      "skills": ["edit"],
+      "skills": [
+        "edit"
+      ],
       "setup": "`### In Scope` holds only the `--- TODO ---` marker. Partway through the session the user says the requirements are final and asks for In Scope to be filled.",
       "query": "/edit specs/login.md",
       "files": [],
@@ -87,7 +100,9 @@
     {
       "id": 7,
       "name": "add-to-todo-on-demand",
-      "skills": ["edit"],
+      "skills": [
+        "edit"
+      ],
       "setup": "Mid-session, with a `## TODO` section already present holding two items.",
       "query": "Add: confirm the lockout threshold with security to TODO",
       "files": [],
@@ -101,7 +116,9 @@
     {
       "id": 8,
       "name": "autofix-bulk-applies-errata",
-      "skills": ["edit"],
+      "skills": [
+        "edit"
+      ],
       "setup": "`specs/login.review.md` has an `## Errata` block of three findings. Two anchors still match their quoted `old` text exactly once; the third entry has since been reworded, so its anchor no longer contains the quoted text.",
       "query": "/edit specs/login.md autofix",
       "files": [],
@@ -117,7 +134,9 @@
     {
       "id": 9,
       "name": "interactive-from-a-line-number",
-      "skills": ["edit"],
+      "skills": [
+        "edit"
+      ],
       "setup": "Line 210 of `specs/login.md` falls inside `GR-4b`.",
       "query": "/edit specs/login.md 210",
       "files": [],
@@ -130,7 +149,9 @@
     {
       "id": 10,
       "name": "feedback-from-a-finding-number",
-      "skills": ["edit"],
+      "skills": [
+        "edit"
+      ],
       "setup": "`specs/login.review.md` exists and holds numbered findings. The run is repeated in a second scenario where the review file is absent.",
       "query": "/edit specs/login.md #2",
       "files": [],
@@ -144,7 +165,11 @@
     {
       "id": 11,
       "name": "corpus-grounded-edit-routes-the-unconfirmable",
-      "skills": ["edit", "report-doc-gap", "kb"],
+      "skills": [
+        "edit",
+        "report-doc-gap",
+        "kb"
+      ],
       "setup": "The `srd-doc` corpus is reachable. The user wants `GR-2` to say the gateway retries a failed token check three times; the retry count appears in no document.",
       "query": "/edit specs/login.md GR-2",
       "files": [],
@@ -159,7 +184,11 @@
     {
       "id": 12,
       "name": "session-start-drains-prior-buffers",
-      "skills": ["edit", "report-doc-gap", "kb"],
+      "skills": [
+        "edit",
+        "report-doc-gap",
+        "kb"
+      ],
       "setup": "A previous session for this SRD ended with two unfiled doc gaps and one unwritten platform fact still buffered.",
       "query": "/edit specs/login.md",
       "files": [],
@@ -172,7 +201,9 @@
     {
       "id": 13,
       "name": "decision-log-written-per-edit",
-      "skills": ["edit"],
+      "skills": [
+        "edit"
+      ],
       "setup": "No `specs/login.decisions.md` exists yet. The user answers `Y` to one proposal with the reason \"retention isn't ours, drop it\", then `S` to the next.",
       "query": "/edit specs/login.md",
       "files": [],
@@ -182,6 +213,54 @@
         "Records the entry, the change in prose, and the user's reason tidied into a clean sentence — never a diff and never an invented rationale",
         "Does not log the skipped proposal",
         "The closing manifest points at the file's newest session block as the author's summary"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "removal-on-an-approved-srd",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`specs/login.md` is `ACCEPTED`. A review finding says `GR-6` duplicates `GR-2` and should be removed. The approving authority has agreed to the removal.",
+      "query": "/edit specs/login.md specs/login.review.md",
+      "files": [],
+      "expected_behavior": [
+        "Does not delete `GR-6`: on an approved SRD a removal strikes the text through and keeps the identifier (STA-8)",
+        "Leaves the number in place and renumbers nothing after it (STA-7)",
+        "Does not reuse `GR-6` for anything later in the run — the id retires with its requirement",
+        "Records the removal in `<srd>.decisions.md` like any other applied edit"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "finding-outside-the-mandate",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`specs/login.review.md` finding `#2` is a metadata gap — no Initiative link (STR-3) — which `edit` may not fix. The run is asked to enter at that finding.",
+      "query": "/edit specs/login.md #2",
+      "files": [],
+      "expected_behavior": [
+        "Enters at `#2`, recognizes it is outside the mandate, and says so rather than opening a proposal it cannot apply",
+        "Names it as the author's to fix and advances to the next finding by number",
+        "Leaves the review file untouched",
+        "Carries it into the closing manifest as flagged and left"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "autofix-writes-the-decision-log",
+      "skills": [
+        "edit"
+      ],
+      "setup": "An `## Errata` block of three findings, two of which apply cleanly. No `specs/login.decisions.md` exists yet.",
+      "query": "/edit specs/login.md autofix",
+      "files": [],
+      "expected_behavior": [
+        "Writes one decision-log entry per applied substitution — the batch path logs like every other applied edit",
+        "Creates `specs/login.decisions.md` with its `cfsync-plugin: ignore-push` front matter on the first write",
+        "Logs nothing for the stale erratum it reported rather than applied",
+        "Leaves the same log a per-change loop would have left for the same two edits"
       ]
     }
   ]
