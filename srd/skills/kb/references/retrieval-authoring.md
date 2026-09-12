@@ -1,10 +1,17 @@
 # Authoring a page for retrieval
 
-The doc-gap draft is published into a corpus served by `srd-doc`: **BM25
-keyword search over section chunks**, no semantic matching. A page is found
-only by the words it contains and ranked by where those words sit. These rules
-mirror the server's own `docs/authoring.md`; apply them to every draft so the
-new page indexes and ranks well once synced.
+<!-- MIRRORED FILE — these rules mirror srd-mcp-doc/docs/authoring.md, which
+     documents the indexer that actually chunks and ranks these pages. Mirrored
+     from commit 538eb93 (2026-07-14). The copy is deliberate: the skills must
+     work without the server repo checked out. When the server's chunking or
+     ranking changes, update this file and bump the commit above — otherwise
+     every page written against it chunks or ranks wrongly, and silently. -->
+
+Pages written for the `srd-doc` corpus — knowledge-base pages, and doc-gap
+drafts — are retrieved by **BM25 keyword search over section chunks**, with no
+semantic matching. A page is found only by the words it contains and ranked by
+where those words sit. Apply these rules to everything written for the corpus so
+it indexes and ranks well.
 
 ## Headings
 
@@ -29,8 +36,8 @@ new page indexes and ranks well once synced.
 ## Facts
 
 - State each capability as an explicit sentence — an agent verifies a claim by
-  searching for its words. Write the exact `target_claim` from the gap as a
-  plain declarative sentence.
+  searching for its words. For a doc-gap draft, write the gap's exact
+  `target_claim` as a plain declarative sentence.
 - Prefer one canonical term per concept; scattered names split matches.
 - Keep glossary-style definitions one per `##` heading.
 
@@ -43,8 +50,8 @@ new page indexes and ranks well once synced.
 
 ## Absent vs unfindable
 
-A gap's `search_terms` plus a live `search`/`get_doc` check tell you which fix
-the page needs:
+A live `search`/`get_doc` check on the fact's own words (a gap's
+`search_terms`, for a doc-gap draft) tells you which fix the page needs:
 
 - **Genuinely absent** — nothing relevant exists. Write new prose.
 - **Present but unranked** — the fact is there but the search terms miss it.

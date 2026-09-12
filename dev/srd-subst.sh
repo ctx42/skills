@@ -33,14 +33,12 @@ assert_one() {
     }
 }
 
-assert_one 'the Company Glossary'
 assert_one '[company glossary](glossary/main_glossary.md)'
 assert_one '[Quality Bar](guidelines_for_software_requirements_documents.md#Quality-Bar.1)'
 assert_one 'the Technology Group'
 
 sed \
-    -e 's|the Company Glossary|the shared glossary|g' \
-    -e 's|\[company glossary\](glossary/main_glossary\.md)|shared glossary|g' \
+    -e 's|\[company glossary\](glossary/main_glossary\.md)|Company Glossary|g' \
     -e 's|\[Quality Bar\](guidelines_for_software_requirements_documents\.md#Quality-Bar\.1)|Quality Bar|g' \
     -e 's|the Technology Group|the approving authority|g' \
     "$buf"

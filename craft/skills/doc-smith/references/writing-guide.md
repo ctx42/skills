@@ -66,6 +66,21 @@ Typical order; include only what the product needs, omit empty sections:
   parentheses, or a new sentence; reserve the em dash for a genuine abrupt break
   or parenthetical aside.
 - Define an acronym or product term on first use; then use it consistently.
+- A glossary or definition entry states what a term means, nothing more; strip
+  behavioral, default, or configuration claims (they belong in reference or
+  concept docs and go stale independently of the term).
+- Attribute each verb to the agent that performs it; never credit a consuming
+  or receiving system with producing or recording data it only ingests.
+- Treat every absolute ("all", "only", "never", "always") as a contradiction
+  magnet: re-verify it against each entity the doc adds later, and scope the
+  absolute itself; a local exception downstream does not fix it.
+- Separate what a format permits from what the domain requires; confirm
+  cardinality against intent before asserting an optionality the schema allows
+  but the domain rules out.
+- Materially different parallel items get no symmetric statement that is true
+  for only one; state the asymmetry.
+- "Noise" is unwanted interference only; call the signal of interest "signal"
+  even where the domain colloquially says "noise".
 - Headings are specific and parallel in grammar ("Installing X", "Configuring X",
   not "Installation" then "How to configure").
 
@@ -105,7 +120,8 @@ Register example — the same facts, sub-B1 fragments raised to fluent B1:
 
 ## Defect taxonomy
 
-What audit reports and proof fixes. Detection heuristic per class:
+What every mode judges against; audit and revise flag, proof fixes. Detection
+heuristic per class:
 
 - Contradiction — two claims about the same entity that can't both hold. Detect
   from the ledger's entity/claim list, not by local reading; cite both spots.
@@ -120,18 +136,16 @@ What audit reports and proof fixes. Detection heuristic per class:
 - Clarity defect — passive/future voice, buried instruction, undefined term,
   filler, or a step with more than one action.
 - Em-dash overuse — em dashes where a comma, parentheses, or a sentence break
-  reads better, or more than roughly one per paragraph. Proof rewrites the
-  excess to lighter punctuation; audit flags. Keep dashes marking a genuine
-  break.
+  reads better, or more than roughly one per paragraph. Rewrite the excess to
+  lighter punctuation; keep dashes marking a genuine break.
 - Formatting defect — prose over the doc's wrap width, misaligned table columns,
-  or bold-label list lead-ins. Proof reflows, re-pads, and rewrites to plain
-  items; audit flags. Respect the doc's own convention over the house default.
+  or bold-label list lead-ins. Reflow, re-pad, and rewrite to plain items,
+  respecting the doc's own convention over the house default.
 - Spelling-variety defect — non-US spelling in a US doc, or English varieties
-  mixed within one doc. Proof normalizes to the doc's variety (US default);
-  audit flags.
+  mixed within one doc. Normalize to the doc's variety (US default).
 - Flat/choppy prose — grammatical but sub-register: fragmentary or staccato
-  sentences, missing connectives, unidiomatic phrasing. Proof fixes it
-  upward to fluent B1; distinct from filler (cut, not rewritten) and from
-  vocabulary level (tracks the audience).
+  sentences, missing connectives, unidiomatic phrasing. Raise it to fluent B1;
+  distinct from filler (cut, not rewritten) and from vocabulary level (tracks
+  the audience).
 - Dubious technical claim — an assertion that looks factually wrong about a
   technology and the doc doesn't settle. Flag as a question; never rewrite.

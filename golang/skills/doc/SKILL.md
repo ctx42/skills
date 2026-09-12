@@ -13,20 +13,21 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg* | module]
 # doc
 
 Executing skill: it reads code, edits godoc and inline comments in `*.go` /
-`*_test.go`, and verifies. Unlike `/review` it acts on the code.
+`*_test.go`, and verifies. Unlike `golang:review` it acts on the code.
 
 **Governing rule — a comment changes only when it fails the checklist.** Judge
-every documentable item against the checklist below; change it only for a
-checklist item that fires, and apply the minimal edit that clears it. A comment
-that is correct and complete by the checklist is left alone, however short.
-"Too dry" means a checklist fact is missing — never that a comment looks short.
-The documentable item — never the file — is the unit of work.
+every documentable item against the checklist below and apply the minimal edit
+that clears the checklist items that fire. A comment that passes is left alone,
+however short: "too dry" means a checklist fact is missing, never that a
+comment looks short. The documentable item — never the file — is the unit of
+work.
 
 Sources of truth:
-- `../style/SKILL.md` (on-demand: before writing a comment — read only its
-  "Godoc & comments" section, plus Naming) — obey it in every comment written;
-  it is the rule spec, do not restate it.
-- The package's own comment conventions, then a sibling package (on-demand:
+- `../style/SKILL.md` (on-demand: before the first comment is written — read
+  only its Production "Godoc & comments" and "Naming" sections) — obey it in
+  every comment written; it is the rule spec, do not restate it. Checklist
+  item 7 is the one place this skill departs from it.
+- The package's own comment conventions, then a sibling package's (on-demand:
   when writing) — for voice and cross-reference style.
 
 ## Target
@@ -48,9 +49,9 @@ item at a time.
   Controls); within each package, files alphabetically; within each file,
   items top to bottom. Plan-first.
 
-A documentable item is one of: the package comment (once per package, in the
-package-named file), a top-level declaration's godoc (type, func, method,
-const/var block), or the inline comments inside one function body.
+A documentable item is one of: the package comment (once per package), a
+top-level declaration's godoc (type, func, method, const/var block), or the
+inline comments inside one function body.
 
 State the resolved kind and the item set before reading.
 
@@ -70,8 +71,7 @@ Read from `$ARGUMENTS`, any order after the target:
 
 ## The checklist
 
-Run each item against the code; it is a yes/no read, not a judgment of length.
-Change the comment only for an item that fires.
+Run each checklist item against the code; each is a yes/no read.
 
 1. missing — an exported symbol or the package has no godoc. Add it.
 2. wrong lead — godoc does not start with the symbol name (Go convention).
@@ -88,43 +88,52 @@ Change the comment only for an item that fires.
 6. restates code — an inline comment narrates what the next line plainly does
    instead of explaining why. Tighten to the why, or delete it.
 7. interface-method godoc — a method implementing an interface (pinned by a
-   `var _ Iface = (*T)(nil)` assertion) carries godoc. Remove it when the
-   method does nothing unexpected vs. the interface contract; keep it,
-   expanded to name the surprise (a side effect, an empty/zero return on
-   success, state left unrecorded), when it does. Never add godoc to an
-   unremarkable one. If the method carries a `//nolint` directive, never
-   delete the block — keep the directive verbatim and give it a godoc: terse
-   if unremarkable, expanded if unexpected.
+   `var _ Iface = (*T)(nil)` assertion) carries godoc. Unremarkable vs. the
+   interface contract: remove it. Surprising (a side effect, an empty/zero
+   return on success, state left unrecorded): keep it, expanded to name the
+   surprise — the one exception to the style rule against such godoc. Never
+   add godoc to an unremarkable one. A `//nolint` directive on the method is
+   never deleted: keep it verbatim and give it the godoc it needs above it —
+   the style's one-line `// implements [Iface].` if unremarkable, expanded if
+   surprising.
+8. bad framing — godoc says a project or file lives "on disk"; a group headline
+   borrows a member's contrastive phrasing instead of naming the group on its
+   own terms; or a comparison equates unlike things (a project-level constant
+   with an OCI image annotation). Reword. A dangling cross-reference that
+   exists only for such a comparison is deleted, never downgraded to plain
+   text.
 
 ## Accuracy
 
-Never write a fact you cannot confirm from the code. Before writing a claim,
-establish ground truth: read the signature, the body, and (for a type) its
-fields and methods. Confirm anything that reaches beyond the visible code with
-the `LSP` tool, same discipline as `review`:
+Never write a fact you cannot confirm from the code; flag it in the report
+instead. Establish ground truth first: read the signature, the body, and (for
+a type) its fields and methods. Confirm anything beyond the visible code with
+the `LSP` tool:
 
-- `hover` / `goToDefinition` — confirm signatures, types, and zero values.
-- `findReferences` / `goToImplementation` — confirm a behavior, concurrency,
-  or "callers must" claim before asserting it.
-- Confirm every godoc cross-reference `[Type]` / `[pkg.Symbol]` resolves to a
-  real symbol; downgrade an unresolved one to plain text.
+- `hover` / `goToDefinition` — signatures, types, zero values.
+- `findReferences` / `goToImplementation` — a behavior, concurrency, or
+  "callers must" claim.
+- Every godoc cross-reference `[Type]` / `[pkg.Symbol]` must resolve to a real
+  symbol; downgrade an unresolved one to plain text.
 
-A fact you cannot confirm from code is flagged in the report, never guessed
-into a comment. If no Go language server is configured the tool errors — fall
-back to reading the code and note the reduced confidence.
+If no Go language server is configured the tool errors — fall back to reading
+the code and note the reduced confidence in the report.
 
 ## Per-item loop
 
-For each item, work in strict order. **Never start item B until item A is
-edited and verified.**
+For each item, in strict order; never start item B until item A is written.
 
-1. Read the code the item documents; establish ground truth (see Accuracy).
-2. Run the checklist; note every item that fires. None fires — leave it
-   untouched, do not restate the report line.
-3. Confirm each fact you will write (see Accuracy); demote the unverifiable to
-   a flag.
-4. Apply the minimal edit that clears the fired items — add only the missing
-   fact, fix only the wrong clause. Obey the style Godoc rules and `max_changes`.
+1. Read the code the item documents; establish ground truth (Accuracy).
+2. Run the checklist; note every checklist item that fires. None fires —
+   leave the comment untouched.
+3. Confirm each fact you will write (Accuracy); demote the unverifiable to a
+   flag.
+4. Write the minimal edit that clears the fired checklist items — add only
+   the missing fact, fix only the wrong clause; never rewrite a comment that
+   needed a clause. Obey the style rules read from `../style/SKILL.md`,
+   `max_changes`, and the `only=` filter. Mirror the package's comment voice,
+   else a sibling package's. The package comment goes in the package-named
+   file (style "Declarations & files"); never create a `doc.go` for it.
 
 ## Never touch
 
@@ -132,33 +141,23 @@ Never edit these; name them in the report when in scope:
 - magic directive comments (`//go:build`, `//go:embed`, `//go:generate`,
   `//nolint`, `//export`) — they are code, never reflow or reword them.
 - generated files marked `DO NOT EDIT`.
-- a comment whose intent cannot be confirmed from the code — flag it, do not
-  guess.
+- a comment whose intent the code cannot confirm — flag it.
 
 ## Plan (file / package / module)
 
 Before writing, present:
 - per item in scope: which checklist items fire (`file:Symbol — item`),
-- items to be flagged unverifiable (`file:Symbol — the unconfirmable fact`),
+- items to flag unverifiable (`file:Symbol — the unconfirmable fact`),
 - never-touch items in scope (`file:Symbol — reason`).
 
-Wait for approval. Then write and verify, one item to completion before the
-next.
-
-## Write
-
-- Apply the minimal edit; do not rewrite a comment that only needed a clause.
-- Obey the style "Godoc & comments" rules (already read); improvise nothing
-  beyond them.
-- Package comment goes in the package-named file; never add a `doc.go` for it.
-- Mirror the package's own comment voice; if none, a sibling package's.
-- Respect `max_changes` and the `only=` filter.
+Wait for approval, then run the per-item loop and Verify.
 
 ## Verify
 
 End of run:
-1. Run `gofmt -l` on every edited file; fix any issue (a rewrap can break the
-   ≤ 80-col rule).
+1. Run `gofmt -l` on every edited file and fix any listing; then re-check that
+   every edited comment line stays <= 80 cols (style "Formatting") — gofmt
+   does not enforce that.
 2. Run `go build ./<pkg>` on every edited package; it must pass — guards
    against a directive comment broken by an edit.
 3. Run `go test ./<pkg>` only if the package already has `Example*` or
@@ -170,8 +169,9 @@ End of run:
 - Flagged unverifiable: `file:Symbol — the fact left unwritten and why`.
 - Never-touched in scope: `file:Symbol — reason`.
 - Module mode: which packages were done and which were skipped.
-- Items left alone need no line. Never skip a flagged or never-touched item
-  silently. Suggest running `/review` on the result.
+- Items left alone get no line; a flagged or never-touched item is never
+  dropped silently. Close with a one-line pointer to run `golang:review` on
+  the result.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.

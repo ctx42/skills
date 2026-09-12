@@ -4,126 +4,128 @@ description: >
   Authors new skills, audits existing ones against the repo's authoring
   standard, and measures whether a skill actually works. Use when asked to
   create, write, scaffold, review, improve, or benchmark/measure a skill.
-argument-hint: "[create|improve|measure] [<skill name or path>]"
+argument-hint: "[create|improve|measure] [<skill or description>]"
+compatibility: Claude Code; skills here ship as Claude Code plugins.
 license: MIT
 ---
 
 # skill-smith
 
-Forge and repair skills. Parse `$ARGUMENTS` for the mode (`$1`) and target
-skill (`$2`); fall back to the user's prose when empty:
+Pick the mode from `$1`, or infer it from the user's prose when `$1` is empty:
 
-- Create — the user describes a new capability, workflow, or knowledge area to
-  package as a skill.
+- create — the user describes a new capability to package as a skill.
+- improve — the user names an existing skill to review or upgrade.
+- measure — the user wants proof a skill works, not an opinion that it does.
 
-- Improve — the user names an existing skill (path or name) to review or
-  upgrade.
+If the mode stays ambiguous, ask one question: create, improve, or measure?
 
-- Measure — the user wants to benchmark or validate whether a skill works
-  (A/B against a baseline, trigger test). See the Measure section.
-
-If the mode is still ambiguous, ask one question: create, improve, or measure?
+The rest of `$ARGUMENTS` is the target — a description (create) or a skill name
+or path (improve, measure).
 
 Sources of truth:
 
-- `standards.md` (eager) — the authoring ruleset; every decision defers to it.
+- `standards.md` (eager) — the authoring ruleset. Every decision defers to it.
+- `CONTRIBUTING.md` (on-demand: placing, naming, cataloging, renaming, or
+  retiring a skill) — repo mechanics. Follow it; never restate it.
 
-- `CONTRIBUTING.md` (on-demand: repo mechanics) — skill placement, naming, the
-  catalog-doc list, dev loop, and retiring. Follow it; never duplicate it.
+Report tersely in every mode: no preamble or narration; state each fact once;
+don't restate output the user can already see.
 
 ## Create mode
 
-Forge a complete, standard-compliant skill end-to-end.
+Build a complete, standard-compliant skill. Copy this checklist and tick it off:
 
-1. Scope it. Settle the one job this skill does, its trigger phrases, whether
-   it creates or packages knowledge, and its plugin group (`golang`, `srd`,
-   `craft`, or a new one). Ask only what you cannot infer.
+```
+- [ ] 1. Scope     — one job, its triggers, its plugin group
+- [ ] 2. Name      — per standards.md, confirmed with the user
+- [ ] 3. Evals     — written before the body
+- [ ] 4. SKILL.md  — the smallest body that passes them
+- [ ] 5. README.md — Usage block + those evals
+- [ ] 6. Validate  — dry-run, fix, repeat, then lint clean
+- [ ] 7. Place     — <group>/skills/<name>/ + catalog docs
+```
 
-2. Read `standards.md` and the relevant parts of `CONTRIBUTING.md`.
+1. Scope it. Settle the one job this skill does, the phrases that should
+   trigger it, and its plugin group (`golang`, `srd`, `craft`, or a new one).
+   Ask only what you cannot infer.
 
-3. Name it. Lowercase-hyphen, gerund or short verb, equals the dir name, no
-   reserved words or vendor prefix. Confirm the name with the user.
+2. Name it per `standards.md` Frontmatter. Confirm the name with the user.
 
-4. Evals first. Derive ≥ 3 scenarios from where the agent falls short without
-   the skill: run the task unaided, note what fails, encode each failure as a
-   request + expected-behavior checks (≥ 1 asserting terse output). These evals
-   are the spec the body must pass.
+3. Write the evals first. Run the task unaided and note what fails. Encode each
+   failure as a request plus its expected-behavior checks, per `standards.md`
+   Evaluations. These evals are the spec the body must pass.
 
-5. Write `SKILL.md`. The minimum dense imperative body that passes the evals,
-   per `standards.md` — adopt the Claude-native affordances where they earn
-   their place (see its "Claude-native frontmatter" section), token economy, ≤
-   ~500 lines, progressive disclosure, and the output-discipline line where the
-   skill describes its output.
+4. Write `SKILL.md` — the smallest dense imperative body that passes them.
+   Adopt the Claude-native affordances where they earn their place. Put the
+   output-discipline line where the skill describes its output. Close with the
+   `## Self-learning` block; `enhance-skills` owns its wording.
 
-6. Write `README.md`. Concise usage + when-to-use, and an `## Evaluations`
-   section holding the step-4 scenarios.
+5. Write `README.md` per `standards.md` README structure, carrying the step-3
+   scenarios under `## Evaluations`.
 
-7. Validate & refine. Dry-run against the evals; where it struggles, fix the
-   skill (strengthen the description first if it fails to trigger) and repeat.
-   Then run `./dev/lint-skills.sh` and clear every error.
+6. Validate, then loop. Dry-run the skill against its own evals:
 
-8. Update catalog docs per CONTRIBUTING.md's Documentation list.
+   - It never triggers — strengthen the description, repeat.
+   - It triggers but fails a check — fix the body, repeat.
+   - Its value is in doubt — run Measure mode instead of another dry-run.
 
-9. Place & load. The skill lives at `<group>/skills/<name>/`. A new group also
-   needs its `.claude-plugin/plugin.json` and a marketplace entry (existing
-   groups need neither). Show the files and doc updates, then tell the user to
-   run `/reload-plugins` to load it.
+   Move on only once every eval passes. Then run `./dev/lint-skills.sh` and
+   clear every error.
 
-Output: the new skill files, the catalog diffs, the evals, and a one-line
-statement of the skill's job and triggers. Then the reload reminder.
+7. Place it at `<group>/skills/<name>/` and update the catalog docs, both per
+   `CONTRIBUTING.md`.
+
+Output: the new skill files, the catalog diffs, one line naming the skill's job
+and triggers, then a reminder to run `/reload-plugins`.
 
 ## Improve mode
 
 Audit one named skill against the standard, report, then fix on confirmation.
-Reasoning only until the user approves — no edits during the audit. Default
-scope is the single skill named; audit a whole category only if asked.
+Scope is the single skill named; audit a whole group only when asked.
 
-1. Resolve the target. State the exact skill dir and files in scope. If none
-   was named, ask which one.
+1. Resolve the target. State the exact skill directory and the files in scope.
+   If none was named, ask which one.
 
-2. Read `standards.md`, `CONTRIBUTING.md`, then the target's `SKILL.md`,
-   `README.md`, and any bundled files.
+2. Read the target's `SKILL.md`, `README.md`, and every bundled file. Consult
+   `CONTRIBUTING.md` only for the mechanics it owns.
 
-3. Audit against `standards.md` — it is loaded, so walk its rule sections (see
-   its Contents) in order rather than re-deriving them. Two checks are easy to
-   skip:
+3. Audit against `standards.md`. It is already loaded — walk its rule sections
+   in Contents order instead of re-deriving them. Two checks get skipped most
+   often:
 
-   - Reference content — read each reference's prose, not just its structure;
-     flag entries that restate the rule they key to, collapse to one shared
-     principle, run past ~2 sentences of Why/Detect, or ship a code fence the
-     prose already makes clear; flag any step that eagerly loads a whole
-     reference each run.
-
-   - Output discipline — the body carries the terse-output line and no step
+   - Reference content. Apply the Body-conciseness tests to each reference's
+     prose, not just its structure, and flag any step that eagerly loads a
+     whole reference every run.
+   - Output discipline. The body carries the terse-output line, and no step
      mandates framing or restating shown content.
 
-4. Report only. Do not edit yet.
+4. Report only. Make no edit before the user approves.
 
-5. Fix on confirmation. Apply the approved findings, show diffs, then run
-   `./dev/lint-skills.sh` and clear any error. If structure changed (rename,
-   new files) follow CONTRIBUTING.md and remind the user to run
+5. Fix on confirmation. Apply the approved findings and show the diffs. Run
+   `./dev/lint-skills.sh` and clear every error. If the structure changed (a
+   rename, new files), follow `CONTRIBUTING.md` and remind the user to run
    `/reload-plugins`.
 
-Output: group findings by severity — Blocker / Should-fix / Nit. Each finding
-names the file (and line if useful), the `standards.md` rule it violates, and a
-minimal fix. End with a verdict (compliant / fix-first) and per-severity counts,
-then offer to apply the fixes.
+Output: findings grouped by severity — Blocker / Should-fix / Nit. Each finding
+names the file (and the line where it helps), the `standards.md` rule it breaks,
+and the minimal fix. Close with a verdict — compliant or fix-first — then offer
+to apply the fixes.
 
-## Measure (optional)
+## Measure mode
 
-Prove a skill works instead of eyeballing it: A/B its README scenarios with and
-without the skill loaded, grade the delta, and test whether the description
-triggers. Follow `references/evals.md`. Run it as the last create step, inside
-improve when a skill's value is in doubt, or standalone on request. Report the
-result table and verdict; make no edits from a Measure run without confirmation.
+Prove the skill earns its tokens instead of eyeballing it:
+
+1. Turn the target's README scenarios into a pass/fail rubric.
+2. Run each scenario in two fresh subagents — skill loaded, skill not loaded.
+3. Grade both legs blind, then score how often the description triggers.
+
+Follow `references/evals.md` for the protocol. Report the result table and the
+verdict. Make no edit from a Measure run without confirmation.
 
 ## Self-application
 
-`skill-smith` obeys its own standard. When you change this skill, re-audit it in
+`skill-smith` obeys its own standard. After changing this skill, re-audit it in
 improve mode.
-
-Report tersely in every mode: no preamble or narration; state each fact once;
-don't restate output the user can already see.
 
 ## Self-learning
 

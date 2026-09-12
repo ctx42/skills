@@ -19,7 +19,7 @@ the house additions (US English, sub-numbering, one term per concept).
 - Glossary
 - Requirements: Document Structure (`STR`), Status and Changes (`STA`),
   Language and Style (`LANG`), Requirement Form (`REQ`), Glossary Discipline
-  (`GLO`), Scope Discipline (`SCO`), Markdown Export (`MD`)
+  (`GLO`), Scope Discipline (`SCO`)
 - Quality Bar
 
 Two things belong to the standard and MUST NOT be copied into the SRD being

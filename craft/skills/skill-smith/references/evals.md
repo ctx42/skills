@@ -2,7 +2,7 @@
 
 On-demand playbook for proving a skill works: does loading it actually improve
 outcomes, and does its description trigger when it should? Run from
-`skill-smith`'s Measure step. Author-time tooling — it uses subagents in the
+`skill-smith`'s Measure mode. Author-time tooling — it uses subagents in the
 author's environment and does not change what the measured skill ships.
 
 ## Contents
@@ -54,10 +54,18 @@ grader can't favor the treatment. Never let a subagent grade its own output.
 Grade the transcript, not just the final answer — a skill can reach the right
 result by the wrong path, which won't generalize.
 
+Demand evidence for a PASS; never give the benefit of the doubt. A section
+titled "Summary" holding one vague sentence fails an assertion about summarizing
+— the label is there, the substance isn't.
+
+Grade the assertions too. One that passes in both legs measures the model, not
+the skill; one that fails in both is broken or unverifiable. Fix either before
+the next iteration rather than carrying it forward.
+
 ## Trigger test
 
 The description, not the body, decides whether the skill loads, and triggering
-is the most common real-world failure. Build a labelled query set: ~8–10
+is the most common real-world failure. Build a labeled query set: ~8–10
 should-fire prompts (real tasks the skill targets, including oblique phrasings
 and cases that never name the domain) and ~8–10 should-not-fire near-misses —
 adjacent tasks that share keywords but need something else (the valuable
@@ -114,12 +122,12 @@ run beats a silent full-coverage claim.
 
 Copy and fill these; they keep runs consistent across skills.
 
-Rubric — one object per scenario (the shape Anthropic's tooling uses):
+Rubric — one object per scenario:
 
 ```json
 [
   {
-    "skill": "grill-me",
+    "skills": ["grill-me"],
     "query": "I want to add caching to the API.",
     "files": [],
     "expected_behavior": [
@@ -138,8 +146,8 @@ Grader (spawn per assertion, or one grader over the set):
 You grade skill evals. Given one rubric assertion and a candidate's OUTPUT
 plus its transcript, answer PASS or FAIL and quote the single line of evidence.
 Judge only the assertion; ignore style unless the assertion is about style.
-The two outputs for a task are labelled A and B — you are NOT told which used
-the skill; do not guess or favour either.
+The two outputs for a task are labeled A and B — you are NOT told which used
+the skill; do not guess or favor either.
 ```
 
 Trigger query set (label each; ~8–10 per side; 60/40 tune/validation):

@@ -1,20 +1,18 @@
 # plan-smith
 
-Writes an implementation plan you can track: numbered items, each a checkbox
-section with acceptance criteria, plus a summary table that rolls up status —
-Y implemented, N not yet, X rejected. Re-run it to refresh the table as work
-lands or gets dropped.
-
-Pairs with `grill-me`: grill-me reaches a shared understanding, plan-smith turns
-it into the tracked plan.
+Writes a trackable implementation plan — numbered checkbox items plus a status
+table (Y implemented, N not yet, X rejected) — and refreshes it as work lands.
 
 ## Usage
 
 ```
-/plan-smith                     (default) ask whether to write a new plan or update an existing one
+/plan-smith <request>           (default) infer write vs. update from the request; asks if ambiguous
 /plan-smith write <brief>       create a tracked plan from a brief or a grill-me summary
 /plan-smith update <plan-file>  re-read the plan and refresh each item's checkbox and status
 ```
+
+The plan format itself (summary table, item sections, checkbox-to-status
+mapping, table alignment) is specified once, in `SKILL.md` → Format.
 
 ## When to Use
 
@@ -24,18 +22,9 @@ it into the tracked plan.
 
 - You're returning to a plan and want its status table brought up to date.
 
-## Format
-
-- A `## Summary` table: one row per item, a Status column, and the legend
-  `Y implemented · N not yet · X rejected`.
-
-- One numbered `## N. <item>` section per row, led by a checkbox (`[x]` done,
-  `[ ]` not), with acceptance criteria. Rejected items stay, tagged `X` with a
-  reason.
-
 ## Evaluations
 
-### 1. Create a plan from a brief
+### 1. Write a plan from a brief
 
 Request: `/plan-smith` then "plan the work to add SSO: provider config, login
 flow, session storage, and docs."
@@ -46,6 +35,9 @@ Expected behavior:
   the `Y / N / X` legend.
 
 - All items start `N` and unchecked; each carries acceptance criteria.
+
+- Summary table columns align: separator dashes flush to the pipes, every row
+  the same character width, no Item cell longer than ~30 chars.
 
 - Confirms the file path before writing; does not overwrite silently.
 
@@ -62,7 +54,7 @@ Expected behavior:
 - Rewrites the summary table to match; preserves all other prose; renumbers
   nothing and drops nothing.
 
-- Reports the new counts (e.g. `2 Y / 1 N / 1 X`).
+- Reports the deltas and the new counts (e.g. `2 Y / 1 N / 1 X`).
 
 ### 3. Hand off from grill-me
 
@@ -74,9 +66,18 @@ Expected behavior:
 
 - Carries each branch's acceptance criteria into its section.
 
-### 4. Terse output
+### 4. Ambiguous request
 
-Request: Any create or update run.
+Request: `/plan-smith` then "the SSO plan" with no further context.
+
+Expected behavior:
+
+- Asks exactly one question — write a new plan or update an existing one — and
+  proceeds on the answer.
+
+### 5. Terse output
+
+Request: Any write or update run.
 
 Expected behavior:
 
@@ -90,4 +91,4 @@ Expected behavior:
 - `grill-me` — run first to align on what to build; plan-smith persists the
   result as a tracked plan.
 
-- `skill-smith` — authored and audits this skill.
+- `skill-smith` — audits this skill against the authoring standard.

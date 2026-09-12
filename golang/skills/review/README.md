@@ -1,10 +1,31 @@
 # review
 
-The done-time Go quality gate. Run it after the edits and the feature are
-finished. It reviews the changed Go code against:
+The done-time Go quality gate: style, correctness, and the style rule list.
 
-- the project style rules — the style dimension is delegated to `golang:style`,
-  which owns the rules and their detection,
+## Usage
+
+```
+/review                                       check (default): review the current git diff
+/review ./pkg/foo                             review one package
+/review ./...                                 review the whole module
+/review /path/to/project                      review that module (a go.mod dir)
+/review ./... max_issues=15 depth=light       cap findings; set review depth
+/review ./... packages=parser,lexer           restrict to these packages
+/review ./... plan_first                      plan + top findings, then stop for approval
+/review ./pkg/foo fix                         review, then apply the findings
+/review add "no naked returns in tests"       add a style rule
+/review change "receivers are three letters"  refine an existing style rule
+/review remove "the compile-time check rule"  remove a style rule
+/review learn                                 mine this session's feedback into rules
+```
+
+## What it does
+
+Run it after the edits and the feature are finished. It reviews the Go code in
+scope against:
+
+- the project style rules — delegated to `golang:style`, which owns the rules
+  and their detection,
 - general correctness: bugs, edge cases, and error handling.
 
 It reasons about the code only — it does not run gofmt, vet, linters, or
@@ -18,39 +39,15 @@ chunk lands as a self-contained, separately committable change, and it pauses
 after each changed chunk for a go-ahead.
 
 It also owns the rule list: describe a preference in plain words and it becomes
-a durable rule in `style`. Or run `/review learn` to turn the feedback you gave
-across a whole editing session into rules.
+a durable rule in `golang:style`, or run `/review learn` to turn the feedback
+you gave across a whole editing session into rules.
 
-## Usage
+## Targets and budget
 
-```
-/review                                       check (default): review the current git diff
-/review ./pkg/foo                             review one package
-/review ./...                                 review the whole module
-/review /path/to/project                      review that module (a go.mod dir)
-/review ./... max_issues=15 depth=light       cap findings; set review depth
-/review ./... plan_first                      plan + top findings, then stop for approval
-/review ./pkg/foo fix                         review, then apply the findings
-/review add "no naked returns in tests"       add or refine a style rule
-/review remove "the compile-time check rule"  remove a style rule
-/review learn                                 mine this session's feedback into rules
-```
-
-Targets: no argument reviews the current diff; a package path/import reviews
-that package; `./...` or a module root reviews every package. Small targets are
+No argument reviews the current diff; a package path/import reviews that
+package; `./...` or a module root reviews every package. Small targets are
 reviewed in context; a large module (> ~6 packages) fans out one review
 subagent per package and merges the results.
-
-### Budget controls
-
-Example invocations:
-
-```
-/review ./... max_issues=15 depth=light
-/review ./pkg/foo depth=full
-/review ./... plan_first          # plan + top findings, then stop
-/review ./... packages=parser,lexer
-```
 
 - `max_issues=N` — cap on findings (default 25).
 - `depth=light|standard|full` — default standard.
@@ -62,9 +59,10 @@ defaults before doing the full pass.
 
 ## Relationship to style
 
-- `style` = the rules (read while **writing** Go) and the style-only pass.
-- `review` = the done-time gate: it delegates the style pass to `golang:style`
-  and adds correctness, edge-case, and error-handling review. One ruleset.
+- `golang:style` = the rules (read while writing Go) and the style-only pass.
+- `golang:review` = the done-time gate: it delegates the style pass to
+  `golang:style` and adds correctness, edge-case, and error-handling review.
+  One ruleset.
 
 ## Evaluations
 
@@ -95,13 +93,19 @@ another with `fmt.Errorf` using `%v`.
 
 ### 3. Rule-edit mode
 
-**Request:** `/review add "no naked returns in tests"`.
+**Request:** `/review add "no naked returns in tests"`, then `/review change
+"receivers are three letters"`, then `/review remove "the compile-time check
+rule"`.
 
 **Expected behavior:**
-- Recognizes a rule edit, turns it into a terse imperative one-liner in the
-  existing style, scoped to Test.
+- Recognizes a rule edit, turns the `add` into a terse imperative one-liner in
+  the existing style, scoped to Test.
 - Detects any duplicate/conflicting rule and waits for confirmation before
-  writing to `style`; shows the before/after diff.
+  writing to `../style/SKILL.md`; shows the before/after diff of the rule text.
+- For the `change`, rewrites the existing receiver-naming line in place rather
+  than adding a second rule.
+- For the `remove`, deletes the matching `../style/SKILL.md` line plus its
+  keyed `../style/rules.md` entry and Contents row, after confirmation.
 
 ### 4. Learn from the session
 
@@ -112,7 +116,8 @@ clarity and asked to convert an `f(p *T)` function into a method.
 - Scans the session's Go feedback and pairs each with the diff hunk that
   resolved it; proposes only generalizable rules (method-over-func,
   behavior-named helper), each with its provenance and a before/after example.
-- Drops task-specific one-offs; dedupes against existing `style` rules.
+- Drops task-specific one-offs; dedupes against existing `../style/SKILL.md`
+  rules.
 - Waits for the user to pick before writing; on confirmation writes the
   `../style/SKILL.md` line (+ keyed `../style/rules.md` entry) and shows the
   diff.
@@ -126,8 +131,8 @@ several packages.
 - Detects the broad scope and writes an ordered plan to `tmp/review-fix-plan.md`
   — one chunk per package, findings listed, status boxes — and gets a
   go-ahead before editing; splits a large package to file-level chunks.
-- Works chunks in order, running `go test ./... -race` per chunk so each ends
-  green, ticking the plan boxes.
+- Proves each bug red then green with a test named to `have`/`want`, and runs
+  `go test ./... -race` per chunk so each ends green, ticking the plan boxes.
 - Pauses after each changed chunk for a go-ahead and never proceeds past an
   unmade decision; it never runs `git commit` — chunks land as separately
   committable changes for the user.

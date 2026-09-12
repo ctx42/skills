@@ -1,163 +1,141 @@
 ---
 name: doc-smith
 description: >
-  Writes, audits, proofs, and collaboratively revises technical documentation
-  and user manuals, catching contradictions, terminology drift, repetition,
-  structural gaps, and dubious technical claims across a whole document. Use
-  when asked to create, audit, review, proof, proofread, check, or work through
+  Writes new technical documentation and user manuals and reviews or fixes
+  existing ones, catching contradictions, terminology drift, repetition,
+  structural gaps, and dubious claims across the whole document. Use when
+  asked to create, audit, review, proof, proofread, check, or work through
   technical docs, a user manual, or product documentation.
-argument-hint: "[create|audit|proof|revise] [<file>...]"
+argument-hint: "[create|audit*|proof|revise] [<file>...]"
 ---
 
 # doc-smith
 
-Write, audit, and proof technical documentation and user manuals. Markdown
-is the assumed format. Pick the mode from `$ARGUMENTS` when given (a mode word
-and any target file(s)), else from the request:
+Create, audit, proof, and revise technical documentation and user manuals;
+Markdown is the assumed format. The mode is `$1` when it is a mode word, else
+inferred from the request; when the request does not settle it, default to
+audit (it edits nothing). The remaining arguments name the target file(s);
+with no target and no clear intent, ask which mode.
 
 - Create — draft a new document or section from scratch.
-- Audit — review an existing doc; report findings, edit nothing until approved.
-- Proof — fix an existing doc in place (grammar, clarity, consistency).
-- Revise — work through the doc with the user, one paragraph at a time.
-
-If ambiguous, ask one question: create, audit, proof, or revise?
+- Audit — report findings on an existing doc; edit nothing until approved.
+- Proof — fix an existing doc in place; flag what has no single right answer.
+- Revise — work through the doc with the user, one unit at a time.
 
 Scope a run to the file — or the named set/directory — the user gives, and
-treat it as **one document**: consistency is judged across all of it. If the
-cross-document pass surfaces a contradiction in a file outside that scope, flag
-it rather than drop it as out of scope.
+treat it as **one document**: consistency is judged across all of it. Flag a
+contradiction the pass surfaces in a file outside that scope rather than drop
+it.
 
 Structure, prose rules, and the defect taxonomy come from
 [`references/writing-guide.md`](references/writing-guide.md) *(eager: read once
-per run)*. Every judgment defers to it.
+per run; every mode judges against all of it)*. Every judgment defers to it.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
-output the user can already see. In create and proof the document is the
-payload — write it in full; do not also paste it back into chat.
+output the user can already see. A written or edited file is the payload: state
+its path and what changed; never paste the document back into chat.
 
-## Model the whole document first (all modes)
+## Whole-document pass (all modes)
 
-Before writing or judging, model the document as a whole — reading top to bottom
-once catches typos but misses a claim on page 1 that a claim on page 8 negates.
-Build a ledger:
+Model the document before writing or judging — a line-by-line read misses a
+claim that a distant section negates. Build a ledger:
 
 - Entities & claims — each product, component, or feature and what the doc
-  asserts about it (what it is, what it does, how it runs, what it requires).
-- Terminology — the term used for each concept; note every synonym or variant.
+  asserts about it (what it is, does, runs on, requires).
+- Terminology — the term used for each concept and every synonym or variant.
 - Structure — the heading outline and the job each section does.
-- Audience & intent — who each part is written for and whether it teaches, walks
+- Audience & intent — who each part is for and whether it teaches, walks
   through a task, or serves as lookup reference.
 
-Then judge the ledger, not only the prose, against the writing guide's defect
-taxonomy — the defects that only cross-distance modeling catches (contradiction,
-terminology drift, repetition, gaps) hide between sections, not in any one line.
-Cite both locations for every contradiction.
+Judge the ledger, not only the prose, against the guide's defect taxonomy; cite
+both locations for every contradiction.
 
-This cross-document pass is the core of audit and proof, and the self-review
-of create.
-
-After any edit, re-check it against the ledger before moving on: a change that
-fixes one paragraph can contradict a distant claim, drift the terminology, or
-orphan a reference elsewhere. Update the ledger with each accepted change. After
-a reflow or line-length edit, re-read the changed lines to confirm the wrap is
-clean — no orphaned word or broken sentence flow — before reporting the fix.
+Coherence check — after any edit, re-check it against the ledger before moving
+on: one fix can contradict a distant claim, drift the terminology, orphan a
+reference, or duplicate a point. Update the ledger with each accepted change.
+After a reflow, re-read the changed lines to confirm the wrap is clean — no
+orphaned word or broken sentence flow.
 
 ## Technical claims: flag, don't fix
 
-Internal consistency you resolve; real-world technical accuracy you flag. When a
-claim contradicts the ledger, fix or report it as a consistency issue. When a
-claim looks factually wrong about a technology and the document itself does not
-settle it, raise it as a question stating what you'd expect and why — never
-silently rewrite it or assert a correction you cannot ground. Uncertain
-authorship beats confident fabrication.
+Internal consistency you resolve; real-world technical accuracy you flag. A
+claim that contradicts the ledger is a consistency finding. A claim that looks
+factually wrong about a technology, and that the document does not settle, is
+raised as a question stating what you'd expect and why — never silently
+rewritten or "corrected" with a fact you cannot ground.
 
 ## Create mode
 
-1. Gather context. Read related existing docs and, if available, the product or
-   repo. Fix the audience, the product, and the document's purpose. Ask only the
-   gaps you cannot infer — audience, scope, key tasks, preferred terminology — in
-   one batched round.
+1. Gather context: related docs and, if available, the product or repo. Fix the
+   audience, product, and purpose; ask only the gaps you cannot infer (audience,
+   scope, key tasks, preferred terminology) in one batched round.
 
-2. Outline first. Choose a structure that fits the purpose per the writing guide
-   (a user manual typically: overview → prerequisites → task procedures →
-   reference → troubleshooting), including only sections the product needs.
-   Confirm the outline before drafting a long document.
+2. Outline a structure that fits the purpose per the guide, with only the
+   sections the product needs. Confirm the outline before drafting a long
+   document.
 
-3. Draft to the guide. One term per concept from the first line, task-oriented
-   steps, plain prose.
+3. Draft to the guide.
 
-4. Self-review with the whole-document pass and the writing-guide checks; fix
-   before writing.
+4. Self-review with the whole-document pass; fix before writing.
 
-5. Write the file(s). State the path; do not paste the document back.
+5. Write the file(s) and state the path.
 
 ## Audit mode
 
-1. Resolve the target. State the exact file(s) in scope.
+1. Resolve the target; state the exact file(s) in scope.
 
-2. Model the whole document (ledger above).
+2. Run the whole-document pass.
 
-3. Audit against the writing guide across: consistency (contradiction,
-   terminology drift, repetition), structure (order, missing or empty sections,
-   fit to purpose), completeness (a reader can finish the task; no dangling
-   references), clarity and prose, and technical claims (flag dubious ones as
-   questions).
+3. Audit against the guide's defect taxonomy; flag dubious technical claims as
+   questions.
 
-4. Report only. Group findings Blocker / Should-fix / Nit. Each names the
-   location, the problem in one line, the rule from the guide it breaks, and a
-   minimal fix; a contradiction cites both locations. End with a verdict and
-   per-severity counts.
+4. Report only. Number the findings (one numbered list, so each can be
+   answered separately) and group them Blocker / Should-fix / Nit;
+   each names the location, the problem in one line, the guide rule it breaks,
+   and a minimal fix; a contradiction cites both locations. End with a verdict
+   and per-severity counts.
 
-5. Fix on confirmation. Apply approved findings; state what changed; do not paste
-   the whole document back.
+5. Fix on confirmation: apply approved findings, run the coherence check, and
+   state what changed.
 
 ## Proof mode
 
 Fix in place. Reserve edits for what has one right answer; flag the rest.
 
-1. Model the whole document (ledger above).
+1. Run the whole-document pass.
 
 2. Apply corrections directly: grammar, clarity, terminology consistency,
    repetition, formatting. Fix a contradiction only when the intended meaning is
-   unambiguous; when it is genuinely unclear which side is right, flag it as a
-   question rather than guess.
+   unambiguous; otherwise flag it as a question. Flag dubious technical claims.
 
-3. Flag, don't fix, dubious technical claims (see above).
+3. Run the coherence check.
 
 4. State what changed — edit classes and counts — and list every flagged
-   contradiction, ambiguity, and technical claim awaiting your decision. Do not
-   paste the whole document back.
+   contradiction, ambiguity, and technical claim awaiting the user's decision.
 
 ## Revise mode
 
 Work through the document with the user, one paragraph (or logical unit) at a
-time, in document order. Collaborative, not batch: propose, discuss, apply, then
-prove the change still fits.
+time, in document order.
 
-1. Model the whole document (ledger above). Confirm the starting unit — the top,
-   or a section the user names.
+1. Run the whole-document pass. Confirm the starting unit — the top, or a
+   section the user names.
 
-2. For the current unit: name the issues you see (consistency, clarity,
-   structure, dubious claim) and propose a concrete revision. Discuss and refine
-   with the user; apply only what they agree to. Flag, don't fix, dubious
-   technical claims.
+2. For the current unit, name the findings (consistency, clarity, structure,
+   dubious claim) and propose a concrete revision. Refine with the user; apply
+   only what they agree to. Flag dubious technical claims.
 
-3. Re-check coherence after applying (see above): scan the rest of the document
-   for anything the edit just broke — a now-contradicted claim, terminology it
-   diverged from, a reference it orphaned, a point it now duplicates. Report any
-   break with its location before advancing; update the ledger.
+3. Run the coherence check on the rest of the document; report any break with
+   its location before advancing.
 
 4. Advance only when the user is done with the unit. Track position so they can
-   pause and resume. On request or at the end, run a final whole-document
-   coherence pass.
+   pause and resume. On request or at the end, run a final whole-document pass.
 
-Per turn, show the proposed revision and the coherence-check result; do not
-reprint the whole document.
+Per turn, show the proposed revision and the coherence-check result only.
 
 ## Self-application
 
-`doc-smith` obeys the repo authoring standard (Claude-native frontmatter, a
-README with ≥ 3 evals, references one level deep). When you change this skill,
+`doc-smith` obeys the repo authoring standard; when you change this skill,
 re-audit it with `skill-smith` in improve mode.
 
 ## Self-learning

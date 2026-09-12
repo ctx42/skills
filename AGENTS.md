@@ -61,7 +61,13 @@ source of truth.
   source.
 - `edit` — edits an existing SRD in place, one confirmed change at a time.
 - `system-check` — build-readiness questions for an SRD; owns
-  `<srd>.questions.md` and the platform-knowledge memory.
+  `<srd>.questions.md`. Banks platform facts through `kb`.
+- `report-doc-gap` — producer side of the doc-gap loop: captures gaps found
+  during SRD work, buffers them, files them on confirmation.
+- `backlog` — one sitting over three lists: questions deferred during SRD work,
+  facts nobody has pinned down, and reported gaps in the user manual.
+- `kb` — owns the knowledge base: writes what the platform is from facts
+  attested during SRD interviews.
 
 ### craft
 

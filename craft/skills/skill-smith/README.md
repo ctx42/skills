@@ -1,22 +1,6 @@
 # skill-smith
 
-Forge new skills and repair existing ones in this repo. One skill, three modes,
-chosen from how you ask:
-
-- Create — describe a capability and it scaffolds the whole skill: directory,
-  `SKILL.md`, `README.md` (with evals), and catalog-doc updates.
-
-- Improve — name an existing skill and it audits against the authoring standard,
-  reports findings by severity, then fixes them on your confirmation.
-
-- Measure — name a skill and it A/B-benchmarks its README scenarios with and
-  without the skill loaded, then tests whether the description triggers.
-
-It targets Claude Code only: skills carry `name` + `description` plus the
-Claude-native affordances (`argument-hint`, `$ARGUMENTS`/`$N`, dynamic
-injection) wherever they earn their place. It enforces
-[standards.md](standards.md), and defers to
-[CONTRIBUTING.md](../../../CONTRIBUTING.md) for repo mechanics.
+Forges new skills, repairs existing ones, and measures whether they work.
 
 ## Usage
 
@@ -26,6 +10,26 @@ injection) wherever they earn their place. It enforces
 /skill-smith improve <skill>  audit a skill against the standard, report, fix on confirmation
 /skill-smith measure <skill>  A/B-benchmark the skill's README scenarios and test triggering
 ```
+
+## Modes
+
+- Create is evals-first. It settles the scope and name with you, writes the
+  evaluation scenarios before the body, then produces the directory,
+  `SKILL.md`, `README.md`, and the catalog-doc updates.
+
+- Improve reports before it touches anything. Findings come back grouped
+  Blocker / Should-fix / Nit, each naming the rule it breaks and the minimal
+  fix; nothing is edited until you approve.
+
+- Measure runs each README scenario twice — with the skill and without — in
+  fresh subagents, grades both legs blind, and scores how reliably the
+  description triggers. It reports; it never edits.
+
+It targets Claude Code only: skills carry `name` + `description` plus the
+Claude-native affordances (`argument-hint`, `$ARGUMENTS`/`$N`, dynamic
+injection) wherever they earn their place. It enforces
+[standards.md](standards.md) and defers to
+[CONTRIBUTING.md](../../../CONTRIBUTING.md) for repo mechanics.
 
 ## Evaluations
 
@@ -40,10 +44,12 @@ Expected behavior:
   no reserved words.
 
 - Writes `SKILL.md` with valid frontmatter (`name` + `description`, plus
-  `argument-hint` if it takes arguments) and a third-person, what + when
-  description.
+  `argument-hint` if it takes arguments), a third-person, what + when
+  description, the output-discipline line, and a closing `## Self-learning`
+  block.
 
-- Writes `README.md` including an `## Evaluations` section with ≥ 3 scenarios.
+- Writes `README.md` with `## Usage` right after the intro and an
+  `## Evaluations` section with ≥ 3 scenarios.
 
 - Lists the catalog-doc updates per CONTRIBUTING.md and reminds you to run
   `/reload-plugins`.
@@ -72,11 +78,11 @@ Request: `/skill-smith help me with skills`
 
 Expected behavior:
 
-- Recognizes the request is ambiguous between create and improve.
+- Recognizes the request names no mode.
 
-- Asks exactly one question: create a new skill, or improve an existing one?
+- Asks exactly one question: create, improve, or measure?
 
-- Does not scaffold or edit anything until the mode is known.
+- Does not scaffold, edit, or benchmark anything until the mode is known.
 
 ### 4. Enforce output discipline
 
@@ -128,10 +134,32 @@ Expected behavior:
 
 - Opens with the result table — no preamble or narration.
 
+### 7. Audit a skill's scope and its gotchas
+
+Request: `/skill-smith improve` a skill that covers both querying a database
+and administering it, and whose only non-obvious rule sits in a reference file
+as "handle errors appropriately".
+
+Expected behavior:
+
+- Flags the double scope against the Scope rule — two unrelated trigger sets
+  belong in two skills.
+
+- Flags "handle errors appropriately" as general advice, not a gotcha, and asks
+  for the concrete correction it stands in for.
+
+- Flags that gotcha living in a reference: the agent cannot know to load a file
+  about a trap it does not know exists.
+
+- Reports by severity; makes no edit before confirmation.
+
 ## Relationship to other skills
 
 - `grill-me` — use it first when a new skill's purpose or triggers are fuzzy;
   `skill-smith` create mode assumes the scope is already clear.
+
+- `enhance-skills` — owns the `## Self-learning` block create mode installs
+  and records lessons into skills after a run.
 
 - `standards.md` — the ruleset; edit it as the authoring standard evolves.
 

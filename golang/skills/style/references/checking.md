@@ -1,10 +1,21 @@
 # style pass
 
-Read when `style` is invoked with a target. This pass checks code against the
-style rules **only** — formatting, naming, structure, godoc, test shape. It does
-not hunt bugs, edge cases, or logic errors; that is `golang:review`.
+Read when `style` is invoked as a command (`/style ...`). The pass checks code
+against the style rules only — formatting, naming, structure, godoc, test shape;
+bugs, edge cases, and logic errors are `golang:review`'s job.
 
 Read the invocation from `$ARGUMENTS`; `$1` is the first token (the target).
+
+## Contents
+
+- Target
+- Budget & scope
+- Principles
+- Workflow
+- Offense list
+- Fixing
+- Scale
+- Delegated by golang:review
 
 ## Target
 
@@ -32,12 +43,37 @@ Default to plan-first for a broad target (whole module, many packages, large
 LOC) with no budget: propose defaults (the caps above, the package list) and ask
 before applying anything.
 
+## Principles
+
+Reason from these while checking; they generalize the `SKILL.md` rules to cases
+no single line spells out.
+
+1. Earn every token: flag text the signature, the reader, or the rule already
+   carries — godoc paraphrasing the name or params, a doc comment duplicating
+   an interface, a helper wrapping one expression, a `want` that saves no
+   width, an `x, err :=` + `assert.NoError` dance where the error isn't under
+   test.
+2. Name a thing for what it is or does, not where it sits: no qualifier
+   stutter, a method over a func taking one receiver-typed arg, a helper named
+   for its behavior not its caller, `ErrXxx` sentinels, typed receivers and
+   matching locals.
+3. Separate distinct multi-line groups with a blank line — switch cases, test
+   topic groups, const groups; group by subject, not by statement type.
+4. Handle output and errors at the right layer: a leaf returns the computed
+   value and its errors; the entry point owns the streams, the exit code, and
+   presentation (trailing newline, padding).
+5. An assertion must be able to fail: pin the output or error cause unique to
+   the wanted branch, never a token shared across sibling paths.
+6. When a line overflows 80 cols, name the overflowing piece as a local — a
+   `format` string, a split literal, a `want` value — rather than wrapping the
+   call.
+
 ## Workflow
 
 1. Resolve the target and budget; list the packages/files in scope.
-2. Check each file against the rules in `SKILL.md` — Production for `*.go`, Test
-   for `*_test.go`. Reason from `rules.md`'s **Principles**; open a keyed
-   `rules.md` entry only when about to flag its rule, never preload the file.
+2. Check each file against the rules in `SKILL.md` — Production for `*.go`,
+   Test for `*_test.go` — reasoning from the Principles above. Open a keyed
+   `rules.md` entry only when about to flag its rule; never preload the file.
 3. Before reporting an offense whose truth reaches beyond the file (a rename's
    call sites, no-godoc-on-an-interface-method, an unused symbol), confirm it
    with the `LSP` tool (`findReferences`, `goToImplementation`, `hover`) rather
@@ -45,11 +81,11 @@ before applying anything.
    server → fall back to grep and note reduced confidence.
 4. Reason only for detection: do not run gofmt, goimports, vet, or linters —
    judge by reading. `LSP` is allowed (read-only navigation).
-5. List the offenses (below), then fix per **Fixing**.
+5. List the offenses (below), then fix per Fixing.
 
 ## Offense list
 
-Group by severity **Blocker / Should-fix / Nit**. Each offense:
+Group by severity Blocker / Should-fix / Nit. Each offense:
 - `file:line` — the offense in one line.
 - the rule id (e.g. `style: %w`, `style: no-stutter`).
 - the minimal fix.
@@ -60,8 +96,8 @@ counts.
 
 ## Fixing
 
-Style fixes are non-behavioral (formatting, naming, comments, structure), so the
-bug-reproduction protocol does not apply — the test gate is the proof.
+Style fixes are non-behavioral (formatting, naming, comments, structure), so no
+failing-test reproduction is needed — the test gate is the proof.
 
 - Default: present the offenses as a numbered list and ask which to apply; apply
   only the picked ones. `fix` applies all; `plan_first` stops after the list.
@@ -81,13 +117,14 @@ bug-reproduction protocol does not apply — the test gate is the proof.
 
 - Single package or small module (<= ~6 packages): check in this context.
 - Larger module (> ~6 packages): fan out one subagent per package (each gets
-  these rules, `rules.md`, the `depth`, and a share of `max_issues`), then merge
-  into one report re-ranked to the global `max_issues`. Report which packages
-  were checked and which were skipped; never silently truncate.
+  `SKILL.md`, this reference, the `depth`, and a share of `max_issues`, and
+  opens `rules.md` entries per need like the parent), then merge into one report
+  re-ranked to the global `max_issues`. Report which packages were checked and
+  which were skipped; never silently truncate.
 
 ## Delegated by golang:review
 
 When `golang:review` invokes `style` to report offenses only, run steps 1–4 for
-the target/budget it passes and output the offense list, then **stop** — do not
-run **Fixing**. `review` merges these offenses with its correctness findings and
-owns fix application.
+the target/budget it passes and output the offense list, then stop — do not run
+Fixing. `review` merges these offenses with its correctness findings and owns
+fix application.

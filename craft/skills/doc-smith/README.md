@@ -1,52 +1,57 @@
 # doc-smith
 
-Write, audit, proof, and revise technical documentation and user manuals. One
-skill, four modes, chosen from how you ask:
-
-- Create — draft a new document or section. It fixes the audience and purpose,
-  asks only the gaps it can't infer, and drafts to a distilled technical-writing
-  standard.
-- Audit — name an existing doc and it models the whole document, then reports
-  findings by severity, editing nothing until you approve.
-- Proof — fixes an existing doc in place (grammar, clarity, consistency),
-  flagging what it can't safely decide.
-- Revise — works through the doc with you one paragraph at a time, and after each
-  change re-checks that it still fits the rest of the document.
-
-Its edge is reading the **whole document as one model** before judging: it builds
-a ledger of entities, claims, and terminology, so it catches a contradiction
-between distant sections — "X is a web platform" early, "X runs in a web browser"
-later — that line-by-line proofreading misses. Internal consistency it fixes;
-real-world technical accuracy it flags as a question rather than guessing.
-
-The rules it lives by come from
-[references/writing-guide.md](references/writing-guide.md): audience and purpose,
-content shapes, user-manual structure, prose and procedure rules, and the defect
-taxonomy audit reports against.
+Creates, audits, proofs, and revises technical documentation and user manuals.
 
 ## Usage
 
 ```
-/doc-smith                   (default) infer the mode from your request; asks if ambiguous
+/doc-smith <file>...         (default) audit: report findings by severity, edit nothing until approved
 /doc-smith create <desc>     draft a new document or section from scratch
-/doc-smith audit <file>...   review, report findings by severity, edit nothing until approved
-/doc-smith proof <file>...   fix in place: grammar, clarity, consistency
+/doc-smith audit <file>...   the default, named explicitly
+/doc-smith proof <file>...   fix in place: grammar, clarity, consistency; flag what it can't decide
 /doc-smith revise <file>...  work through the doc with you, one paragraph at a time
 ```
+
+Without a mode word the mode is inferred from how you ask ("draft a manual
+for…" creates, "work through … with me" revises); a bare file audits.
+
+## Modes
+
+- Create — fixes the audience and purpose, asks only the gaps it can't infer,
+  and drafts to a distilled technical-writing standard.
+- Audit — models the whole document, then reports findings by severity, editing
+  nothing until you approve.
+- Proof — fixes an existing doc in place (grammar, clarity, consistency),
+  flagging what it can't safely decide.
+- Revise — works through the doc with you one paragraph at a time, and after
+  each change re-checks that it still fits the rest of the document.
+
+Its edge is reading the **whole document as one model** before judging: it
+builds a ledger of entities, claims, and terminology, so it catches a
+contradiction between distant sections — "X is a web platform" early, "X runs
+in a web browser" later — that line-by-line proofreading misses. Internal
+consistency it fixes; real-world technical accuracy it flags as a question
+rather than guessing.
+
+The rules it lives by come from
+[references/writing-guide.md](references/writing-guide.md): audience and
+purpose, content shapes, user-manual structure, prose and procedure rules, and
+the defect taxonomy every mode judges against.
 
 ## Evaluations
 
 ### 1. Catch a cross-document contradiction
 
-**Request:** `/doc-smith audit docs/manual.md` — the doc says "Acme is a hosted
-web platform" in the intro and "Acme runs entirely in your web browser" three
-sections later, and repeats the browser claim twice more.
+**Request:** `/doc-smith docs/manual.md` — no mode word; the doc says "Acme is
+a hosted web platform" in the intro and "Acme runs entirely in your web
+browser" three sections later, and repeats the browser claim twice more.
 
 **Expected behavior:**
-- Models the whole document before judging; does not report only local typos.
+- Defaults to audit: models the whole document before judging and edits
+  nothing before approval.
 - Reports the contradiction as a Blocker, citing **both** locations, not one.
 - Flags the repeated browser claim as redundant.
-- Groups findings Blocker / Should-fix / Nit and edits nothing before approval.
+- Numbers the findings and groups them Blocker / Should-fix / Nit.
 
 ### 2. Flag a dubious technical claim instead of rewriting it
 
@@ -69,8 +74,8 @@ line claiming "REST APIs are stateful by design."
   step narration.
 - Each finding is stated once; no closing summary re-lists findings already
   shown.
-- After applying fixes, states the edit classes and the file path; does not paste
-  the whole document back into chat.
+- After applying fixes, states the edit classes and the file path; does not
+  paste the whole document back into chat.
 
 ### 4. Create a user manual, grounded, asking only gaps
 
@@ -95,8 +100,8 @@ one manual`
   them.
 - Flags a concept named "workspace" in one file and "project" in another as
   terminology drift.
-- Flags a reference to a "Backup" section that no file contains as a completeness
-  gap.
+- Flags a reference to a "Backup" section that no file contains as a
+  completeness gap.
 
 ### 6. Revise paragraph by paragraph, keeping the whole coherent
 
@@ -104,13 +109,13 @@ one manual`
 early paragraph, the user renames "workspace" to "project".
 
 **Expected behavior:**
-- Moves in document order, one paragraph at a time; proposes a revision, applies
-  only what the user agrees to, and does not batch-edit the whole file.
-- After applying the rename, re-checks the rest of the document and flags the
-  later paragraphs still saying "workspace" as now-inconsistent — before moving
-  on.
-- Reports each turn tersely: the proposed change and the coherence-check result,
-  not a reprint of the whole document.
+- Infers revise mode; moves in document order, one paragraph at a time;
+  proposes a revision, applies only what the user agrees to, and does not
+  batch-edit the whole file.
+- After applying the rename, runs the coherence check and flags the later
+  paragraphs still saying "workspace" as now-inconsistent — before moving on.
+- Reports each turn tersely: the proposed change and the coherence-check
+  result, not a reprint of the whole document.
 
 ### 7. Normalize spelling and formatting to convention
 
@@ -118,8 +123,9 @@ early paragraph, the user renames "workspace" to "project".
 "color", and has a misaligned Markdown table.
 
 **Expected behavior:**
-- Normalizes to one spelling variety (US by default); if the doc is consistently
-  British, keeps British and flags the mix rather than converting wholesale.
+- Normalizes to one spelling variety (US by default); if the doc is
+  consistently British, keeps British and flags the mix rather than converting
+  wholesale.
 - Aligns the table columns and reflows to the doc's own established wrap width,
   not an imposed house default.
 - Reports the variety mix as a spelling-variety defect.

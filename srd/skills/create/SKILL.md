@@ -15,81 +15,69 @@ standard, and self-checking the draft before saving it.
 
 ## Boundaries
 
-- **Role:** the authority for SRD format, style, logic, and rules, and the
-  author of new SRDs (interview → draft → self-check). The shared reference
-  files under `references/`, `assets/`, and `scripts/` are owned here; the other
-  SRD skills read them.
-- **Must not:** review or audit an SRD written elsewhere (that is `review`);
-  edit an existing SRD as a service (that is `edit`); mark an SRD `ACCEPTED`
-  — acceptance is a human decision (STA-3).
+`create` is the authority for SRD format, style, logic, and rules, and the
+author of new SRDs (interview → draft → self-check). It owns the shared files
+under `references/`, `assets/`, and `scripts/`; the other SRD skills read them.
+It never reviews or audits an SRD written elsewhere (that is `review`), never
+edits an existing SRD as a service (that is `edit`), and never marks an SRD
+`ACCEPTED`: acceptance is a human decision (STA-3).
 
 ## Sources of truth
 
-- [references/srd-standard.md](references/srd-standard.md) (on-demand:
-  steps 3–4) — the SRD rule set (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`,
-  Quality Bar). Both the drafting and the self-check defer to it; read it
-  before drafting. Not needed during glossary resolution or the interview.
+- [references/doc-corpus.md](references/doc-corpus.md) (eager) — how to reach
+  the platform documentation corpus, how its sources rank, and where an
+  unconfirmed or undocumented fact goes (`srd:report-doc-gap`, `srd:kb`).
+- [references/srd-standard.md](references/srd-standard.md) (on-demand: steps
+  3–4) — the SRD rule set (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, Quality
+  Bar). Read it before drafting; not needed for the glossary or the interview.
 - [references/authoring-guide.md](references/authoring-guide.md) (on-demand:
-  steps 2–4) — house extensions to the standard's rules (US English,
-  sub-numbering, terminology consistency, the consistency pass) and Bad→Good
-  defect examples to draft against and check for. Its examples never go into
-  the SRD (REQ-7). Not needed during the interview.
+  steps 2–4) — house extensions (US English, sub-numbering, one term per
+  concept, the consistency pass) and Bad→Good defect examples to draft against
+  and check for. Its examples never go into the SRD (REQ-7).
+- [references/errata.md](references/errata.md) (not read here) — the bulk-fix
+  errata class `review` and `edit` apply; kept here because `create` owns the
+  shared references.
 - [references/srd-procedures.md](references/srd-procedures.md) (on-demand:
-  step 0) — shared operating procedures (glossary resolution).
+  step 0) — shared procedures: glossary resolution, In Scope derivation.
 - [assets/srd-template.md](assets/srd-template.md) (on-demand: step 3) — the
-  SRD skeleton, in the required section order with the keyword notice. Fill
-  it; do not restructure it.
+  SRD skeleton in the required section order with the keyword notice. Fill it;
+  do not restructure it.
 - [scripts/glossary-fingerprint.sh](scripts/glossary-fingerprint.sh) (run, not
   read) — hashes the Company Glossary so its term digest is rebuilt only when
   the glossary changes.
 
-## Documentation corpus (when available)
+## Documentation corpus
 
-Some setups expose the platform's live documentation over the `srd-doc` MCP
-server — tools `mcp__srd-doc__search` (query + optional `k`),
-`mcp__srd-doc__get_doc` (document id), and `mcp__srd-doc__list_docs` (no args).
-When present, use them to ground factual claims against the real docs instead
-of guessing; when absent the skill runs fully offline as before. Degrade in
-this order, falling through only when a step genuinely is not there — not on
-one failed call:
-
-1. The `srd-doc` MCP corpus tools above (preferred).
-2. The `srd-doc` server's REST mirror via curl, when it runs but MCP is not
-   wired into this client:
-   `curl 'http://<host>:7777/search?q=TEXT&k=5'`,
-   `curl 'http://<host>:7777/docs/<id>'` — same engine, same results.
-3. Targeted Grep/Read over a local corpus checkout, scoped to the relevant
-   subdirectory — a stopgap, never a blind whole-corpus read.
-
-Default to `search` with `k` about 5; reach for `get_doc` only when a hit needs
-its full table or context; use `list_docs` to orient first.
-
-### Reporting a doc gap
-
-When a corpus lookup **cannot confirm a claim** — content missing, wrong,
-incomplete, or ambiguous — hand the gap to `srd:report-doc-gap`. That skill owns
-capture, the grill, and the confirmed `report_gap` filing; this skill only spots
-the gap and delegates. Invoke it the moment a gap surfaces — it buffers the gap
-without interrupting the interview — and again at session start, where it drains
-any gaps a prior session left unfiled. Report only *documentation* gaps here;
-SRD-document defects stay in this skill's own findings.
+When a corpus is reachable, ground every claim about the existing system in it
+instead of guessing; absent one, run offline. `create` consults it at two
+points: in the interview, when the user states a fact about the existing system
+or uses a term no glossary defines, and in the self-check, for every
+requirement that asserts existing behavior. A lookup that cannot confirm the
+claim goes to `srd:report-doc-gap`; a fact the corpus lacks but the user
+confirms goes to `srd:kb`. Both drain at step 0, buffer silently in between,
+and run again at step 5, where `srd:kb` writes its confirmed facts and
+`srd:report-doc-gap` offers to work the buffered gaps. A platform fact is confirmed
+through the branch restatement in step 1, never through a separate prompt.
 
 ## Workflow
 
 Copy this checklist and tick it off:
 
-- [ ] 0. Resolve the Company Glossary and load its term digest.
+- [ ] 0. Drain the delegate buffers; resolve the Company Glossary and load its
+      term digest.
 - [ ] 1. Interview the user along the SRD spine.
 - [ ] 2. Propose requirement groups and prefixes; get confirmation.
 - [ ] 3. Draft the SRD from the template.
-- [ ] 4. Self-check: auto-fix mechanical issues, report judgment ones.
-- [ ] 5. Write the `.md` file to a user-named path.
+- [ ] 4. Self-check: auto-fix mechanical issues, collect judgment ones.
+- [ ] 5. Write the `.md` file to a user-named path; run the delegates'
+      finish step; report once.
 
-### 0. Resolve the glossary
+### 0. Start
 
-Run the glossary-resolution procedure in
+Invoke `srd:report-doc-gap` and `srd:kb` to drain what a prior session left
+buffered for this SRD. Then run the glossary-resolution procedure in
 [references/srd-procedures.md](references/srd-procedures.md): resolve the
-per-project glossary path — a single Markdown file or a directory of them —
+per-project glossary path (a single Markdown file or a directory of them),
 fingerprint it, and load or regenerate its term digest. The digest lets the SRD
 satisfy GLO-3 / STR-10 without redefining known terms.
 
@@ -99,36 +87,37 @@ When the invocation carries a seed (`$ARGUMENTS`), treat it as the user's
 opening Objective and restate it for confirmation instead of asking cold; with
 no seed, open with the Objective question.
 
-Drive the conversation; do not wait to be fed content. Ask **one branch at a
-time**, in this order, and restate each resolved branch before moving on:
+Drive the conversation; do not wait to be fed content. Ask one branch at a
+time, in this order, and restate each resolved branch before moving on, folding
+any platform facts that branch surfaced into the restatement in natural prose,
+so confirming it confirms both the SRD and the knowledge base:
 
-1. **Objective** — what this SRD specifies, in one or two sentences.
-2. **UI change?** — yes sets `Designs` to a TODO link placeholder; no sets it to
+1. Objective: what this SRD specifies, in one or two sentences.
+2. UI change? Yes sets `Designs` to a TODO link placeholder; no sets it to
    `N/A` (STR-5, STR-7).
-3. **In Scope** — the atomic, verifiable things it delivers (SCO-1). MAY be
+3. In Scope: a high-level overview of each change it requests (SCO-1). MAY be
    deferred: because In Scope derives from the requirements, the user may leave
    the `--- TODO ---` marker and derive `SC-n` items after the requirements
    settle (derivation procedure in
    [references/srd-procedures.md](references/srd-procedures.md)).
-4. **Out of Scope** — what it deliberately excludes (STR-11). Requirements must
-   not contradict these (SCO-3).
-5. **Requirements** — pull out the actual rules. For each, push until it is:
-   atomic (REQ-1), about what *the system* does (LANG-1, LANG-5), and verifiable
-   with concrete criteria — reject vague qualities like "secure" or "fast" and
-   ask for the measurable form (REQ-5, REQ-6). When the user states a fact about
-   the existing system ("the system already does X", "the API returns Y") and a
-   corpus is available, verify it with `search` before accepting — surface any
-   contradiction immediately in interview voice, never silently accept or fix.
-   When the corpus cannot confirm the claim (missing, wrong, incomplete, or
-   ambiguous docs), hand it to `srd:report-doc-gap` (see
-   [Reporting a doc gap](#reporting-a-doc-gap)).
-6. **Terms** — as terms surface, check them against the glossary digest. Mark
-   each as already-defined (link to it) or needs a local Glossary entry. When a
-   corpus is available, `search` it before asking the user to define a term — it
-   may already define it, or name the same concept differently (a naming
-   conflict to surface).
+4. Out of Scope: what it deliberately excludes (STR-11). Requirements must not
+   contradict these (SCO-3).
+5. Requirements: pull out the actual rules. For each, push until it is atomic
+   (REQ-1), about what *the system* does (LANG-1, LANG-5), and verifiable with
+   concrete criteria: reject vague qualities like "secure" or "fast" and ask
+   for the measurable form (REQ-5, REQ-6). When the user states a fact about
+   the existing system ("the system already does X", "the API returns Y"),
+   `search` the corpus before accepting it; surface any contradiction at once
+   in interview voice, never silently accept or fix. Route the other outcomes
+   per [Documentation corpus](#documentation-corpus).
+6. Terms: as terms surface, check them against the glossary digest and mark
+   each as already defined (link to it) or needing a local Glossary entry.
+   `search` the corpus before asking the user to define a term: it may already
+   define it, or name the same concept differently (a naming conflict to
+   surface). A definition the user supplies because no glossary carries it
+   goes to `srd:kb`.
 
-Do not collect Owners, Initiative links, or Designs links — those are left as
+Do not collect Owners, Initiative links, or Designs links; those are left as
 marked placeholders (the skill fetches no such links). Status is always
 `IN PROGRESS` for a new draft.
 
@@ -140,31 +129,24 @@ contradictions; surface a decision that blocks another before continuing.
 Cluster the requirements into logical groups. Propose an uppercase prefix per
 group, three or four letters where one fits (REQ-8, e.g. `AUTH`, `DATA`,
 `VIEW`). Show the grouping and prefixes and let the user rename or merge. Then
-number each group from 1 in order (REQ-2 `**PFX-1:**`,
-REQ-3 unique, REQ-4 in order). Do the same for scope items (`SC-`, `OSC-`).
-Default to flat numbers; use one-letter sub-numbering (`**GR-1a:**`,
-`**GR-1b:**`) only for a tight cluster of related rules — see the authoring
-guide.
+number each group from 1 in order (REQ-2 `**PFX-1:**`, REQ-3 unique, REQ-4 in
+order). Do the same for scope items (`SC-`, `OSC-`). Default to flat numbers;
+use one-letter sub-numbering (`**GR-1a:**`, `**GR-1b:**`) only for a tight
+cluster of related rules (authoring guide).
 
 ### 3. Draft
 
-Fill `assets/srd-template.md`. Keep the required order (STR-13): metadata →
-keyword notice → Introduction → Glossary → Scope → Requirements. Specifics:
+Fill `assets/srd-template.md` in its section order (STR-13), writing against
+the standard and the authoring guide. Decisions specific to a new draft:
 
-- Metadata: real `Objective` and `Status: In Progress`; `Owners`, `Initiative`,
-  and (when UI changes) `Designs` as clearly-marked `<TODO: …>` placeholders.
-- Introduction states the purpose and, at a high level, what the system will and
-  will not do (STR-9). No normative keywords here.
-- Glossary defines only terms not in the Company Glossary; each entry defines the
-  term and nothing else (GLO-1).
-- Scope: In Scope MAY hold the `--- TODO ---` marker instead of `SC-n` items when
-  deferred (derive them from the requirements before acceptance). Add a `## TODO`
-  section as the last section only when there are open authoring issues to track.
-- Requirements: one rule each, `the system` as subject, normative keywords in
-  all-capitals, no examples or notes.
-- Write in US English (`color`, `behavior`, `standardize`) and use one term per
-  concept throughout (see the authoring guide).
-- Valid Markdown.
+- Metadata: a real `Objective`; `Status` `IN PROGRESS`; `Owners`, `Initiative`,
+  and (when the UI changes) `Designs` as clearly marked `<TODO: …>`
+  placeholders; `Designs` `N/A` otherwise.
+- In Scope MAY keep the `--- TODO ---` marker instead of `SC-n` items when
+  deferred; derive them from the requirements before acceptance.
+- Add a `## TODO` section as the last section only when open authoring issues
+  need tracking.
+- Local Glossary entries only for terms the Company Glossary digest lacks.
 
 ### 4. Self-check
 
@@ -175,41 +157,39 @@ the defect classes in
 [references/authoring-guide.md](references/authoring-guide.md). Loop until the
 mechanical checks all pass. This is `create`'s action policy on a finding:
 
-1. **Auto-fix** the mechanical checks (no judgment): section order (STR-13),
+1. Auto-fix the mechanical checks (no judgment): section order (STR-13),
    keyword notice placement (STR-8), identifier format/uniqueness/order
    (REQ-2/3/4), keyword capitalization (LANG-4), stray example or note text
-   (REQ-7), valid Markdown, Status defaulting to
-   `IN PROGRESS`, Designs `N/A` when the user said no UI change, British → US
-   spelling.
-2. **Consistency pass** — run the consistency pass in
-   [references/authoring-guide.md](references/authoring-guide.md), re-reading the
-   whole draft top to bottom. Repeat after any fix.
-3. **Report** the judgment checks as a short list, each citing its rule id and
-   location: missing/placeholder Owners, Initiative, Designs (STR-2/3/5/7 — the
+   (REQ-7), valid Markdown, Status defaulting to `IN PROGRESS`, Designs `N/A`
+   when the user said no UI change, British → US spelling.
+2. Consistency pass: run the pass in
+   [references/authoring-guide.md](references/authoring-guide.md), re-reading
+   the whole draft top to bottom. Repeat after any fix.
+3. Collect the judgment checks for the step-5 report, each with its rule id and
+   location: missing/placeholder Owners, Initiative, Designs (STR-2/3/5/7; the
    back-links STR-4/6 are external and not reported); intro gaps (STR-9);
-   undefined terms (STR-10/GLO-3); style
-   (LANG-1/2/3/5/6/7); non-atomic or unverifiable requirements (REQ-1/5/6);
-   glossary discipline (GLO-1/2); scope coverage and conflicts — every In Scope
-   item needs ≥ 1 requirement and none may contradict Out of Scope (SCO-2/3);
-   duplicate or overlapping requirements and terminology drift (authoring
-   guide); and any Quality Bar item not yet met. When a corpus is available,
-   also flag any requirement whose claim about existing system behavior could
-   not be verified against it — a *facts* gap, distinct from the format checks
-   above. For each such facts gap, hand it to `srd:report-doc-gap` (see
-   [Reporting a doc gap](#reporting-a-doc-gap)). Items
-   left as marked placeholders (Initiative, Designs, Owners, an unresolved In
-   Scope `--- TODO ---` marker, and any non-empty `## TODO` section) are always
-   reported as outstanding human follow-ups.
+   undefined terms (STR-10/GLO-3); style (LANG-1/2/3/5/6/7); non-atomic or
+   unverifiable requirements (REQ-1/5/6); glossary discipline (GLO-1/2); scope
+   coverage and conflicts, every In Scope item needing ≥ 1 requirement and none
+   contradicting Out of Scope (SCO-2/3); duplicate or overlapping requirements
+   and terminology drift (authoring guide); any Quality Bar item not yet met.
+   When a corpus is available, also flag any requirement whose claim about
+   existing system behavior it could not confirm, a facts gap distinct from the
+   format checks, and route it per [Documentation corpus](#documentation-corpus).
+   Marked placeholders (Initiative, Designs, Owners, an unresolved In Scope
+   `--- TODO ---` marker, any non-empty `## TODO` section) are always
+   outstanding human follow-ups.
 
 Do not mark the draft acceptable: a new SRD is `IN PROGRESS` and acceptance
 (STA-3, Quality Bar) is a human decision.
 
 ### 5. Write
 
-Write the SRD as a single `.md` file to the path the user gives (ask if they have
-not said). Then summarize: the file path, the requirement groups and counts, and
-the outstanding human follow-ups from step 4 (placeholders to fill, anything
-reported).
+Write the SRD as a single `.md` file to the path the user gives (ask if they
+have not said). Invoke `srd:kb` to write the facts the interview confirmed and
+`srd:report-doc-gap` to offer the gaps buffered this session. Then report
+once: the file path, the requirement groups with their counts, and the judgment
+findings and human follow-ups collected in step 4.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.

@@ -25,8 +25,8 @@ do and what it will not do. No normative keywords here.>
 
 ## Glossary
 
-<Define only terms that are used in requirements and are not yet in the shared
-glossary. Each entry defines the term and nothing else — no behavior, no rules.>
+<Define only terms that are used in requirements and are not yet in the Company
+Glossary. Each entry defines the term and nothing else — no behavior, no rules.>
 
 ### <Term>
 

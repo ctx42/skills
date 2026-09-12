@@ -1,19 +1,12 @@
 # Go style — deep rules
 
-The style checker reasons from the **Principles** below; the terse rule of
-record for every convention lives in `SKILL.md` (same directory). The keyed
-entries here add only what a capable reviewer can't infer from that one-line
-rule — a non-obvious detection heuristic or an exemption. Consult an entry when
-you're about to flag its rule; don't preload the file. Grows via `golang:review
-add`.
+Keyed detection detail for the rules in `SKILL.md` (same directory). An entry
+adds only what a capable reviewer can't infer from the one-line rule — an
+exemption or a detection heuristic — in two short sentences. Open an entry only
+when about to flag its rule; never preload the file. Grows via
+`golang:review add`.
 
 ## Contents
-
-**Principles** — earn every token · name for what it is · separate groups ·
-output & errors at the right layer · keep functions pure · assertions must
-fail · name the overflow.
-
-Keyed entries:
 
 - No name stutter (Production)
 - Method over a single-receiver-arg func (Production)
@@ -26,473 +19,148 @@ Keyed entries:
 - Output belongs to the entry point, not leaf functions (Production)
 - Read the environment through the ring (Production + Test)
 - Name the overflow (Production + Test)
-- Blank line between distinct groups (Production + Test)
-- Three-letter receivers and matching locals (Production)
+- Break an over-width table row positionally (Test)
 - Don't wrap a one-liner in a test helper (Test)
 - Assert on distinctive output, not shared tokens (Test)
 - must.Value for error not under test (Test)
 - Test helpers in all_test.go (Test)
 - Test order mirrors source order (Test)
 - Field-count guard forces new-field coverage (Test)
-- Break an over-width table row positionally (Test)
-- Empty Given section (Test)
-
-## Principles
-
-Reason from these; reach for a keyed entry only for a rule's non-obvious detail.
-
-1. **Earn every token.** Flag text the signature, the reader, or the terse rule
-   already carries: godoc that paraphrases the name/params, a doc comment
-   duplicating an interface, a helper wrapping one expression, a `want` that
-   saves no width, an `x, err :=` + `assert.NoError` dance where the error isn't
-   under test. Trim to the non-obvious or cut it.
-2. **Name for what a thing is or does, not where it sits** — no qualifier
-   stutter (`pkg.PkgThing`), a method over a func taking one receiver-typed arg,
-   a helper named for its behavior not its caller, `ErrXxx` sentinels, typed
-   receivers and matching locals.
-3. **Separate distinct multi-line groups with a blank line** — switch cases,
-   test topic groups, const groups. Group by subject, not by statement type.
-4. **Handle output and errors at the right layer.** A leaf returns values and
-   errors; the command entry point owns the streams, the exit code, and
-   presentation. The wrapping/matching mechanics live in `style` — the
-   principle here is *which layer* owns each concern.
-5. **Keep functions pure and reusable** — return the computed value; leave
-   presentation (trailing newline, padding) and destination (stdout/stderr) to
-   the caller.
-6. **An assertion must be able to fail.** Pin the output or error cause unique to
-   the wanted branch, never a token shared across sibling paths.
-7. **When a line overflows 80 cols, name the overflowing piece** as a local — a
-   `format` string, a split literal, a `want` value — rather than wrapping the
-   call across lines.
 
 ## No name stutter (Production)
 
-Why: `pkg.PkgThing` or `m.MetaGet` makes the reader say the qualifier twice;
-dropping the redundant prefix is the Go convention and reads cleaner.
-Exemption: a member name is load-bearing when it is fixed by a contract outside
-the package — a method set some other type is asserted against, or names invoked
-by string via `text/template`, reflection, or (de)serialization — because
-renaming it breaks those callers with no local compile error. Do not flag such a
-name when the file pins the set with a compile-time assertion (`var _ Contract =
-(*T)(nil)`, often against a locally-declared mirror interface) plus a godoc
-explaining the external contract.
-Detect: a member name repeating its type or package qualifier (`Meta.MetaGet`,
-`client.ClientDo`). Before flagging, look in the same file for a `var _ ... =`
-assertion or an interface whose method set contains the name; if one is present
-with a rationale comment, treat the name as intentional and skip it. Absent any
-such pin, flag it as before.
-
-```go
-// Not stutter — the prefix is pinned by an external contract:
-type metaContract interface {
-	MetaGet(key string) any
-	// ...
-}
-
-var _ metaContract = Meta(nil) // Renames break external callers; fail here.
-```
+Exemption: a name fixed by a contract outside the package — a method set another
+type is asserted against, or a name invoked by string via `text/template`,
+reflection, or (de)serialization — since renaming it breaks those callers with
+no local compile error. Detect: a member repeating its type or package
+qualifier (`Meta.MetaGet`, `client.ClientDo`) with no same-file `var _ ... =`
+pin or interface carrying the name plus a rationale comment.
 
 ## Method over a single-receiver-arg func (Production)
 
-Why: `p.cacheFile()` reads as an operation on the page; `cacheFile(p)` reads as
-an outside procedure that happens to need one. A method groups behavior with the
-type, shortens call sites, and lets a chain collapse — `p.encode()` then
-`p.write(path)` beats threading a value through free functions. The receiver
-names the type, so drop any type suffix from the name (`encodePage` → `encode`)
-per No name stutter.
-Exemption: the arg is one of several equals (no clear receiver); the func must
-match a signature (sort, http handler, callback); or it is deliberately typeless
-(→ `helpers.go`).
-Detect: an unexported func with a single local-type parameter and no
-signature-contract reason to stay a func. Convert to a method, update callers to
-`p.f()`, rename its test to `Test_T_f`.
+Exemption beyond the body's contract and typeless cases: the arg is one of
+several equals with no clear receiver. Detect: an unexported func with a single
+local-type parameter; convert it, update callers to `pag.f()`, and rename its
+test to `Test_T_f`.
 
 ## Name a helper for behavior, not its caller (Production)
 
-Why: `cached(path)` implies cache semantics, but a plain `os.Stat` existence
-check is domain-agnostic; the caller-derived name misleads and blocks reuse.
-`fileExists` states the contract. Generalize incidental wrap text too
-("checking cache file" → "checking file"). Boolean predicates read third-person
-singular: `fileExists`, not `fileExist`.
-Detect: a helper named for a caller/domain (`cached`, `writeConfig`) whose body
-touches only stdlib fs/string/math ops, no domain type.
+Boolean predicates read third-person singular (`fileExists`, not `fileExist`);
+generalize incidental wrap text too ("checking cache file" → "checking file").
+Detect: a helper named for its caller or domain (`cached`, `writeConfig`) whose
+body touches only stdlib fs/string/math ops and no domain type.
 
 ## No godoc on interface-implementing methods (Production)
 
-Why: the interface declaration is the canonical doc; repeating it on each
-implementation duplicates text that rots. The only allowed comment is a one-line
-reference.
-Detect: a method whose signature matches an implemented interface and that
-carries a full godoc comment.
-
-```go
-// implements [io.WriterTo].
-func (e *Encoder) WriteTo(w io.Writer) (int64, error) { ... }
-```
+The only allowed comment is a one-line reference: `// implements
+[io.WriterTo].` Detect: a full godoc on a method whose signature matches an
+interface the type implements (confirm with `goToImplementation`).
 
 ## Use godoc cross-references (Production)
 
-Why: `[Type]`/`[pkg.Symbol]` render as links and stay greppable; bare names rot
-on rename. Bracket only exported symbols — unexported names are plain text.
-Detect: prose naming another in-package exported symbol without brackets, or
-brackets around an unexported identifier. Skip the comment's own leading name
-and lowercase concepts. When editing a comment, fix the whole comment.
+The comment's own leading name and lowercase concepts stay plain. Detect: prose
+naming another in-package exported symbol without brackets, or brackets around
+an unexported identifier; when editing a comment, fix the whole comment.
 
 ## Example functions for public APIs (Production)
 
-Why: `Example*` functions are compiled and executed by `go test`, so unlike
-prose in a doc comment they cannot silently rot; they render on pkg.go.dev as
-the canonical usage; and writing one exercises the public API from a caller's
-seat, exposing awkward signatures before users hit them.
-Detect: a non-trivial exported symbol — a constructor, a primary entry point,
-anything needing non-obvious setup — with no matching `Example`, `ExampleT`, or
-`ExampleT_method` in the package's `_test.go` files. Skip trivial getters,
-setters, and self-evident one-liners. The common trigger is new public API in a
-diff with no accompanying example.
-
-```go
-func ExampleNewClient() {
-	c := goldkit.NewClient("host")
-	fmt.Println(c.Ping())
-	// Output: pong
-}
-```
+Non-trivial means a constructor, a primary entry point, or anything needing
+non-obvious setup; trivial getters, setters, and self-evident one-liners are
+exempt. Detect: such a symbol with no matching `Example`, `ExampleT`, or
+`ExampleT_method` in the package's `_test.go` files — typically new public API
+in a diff with no accompanying example.
 
 ## Reusable package ships a README (Production)
 
-Why: godoc documents the API symbol by symbol, but a reader landing on the
-repository or on pkg.go.dev first needs orientation — what the package is for,
-how to import it, and one worked example to copy.
-Detect: a package meant for outside consumption (not `main`, `internal`, or
-test-only) whose directory has no `README.md` and no `doc.go` package-overview
-comment beyond a one-line synopsis; or one present but missing the essentials —
-stated purpose, import path, and at least one runnable usage snippet. Scope to
-the module root and each public sub-package; do not demand a README per file.
+Scope to the module root and each public sub-package; never demand one per
+file. Detect: a package meant for outside consumption whose directory has
+neither a `README.md` nor a `doc.go` overview beyond a one-line synopsis, or
+one missing the essentials (purpose, import path, one runnable snippet).
 
 ## Package godoc lives in the package-named file (Production)
 
-Why: a reader looking for the package overview expects it on the file named
-after the package (`foo.go` in package `foo`); a standalone `doc.go` holding
-only the `package` comment is an extra file to find and maintain.
-Detect: a `doc.go` whose sole content is the package doc comment while a
-package-named file exists — move the comment there and delete `doc.go`.
-Relation: the README rule above still accepts a `doc.go` package overview as a
-README substitute; that only applies when no package-named file exists to host
-the comment. When one exists, it wins and `doc.go` should not carry the package
-godoc.
+Relation: the README rule accepts a `doc.go` overview as a README substitute
+only when no package-named file exists to host it. Detect: a `doc.go` whose
+sole content is the package doc comment while a package-named file exists —
+move the comment there and delete `doc.go`.
 
 ## Output belongs to the entry point, not leaf functions (Production)
 
-Why: whether a message is an error or a normal result, and whether it goes to
-stdout or stderr, is a policy decision — one that belongs to the single place
-that also owns the process exit code (the command's `Main`/entry point). A leaf
-or mid-level function that prints hard-codes that policy, can't be reused in a
-context that wants the output elsewhere (a server, a test, a different stream),
-and splits error handling across two layers. This is stricter than "never
-log-and-return": it forbids *any* stdout/stderr write from non-entry functions,
-not just logging an error you also return.
-
-Return the output text (or a small result value) alongside `error`; the entry
-point writes results to stdout, errors to stderr, and maps the error to an exit
-code. Do not pass `os.Stdout`/`os.Stderr`/a writer into a function so it can
-report its own errors — passing a sink for streamed *data* is fine, reporting
-*errors/results* through it is not.
-
-```go
-// avoid — leaf decides stream and swallows the return into an exit code:
-func run(cfg *Config) int {
-	if err := do(cfg); err != nil {
-		fmt.Fprintf(os.Stderr, "run: %s\n", err)
-		return 1
-	}
-	return 0
-}
-
-// prefer — leaf returns; Main decides:
-func run(cfg *Config) (string, error) {
-	out, err := do(cfg)
-	if err != nil {
-		return "", fmt.Errorf("run: %w", err)
-	}
-	return out, nil
-}
-```
-
-Detect: `fmt.Fprint*`/`fmt.Print*`/`log.*` to `os.Stdout`/`os.Stderr` (or an
-injected writer used for error/result reporting) anywhere but the command entry
-point; a function returning an `int` exit code instead of an `error`; a
-function that both prints an error and returns (or absorbs) it.
+Stricter than "never log-and-return": stream choice and exit code are policy
+owned by the single entry point (`Main`), so a non-entry function returns text
+or a result value plus `error` and writes nothing — passing a writer for
+streamed data is fine, passing `os.Stdout`/`os.Stderr` so a function can report
+its own errors or results is not. Detect: `fmt.Fprint*`/`fmt.Print*`/`log.*` to
+a process stream (or an injected reporting writer) outside the entry point; a
+function returning an `int` exit code instead of `error`; a function that both
+prints an error and returns or absorbs it.
 
 ## Read the environment through the ring (Production + Test)
 
-Why: the ring (`*ring.Ring`) is the project's injected process environment —
-one seam the whole program reads env, args, and streams through. A function
-that calls `os.Getenv` directly reaches around that seam: it can't be exercised
-with a controlled environment, forces tests to mutate the real process env with
-`t.Setenv` (global, serializing, leak-prone), and hides an input the signature
-should declare. Taking `*ring.Ring` makes the dependency explicit and the code
-testable in isolation.
-
-Production: accept `*ring.Ring` and read via `rng.EnvGet`/`rng.EnvLookup`; never
-`os.Getenv`. Test: set the value on the ring with `rng.EnvSet`, never `t.Setenv`
-— and set it *after* constructing the ring, capturing any working-directory-
-relative fixture path into a local first, since `rng.EnvSet` mutates the ring in
-place at any point before the code under test reads it.
-
-```go
-// avoid — reaches around the seam; test must mutate global process env:
-func LogFilename() string {
-	if id := os.Getenv("BUILD_ID"); id != "" { /* ... */ }
-}
-t.Setenv("BUILD_ID", "123")
-
-// prefer — dependency declared; test sets it on the ring:
-func LogFilename(rng *ring.Ring) string {
-	if id := rng.EnvGet("BUILD_ID"); id != "" { /* ... */ }
-}
-rng := tst.Ring()
-rng.EnvSet("BUILD_ID", "123")
-```
-
-Detect: `os.Getenv`/`os.LookupEnv` in a function that has (or could take) a
-`*ring.Ring`; `t.Setenv` in a test whose subject reads env through a ring.
+The ring (`*ring.Ring`) is the injected process environment, so `os.Getenv`
+reaches around that seam and forces tests onto the global `t.Setenv`; in tests
+call `rng.EnvSet` after constructing the ring, capturing any
+working-directory-relative fixture path into a local first, since it mutates
+the ring in place. Detect: `os.Getenv`/`os.LookupEnv` in a function that has
+(or could take) a `*ring.Ring`; `t.Setenv` in a test whose subject reads env
+through a ring.
 
 ## Name the overflow (Production + Test)
 
-Why: when a call or literal pushes past 80 cols, hoisting the overflowing piece
-into a named local reads cleaner than breaking the call across lines — the args
-stay on one line and the value gets a name. Three forms:
-
-- a printf-family format string → a `format` local (the whole `fmt` family:
-  `Errorf`, `Sprintf`, `Printf`, …, not just `Sprintf`);
-- a long string literal → per-line `"..."` segments joined with `+`, led by an
-  empty `"" +` on the opening line so every segment aligns vertically and each
-  `\n` stays explicit; never a raw backtick string for multi-line content in
-  indented code (it must start at column 0 and hides trailing whitespace);
-- a long expected value in a test → a `want` local.
-
-Inverse: don't hoist when the inlined form already fits <=80 — a short `want`
-or fixture string local that saves no width is needless, even if repeated.
-Detect: a call wrapped only to fit length; a multi-line backtick string in
-indented code; quoted segments where the first trails the `:=` and the rest hang
-below it misaligned; a short string local whose literal fits at every use.
-
-```go
-// format local:
-format := "cannot parse toolchain version %q"
-return fmt.Errorf(format, runtime.Version())
-
-// string literal — leading "" + aligns every segment:
-content := "" +
-	"host: example\n" +
-	"account: a@ex.com\n"
-
-// want local — names the expectation, keeps the assert on one line:
-want := "flag provided but not defined: -unknown\n"
-assert.Equal(t, want, tst.Stderr())
-```
-
-## Blank line between distinct groups (Production + Test)
-
-Why: multi-line groups serving different subjects need a blank between them;
-same-subject consecutive asserts stay packed (a blank every line is noise).
-Detect: distinct subjects with no blank between groups; multi-line switch cases
-with no blank between; or a blank between consecutive same-subject asserts.
-
-```go
-assert.NoError(t, err)
-assert.Contain(t, "ok (v3)", have)
-
-req := srv.Request(0)
-assert.Equal(t, "/api/v2/pages/1", req.URL.Path)
-```
-
-## Three-letter receivers and matching locals (Production)
-
-Why: `p` carries no type information; a fixed `pag`/`cfg` reads as its type
-everywhere, and reusing it for locals names one value the same in production
-and test.
-Detect: a single-letter receiver; a local of type `*T`/`T` named other than the
-type's receiver abbreviation.
-
-```go
-// avoid:               // prefer:
-func (p *page) ...      func (pag *page) ...
-p := &page{...}         pag := &page{...}
-```
-
-In tests the value under test is still `have`, not the type name — the have/want
-rule wins over receiver-mirroring.
-
-## Don't wrap a one-liner in a test helper (Test)
-
-Why: a helper whose whole body is one expression adds a name and an indirection
-without hiding any complexity — the call site reads no worse inlined. The one
-benefit a thin wrapper sometimes carries is centralizing a repeated literal (a
-golden-fixture path, a magic filename); a `const` does that without the function.
-Detect: a `func(...) T { t.Helper(); return oneExpr }` in a `_test.go` file.
-Inline it at every call site. If it existed only to avoid repeating a literal,
-declare that literal as a `const` and inline the expression.
-
-```go
-// avoid — helper wraps a single expression at 5 call sites:
-func pageBody(t tester.T, d pageData) []byte {
-	t.Helper()
-	return goldkit.Create(t, "testdata/page.tpl.yml", d).Body()
-}
-
-// prefer — const for the shared path, expression inlined:
-const pageTpl = "testdata/page.tpl.yml"
-body := goldkit.Create(t, pageTpl, d).Body()
-```
-
-Relation: the same holds in production — a one-line func used at a single call
-site (e.g. `func isX(f) bool { return slices.Contains(xs, f) }`) adds a name and
-indirection without hiding complexity; inline it at the caller.
-
-## Assert on distinctive output, not shared tokens (Test)
-
-Why: an assertion is only as good as its discriminating power. Checking that
-output *contains* a token shared by several outputs — the program name, a
-`cfsync:` prefix, a word in both the version banner and the usage text — passes
-even when the wrong branch ran, so it proves almost nothing. `assert.NotEqual(t,
-"", out)` (merely "something was printed") is the degenerate case: it can never
-distinguish correct output from garbage.
-Detect: `Contain` on a token that also appears in a sibling test's expected
-output; assertions against the binary/package name; `NotEqual(t, "", ...)` or
-`len(out) > 0` as the only content check. Prefer whole-string `Equal` when the
-output is small and fixed; otherwise pick a substring unique to the wanted
-branch (`"cfsync dev\n"`, not `"cfsync"`).
-
-```go
-// avoid — "cfsync" is in both the version banner and the usage text:
-assert.Contain(t, "cfsync", tst.Stdout())
-
-// prefer — only the version branch prints exactly this:
-want := "cfsync dev\n"
-assert.Equal(t, want, tst.Stdout())
-```
-
-Applies to errors too: a wrapper prefix (`"reading config"`) passes for any
-failure in that stage. Assert the cause's unique substring, or pin wrapper and
-cause with one `ErrorRegexp`. A dispatch test is the same trap — if `--test`
-and `--pull` both fail at config-load, `"reading config"` proves neither ran;
-drive it to an X-only outcome.
-
-```go
-// avoid — every load failure produces this wrapper:
-assert.ErrorContain(t, "parsing config", err)
-
-// prefer — pins wrapper and the invalid-YAML cause in one match:
-assert.ErrorRegexp(t, "parsing config.*cannot start any token", err)
-
-// avoid — stacked contains for one error:
-assert.ErrorContain(t, "encoding page 7", err)
-assert.ErrorContain(t, "invalid character", err)
-
-// prefer — one regexp:
-assert.ErrorRegexp(t, "encoding page 7.*invalid character", err)
-```
-
-## must.Value for error not under test (Test)
-
-Why: in the `--- Given ---` arrange step and the `--- Then ---` readback, a
-value-plus-error call is plumbing — the error is not what the test asserts, so
-`x, err := f(); assert.NoError(t, err)` is three lines of noise around one
-value. `must.Value(f())` / `must.Values(f())` (`ctx42/testing/pkg/must`) panic
-on error, failing the test at that line with the same effect and less ceremony.
-The boundary is the assertion target: the error returned by the `--- When ---`
-call *is* the thing under test — keep `out, err := f(...)` and assert on `err`
-there. Never swap the subject call for `must`.
-Detect: a `_, err :=`/`x, err :=` outside the When step immediately followed by
-`assert.NoError(t, err)` where `err` is not otherwise inspected; the value feeds
-setup or a later assertion. Leave the When call's error check alone.
-
-```go
-// avoid — error is plumbing, not the assertion:
-want, err := p.MarshalJSON()
-assert.NoError(t, err)
-
-// prefer:
-want := must.Value(p.MarshalJSON())
-```
-
-## Test helpers in all_test.go (Test)
-
-Why: shared test helpers (e.g. `saveVars`, fixture builders) placed in
-individual `_test.go` files are easy to miss and may be duplicated. A single
-`all_test.go` file in the package is the canonical home — one place to look,
-one place to maintain.
-Detect: a helper function (no `Test`/`Bench`/`Example` prefix, not in a
-`*test` package) defined in a `_test.go` file that is not named `all_test.go`
-and is called from more than one other test file, or whose scope is clearly
-package-wide rather than local to one test. Also flag the reverse: a helper in
-`all_test.go` with no caller — the compiler ignores unused package-level funcs,
-so dead helpers must be caught here and removed.
-
-## Test order mirrors source order (Test)
-
-Why: a reader navigating between `foo.go` and `foo_test.go` expects to find the
-test for a function near where the function sits in the source; mismatched order
-forces mental re-mapping and hides missing coverage.
-Applies only when `foo_test.go` has a 1-to-1 name match with `foo.go`. Files
-like `all_test.go` are exempt.
-Subject extraction: strip the `Test_` prefix and take everything up to the
-first `_tabular` suffix — `Test_Foo` and `Test_Foo_tabular` both map to `Foo`.
-When multiple tests share a subject, the plain variant (`Test_Foo`) must precede
-the tabular variant (`Test_Foo_tabular`).
-Detect: walk the test file top-to-bottom, extract each subject, record its
-first position in `foo.go`; flag any subject whose position is less than the
-previous subject's position.
-
-```go
-// foo.go order: A, B, C
-// bad foo_test.go order:
-func Test_A(t *testing.T) { ... }
-func Test_C(t *testing.T) { ... } // C before B — violation
-func Test_B(t *testing.T) { ... }
-```
-
-## Field-count guard forces new-field coverage (Test)
-
-Why: `assert.Fields(t, N, T{})` is a tripwire — it fails when `T` gains or loses
-a field so the author is forced to update the test's per-field assertions.
-Bumping `N` to make it compile/pass without adding an assertion for the new
-field silences the tripwire and defeats its only purpose.
-Detect: a diff that changes the `N` in `assert.Fields` (or adds a struct field)
-without adding an assertion referencing the new field in the same change.
+A raw backtick string is banned for multi-line content in indented code because
+it must start at column 0 and hides trailing whitespace. Detect: a call wrapped
+only to fit the width; a multi-line backtick string in indented code; `+`-joined
+segments where the first trails the `:=` and the rest hang misaligned below it;
+a short string local whose literal fits inline at every use.
 
 ## Break an over-width table row positionally (Test)
 
-Why: a table row is data, not a struct being documented — the field order is
-already fixed by the anonymous struct above it, so field-name keys add noise
-without adding information. This runs against the common Go habit of keying
-multi-line struct literals, so it needs saying: when a row fits on one line,
-leave it; when it overflows the line limit, break it one element per line and
-keep the values positional.
+A row is data whose field order the anonymous struct above already fixes, so
+keys add noise; this runs against the Go habit of keying multi-line struct
+literals, so never "fix" a positional row back to keys. Detect: a multi-line
+table-row literal using `field: value` keys, or a single-line row past the width
+limit that should wrap.
 
-```go
-// bad — keyed on overflow
-{
-	testN: "bad value that is not quoted",
-	msg:   "invalid value x for flag -n: parse error",
-},
+## Don't wrap a one-liner in a test helper (Test)
 
-// good — positional, one element per line
-{
-	"bad value that is not quoted",
-	"invalid value x for flag -n: parse error",
-},
-```
+Detect: a `func(...) T { t.Helper(); return oneExpr }` in a `_test.go` file;
+inline it at every call site, and if it existed only to avoid repeating a
+literal, declare that literal as a `const`.
 
-Detect: a multi-line table-row literal using `field: value` keys, or a
-single-line row past the width limit that should wrap.
+## Assert on distinctive output, not shared tokens (Test)
 
-## Empty Given section (Test)
+`assert.NotEqual(t, "", out)` or `len(out) > 0` as the only content check is
+the degenerate case — it never distinguishes correct output from garbage.
+Detect: `Contain` on a token that also appears in a sibling test's expected
+output (the program name, a shared wrapper prefix such as `"reading config"`);
+assertions against the binary or package name; a dispatch test whose asserted
+outcome more than one branch yields.
 
-Why: a `--- Given ---` marker with no statements under it is noise — the
-`--- When ---`/`--- Then ---` structure reads fine without it. Keep the marker
-only when there is real arrange, including When-argument prep per the
-prepare-in-Given rule.
-Detect: a `// --- Given ---` line followed immediately (a blank line aside) by
-`// --- When ---`, with no statements between.
+## must.Value for error not under test (Test)
+
+`must.Value`/`must.Values` (`ctx42/testing/pkg/must`) panic on error, failing
+the test at that line. Detect: an `x, err :=` outside the `--- When ---` step
+immediately followed by `assert.NoError(t, err)` with `err` not otherwise
+inspected; never swap the `--- When ---` call itself for `must`.
+
+## Test helpers in all_test.go (Test)
+
+The compiler ignores unused package-level funcs, so a dead helper in
+`all_test.go` is caught only here. Detect: a helper (no `Test`/`Bench`/`Example`
+prefix) defined in a `_test.go` file other than `all_test.go` and called from
+more than one test file, or clearly package-wide in scope; also a helper in
+`all_test.go` with no caller.
+
+## Test order mirrors source order (Test)
+
+Subject extraction: strip the `Test_` prefix and take everything up to the
+first `_tabular` suffix, so `Test_Foo` and `Test_Foo_tabular` both map to
+`Foo`. Detect: walk the test file top to bottom, record each subject's first
+position in `foo.go`, and flag any subject positioned before the previous one.
+
+## Field-count guard forces new-field coverage (Test)
+
+The guard is `assert.Fields(t, N, T{})`: it fails when `T` gains or loses a
+field so the author must update the per-field assertions. Detect: a diff that
+changes `N` (or adds a struct field) without adding an assertion referencing the
+new field in the same change.

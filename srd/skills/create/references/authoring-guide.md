@@ -11,33 +11,59 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
 ## Contents
 
 - House additions to the rules
-- Errata class
 - Consistency pass
 - Defect classes (Bad → Good)
 - Good atomic requirements
 
 ## House additions to the rules
 
-- **US English.** Write SRDs in US English: `color`, `behavior`, `standardize`,
+- Write SRDs in US English: `color`, `behavior`, `standardize`,
   `analyze`, `center` — not `colour`, `behaviour`, `standardise`. The self-check
   flags British spellings. (This governs the SRD artifact only.)
-- **Sub-numbering allowed.** Within a group, tightly-coupled requirements MAY use
+- Sub-numbering is allowed: within a group, tightly-coupled requirements MAY use
   letter suffixes — `**GR-1a:**`, `**GR-1b:**` — when it aids readability. Keep
   it shallow; do not nest deeper than one letter. Plain `**GR-1:**`, `**GR-2:**`
   remains the default; reach for suffixes only when several rules form one tight
   cluster.
-- **STR-9 "will and will not do".** An introduction satisfies STR-9 with its
+- STR-9 "will and will not do": an introduction satisfies STR-9 with its
   purpose plus a high-level account of what the system *will* do; the exclusions
   ("will not") are carried by Out of Scope, not restated in the intro. Do not
   raise an intro finding for a missing explicit "will not do" when Out of Scope
   is present.
-- **Terminology consistency.** Use one term per concept throughout. Do not mix
+- Terminology consistency: use one term per concept throughout. Do not mix
   synonyms for the same thing (e.g. `MFA` / `2FA` / `two-factor`); pick one and
-  define it once.
-- **Template wiki macros are deliberate.** The template's `[[TOC]]`, the
+  define it once. Qualify overloaded terms ("tag", "metadata", "header",
+  "channel") with what they belong to ("a sound file's `sen.kind` metadata
+  tag"); terseness never excuses a term that resolves differently in another
+  document.
+- Glossary is conditional (STR-10 "terms that need a definition"): never
+  require a Glossary section when nothing needs defining. Proper names
+  (product or module names, external tools, device models) are not concepts
+  and are not GLO-3 gaps.
+- Plain headings: never bold a heading (`### **X**`); de-bold existing ones.
+- Link, do not restate: when a requirement would repeat rules an authoritative
+  platform document defines, link that document and state only the SRD-level
+  constraint.
+- Plain language: short sentences, everyday verbs, at most one condition
+  clause; never stack nested qualifiers. The linked platform document carries
+  the precision.
+- A device or product model named in a requirement is the correct scope when
+  the UI surface or feature exists only for those models; never propose
+  generalizing it away.
+- No catch-all requirement ("features not addressed behave identically"): an
+  SRD specifies only what changes; unspecified areas are unchanged by default,
+  and such a rule is weakly verifiable (REQ-5, LANG-7).
+- Narrowing is layering, not contradiction: an SRD that offers less than a
+  platform document says the system can do is not a corpus gap and the
+  platform document is not wrong. A role or setting that restores the full
+  capability is the tell that both statements hold.
+- `REQ` is a legitimate requirement prefix: the standard's own `STR-*`/`REQ-*`
+  ids must not be pasted into an SRD, but the letter codes are not reserved.
+  Never raise a prefix "collision" with the standard as a finding.
+- Template wiki macros are deliberate: the template's `[[TOC]]`, the
   `[[!Status]]` macro, and the `[!INFO]` notice target the wiki the SRD is
   exported to, not GFM — do not "fix" them to GitHub forms.
-- **In Scope MAY be deferred.** In Scope items derive from the requirements
+- In Scope MAY be deferred: In Scope items derive from the requirements
   (SCO-2), so an SRD MAY leave `### In Scope` holding a single `--- TODO ---`
   marker line while the requirements are still in flux. While the marker stands,
   the In-Scope-coverage checks (SCO-2, Quality Bar 2) are suspended — In Scope
@@ -46,90 +72,16 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   [srd-procedures.md](srd-procedures.md)) before the SRD is `ACCEPTED`. An
   unresolved marker is a house blocker for acceptance: always flag it, never
   keep it silently, and never remove it without deriving the items.
-- **`## TODO` scaffold.** An SRD MAY carry a `## TODO` section as its last
+- `## TODO` scaffold: an SRD MAY carry a `## TODO` section as its last
   section (after Requirements; STR-14) — a numbered list of open authoring
   issues the human must return to. These are working notes, not requirements:
   they carry no normative keywords and are exempt from REQ-7 (they sit outside
   any requirement). It MUST be empty or removed before the SRD is `ACCEPTED`; a
   non-empty `## TODO` is a house blocker for acceptance and is always flagged.
-- **Errata class (mechanical, meaning-preserving).** A defect whose fix changes
-  only surface form, never what a requirement *says*, is **errata** — safe to
-  apply in bulk without per-item review. `review` groups errata for bulk fixing;
-  `edit autofix` applies them. The gate, the allowlist, and the exclusions are
-  in [Errata class](#errata-class) below; classify against them, not by feel.
-
-## Errata class
-
-Errata is the bulk-appliable class: `review` collects it under `## Errata` and
-`edit autofix` applies the whole block behind one confirmation. Because nobody
-reviews the fixes individually, the class is drawn to make a false positive
-impossible rather than unlikely.
-
-### The gate
-
-A finding is errata **only if** its fix can be stated as an exact literal
-substitution — `old → new` — anchored to one named id or verbatim heading,
-where `old` appears in that anchor and nowhere ambiguous within it. If the fix
-has to be described in prose ("reword", "restate with the system as subject",
-"make it consistent"), it is **not** errata, however small it looks.
-
-Three consequences:
-
-- `old` and `new` must survive the review file's 80-column wrapping — keep
-  each under roughly 40 characters, and never let a substitution straddle a
-  line break. A fix that cannot be quoted that tightly is not errata.
-- **Whitespace and glyph fixes carry a class plus a neighboring word, never a
-  literal span** — quoting whitespace is forbidden (wrapping destroys the
-  proof), so state "two consecutive spaces before the word *in*" and let
-  `edit autofix` derive the canonical fix from the class.
-- One fix repeated identically across sites is one finding, but it MUST name
-  every site, so `autofix` can verify it found exactly that many.
-
-### Errata classes (allowlist)
-
-Nothing outside this list is errata.
-
-- **Misspelling of a clearly-intended word** —
-  `Authentiction → Authentication`, `massage → message`, `U ser → User`.
-  The intended word must be beyond doubt from the sentence.
-- **British → US spelling** — `behaviour → behavior`, `grey → gray`,
-  `standardised → standardized`, `cancelled → canceled`.
-- **Whitespace** — trailing spaces; two consecutive spaces where one belongs;
-  a space trapped inside a bold identifier.
-- **Glyph** — a curly quote closing with the wrong direction; a hyphen where a
-  parenthetical dash belongs; a stray backslash or other leftover markup glyph.
-- **Emphasis markers** — unbalanced or stray `**`; bold leaking into the
-  middle of a sentence; a bolded section heading; a malformed bold identifier
-  (`**AC-3: ** → **AC-3:** `).
-- **Missing terminal period** on a requirement.
-- **Closed-form orthography** — `can not → cannot`, and like joins or splits
-  where the part of speech leaves one correct form.
-- **A uniquely-determined function word** — an article, preposition, or
-  infinitive `to` whose absence is ungrammatical and whose insertion is the only
-  grammatical repair: `force users re-authenticate → force users to
-  re-authenticate`. If more than one insertion works, it is not errata.
-- **Heading case matched to the document's own convention** —
-  `## In scope → ## In Scope` when every sibling heading is title-cased.
-- **Boilerplate the standard fixes verbatim** — the STR-8 keyword notice.
-
-### Never errata (exclusions)
-
-These stay out of `## Errata` even when a literal substitution exists:
-
-- Text inside a code span, a URL, a quoted UI string, or a product, device, or
-  proper name — the "misspelling" may be the real spelling.
-- Inserting or deleting a **content** word (noun, verb, adjective) or any
-  normative keyword.
-- Any change to a requirement identifier — its spelling, number, prefix, or
-  order.
-- Subject, voice, or mood: passive → active, or "the user interface MUST" →
-  "the system MUST" (LANG-1). These are rewrites, not surface form.
-- Capitalizing a term to its glossary form. The question is whether the site
-  means the defined term or the generic sense — author judgment, not surface
-  form.
-- Line wrapping or reflow.
-- Any case with two plausible corrections, or where the intended word is
-  genuinely in doubt. Classify **conservatively**: when in doubt, not errata.
+- Errata class: a defect whose fix changes only surface form, never what a
+  requirement *says*. Classified against the gate, allowlist, and exclusions in
+  [errata.md](errata.md); `review` groups errata for bulk fixing, `edit autofix`
+  applies them.
 
 ## Consistency pass
 
@@ -153,14 +105,8 @@ This pass is the self-check's feedback loop — repeat it until it is clean.
 ## Defect classes (Bad → Good)
 
 <!-- Each Bad→Good section below transcribes an upstream source example block;
-     its localId is annotated at the section. untranscribed example blocks —
-     source examples with no section here yet; check them on the next
-     page_version bump:
-     2b66f741-45ad-4225-8f24-c69401b968d5 (follows LANG-1),
-     c6f67fef-67b2-441f-9341-66c10dcd685e (follows LANG-3),
-     6fec97d9-b0a9-4d67-a462-2f51e0c35bd8 (follows LANG-6),
-     ee6f5ac1-261a-42bc-8ad7-70c0c2934499 (follows LANG-7),
-     d724bbc4-efcd-49a8-abd7-f0bd6200cd0f (follows REQ-2) -->
+     its localId is annotated at the section. Untranscribed ids are listed in
+     dev/srd-untranscribed-examples.md. -->
 
 ### Glossary pollution — behavior hidden in a definition (GLO-1/2)
 <!-- expand: 563d87a5-e660-4203-887b-17c549fbd7f2 (follows GLO-1) -->

@@ -7,13 +7,13 @@ description: >
   a feature are complete, and to add, change, or learn style rules from
   feedback.
 license: MIT
-argument-hint: "[TARGET* | add RULE | remove RULE | learn]
-  [packages=a,b] [max_issues=N] [depth=light|standard*|full] [plan_first] [fix]"
+argument-hint: "[TARGET* | add|change|remove RULE | learn] [packages=a,b]
+  [max_issues=N] [depth=light|standard*|full] [plan_first] [fix]"
 ---
 
 # review
 
-Final-gate review for Go code. Read the invocation from `$ARGUMENTS`; `$1` is
+Done-time review for Go code. Read the invocation from `$ARGUMENTS`; `$1` is
 the first token. Pick the mode from it:
 
 - Check (default) — a target token or empty input; audit finished code.
@@ -24,8 +24,7 @@ the first token. Pick the mode from it:
 
 Sources of truth:
 - `golang:style` (on-demand: Check mode) — owns the style rules and their
-  detection; review delegates the whole style dimension to it and reviews only
-  correctness itself.
+  detection; the whole style dimension is delegated to it.
 - `../style/SKILL.md`, `../style/rules.md` (on-demand: Rule-edit/Learn) — the
   terse rules and their keyed detection detail; those modes write here.
 
@@ -36,21 +35,19 @@ don't restate output the user can already see.
 
 !`git diff HEAD`
 
-This is the default review target when `$1` is empty. A package or module
-invocation (`$1` names a path / `./...` / a `go.mod` dir) ignores this diff and
-reads the named target instead.
+The Check target when `$1` is empty; a named target ignores it.
 
 ## Check mode
 
 ### Target
 
 `$1` is the target token:
-- **empty** — review the injected working diff (above); if it is empty, fall
-  back to the current git diff vs the base branch (staged + unstaged).
-- **a package** — a path like `./pkg/foo` or an import path; review that one
+- empty — review the injected working diff; if it is empty, fall back to the
+  current git diff vs the base branch (staged + unstaged).
+- a package — a path like `./pkg/foo` or an import path; review that one
   package's `.go` files.
-- **a module / many packages** — `./...`, a directory containing `go.mod`, or
-  an explicit "module"; review every package in the module.
+- a module / many packages — `./...`, a directory containing `go.mod`, or an
+  explicit "module"; review every package in the module.
 
 State the resolved target and the exact package/file set before reviewing.
 
@@ -58,8 +55,11 @@ State the resolved target and the exact package/file set before reviewing.
 
 Read these controls from `$ARGUMENTS` (any order, after the target):
 - `packages=a,b` — restrict to these packages within the target.
-- `max_issues=N` — hard cap on findings reported (default 25).
-- `depth=light|standard|full` — default `standard`.
+- `max_issues=N` — hard cap on findings reported (default 25); stop there,
+  highest severity first.
+- `depth=light|standard|full` — default `standard`. `light` reports only
+  blockers and major maintainability with minimal examples; `full` reviews
+  everything deeply — use sparingly.
 - `plan_first` — produce a short prioritized plan plus the top findings, then
   stop for approval before the full pass.
 - `fix` — after reviewing, apply the findings (see Applying fixes).
@@ -68,14 +68,6 @@ Default to plan-first: if the target is broad (whole module, many packages, or
 large LOC) and no budget was given, switch to `plan_first` automatically,
 propose defaults (the caps above, the package list), and ask before the full
 review.
-
-Depth:
-- `light` — only blockers and major maintainability; minimal examples.
-- `standard` — balanced coverage of the target.
-- `full` — deep review of everything; use sparingly.
-
-Stop at `max_issues`; report highest-severity first and say how many findings
-were left unreported.
 
 ### Workflow
 
@@ -88,18 +80,19 @@ were left unreported.
    - Correctness: bugs, wrong logic, nil/bounds, ignored errors, data races.
    - Edge cases: empty/large/concurrent inputs and every error path.
    - Error handling & API: wrapping, sentinels, boundaries, easy misuse.
-   - Cross-boundary verify (`depth=standard`+): before reporting any claim
-     that reaches beyond the diff — a symbol is unused, all callers handle an
+   - Never report a form the style rules require as a defect: the `"" +`
+     segmented multi-line string is the mandated style (raw strings break
+     indentation); never propose a backtick raw string for it.
+   - Cross-boundary verify (`depth=standard`+): before reporting a claim that
+     reaches beyond the diff — a symbol is unused, all callers handle an
      error/nil, an interface is fully implemented, a suspect branch is
      reachable — confirm it with the `LSP` tool (`findReferences`,
-     `goToImplementation`, `incomingCalls`, `hover`/`goToDefinition`) instead of
-     asserting from the visible code. Skip at `depth=light`; reserve for
-     findings that actually cross a file/package boundary, not every line. If no
-     Go language server is configured the tool errors — fall back to grep/read
-     and note the reduced confidence in the finding.
-4. Reason only. Do not run gofmt, go vet, golangci-lint, or go test — judge by
-   reading the code. The `LSP` tool is permitted: it is read-only semantic
-   navigation, not the build/test toolchain, and does not mutate code.
+     `goToImplementation`, `incomingCalls`, `hover`/`goToDefinition`) rather
+     than asserting from the visible code. Skip at `depth=light`; reserve for
+     findings that cross a file/package boundary. No language server → fall
+     back to grep/read and note the reduced confidence in the finding.
+4. Reason only: do not run gofmt, go vet, golangci-lint, or go test — judge by
+   reading the code. `LSP` is allowed (read-only navigation).
 5. Merge the style offenses with the correctness findings and report (below).
    Do not change code unless asked.
 
@@ -111,35 +104,32 @@ were left unreported.
   invokes `golang:style` on its package for the style offenses and reviews
   correctness itself, with the `depth` and a share of `max_issues`), then
   synthesize one merged report, re-ranking findings to the global `max_issues`
-  cap. Keeps the main context lean.
-- Always report which packages were reviewed and which were skipped; never
-  silently truncate — if the target is too large, do the highest-risk packages
-  first and say what you skipped.
+  cap.
+- If the target is too large, do the highest-risk packages first and name the
+  skipped ones in the report; never silently truncate.
 
 ### Output
 
-Group by severity: **Blocker / Should-fix / Nit**. Each finding:
+Group by severity: Blocker / Should-fix / Nit. Each finding:
 - `file:line` — the problem in one line.
 - The rule id or dimension (e.g. `style: %w`, `correctness`).
 - A minimal suggested fix.
 
 End with a one-line verdict (ship / fix-first) and the per-severity counts. For
 a module, give the verdict per package plus an overall summary. Report budget
-usage: `depth`, packages/files reviewed, and whether you stayed under
-`max_issues` (and how many findings went unreported).
+usage: `depth`, packages/files reviewed, and how many findings went unreported
+past `max_issues`.
 
 ### Applying fixes
 
 When asked to change code (apply findings, fix, refactor), read
-[references/fixing.md](references/fixing.md) first and follow it. Check mode
-itself stays reason-only.
+[references/fixing.md](references/fixing.md) first and follow it.
 
 ## Rule-edit and Learn modes
 
 When either mode triggers, read
-[references/rule-editing.md](references/rule-editing.md) first and follow it.
-Both modes write to `../style/SKILL.md` and `../style/rules.md`, and never
-without confirmation.
+[references/rule-editing.md](references/rule-editing.md) first and follow it;
+never write a rule without confirmation.
 
 ## Self-learning
 

@@ -9,6 +9,7 @@ duplicates it.
 
 ## Contents
 
+- Scope
 - Frontmatter
 - Claude-native frontmatter
 - Description quality
@@ -18,9 +19,21 @@ duplicates it.
 - Progressive disclosure
 - Degrees of freedom
 - Workflows & feedback loops
+- Gotchas
 - Content hygiene
 - Scripts & bundled files
+- README structure
 - Evaluations
+
+## Scope
+
+One skill covers one coherent unit of work — size it like a function.
+
+- Scoped too narrow, a single task drags in several skills, each paying
+  metadata and each able to contradict the others.
+- Scoped too broad, no description can trigger it precisely.
+- Split a skill that needs two unrelated trigger sets; merge two that always
+  fire together.
 
 ## Frontmatter
 
@@ -28,15 +41,17 @@ This repo's skills ship as Claude Code plugins and target **Claude Code only**.
 Write for the Claude Code feature set; the native affordances below are
 encouraged where they earn their place.
 
-- **Required:** `name`, `description`.
-- `name` — lowercase, hyphens/numbers only, ≤ 64 chars, **must equal the parent
-  directory name**. No reserved words (`anthropic`, `claude`), no org/vendor
-  prefix, no vague names (`helper`, `utils`). Prefer a gerund (`writing-x`) or
-  short verb.
+- Required: `name`, `description`.
+- `name` — lowercase letters, digits, and hyphens only; ≤ 64 chars; no leading,
+  trailing, or doubled hyphen; **must equal the parent directory name**. No
+  reserved words (`anthropic`, `claude`), no org/vendor prefix, no vague names
+  (`helper`, `utils`). Prefer a gerund (`writing-x`) or a short verb.
 - `description` — see next section. ≤ 1024 chars.
-- **Optional metadata:** `license`, `version`, `tags`, `author`, `metadata`.
+- `compatibility` — one line, ≤ 500 chars, only when the skill has a real
+  environment requirement (a host product, a system package, network access).
+- Optional metadata: `license`, `version`, `tags`, `author`, `metadata`.
   Use sparingly.
-- **Claude-native affordances (allowed):** `argument-hint` (surface a skill's
+- Claude-native affordances (allowed): `argument-hint` (surface a skill's
   arguments in the invocation UI), `$ARGUMENTS` / `$N` body substitution, and
   dynamic injection (`` !`cmd` ``). See "Claude-native frontmatter" below.
 - Other Claude Code keys (`allowed-tools`, `disable-model-invocation`, `model`,
@@ -68,26 +83,28 @@ already suffices.
 The description is how the agent decides to load the skill — its single
 highest-leverage field.
 
-- **Third person.** "Reviews X", not "I review X" or "You can review X".
+- Third person: "Reviews X", not "I review X" or "You can review X".
 - State **what it does AND when to use it** — include concrete trigger terms.
-- **No workflow leak.** Say *when to use it*, never how it works: no mode
-  lists, control/flag names, file paths, or step summaries. An agent acts on a
-  leaked summary and skips the body — the very steps the skill exists to
-  enforce. Every clause serves discovery.
-- **Lean pushy on *when*.** Agents tend to under-trigger, so make the use-cases
+- No workflow leak: say *when to use it*, never how it works — no mode lists,
+  control/flag names, file paths, or step summaries. An agent acts on a leaked
+  summary and skips the body — the very steps the skill exists to enforce. Every
+  clause serves discovery.
+- Lean pushy on when: agents tend to under-trigger, so make the use-cases
   assertive ("Use when…") and cover oblique phrasings — while still never
   leaking *how* (above).
-- **Size.** Aim ≤ ~350 chars (hard limit 1024) — the description is paid in
-  every session, for every skill, whether or not it fires.
+- Size: aim ≤ ~350 chars (hard limit 1024) — the description is paid in every
+  session, for every skill, whether or not it fires.
 - Specific, not vague. ✗ "Helps with documents" ✓ "Extracts text and tables
   from PDFs. Use when the user mentions PDFs, forms, or extraction."
 - Put the key use case first (listing text is truncated downstream).
+- Name the boundary when a near neighbor exists — say what the skill is *not*
+  for, so adjacent tasks that share its vocabulary stop false-triggering.
 - Include triggers **naturally** — write a real sentence, not a keyword-stuffed
   tag dump.
-- **YAML scalar safety.** A plain scalar breaks on `: ` (colon-space) or a
-  leading `>`/`<`. Use a folded block scalar (`description: >`) for multi-line
-  or any description containing a colon — it is valid YAML and the repo default.
-  Never "fix" a colon by deleting the block scalar.
+- YAML scalar safety: a plain scalar breaks on `: ` (colon-space) or a leading
+  `>`/`<`. Use a folded block scalar (`description: >`) for multi-line or any
+  description containing a colon — it is valid YAML and the repo default. Never
+  "fix" a colon by deleting the block scalar.
 
 ## Token performance
 
@@ -110,15 +127,15 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
 
 ## Body: conciseness
 
-- **Assume the model is already smart.** Add only what it does not know. Cut any
+- Assume the model is already smart. Add only what it does not know. Cut any
   sentence that explains a common concept.
-- **One rule = one dense imperative line** in the body or style list. Expand in a
+- One rule = one dense imperative line in the body or style list. Expand in a
   reference only when the line alone is not enough to enforce.
-- **Keyed / reference entries stay short.** Why + Detect in ≤2 sentences; no
+- Keyed / reference entries stay short: Why + Detect in ≤2 sentences; no
   multi-paragraph rationale. Prefer no example; a code fence only when the rule
   is ambiguous without one (fragile format, non-obvious shape). Drop the entry
   when the body line is enough.
-- **These tests apply to every loaded file, not just the body.** A reference must
+- These tests apply to every loaded file, not just the body. A reference must
   also cut what the model already knows: a keyed reference that restates the terse
   rule it keys to, or whose entries collapse to one shared principle, is
   duplication dressed as detail — trim each entry to the non-obvious (exemption,
@@ -129,9 +146,14 @@ of outcome**. Treat it as a hard budget the skill must earn against, not a nicet
   agent generalize** to cases the skill did not spell out; then state the rule,
   then the reason in one short clause. Keep bare imperatives for fragile,
   one-right-way steps.
+- Teach the method, not the answer. The skill must generalize to the next task,
+  so write the procedure ("read the schema, join on the `_id` convention"), not
+  one instance's result ("join orders to customers on customer_id").
 - One consistent term per concept throughout (don't mix "field/box/element").
-- **Address the agent.** Write for "the agent"; you may name Claude Code
-  features where a skill relies on them.
+- Address the agent: write for "the agent"; you may name Claude Code features
+  where a skill relies on them.
+- Every `SKILL.md` ends with the `## Self-learning` block; `enhance-skills`
+  owns its wording and `dev/lint-skills.sh` warns when it is missing.
 
 ## Output discipline
 
@@ -139,15 +161,15 @@ Conciseness governs the static body; this governs what a running skill **says
 back** each turn — a per-run cost the body rules never touch. Every skill must
 make its agent report tersely.
 
-- **Cut framing.** No preamble ("I'll now review…"), no step narration ("Let me
+- Cut framing: no preamble ("I'll now review…"), no step narration ("Let me
   read the file"), no closing filler ("Hope this helps"). Open with the payload.
-- **State each fact once.** Don't restate output the user can already see. No
+- State each fact once: don't restate output the user can already see. No
   closing summary that repeats findings, a diff, or an artifact just shown. A
   short pointer ("wrote `x.md`") is fine; re-listing its contents is not.
-- **Never cut the payload.** Terseness applies to framing and restating only.
-  The substantive result — findings, diffs, the written artifact, a required
+- Never cut the payload: terseness applies to framing and restating only. The
+  substantive result — findings, diffs, the written artifact, a required
   status table — is always stated in full. A review still lists every finding.
-- **Every skill carries the rule in its body.** A produced `SKILL.md` must
+- Every skill carries the rule in its body: a produced `SKILL.md` must
   contain an explicit output-discipline line so the rule bites at runtime, not
   only when skill-smith is authoring. Canonical wording: *Report tersely: no
   preamble or narration; state each fact once; don't restate output the user can
@@ -162,13 +184,13 @@ files (on demand). Exploit it:
   material, schemas, and long examples into sibling files. Conventional layout:
   `scripts/` (executable code), `references/` (docs loaded on
   demand), `assets/` (templates, examples). Use these names; avoid deep nesting.
-- **References one level deep.** Every bundled file links directly from
+- References one level deep: every bundled file links directly from
   `SKILL.md`. Never chain `SKILL.md` → a.md → b.md — the agent may only preview
   nested files.
 - Name bundled files for their content (`standards.md`, `rules.md`), not
   `doc2.md`. Use forward slashes always.
 - Any reference file over ~100 lines starts with a Contents list.
-- **Label every Sources-of-truth entry** `(eager)` or `(on-demand: <when>)`,
+- Label every Sources-of-truth entry `(eager)` or `(on-demand: <when>)`,
   so a workflow step cannot silently preload a file meant for per-need reads.
 - Structure is necessary, not sufficient — a one-hop, ToC'd, well-named
   reference can still bloat with restated content or be preloaded whole. Apply
@@ -178,10 +200,10 @@ files (on demand). Exploit it:
 
 Match specificity to task fragility:
 
-- **High** (prose steps) — many valid approaches, context decides. e.g. reviews.
-- **Medium** (templates/pseudocode with parameters) — a preferred pattern, some
+- High (prose steps) — many valid approaches, context decides. e.g. reviews.
+- Medium (templates/pseudocode with parameters) — a preferred pattern, some
   variation ok.
-- **Low** (exact commands, no improvisation) — fragile, must-be-consistent,
+- Low (exact commands, no improvisation) — fragile, must-be-consistent,
   ordered operations. e.g. migrations.
 
 ## Workflows & feedback loops
@@ -197,25 +219,37 @@ Match specificity to task fragility:
   (checkbox items + a Y/N/X status table) instead of inventing a format.
   Internal progress checklists the agent ticks off mid-run are exempt.
 
+## Gotchas
+
+A gotchas list is often a skill's highest-value content: the environment facts
+that defy a reasonable assumption, which the agent gets wrong unless told.
+
+- A gotcha is a concrete correction, never general advice. ✗ "handle errors
+  properly" ✓ "`/health` returns 200 while the database is down — use `/ready`".
+- Keep gotchas in the body, not a reference: the agent cannot know to load a
+  file about a trap it does not know exists.
+- Grow the list from real corrections — every mistake a user has to correct is
+  a candidate line (this is what `## Self-learning` feeds).
+
 ## Content hygiene
 
-- **No time-sensitive info** ("after August 2025…"). Put superseded guidance in
+- No time-sensitive info ("after August 2025…"). Put superseded guidance in
   an "Old patterns" section instead.
 - Concrete examples beat abstract description — show input/output pairs when
   output quality depends on format.
 - Provide one default with an escape hatch, not a menu of options.
-- **Wrap Markdown prose at ~80 columns.** Reflow every edited paragraph so no
+- Wrap Markdown prose at ~80 columns: reflow every edited paragraph so no
   line exceeds 80; exempt code fences, table rows, and unbreakable tokens (URLs,
   paths, links). `dev/lint-skills.sh` warns on breakable over-width lines.
-- **Align table columns** — pad cells so `|` delimiters line up in the source;
+- Align table columns — pad cells so `|` delimiters line up in the source;
   re-pad the whole table when adding a row.
-- **Plain, spaced lists.** Write list items as plain sentences — no bold-label
+- Plain, spaced lists: write list items as plain sentences — no bold-label
   lead-ins — and reserve `**bold**` for genuine emphasis in prose. Space items
   with a blank line when they are prose steps; keep them tight and unspaced
   when they are dense enumerations (type/flag/option lists, short spec fields,
   reference entries), where a value per line scans better and token economy
   wins. Applies to `SKILL.md` bodies, READMEs, and references alike.
-- **US English.** Write skill files and any content a skill authors in US
+- US English: write skill files and any content a skill authors in US
   English spelling and conventions ("color", "canceled", "-ize"). When a skill
   edits a target that consistently uses another variety, match it and flag
   mixed usage rather than convert wholesale.
@@ -224,16 +258,24 @@ Match specificity to task fragility:
 
 Scripts are allowed. When you include them:
 
-- **Solve, don't punt** — handle errors in the script rather than failing to the
+- Solve, don't punt — handle errors in the script rather than failing to the
   agent.
 - No voodoo constants — justify every magic value in a comment.
 - Make intent explicit: "Run `x.py`…" (execute) vs "See `x.py` for the
   algorithm" (read as reference).
 - Don't assume packages are installed — state dependencies.
+- Never block on input: agents run non-interactive shells. Take every input as
+  a flag, env var, or stdin, and exit with a usage line instead of prompting.
+- Document the interface in `--help` — flags, defaults, one example — since
+  that output is how the agent learns to call the script.
+- Data to stdout (JSON/CSV, not aligned columns), diagnostics to stderr, a
+  distinct exit code per failure kind.
+- Make errors actionable: what was wrong, what was expected, what to try.
+- Stay idempotent and cap output size — agents retry, and harnesses truncate.
 
 ## README structure
 
-- **Usage section, near the top.** Every skill's `README.md` MUST carry a
+- Usage section, near the top: every skill's `README.md` MUST carry a
   `## Usage` section immediately after the H1 title and its one-line intro,
   before any other `##` section. It holds a single fenced code block showcasing
   invocation examples — one line per mode: the invocation with representative
@@ -242,12 +284,12 @@ Scripts are allowed. When you include them:
   block reads as a table. Model it on `srd/skills/review/README.md`:
 
   ```
-  /review path/to/srd.md            review (default): resolve fixed + append new
-  /review path/to/srd.md walk       interactive, section by section
-  /review path/to/srd.md check      re-verify open findings vs the current SRD
+  /review path/to/srd.md             review (default): resolve fixed + append new
+  /review path/to/srd.md walk        interactive, section by section
+  /review path/to/srd.md check       re-verify open findings vs the current SRD
   /review path/to/srd.md check #4,6  re-verify only findings #4 and #6
-  /review path/to/srd.md errata     re-sort existing findings into ## Errata
-  /review path/to/srd.md feedback   terse plain-text list of open tasks
+  /review path/to/srd.md errata      re-sort existing findings into ## Errata
+  /review path/to/srd.md feedback    terse plain-text list of open tasks
   ```
 
 ## Evaluations
@@ -257,7 +299,10 @@ Mandatory and written before finalizing (eval-driven development):
 - Every skill's `README.md` has an `## Evaluations` section with **at least 3
   scenarios**. Each scenario: a representative request + the expected behavior
   (2–4 bullet checks).
-- **At least one scenario asserts terse output** per the output-discipline rule:
+- Each check must be gradeable from the output alone: "names the rule it
+  breaks", not "handles it well". Drop a check the skill-less baseline also
+  passes — it measures the model, not the skill.
+- At least one scenario asserts terse output per the output-discipline rule:
   no preamble or narration, payload stated once, no closing summary that repeats
   shown content.
 - Build evals from real gaps: run the task without the skill, note what failed,
@@ -267,5 +312,5 @@ Mandatory and written before finalizing (eval-driven development):
   trigger.
 - Test across the models the skill targets — guidance that suits a strong model
   can under-serve a smaller one.
-- To measure a skill empirically (baseline A/B, trigger test), use the Measure
-  step — `references/evals.md`.
+- To measure a skill empirically (baseline A/B, trigger test), use
+  `skill-smith`'s Measure mode (`references/evals.md`).

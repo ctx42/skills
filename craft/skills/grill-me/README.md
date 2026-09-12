@@ -1,20 +1,19 @@
 # grill-me
 
-A planning interview skill. When invoked, the agent switches into interviewer
-mode and questions you relentlessly about every part of your plan until you both
-share the same understanding. It walks the design tree one branch at a time
-(architecture, data model, UX, edge cases, deployment, dependencies), resolving
-the dependencies between decisions before moving on.
-
-Use it before building something, while the plan still has open questions,
-unstated assumptions, or choices that might conflict.
+A planning interview: the agent questions you relentlessly, one branch of the
+decision tree at a time, until you both share the same understanding.
 
 ## Usage
 
 ```
-/grill-me                     interview about the plan described so far in the conversation (default)
-/grill-me <plan or approach>  interrogate the plan or approach given as the argument
+/grill-me                             interview about the plan described so far in the conversation (default)
+/grill-me <plan, approach, or topic>  interrogate the subject given as the argument
 ```
+
+Other skills invoke it the same way, passing the subject as the argument —
+`srd:report-doc-gap` (heavy-mode gap extraction) and `srd:backlog` (filling a
+gap cluster) hand over a documentation gap and get the structured summary back
+in their own flow, with no plan-smith handoff.
 
 ## When to Use
 
@@ -24,27 +23,34 @@ unstated assumptions, or choices that might conflict.
 
 - You want risky or contradictory decisions surfaced early.
 
+- You know something a document must state and want it drawn out completely
+  before it is written.
+
 ## How It Works
 
-1. Reads your plan and maps the decision tree.
+1. Reads the subject — the argument when given, else the plan from the
+   conversation — and maps the decision tree: architecture, data model, UX,
+   edge cases, deployment, dependencies for a build plan; the claim, its
+   boundaries, reader context, and terminology for a topic to document.
 
 2. Grills one branch at a time, starting with the highest-impact unknowns.
 
 3. Names dependencies between decisions explicitly.
 
-4. Restates each resolved decision so you can confirm or correct it.
+4. Restates each resolved decision so you can confirm or correct it, and says
+   how many branches remain.
 
 5. Stops when everything is aligned and presents a structured summary with
    acceptance criteria per decision, then offers to hand it to `plan-smith` as a
-   tracked plan.
+   tracked plan (skipped when another skill invoked it).
 
 ## What to Expect
 
 - Direct, focused questions — one topic at a time, no bundling.
 
-- Push-back when a choice looks risky or inconsistent.
+- Pushback when a choice looks risky or inconsistent.
 
-- A running sense of how many branches are resolved versus still open.
+- No code and no design work — planning only.
 
 ## Evaluations
 
@@ -61,7 +67,24 @@ Expected behavior:
 
 - Does not start designing or writing code.
 
-### 2. Contradictory choices
+### 2. Subject supplied by a caller
+
+Request: `srd:report-doc-gap`, in heavy mode, invokes `craft:grill-me` with
+the gap "the docs don't say what happens to an in-flight order when a station
+goes offline" as the argument.
+
+Expected behavior:
+
+- Takes the subject from the argument, not from the surrounding conversation.
+
+- Maps topic branches — the claim itself, its boundaries and exceptions, the
+  context a reader needs, terms and synonyms — not build-plan branches such as
+  deployment or UX.
+
+- Ends with the structured summary and returns to the caller's flow; no
+  `plan-smith` offer, no file written.
+
+### 3. Contradictory choices
 
 Request: Earlier in the interview the user set "the app must work fully
 offline," and now, on a later branch, says "every save syncs to the server
@@ -75,7 +98,7 @@ Expected behavior:
 - Does not silently pick one; holds both branches open until the user resolves
   the tension.
 
-### 3. Alignment reached
+### 4. Alignment reached
 
 Request: All branches have been answered.
 
@@ -91,7 +114,7 @@ Expected behavior:
 
 - Writes no implementation code.
 
-### 4. Terse output
+### 5. Terse output
 
 Request: Any point during the interview.
 

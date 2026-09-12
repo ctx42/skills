@@ -11,12 +11,12 @@ license: MIT
 
 # plan-smith
 
-Turn a brief into a tracked plan, and keep its status current. Pick the mode
-from `$ARGUMENTS` when given (a mode word like `write`/`update` and a plan-file
-path), else from the request:
+Turn a brief into a tracked plan, and keep its status current. `$1` is the
+mode when given — `write` (the rest of `$ARGUMENTS` is the brief) or `update`
+(the rest is the plan-file path); else infer the mode from the request:
 
-- Create — write a new plan from a description, a spec, or a shared
-  understanding reached with `grill-me`.
+- Write — a new plan from a description, a spec, or a shared understanding
+  reached with `grill-me`.
 
 - Update — re-read an existing plan and refresh each item's checkbox and status
   from what has since happened.
@@ -24,8 +24,10 @@ path), else from the request:
 If the request is ambiguous, ask one question: write a new plan or update an
 existing one?
 
-Report tersely: no preamble or narration; state each fact once; after writing,
-don't paste the plan back — point to the file and give the status counts.
+Report tersely: no preamble or narration; state each fact once; don't restate
+output the user can already see. After writing, point to the file and give the
+status counts (e.g. `wrote tmp/sso-plan.md — 0 Y / 4 N / 0 X`); never paste
+the plan back.
 
 ## Format
 
@@ -45,15 +47,14 @@ A summary table first, so status is visible at a glance:
 Legend: Y implemented · N not yet · X rejected
 ```
 
-Keep the **Item** cell to a short name (≤ ~30 chars); the item's own section
+Keep the `Item` cell to a short name (≤ ~30 chars); the item's own section
 carries the detail. Align the table so the `|` delimiters line up vertically:
 
 - Each column's width is its widest cell's content.
 - Header and body cells: one leading and one trailing space around the content,
   then pad the trailing side with spaces to the column width.
-- Separator row: fill each cell with dashes **flush to the pipes, no
-  surrounding spaces** (`|----|`, never `| -- |`), exactly as many dashes as the
-  cell is wide.
+- Separator row: fill each cell with dashes flush to the pipes, no surrounding
+  spaces (`|----|`, never `| -- |`), exactly as many dashes as the cell is wide.
 
 Compute the widths from the widest cell — don't eyeball it — then verify the
 header, separator, and every body row have identical character width.
@@ -71,21 +72,23 @@ Then one section per item, numbered to match the table, each led by a checkbox:
 ```
 
 Checkbox to status: `[x]` = `Y` (implemented), `[ ]` = `N` (not yet). A rejected
-item keeps `[ ]`, is tagged `X`, and states why in one line — never delete it.
+item keeps `[ ]`, is tagged `X`, and states why in one line — never delete it,
+so the record stays honest.
 
-## Create mode
+## Write mode
 
 1. Gather the items. From the brief (or a `grill-me` summary), list the
-   distinct, independently-checkable pieces of work. Don't invent scope; ask if
-   a piece is unclear.
+   distinct, independently-checkable pieces of work — one item = one outcome;
+   split bundled work. Don't invent scope; ask if a piece is unclear.
 
 2. Order by dependency and impact — blocking and highest-impact items first.
 
-3. Write the file to the format above: summary table (every item starts `N`,
-   unchecked) then one section per item with acceptance criteria.
+3. Confirm the path: use the name the user gives, else `tmp/<slug>-plan.md`.
+   Never overwrite an existing plan without saying so.
 
-4. Confirm the path before writing; use the name the user gives, else
-   `tmp/<slug>-plan.md`. Never overwrite an existing plan without saying so.
+4. Write the file to the format above: summary table (every item starts `N`,
+   unchecked) then one section per item. Give each item acceptance criteria —
+   what proves it done — so `Y` is verifiable, not asserted.
 
 ## Update mode
 
@@ -96,25 +99,11 @@ item keeps `[ ]`, is tagged `X`, and states why in one line — never delete it.
    implemented → `[x]` / `Y`; dropped → `X` + one-line reason; untouched → leave
    `N`.
 
-3. Rewrite the summary table and the changed items' checkboxes/tags only; leave
-   all other prose intact.
+3. Rewrite the summary table and the changed items' checkboxes/tags only, so
+   table and sections keep the same numbering and statuses; leave all other
+   prose intact.
 
-4. Report the deltas and the new counts; don't reprint the whole plan.
-
-## Rules
-
-- One item = one independently-checkable outcome. Split bundled work.
-
-- Never silently drop a rejected item — mark it `X` with a reason so the record
-  stays honest.
-
-- Give each item acceptance criteria — state what proves it done, so `Y` is
-  verifiable, not asserted.
-
-- Table and sections stay in sync: same numbering, same statuses.
-
-- Keep summary Item names short and pad the table so columns align — a long
-  name in one row must not skew the `|` delimiters (see Format).
+4. Report the deltas and the new counts.
 
 ## Self-learning
 

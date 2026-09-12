@@ -47,7 +47,8 @@ keeps every plugin/marketplace version in lockstep with `VER` (see
 List available skills. They are namespaced by plugin, e.g.:
 
 - `golang`: `/golang:style`, `/golang:review`, `/golang:cover`, `/golang:doc`, `/golang:reshape`
-- `srd`: `/srd:create`, `/srd:review`, `/srd:edit`, `/srd:system-check`
+- `srd`: `/srd:create`, `/srd:review`, `/srd:edit`, `/srd:system-check`,
+  `/srd:report-doc-gap`, `/srd:backlog`, `/srd:kb`
 - `craft`: `/craft:cm`, `/craft:grill-me`, `/craft:plan-smith`,
   `/craft:skill-smith`, `/craft:readme-smith`, `/craft:doc-smith`,
   `/craft:enhance-skills`
@@ -56,20 +57,22 @@ Each skill has its own `README.md` with usage examples.
 
 ---
 
-## 4. system-check memory
+## 4. The knowledge base
 
-`system-check` builds a curated platform-knowledge base as you use it. It is
-your data, stored once per machine at:
+The SRD skills build a knowledge base about your platform as you use them —
+facts you confirm during an interview become Markdown pages that every agent can
+search. `srd:kb` owns it; you never invoke it directly.
+
+It lives in a directory you choose on first use, remembered at:
 
 ```
-~/.agent-data/ctx42-skills/srd/memory.md
+~/.agent-data/ctx42-skills/srd/kb-root
 ```
 
-The `srd/` segment scopes it to the `srd` skills, so only they load it. It is
-created on first use from the shipped template and survives plugin updates;
-older installs migrate per
-`srd/skills/system-check/references/memory-migration.md`.
-Nothing to set up; back this file up if the knowledge is valuable.
+Pick a directory in a git repository that **no Confluence sync manages** — a
+sync pull would clobber agent writes. Serve it to agents by adding it as a
+source in your `mcp-doc.yaml`, then work what it still owes with
+`/srd:backlog`.
 
 ---
 
