@@ -140,10 +140,8 @@ re-audit it with `skill-smith` in improve mode.
 
 ## Self-learning
 
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
-`$HOME/.agent-data/ctx42-skills/lessons/craft/doc-smith.md` when this directory
-is read-only. On a correction or self-caught mistake, first draft the lesson
-**generically** — a rule for any document, not tied to the one at hand — and
-present it for the user's approval. Only once approved, append the one-line rule
-to whichever is writable (creating it) and report where. Never append an
-unapproved lesson.
+Obey this skill's lessons when it has any: sibling `LESSONS.md`, else
+`$HOME/.agent-data/ctx42-skills/lessons/craft/doc-smith.md` when this
+directory is read-only. Most runs have none; absence is the normal case and
+needs no comment. On a correction or self-caught mistake, append a one-line
+rule to whichever path is writable, creating it, and report where.

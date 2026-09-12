@@ -157,8 +157,9 @@ re-dump the generated file.
 
 ## Self-learning
 
-Read this skill's lessons and obey them: sibling `LESSONS.md`, else
+Obey this skill's lessons when it has any: sibling `LESSONS.md`, else
 `$HOME/.agent-data/ctx42-skills/lessons/srd-sync.md` when this directory is
-read-only. On a correction or self-caught mistake (e.g. a transform rule the
-source outgrew, an accidental reword the self-verify missed), append a one-line
-rule to whichever is writable (creating it) and report where.
+read-only. Most runs have none; absence is the normal case and needs no
+comment. On a correction or self-caught mistake (e.g. a transform rule the
+source outgrew, an accidental reword the self-verify missed), append a
+one-line rule to whichever path is writable, creating it, and report where.
