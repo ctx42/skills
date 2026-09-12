@@ -1,27 +1,31 @@
 # readme-smith
 
-Forge and repair a project's `README.md`. One skill, two modes, chosen from how
-you ask:
-
-- **Create** — no usable README exists, or you want a new/rewritten one. It scans
-  the repo, asks only for the gaps code can't reveal, and drafts to a distilled
-  house structure.
-- **Improve** — name an existing README and it audits against the same rules,
-  reports findings by severity, then fixes them on your confirmation.
-
-**The rules it lives by:** structure and style come from
-[references/template.md](references/template.md) — GFM, GitHub admonitions,
-restrained emoji, a logo only if the repo has one, and no fabricated facts. It
-never authors License/Contributing/Changelog sections (dedicated files own
-those), and it runs the install/quickstart commands it ships to prove they work.
+Creates and improves a project's `README.md`, grounded in the real repo.
 
 ## Usage
 
 ```
-/readme-smith                        (default) infer create vs improve from the request; asks if ambiguous
-/readme-smith create <desc>          scan the repo and draft a new README.md, grounded in real code
-/readme-smith improve <readme-path>  audit an existing README, report findings, fix on confirmation
+/readme-smith                         (default) infer create vs improve from the request; asks if ambiguous
+/readme-smith create [<readme-path>]  scan the repo and draft a new README, grounded in real code
+/readme-smith improve <readme-path>   audit an existing README, report findings, fix on confirmation
 ```
+
+## Modes
+
+- Create: no usable README exists, or you want a new/rewritten one. It asks
+  only for the gaps code cannot reveal.
+- Improve: an existing README to audit; findings are grouped by severity and
+  fixed only on your confirmation.
+
+Both modes draft and audit against the blueprint in
+[references/template.md](references/template.md): GFM, GitHub admonitions,
+restrained emoji, a logo only if the repo has one, and no fabricated facts. The
+skill never authors Contributing/Changelog/Code-of-Conduct/Security sections
+(dedicated files own those), keeps badges and any `## License` section to the
+root README, and runs the install/quickstart commands it ships to prove they
+work. In a Go project that offers the gomake `:project:doc-eg` target, README
+examples are injected from testable `Example…` functions
+([references/gomake.md](references/gomake.md)).
 
 ## Evaluations
 
@@ -52,11 +56,12 @@ published package)
 
 ### 3. Improve an existing README
 
-**Request:** `/readme-smith improve README.md`
+**Request:** `/readme-smith improve pkg/foo/README.md` (a member README in a
+multi-package repo)
 
 **Expected behavior:**
-- Reports a `## License` section duplicating `LICENSE.md` as a finding (excluded
-  section — dedicated file owns it).
+- Reports its `## License` section as a finding (root README only; the
+  `LICENSE.md` file owns the text).
 - Flags code fences with no language and nav links to missing anchors, each
   citing the rule from `references/template.md`.
 - Groups findings Blocker / Should-fix / Nit and offers to apply them — no edits
@@ -96,8 +101,8 @@ whose only package is `github.com/acme/foo/pkg/foo`, long enough to warrant a TO
 - Emits exactly one navigation aid — a nav line or a `<!-- TOC -->` block, never
   both.
 - Reads the base path from `go.mod`, not one guessed from the org or a sibling
-  repo, and points `go get`/badges/pkg.go.dev at the **module**
-  (`github.com/acme/foo`) but the Go `import` at the **package**
+  repo, and points `go get`/badges/pkg.go.dev at the module
+  (`github.com/acme/foo`) but the Go `import` at the package
   (`github.com/acme/foo/pkg/foo`).
 - Does not assert the repo is public or private, and adds no `GOPRIVATE`/auth
   note, from the host URL alone.
