@@ -82,7 +82,11 @@ Copy this checklist and tick it off:
 ### 0. Start
 
 Invoke `srd:report-doc-gap` and `srd:kb` to drain what a prior session left
-buffered for this SRD. Then run the glossary-resolution procedure in
+buffered for this SRD. Each reports what it holds, including nothing: an empty
+buffer is a fact the run states in a clause, not a silence, or a drain that
+never happened looks identical to one that found nothing.
+
+Then run the glossary-resolution procedure in
 [references/srd-procedures.md](references/srd-procedures.md): resolve the
 per-project glossary path (a single Markdown file or a directory of them),
 fingerprint it, and load or regenerate its term digest. The digest lets the SRD

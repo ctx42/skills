@@ -35,12 +35,17 @@ glossary actually changes. Run this before drafting or editing:
 
 ### Glossary memory
 
-Keep one record per project in the standard per-project memory. It holds: the
-glossary path (file or directory); the last content hash from
-`glossary-fingerprint.sh`; the date the digest was last regenerated; and the
-digest body. Nothing about the glossary lives in the skill directory or in
-`$HOME/.agent-data` — only in project memory, so each project resolves to its own
-glossary automatically.
+Keep one record per project at `.claude/srd/glossary-memory.md`, relative to
+the project root — the directory the SRD work is happening in, not the skill's
+own checkout. It holds: the glossary path (file or directory); the last content
+hash from `glossary-fingerprint.sh`; the date the digest was last regenerated;
+and the digest body.
+
+That location, and not `$HOME/.agent-data`, because the binding is
+project-to-glossary: one machine works on several projects, and a
+machine-global record would hand the wrong glossary to the next one. Create the
+file and its directory on first use. Whether it is committed or ignored is the
+project's call — a committed one saves every teammate the first-run question.
 
 ## Derive In Scope from requirements
 
