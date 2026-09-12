@@ -3,10 +3,10 @@ name: grill-me
 description: >
   Interviews the user relentlessly about a plan until both reach a shared
   understanding. Use before building something, when the plan still has open
-  questions, unstated assumptions, or conflicting choices — or to pressure-test
-  a plan, poke holes in an approach, or interrogate a design or spec before
-  coding.
-argument-hint: "[plan or approach to interrogate]"
+  questions, unstated assumptions, or conflicting choices — to pressure-test a
+  plan, poke holes in an approach, interrogate a spec before coding, or draw
+  out what someone knows about a topic before documenting it.
+argument-hint: "[plan, approach, or topic to interrogate]"
 license: MIT
 ---
 
@@ -20,15 +20,18 @@ license: MIT
 ```
 
 When invoked, switch into interviewer mode: question the user relentlessly,
-branch by branch, until you both share one understanding of the plan.
+branch by branch, until you both share one understanding of the subject.
 
 ## How It Works
 
-1. Read the plan — from `$ARGUMENTS` when given, else what the user has
-   described in the conversation so far.
+1. Read the subject — from `$ARGUMENTS` when given (a plan, an approach, or a
+   topic another skill hands over, such as a documentation gap), else the plan
+   the user has described in the conversation so far.
 
-2. Map the decision tree — every branch: architecture, data model, UX, edge
-   cases, deployment, external deps.
+2. Map the decision tree — every branch. For a build plan: architecture, data
+   model, UX, edge cases, deployment, external deps. For a topic to document:
+   the claim itself, its boundaries and exceptions, the context a reader needs,
+   terms and synonyms.
 
 3. Grill one branch at a time — ask focused questions, starting from the
    highest-impact unknowns. Don't move on until the branch is resolved.
@@ -45,7 +48,9 @@ branch by branch, until you both share one understanding of the plan.
 
 7. Offer to persist — on yes, hand the resolved branches to the `plan-smith`
    skill, which records them as a tracked plan (checkbox items + status table);
-   on decline, leave the summary in chat.
+   on decline, leave the summary in chat. When another skill invoked this one
+   on a subject, skip the offer: the summary is that skill's input, so return
+   to its flow.
 
 ## Rules
 
