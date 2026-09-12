@@ -113,8 +113,14 @@ writes:
 ## Invocation
 
 The first token is a mode word; the next is the SRD path or id when one is in
-play. Callers
-pass both. With no arguments, default to capture.
+play. Callers pass both. With no arguments, default to capture.
+
+With no SRD named and no caller to name one, there is no per-SRD buffer to
+drain: the session itself is the source. Take what this conversation attested,
+buffer it under the session, and attest it to the session rather than to an SRD
+— do not infer an id from the conversation to fill the slot, which invents a
+provenance nobody can check. The `*` in the argument hint marks the default,
+here and in every skill that carries one.
 
 - `capture` (default) — buffer, confirm, and write what the session
   surfaced. The flow below.
@@ -211,7 +217,12 @@ For each confirmed fact, in order:
    [references/retrieval-authoring.md](references/retrieval-authoring.md).
 4. Promote when earned. When **two or more** inbox facts share a subject,
    create the top-level page, move them in, remove them from the inbox, and say
-   what was created. A single fact never earns a page.
+   what was created. A single fact never earns a page — that rule governs
+   promotion out of the inbox, where a lone fact is better found under a
+   subject heading than alone on a page of its own. It does not govern
+   `restructure`, which moves sections that already have a home because the
+   home turned out to be the wrong one; there, one section may be exactly what
+   moves.
 
 The inbox is staging, not storage. A fact there inherits the inbox's title
 field, which says nothing about its subject, so it ranks far below the same fact
@@ -285,6 +296,12 @@ Two kinds, worked differently. `deferred` — someone knows, the session did not
 have time to take it; closable in seconds. `unknown` — nobody has pinned it
 down; it needs deciding or finding out.
 
+A guess of your own that the user never confirmed is `deferred`, not `unknown`:
+the user was there and could have settled it, and calling it an unknown puts
+the agent's inference on the same footing as a fact nobody in the organization
+has. State it as the question it answers ("does evidence expire, and after how
+long?"), never as the inference wearing a question mark.
+
 An unknown is **never** filed as a documentation gap. A gap's resolver is
 someone writing a page; an unknown's resolver is someone finding out. Filed as a
 gap it sits forever in a backlog whose only tool is authorship.
@@ -322,6 +339,13 @@ built in, never a bare file move.
    attestation line, its rows in the source page's `## Provenance` table, and
    any of its entries under `## Open questions`. A section that arrives
    stripped of its attestation line is silently an unsourced claim.
+
+   Moving out of `_inbox.md` is the case with nothing to carry: the inbox has
+   no `## Provenance` table, and a question that lived in the index alone has
+   no wording on the page. Write both on arrival, from the attestation line and
+   the `_open-questions.md` row, rather than leaving the new page short of what
+   every other page has — a promoted fact that loses its provenance row is the
+   same unsourced claim by a slower route.
 3. Repair every inbound reference in the same pass. Four kinds, all greppable
    from the KB root except the last:
    - Page links between KB pages.
