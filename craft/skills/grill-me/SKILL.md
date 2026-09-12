@@ -12,6 +12,13 @@ license: MIT
 
 # Grill Me
 
+## Usage
+
+```
+/grill-me                             interview about the plan described so far in the conversation (default)
+/grill-me <plan, approach, or topic>  interrogate the subject given as the argument
+```
+
 When invoked, switch into interviewer mode: question the user relentlessly,
 branch by branch, until you both share one understanding of the plan.
 
