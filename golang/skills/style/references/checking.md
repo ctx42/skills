@@ -39,9 +39,15 @@ Read these from `$ARGUMENTS` (any order, after the target):
 - `plan_first` — list the offenses and stop for approval before applying any.
 - `fix` — apply every listed offense's fix without asking (skips the pick step).
 
-Default to plan-first for a broad target (whole module, many packages, large
-LOC) with no budget: propose defaults (the caps above, the package list) and ask
-before applying anything.
+Default to plan-first for a broad target with no budget: propose defaults (the
+caps above, the package list) and ask before applying anything. Broad means the
+run would fan out — more than ~6 packages, the same threshold Scale uses. A
+module of three small packages is `./...` and still not broad: check it in this
+context and use the normal pick step, which asks before applying anyway.
+
+Plan-first is propose-then-stop: the defaults and the package list, and no
+check until the user answers. It is not check-everything-then-present — that
+spends the whole run before the budget it is asking about has been agreed.
 
 ## Principles
 
@@ -91,7 +97,10 @@ the list checkable, since a reader cannot tell an empty result from an
 unresolved target without it.
 
 Group by severity Blocker / Should-fix / Nit. Severity is a property of the
-rule, not of the reader's taste — decide it the same way every time:
+rule, not of the instance or the reader's taste: the same rule broken in two
+packages is the same severity in both, and a worker that finds switch spacing a
+Nit in four packages and Should-fix in two has graded the code rather than the
+rule. Decide it once, the same way every time:
 
 - Blocker — the code is wrong or will mislead: a swallowed or `%v`-wrapped
   error, a data race the style rules forbid, an exported symbol with no godoc,
@@ -100,16 +109,30 @@ rule, not of the reader's taste — decide it the same way every time:
   incorrect: naming, stutter, receiver conventions, test structure, ordering.
 - Nit — mechanical and local: spacing, comment wording, import grouping.
 
+A rule that fits none cleanly takes the nearest tier and says so in the
+offense, rather than being graded afresh each time it appears.
+
 Each offense:
 - `file:line` — the offense in one line.
 - the rule id (e.g. `style: %w`, `style: no-stutter`).
 - the minimal fix.
 
-Rule ids are not coined per run. Use the `rules.md` key, or the exact rule
-phrase from `SKILL.md` when the rule has no keyed entry — so the same offense
-carries the same id across packages, runs, and workers. `receiver-naming`,
-`receiver-abbr`, and `receivers` for one rule makes a merged report
-uncountable.
+Rule ids are not coined per run, and "the exact rule phrase" is not an id —
+asked for one, twelve workers turned the same `%w` rule into
+`Wrap errors with %w and add context…`, `style: %w`, and a lower-cased variant.
+Derive it mechanically so every worker lands on the same string:
+
+- The rule has a `rules.md` entry → its Contents key, slugged: *No name stutter*
+  → `no-name-stutter`.
+- It does not → the first three significant words of its `SKILL.md` line,
+  lowercased, hyphenated, punctuation and articles dropped: *Wrap errors with
+  `%w`…* → `wrap-errors-w`; *Lines <=80 cols…* → `lines-80-cols`.
+
+One offense is one rule broken in one file, however many times it is broken
+there — list every site on the offense, do not repeat the offense per site.
+Twelve workers reporting a receiver rule as one offense in some packages and
+one per site in others makes every count noise, and a cap applied to sites
+rather than rules spends itself on whichever rule happens to repeat most.
 
 Stop at `max_issues`, highest-severity first; say how many offenses went
 unreported. End with a one-line verdict (clean / fix-first) and per-severity
@@ -148,6 +171,19 @@ failing-test reproduction is needed — the test gate is the proof.
   per-worker budget drops findings before anything can rank them, so a package
   with many nits evicts another package's blocker while the global cap still
   has room.
+
+  The merge folds by rule id before it cuts: one rule broken in twelve packages
+  is one finding listing twelve packages, not twelve findings. Cut at
+  `max_issues` after folding. Unfolded, two blockers repeated across a module
+  consumed a whole default cap of 25 while the rule broken in *every* package
+  fell outside it — the worst finding in the run, unreported.
+
+  Every worker checks the same rules: the Production section, plus Test for
+  `_test.go`. Each reports which rules it checked, and the merge says so. Left
+  to choose, twelve workers on byte-identical code detected zero-value safety
+  in ten, cross-references in four, and returned per-package totals from 3 to
+  10 for the same file — a spread that looks like a finding about the packages
+  and is really a finding about the workers.
 
   The merge is only performable if workers agree on ids and severity, which is
   what the rubric and the id rule above are for: merging means concatenating,

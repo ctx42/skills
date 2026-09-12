@@ -61,13 +61,13 @@
       "id": 7,
       "name": "broad-target-auto-plan-first",
       "expected_behavior": [
-        "Switches to plan-first: proposes the `max_issues` and `depth` defaults and the package list, and asks before checking",
+        "Switches to plan-first: proposes the `max_issues` and `depth` defaults and the package list, and stops without checking",
         "Skips that prompt when the invocation already carries `packages=a,b` or `max_issues=N`",
-        "Fans out one subagent per package past ~6, each opening only the `rules.md` entries it needs",
-        "Gives workers no per-package share of `max_issues` — they report everything they find and the cap is applied once at the merge",
-        "Merged offenses carry one severity and one rule id per rule, so the same offense in two packages does not arrive as two differently-named findings",
-        "Names the packages checked and the packages skipped",
-        "At `depth=light`, skips the LSP cross-file confirmation"
+        "Past the approval, fans out one subagent per package, each checking the same rule set and reporting which rules it checked",
+        "Gives workers no share of `max_issues` — they report everything and the cap applies once at the merge",
+        "Folds by rule id before cutting: the godoc rule broken in all twelve packages is one finding listing twelve, not twelve findings",
+        "The rule broken everywhere survives the cap, rather than being evicted by two offenses repeated twelve times apiece",
+        "The same rule carries one id and one severity across all twelve packages"
       ]
     },
     {

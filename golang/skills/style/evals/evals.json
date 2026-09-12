@@ -68,7 +68,7 @@
       "skills": [
         "style"
       ],
-      "setup": "A 12-package module, invoked with no budget controls.",
+      "setup": "A 12-package module. Every package holds the same two offenses — a `%v` error wrap and a single-letter receiver — and one rule, missing godoc on an exported symbol, is broken in all twelve. Invoked with no budget controls.",
       "query": "/style ./...",
       "files": []
     },
