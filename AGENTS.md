@@ -63,6 +63,8 @@ source of truth.
 - `edit` — edits an existing SRD in place, one confirmed change at a time.
 - `system-check` — build-readiness questions for an SRD; owns
   `<srd>.questions.md` and the platform-knowledge memory.
+- `kb` — owns the knowledge base: writes what the platform is from facts
+  attested during SRD interviews.
 
 ### craft
 

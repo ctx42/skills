@@ -47,7 +47,8 @@ keeps every plugin/marketplace version in lockstep with `VER` (see
 List available skills. They are namespaced by plugin, e.g.:
 
 - `golang`: `/golang:style`, `/golang:review`, `/golang:cover`, `/golang:doc`, `/golang:reshape`
-- `srd`: `/srd:create`, `/srd:review`, `/srd:edit`, `/srd:system-check`
+- `srd`: `/srd:create`, `/srd:review`, `/srd:edit`, `/srd:system-check`,
+  `/srd:kb`
 - `craft`: `/craft:cm`, `/craft:grill-me`, `/craft:plan-smith`,
   `/craft:readme-smith`, `/craft:doc-smith`, `/craft:enhance-skills`
 

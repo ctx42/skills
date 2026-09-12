@@ -42,7 +42,8 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       ├── create/             # Author a new SRD to the SRD standard
 │       ├── review/             # Read-only review of an SRD
 │       ├── edit/               # Interactive in-place editing of an SRD
-│       └── system-check/       # Build-readiness review (system-knowledge)
+│       ├── system-check/       # Build-readiness review (system-knowledge)
+│       └── kb/                  # Owns the knowledge base: capture and write
 └── craft/                          # Plugin: cross-cutting engineering-craft aids
     ├── .claude-plugin/plugin.json
     └── skills/
