@@ -11,6 +11,21 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg* | module]
 
 # cover
 
+## Usage
+
+```
+/cover ./pkg/foo                package (default): per function, plan-first
+/cover func=Foo                 one function by name; no plan gate
+/cover func=T.Bar               one method
+/cover pkg/svc/foo.go:42        the function enclosing that line
+/cover pkg/svc/foo.go           every function in the file, plan-first
+/cover module                   every package, sequential, plan-first
+/cover ./pkg/foo max_tests=8    cap tests/cases added this run
+/cover module packages=svc,api  module mode: restrict to these packages
+/cover func=Foo include=all     also attempt the deferred complex lines
+/cover module fanout            module mode: one subagent per package, merged
+```
+
 Executing skill: it runs `go test -coverprofile`, reads the profile, edits and
 creates `*_test.go` files, and re-runs to verify. Unlike `/review` it acts
 on the code.

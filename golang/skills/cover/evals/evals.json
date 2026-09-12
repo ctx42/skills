@@ -1,0 +1,100 @@
+{
+  "skill_name": "cover",
+  "evals": [
+    {
+      "id": 1,
+      "name": "single-function-in-isolation",
+      "skills": ["cover"],
+      "setup": "`Parse` has one happy-path test, `Test_Parse`, and two uncovered error branches. A caller's test, `Test_Load`, incidentally executes one of those branches, so a whole-package coverage run credits `Parse` with more than its own test earns.",
+      "query": "/cover func=Parse",
+      "files": [],
+      "expected_behavior": [
+        "Runs straight through with no plan gate, mapping to the `Test_Parse` direct-test family",
+        "Measures with `-run '^Test_Parse($|_)'` and reads only `Parse`'s own line range — the coverage `Test_Load` contributes is not counted",
+        "Adds table rows aimed at the two error branches, re-measures, and confirms those lines went 0 → hit",
+        "New rows follow the style Test rules: `have`/`want`, never `got`; error subtests named `error - <condition>`"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "package-target-is-plan-first",
+      "skills": ["cover"],
+      "setup": "`./pkg/svc` holds six exported functions, four of them partly covered.",
+      "query": "/cover ./pkg/svc",
+      "files": [],
+      "expected_behavior": [
+        "States the resolved kind (package) and the function set before measuring",
+        "Presents a plan — per-function current coverage, proposed easy cases, deferred and un-coverable lines — and waits for approval before writing anything",
+        "Works one function to completion and verification before starting the next, rather than editing the whole package at once"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "deferred-and-uncoverable-are-reported",
+      "skills": ["cover"],
+      "setup": "`Dial` has one branch reachable only behind a network seam and one defensive `return` that no input can reach. The run is repeated afterwards with `include=all`.",
+      "query": "/cover func=Dial",
+      "files": [],
+      "expected_behavior": [
+        "Covers the easy lines, defers the network branch with a stated reason, and names the defensive branch un-coverable",
+        "Never attempts the un-coverable line",
+        "Under `include=all`, builds the fake for the network branch and covers it",
+        "Still reports the defensive `return` as un-coverable under `include=all` — the flag does not turn it into an attempt"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "line-target-resolves-to-its-function",
+      "skills": ["cover"],
+      "setup": "Line 42 of `pkg/svc/foo.go` sits inside `Load`.",
+      "query": "/cover pkg/svc/foo.go:42",
+      "files": [],
+      "expected_behavior": [
+        "Resolves the target to `Load` and states the kind (line) and the function",
+        "Runs `Load`'s full per-function loop without a plan gate, since a line target is a single function",
+        "Measures with `-run '^Test_Load($|_)'`, never with whole-package coverage"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "module-mode-honors-its-controls",
+      "skills": ["cover"],
+      "setup": "A module of nine packages, two of them `svc` and `api`.",
+      "query": "/cover module packages=svc,api fanout max_tests=5",
+      "files": [],
+      "expected_behavior": [
+        "Touches only `svc` and `api`, leaving the other seven packages alone",
+        "Dispatches one subagent per package and merges their reports, listing packages covered and skipped",
+        "Adds at most five tests or cases across the whole run and reports what is left under the cap",
+        "Each subagent still finishes and verifies one function before starting the next"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "writes-into-existing-tests",
+      "skills": ["cover"],
+      "setup": "`Test_Encode_tabular` already exists for the target function. A helper in `all_test.go` loses its last caller during the edit.",
+      "query": "/cover pkg/svc/foo.go",
+      "files": [],
+      "expected_behavior": [
+        "Adds rows to `Test_Encode_tabular` rather than creating a parallel test function",
+        "Deletes the now-unused helper from `all_test.go`, and drops the file if nothing is left in it",
+        "Ends with `gofmt -l` clean and `go test -v -race` showing `--- PASS` for every test in the edited files"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "terse-output",
+      "skills": ["cover"],
+      "setup": "An ordinary single-function run that adds two table rows.",
+      "query": "/cover func=Foo",
+      "files": [],
+      "expected_behavior": [
+        "Opens with the result — no preamble and no narration of measuring",
+        "Reports the before → after coverage delta, the tests added, and any deferred or un-coverable lines, each stated once",
+        "No closing restatement of the table it just showed",
+        "Quotes only the `--- PASS` lines for the tests it touched, not the full `go test -v` log"
+      ]
+    }
+  ]
+}
