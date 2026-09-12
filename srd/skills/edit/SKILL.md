@@ -11,6 +11,18 @@ license: MIT
 
 # edit
 
+## Usage
+
+```
+/edit <srd>                  interactive (default): front-load issues, then walk entry by entry
+/edit <srd> 123              interactive from line 123: resolve to the nearest entry, walk from there
+/edit <srd> <srd>.review.md  feedback: apply a review file or pasted feedback, blocker → major → minor
+/edit <srd> #2               feedback from finding #2, then next by number or jump to any number
+/edit <srd> autofix          bulk-apply the review's ## Errata block behind one confirmation
+/edit <srd> polish           mechanical-only cleanup (spelling, numbering, keywords), confirm each
+/edit <srd> GR-3a            targeted: edit one entry by id, quoted text, or description
+```
+
 Drive an existing SRD toward the SRD standard by editing the source in place.
 
 ## Boundaries
