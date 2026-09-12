@@ -16,6 +16,13 @@ one failed call:
 2. The `srd-doc` REST mirror, when the server runs but MCP is not wired into
    this client: `curl 'http://<host>:7777/search?q=TEXT&k=5'` and
    `curl 'http://<host>:7777/docs/<id>'`. Same engine, same results.
+
+   `<host>` is `localhost` unless `SRD_DOC_HOST` says otherwise — probe it
+   before concluding there is no corpus. Missing MCP tools are not evidence the
+   server is down; they are evidence this client has no MCP wiring, which is
+   the exact case this step exists for. Reporting "no corpus" without a
+   `curl 'http://localhost:7777/docs' ` is the common way to miss a corpus that
+   is running.
 3. Scoped Grep/Read over a local corpus checkout, limited to the relevant
    subdirectory. A stopgap, never a blind whole-corpus read.
 

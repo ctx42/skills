@@ -75,6 +75,10 @@ genuinely is not there, never on one failed call:
    `id` (`gap-NNNN`). The read tools `mcp__srd-doc__search`, `get_doc`, and
    `list_docs` come from the same server; the caller uses them to decide a
    claim is unconfirmable before handing the gap here.
+
+   The absence of these tools says this client has no MCP wiring, not that the
+   server is down — fall through to REST and probe it before reporting no
+   channel.
 2. REST mirror, when the server runs but MCP is not wired into this client:
    `POST /gaps` with the record as a JSON body.
 
