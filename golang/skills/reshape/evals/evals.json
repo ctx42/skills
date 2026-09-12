@@ -1,0 +1,60 @@
+{
+  "skill_name": "reshape",
+  "evals": [
+    {
+      "id": 1,
+      "name": "ranked-multi-archetype-proposals",
+      "skills": ["reshape"],
+      "setup": "The project calls `must.Value` at 34 sites, 28 of them wrapped in the same three-line error-drop, and builds the same options struct inline at 12 more. The library is a local module under a `replace` directive, so its source is editable.",
+      "query": "/reshape must",
+      "files": [],
+      "expected_behavior": [
+        "Opens with the resolved library, the consumer scope, and the call-site count",
+        "Proposes across several archetypes, including at least one structural move — absorbing the repeated sequence, or moving a responsibility upstream — not only a rename or a single helper",
+        "Ranks by impact (reach × savings × quality, discounted by breakage and effort) and leads with the biggest win",
+        "Shows a real call site before → after for each proposal",
+        "Offers concrete diffs, since the library source is editable here"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "proposals-stay-on-the-library",
+      "skills": ["reshape"],
+      "setup": "`oskit` is consumed across the module, but the run is scoped to `./pkg/render`. Several call sites could be tidied without touching `oskit` at all — the tempting wrong answer.",
+      "query": "/reshape oskit in ./pkg/render",
+      "files": [],
+      "expected_behavior": [
+        "Every proposal changes `oskit`'s API; the consumer diff is shown as the payoff, never as the proposal itself",
+        "Proposes no call-site-only refactor that leaves the API untouched",
+        "Proposed signatures follow the style Naming, Errors, and API design rules",
+        "Edits nothing — reports the proposal set and stops"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "external-library-public-surface",
+      "skills": ["reshape"],
+      "setup": "`gopkg.in/yaml.v3` is an ordinary module dependency: no `replace`, no `go.work` entry, source in the module cache.",
+      "query": "/reshape gopkg.in/yaml.v3",
+      "files": [],
+      "expected_behavior": [
+        "Detects that the library is external and says so",
+        "Frames every proposal at the public-API level and notes it cannot diff internals",
+        "Offers a local wrapper as the fallback for changes that cannot land upstream"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "terse-output",
+      "skills": ["reshape"],
+      "setup": "A run whose analysis would support eight proposals, capped at three.",
+      "query": "/reshape must max=3",
+      "files": [],
+      "expected_behavior": [
+        "Opens with the one-line header and the ranked table — no preamble, no narration of mapping call sites",
+        "Reports at most three proposals, the three highest-impact ones",
+        "States each proposal once, with no closing summary re-listing the table already shown"
+      ]
+    }
+  ]
+}

@@ -12,6 +12,14 @@ argument-hint: "LIB [in ./pkg] [max=N]"
 
 # reshape
 
+## Usage
+
+```
+/reshape github.com/x/y/must   consumer scope is the whole module (default)
+/reshape must in ./pkg/render  restrict the consumer scope to one package
+/reshape must max=5            cap proposals reported (default 8, highest impact first)
+```
+
 Consumer-driven API review. Point it at a library the project depends on; it
 maps every call site, diagnoses the friction, and proposes the highest-impact
 changes to the *library's* API — the ones that would most simplify the code
