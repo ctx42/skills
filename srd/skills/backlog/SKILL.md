@@ -48,6 +48,10 @@ system is.
 - [../kb/references/retrieval-authoring.md](../kb/references/retrieval-authoring.md)
   (on-demand: drafting a page in `gaps`) — how to write Markdown the corpus
   chunks and ranks well. `srd:kb` owns it.
+- [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
+  (on-demand: before the first corpus lookup in `gaps`) — how to reach the
+  corpus, including the host the REST mirror answers on. `srd:create` owns it;
+  the `search`/`get_doc` calls below are specified there, not here.
 
 ## Backends
 
@@ -57,7 +61,11 @@ raised, hit count, `Lives in` page link) or `## Closed`. The wording lives in
 the page's `## Open questions` section; a row with an empty page link has only
 its label. Without a KB root, say so and work `gaps` alone.
 
-The `gaps` list reaches the store by, in priority order:
+The `gaps` list reaches the store by, in priority order — falling through only
+when a step is genuinely absent, never because one call failed. Absent means
+the tool is not in the tool set, or the mirror's host does not answer at all; a
+call that reaches the store and returns an error is a working store with a
+problem, and is reported rather than retried or fallen past:
 
 1. MCP — `mcp__srd-doc__list_gaps` (optional `status`),
    `mcp__srd-doc__resolve_gap` (`gap_id`, `published_url`, optional `note`);
@@ -92,8 +100,11 @@ own mechanism, one call per item.
 
 ### 1. Open the sitting
 
-State the three counts in one line and stop. Lead with `deferred` when it is
-non-empty: a sitting that opens with quick closes keeps going. All three empty:
+State the counts in one line and stop. With a backend missing, state the counts
+you have and name the list you cannot see in the same line — two counts and
+"no gap store configured" is the opening for that sitting, not a reason to
+skip the opening or to stop. Lead with `deferred` when it is non-empty: a
+sitting that opens with quick closes keeps going. All three empty:
 say the backlog is clear and stop.
 
 ### 2. deferred
@@ -109,7 +120,13 @@ its topic page, or from the row's label when it has no page yet.
 
 ### 3. unknowns
 
-For each row, establish which it is:
+Establish each row's state from the user in the room, never from the corpus. An
+unknown is by definition something nobody has pinned down, so a corpus hit that
+looks like the answer is either a different question or the very thing that
+should have closed it long ago — say so and let the user decide which. Reading
+one as the answer is how an unknown gets closed with a guess wearing a source.
+
+For each row:
 
 - Answered since (a decision was taken, or someone found out): hand the answer
   to `srd:kb`, which closes the row.
