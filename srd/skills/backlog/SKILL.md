@@ -12,6 +12,15 @@ license: MIT
 
 # backlog
 
+## Usage
+
+```
+/backlog           all three lists, cheap wins first (default)
+/backlog deferred  questions someone knows the answer to; closed by asking
+/backlog unknowns  things nobody has pinned down; triage, not answering
+/backlog gaps      reported holes in the user manual; drafts the page
+```
+
 One sitting over the three lists the SRD skills fill as a byproduct, cheap wins
 first.
 

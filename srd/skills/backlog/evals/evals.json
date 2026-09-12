@@ -1,0 +1,86 @@
+{
+  "skill_name": "backlog",
+  "evals": [
+    {
+      "id": 1,
+      "name": "opens-with-counts",
+      "skills": ["backlog"],
+      "setup": "`_open-questions.md` holds 3 deferred questions and 2 unknowns; the `srd-doc` gap store holds 5 open gaps.",
+      "query": "/backlog",
+      "files": [],
+      "expected_behavior": [
+        "States the three counts and stops, letting the user pick a list",
+        "Leads with `deferred` as the cheap wins",
+        "Starts no grilling and drafts no page before the user picks",
+        "No preamble; each count stated once"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "never-closes-an-unknown-by-guessing",
+      "skills": ["backlog"],
+      "setup": "One unknown asks whether a per-sensor-type propagation speed is needed. Nothing has been decided, though the corpus carries enough for a plausible inference.",
+      "query": "/backlog unknowns",
+      "files": [],
+      "expected_behavior": [
+        "Does not answer it from inference or from corpus reading, however plausible the inference",
+        "Confirms it is still open and moves on, closing it only if the user reports that a decision was actually taken",
+        "Leaves the row under `## Open` and bumps no hit count"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "reclassifies-rather-than-skipping",
+      "skills": ["backlog"],
+      "setup": "Working the deferred list, the user answers one question with \"actually nobody knows that yet\" — it was filed as deferred but is really an unknown.",
+      "query": "/backlog deferred",
+      "files": [],
+      "expected_behavior": [
+        "Has `srd:kb` change the row's kind from `deferred` to `unknown` in place, and says so",
+        "Writes nothing under the KB root itself — every KB write is delegated",
+        "Does not treat it as a skip or leave the row mislabeled",
+        "Does not file it as a documentation gap: it says nothing about the user manual"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "clusters-gaps-and-drafts-outside-the-corpus",
+      "skills": ["backlog"],
+      "setup": "Three open gaps, two of which report the same missing fact from different SRDs. The corpus covers a third of that fact already, but in an unranked page.",
+      "query": "/backlog gaps",
+      "files": [],
+      "expected_behavior": [
+        "Clusters the two duplicates and surfaces the cluster size as priority",
+        "Checks the corpus before drafting, separating content that is absent from content that is present but unranked",
+        "Writes the draft outside every corpus source, the KB root included",
+        "Publishes nothing itself; once given the published URL it resolves every gap in the cluster"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "degrades-without-a-gap-store",
+      "skills": ["backlog"],
+      "setup": "The server exposes neither `list_gaps` nor `GET /gaps`. `_open-questions.md` still holds 2 deferred and 1 unknown.",
+      "query": "/backlog",
+      "files": [],
+      "expected_behavior": [
+        "Says once that the gap store is not enabled, then counts the two knowledge-base lists",
+        "Works `deferred` and `unknowns` normally — the backends fail independently",
+        "Invents no store and does not retry the failed probe"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "terse-output",
+      "skills": ["backlog"],
+      "setup": "A sitting that closes two deferred questions and one gap cluster.",
+      "query": "/backlog",
+      "files": [],
+      "expected_behavior": [
+        "No narration of the list calls or the row moves",
+        "States what closed, once",
+        "No closing summary repeating the rows, and no drafted page echoed back into chat"
+      ]
+    }
+  ]
+}
