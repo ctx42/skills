@@ -70,10 +70,10 @@ Legend: Y implemented · N not yet · X rejected
 Keep the `Item` cell to a short name (≤ ~30 chars); the item's own section
 carries the detail. Align the table so the `|` delimiters line up vertically:
 
-- Each column's width is its widest cell's content — counting the header as a
-  cell, and counting the `#` column against the plan's highest item number, so
-  a plan that reaches item 10 keeps `#` two wide throughout (which is why the
-  template above shows `| #  |`).
+- Each column's width is its widest cell's content, counting the header as a
+  cell — except `#`, which is never narrower than two, so single-digit plans
+  still read `| #  |` as the template and both bundled plans do, and reaching
+  item 10 changes nothing.
 - Widening is required, narrowing is not. When editing an existing plan whose
   columns are already wider than the content needs, keep its widths and pad the
   new row to match: a plan is edited far more often than it is written, and
@@ -146,6 +146,17 @@ so the record stays honest.
    without re-reading the code, which survives exactly as long as nothing is
    marked `Y` on someone's say-so. What you could not verify stays `N` and is
    named in the report as unverified, not silently promoted or silently left.
+
+   Judge an item against its own acceptance criteria, not against how finished
+   the area looks: an item asking for 429 *with* `Retry-After` is not done by a
+   429 alone. Part-done stays `N` — there is no half status, and inventing one
+   would make the table unreadable — but the report says what landed and what
+   is missing, so the gap is visible without re-reading the code.
+
+   Some criteria the repo cannot settle either way: a staging round trip, a
+   thing only a human has seen work. Those stay `N` too, named as unverifiable
+   *here* rather than unmet, which tells the user it needs their eyes and not
+   more code.
 
 3. Append work the plan does not carry yet, when the update surfaced some: new
    items at the end with fresh numbers, status `N`, and the same shape as the

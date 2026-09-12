@@ -52,10 +52,11 @@
       "id": 5,
       "name": "update-unverified-claim",
       "expected_behavior": [
-        "Goes to the repo rather than recording the user's claim — a claim is where to look, not what to write down",
-        "Marks `Y` only what the code, a test, or a command's output actually shows",
-        "Leaves the unverifiable item `N` and names it in the report as unverified, rather than silently promoting it or silently leaving it",
-        "Does not renumber or drop any item while doing so"
+        "Goes to the code rather than recording the user's claim — a claim is where to look, not what to write down",
+        "Leaves item 2 `N`: a process-local map is not the shared Redis counter the item specifies, however close the feature looks",
+        "Does not mark item 3 `Y` on the strength of the 429 alone — its acceptance criteria name `Retry-After`, which is absent",
+        "Names both in the report as claimed-but-unverified, saying what is actually there, so the user can correct the plan or the code",
+        "Renumbers and drops nothing"
       ]
     },
     {

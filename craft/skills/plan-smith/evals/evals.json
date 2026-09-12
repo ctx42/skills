@@ -49,7 +49,7 @@
       "skills": [
         "plan-smith"
       ],
-      "setup": "An existing plan with four `N` items. The user says \"items 2 and 3 are done\". The repo shows item 2 implemented and tested; item 3's code is not there at all.",
+      "setup": "`assets/rate-limit-plan.md` and `assets/limiter.go`, copied into the workspace. The user says \"items 2 and 3 are done\". The code says otherwise: item 2 wants Redis counters and `limiter.go` keeps buckets in a process-local `map[string]*bucket` behind a mutex, with no redis anywhere; item 3 wants HTTP 429 *with a `Retry-After` header* and the handler returns 429 but sets no such header. There are no `_test.go` files at all.",
       "query": "/plan-smith update rate-limit-plan.md — the Redis counters and the 429 responses both landed, mark them done.",
       "files": [
         "assets/rate-limit-plan.md",
