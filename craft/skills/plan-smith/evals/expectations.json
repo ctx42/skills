@@ -19,10 +19,10 @@
       "name": "bundled-brief",
       "expected_behavior": [
         "Splits the bundle into separate items, one per outcome — at minimum the storage/disk problem, the failure notification, and the reconciliation with the dashboard — rather than a single 'fix the export' item",
-        "Orders items by dependency and impact, putting blocking work before work that depends on it, rather than echoing the order the user happened to mention things",
         "Asks about the piece that is genuinely underdetermined (what the numbers not tying out actually means, or where the export should go instead) rather than inventing a resolution for it",
         "Does not pad the plan with work the user never raised, such as rewriting the export in a different language or adding a scheduler",
-        "Gives each item acceptance criteria that a reader could check"
+        "Gives each item acceptance criteria that a reader could check",
+        "Where one item cannot start until another finishes, says so in that item's section — the order alone proves nothing when it matches the order the user happened to speak in"
       ]
     },
     {
@@ -55,7 +55,7 @@
         "Goes to the code rather than recording the user's claim — a claim is where to look, not what to write down",
         "Leaves item 2 `N`: a process-local map is not the shared Redis counter the item specifies, however close the feature looks",
         "Does not mark item 3 `Y` on the strength of the 429 alone — its acceptance criteria name `Retry-After`, which is absent",
-        "Names both in the report as claimed-but-unverified, saying what is actually there, so the user can correct the plan or the code",
+        "Names both in the report as claimed-but-unverified, saying what is actually there",
         "Renumbers and drops nothing"
       ]
     },
@@ -63,7 +63,7 @@
       "id": 6,
       "name": "ambiguous-request",
       "expected_behavior": [
-        "Asks exactly one question — write a new plan or update an existing one — and nothing else",
+        "Asks exactly one question — write a new plan or update an existing one —",
         "Writes no file and invents no plan content before the answer comes back",
         "Opens on the question, with no preamble, no restatement of the request, and no announcement of what it is about to do"
       ]

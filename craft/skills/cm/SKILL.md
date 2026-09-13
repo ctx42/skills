@@ -133,7 +133,9 @@ config key or wire format no longer accepted. Documented or not: a caller
 written against what the code actually did is broken just the same, so the test
 is whether correct code stops working, not whether a doc said so. A bug fix
 that makes observable behavior *match* what was already promised is not
-breaking, or every `fix` would carry a `!`:
+breaking, or every `fix` would carry a `!`. Say in the body who has to act
+anyway: code written against the buggy behaviour stops working, and those
+callers — not the ones the bug bit — are the ones with something to do:
 
 - Add `!` in the summary.
 - Add a mandatory `BREAKING CHANGE:` footer describing the impact and

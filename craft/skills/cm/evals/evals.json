@@ -100,6 +100,16 @@
       "setup": "Nothing is staged. The working tree carries an unstaged change adding a retry to the HTTP client. The invocation asks to commit.",
       "query": "/cm apply",
       "files": []
+    },
+    {
+      "id": 11,
+      "name": "hash-without-an-amend-ask",
+      "skills": [
+        "cm"
+      ],
+      "setup": "`HEAD` is a commit whose message reads \"wip\". Its diff adds request-id propagation. Nothing in the invocation asks for an amend or a commit.",
+      "query": "/cm HEAD",
+      "files": []
     }
   ]
 }

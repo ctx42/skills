@@ -18,8 +18,7 @@
         "Resolves `HEAD` as the commit selector rather than looking for a hex string and falling through to the staged diff",
         "Regenerates the message from that commit's own diff via `git show`, ignoring the staged `.gitignore`",
         "Amends with `git commit --amend` through a heredoc rather than creating a new commit, because the request asked for the amend",
-        "Does not fold the staged `.gitignore` into the amended commit — it amends the message alone and says what stayed staged",
-        "A bare `/cm <hash>` would only present the message; the amend happens on the explicit ask"
+        "Does not fold the staged `.gitignore` into the amended commit — it amends the message alone and says what stayed staged"
       ]
     },
     {
@@ -46,7 +45,7 @@
       "expected_behavior": [
         "Summary line captures it as `style:` or `chore:`",
         "Sums the cleanup in one sentence, or omits the body — it does not enumerate the mechanical edits one by one",
-        "Reserves per-symbol detail for changes a user of the software would notice; in a mixed commit those lead and the cleanup folds into one closing sentence"
+        "Reserves per-symbol detail for changes a user of the software would notice — here there are none, so no symbol is named individually"
       ]
     },
     {
@@ -82,7 +81,7 @@
       "expected_behavior": [
         "Writes it as `fix`, with no `!` and no `BREAKING CHANGE:` footer",
         "Treats behaviour moving into line with the documented contract as a fix, not a break — otherwise every bug fix would carry a `!`",
-        "Mentions in the body that callers depending on the old acceptance are affected, without escalating the type"
+        "Says in the body that code relying on the old, undocumented acceptance will now get an error — the people affected are the ones depending on the bug, not the ones it bit, and only the first group has to act"
       ]
     },
     {
@@ -93,6 +92,15 @@
         "Does not commit: with nothing staged, `git commit` would fail or create an empty commit",
         "Stages nothing on the user's behalf — choosing what goes into a commit is the user's call",
         "Says plainly that the tree is unstaged and `apply` did not run, and presents the message anyway"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "hash-without-an-amend-ask",
+      "expected_behavior": [
+        "Derives the message from that commit's diff via `git show`",
+        "Presents the message and stops — `HEAD`'s hash is unchanged afterwards, and no new commit exists",
+        "Does not propose amending; naming a commit is not asking to rewrite it"
       ]
     }
   ]
