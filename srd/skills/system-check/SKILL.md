@@ -45,6 +45,10 @@ against the target platform as the `srd-doc` corpus records it.
   (eager) — how to reach the documentation corpus, how its sources rank, and
   where an unconfirmed or undocumented fact goes (`srd:report-doc-gap`,
   `srd:kb`).
+- [../review/SKILL.md](../review/SKILL.md) (on-demand: before invoking the
+  review layer) — this skill delegates the standard checks there and depends on
+  what that skill does to `<srd>.review.md`, so read its file lifecycle rather
+  than assuming one.
 
 ## Documentation corpus
 
@@ -58,8 +62,7 @@ buffer silently in between, and `srd:kb` writes when the walk ends.
 ## Invocation
 
 The first token is the SRD path, or a literal mode word. With no arguments, ask
-which SRD
-to check; fall back to the user's prose for free-form input.
+which SRD to check; fall back to the user's prose for free-form input.
 
 - an SRD path → **review** (default): the full flow below. Re-running on
   an SRD that already has a `<srd>.questions.md` resumes the open questions (see
@@ -71,7 +74,9 @@ to check; fall back to the user's prose for free-form input.
 
 1. Start: invoke `srd:report-doc-gap` and `srd:kb` to drain what a prior
    session left buffered for this SRD, then resolve the corpus (see
-   [Support files](#support-files)). With none reachable, skip the
+   [Support files](#support-files)). `srd:review` drains the gap buffer at its
+   own start too; tell it the drain is done so the user is not offered the same
+   pending gaps twice in one run. With none reachable, skip the
    system-knowledge layer and run the review layer alone rather than stopping.
 2. Get the review: run `srd:review path/to/srd.md` (default mode) and read the
    file it leaves. That mode never rewrites an existing file — on one that
@@ -80,14 +85,21 @@ to check; fall back to the user's prose for free-form input.
    author's file is refreshed, not clobbered, and a review written before the
    last edit does not silently go stale.
 3. Build the merged question set:
-   - From the review: reframe each relevant finding as a colleague-voice
-     question. Drop its severity tag and rule id (keep the severity only to
-     order the walk, step 5).
+   - From the review: reframe each finding that blocks *building* into a
+     colleague-voice question. That is what "relevant" means here — a reader
+     who has to implement the SRD is stopped by a non-atomic rule, an
+     unverifiable criterion, an uncovered scope item, an undefined term. They
+     are not stopped by a British spelling or a stray emphasis, so errata and
+     cosmetics never become questions: they stay in the review file for the
+     author. Drop the severity tag and rule id (keep the severity only to order
+     the walk, step 5).
    - System confrontation: confront the SRD against the corpus. `srd:review`
      runs a facts-vs-corpus pass of its own, so the two layers can land the
-     same contradiction twice — merge them into one question and keep the
-     review's finding number, rather than asking the user the same thing in two
-     voices. Raise a question when the SRD contradicts a documented
+     same contradiction twice — merge them into one question rather than asking
+     the user the same thing in two voices. The merged question takes a `Qn`
+     like any other; note the review finding it came from in the questions
+     file's own bookkeeping, not in the question's text, which carries no rule
+     ids or finding numbers. Raise a question when the SRD contradicts a documented
      API rule, service behavior, or glossary term; redefines or conflicts with
      another SRD; uses a term undefined in the system; or cannot be built
      without knowing something the system does not pin down ("can't build X
@@ -210,8 +222,12 @@ Open questions only. Resolved items are removed; durable facts are banked.
   analysis and the walk order, never the file.
 - Questions are not list items: each begins with its bold `Qn` id, separated by
   one blank line.
-- Sequential ids in walk order (`Q1`, `Q2`, …), stable across re-runs — when
-  one is removed, do not renumber the survivors.
+- Ids are assigned in walk order the first time a question appears and never
+  change after: a survivor keeps its number, and a question added on a re-run
+  takes the next unused one. The file is therefore ordered by walk priority
+  while the ids run out of sequence — that is correct, because a `Qn` the user
+  answered yesterday must still mean the same question today. Never renumber to
+  tidy the sequence.
 
 Good:
 

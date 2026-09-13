@@ -19,7 +19,7 @@
         "system-check",
         "review"
       ],
-      "setup": "A re-run after the author edited the SRD. Both `specs/labeling.questions.md` and `specs/labeling.review.md` already exist, the latter written by the author's own review pass. The edit fixed six findings and introduced two new blockers — `GR-12` states a vague quality attribute, `GR-13` specifies an appearance rather than a behaviour.",
+      "setup": "A re-run after the author edited the SRD. Both `specs/labeling.questions.md` and `specs/labeling.review.md` already exist, the latter written by the author's own review pass. The edit fixed six findings and introduced two new blockers: `GR-12` states a vague quality attribute with no measurable criterion (REQ-6), and `GR-14` is an In Scope item no requirement covers (SCO-2).",
       "query": "/system-check specs/labeling.md",
       "files": []
     },
