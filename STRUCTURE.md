@@ -98,6 +98,13 @@ reference each other with relative paths from their own directory:
 
 Keep these skills within the same plugin so the `../sibling` paths resolve.
 
+A path written in a `references/` file needs one more `..` than the same path
+in a `SKILL.md`, since it sits a directory deeper — `../../create/references/`
+from `edit/references/autofix.md`, `../create/references/` from
+`edit/SKILL.md`. `dev/lint-skills.sh` resolves every relative link in both and
+fails on one that points nowhere; it was added after a reference file lost its
+only link to a sibling by carrying the SKILL.md spelling.
+
 ---
 
 ## Per-machine data
