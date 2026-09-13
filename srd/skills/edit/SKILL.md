@@ -33,7 +33,10 @@ counterpart to the read-only `review`. It never invents or restates rules
 never edits metadata (Owners, Initiative, Designs), sets back-links, or changes
 `Status`; it flags those gaps (STR-2/3/5/7, STA-*). A finding outside that
 mandate is reported, not looped — even when the run entered at it: a feedback
-run starting at a metadata `#2` says so and advances. It never proposes a Status
+run starting at a metadata `#2` says so and advances to `#3`. An explicit `#n`
+sets the order for the rest of the run, so advancing means the next number, not
+a return to severity order — the user who named a number is reading the file by
+number. It never proposes a Status
 transition (flag only a malformed `STA-*` value) and never proposes pushing,
 publishing, or syncing the SRD as a follow-up. Comment blocks are read-only:
 a source of information about the SRD, never edited, answered, or rewritten,
@@ -157,7 +160,10 @@ Every mode but `autofix` runs this loop per change:
 2. Close the proposal with the choices (Yes / Yes Next / Skip / Edit) — the
    capital letter is the key — and apply only on explicit approval:
    - `Y` (Yes): apply, then stay on the current entry and propose its next
-     issue; advance only once the entry is exhausted.
+     issue; advance only once the entry is exhausted. In `feedback` the unit
+     is the review's finding, not the entry, so `Y` proposes the next finding
+     on that entry and stops when the review has no more — never an issue the
+     review did not raise. Applying a review means applying that review.
    - `YN` (Yes Next): apply and move to the next entry, leaving its remaining
      issues flagged.
    - `S` (Skip): change nothing; leave the issue flagged.
@@ -171,8 +177,9 @@ Every mode but `autofix` runs this loop per change:
    list is terminal output, not a section of the SRD: it belongs to this
    session, empties with it, and writing it into the document would leave
    questions behind for the next reader to mistake for content. Carry it
-   forward in the conversation, renumbered, until it empties; what is still
-   open at the end goes in the closing manifest.
+   forward in the conversation, renumbered from 1 each time you re-show it so
+   answered items leave no holes, until it empties; what is still open at the
+   end goes in the closing manifest.
 3. Re-validate the affected entry and its cross-refs at once against the
    standard, focusing on what the edit can touch: scope coverage (SCO-2/3,
    suspended while the In Scope `--- TODO ---` marker stands), id
@@ -189,6 +196,11 @@ one term per concept); when an edit restructures sections, follow the
 template's order.
 
 ## Decision log
+
+`autofix` is a bulk path through the same gate, not an exception to it: every
+substitution it applies is an applied edit and owes its entry, and
+[references/autofix.md](references/autofix.md) is the procedure for finding and
+applying them, not the whole of what the mode owes.
 
 Record every applied edit in `<srd>.decisions.md` beside the source — the
 author-facing account of what changed and why, which a diff cannot carry.
@@ -288,7 +300,11 @@ with a confirmation and expects no review file.
    Move on only after the current entry is resolved or skipped.
 
 Start point (path + line): resolve the line to the entry or paragraph at or
-nearest it, skip step 1, and begin step 2 there, continuing to the end.
+nearest it, skip step 1, and begin step 2 there, continuing to the end. The
+walk is still one entry at a time and still never looks ahead — step 1's
+summary is what would have told you which later entry has a finding, and
+skipping it means learning that entry by entry. Say "no finding" and move on
+for a clean one rather than scanning forward for the next interesting entry.
 
 ### feedback
 
@@ -341,7 +357,11 @@ free description ("the login timeout rule").
    skips this step: its fixes are surface-only.
 2. Invoke `srd:kb` to write the facts the session's confirmations attested,
    and `srd:report-doc-gap` to offer to work the gaps it buffered this
-   session.
+   session. `srd:kb` asks where the knowledge base lives when no root is on
+   file, which on a first run lands here, just before the manifest. Resolve it
+   at session start instead when the session has facts to bank: a setup
+   question between the last edit and the closing report reads as an
+   interruption of the report, and the answer is needed either way.
 3. Close with the manifest — approved edits, not a re-narration of diffs the
    user already saw:
    - What changed: entry/id, one line each.

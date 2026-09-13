@@ -167,6 +167,11 @@ the exemption barely shows.
    *here* rather than unmet, which tells the user it needs their eyes and not
    more code.
 
+   A brief may carry an item that is a question for a named person rather than
+   work in the repo — `grill-me` hands over open branches that way. Its
+   criterion is that the answer is recorded, and only the user can settle it;
+   the repo never can, so it is never promoted here.
+
    So `Y` needs every criterion settled in the repo. One unmet, one only a
    human can settle, one the user says is done but nothing in the repo shows —
    any single one holds the item at `N`. An item half checkable and half

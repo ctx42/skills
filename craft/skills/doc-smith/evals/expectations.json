@@ -5,7 +5,7 @@
       "id": 1,
       "name": "cross-document-contradiction",
       "expected_behavior": [
-        "Defaults to audit: models the whole document before judging and edits nothing before approval",
+        "Judges against a model of the whole document, not a sequential read: the report pairs findings whose two halves sit in different sections, and cites both locations for each — a defect only visible once both ends are held at once",
         "Reports the contradiction as a Blocker citing both locations, not just the later one",
         "Flags the twice-repeated browser claim as redundancy",
         "Numbers the findings and groups them Blocker / Should-fix / Nit"
@@ -67,7 +67,7 @@
       "name": "normalize-to-the-doc-s-own-convention",
       "expected_behavior": [
         "Normalizes to the variety the document predominantly uses, fixing the minority outliers rather than converting the whole document",
-        "Does not impose US on a document that is mostly British — US is the tiebreak only where the doc has no variety of its own",
+        "Reports the mixed spelling in both directions — how many sites use each form and which it took as the document's own — so the reader can overrule the choice without re-reading the document",
         "Reports the mix as a spelling-variety defect either way, since the author may have meant the other one",
         "Re-aligns the table columns and reflows to the doc's own 100-column wrap, not an imposed house default",
         "States edit classes and counts without pasting the document back"

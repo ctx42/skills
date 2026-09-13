@@ -72,10 +72,9 @@
       "id": 7,
       "name": "update-keeps-an-existing-table-s-widths",
       "expected_behavior": [
-        "Pads the appended row to the table's existing widths rather than re-padding every row down to the new minimum",
-        "Leaves untouched rows byte-identical, so the diff shows only what changed",
-        "Appends the new item at the end with a fresh number and status `N`, renumbering nothing",
-        "Keeps the `|` delimiters aligned in the source after the edit"
+        "Keeps the `Item` column padded to its existing 30 characters: the appended row is padded out to match, not the table narrowed to the new widest cell",
+        "Leaves every row it did not change byte-identical — the three existing rows and the separator are unchanged apart from item 1's status",
+        "Marks item 1 `Y` from the implementation actually present in the repo, and appends the TODO's work as a new item at `N` with the next number"
       ]
     }
   ]

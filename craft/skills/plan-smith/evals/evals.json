@@ -18,7 +18,7 @@
         "plan-smith"
       ],
       "setup": "Cold open. No prior conversation.",
-      "query": "/plan-smith we need to get the nightly export working properly — right now it dumps everything to one CSV on the app server, which fills the disk, nobody is told when it fails, and finance says the numbers do not tie out with the dashboard. Write that up as a plan.",
+      "query": "/plan-smith we need to get the nightly export working properly — right now it dumps everything to one CSV on the app server, which fills the disk, nobody is told when it fails, and finance says the numbers do not tie out with the dashboard. The figures can only be reconciled once the export is split per entity, since today there is nothing to compare line by line. Write that up as a plan.",
       "files": []
     },
     {
@@ -72,9 +72,11 @@
       "skills": [
         "plan-smith"
       ],
-      "setup": "An existing plan whose `Item` column is padded several spaces wider than its widest cell needs — written when a longer item name was in it. One item is now implemented, and the update also appends a new item.",
-      "query": "/plan-smith update tmp/sso-plan.md",
-      "files": []
+      "setup": "The bundled `assets/wide-column-plan.md`, whose `Item` column is padded to 30 characters where its widest cell needs 18 — written when a longer item name was in it. Item 1 (row-level filters) is now implemented in the repo. The repo also carries a `TODO` naming one further piece of work whose item name is shorter than the padded column, so re-padding the table to its new minimum and leaving it alone produce different files.",
+      "query": "/plan-smith update tmp/wide-column-plan.md",
+      "files": [
+        "assets/wide-column-plan.md"
+      ]
     }
   ]
 }

@@ -72,7 +72,8 @@
         "Produces the summary rather than refusing to finish — an unanswerable branch does not block alignment",
         "Does not quietly close the branch or invent a ceiling to make the summary look complete",
         "Carries it as open, naming who owns the answer and the question they must answer",
-        "The other branches still get acceptance criteria; only the open one lacks them"
+        "The other branches still get acceptance criteria; only the open one lacks them",
+        "The persisted plan carries the open branch as its own item — the named owner and the question they must answer, with what it blocks — so a reader of the file alone can tell that work is gated; it does not survive only in the chat reply"
       ]
     }
   ]
