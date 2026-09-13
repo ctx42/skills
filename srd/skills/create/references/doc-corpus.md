@@ -34,8 +34,17 @@ one failed call:
    subdirectory. A stopgap, never a blind whole-corpus read.
 
 Default to `search` with `k` about 5; `get_doc` only when a hit needs its full
-table or context; `list_docs` to orient. A source pointer is a document id.
-Every backend is read-only: it queries the docs, never edits the SRD.
+table or context; `list_docs` to orient. Every backend is read-only: it queries
+the docs, never edits the SRD.
+
+A source pointer is a document id: the string `get_doc` accepts, which is not
+the path the file has in a checkout. Ids are namespaced by source — `ifp-doc/`,
+`user-doc/`, `kb/` — so one page is `docs/infraport/formats/x.md` on disk and
+`ifp-doc/formats/x.md` in the corpus. Record the id. Checking a path-shaped
+citation against `list_docs` finds no match for any of them and reports a whole
+page of live sources as stale; that is a defect in the comparison, not a stale
+citation. Match on the trailing path first, and call a citation stale only when
+no id ends in it.
 
 ## Trust
 

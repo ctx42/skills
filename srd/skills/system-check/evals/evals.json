@@ -41,7 +41,7 @@
         "system-check",
         "kb"
       ],
-      "setup": "A knowledge-base page consulted during the walk cites a corpus document id that `list_docs` no longer returns.",
+      "setup": "A knowledge-base page consulted during the walk cites two sources. One is a corpus document id that `list_docs` no longer returns. The other is a live document, cited the way the page's own Source table writes them — as a checkout path, `docs/infraport/formats/sound_file_documentation.md`, where the corpus serves that same page under the namespaced id `ifp-doc/formats/sound_file_documentation.md`.",
       "query": "/system-check specs/labeling.md",
       "files": []
     },

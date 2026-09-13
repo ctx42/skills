@@ -39,6 +39,7 @@
       "name": "stale-citation-becomes-a-question",
       "expected_behavior": [
         "Raises the stale citation as a question alongside the others",
+        "Raises only the citation that is genuinely absent: the live source written as a checkout path is not reported stale, since no `list_docs` id equals that string and comparing the raw strings would condemn every source on the page",
         "Hands the repair to `srd:kb`, which owns knowledge-base files, rather than editing the page here",
         "Does not silently drop the fact the stale page carried"
       ]

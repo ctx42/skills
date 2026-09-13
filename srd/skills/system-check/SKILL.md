@@ -110,8 +110,11 @@ which SRD to check; fall back to the user's prose for free-form input.
      what you found and what it fails to cover; a competent engineer does not
      ask what they could have looked up. When the lookup shows the docs
      themselves at fault, also hand the gap to `srd:report-doc-gap`.
-   - Stale citation: when a knowledge-base page cites a corpus id absent from
-     `list_docs`, raise it as a question too and hand the repair to `srd:kb`.
+   - Stale citation: when a knowledge-base page cites a document that no
+     `list_docs` id matches, raise it as a question too and hand the repair to
+     `srd:kb`. Match the way the corpus reference says: a citation written as a
+     checkout path matches no id literally, and comparing the raw strings
+     condemns every live source on the page.
 4. Write `<srd>.questions.md` next to the SRD (open questions only), per
    [Questions file](#questions-file).
 5. Walk one question at a time (see [Walk](#walk)), ordered: was-blocker
