@@ -122,6 +122,25 @@ Good — definition only; the behavior moves to a requirement:
 > **Recovery Codes** — One-time codes that let a user regain access when their
 > primary authentication method is unavailable.
 
+### Glossary link repeated on every use (GLO-4)
+<!-- expand: (follows GLO-4) -->
+
+Bad:
+> The Acoustic Channel carries the signal. Each
+> [Acoustic Channel](glossary/main_glossary.md#acoustic-channel) is sampled
+> independently, and an [Acoustic Channel](glossary/main_glossary.md#acoustic-channel)
+> with no sensor is skipped.
+
+Good — linked on first use, bare after that:
+> The [Acoustic Channel](glossary/main_glossary.md#acoustic-channel) carries the
+> signal. Each Acoustic Channel is sampled independently, and an Acoustic
+> Channel with no sensor is skipped.
+
+GLO-4 is a SHOULD, and the link is owed once per document, not once per section
+— a term linked again three pages later has not broken the rule so much as made
+the SRD read like a reference card. GLO-5 governs where that one link points:
+at the entry, never at the glossary document.
+
 ### Non-atomic requirement — several rules in one (REQ-1)
 <!-- expand: 9f74c18d-837b-46c7-aaff-b27e00b6936b (follows REQ-1) -->
 

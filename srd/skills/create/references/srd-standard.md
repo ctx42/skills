@@ -1,6 +1,6 @@
 # SRD Standard
 
-<!-- GENERATED FILE — do not edit by hand; page_version 16. Assembled by the
+<!-- GENERATED FILE — do not edit by hand; page_version 19. Assembled by the
      srd-sync skill from dev/srd-standard.header.md, the upstream
      "Guidelines for Software Requirements Documents" source, and
      dev/srd-standard.footer.md. Edit the frame files or the upstream source,
@@ -27,8 +27,10 @@ the house additions (US English, sub-numbering, one term per concept).
 Two things belong to the standard and MUST NOT be copied into the SRD being
 written:
 
-- The rule identifiers (`STR-*`, `REQ-*`, …) name the rules; they are not part
-  of a user's document.
+- The rule identifiers (`STR-*`, `REQ-*`, …) name this standard's own rules, so
+  never carry them into an SRD as if they were its requirements. The letter
+  codes are not reserved: an SRD MAY number its own requirements `REQ-1`,
+  `REQ-2`, … if that suits the document.
 - A real SRD carries no `Example` / `Don't` / `Do` annotations. They are a
   teaching device only (REQ-7); the Bad→Good examples live in
   [authoring-guide.md](authoring-guide.md).
@@ -80,6 +82,11 @@ A statement of something the document will define or deliver.
 ## Out of Scope
 
 A statement of something the document does not cover on purpose.
+
+## Company Glossary
+
+The shared glossary that defines terms used across INFRAPORT documents. It is
+kept outside any single SRD.
 
 ## Quality Bar
 
@@ -224,9 +231,23 @@ defined, either in the SRD's "Glossary" section or in the Company Glossary.
 Proper names — product, service, tool, and device names — do not need a
 definition.
 
+**GLO-4:** An SRD SHOULD link a term that the Company Glossary defines to its
+definition, on the term's first use in the document. Later uses of the same term
+need no link.
+
+**GLO-5:** A link to a Company Glossary definition MUST point to the entry
+itself, not to the glossary document alone.
+
+**GLO-6:** An SRD MAY use a proper name without a link to the Company Glossary,
+even when the Company Glossary defines that name.
+
+**GLO-7:** A term defined in the SRD's own "Glossary" section MAY be used
+without a link to that definition.
+
 ## Scope Discipline
 
-**SCO-1:** Each scope item MUST be atomic and verifiable.
+**SCO-1:** Each scope item MUST give a high-level overview of one change the SRD
+requests.
 
 **SCO-2:** Every "In Scope" item MUST be covered by at least one requirement.
 
