@@ -5,10 +5,10 @@
       "id": 1,
       "name": "surfaces-a-system-contradiction",
       "expected_behavior": [
-        "Drains `srd:report-doc-gap` and `srd:kb` for this SRD first, and says nothing about them because both buffers are empty",
+        "States in one clause that both buffers were drained and were empty — the delegates show the user nothing, so this skill's own report is where a drain that ran becomes distinguishable from one that did not",
         "Runs `srd:review specs/labeling.md` once to create the review file, then reads it — and makes no edit to the SRD",
-        "Writes `specs/labeling.questions.md` merging the reframed, untagged review findings with a system question noting that `GR-4` contradicts the documented API rule",
-        "Merges the contradiction into one question when `srd:review`'s own facts-vs-corpus pass found it too, keeping the review's finding number rather than asking twice in two voices",
+        "Writes `specs/labeling.questions.md` merging the reframed review findings with a system question noting that `GR-4` contradicts `ifp-doc/concepts/tags.md`. No question carries a severity tag, a rule id, or a finding number",
+        "Asks the contradiction once, not twice in two voices, even though the review layer's own facts-vs-corpus pass found it too — the link back to the review finding lives in the file's bookkeeping, never in the question's text",
         "Walks one question at a time and does not advance until the user moves on"
       ]
     },
@@ -18,8 +18,8 @@
       "expected_behavior": [
         "Refreshes the review layer with `srd:review` in default mode, which resolves what the edit fixed and appends what it broke",
         "Does not use `check`: that mode re-verifies only, so the two new blockers would reach no question",
-        "Leaves the author's file intact — numbers, comments and `## Withdrawn` survive — because the default mode updates in place rather than rewriting",
-        "Turns both new defects — `GR-12`'s unmeasurable quality and `GR-14`'s uncovered scope item — into questions in the refreshed set",
+        "Leaves the author's review file intact — every finding number survives and nothing is renumbered — because the default mode updates in place rather than rewriting",
+        "Turns both new defects — `GR-12`'s unmeasurable quality and the In Scope item `SC-4` that no requirement covers — into questions in the refreshed set",
         "Drops the open questions the edit answered and names which ones went",
         "Walks only the refreshed open set"
       ]
