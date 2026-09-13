@@ -79,11 +79,15 @@ what it meant.
 
 - `max_tests=N` — hard cap on cases added this run: count one per table row
   or subtest, and one for a test function that holds neither. A new two-row
-  table function is two, not three — the wrapper is not itself a case. Under
+  table function is two, not three — the wrapper is not itself a case. Turning
+  an existing single-case test into a table counts the rows you add, not the
+  one that was already there: the cap bounds new coverage, and re-shaping a
+  case that already ran adds none. Under
   `fanout` the cap cannot be enforced live across workers, so divide it before
-  dispatch: give each worker `N / packages` (minimum 1), name each worker's
-  share in the plan, and report the total actually added against `N`. Uneven
-  division goes to the packages with the most uncovered lines.
+  dispatch: give each worker `N / packages` rounded down (minimum 1), name
+  each worker's share in the plan, and report the total actually added against
+  `N`. Hand the remainder out one at a time, most-uncovered package first,
+  until it is gone.
 - `packages=a,b` — module mode: restrict to these packages.
 - `include=all` — also attempt complex lines (build the fakes/scaffolding) in
   `*_test.go`, which is the whole of this skill's write scope. A line reachable
@@ -109,9 +113,10 @@ For each target function `Foo` (or method `T.Bar`), work in strict order.
    the function is uncovered — scaffold `Test_Foo`.
 2. Measure in isolation: `go test -run '^Test_Foo($|_)' -coverprofile=<tmp>
    ./<pkg>` (methods: `^Test_T_Bar($|_)`). Read coverage of only Foo's own
-   line range from the profile; ignore blocks belonging to callees. The profile's
-   rows are `file:startLine.col,endLine.col stmts count` — one row per basic
-   block, not per line, and `stmts` is how many statements that block holds.
+   line range from the profile; ignore blocks belonging to callees. The
+   profile's rows are `file:startLine.col,endLine.col stmts count` — one row
+   per basic block, not per line, and `stmts` is how many statements that
+   block holds.
    Select the rows whose range falls inside Foo, treat `count > 0` as covered,
    and report coverage as covered statements over total, which is what the
    percentages elsewhere count; a rolled-up
@@ -124,10 +129,12 @@ For each target function `Foo` (or method `T.Bar`), work in strict order.
    and the package's test conventions, then add one targeted case — table row,
    subtest, or assertion — per easy line or branch (complex lines too under
    `include=all`; stop at `max_tests`). Never attempt un-coverable lines.
-4. Re-measure once: re-run Foo's direct-test family and re-read the profile;
-   confirm Foo's target lines went from 0 to hit. If a target line did not
-   rise, bisect — narrow to the case meant to cover it, fix or drop it —
-   until every coverable line of Foo is hit or deferred.
+4. Re-measure: re-run Foo's direct-test family and re-read the profile;
+   confirm Foo's target lines went from 0 to hit. One measurement is the
+   expected cost — do not re-measure per case added. If a target line did not
+   rise, that is the exception: bisect it — narrow to the case meant to cover
+   it, fix or drop it — and re-measure, until every coverable line of Foo is
+   hit or deferred.
 
 ## Classify each uncovered line
 
@@ -163,7 +170,9 @@ End of run, after every function's loop:
 
 1. Run `gofmt -l` on every edited `*_test.go` file; fix any issues.
 2. Run `go test -v -race` over every package this run edited — `./<pkg>` for
-   one, `./...` for a module or fan-out run. Each must pass — a test this
+   one, `./...` for a module or fan-out run. A run that edited nothing has
+   nothing to verify: say so and skip both steps rather than reporting a gate
+   that guarded no change. Each must pass — a test this
    run never touched going red is still this run's problem, and the most
    likely cause is a helper it edited. Quote only the result lines of the tests
    this run touched; report any other failure as a regression rather than
@@ -174,13 +183,12 @@ End of run, after every function's loop:
 Never attempt; always name the line and the reason:
 - unreachable defensive branches (errors that cannot occur at the call site),
 - `init` functions,
-- clock, network, hardware, or randomness *with* an injection seam nobody can
-  drive from a test — a real device, a real wall clock the code reads
-  directly. Where the only obstacle is a missing seam, the line is **deferred**,
-  not un-coverable: someone can add the seam, and this skill may not (see
-  `include=all`). Un-coverable means no test could reach it whatever the author
-  does; deferred means not from here.
-- `init` functions,
+- clock, network, hardware, or randomness that no injection seam can reach —
+  a real device, a real wall clock the code reads directly. Where the only
+  obstacle is a missing seam, the line is **deferred**, not un-coverable:
+  someone can add the seam, and this skill may not (see `include=all`).
+  Un-coverable means no test could reach it whatever the author does; deferred
+  means not from here.
 - generated files marked `DO NOT EDIT`,
 - panic-only paths with no recoverable contract.
 
