@@ -52,10 +52,12 @@ assert_not_inside() {
     }
 }
 
+# Check every rule before reporting any of it: a log that prints three
+# successes and then fails reads like a success with a footnote.
+assert_not_inside 'the Technology Group [A-Z][a-zA-Z]+'
 assert_present '[company glossary](glossary/main_glossary.md)'
 assert_present '[Quality Bar](guidelines_for_software_requirements_documents.md#Quality-Bar.1)'
 assert_present 'the Technology Group'
-assert_not_inside 'the Technology Group [A-Z][a-zA-Z]+'
 
 sed \
     -e 's|\[company glossary\](glossary/main_glossary\.md)|Company Glossary|g' \

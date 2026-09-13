@@ -30,7 +30,7 @@ that writes it. Maintainer task: it needs the cfsync mirror in the private
 
 | Role            | Path                                                                                                 | Load    |
 |-----------------|------------------------------------------------------------------------------------------------------|---------|
-| Source (mirror) | `$SRD_STANDARD_SRC`, else `~/ws/vr/docs/infraport/guidelines_for_software_requirements_documents.md` | (eager) |
+| Source (mirror) | `$SRD_STANDARD_SRC`, else `~/ws/vr/docs/docs/infraport/guidelines_for_software_requirements_documents.md` | (eager) |
 | Generated copy  | `srd/skills/create/references/srd-standard.md`                                                       | (eager) |
 | Header frame    | `dev/srd-standard.header.md`                                                                         | (eager) |
 | Footer frame    | `dev/srd-standard.footer.md`                                                                         | (eager) |
@@ -89,9 +89,14 @@ Initiative, Ticketing System, Markdown, Status, User Interface (UI). Keep every
 other term.
 
 Strip these, keeping the surrounding text: the `---` frontmatter block; the
-metadata table (`|` rows); `[[TOC]]`; the intro note ("This page is itself a
+metadata table (`|` rows); the TOC block (a fenced ```` ```adf ```` block whose
+body is `type: toc` plus a `localId`); the intro note ("This page is itself a
 valid SRD…"); cfsync `N>` indent markers and their continuation indentation in
-glossary definitions; `[[*expand:…]]` and `[[*orderedList:…]]` placeholders.
+glossary definitions; and the example expands — `> [!EXPAND] Example`
+blockquotes carrying the Don't/Do pairs, stripped entire, since a real SRD
+carries no Example/Don't/Do annotation. (Earlier exports emitted `[[TOC]]` and
+`[[*expand:…]]`/`[[*orderedList:…]]` placeholders; neither appears from
+page_version 16 on. Strip whichever form the source in hand actually uses.)
 In REQ-7, keep only through "It MUST be the rule and nothing more." and drop
 the source's trailing "This page is the one and only exception…" aside (it is
 specific to the source page). Collapse any doubled blank line the strips leave.
@@ -100,7 +105,7 @@ Requirements keep their `**ID:**` prefixes; every group outside Scope stays.
 
 Do not make the vr-internal-reference rewrites (GLO-3, STR-10, STA-3, STA-4) by
 hand: copy those units verbatim like any other; `dev/srd-subst.sh` bakes the
-swaps in at step 6.
+swaps in at step 5.
 
 ## Steps
 
@@ -110,17 +115,19 @@ swaps in at step 6.
 3. Frozen-node check. If the source `page_version` is newer than the copy's
    provenance version, the frozen nodes (the Quality Bar list and the Bad→Good
    example expands) may have changed without showing in the export. Run the
-   diff below. It stops the sync only when it finds something: a new or missing
-   `[[*expand:` id, or a Quality Bar list the maintainer has not re-checked at
-   this version. A clean check is reported in one line and the sync continues —
-   a version bump on its own is a prompt to look, not a hard stop, or no sync
-   could ever complete.
-   - Diff the source's `[[*expand:` localIds against the `<!-- expand: -->`
+   diff below. It stops the sync only when it finds something: an example
+   expand the guide does not account for, or a Quality Bar list the maintainer
+   has not re-checked at this version. Match expands by the rule they follow,
+   not by id — the export stopped carrying localIds, so the rule each one sits
+   under is the only stable key. A clean check is reported in one line and the
+   sync continues — a version bump alone is a prompt to look, not a hard stop,
+   or no sync could ever complete.
+   - Diff the source's example expands against the `<!-- expand: -->`
      anchors in `srd/skills/create/references/authoring-guide.md` plus the
-     list in `dev/srd-untranscribed-examples.md`. Report each new id with the
-     rule it follows (read it in Confluence, then transcribe it into the guide
-     or add it to the list) and each missing id (retire its guide section or
-     list entry).
+     list in `dev/srd-untranscribed-examples.md`, keyed by the rule each
+     expand follows. Report each new one with the rule it follows (read it in
+     Confluence, then transcribe it into the guide or add it to the list) and
+     each one that has gone (retire its guide section or list entry).
    - Tell the maintainer to open the page, review the Quality Bar list and the
      expands, and update `dev/srd-standard.footer.md` and the guide before
      continuing.
@@ -128,23 +135,27 @@ swaps in at step 6.
 4. Transform the source into the body per the rules above.
 5. Apply substitutions to the body, before assembling and before wrapping:
    `dev/srd-subst.sh <body.tmp >body.final` (reads stdin, prints the result).
-   Order matters and only this one reproduces the shipped copy — the copy holds
-   post-substitution words, so wrapping first leaves the script's patterns
-   split across lines and it exits `matched 0 times` on text that is in fact
-   present. That failure is not the upstream-phrase-changed case: check the
-   order before touching the script's rules.
+   Order matters: the copy holds post-substitution words, so substituting
+   before the frame and the wrap is what reproduces it. Wrapping first can also
+   split a pattern across lines and produce a spurious `matched 0 times` —
+   whether it does depends on where the wrap falls, so a phrase that survives
+   at one width fails at another. Either way, check the order before touching
+   the script's rules: that failure is not the upstream-phrase-changed case.
    A genuine assertion failure means an upstream phrase changed — update the
    script's rule, never resolve it by accepting the source wording. The script
    prints one `subst '<phrase>' xN` line per rule: a phrase cited by two rules
-   (the glossary link is GLO-3's and STR-10's both) reports `x2` and is
-   rewritten in both places, which is correct. It refuses outright when a
+   reports `xN` and is rewritten in every place, which is correct — how many
+   rules cite a given phrase changes between page versions, so the count is
+   information, not something to assert in advance. It refuses outright when a
    phrase occurs only inside a longer one, since these are substring matches
    and "the Technology Group" sits inside "the Technology Group Lead".
 6. Assemble the final candidate: `header + body.final + footer`, one blank line
-   between, with the banner edit from Assembly, then wrap to the copy's width.
+   between, with the banner edit from Assembly, then wrap new and changed prose
+   to 80 columns. Unchanged units keep the wrapping they already have — reflowing
+   them turns a three-line diff into a whole-file one and buries the real change.
 7. `diff` the final candidate against the current copy. The hunks are the real
    changes since the last sync. Verify only the changed units
-   character-for-character against the source minus the trims and the step-6
+   character-for-character against the source minus the trims and the step-5
    substitutions (unchanged units were verified at the previous sync). Report
    the hunks in these buckets:
    - LOCAL-ONLY (in the copy, not the candidate): local debt — push it

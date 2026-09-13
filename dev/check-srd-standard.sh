@@ -16,7 +16,7 @@ export LC_ALL=C
 
 SKILLS_SRC="$(cd "$(dirname "$0")/.." && pwd)"
 COPY="$SKILLS_SRC/srd/skills/create/references/srd-standard.md"
-SRC="${SRD_STANDARD_SRC:-$HOME/ws/vr/docs/infraport/guidelines_for_software_requirements_documents.md}"
+SRC="${SRD_STANDARD_SRC:-$HOME/ws/vr/docs/docs/infraport/guidelines_for_software_requirements_documents.md}"
 
 [ -f "$SRC" ] || { echo "SKIP   SRD source not on this machine ($SRC)"; exit 0; }
 
