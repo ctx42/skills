@@ -9,7 +9,8 @@
         "Groups findings by document section",
         "Tags the two-rule requirement `[blocker, atomicity]` citing REQ-1, and the uncovered scope item `[blocker, coverage]` citing SCO-2",
         "Collects the British spelling into the `## Errata` block at the top, tagged `[minor, linguistic]` citing `(SRD:house)`, stated as the substitution `` `behaviour` → `behavior` ``",
-        "Closes with a per-severity count and whether a blocker stands between the SRD and the Quality Bar"
+        "Closes with a per-severity count and whether a blocker stands between the SRD and the Quality Bar",
+        "The closing per-severity counts match what the review file actually contains — a tally is a claim about the file, and a wrong one sends the author to the wrong findings"
       ]
     },
     {
@@ -85,10 +86,10 @@
         "Rewrites its prose fix into the substitution shape that makes it appliable unreviewed",
         "Leaves the blocker `#2` under its own section",
         "Reclassifies only — hunts no new defects",
-        "Is idempotent: a second run changes nothing",
         "Bumps `updated:` because something moved, and reports the moved number",
-        "A second run writes nothing at all — not even a fresh timestamp — since nothing moved",
-        "Reads the SRD to quote the `old` text exactly when rewriting the prose fix, while editing only the review file"
+        "Reads the SRD to quote the `old` text exactly when rewriting the prose fix, while editing only the review file",
+        "Run twice in a row, the second run changes nothing at all — not a moved finding, not a fresh `updated:` timestamp",
+        "The file after the second run is byte-identical to the file after the first"
       ]
     },
     {

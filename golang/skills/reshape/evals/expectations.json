@@ -8,7 +8,7 @@
         "Opens with the resolved library, the consumer scope, and the call-site count",
         "Proposes across several archetypes, including at least one structural move — absorbing the repeated sequence, or moving a responsibility upstream — not only a rename or a single helper",
         "Ranks by impact (reach × savings × quality, discounted by breakage and effort) and leads with the biggest win",
-        "Shows a real call site before → after for each proposal",
+        "Shows a real call site before → after for every proposal whose payoff is at the call site; a change with no call-site effect says so instead",
         "Offers concrete diffs, since the library source is editable here"
       ]
     },
@@ -17,7 +17,7 @@
       "name": "proposals-stay-on-the-library",
       "expected_behavior": [
         "Every proposal changes `oskit`'s API; the consumer diff is shown as the payoff, never as the proposal itself",
-        "Proposes no call-site-only refactor that leaves the API untouched",
+        "Names the call-site-only cleanup it declined and why, rather than silently omitting it — the reader needs to see the trap was spotted",
         "Proposed signatures follow the style Naming, Errors, and API design rules",
         "Edits nothing — reports the proposal set and stops"
       ]
@@ -36,7 +36,6 @@
       "name": "terse-output",
       "expected_behavior": [
         "Opens with the one-line header and the ranked table — no preamble, no narration of mapping call sites",
-        "Reports at most three proposals, cutting from the bottom of the ranked list",
         "Says in one line that the forced structural option was considered and what displaced it, if the cap evicted it — the cap hides nothing silently",
         "States each proposal once, with no closing summary re-listing the table already shown"
       ]
@@ -45,9 +44,10 @@
       "id": 5,
       "name": "restraint-on-an-api-that-is-fine",
       "expected_behavior": [
-        "Says the API fits its consumer and proposes little or nothing, rather than manufacturing eight proposals to fill the default cap",
-        "Does not force a structural proposal into existence when no friction supports one — the forcing rule is about not stopping at renames, not a quota",
-        "Still reports the header line with the real call-site count, so the reader can see the analysis happened"
+        "Says the API fits its consumer and prints no ranked table, rather than an empty one",
+        "Names what it looked for and found absent, so a reader can tell a clean API from a shallow pass",
+        "Declines any reach-1 shape by name instead of padding the table with a `Low` row",
+        "Still reports the header line with the real call-site count"
       ]
     }
   ]

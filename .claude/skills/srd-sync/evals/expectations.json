@@ -6,7 +6,7 @@
       "name": "normal-sync-after-a-source-edit",
       "expected_behavior": [
         "Reads the source, the current copy, and the header/footer frame before proposing anything",
-        "Runs the frozen-node check and, finding nothing new or missing, reports it in one line and continues — a `page_version` bump alone is a prompt to look, not a hard stop",
+        "Runs the frozen-node check. It continues only if that check is clean; an example expand the guide does not account for stops the sync and nothing is written, however ordinary the rest of the diff looks",
         "Reports the reworded rule under TEXT DIFFERS with both sides shown",
         "Confirms before writing, then writes header + transformed body + footer with the provenance banner carrying the new source `page_version`",
         "Generated rule text is the source text verbatim — no paraphrase and no re-wrap that changed words"
@@ -66,8 +66,7 @@
         "Reports the intro hunk as FRAME and asks no confirmation for it",
         "Fails the Contents check: names the stale group and tells the maintainer to update the header's Contents, then re-assembles",
         "Blocks the write on that failure even though the diff is otherwise FRAME-only — a stale Contents line is itself a FRAME hunk and must not ride through",
-        "Passes the Notice check silently, since `in this document` → `in an SRD` is the one tolerated difference",
-        "Would treat any other Notice difference as `NOTICE DIFFERS` and hard-stop"
+        "Passes the Notice check, reporting it in one line, since `in this document` → `in an SRD` is the one tolerated difference"
       ]
     },
     {

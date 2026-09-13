@@ -53,8 +53,9 @@
       "name": "declined-at-the-confirm-gate",
       "expected_behavior": [
         "Files nothing",
-        "Says what happened to the record, since discarding it is destructive and the finder should not have to guess",
-        "Does not silently re-buffer a record the finder rejected, nor silently drop one they only meant to amend — it asks which"
+        "Says the record was discarded and dropped from the buffer, so the finder is not left wondering where it went",
+        "Offers the amend path before the gate, not after: a correction adjusts and re-shows, a no discards",
+        "Records the topic in the caller's output so the same weak lookup does not re-capture it next session"
       ]
     },
     {

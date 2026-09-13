@@ -90,6 +90,16 @@
       "setup": "The user ran `/craft:cm` in a writable checkout. The commit message body came back wrapped at 80 columns and the user corrected it: \"the body wraps at 72, not 80.\" `craft/skills/cm/SKILL.md` already states `- Wrap at 72 columns.` under its `## Body` section. There is no sibling `LESSONS.md`.",
       "query": "/enhance-skills",
       "files": []
+    },
+    {
+      "id": 10,
+      "name": "writes-the-rule-that-was-approved",
+      "skills": [
+        "enhance-skills"
+      ],
+      "setup": "A session with one correction. The proposal the user approves reads, word for word: \"never restructure or reshape code the task did not ask about\". The target skill directory is a writable checkout with no sibling `LESSONS.md`.",
+      "query": "/enhance-skills",
+      "files": []
     }
   ]
 }

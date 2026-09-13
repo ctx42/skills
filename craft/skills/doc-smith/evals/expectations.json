@@ -38,8 +38,8 @@
       "expected_behavior": [
         "Fixes audience, product, and purpose, asking only the gaps it cannot infer — audience, key tasks, terminology — in one batched round",
         "Uses one term per concept from the first line and a task-oriented structure (overview → prerequisites → tasks → reference → troubleshooting), omitting empty sections",
-        "Runs the whole-document self-review before writing",
-        "Writes the file, states the path, and does not paste the manual back"
+        "Writes the file, states the path, and does not paste the manual back",
+        "Names, in the reply, what the whole-document pass changed — the pass leaves no other trace, so an unreported one cannot be told from one that never ran"
       ]
     },
     {
@@ -55,8 +55,10 @@
       "id": 6,
       "name": "revise-keeps-the-whole-coherent",
       "expected_behavior": [
-        "Infers revise mode; moves in document order one paragraph at a time, applying only what the user agrees to and never batch-editing the file",
-        "After the rename lands, runs the coherence check and flags the later \"workspace\" paragraphs as now-inconsistent before moving on",
+        "Infers revise mode and moves in document order, one unit at a time, applying only what the user agrees to",
+        "Applies the rename to the unit under discussion only, rather than sweeping the document on its own initiative",
+        "Runs the coherence check and reports the later occurrences as now-inconsistent, with their locations, before moving on",
+        "Sweeps the rest only once the user asks for it, which is the difference between a batch edit and an agreed one",
         "Reports each turn as the proposed change plus the coherence-check result — not a reprint of the document"
       ]
     },

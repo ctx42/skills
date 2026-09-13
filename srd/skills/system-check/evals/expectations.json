@@ -19,7 +19,7 @@
         "Refreshes the review layer with `srd:review` in default mode, which resolves what the edit fixed and appends what it broke",
         "Does not use `check`: that mode re-verifies only, so the two new blockers would reach no question",
         "Leaves the author's file intact — numbers, comments and `## Withdrawn` survive — because the default mode updates in place rather than rewriting",
-        "Turns `GR-12` and `GR-13` into questions in the refreshed set",
+        "Turns both new defects — `GR-12`'s unmeasurable quality and `GR-14`'s uncovered scope item — into questions in the refreshed set",
         "Drops the open questions the edit answered and names which ones went",
         "Walks only the refreshed open set"
       ]
@@ -49,7 +49,8 @@
       "expected_behavior": [
         "No preamble and no step narration — nothing like \"I'll now read…\" or \"Let me run review\"",
         "Reports a one-line pointer after writing (\"wrote `specs/labeling.questions.md`, 6 open questions\") without re-listing the questions already in the file",
-        "Opens the walk with the first question rather than a summary of what it just did"
+        "Opens the walk with the first question rather than a summary of what it just did",
+        "The finding counts in the reply match what the review file holds — count them from the file rather than from memory of writing it"
       ]
     },
     {

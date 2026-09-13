@@ -68,7 +68,7 @@
         "edit"
       ],
       "setup": "Mid-session, with a `## TODO` section already present holding two items.",
-      "query": "Add: confirm the lockout threshold with security to TODO",
+      "query": "Add: confirm the lockout threshold with security to TODO — then close the session",
       "files": []
     },
     {
@@ -121,7 +121,7 @@
         "report-doc-gap",
         "kb"
       ],
-      "setup": "A previous session for this SRD ended with two unfiled doc gaps and one unwritten platform fact still buffered.",
+      "setup": "A previous session for this SRD ended with two unfiled doc gaps and one unwritten platform fact still buffered. The user defers both when offered, asking to get on with the edit.",
       "query": "/edit specs/login.md",
       "files": []
     },

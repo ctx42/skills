@@ -139,7 +139,6 @@
       "expected_behavior": [
         "Does not delete `GR-6`: on an approved SRD a removal strikes the text through and keeps the identifier (STA-8)",
         "Leaves the number in place and renumbers nothing after it (STA-7)",
-        "Does not reuse `GR-6` for anything later in the run — the id retires with its requirement",
         "Records the removal in `<srd>.decisions.md` like any other applied edit"
       ]
     },

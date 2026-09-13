@@ -49,7 +49,8 @@
         "Opens with the confirmation or the next question — no acknowledgement phrase, no praise, no narration of what it is doing next",
         "Confirms the decision once in a single short restatement, and does not repeat it later in the same turn",
         "Does not re-list the already-resolved branches or replay the interview so far",
-        "Says how many branches remain open"
+        "Says how many branches remain open",
+        "States how many branches are resolved and how many remain, the same way in every turn that reports progress"
       ]
     },
     {
@@ -58,10 +59,10 @@
       "expected_behavior": [
         "Declines to treat the interview as complete, despite the user saying it is",
         "Names the size limit as still open and says why \"something sensible\" is not a decision — no number means nothing to build or test against",
-        "Does not volunteer a limit of its own — no candidate row count offered even as a strawman to argue with; the number has to come from the user",
         "Does not produce the final structured summary or offer the plan-smith handoff while that branch is open",
         "Asks one question, not a numbered list of questions the user must work through in one go",
-        "States how many branches are resolved and how many remain open, not just that one is outstanding"
+        "States how many branches are resolved and how many remain open, not just that one is outstanding",
+        "States how many branches are resolved and how many remain, the same way in every turn that reports progress"
       ]
     },
     {

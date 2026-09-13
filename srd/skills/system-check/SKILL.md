@@ -123,6 +123,11 @@ Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. A short pointer ("wrote `<srd>.questions.md`,
 N open questions") is enough — do not re-list the questions you just wrote.
 
+Every count you report — questions written, findings the review layer holds,
+what remains open — is read back off the file, never carried in your head from
+writing it. Two files are in play here and they count different things, which
+is exactly how a question total gets reported as a finding total.
+
 ## Walk
 
 Go through the questions file **one item at a time**. Never batch. For each

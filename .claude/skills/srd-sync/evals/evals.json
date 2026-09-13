@@ -84,7 +84,7 @@
       "skills": [
         "srd-sync"
       ],
-      "setup": "A machine with no vr checkout, so the cfsync mirror is absent.",
+      "setup": "`SRD_STANDARD_SRC` points at a path that does not exist, so the source cannot be read. (The default path now resolves on a machine with the checkout, so absence has to be arranged deliberately rather than assumed.)",
       "query": "Sync the SRD standard",
       "files": [],
       "requires": "none — this scenario IS the absent-source case and runs anywhere"

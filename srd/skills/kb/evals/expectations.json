@@ -55,8 +55,8 @@
       "expected_behavior": [
         "Shows the proposed moves and waits for confirmation before touching a file",
         "Moves the section with its attestation line, provenance rows, and open questions",
-        "Re-derives anchors and repairs knowledge-base page links, `_open-questions.md` rows, and the gap store's `doc_id`",
-        "States that references from SRDs cannot be repaired, and names the old ids so they can be found by hand"
+        "States that references from SRDs cannot be repaired, and names the old ids so they can be found by hand",
+        "Reports each stale gap-store `doc_id` with the value it should take, rather than writing it — this skill holds read access there"
       ]
     },
     {

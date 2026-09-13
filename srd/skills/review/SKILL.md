@@ -97,11 +97,10 @@ Tag each finding:
   acting on it is misled without the SRD being unacceptable.
 - `minor` — cosmetic: British spelling, spacing, punctuation.
 
-The rows are the common cases, not every rule — STR-8/9/11-13, STA-4-8 and
-REQ-2/7/8 have none. Place an unlisted rule by what breaking it costs: the
-Quality Bar (blocker), a reader who must still act (major), the eye alone
-(minor). Say which tier and why in the finding, so the next run lands in the
-same place. Never a fourth level.
+The rows are the common cases — STR-8/9/11-13, STA-4-8 and REQ-2/7/8 have
+none. Place an unlisted rule by what breaking it costs: the Quality Bar
+(blocker), a reader who must still act (major), the eye alone (minor). Say
+which tier and why, so the next run lands in the same place. Never a fourth.
 
 ## Category
 
@@ -123,10 +122,9 @@ entry leads and the lower becomes the second tag:
   contradicting Out of Scope, or a rule stated only in a Note or the
   Introduction (SCO-2, SCO-3).
 - `reference` — a link, ticket id, or claim about the live system that is
-  wrong or stale. The standard has no rule against being wrong about the
-  platform, so this finding cites evidence where others cite a rule: the corpus
-  doc id and heading that contradict it, or the dead link. "This is wrong" with
-  nothing to check it against is not actionable.
+  wrong or stale. The standard forbids no such error, so this finding cites
+  evidence where others cite a rule: the corpus doc id and heading that
+  contradict it, or the dead link.
 - `redundancy` — two rules state the same thing, or one subsumes the other.
 - `verifiability` — a vague quality, an unmeasurable criterion, an open-ended
   list (REQ-5, REQ-6, LANG-7).
@@ -167,6 +165,10 @@ free-form input.
 A file-writing run closes with one task-oriented line — e.g. "4 of 15 tasks
 resolved, 2 withdrawn; 1 blocker still open." — plus the per-severity count of
 open findings and whether a blocker stands between the SRD and the Quality Bar.
+
+Count those from the finished file, not from memory of writing it: a wrong
+tally sends the author to the wrong findings, and it is the one number nobody
+re-derives.
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
 

@@ -18,8 +18,9 @@
       "name": "broad-target-auto-plan-first",
       "expected_behavior": [
         "Detects the broad target and switches to plan-first on its own",
-        "Proposes the defaults it would use — `max_issues=25`, `depth=standard`, the package list — and stops for approval before the full pass",
-        "Past the approval, fans out one subagent per package and merges into one ranked report capped at `max_issues`"
+        "Proposes the defaults it would use — `max_issues=25`, `depth=standard`, the package list — and stops there, checking nothing until the user answers",
+        "Given that approval in a following turn, fans out one subagent per package and merges into one ranked report capped at `max_issues`",
+        "Leaves each worker's report on disk, or attributes merged lines to the worker that produced them, so the fan-out is visible in the artifacts rather than only asserted"
       ]
     },
     {
@@ -41,7 +42,7 @@
         "Proposes the two genuinely new rules, each with its provenance and a before/after example",
         "Drops the project-specific rename",
         "Reports the `context.Context` correction as already covered rather than proposing it again — deduping against `../style/SKILL.md` happens before presenting, not after",
-        "Waits for the user to pick before writing; on confirmation writes the `../style/SKILL.md` line plus its keyed `../style/rules.md` entry and shows the diff"
+        "Waits for the user to pick before writing; on confirmation writes the `../style/SKILL.md` line, plus its keyed `../style/rules.md` entry where the rule needs one, and shows the diff"
       ]
     },
     {
@@ -61,8 +62,7 @@
       "name": "terse-output",
       "expected_behavior": [
         "Opens with the findings — no preamble, no narration of reading the rules",
-        "States each finding once and reports budget usage",
-        "No closing summary re-listing findings the user can already see"
+        "States each finding once and reports budget usage"
       ]
     },
     {

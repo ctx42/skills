@@ -43,13 +43,11 @@
       "id": 5,
       "name": "retrofit-missing-block",
       "expected_behavior": [
-        "Appends the `## Self-learning` block verbatim as the last `## ` section of `SKILL.md`, after `## Output`, leaving the rest of the body untouched",
-        "The inserted block matches the one other skills carry line for line, so the tree stays uniform — same wording, same line breaks, only `<plugin>/<skill>` resolved",
+        "Appends the `## Self-learning` block as the last `## ` section of `SKILL.md`, leaving the rest of the body untouched",
+        "Reproduces the block's wording exactly — same sentences, same order — then substitutes the plugin and skill names and re-wraps to 80 columns; the words are the constant, not the line breaks",
         "Resolves the placeholder path to `$HOME/.agent-data/ctx42-skills/lessons/craft/foo.md`, keeping `$HOME` literal",
         "Creates no `LESSONS.md` — the store appears with the first lesson, not with the block",
-        "Reports the one file it edited, with no restatement of the block it just wrote",
-        "Reproduces the block's wording exactly, then substitutes the plugin and skill names and re-wraps to 80 columns — the words are the constant, not the line breaks",
-        "Appends it as the last `## ` section of the target `SKILL.md`, creating no lessons file"
+        "Reports the one file it edited, without restating the block it just wrote"
       ]
     },
     {
@@ -75,9 +73,10 @@
       "id": 8,
       "name": "terse-output",
       "expected_behavior": [
-        "Writes all three rules: two to `golang/skills/style/LESSONS.md`, one to `craft/skills/cm/LESSONS.md`, each file created with the `# Lessons` header",
-        "Per touched skill: the path written and the rules added, each stated once",
-        "No preamble, no narration of reading or appending, and no closing summary that restates the rules just listed",
+        "Writes all three rules: two to `golang/skills/style/LESSONS.md`, one to `craft/skills/cm/LESSONS.md`, each file created with its `# Lessons` header",
+        "Per touched skill, states the path written and how many rules landed",
+        "Does not restate the rules themselves — the user approved them a turn ago and can still see them",
+        "No preamble, no narration of reading or appending, no closing summary",
         "Does not paste the resulting `LESSONS.md` files back"
       ]
     },
@@ -89,6 +88,15 @@
         "Files no lesson: the rule was missed, not missing, and a `LESSONS.md` line repeating the body changes nothing on a future run",
         "Says the body already rules on it rather than silently dropping the correction, and points at rewording that `SKILL.md` line as the fix that would help",
         "Does not decide by asking the user what to do with the duplicate"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "writes-the-rule-that-was-approved",
+      "expected_behavior": [
+        "The line on disk is the line the user approved, word for word — not a tightened, shortened, or otherwise improved version of it",
+        "Any wording change is proposed and approved before the write, never applied on the way to the file",
+        "Re-wrapping to 80 columns is not a wording change; dropping words is"
       ]
     }
   ]

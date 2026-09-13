@@ -16,7 +16,7 @@
       "id": 2,
       "name": "reuse-the-company-glossary",
       "expected_behavior": [
-        "Recognizes the known term from the glossary digest and adds no local Glossary entry for it, linking or referring to the Company Glossary instead (GLO-3 / STR-10)",
+        "Adds no local Glossary entry for the known term (GLO-3 / STR-10). The SRD may use the term bare — the Company Glossary is what defines it — and the reply says which terms were recognised, so the author can see the lookup happened",
         "Adds a local Glossary entry only for the genuinely new term",
         "Defines that term and nothing else — no behaviour, no rules inside the entry (GLO-1)"
       ]

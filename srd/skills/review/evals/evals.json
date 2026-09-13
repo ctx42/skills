@@ -80,7 +80,7 @@
         "review"
       ],
       "setup": "`specs/login.review.md` holds a British-spelling finding `#4` under Requirements, stated as prose rather than a substitution, and a scope blocker `#2`. There is no `## Errata` block yet.",
-      "query": "/review specs/login.md errata",
+      "query": "/srd:review specs/login.md errata, then the same command again",
       "files": []
     },
     {
