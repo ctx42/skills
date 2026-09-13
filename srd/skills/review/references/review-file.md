@@ -24,6 +24,12 @@ Each finding is atomic — one indivisible fix, verifiable by a single yes/no. I
 two edits can be verified or resolved separately, they are two findings, even
 when they share one root cause. No bullet says "do A and B".
 
+Two rules breaking on one edit is the mirror case and resolves the same way: a
+`Status` field that violates both STA-2 and STA-3 takes one correction and one
+yes, so it is one finding. Cite the rule the fix is derived from and name the
+other in the text. Atomicity is about the fix, not about how many rules the
+defect trips.
+
 Open finding shape — number first, then severity, then category:
 
 `- [ ] #7 [blocker, atomicity] GR-3a: problem — fix. (SRD:REQ-1)`
@@ -81,8 +87,14 @@ In order:
 2. Open findings, grouped by document section: Metadata, Introduction,
    Glossary, Scope, Requirements. Omit a section with no open findings. An
    errata finding lives in `## Errata`, never also under its document section.
+   No `---` between these sections — the rule separates the file's parts
+   (Errata, open findings, Resolved, Withdrawn), not the document sections
+   inside the open part.
 3. A `---` line, then `## Resolved`: fixed findings as `- [x] #7 …`, a flat
-   list sorted by number, keeping the text and rule id.
+   list sorted by number, keeping the original text and rule id and appending
+   what closed it (`— added GR-11`). Keep, then append: a rewritten finding
+   loses what was wrong, and the pair is what makes the entry readable a month
+   later.
 4. A `---` line, then `## Withdrawn` (last): `- #9 … (withdrawn: <reason>)` —
    no checkbox, keeps the number.
 

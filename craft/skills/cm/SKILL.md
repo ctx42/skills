@@ -103,6 +103,14 @@ review; they see only the diff and the message.
 - Prefer concrete symbols and files: `` `TargetNameFromContext` ``,
   `` `Prepare` ``, not umbrella slogans that hide the actual edits.
 
+- Every number in the body is read off the diff, not reasoned out from it. A
+  message describing `1<<attempt * 100ms` over `maxAttempts = 3` as backing off
+  "200ms, 400ms and 800ms" invented the third value — the third attempt is the
+  last one, so it never sleeps. Retry counts, timeouts, sizes, versions:
+  compute them from the changed lines or leave them out. The reader checks the
+  message against the diff, and a wrong number there discredits the rest of a
+  message that was otherwise right.
+
 - If the diff mixes unrelated edits (e.g. IDE config + library fix), say so
   in the body or ask to split commits — still without process jargon.
 

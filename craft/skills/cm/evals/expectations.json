@@ -5,7 +5,7 @@
       "id": 1,
       "name": "message-from-staged-diff",
       "expected_behavior": [
-        "Derives the message from the diff alone — the session-cookie discussion never reaches the message",
+        "The message describes only what the diff changes: no mention of session cookies, of an approach considered and dropped, or of anything a reader of `git log` could not see in the diff",
         "Summary line is imperative, lowercase, `feat(...)`-shaped, no trailing period, within ~50 chars",
         "Defaults to `mini`: the summary plus one short paragraph wrapped at 72 columns that explains why, naming concrete symbols in backticks",
         "Presents the message once in a zero-indent code block and stops — no `git commit` run or proposed, since the invocation did not ask for it"
@@ -17,7 +17,7 @@
       "expected_behavior": [
         "Resolves `HEAD` as the commit selector rather than looking for a hex string and falling through to the staged diff",
         "Regenerates the message from that commit's own diff via `git show`, ignoring the staged `.gitignore`",
-        "Amends with `git commit --amend` through a heredoc rather than creating a new commit, because the request asked for the amend",
+        "Amends without opening an editor and without `-m`, so the multi-paragraph body survives intact — checkable in the commit object, whose body keeps its blank lines and wrapping",
         "Does not fold the staged `.gitignore` into the amended commit — it amends the message alone and says what stayed staged"
       ]
     },
@@ -45,7 +45,7 @@
       "expected_behavior": [
         "Summary line captures it as `style:` or `chore:`",
         "Sums the cleanup in one sentence, or omits the body — it does not enumerate the mechanical edits one by one",
-        "Reserves per-symbol detail for changes a user of the software would notice — here there are none, so no symbol is named individually"
+        "Names no footer: nothing in the diff identifies a commit this change answers to, and `Refs:` is not a slot to fill"
       ]
     },
     {
@@ -61,7 +61,7 @@
       "id": 7,
       "name": "apply-commits-without-confirming",
       "expected_behavior": [
-        "Generates the message, then runs `git commit` through a heredoc without asking for confirmation",
+        "Commits without opening an editor and without `-m`, so the multi-paragraph body survives intact — checkable in the commit object, whose body keeps its blank lines and wrapping",
         "Honours the combined tokens: `micro apply` commits a one-line message",
         "Adds no `Co-Authored-By` or other attribution trailer despite the active harness instruction"
       ]
@@ -72,7 +72,8 @@
       "expected_behavior": [
         "Finds the staged diff empty and derives from `git diff` — the unstaged changes — rather than reporting that there is nothing to describe",
         "Says which diff it used, so the user knows the message does not describe a staged commit",
-        "Stages nothing itself"
+        "Stages nothing itself",
+        "Every number in the body is derivable from the diff: the backoff delays named are the ones the changed code actually sleeps, with no extra value inferred from the doubling pattern"
       ]
     },
     {
@@ -91,7 +92,8 @@
         "Derives the message from the unstaged diff, as the empty-index fallback requires",
         "Does not commit: with nothing staged, `git commit` would fail or create an empty commit",
         "Stages nothing on the user's behalf — choosing what goes into a commit is the user's call",
-        "Says plainly that the tree is unstaged and `apply` did not run, and presents the message anyway"
+        "Says plainly that the tree is unstaged and `apply` did not run, and presents the message anyway",
+        "Every number in the body is derivable from the diff: the backoff delays named are the ones the changed code actually sleeps, with no extra value inferred from the doubling pattern"
       ]
     },
     {
