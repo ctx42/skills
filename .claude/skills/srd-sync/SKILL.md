@@ -125,7 +125,10 @@ swaps in at step 5.
    - Diff the source's example expands against the `<!-- expand: -->`
      anchors in `srd/skills/create/references/authoring-guide.md` plus the
      list in `dev/srd-untranscribed-examples.md`, keyed by the rule each
-     expand follows. Report each new one with the rule it follows (read it in
+     expand follows on both sides. Both files are keyed that way as of
+     page_version 19; an entry still carrying only a localId is stale and
+     matches nothing, which is how GLO-4 stayed invisible across three
+     version bumps. Report each new one with the rule it follows (read it in
      Confluence, then transcribe it into the guide or add it to the list) and
      each one that has gone (retire its guide section or list entry).
    - Tell the maintainer to open the page, review the Quality Bar list and the

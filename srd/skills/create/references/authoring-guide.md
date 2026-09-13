@@ -104,9 +104,11 @@ This pass is the self-check's feedback loop — repeat it until it is clean.
 
 ## Defect classes (Bad → Good)
 
-<!-- Each Bad→Good section below transcribes an upstream source example block;
-     its localId is annotated at the section. Untranscribed ids are listed in
-     dev/srd-untranscribed-examples.md. -->
+<!-- Each Bad→Good section below transcribes an upstream source example block,
+     annotated with the rule it follows. The export stopped carrying localIds at
+     page_version 16, so the rule is the key srd-sync matches on; the localIds
+     still shown are historical. Untranscribed examples are listed in
+     dev/srd-untranscribed-examples.md, keyed the same way. -->
 
 ### Glossary pollution — behavior hidden in a definition (GLO-1/2)
 <!-- expand: 563d87a5-e660-4203-887b-17c549fbd7f2 (follows GLO-1) -->
@@ -119,6 +121,25 @@ Bad:
 Good — definition only; the behavior moves to a requirement:
 > **Recovery Codes** — One-time codes that let a user regain access when their
 > primary authentication method is unavailable.
+
+### Glossary link repeated on every use (GLO-4)
+<!-- expand: (follows GLO-4) -->
+
+Bad:
+> The Acoustic Channel carries the signal. Each
+> [Acoustic Channel](glossary/main_glossary.md#acoustic-channel) is sampled
+> independently, and an [Acoustic Channel](glossary/main_glossary.md#acoustic-channel)
+> with no sensor is skipped.
+
+Good — linked on first use, bare after that:
+> The [Acoustic Channel](glossary/main_glossary.md#acoustic-channel) carries the
+> signal. Each Acoustic Channel is sampled independently, and an Acoustic
+> Channel with no sensor is skipped.
+
+GLO-4 is a SHOULD, and the link is owed once per document, not once per section
+— a term linked again three pages later has not broken the rule so much as made
+the SRD read like a reference card. GLO-5 governs where that one link points:
+at the entry, never at the glossary document.
 
 ### Non-atomic requirement — several rules in one (REQ-1)
 <!-- expand: 9f74c18d-837b-46c7-aaff-b27e00b6936b (follows REQ-1) -->

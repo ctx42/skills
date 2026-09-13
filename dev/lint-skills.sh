@@ -159,8 +159,9 @@ lint_skill() {
     # than SKILL.md, so a sibling path copied from a SKILL.md into a
     # references/ file is one `../` short and silently points nowhere — which
     # is exactly how edit/references/autofix.md lost its link to errata.md.
-    # Links inside fenced code blocks are skipped: a template's placeholder
-    # targets (`ci-link`, `doc/logo.png`) are content, not links to follow.
+    # Links inside fenced code blocks and blockquotes are skipped: a template's
+    # placeholder targets (`ci-link`, `doc/logo.png`) and an authoring guide's
+    # Bad/Good specimens are content to read, not navigation to follow.
     local f target resolved
     while IFS= read -r f; do
         [ -f "$f" ] || continue
@@ -173,6 +174,7 @@ lint_skill() {
         done < <(awk '
             /^[[:space:]]*```/ { fence = !fence; next }
             fence { next }
+            /^[[:space:]]*>/ { next }
             {
                 line = $0
                 while (match(line, /\]\([^)#][^)]*\)/)) {

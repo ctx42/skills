@@ -1,12 +1,21 @@
 # Untranscribed SRD-standard examples
 
-Upstream `[[*expand:` example blocks (Confluence localIds) with no Bad→Good
-section in `srd/skills/create/references/authoring-guide.md` yet. The srd-sync
-skill diffs the source ids against these plus the `<!-- expand: -->` anchors in
-the guide on every `page_version` bump; transcribe or retire entries here.
+Upstream `> [!EXPAND] Example` blocks with no Bad→Good section in
+`srd/skills/create/references/authoring-guide.md` yet. The srd-sync skill diffs
+the source's expands against these plus the `<!-- expand: -->` anchors in the
+guide on every `page_version` bump; transcribe or retire entries here.
 
-- `2b66f741-45ad-4225-8f24-c69401b968d5` (follows LANG-1)
-- `c6f67fef-67b2-441f-9341-66c10dcd685e` (follows LANG-3)
-- `6fec97d9-b0a9-4d67-a462-2f51e0c35bd8` (follows LANG-6)
-- `ee6f5ac1-261a-42bc-8ad7-70c0c2934499` (follows LANG-7)
-- `d724bbc4-efcd-49a8-abd7-f0bd6200cd0f` (follows REQ-2)
+**Keyed by the rule each expand follows, not by Confluence localId.** The export
+stopped carrying localIds at page_version 16, so an id-keyed list matches
+nothing and every source expand reads as new. That is what hid GLO-4 — added
+upstream, absent from both the guide and this list, and invisible to the diff
+because the diff had no key to match on.
+
+- follows LANG-1
+- follows LANG-3
+- follows LANG-6
+- follows LANG-7
+- follows REQ-2
+
+Transcribed in the guide (do not duplicate here): GLO-1, GLO-4, REQ-1, REQ-6,
+SCO-2. Ten expands upstream at page_version 19; five transcribed, five listed.

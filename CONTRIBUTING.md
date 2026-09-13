@@ -64,6 +64,33 @@ expectations you have already read measures whether the instructions are
 followable, not whether an uninformed agent follows them. The linter checks the
 ids match and that no `expected_behavior` leaks back into `evals.json`.
 
+The two prompts are `dev/eval/blind-runner-prompt.md` and
+`dev/eval/grader-prompt.md`, kept outside `tmp/` so reading one does not break
+the runner's own don't-read-`tmp/` rule. Hand them over verbatim.
+
+**What to distrust in a result.**
+
+- *One agent doing both jobs.* Its pass counts mean "these instructions are
+  followable", not "an uninformed agent follows them".
+- *`"files": []`.* The runner then authors the corpus it is graded on. A real
+  fixture under `assets/` is stronger; `srd:review`'s `flawed-srd.md` is the
+  model.
+- *An interview skill.* `grill-me`, `srd:create`, `srd:edit` need someone to
+  play the user, and one agent playing both sides is a weak test. Have it
+  write the persona's ground truth down first and say where it was generous.
+- *A pre-fix run graded against post-fix expectations.* Editing a scenario or
+  an expectation after a run invalidates that run's verdict on it. Re-run, or
+  tell the grader which bullets the edit reaches.
+
+**Live services and real stores.** The `srd-doc` server on `localhost:7777` is
+production — the INFRAPORT corpus and a gap store whose API has no delete — and
+`$HOME/.agent-data/` holds the user's real lesson files and gap buffers. Tell
+every agent so explicitly: `GET` is the only safe verb, and every
+`$HOME/.agent-data` path a skill resolves must be redirected into the run's
+workspace. Both have been violated by eval agents following the skills
+faithfully — once filing a probe record that needed a hand edit to remove,
+once by a skill that reaches the buffer only through another skill.
+
 Skills ship no `README.md`. Everything a user or agent needs lives in
 `SKILL.md`, its bundled files, and `evals/evals.json`; the repo-level
 `README.md` is where humans get oriented. A skill README is a second copy of
