@@ -19,6 +19,9 @@ A skill lives at `<group>/skills/<skill-name>/`. Pick the group by purpose:
 | `srd`   | Software Requirement Document lifecycle |
 | `craft` | Cross-cutting engineering-craft aids    |
 
+The fourth plugin, `notify`, is hooks-only and holds no `skills/` directory —
+never place a skill there.
+
 Adding a skill to an existing group needs **no** marketplace change — the
 plugin's default `skills/` scan discovers it. Only a brand-new group needs its
 own `.claude-plugin/plugin.json` plus an entry in

@@ -13,13 +13,14 @@ symlinking.
 ## Organization
 
 Skills are grouped into three plugins, one directory per plugin, each with its
-own manifest and a `skills/` folder:
+own manifest and a `skills/` folder. A fourth plugin, `notify`, carries no
+skills — it ships only desktop-notification hooks:
 
 ```
 <repo-root>/
 ├── README.md  CONTRIBUTING.md  STRUCTURE.md  ONBOARDING.md  AGENTS.md
 ├── dev/                                 # maintainer scripts (lint, version sync)
-├── .claude-plugin/marketplace.json      # the marketplace catalog (3 plugins)
+├── .claude-plugin/marketplace.json      # the marketplace catalog (4 plugins)
 │
 ├── go/
 │   ├── .claude-plugin/plugin.json
@@ -27,16 +28,20 @@ own manifest and a `skills/` folder:
 ├── srd/
 │   ├── .claude-plugin/plugin.json
 │   └── skills/{create,review,edit,system-check,report-doc-gap,backlog,kb}/
-└── craft/
+├── craft/
+│   ├── .claude-plugin/plugin.json
+│   └── skills/{cm,grill-me,plan-smith,readme-smith,doc-smith,enhance-skills}/
+└── notify/                              # hooks only — no skills/ folder
     ├── .claude-plugin/plugin.json
-    └── skills/{cm,grill-me,plan-smith,readme-smith,doc-smith,enhance-skills}/
+    └── hooks/{hooks.json,notify-project.sh,notify-monitors.py}
 ```
 
-| Plugin  | Skills                                                                        | Purpose                                                                                 |
-|---------|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| `go`    | `style`, `review`, `cover`, `doc`, `reshape`                                  | Go style (write + check), done-time review, test coverage, doc fixing, API proposals    |
-| `srd`   | `create`, `review`, `edit`, `system-check`, `report-doc-gap`, `backlog`, `kb` | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base       |
-| `craft` | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `enhance-skills` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning |
+| Plugin   | Skills                                                                        | Purpose                                                                                 |
+|----------|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| `go`     | `style`, `review`, `cover`, `doc`, `reshape`                                  | Go style (write + check), done-time review, test coverage, doc fixing, API proposals    |
+| `srd`    | `create`, `review`, `edit`, `system-check`, `report-doc-gap`, `backlog`, `kb` | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base       |
+| `craft`  | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `enhance-skills` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning |
+| `notify` | — (hooks only)                                                                | Sound and an on-screen card on every monitor when Claude stops or needs input           |
 
 Plugin skills are **namespaced** by their plugin (e.g. `/srd:review`),
 so they never silently shadow a personal or project skill of the same name.
@@ -53,6 +58,7 @@ so they never silently shadow a personal or project skill of the same name.
 /plugin install go@ctx42-skills
 /plugin install srd@ctx42-skills
 /plugin install craft@ctx42-skills
+/plugin install notify@ctx42-skills   # Linux/macOS desktop only
 ```
 
 Update to the latest with `/plugin marketplace update ctx42-skills`.
@@ -87,6 +93,7 @@ per machine.
    claude plugin install go@ctx42-skills
    claude plugin install srd@ctx42-skills
    claude plugin install craft@ctx42-skills
+   claude plugin install notify@ctx42-skills
    ```
 
 4. **Restart Claude** (or run `/reload-plugins`), then verify with `/plugin` or
@@ -107,7 +114,8 @@ dotfiles:
   "enabledPlugins": {
     "go@ctx42-skills": true,
     "srd@ctx42-skills": true,
-    "craft@ctx42-skills": true
+    "craft@ctx42-skills": true,
+    "notify@ctx42-skills": true
   }
 }
 ```

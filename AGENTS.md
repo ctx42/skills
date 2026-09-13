@@ -3,8 +3,9 @@
 Guide for AI agents working in this repository.
 
 This repository is a collection of reusable skills for Claude. Skills ship as
-**Claude Code plugins**, grouped into `go`, `srd`, and `craft`. Each skill
-is a directory under a group's `skills/` folder with a `SKILL.md` (the prompt,
+**Claude Code plugins**, grouped into `go`, `srd`, and `craft`. A fourth
+plugin, `notify`, ships desktop-attention hooks and no skills. Each skill is a
+directory under a group's `skills/` folder with a `SKILL.md` (the prompt,
 including its `## Usage` block), an `evals/evals.json` (its eval scenarios) and
 an `evals/expectations.json` (how each is graded — separate so a run can be
 given a scenario without its rubric).
@@ -19,7 +20,8 @@ Skills ship no `README.md`; the repo-level one orients humans.
 3. **Skills live under a group.** A skill's path is `<group>/skills/<name>/`.
    Adding one to an existing group needs no marketplace edit — the default
    `skills/` scan finds it. A new group needs its own `.claude-plugin/plugin.json`
-   and a `marketplace.json` entry.
+   and a `marketplace.json` entry. Never add a skill to `notify` — it is a
+   hooks-only plugin.
 4. **Reference siblings relatively.** Skills in the same plugin resolve each other
    as `../sibling/...` (they are cached together). Cross-plugin file references do
    not resolve — keep interdependent skills in one group.
@@ -86,6 +88,16 @@ source of truth.
   contradictions, drift, and gaps, and re-checks each edit against the rest.
 - `enhance-skills` — harvests session corrections into per-skill lessons;
   retrofits the `## Self-learning` block.
+
+### notify
+
+Ships no skills. `hooks/hooks.json` registers `Stop` and `Notification`, both
+running `hooks/notify-project.sh` via `${CLAUDE_PLUGIN_ROOT}`; that script reads
+the hook JSON from stdin and hands the message and project name to
+`hooks/notify-monitors.py`, which draws a GTK card on every monitor. Linux
+(X11/XWayland) and macOS only, degrading to `notify-send` and then to stderr.
+Hooks are read at session start — test a change by restarting, not with
+`/reload-plugins`.
 
 ## More Detail
 

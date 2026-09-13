@@ -28,6 +28,13 @@
       "description": "Cross-cutting engineering-craft aids: Conventional Commit messages (cm), a relentless planning interview (grill-me), a plan author/tracker (plan-smith), a README author (readme-smith), and skill self-learning (enhance-skills).",
       "strict": true,
       "category": "productivity"
+    },
+    {
+      "name": "notify",
+      "source": "./notify",
+      "description": "Desktop attention signal: a sound plus a small card centred near the top of every monitor when Claude stops or asks for input. Hooks only \u2014 ships no skills.",
+      "strict": true,
+      "category": "productivity"
     }
   ]
 }

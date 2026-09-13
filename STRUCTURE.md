@@ -27,7 +27,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 ├── .claude/
 │   └── skills/srd-sync/            # Project-local maintainer skill: regenerate srd-standard.md (not shipped)
 ├── .claude-plugin/
-│   └── marketplace.json            # Marketplace catalog: the three plugins below
+│   └── marketplace.json            # Marketplace catalog: the four plugins below
 │
 ├── go/                             # Plugin: Go workflow
 │   ├── .claude-plugin/plugin.json
@@ -47,20 +47,27 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       ├── report-doc-gap/      # Producer: capture and file doc gaps
 │       ├── backlog/             # Consumer: deferred, unknowns, and doc gaps
 │       └── kb/                  # Owns the knowledge base: capture and write
-└── craft/                          # Plugin: cross-cutting engineering-craft aids
+├── craft/                          # Plugin: cross-cutting engineering-craft aids
+│   ├── .claude-plugin/plugin.json
+│   └── skills/
+│       ├── cm/                     # Conventional commit messages
+│       ├── grill-me/               # Planning interview
+│       ├── plan-smith/             # Write and track implementation plans
+│       ├── readme-smith/           # Author and improve project READMEs
+│       ├── doc-smith/              # Write, revise, audit, proof docs & manuals
+│       └── enhance-skills/         # Record lessons into skills; self-learning
+└── notify/                         # Plugin: desktop attention hooks (no skills)
     ├── .claude-plugin/plugin.json
-    └── skills/
-        ├── cm/                     # Conventional commit messages
-        ├── grill-me/               # Planning interview
-        ├── plan-smith/             # Write and track implementation plans
-        ├── readme-smith/           # Author and improve project READMEs
-        ├── doc-smith/              # Write, revise, audit, proof docs & manuals
-        └── enhance-skills/         # Record lessons into skills; self-learning
+    └── hooks/
+        ├── hooks.json              # Registers Stop + Notification
+        ├── notify-project.sh       # The hook: parses hook JSON, dispatches
+        └── notify-monitors.py      # GTK card drawn on every monitor
 ```
 
-Skills are grouped into **three plugins** (`go`, `srd`, `craft`).
-Each plugin is a directory with a `.claude-plugin/plugin.json` manifest and a
-`skills/` folder holding one directory per skill. Each skill directory has a
+Skills are grouped into **three plugins** (`go`, `srd`, `craft`); a fourth,
+`notify`, ships hooks instead of skills.
+Each skill plugin is a directory with a `.claude-plugin/plugin.json` manifest and
+a `skills/` folder holding one directory per skill. Each skill directory has a
 `SKILL.md` (the prompt, including its `## Usage` block), an `evals/evals.json`
 (its eval scenarios) and an `evals/expectations.json` (how each is graded, kept
 apart so a run can be handed a scenario without its rubric). Skills ship no
@@ -72,12 +79,18 @@ apart so a run can be handed a scenario without its rubric). Skills ship no
 
 Claude consumes the skills as plugins, not as loose skill folders:
 
-- `.claude-plugin/marketplace.json` lists the three plugins, each pointing at its
+- `.claude-plugin/marketplace.json` lists the four plugins, each pointing at its
   group directory via `source` (e.g. `"./srd"`). Skills inside a group are
   discovered by the default `skills/` scan — the marketplace does not list them
   individually.
 - Each group's `.claude-plugin/plugin.json` names the plugin. That name becomes
   the skill namespace: `create` is invoked as `/srd:create`.
+- A plugin may ship no skills at all. `notify` carries only
+  `hooks/hooks.json`, whose commands resolve through `${CLAUDE_PLUGIN_ROOT}`
+  so they work from the plugin cache as well as from `--plugin-dir`. Hooks load
+  at session start, so a change there needs a restart, not `/reload-plugins`.
+  `dev/lint-skills.sh` walks only directories holding a `SKILL.md`, so a
+  skill-less plugin is checked for its manifest and version alone.
 
 Install and update commands are in [README.md](./README.md#install); the
 edit-test dev loop (`--plugin-dir` + `/reload-plugins`) is in
