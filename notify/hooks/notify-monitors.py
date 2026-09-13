@@ -4,7 +4,7 @@
 Used by ~/.claude/hooks/notify-project.sh. Forces the X11/XWayland backend so the
 X screen spans all monitors and a small undecorated window can be move()'d onto
 each one — avoiding fullscreen (which Mutter backs with an opaque black surface).
-Auto-dismisses after TIMEOUT seconds.
+Auto-dismisses after TIMEOUT seconds, or on a click anywhere on a card.
 
 Usage: notify-monitors.py "<message>" "<project>" [timeout_seconds]
 """
@@ -73,10 +73,10 @@ def on_draw(widget, cr):
     return False
 
 
-def on_realize(widget):
-    # Clicks/keys pass straight through the card to whatever is beneath it.
-    region = cairo.Region()
-    widget.get_window().input_shape_combine_region(region, 0, 0)
+def on_click(widget, event):
+    # A click anywhere on any card dismisses the cards on every monitor.
+    Gtk.main_quit()
+    return True
 
 
 def place(win, monitor_index):
@@ -103,7 +103,8 @@ def make_card(monitor_index):
     if visual is not None:
         win.set_visual(visual)
     win.connect("draw", on_draw)
-    win.connect("realize", on_realize)
+    win.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+    win.connect("button-press-event", on_click)
     win.move(*[0, 0])  # placeholder; real placement after show
     win.show_all()
     place(win, monitor_index)
