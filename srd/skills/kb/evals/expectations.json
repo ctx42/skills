@@ -18,7 +18,8 @@
         "Writes the attested behaviour to the page body",
         "Keeps the inferred retention period out of the body entirely",
         "Records it as an open question, mirrored into `_open-questions.md`",
-        "Opens the section carrying undocumented content with its attestation line"
+        "Opens the section carrying undocumented content with its attestation line",
+        "Adds nothing the attestation does not carry: every clause in the written section traces to something the user said, and a section marked as absent from the platform docs enumerates no specifics of its own"
       ]
     },
     {
@@ -74,7 +75,7 @@
       "expected_behavior": [
         "Defaults to capture and writes the fact without asking which SRD it belongs to — a bare capture has none",
         "Names the session as the source in the attestation line rather than inventing an SRD reference or leaving the slot blank",
-        "Leaves `srd_ref` unset rather than filling it with a placeholder",
+        "Invents no SRD id: with no SRD in play the attestation names the session, and `srd_ref` carries nothing the fixture did not already hold",
         "Omits the `· gap-NNNN` segment, since no gap was filed"
       ]
     }

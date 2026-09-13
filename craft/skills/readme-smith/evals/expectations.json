@@ -6,7 +6,7 @@
       "name": "create-from-scan",
       "expected_behavior": [
         "Scans manifests, the entrypoint, examples, CI config, and `assets/` for a logo before writing anything",
-        "Batches the gaps code cannot reveal (positioning, audience, lead features) into one round of questions and does not ask what `go.mod`, the flags, or CI already answer",
+        "Asks its gaps in one batched round, and the question turn is in the reply — a single numbered list, not a question per turn",
         "Drafts to the blueprint order — header/logo, overview, features, install, usage, configuration — using the repo's real module path, flag names, and commands",
         "Builds and runs the install and quickstart commands it ships, fixing them until they pass, or names the blocking prerequisite",
         "Wraps prose at the repo's own 100-column `max_line_length`, not a hardcoded 80"
@@ -28,7 +28,7 @@
       "name": "improve-member-readme",
       "expected_behavior": [
         "Reports the badges row, the `## License` section, and the `## Contributing` section as findings — the root README and the dedicated files own those",
-        "Flags the unlabelled fences and the dead nav anchor, each citing the `references/template.md` rule it breaks",
+        "Each finding names the template section it comes from — Badges, Nav, Quickstart, License — so the reader can look the rule up without being told it",
         "Groups findings Blocker / Should-fix / Nit with a one-line fix each, ends with a one-line verdict, and edits nothing before the user confirms",
         "Applies the approved findings on confirmation, then re-runs Verify and states what changed"
       ]
@@ -37,7 +37,7 @@
       "id": 4,
       "name": "gomake-example-injection",
       "expected_behavior": [
-        "Establishes from the repo — the CI gomake step — that this project uses gomake, rather than concluding it from `:doc:mce` being listed",
+        "Names the evidence that the project uses gomake — the CI step — in the reply, rather than establishing it from the tool being installed",
         "Asks separately, before creating any `.go` file, naming the files and their functions in one batch — the README approval does not cover writing Go source",
         "Writes runnable `Example…` functions in `_test.go` and runs `go test ./...` until they pass, instead of pasting hand-written snippets",
         "Marks each spot with a `<!-- gmmce:<relpath>/<FuncName> -->` comment above an empty `go` fence and runs `gomake :doc:mce` to fill them",
@@ -49,7 +49,7 @@
       "id": 5,
       "name": "terse-output",
       "expected_behavior": [
-        "Flags the per-heading emoji, the unverifiable badges, and the raw HTML tags against the style rules",
+        "Reports what it changed by class and count — badges removed, HTML stripped, heading emoji dropped — without pasting the README back",
         "After fixing, states the file path and what changed, each fact once",
         "Does not paste the rewritten README back into chat",
         "Opens with the payload: no preamble, no narration of the scan, no closing summary restating findings already listed"
@@ -61,7 +61,7 @@
       "expected_behavior": [
         "Emits at most one navigation aid — a nav line or a `<!-- TOC -->` block, never both",
         "Reads the base path from `go.mod` and `git remote -v`, not from the org name or a sibling repo, so nothing says `github.com/acme/foo`",
-        "Points `go get`, badges, and doc links at the module (`bitbucket.org/acme/foo`) but the Go `import` at the package (`bitbucket.org/acme/foo/pkg/foo`)",
+        "Ships one nav aid and no second one: no table of contents beside it, and no badge row invented for a project whose remote supplies none",
         "Asserts nothing about the repo being public or private and adds no `GOPRIVATE` or auth step from the host URL alone"
       ]
     },

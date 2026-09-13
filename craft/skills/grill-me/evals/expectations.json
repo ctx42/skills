@@ -17,7 +17,7 @@
       "expected_behavior": [
         "Interrogates the documentation gap given as the argument, not the Go package rename from the surrounding conversation",
         "Maps branches suited to documenting a claim — what the claim actually asserts, its boundaries and exceptions, the context a reader needs, the terms and their synonyms",
-        "Does not map build-plan branches such as deployment, UX, or architecture, which do not apply to a documentation gap",
+        "Returns to the calling skill rather than closing with the user: the reply ends on the summary handed back, with no offer to persist",
         "Asks one focused question and writes no file"
       ]
     },
@@ -38,7 +38,7 @@
         "Recognizes that no branches remain open and stops asking questions",
         "Presents the complete shared understanding as one structured summary covering all six resolved decisions",
         "Gives each resolved branch acceptance criteria concrete enough to verify against the finished feature, not a restatement of the decision",
-        "Offers to hand the result to plan-smith and writes no file without a yes",
+        "Offers to persist the summary, and on the yes a plan file exists carrying every resolved branch as an item with the branch's own acceptance criteria",
         "Writes no implementation code"
       ]
     },
@@ -49,7 +49,6 @@
         "Opens with the confirmation or the next question — no acknowledgement phrase, no praise, no narration of what it is doing next",
         "Confirms the decision once in a single short restatement, and does not repeat it later in the same turn",
         "Does not re-list the already-resolved branches or replay the interview so far",
-        "Says how many branches remain open",
         "States how many branches are resolved and how many remain, the same way in every turn that reports progress"
       ]
     },
@@ -61,8 +60,7 @@
         "Names the size limit as still open and says why \"something sensible\" is not a decision — no number means nothing to build or test against",
         "Does not produce the final structured summary or offer the plan-smith handoff while that branch is open",
         "Asks one question, not a numbered list of questions the user must work through in one go",
-        "States how many branches are resolved and how many remain open, not just that one is outstanding",
-        "States how many branches are resolved and how many remain, the same way in every turn that reports progress"
+        "States how many branches are resolved and how many remain open, not just that one is outstanding"
       ]
     },
     {

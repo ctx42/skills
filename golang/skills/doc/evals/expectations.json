@@ -16,8 +16,7 @@
       "expected_behavior": [
         "Fires the missing-fact checklist item for the slice mutation, which the body proves",
         "Documents that mutation, naming what the caller must not assume about the slice afterwards",
-        "Writes nothing about concurrency: the absence of a mutex is not evidence of a guarantee either way, and \"not safe for concurrent use\" would be a conclusion about code nobody wrote",
-        "Treats the open question as a silence to leave or a point to flag, not a blank in the seven-category list to fill"
+        "Writes nothing about concurrency: the absence of a mutex is not evidence of a guarantee either way, and \"not safe for concurrent use\" would be a conclusion about code nobody wrote"
       ]
     },
     {
@@ -33,7 +32,7 @@
       "id": 4,
       "name": "terse-output",
       "expected_behavior": [
-        "Opens with the result — no preamble and no narration of reading the code",
+        "No narration: the reply is the changes made, the Verify result, and the verdict. A one-line note that no language server was available is a fact, not narration",
         "Lists changes made as `file:Symbol — item`, plus flagged and never-touched items, each stated once",
         "No closing restatement of the edits it just listed"
       ]
@@ -43,7 +42,7 @@
       "name": "line-target-resolves-to-its-item",
       "expected_behavior": [
         "States the resolved kind (line) and the item it resolved to: the inline comments of `(*Svc).Flush`'s body — the innermost item containing line 42, not the enclosing declaration's godoc, which `func=Flush` would reach",
-        "Touches nothing else in the file — the four other functions keep their defects",
+        "Touches only the item the line resolves to: every other function in the file is byte-identical after the run, whether or not it had a defect",
         "Presents no plan; a line target is a single item, so it runs the loop straight through",
         "Deletes `// increment i` as a comment that only restates the code"
       ]
@@ -53,10 +52,10 @@
       "name": "module-mode-with-fanout-and-filter",
       "expected_behavior": [
         "The plan lists items from `svc` and `api` only; every other package is reported as skipped",
-        "After approval, dispatches one subagent per package and merges their reports into the skill's output format",
+        "Fans out one worker per in-scope package and merges their reports — each worker's per-package report survives on disk, so the fan-out is visible rather than asserted",
         "No comment anywhere claims `Router` is or is not safe for concurrent use — the absence of a mutex is not evidence either way",
         "The parent re-checks each worker's added or changed comment against the checklist before merging, and reverts any fact the code does not establish, saying so in the report",
-        "Verifies each edited package with `gofmt -l` and `go build` before reporting"
+        "Reports the Verify result in the reply — which packages were gate-checked and that `gofmt -l` and `go build` passed"
       ]
     },
     {

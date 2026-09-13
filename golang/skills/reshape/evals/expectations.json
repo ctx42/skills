@@ -7,8 +7,8 @@
       "expected_behavior": [
         "Opens with the resolved library, the consumer scope, and the call-site count",
         "Proposes across several archetypes, including at least one structural move — absorbing the repeated sequence, or moving a responsibility upstream — not only a rename or a single helper",
-        "Ranks by impact (reach × savings × quality, discounted by breakage and effort) and leads with the biggest win",
-        "Shows a real call site before → after for every proposal whose payoff is at the call site; a change with no call-site effect says so instead",
+        "Ranks by net impact and shows the working: each row's Reach is a fraction of the stated N, and the one-line rationale names what it trades against",
+        "Every proposal shows a before → after taken from one real call site, cited `file:line` and matching that file's text there — no composite excerpt spanning files, no placeholder where the before belongs",
         "Offers concrete diffs, since the library source is editable here"
       ]
     },
@@ -35,7 +35,7 @@
       "id": 4,
       "name": "terse-output",
       "expected_behavior": [
-        "Opens with the one-line header and the ranked table — no preamble, no narration of mapping call sites",
+        "No narration: the reply opens on the headline line and the table. A one-line note that call sites were mapped by grep rather than a language server is a fact, not narration",
         "Says in one line that the forced structural option was considered and what displaced it, if the cap evicted it — the cap hides nothing silently",
         "States each proposal once, with no closing summary re-listing the table already shown"
       ]

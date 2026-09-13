@@ -17,7 +17,7 @@
       "skills": [
         "review"
       ],
-      "setup": "A module of eleven packages. The invocation names no budget and no depth.",
+      "setup": "A module of eleven packages. The invocation names no budget and no depth. The user answers the proposal in a following turn with \"go ahead, those defaults are fine\", so the run continues past the gate in the same session.",
       "query": "/review ./...",
       "files": []
     },
@@ -47,7 +47,7 @@
       "skills": [
         "review"
       ],
-      "setup": "Findings span five packages, one of them large enough to warrant file-level chunks.",
+      "setup": "Findings span five packages, one of them large enough to warrant file-level chunks. The user answers each pause with \"go ahead\" in a following turn, so the run works at least the first two chunks rather than stopping at the plan.",
       "query": "/review ./... fix",
       "files": []
     },

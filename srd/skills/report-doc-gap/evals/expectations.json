@@ -34,7 +34,7 @@
       "id": 4,
       "name": "opt-out-and-duplicate-merge",
       "expected_behavior": [
-        "Merges into the existing record — wider `search_terms`, richer `detail` — instead of adding a duplicate",
+        "Merges into the existing record rather than adding a twin: `search_terms` and `srd_ref` are unioned, the existing `detail`, `kind`, and pointer fields survive, and the pointer-less second capture blanks nothing",
         "Takes only the one-line `detail` and leaves `target_claim` empty, honouring the opt-out",
         "Still shows the record for confirmation before filing: opting out of the grill is not opting out of the confirmation"
       ]
