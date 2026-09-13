@@ -104,6 +104,12 @@ what it meant.
 
 For each target function `Foo` (or method `T.Bar`), work in strict order.
 **Never start function B until function A's loop is complete and verified.**
+Keep each function's after-profile rather than overwriting one scratch file:
+`<tmp>/<Func>.after` per function. Writing every test first and then measuring
+them all produces the same final numbers and the same green suite, so nothing
+in the result distinguishes it — the per-function profiles are what do, and
+they are also what tells you which case covered which line when one of them
+does not.
 
 1. Map to its direct-test family by style naming: every test whose name
    starts with `Test_Foo` (`Test_Foo`, `Test_Foo_tabular`, `Test_Foo_EdgeCase`,
@@ -129,7 +135,8 @@ For each target function `Foo` (or method `T.Bar`), work in strict order.
    and the package's test conventions, then add one targeted case — table row,
    subtest, or assertion — per easy line or branch (complex lines too under
    `include=all`; stop at `max_tests`). Never attempt un-coverable lines.
-4. Re-measure: re-run Foo's direct-test family and re-read the profile;
+4. Re-measure into `<tmp>/Foo.after`: re-run Foo's direct-test family and
+   re-read the profile;
    confirm Foo's target lines went from 0 to hit. One measurement is the
    expected cost — do not re-measure per case added. If a target line did not
    rise, that is the exception: bisect it — narrow to the case meant to cover
