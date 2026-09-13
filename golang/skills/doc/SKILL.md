@@ -95,10 +95,10 @@ Read from `$ARGUMENTS`, any order after the target:
   godoc only.
 - `only=exported` — touch the package comment and exported symbols only;
   skip unexported godoc and inline comments.
-- `fanout` — module mode: dispatch one subagent per package (each gets the
-  style rules and this per-item loop for its package) and merge the per-package
-  reports. Use on large modules to keep the main context lean; packages are
-  independent, so ordering is preserved per package.
+- `fanout` — module mode: dispatch one subagent per package (each gets The
+  checklist, Accuracy, Never touch, and the Per-item loop, for its package) and
+  merge the per-package reports. Use on large modules to keep the main context
+  lean; packages are independent, so ordering is preserved per package.
 
   Merging is not accepting. Before a worker's edits enter the report, re-read
   each added or changed comment against the checklist — item 4 above all, since
@@ -107,9 +107,10 @@ Read from `$ARGUMENTS`, any order after the target:
   added fact against the code that is supposed to establish it: a concurrency
   guarantee on a type with no synchronization, an error condition no branch
   produces, a units claim nothing converts. Revert what the code does not carry
-  and say so in the merged report; a blind run of this skill produced precisely
-  that edit from one worker while another, on the same prompt, declined it. The
-  parent is the last checklist pass, not a stapler.
+  and say so in the merged report: two workers given the same package and the
+  same prompt have added and declined the very same unsupported guarantee, so
+  which one you got is not something the merge can assume. The parent is the
+  last checklist pass, not a stapler.
 
 ## The checklist
 
@@ -137,8 +138,12 @@ Run each checklist item against the code; each is a yes/no read.
    variable instead of the type. Fix per style.
 6. restates code — an inline comment narrates what the next line plainly does
    instead of explaining why. Tighten to the why, or delete it.
-7. interface-method godoc — a method implementing an interface (pinned by a
-   `var _ Iface = (*T)(nil)` assertion) carries godoc. Unremarkable vs. the
+7. interface-method godoc — a method implementing an interface the type is
+   pinned to carries godoc. Pinned means the package itself commits to it: a
+   `var _ Iface = (*T)(nil)` assertion, a constructor returning the interface,
+   or a struct field or parameter declared as it. A type that merely happens to
+   fit an interface is not pinned, and its methods are judged as ordinary
+   godoc. Unremarkable vs. the
    interface contract: remove it. Surprising: keep it, expanded to name the
    surprise — the one exception to the style rule against such godoc. Never
    add godoc to an unremarkable one.
@@ -176,8 +181,9 @@ the `LSP` tool:
 - Every godoc cross-reference `[Type]` / `[pkg.Symbol]` must resolve to a real
   symbol; downgrade an unresolved one to plain text.
 
-If no Go language server is configured the tool errors — fall back to reading
-the code and note the reduced confidence in the report.
+With no Go language server the `LSP` tool errors, and a client without it
+wired has no such tool at all — either way, fall back to reading the code and
+note the reduced confidence in the report.
 
 ## Per-item loop
 
@@ -206,7 +212,9 @@ Never edit these; name them in the report when in scope:
 ## Plan (file / package / module)
 
 Before writing, present:
-- per item in scope: which checklist items fire (`file:Symbol — item`),
+- per item in scope: which checklist items fire (`file:Symbol — item`); a
+  symbol nothing fires on does not appear, so the plan stays the list of
+  intended edits rather than an inventory of the package,
 - items to flag unverifiable (`file:Symbol — the unconfirmable fact`),
 - never-touch items in scope (`file:Symbol — reason`).
 
@@ -220,8 +228,8 @@ End of run:
    does not enforce that.
 2. Run `go build ./<pkg>` on every edited package; it must pass — guards
    against a directive comment broken by an edit.
-3. Run `go test ./<pkg>` only if the package already has `Example*` or
-   doc-comment tests; they must still pass. Never create them (out of scope).
+3. Run `go test ./<pkg>` only if the package already has `Example*`
+   functions; they must still pass. Never create them (out of scope).
 
 ## Output
 
