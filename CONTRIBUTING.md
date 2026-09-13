@@ -82,6 +82,16 @@ the runner's own don't-read-`tmp/` rule. Hand them over verbatim.
   an expectation after a run invalidates that run's verdict on it. Re-run, or
   tell the grader which bullets the edit reaches.
 
+**Make every count re-derivable, and say so in the skill.** Four skills shipped
+a wrong number to the user this round — a backoff delay the code never sleeps,
+"~300 characters" over an example that renders 185, a fan-out total of 48 where
+the workers summed to 45, "12 terms digested" from a glossary defining 10. Each
+was true when it was written and wrong by the time it shipped, and none of the
+four runs noticed. A skill that reports a count needs a line telling it to read
+that count off the finished artifact rather than carry it from the work, and a
+scenario that grades the count against the file. It is the one number nobody
+re-derives, which is exactly why it is worth grading.
+
 **Live services and real stores.** The `srd-doc` server on `localhost:7777` is
 production — the INFRAPORT corpus and a gap store whose API has no delete — and
 `$HOME/.agent-data/` holds the user's real lesson files and gap buffers. Tell

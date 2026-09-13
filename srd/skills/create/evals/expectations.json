@@ -9,7 +9,8 @@
         "Interviews one branch at a time — objective, UI change, in/out of scope, the rules — rather than drafting straight from the one-line idea",
         "Rewrites a vague requirement (\"resets must be secure\") into a verifiable one (\"the system MUST require a reset token that expires after 15 minutes\") per REQ-6",
         "Keeps each requirement atomic per REQ-1",
-        "Produces the sections in the required order with the keyword notice, Status `IN PROGRESS`, and TODO placeholders for Owners, Initiative, and Designs"
+        "Produces the sections in the required order with the keyword notice, Status `IN PROGRESS`, and TODO placeholders for Owners, Initiative, and Designs",
+        "Every count the reply states matches the artifact it describes — the term count equals the terms in the digest, the TODO count equals the marked TODOs in the SRD"
       ]
     },
     {
@@ -17,7 +18,7 @@
       "name": "reuse-the-company-glossary",
       "expected_behavior": [
         "Adds no local Glossary entry for the known term (GLO-3 / STR-10). The SRD may use the term bare — the Company Glossary is what defines it — and the reply says which terms were recognised, so the author can see the lookup happened",
-        "Adds a local Glossary entry only for the genuinely new term",
+        "Defines locally every term the Company Glossary does not carry, however many that is, and defines no term it does carry — the count is whatever the glossary leaves out, not a fixed number",
         "Defines that term and nothing else — no behaviour, no rules inside the entry (GLO-1)"
       ]
     },
@@ -44,7 +45,7 @@
       "name": "house-extensions",
       "expected_behavior": [
         "Rewrites the British spellings to US English — \"color\", \"standardize\"",
-        "Flags the duplicate or overlapping requirements to merge during the consistency pass, along with any term used inconsistently",
+        "Flags the duplicate pair and the term used inconsistently across sections — the recompute trigger, which one section states as new evidence arriving and another as a measurement being added",
         "Uses one-letter sub-numbering (`GR-1a`, `GR-1b`, `GR-1c`) for the tight cluster while keeping flat numbers elsewhere"
       ]
     },
@@ -52,7 +53,7 @@
       "id": 6,
       "name": "terse-output",
       "expected_behavior": [
-        "No preamble and no step narration through drafting and self-check; the report opens with the payload",
+        "The reply is the payload: the file path, the counts, and what is left open. No requirement text quoted back beyond a proposed rewording",
         "One report after writing: the file path, the requirement groups and counts, and the outstanding human follow-ups",
         "Does not re-paste the drafted SRD, and does not repeat findings already shown"
       ]
@@ -64,8 +65,9 @@
         "Searches the corpus before accepting the claim, and neither silently accepts nor silently corrects it",
         "Hands the unconfirmable claim to `report-doc-gap`, and the confirmed fact to `kb` once the user confirms it in the branch restatement",
         "Neither hand-off interrupts the interview",
-        "Asks no \"bank this?\" or knowledge-base question — the retry count is confirmed only through the restatement of the Requirements branch",
-        "At the write step, invokes `kb` to write the confirmed fact and `report-doc-gap` to offer the buffered gap"
+        "Never asks permission to bank the fact — no \"should I record this?\" prompt. Confirming the requirement confirms the fact, and `srd:kb` captures it silently. Ordinary elicitation (\"is three the count today?\") is a requirement question, not a banking prompt, and does not breach this",
+        "At the write step, invokes `kb` to write the confirmed fact and `report-doc-gap` to offer the buffered gap",
+        "Writes no requirement the interview did not attest: every rule in the SRD traces to something the persona stated, and a behaviour nobody mentioned does not appear because it would round the feature out"
       ]
     }
   ]

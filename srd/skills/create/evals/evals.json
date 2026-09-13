@@ -27,7 +27,7 @@
       "skills": [
         "create"
       ],
-      "setup": "The draft reaching self-check contains a two-rule requirement, a lowercase \"must\", an `In Scope` item no requirement covers, and an `Example:` annotation.",
+      "setup": "The draft reaching self-check contains a two-rule requirement, a lowercase \"must\", an `In Scope` item no requirement covers, and an `Example:` annotation. The draft as it stood before the self-check is kept beside the SRD as `<srd>.draft-before-self-check.md`, so the self-check's effect can be read as a diff.",
       "query": "/create",
       "files": []
     },
@@ -47,7 +47,7 @@
       "skills": [
         "create"
       ],
-      "setup": "The draft carries \"the colour MUST standardise…\", two requirements stating the same rule in different words, and a tight cluster of three related rules under one group.",
+      "setup": "The draft carries \"the colour MUST standardise…\", two requirements stating the same rule in different words, and a tight cluster of three related rules under one group. One term is also used inconsistently across sections: the scope item says severity is recomputed when new evidence arrives, while the requirement says when a measurement is added.",
       "query": "/create",
       "files": []
     },

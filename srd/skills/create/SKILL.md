@@ -82,10 +82,13 @@ Copy this checklist and tick it off:
 ### 0. Start
 
 Invoke `srd:report-doc-gap` and `srd:kb` to drain what a prior session left
-buffered for this SRD. Each returns what it holds, including nothing, and shows
-the user nothing when empty — the clause saying both drains ran and found
-nothing is this skill's to write, in its own report, because a drain that never
-happened otherwise looks identical to one that found nothing.
+buffered for this SRD. `srd:kb` asks where the knowledge base lives when no root
+is on file: let that question land here, not at step 5, where it would sit
+between the finished SRD and the closing report. Each returns what it holds,
+including nothing, and shows the user nothing when empty — the clause saying
+both drains ran and found nothing is this skill's to write, in its own report,
+because a drain that never happened otherwise looks identical to one that found
+nothing.
 
 Then run the glossary-resolution procedure in
 [references/srd-procedures.md](references/srd-procedures.md): resolve the
@@ -208,6 +211,12 @@ findings and human follow-ups collected in step 4.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
+
+Every count in the report — terms digested, requirements written, TODOs left,
+findings the self-check raised — is read off the finished artifact, never
+carried from the work that produced it. A run told the user "12 terms digested
+from 3 files" over a glossary defining 10; nobody re-derives that number, so
+nobody catches it.
 
 ## Self-learning
 
