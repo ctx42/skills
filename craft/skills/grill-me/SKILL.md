@@ -125,10 +125,10 @@ branch by branch, until you both share one understanding of the subject.
 
 ## Self-learning
 
-Obey this skill's lessons when it has any: read both a sibling `LESSONS.md`
-and `$HOME/.agent-data/ctx42-skills/lessons/craft/grill-me.md`, the sibling
-winning a conflict — a read-only install writes the second, and what it
-learned there stays true once the checkout is writable again. Most runs have
+Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
+`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/craft/grill-me.md`,
+the sibling winning a conflict — a read-only install writes the second, and what
+it learned there stays true once the checkout is writable again. Most runs have
 none; absence is the normal case and needs no comment. On a correction or
 self-caught mistake, append a one-line rule to the sibling when this directory
 is writable, else to the fallback, creating it, and report where.

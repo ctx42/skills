@@ -41,8 +41,9 @@ lessons live in one of two places; resolve per skill from the directory its
 - In-place: directory writable (source checkout or `--plugin-dir` copy) —
   sibling `LESSONS.md`. Committed there, lessons ship to everyone.
 - External: read-only or update-clobbered install (under `.../plugins/cache/`)
-  — `$HOME/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md`,
-  `$HOME`-rooted to survive plugin updates.
+  — `${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/<plugin>/<skill>.md`,
+  rooted outside the checkout to survive plugin updates. `AGENT_DATA_DIR` lets
+  a sandbox or an eval redirect the store; unset means the real one.
 
 Read both files when both exist and obey the union; write only to the writable
 one, creating parent dirs. Never write under `.../plugins/cache/` even if the OS
@@ -115,10 +116,10 @@ is read when the skill runs, not now:
 ```
 ## Self-learning
 
-Obey this skill's lessons when it has any: read both a sibling `LESSONS.md`
-and `$HOME/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md`, the sibling
-winning a conflict — a read-only install writes the second, and what it
-learned there stays true once the checkout is writable again. Most runs have
+Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
+`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/<plugin>/<skill>.md`,
+the sibling winning a conflict — a read-only install writes the second, and what
+it learned there stays true once the checkout is writable again. Most runs have
 none; absence is the normal case and needs no comment. On a correction or
 self-caught mistake, append a one-line rule to the sibling when this directory
 is writable, else to the fallback, creating it, and report where.
@@ -170,10 +171,10 @@ the least to report, and is where the report most often grows instead.
 
 ## Self-learning
 
-Obey this skill's lessons when it has any: read both a sibling `LESSONS.md`
-and `$HOME/.agent-data/ctx42-skills/lessons/craft/enhance-skills.md`, the
-sibling winning a conflict — a read-only install writes the second, and what
-it learned there stays true once the checkout is writable again. Most runs
-have none; absence is the normal case and needs no comment. On a correction or
+Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
+`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/craft/enhance-skills.md`,
+the sibling winning a conflict — a read-only install writes the second, and what
+it learned there stays true once the checkout is writable again. Most runs have
+none; absence is the normal case and needs no comment. On a correction or
 self-caught mistake, append a one-line rule to the sibling when this directory
 is writable, else to the fallback, creating it, and report where.

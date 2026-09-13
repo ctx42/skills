@@ -46,7 +46,7 @@
       "expected_behavior": [
         "Appends the `## Self-learning` block as the last `## ` section of `SKILL.md`, leaving the rest of the body untouched",
         "Reproduces the block's wording exactly — same sentences, same order — then substitutes the plugin and skill names and re-wraps to 80 columns; the words are the constant, not the line breaks",
-        "Resolves the placeholder path to `$HOME/.agent-data/ctx42-skills/lessons/craft/foo.md`, keeping `$HOME` literal",
+        "Resolves the placeholder path to `${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/craft/foo.md`, keeping the `${AGENT_DATA_DIR:-$HOME/.agent-data}` expression literal rather than expanding it",
         "Creates no `LESSONS.md` — the store appears with the first lesson, not with the block",
         "Reports the one file it edited, without restating the block it just wrote"
       ]
@@ -65,7 +65,7 @@
       "id": 7,
       "name": "read-only-install",
       "expected_behavior": [
-        "Resolves the store to `$HOME/.agent-data/ctx42-skills/lessons/craft/cm.md` and creates its parent directories",
+        "Resolves the store to `${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/craft/cm.md` — honoring `AGENT_DATA_DIR` when the environment sets it — and creates its parent directories",
         "Writes nothing under `.../plugins/cache/`, and does not retrofit or otherwise edit the installed `SKILL.md`, even if the OS reports the path writable",
         "Names the resolved path in the report so the user can tell the lesson stayed local rather than shipping"
       ]
