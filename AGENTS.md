@@ -3,7 +3,7 @@
 Guide for AI agents working in this repository.
 
 This repository is a collection of reusable skills for Claude. Skills ship as
-**Claude Code plugins**, grouped into `golang`, `srd`, and `craft`. Each skill
+**Claude Code plugins**, grouped into `go`, `srd`, and `craft`. Each skill
 is a directory under a group's `skills/` folder with a `SKILL.md` (the prompt,
 including its `## Usage` block), an `evals/evals.json` (its eval scenarios) and
 an `evals/expectations.json` (how each is graded — separate so a run can be
@@ -43,7 +43,7 @@ claude --plugin-dir ./srd      # repeat the flag for more groups
 One line per skill for orientation; each skill's `SKILL.md` description is the
 source of truth.
 
-### golang
+### go
 
 - `style` — the enforced Go style rules (Production + Test): read before any
   `.go` edit, or run it on a target for a style-only check-and-fix pass.

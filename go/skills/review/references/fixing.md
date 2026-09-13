@@ -2,7 +2,7 @@
 
 Read when asked to apply findings, fix, or refactor. Every behavioral code
 change ships with tests in the same change — new behavior gets new tests,
-changed behavior gets updated tests — written to `golang:style`'s Test rules
+changed behavior gets updated tests — written to `go:style`'s Test rules
 (`have`/`want`, never `got`). Pure no-ops (renames, comment edits) are exempt.
 
 ## Never print diffs of applied fixes

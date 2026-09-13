@@ -21,7 +21,7 @@ own manifest and a `skills/` folder:
 ├── dev/                                 # maintainer scripts (lint, version sync)
 ├── .claude-plugin/marketplace.json      # the marketplace catalog (3 plugins)
 │
-├── golang/
+├── go/
 │   ├── .claude-plugin/plugin.json
 │   └── skills/{style,review,cover,doc,reshape}/
 ├── srd/
@@ -32,11 +32,11 @@ own manifest and a `skills/` folder:
     └── skills/{cm,grill-me,plan-smith,readme-smith,doc-smith,enhance-skills}/
 ```
 
-| Plugin   | Skills                                                                        | Purpose                                                                                 |
-|----------|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| `golang` | `style`, `review`, `cover`, `doc`, `reshape`                                  | Go style (write + check), done-time review, test coverage, doc fixing, API proposals    |
-| `srd`    | `create`, `review`, `edit`, `system-check`, `report-doc-gap`, `backlog`, `kb` | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base       |
-| `craft`  | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `enhance-skills` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning |
+| Plugin  | Skills                                                                        | Purpose                                                                                 |
+|---------|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| `go`    | `style`, `review`, `cover`, `doc`, `reshape`                                  | Go style (write + check), done-time review, test coverage, doc fixing, API proposals    |
+| `srd`   | `create`, `review`, `edit`, `system-check`, `report-doc-gap`, `backlog`, `kb` | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base       |
+| `craft` | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `enhance-skills` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning |
 
 Plugin skills are **namespaced** by their plugin (e.g. `/srd:review`),
 so they never silently shadow a personal or project skill of the same name.
@@ -50,7 +50,7 @@ so they never silently shadow a personal or project skill of the same name.
 /plugin marketplace add ctx42/skills
 
 # install the groups you want
-/plugin install golang@ctx42-skills
+/plugin install go@ctx42-skills
 /plugin install srd@ctx42-skills
 /plugin install craft@ctx42-skills
 ```
@@ -84,7 +84,7 @@ per machine.
    (`~/.claude/plugins/cache/ctx42-skills/…`) and enabled for all sessions:
 
    ```shell
-   claude plugin install golang@ctx42-skills
+   claude plugin install go@ctx42-skills
    claude plugin install srd@ctx42-skills
    claude plugin install craft@ctx42-skills
    ```
@@ -105,7 +105,7 @@ dotfiles:
     }
   },
   "enabledPlugins": {
-    "golang@ctx42-skills": true,
+    "go@ctx42-skills": true,
     "srd@ctx42-skills": true,
     "craft@ctx42-skills": true
   }
@@ -117,7 +117,7 @@ the clone reach your sessions.
 
 ### Apply the Go style rules automatically
 
-Installing `golang` makes the `style` rulebook available; it does not make an
+Installing `go` makes the `style` rulebook available; it does not make an
 agent read it unprompted. For that, paste this into the **target project's**
 `CLAUDE.md`, so every session that edits Go there picks the rules up:
 
@@ -153,16 +153,16 @@ versions by hand — see [Versioning](CONTRIBUTING.md#versioning)):
 ```shell
 # in your clone (once: ./dev/version.sh install-hooks)
 # bump VER + CHANGELOG, commit, tag, push — the hook syncs all manifests
-claude plugin update golang@ctx42-skills     # copies the new version into the cache
+claude plugin update go@ctx42-skills         # copies the new version into the cache
 ```
 
 Then restart running sessions (or `/reload-plugins`) to load it. In short:
 `--plugin-dir` for live iteration in one session; **bump `VER` + `update`** to
 publish an edit to all sessions.
 
-**Editing rules that a skill grows itself** — e.g. `golang:review`/`golang:style`
-rule edits via `/golang:review add …` — must be done against your clone with
-`--plugin-dir ./golang`, then committed, so the change reaches the repo. A
+**Editing rules that a skill grows itself** — e.g. `go:review`/`go:style` rule
+edits via `/go:review add …` — must be done against your clone with
+`--plugin-dir ./go`, then committed, so the change reaches the repo. A
 marketplace install is a versioned *copy* under `~/.claude/plugins/cache/`; edits
 made there land in that throwaway copy and are lost on the next update, never
 reaching the source of truth. (Per-machine data — the knowledge-base pointer,

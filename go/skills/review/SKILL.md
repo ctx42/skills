@@ -40,7 +40,7 @@ the mode from the first token:
   the last /clear) for convention feedback and proposes rules.
 
 Sources of truth:
-- `golang:style` (on-demand: Check mode) — owns the style rules and their
+- `go:style` (on-demand: Check mode) — owns the style rules and their
   detection; the whole style dimension is delegated to it.
 - `../style/SKILL.md`, `../style/rules.md` (on-demand: Rule-edit/Learn) — the
   terse rules and their keyed detection detail; those modes write here.
@@ -89,14 +89,14 @@ Default to plan-first: if the target is broad and no budget was given, switch
 to `plan_first` automatically, propose defaults (the caps above, the package
 list), and ask before the full review. Broad means the run would fan out — more
 than ~6 packages, or comparable LOC in fewer. That is the same threshold
-`golang:style` uses, deliberately: the two skills share a target and a budget,
+`go:style` uses, deliberately: the two skills share a target and a budget,
 and a `./...` that is broad to one and not to the other cannot be delegated
 coherently. A module of three small packages is `./...` and still not broad.
 
 ### Workflow
 
 1. Resolve the target and budget (above) and list the packages/files in scope.
-2. Style dimension — invoke `golang:style` with the resolved target and budget
+2. Style dimension — invoke `go:style` with the resolved target and budget
    (`packages`, `depth`), instructing it to report offenses only. Take its
    offense list as the style findings; do not re-derive style rules here.
 
@@ -131,7 +131,7 @@ coherently. A module of three small packages is `./...` and still not broad.
 4. Reason only while reviewing: do not run gofmt, go vet, golangci-lint, or
    go test — judge by reading the code. Say so in the report: one line naming
    the tools this pass ran (normally none) and that the style dimension came
-   from `golang:style`. A reader cannot otherwise tell a review that honored
+   from `go:style`. A reader cannot otherwise tell a review that honored
    this from one that shelled out, and neither can anyone checking the run
    afterwards. `LSP` is allowed (read-only
    navigation). This governs the review, not the fix: applying findings
@@ -145,7 +145,7 @@ coherently. A module of three small packages is `./...` and still not broad.
 - Single package or small module (<= ~6 packages): review in this context,
   package by package, highest-risk first.
 - Larger module (> ~6 packages): fan out one review subagent per package (each
-  invokes `golang:style` on its package for the style offenses and reviews
+  invokes `go:style` on its package for the style offenses and reviews
   correctness itself, with the `depth`), then synthesize one merged report,
   re-ranking findings to the global `max_issues` cap. Workers get no share of
   the cap — they report everything they find, and the cap is applied once at
@@ -159,7 +159,7 @@ coherently. A module of three small packages is `./...` and still not broad.
 Group by severity: Blocker / Should-fix / Nit. Each finding:
 - `file:line` — the problem in one line.
 - The rule id or dimension (e.g. `wrap-errors-w`, `correctness`) — a style
-  offense keeps the bare id `golang:style` derived it under, unprefixed, so a
+  offense keeps the bare id `go:style` derived it under, unprefixed, so a
   finding merged from there is still the same string.
 - A minimal suggested fix.
 
@@ -182,7 +182,7 @@ never write a rule without confirmation.
 ## Self-learning
 
 Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
-`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/golang/review.md`,
+`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/go/review.md`,
 the sibling winning a conflict — a read-only install writes the second, and what
 it learned there stays true once the checkout is writable again. Most runs have
 none; absence is the normal case and needs no comment. On a correction or

@@ -29,7 +29,7 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg* | module]
 ```
 
 Executing skill: it reads code, edits godoc and inline comments in `*.go` /
-`*_test.go`, and verifies. Unlike `golang:review` it acts on the code. Scope
+`*_test.go`, and verifies. Unlike `go:review` it acts on the code. Scope
 stops at in-source comments: never write an `Example*` function or a package
 `README` overview to carry what a comment should say.
 
@@ -241,7 +241,7 @@ End of run:
 - Never-touched in scope: `file:Symbol — reason`.
 - Module mode: which packages were done and which were skipped.
 - Items left alone get no line; a flagged or never-touched item is never
-  dropped silently. Close with a one-line pointer to run `golang:review` on
+  dropped silently. Close with a one-line pointer to run `go:review` on
   the result.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
@@ -250,7 +250,7 @@ output the user can already see.
 ## Self-learning
 
 Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
-`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/golang/doc.md`, the
+`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/go/doc.md`, the
 sibling winning a conflict — a read-only install writes the second, and what it
 learned there stays true once the checkout is writable again. Most runs have
 none; absence is the normal case and needs no comment. On a correction or

@@ -29,7 +29,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 ├── .claude-plugin/
 │   └── marketplace.json            # Marketplace catalog: the three plugins below
 │
-├── golang/                         # Plugin: Go workflow
+├── go/                             # Plugin: Go workflow
 │   ├── .claude-plugin/plugin.json
 │   └── skills/
 │       ├── style/               # Go style ruleset + style-only pass (prod + test)
@@ -58,7 +58,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
         └── enhance-skills/         # Record lessons into skills; self-learning
 ```
 
-Skills are grouped into **three plugins** (`golang`, `srd`, `craft`).
+Skills are grouped into **three plugins** (`go`, `srd`, `craft`).
 Each plugin is a directory with a `.claude-plugin/plugin.json` manifest and a
 `skills/` folder holding one directory per skill. Each skill directory has a
 `SKILL.md` (the prompt, including its `## Usage` block), an `evals/evals.json`
@@ -92,7 +92,7 @@ reference each other with relative paths from their own directory:
 
 - `review`, `edit`, and `system-check` read `../create/references/*`.
 - `backlog` reads `../kb/references/retrieval-authoring.md`, which `kb` owns.
-- `cover` and `doc` read `../style/SKILL.md`; `review` invokes `golang:style`
+- `cover` and `doc` read `../style/SKILL.md`; `review` invokes `go:style`
   for the style pass and writes rule edits to `../style/SKILL.md` +
   `../style/rules.md`.
 

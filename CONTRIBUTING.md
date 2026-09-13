@@ -1,8 +1,8 @@
 # Contributing to Skills
 
 This document explains how to add, organize, and maintain skills in this
-repository. Skills ship as Claude Code plugins, grouped into `golang`,
-`srd`, and `craft`.
+repository. Skills ship as Claude Code plugins, grouped into `go`, `srd`,
+and `craft`.
 
 ## Core Principles
 
@@ -13,11 +13,11 @@ repository. Skills ship as Claude Code plugins, grouped into `golang`,
 
 A skill lives at `<group>/skills/<skill-name>/`. Pick the group by purpose:
 
-| Group    | For                                     |
-|----------|-----------------------------------------|
-| `golang` | Go tooling (style, review, coverage)    |
-| `srd`    | Software Requirement Document lifecycle |
-| `craft`  | Cross-cutting engineering-craft aids    |
+| Group   | For                                     |
+|---------|-----------------------------------------|
+| `go`    | Go tooling (style, review, coverage)    |
+| `srd`   | Software Requirement Document lifecycle |
+| `craft` | Cross-cutting engineering-craft aids    |
 
 Adding a skill to an existing group needs **no** marketplace change — the
 plugin's default `skills/` scan discovers it. Only a brand-new group needs its

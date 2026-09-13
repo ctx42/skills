@@ -9,8 +9,8 @@
   },
   "plugins": [
     {
-      "name": "golang",
-      "source": "./golang",
+      "name": "go",
+      "source": "./go",
       "description": "Go workflow: enforced write-time style (style), done-time quality review (review), and per-function test-coverage improvement (cover).",
       "strict": true,
       "category": "development"

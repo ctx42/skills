@@ -14,7 +14,7 @@ marketplace.
 
 ```shell
 /plugin marketplace add ctx42/skills
-/plugin install golang@ctx42-skills
+/plugin install go@ctx42-skills
 /plugin install srd@ctx42-skills
 /plugin install craft@ctx42-skills
 ```
@@ -46,7 +46,7 @@ keeps every plugin/marketplace version in lockstep with `VER` (see
 
 List available skills. They are namespaced by plugin, e.g.:
 
-- `golang`: `/golang:style`, `/golang:review`, `/golang:cover`, `/golang:doc`, `/golang:reshape`
+- `go`: `/go:style`, `/go:review`, `/go:cover`, `/go:doc`, `/go:reshape`
 - `srd`: `/srd:create`, `/srd:review`, `/srd:edit`, `/srd:system-check`,
   `/srd:report-doc-gap`, `/srd:backlog`, `/srd:kb`
 - `craft`: `/craft:cm`, `/craft:grill-me`, `/craft:plan-smith`,

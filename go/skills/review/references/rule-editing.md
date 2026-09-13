@@ -6,7 +6,7 @@ Read when Rule-edit or Learn mode triggers. Both modes write rules to
 ## Writes must reach the repo
 
 The paths above resolve relative to the running plugin copy. Rules only stick
-if that copy is the git clone (loaded via `claude --plugin-dir ./golang`), so
+if that copy is the git clone (loaded via `claude --plugin-dir ./go`), so
 the change can be committed and shared. From a marketplace install (a copy
 under `~/.claude/plugins/cache/`) the edit lands in a throwaway copy and is
 lost on the next update — warn the user and have them re-run from the clone

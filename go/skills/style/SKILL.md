@@ -37,8 +37,8 @@ uses:
   [references/checking.md](references/checking.md) and follow it; per-rule
   detection detail lives in [rules.md](rules.md), opened one entry at a time.
 
-Change the rules only through `golang:review` (state a preference, or
-`golang:review learn` to mine an editing session); never hand-edit them.
+Change the rules only through `go:review` (state a preference, or
+`go:review learn` to mine an editing session); never hand-edit them.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see — when citing a rule, name it and the fix, not
@@ -261,7 +261,7 @@ its full text.
 ## Self-learning
 
 Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
-`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/golang/style.md`, the
+`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/go/style.md`, the
 sibling winning a conflict — a read-only install writes the second, and what it
 learned there stays true once the checkout is writable again. Most runs have
 none; absence is the normal case and needs no comment. On a correction or

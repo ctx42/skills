@@ -48,7 +48,7 @@
         "style",
         "review"
       ],
-      "setup": "`golang:review` is running a check on the current diff and invokes `style` for the style dimension.",
+      "setup": "`go:review` is running a check on the current diff and invokes `style` for the style dimension.",
       "query": "/review",
       "files": []
     },

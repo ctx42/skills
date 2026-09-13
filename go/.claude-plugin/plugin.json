@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
-  "name": "golang",
+  "name": "go",
   "description": "Go workflow: enforced write-time style (style), done-time quality review (review), per-function test-coverage improvement (cover), and in-source documentation fixing (doc).",
   "version": "0.25.0",
   "author": {

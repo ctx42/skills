@@ -87,8 +87,8 @@ lint_skill() {
     local dir="$1" name rel skill_md readme evals fm
     name="$(basename "$dir")"
     # Report by repo-relative path, not basename: two groups can hold skills of
-    # the same name (golang/skills/review and srd/skills/review), and a bare
-    # name leaves the reader guessing which one a finding belongs to.
+    # the same name (go/skills/review and srd/skills/review), and a bare name
+    # leaves the reader guessing which one a finding belongs to.
     rel="${dir#"$SKILLS_SRC"/}"
     skill_md="$dir/SKILL.md"
     readme="$dir/README.md"

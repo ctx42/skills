@@ -16,7 +16,7 @@
       "expected_behavior": [
         "Proposes the rule and its target file, and waits for confirmation before writing anything",
         "States the rule as one imperative line that generalizes past this run — resource-leak severity, not \"the user disagreed about rows.Close in that loop\"",
-        "Names `golang/skills/review/LESSONS.md` as the target, not the `SKILL.md` body and not the `.agent-data` path, since the checkout is writable",
+        "Names `go/skills/review/LESSONS.md` as the target, not the `SKILL.md` body and not the `.agent-data` path, since the checkout is writable",
         "Creates the file with the `# Lessons` header when writing the first rule"
       ]
     },
@@ -74,7 +74,7 @@
       "id": 8,
       "name": "terse-output",
       "expected_behavior": [
-        "Writes all three rules: two to `golang/skills/style/LESSONS.md`, one to `craft/skills/cm/LESSONS.md`, each file created with its `# Lessons` header",
+        "Writes all three rules: two to `go/skills/style/LESSONS.md`, one to `craft/skills/cm/LESSONS.md`, each file created with its `# Lessons` header",
         "Per touched skill, states the path written and how many rules landed",
         "Does not restate the rules themselves — the user approved them a turn ago and can still see them",
         "No preamble, no narration of reading or appending, no closing summary",

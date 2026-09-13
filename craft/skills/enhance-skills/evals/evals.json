@@ -17,7 +17,7 @@
       "skills": [
         "enhance-skills"
       ],
-      "setup": "The user ran `/golang:review` on a package. The review called a `defer rows.Close()` inside a loop a style nit; the user pushed back: \"that's not a nit, it's a real leak — the file handle lives until the function returns. Flag resource leaks as bugs, not style.\" The agent agreed and re-filed it. `golang/skills/review/` is a writable checkout with the `## Self-learning` block and no sibling `LESSONS.md`.",
+      "setup": "The user ran `/go:review` on a package. The review called a `defer rows.Close()` inside a loop a style nit; the user pushed back: \"that's not a nit, it's a real leak — the file handle lives until the function returns. Flag resource leaks as bugs, not style.\" The agent agreed and re-filed it. `go/skills/review/` is a writable checkout with the `## Self-learning` block and no sibling `LESSONS.md`.",
       "query": "/enhance-skills",
       "files": []
     },
@@ -77,7 +77,7 @@
       "skills": [
         "enhance-skills"
       ],
-      "setup": "A long session in a writable checkout. `/golang:style` was corrected twice — it rewrote a test as table-driven when only a style offense was flagged (\"fix the offense in place, don't restructure tests I didn't ask you to touch\"), and it reported offenses inside `vendor/` (\"skip vendored and generated files, they're not ours to style\") — and `/craft:cm` once (\"stop reaching for `chore`; every commit has a real type\"). None of the three is stated in the skill bodies. Both skill directories are writable, carry the `## Self-learning` block, and have no `LESSONS.md`.\n\nThe agent has already mined and proposed these: two rules for `golang:style`, one for `craft:cm`. The user has just approved, so this is the write turn.",
+      "setup": "A long session in a writable checkout. `/go:style` was corrected twice — it rewrote a test as table-driven when only a style offense was flagged (\"fix the offense in place, don't restructure tests I didn't ask you to touch\"), and it reported offenses inside `vendor/` (\"skip vendored and generated files, they're not ours to style\") — and `/craft:cm` once (\"stop reaching for `chore`; every commit has a real type\"). None of the three is stated in the skill bodies. Both skill directories are writable, carry the `## Self-learning` block, and have no `LESSONS.md`.\n\nThe agent has already mined and proposed these: two rules for `go:style`, one for `craft:cm`. The user has just approved, so this is the write turn.",
       "query": "yes, write them",
       "files": []
     },
@@ -97,7 +97,7 @@
       "skills": [
         "enhance-skills"
       ],
-      "setup": "A session correcting `golang:review`: it refactored a helper the task did not mention. The proposal the user approves reads, word for word: \"never restructure or reshape code the task did not ask about\". `golang/skills/review/` is a writable checkout with no sibling `LESSONS.md` The approved sentence is long enough that writing it into the file requires wrapping it across two lines.",
+      "setup": "A session correcting `go:review`: it refactored a helper the task did not mention. The proposal the user approves reads, word for word: \"never restructure or reshape code the task did not ask about\". `go/skills/review/` is a writable checkout with no sibling `LESSONS.md` The approved sentence is long enough that writing it into the file requires wrapping it across two lines.",
       "query": "/enhance-skills",
       "files": []
     }

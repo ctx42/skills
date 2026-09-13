@@ -26,7 +26,7 @@
         "Resolves the target, lists the files in scope, and reads `references/checking.md`",
         "Reasons only for detection — runs no gofmt, vet, or linter",
         "Opens only the `rules.md` entries for the rules it flags — the file is never read whole, which is visible in the commands the run issued",
-        "Reports style offenses only: the off-by-one is left to `golang:review`, not reported here",
+        "Reports style offenses only: the off-by-one is left to `go:review`, not reported here",
         "Groups findings Blocker / Should-fix / Nit with `file:line`, the rule id, and a minimal fix; ends with a clean / fix-first verdict and per-severity counts",
         "Asks which offenses to apply rather than editing unprompted"
       ]
@@ -53,7 +53,7 @@
       "id": 6,
       "name": "rules-change-only-through-review",
       "expected_behavior": [
-        "Routes the request to `golang:review` rule-edit mode instead of hand-editing `SKILL.md` or `rules.md`",
+        "Routes the request to `go:review` rule-edit mode instead of hand-editing `SKILL.md` or `rules.md`",
         "The resulting change is one dense rule line in `SKILL.md`, plus a keyed `rules.md` entry only where the line alone is not enough"
       ]
     },

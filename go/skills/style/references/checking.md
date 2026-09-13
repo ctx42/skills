@@ -2,7 +2,7 @@
 
 Read when `style` is invoked as a command (`/style ...`). The pass checks code
 against the style rules only — formatting, naming, structure, godoc, test shape;
-bugs, edge cases, and logic errors are `golang:review`'s job.
+bugs, edge cases, and logic errors are `go:review`'s job.
 
 Read the invocation from `$ARGUMENTS`; its first token is the target.
 
@@ -15,7 +15,7 @@ Read the invocation from `$ARGUMENTS`; its first token is the target.
 - Offense list
 - Fixing
 - Scale
-- Delegated by golang:review
+- Delegated by go:review
 
 ## Target
 
@@ -23,7 +23,7 @@ The first token selects what to check:
 - empty — run `git diff HEAD`; if that is empty, fall back to the diff vs the
   base branch (staged + unstaged).
 - not a path at all — `add`, `change`, `remove`, or prose about the rules
-  themselves is a rulebook edit, not a target: redirect to `golang:review`
+  themselves is a rulebook edit, not a target: redirect to `go:review`
   (see SKILL.md) rather than resolving it as a directory that does not exist.
   Anything else unrecognized: say so and ask, do not guess a target.
 - a package — a path like `./pkg/foo` or an import path; check that package's
@@ -250,14 +250,14 @@ failing-test reproduction is needed — the test gate is the proof.
   rather than adding one. If a rule id arrives in two spellings, the merge has already
   failed — fix the id, do not reconcile at the end.
 
-## Delegated by golang:review
+## Delegated by go:review
 
 Delegation is recognized from the invocation, not guessed: `review` says it is
 invoking for offenses only and passes the target and budget. There is no flag —
 a run that was not told it is delegated is not delegated, and asks the user
 which offenses to apply as usual.
 
-When `golang:review` invokes `style` to report offenses only, run steps 1–4 for
+When `go:review` invokes `style` to report offenses only, run steps 1–4 for
 the target/budget it passes and output the offense list, then stop — do not run
 Fixing. `review` merges these offenses with its correctness findings and owns
 fix application.

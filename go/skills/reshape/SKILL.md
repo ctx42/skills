@@ -185,7 +185,7 @@ output the user can already see.
 ## Self-learning
 
 Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
-`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/golang/reshape.md`,
+`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/go/reshape.md`,
 the sibling winning a conflict — a read-only install writes the second, and what
 it learned there stays true once the checkout is writable again. Most runs have
 none; absence is the normal case and needs no comment. On a correction or

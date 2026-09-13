@@ -128,7 +128,7 @@ does not.
    existing family is not a suffix to coin for a new test. A function whose
    tests are all named off-convention (`TestFooFails`) has an empty family and
    measures 0% — an uncovered function to scaffold `Test_Foo` for, and the
-   stray name is `golang:style`'s to fix, not this run's.
+   stray name is `go:style`'s to fix, not this run's.
 2. Measure in isolation: `go test -run '^Test_Foo($|_)'
    -coverprofile=tmp/cover/Foo.before ./<pkg>` (methods: `^Test_T_Bar($|_)`).
    Read coverage of only Foo's own line range from the profile; ignore blocks
@@ -243,7 +243,7 @@ output the user can already see.
 ## Self-learning
 
 Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
-`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/golang/cover.md`, the
+`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/go/cover.md`, the
 sibling winning a conflict — a read-only install writes the second, and what it
 learned there stays true once the checkout is writable again. Most runs have
 none; absence is the normal case and needs no comment. On a correction or
