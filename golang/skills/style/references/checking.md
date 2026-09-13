@@ -181,7 +181,8 @@ Style fixes are non-behavioral (formatting, naming, comments, structure), so no
 failing-test reproduction is needed — the test gate is the proof.
 
 - Default: present the offenses as a numbered list and ask which to apply; apply
-  only the picked ones. `fix` applies all; `plan_first` stops after the list.
+  only the picked ones. `fix` applies all. `plan_first` never reaches here — it
+  stops before the check, so a run carrying it has no offense list to apply.
 - For a rename or signature change, enumerate call sites with `LSP`
   (`findReferences`, `goToImplementation`) before editing so definition and
   dependents change together.
