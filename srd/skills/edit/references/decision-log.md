@@ -39,3 +39,13 @@ cfsync-plugin: ignore-push
 ---
 
 # Changes — <Document Title>
+
+## 2026-07-27
+
+### Details page
+
+DET-14 was removed. Retention and data accessibility are not part of this SRD,
+so the requirement and its open "retention period to be confirmed" note went
+with it. DET-13 still covers keeping historical measurements available after a
+channel is reassigned.
+````

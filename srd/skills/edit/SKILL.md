@@ -203,16 +203,6 @@ What goes in an entry, the file's shape, and what `autofix` owes it are in
 [references/decision-log.md](references/decision-log.md) — read it before
 writing the session's first entry.
 
-## 2026-07-27
-
-### Details page
-
-DET-14 was removed. Retention and data accessibility are not part of this SRD,
-so the requirement and its open "retention period to be confirmed" note went
-with it. DET-13 still covers keeping historical measurements available after a
-channel is reassigned.
-````
-
 ## Draft scaffolds
 
 Two working scaffolds live in a draft SRD (House additions in the authoring
