@@ -155,6 +155,49 @@ lint_skill() {
     grep -qE '^##[[:space:]]+Usage' "$skill_md" \
         || err "$rel: SKILL.md has no '## Usage' section"
 
+    # Relative links resolve. A reference file lives one directory deeper
+    # than SKILL.md, so a sibling path copied from a SKILL.md into a
+    # references/ file is one `../` short and silently points nowhere — which
+    # is exactly how edit/references/autofix.md lost its link to errata.md.
+    # Links inside fenced code blocks are skipped: a template's placeholder
+    # targets (`ci-link`, `doc/logo.png`) are content, not links to follow.
+    local f target resolved
+    while IFS= read -r f; do
+        [ -f "$f" ] || continue
+        while IFS= read -r target; do
+            [ -n "$target" ] || continue
+            resolved="$(cd "$(dirname "$f")" 2>/dev/null && \
+                realpath -m --relative-to="$SKILLS_SRC" "$target" 2>/dev/null)"
+            [ -e "$SKILLS_SRC/$resolved" ] \
+                || err "${f#"$SKILLS_SRC"/}: link target '$target' does not exist"
+        done < <(awk '
+            /^[[:space:]]*```/ { fence = !fence; next }
+            fence { next }
+            {
+                line = $0
+                while (match(line, /\]\([^)#][^)]*\)/)) {
+                    t = substr(line, RSTART + 2, RLENGTH - 3)
+                    sub(/#.*$/, "", t)
+                    if (t !~ /^(https?:|mailto:|#)/ && t ~ /\//) print t
+                    line = substr(line, RSTART + RLENGTH)
+                }
+            }
+        ' "$f")
+    done < <(printf '%s\n' "$skill_md" "$dir"/references/*.md)
+
+    # No positional argument placeholders anywhere the skill reads. Positional
+    # substitution is zero-indexed ($0 is the first token), so every "$1 is the
+    # first token" in this repo was off by one for as long as it stood. Prose
+    # naming the token cannot be off by one, so the placeholders are banned
+    # outright rather than corrected. Reference files are checked too: they are
+    # read by the same run and the one that survived the tree-wide fix was
+    # there, not in a SKILL.md.
+    local posarg
+    posarg="$(grep -rlnE '(^|[^\\$])\$[0-9]' "$skill_md" \
+        "$dir/references" "$dir/assets" 2>/dev/null || true)"
+    [ -n "$posarg" ] && err "$rel: positional argument placeholder (\$N) in:
+       $(echo "$posarg" | tr '\n' ' ')— name the token in prose instead"
+
     # Eval scenarios exist in evals/evals.json, pass criteria in
     # evals/expectations.json. They are separate files so a run can be handed a
     # scenario without the rubric it will be graded on; keeping both in one

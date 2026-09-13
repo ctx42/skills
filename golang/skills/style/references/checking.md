@@ -4,7 +4,7 @@ Read when `style` is invoked as a command (`/style ...`). The pass checks code
 against the style rules only — formatting, naming, structure, godoc, test shape;
 bugs, edge cases, and logic errors are `golang:review`'s job.
 
-Read the invocation from `$ARGUMENTS`; `$1` is the first token (the target).
+Read the invocation from `$ARGUMENTS`; its first token is the target.
 
 ## Contents
 
@@ -19,7 +19,7 @@ Read the invocation from `$ARGUMENTS`; `$1` is the first token (the target).
 
 ## Target
 
-`$1` selects what to check:
+The first token selects what to check:
 - empty — run `git diff HEAD`; if that is empty, fall back to the diff vs the
   base branch (staged + unstaged).
 - a package — a path like `./pkg/foo` or an import path; check that package's

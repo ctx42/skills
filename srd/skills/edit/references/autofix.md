@@ -17,8 +17,9 @@ touches ids.
 
 1. No review file, or an empty `## Errata` block: say so and stop.
 2. Parse each open errata finding into its anchor and its fix, which the class
-   in [../create/references/errata.md](../create/references/errata.md) states
-   as an exact substitution — literal (`` `old` → `new` ``) or coded (a
+   in
+   [../../create/references/errata.md](../../create/references/errata.md)
+   states as an exact substitution — literal (`` `old` → `new` ``) or coded (a
    whitespace/glyph class plus a neighboring word; derive the canonical fix
    from the class). A finding with neither shape is not appliable: exclude it,
    report it as malformed, and tell the user to re-run `review <srd> errata`.
