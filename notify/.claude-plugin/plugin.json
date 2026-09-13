@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "notify",
+  "description": "Desktop attention signal for Linux and macOS: a sound plus a small card centred near the top of every monitor when Claude stops or asks for input.",
+  "version": "0.25.0",
+  "author": {
+    "name": "Rafal Zajac",
+    "email": "rzajac@gmail.com"
+  },
+  "keywords": ["hooks", "notification", "desktop", "gtk"],
+  "license": "MIT"
+}
