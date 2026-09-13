@@ -25,7 +25,7 @@
       "expected_behavior": [
         "Resolves the target, lists the files in scope, and reads `references/checking.md`",
         "Reasons only for detection — runs no gofmt, vet, or linter",
-        "Opens the `rules.md` entry for the interface-method rule rather than the whole file",
+        "Opens only the `rules.md` entries for the rules it flags — the file is never read whole, which is visible in the commands the run issued",
         "Reports style offenses only: the off-by-one is left to `golang:review`, not reported here",
         "Groups findings Blocker / Should-fix / Nit with `file:line`, the rule id, and a minimal fix; ends with a clean / fix-first verdict and per-severity counts",
         "Asks which offenses to apply rather than editing unprompted"
@@ -67,7 +67,8 @@
         "Gives workers no share of `max_issues` — they report everything and the cap applies once at the merge",
         "Folds by rule id before cutting: the godoc rule broken in all twelve packages is one finding listing twelve, not twelve findings",
         "The rule broken everywhere survives the cap, rather than being evicted by two offenses repeated twelve times apiece",
-        "The same rule carries one id and one severity across all twelve packages"
+        "Every worker reports a given rule under one id and one severity: the parent pinned the id list before dispatch, so no rule comes back in two spellings and none is reconciled after the fact",
+        "Reports the raw total as the sum of the worker reports (54), not a figure carried from the plan — and says how many went unreported after folding and cutting"
       ]
     },
     {

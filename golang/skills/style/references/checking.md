@@ -87,6 +87,10 @@ no single line spells out.
 2. Check each file against the rules in `SKILL.md` — Production for `*.go`,
    Test for `*_test.go` — reasoning from the Principles above. Open a keyed
    `rules.md` entry only when about to flag its rule; never preload the file.
+   Read the entry, not the file: `grep -n` its Contents key to find the line,
+   then read that range. `cat rules.md` is the thing this rule exists to
+   prevent — it is the single largest file the pass can pull in, most of it
+   about rules the target does not break.
 3. Before reporting an offense whose truth reaches beyond the file (a rename's
    call sites, no-godoc-on-an-interface-method, an unused symbol), confirm it
    with the `LSP` tool (`findReferences`, `goToImplementation`, `hover`) rather
@@ -221,7 +225,11 @@ failing-test reproduction is needed — the test gate is the proof.
   The merge is only performable if workers agree on ids and severity, which is
   what the rubric and the id rule above are for: merging means concatenating,
   sorting by severity then rule id, collapsing exact duplicates, and cutting at
-  `max_issues`. If a rule id arrives in two spellings, the merge has already
+  `max_issues`. Sum the raw total from the worker reports when you write it
+  down — a fan-out's "N offenses across M packages, K unreported" is the one
+  number the reader cannot re-derive without the worker output, and a merge
+  that reported 48 where the workers summed to 45 got it by carrying a figure
+  rather than adding one. If a rule id arrives in two spellings, the merge has already
   failed — fix the id, do not reconcile at the end.
 
 ## Delegated by golang:review

@@ -51,6 +51,13 @@ to the file, state its path, and do not paste it back into chat.
   - A claim the README merely *makes* and cannot support (a benchmark figure, a
     download count, "battle-tested") is deleted, not marked. A TODO asking
     someone to source an invented number preserves the invention.
+- Re-measure anything you call measured. A number in the README — a byte
+  count, a timing, a line width, a version — is measured against what the file
+  finally ships, not against the draft it was probed on. A run measured a
+  306-character wire line, trimmed the payload afterwards, and shipped "~300"
+  over an example that renders 185. A number sold as measured is checked by the
+  first reader who tries.
+
 - Verify commands. Run every install and quickstart command you ship (see
   Verify); a command you cannot run is marked, not guessed — "marked" meaning
   whichever of the three above fits, which for a command this environment

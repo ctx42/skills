@@ -68,7 +68,7 @@
       "skills": [
         "style"
       ],
-      "setup": "A 12-package module. Every package holds the same two offenses — a `%v` error wrap and a single-letter receiver — and one rule, missing godoc on an exported symbol, is broken in all twelve. Invoked with no budget controls.",
+      "setup": "A 12-package module. Every package holds the same four offenses — a `%v` error wrap, a single-letter receiver, missing godoc on an exported symbol, and a missing blank line between test topic groups — so 48 offenses fold to 4 findings. Two packages hold three further offenses each that no other package has, giving 54 in all and 10 findings after folding. Invoked with no budget controls, so the proposed default cap is 25: the cap binds on the unfolded list and does not bind on the folded one, which is the difference the run has to get right.",
       "query": "/style ./...",
       "files": []
     },
