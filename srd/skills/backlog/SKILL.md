@@ -57,9 +57,13 @@ system is.
 
 The KB lists read `_open-questions.md` at the KB root, which `srd:kb` resolves:
 one row per question under `## Open` (label, kind `deferred` or `unknown`, date
-raised, hit count, `Lives in` page link) or `## Closed`. The wording lives in
-the page's `## Open questions` section; a row with an empty page link has only
-its label. Without a KB root, say so and work `gaps` alone.
+raised, hit count, `Lives in` page link) or `## Closed`, which keeps the same
+columns plus the date closed and where the answer now lives. The wording lives
+in the page's `## Open questions` section; a row with an empty page link has
+only its label. When a question closes, its wording leaves that section — the
+answer is in the page body now, and a question still posed beside its own
+answer reads as unresolved to the next person. Without a KB root, say so and
+work `gaps` alone.
 
 The `gaps` list reaches the store by, in priority order — falling through only
 when a step is genuinely absent, never because one call failed. Absent means
@@ -75,8 +79,17 @@ problem, and is reported rather than retried or fallen past:
    `GET /docs/<id>`.
 
 Fall through only when a step genuinely is not there, not on one failed call.
-If neither exposes `/gaps`, the store is not enabled — say so and work the KB
-lists alone.
+What the response says, in order:
+
+- No host answering, or the MCP tool absent — that backend is not there. Fall
+  through.
+- `404` on `/gaps` from a host that answers other routes — the server is up
+  without the gap endpoint. The store is not enabled: say so and work the KB
+  lists alone.
+- Any other error, `500` and friends — a store that exists and is unwell.
+  Report it with its status and stop working `gaps`; do not fall through, do
+  not retry, and do not describe it as not enabled, which would send someone
+  to configure a thing that is already configured.
 
 A gap record carries `id`, `status`, `created_at`, `kind`
 (missing/wrong/incomplete/ambiguous), `topic`, `doc_id`, `heading_path`,
@@ -120,11 +133,13 @@ its topic page, or from the row's label when it has no page yet.
 
 ### 3. unknowns
 
-Establish each row's state from the user in the room, never from the corpus. An
-unknown is by definition something nobody has pinned down, so a corpus hit that
-looks like the answer is either a different question or the very thing that
-should have closed it long ago — say so and let the user decide which. Reading
-one as the answer is how an unknown gets closed with a guess wearing a source.
+Only the user closes an unknown. You may read the corpus — an unknown that
+turns out to be documented is worth knowing — but a hit is evidence to put in
+front of them, never a closure. It is either about a different question, or the
+very thing that should have closed this row long ago, and only they can say
+which. Reading one as the answer is how an unknown gets closed with a guess
+wearing a source. Bring the hit, name what it does and does not settle, and let
+them decide.
 
 For each row:
 
@@ -152,8 +167,10 @@ Draft the page that fixes the user manual; a human publishes it.
    content needs a structural edit to the existing page, never a duplicate
    (the reference's "Absent vs unfindable").
 4. Extract what the page must state. A record says what is missing, not what
-   is true; one filed in heavy mode already carries knowledge in
-   `detail`/`target_claim` — read those first as a starting point, not gospel.
+   is true — but some were grilled at depth when filed and already carry
+   knowledge in `detail` and `target_claim` (`srd:report-doc-gap` calls that a
+   heavy grill). Spot them by a populated `target_claim`, read those first as a
+   starting point, not gospel.
    Run `craft:grill-me` on the cluster to fill what the record leaves open,
    never re-asking what it answers. Do not draft from guesses.
 5. Draft one page (or the edit to an existing one) against

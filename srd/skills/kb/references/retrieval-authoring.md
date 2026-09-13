@@ -44,7 +44,10 @@ it indexes and ranks well.
 ## Links and tables
 
 - Put the canonical URL first in the body — a citation uses the first
-  `atlassian.net` link, else the first `http(s)` URL.
+  `atlassian.net` link, else the first `http(s)` URL. A draft written before
+  publication has no such URL yet: leave the line as a marked placeholder and
+  fill it when the page is published, rather than citing a URL that does not
+  resolve or silently shipping a page with no citation at all.
 - Give tables real column headers and a one-line caption sentence; bare pipe
   cells tokenize poorly.
 

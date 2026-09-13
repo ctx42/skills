@@ -22,7 +22,9 @@ one failed call:
    this client: `curl 'http://<host>:7777/search?q=TEXT&k=5'` and
    `curl 'http://<host>:7777/docs/<id>'`. Same engine, same results.
 
-   `<host>` is `localhost` unless `SRD_DOC_HOST` says otherwise — probe it
+   `<host>:<port>` is `localhost:7777` unless `SRD_DOC_HOST` and `SRD_DOC_PORT`
+   say otherwise — both overridable, since a second instance on one machine
+   cannot share the port — probe it
    before concluding there is no corpus. Missing MCP tools are not evidence the
    server is down; they are evidence this client has no MCP wiring, which is
    the exact case this step exists for. Reporting "no corpus" without a
