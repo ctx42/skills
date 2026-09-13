@@ -108,16 +108,22 @@ Detect whether the library source is editable:
 
 Rank each candidate by **net impact**, biggest first:
 
-- reach — how many call sites it simplifies (the LSP count).
+- reach — how many of the N uses it simplifies. Uses, not calls: a change
+  that reshapes declarations rather than call sites (exposing an interface,
+  adding a testing helper) has a real reach, and counting only calls would pin
+  every such proposal at 0 while step 4 still requires one.
 - savings — boilerplate / lines / steps removed per site.
 - quality — readability, testability, fewer error-prone steps.
 - cost (discount) — API breakage (additive beats breaking), implementation
   effort, blast radius on *other* consumers.
 
-Net = reach × savings × quality, discounted by cost. Label each **High / Med /
-Low** — High is worth doing this quarter, Med worth doing, Low worth knowing —
-and lead with the single biggest-impact change. Label the Net, after the
-discount; the table's Breakage and Effort columns show what was discounted, so
+Net = reach × savings × quality, discounted by cost. Label each **High** or
+**Med** — High is worth doing this quarter, Med worth doing — and lead with the
+single biggest-impact change. There is no third label: a shape worth knowing
+but not worth doing is a declined note under the table (see Output), so a
+bottom tier would only ever name rows that belong somewhere else. Label the
+Net, after the discount; the table's Breakage and Effort columns show what was
+discounted, so
 a High beside heavy Breakage means it survived that. A change that touches many
 sites and is additive outranks a flashy structural rewrite that breaks everyone.
 
@@ -131,13 +137,16 @@ proposal the brainstorm exists to surface.
 
 Open with the ranked payload:
 
-1. One line: library · consumer scope · modifiability · N call sites ·
+1. One line: library · consumer scope · modifiability · N uses ·
    M proposals. N counts every syntactic use of the library's surface in the
-   consumer scope: a call to one of its functions, a method call on a value it
-   owns (`src.Next()`), and a composite literal of one of its types
-   (`must.Options{…}`) each count once. A line using two of them counts twice;
-   a use inside a loop counts once. Not files, not occurrences of the package
-   name, not per-iteration executions.
+   consumer scope, each once: a call to one of its functions; a method call on
+   a value it owns (`src.Next()`); a composite literal of one of its types
+   (`must.Options{…}`); a conversion to one of its types
+   (`(*oskit.File)(nil)`); a variable, field, or parameter declared as one
+   (`var doc yaml.Node`); and a reference to one of its exported constants or
+   sentinel errors (`yaml.DocumentNode`, `errors.Is(err, tidy.ErrEmpty)`). A
+   line using two of them counts twice; a use inside a loop counts once. Not
+   files, not occurrences of the package name, not per-iteration executions.
 
    N is the denominator every `Reach` is a fraction of, so both must count the
    same way — a headline counting only calls beside a Reach counting literals
@@ -146,7 +155,7 @@ Open with the ranked payload:
    so in a sentence and stop: an empty table is a shrug with borders. Name what
    you looked for and found absent, so the reader can tell a clean API from a
    shallow pass. A shape worth knowing but not worth doing is a named
-   declined note there, not a `Low` row padding the table.
+   declined note there, not a row padding the table.
 
 
    | # | Change (archetype) | Reach | Impact | Breakage | Effort |
