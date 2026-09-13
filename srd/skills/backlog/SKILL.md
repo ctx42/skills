@@ -60,11 +60,14 @@ system is.
 The KB lists read `_open-questions.md` at the KB root, which `srd:kb` resolves:
 one row per question under `## Open` (label, kind `deferred` or `unknown`, date
 raised, hit count, `Lives in` page link) or `## Closed`, which keeps the same
-columns plus the date closed and where the answer now lives. The wording lives
-in the page's `## Open questions` section; a row with an empty page link has
-only its label. When a question closes, its wording leaves that section — the
-answer is in the page body now, and a question still posed beside its own
-answer reads as unresolved to the next person. Without a KB root, say so and
+columns — `kind` included, so a closed row still says whether it had been a
+deferred question or an unknown — plus the date closed and where the answer
+now lives. The wording lives in the page's `## Open questions` section; a row
+with an empty page link has only its label. When a question closes, its wording
+leaves that section — the answer is in the page body now, and a question still
+posed beside its own answer reads as unresolved to the next person — and when
+that was the last one, the heading goes too, since an empty heading promises a
+list the page does not have. Without a KB root, say so and
 work `gaps` alone.
 
 The `gaps` list reaches the store by, in priority order — falling through only
@@ -104,8 +107,10 @@ relevant.
 The first token names one list, or `all` (default). Copy this checklist and
 tick it off:
 
-- [ ] 1. Open the sitting: resolve both backends, count each list, stop for
-      the user's pick. Skipped when a list was named.
+- [ ] 1. Open the sitting: resolve the KB root and the gap store, count each
+      list, stop for the user's pick. Skipped when a list was named. (Two
+      backends in that sense — the MCP/REST fallthrough below is one backend
+      reached two ways, not a second one.)
 - [ ] 2. `deferred`: ask, hand the answer to `srd:kb`.
 - [ ] 3. `unknowns`: triage, never answer.
 - [ ] 4. `gaps`: cluster, check the corpus, grill, draft, resolve.
@@ -183,8 +188,13 @@ Draft the page that fixes the user manual; a human publishes it.
    which directories are sources first.
 6. Resolve once the human gives the published URL: `resolve_gap` for every gap
    in the cluster, so each moves from `open` to `resolved` with the URL
-   recorded. Say that the corpus reflects the page only after the next sync
-   and server restart.
+   recorded. An edit to an existing page has a URL already — that page's — and
+   it is the right one to record: the gap is closed by what the reader can now
+   find there. When nobody can publish in this sitting, resolve nothing: say
+   where the draft is and that the gaps stay `open` until it lands, since a gap
+   resolved against an unpublished draft reads as done to everyone after. Say
+   that the corpus reflects the page only after the next sync and server
+   restart.
 
 A platform fact the grill surfaces also goes to `srd:kb`; the gap and the KB
 entry close independently.

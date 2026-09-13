@@ -45,10 +45,13 @@ memory.
   publish anything to Confluence; write a fact the user has not confirmed.
 - Depends on: the `srd-doc` corpus read tools for dedup and coverage checks.
   The corpus indexes the knowledge base under its own `kb/` prefix, and that
-  index can lag or outlive the files: a hit under `kb/` is evidence a page
-  existed, not that it is in the KB root now. Resolve every hit to a real path
-  under the root before appending to it; a hit with no file behind it is a new
-  page to write, not a page to extend.
+  index can lag or outlive the files, and it may be indexing a different
+  knowledge base than the root resolved here — the corpus serves whatever the
+  server was built over, not whatever this machine points at. Either way a hit
+  under `kb/` is evidence a page existed somewhere, not that it is in this KB
+  root now. Resolve every hit to a real path under the root before appending
+  to it; a hit with no file behind it is a new page to write, not a page to
+  extend, however well its text matches.
   Without them, capture still works but every write is blind — say so and
   prefer the inbox over creating a page.
 
@@ -256,10 +259,14 @@ title: Acoustic Leak Detection
 aliases: [AUTOCO, automated cross-correlation]
 cfsync-plugin: ignore-push
 attested: 2026-09-11
-srd_ref: INT-384
+srd_ref: INT-384, INT-392
 last_verified: 2026-09-11
 ---
 ```
+
+`srd_ref` accumulates: a page attested across several SRDs lists them
+comma-separated, earliest first, and a write appends rather than replaces.
+`attested` stays the first date; `last_verified` moves.
 
 `title` is always explicit — without it the indexer falls back to the file name.
 `aliases` carry abbreviations and synonyms; they index at the title's boost on
@@ -292,6 +299,10 @@ Body rules:
 
 - `## Provenance` closes the page as a human-facing roll-up — which areas
   rest on documents, which on a conversation. An index, not the mechanism.
+  Every write adds or updates its row there, whether the write creates the
+  page or appends a section to one: a roll-up nobody maintains indexes a page
+  that has moved on. A page with no `## Provenance` yet gets one on the first
+  write that touches it.
 - `## Open questions` holds what this page's subject leaves unanswered. See
   [Open questions](#open-questions) below.
 
