@@ -154,7 +154,9 @@ coherently. A module of three small packages is `./...` and still not broad.
 
 Group by severity: Blocker / Should-fix / Nit. Each finding:
 - `file:line` — the problem in one line.
-- The rule id or dimension (e.g. `style: %w`, `correctness`).
+- The rule id or dimension (e.g. `wrap-errors-w`, `correctness`) — a style
+  offense keeps the bare id `golang:style` derived it under, unprefixed, so a
+  finding merged from there is still the same string.
 - A minimal suggested fix.
 
 End with a one-line verdict (ship / fix-first) and the per-severity counts. For

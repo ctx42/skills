@@ -21,7 +21,7 @@ argument-hint: "[TARGET] [packages=a,b] [max_issues=N]
 /style ./...                            check the whole module
 /style /path/to/project                 check that module (a go.mod dir)
 /style ./pkg/foo fix                    apply every offense's fix without asking
-/style ./... plan_first                 list offenses only, then stop
+/style ./... plan_first                 propose the budget, then stop
 /style ./... packages=a,b               restrict a module check to these packages
 /style ./... max_issues=15 depth=light  cap offenses; set depth
 ```

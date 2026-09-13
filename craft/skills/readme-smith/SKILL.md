@@ -81,6 +81,12 @@ leave that finding reported and its fence untouched — never write the file and
 mention it afterwards. The no declines the Go source, not the run: every other
 approved fix still applies.
 
+A fence left untouched that way can be one Verify would otherwise reject, and
+Verify does not override the no — shipping the snippet the README already had
+is what "untouched" means. Say in the reply that the fence stayed as it was and
+that it does not compile, so the state is the user's choice rather than an
+unnoticed defect.
+
 ## Create mode
 
 1. Scan the repo. Ground everything in real code: package manifests
@@ -128,7 +134,10 @@ No edits until the user approves the findings.
    breaks, and a minimal fix. A gap only the user can close (the minimum
    runtime, whether the package is published, which remote is real) is a
    finding like any other, asked in its own line — improve mode has no separate
-   question round. End with a one-line verdict; the verdict is the ask, so add
+   question round. The Go-source gate is the exception, and it is not a
+   question about the README: it comes after approval, immediately before any
+   `.go` file is written, because until the fixes are approved there may be no
+   example to write. End with a one-line verdict; the verdict is the ask, so add
    no "shall I apply these?" after it.
 
 4. Fix on confirmation. Apply approved findings, then Verify. State what
@@ -167,6 +176,11 @@ Dynamic:
         must be told. A `<!-- TODO: … -->` is invisible to them; use a
         `> [!NOTE]` naming what has to happen first, and a TODO only for the
         fact you are missing.
+      - *The failure does not say which* — a private host answering "you may
+        not have access, or it no longer exists" is both readings at once.
+        Treat it as the project kind, since a note the reader does not need
+        costs them a sentence and a missing one costs them the install, and
+        say in the reply that the cause was not distinguishable from here.
 
 ## Self-application
 

@@ -22,6 +22,10 @@ Read the invocation from `$ARGUMENTS`; its first token is the target.
 The first token selects what to check:
 - empty — run `git diff HEAD`; if that is empty, fall back to the diff vs the
   base branch (staged + unstaged).
+- not a path at all — `add`, `change`, `remove`, or prose about the rules
+  themselves is a rulebook edit, not a target: redirect to `golang:review`
+  (see SKILL.md) rather than resolving it as a directory that does not exist.
+  Anything else unrecognized: say so and ask, do not guess a target.
 - a package — a path like `./pkg/foo` or an import path; check that package's
   `.go` files.
 - a module / many packages — `./...`, a directory containing `go.mod`, or an
@@ -36,7 +40,10 @@ Read these from `$ARGUMENTS` (any order, after the target):
 - `max_issues=N` — cap on offenses reported (default 25).
 - `depth=light|standard|full` — default `standard`. `light` reports only
   high-impact offenses; `full` checks every rule exhaustively.
-- `plan_first` — list the offenses and stop for approval before applying any.
+- `plan_first` — propose the budget and the package list, then stop for the
+  user's answer, checking nothing until it comes. Not "list the offenses and
+  stop before applying": the default pick step already asks before applying, so
+  that reading would make the flag do nothing.
 - `fix` — apply every listed offense's fix without asking (skips the pick step).
 
 Default to plan-first for a broad target with no budget: propose defaults (the
@@ -114,31 +121,45 @@ offense, rather than being graded afresh each time it appears.
 
 Each offense:
 - `file:line` — the offense in one line.
-- the rule id (e.g. `style: %w`, `style: no-stutter`).
+- the rule id (e.g. `wrap-errors-w`, `no-name-stutter`).
 - the minimal fix.
 
 Rule ids are not coined per run, and "the exact rule phrase" is not an id —
 asked for one, twelve workers turned the same `%w` rule into
 `Wrap errors with %w and add context…`, `style: %w`, and a lower-cased variant.
-Derive it mechanically so every worker lands on the same string:
+An id is a bare slug: no `style:` prefix, no backticks, no capitals.
 
-- The rule has a `rules.md` entry → its Contents key, slugged: *No name stutter*
-  → `no-name-stutter`.
-- It does not → the first three significant words of its `SKILL.md` line,
-  lowercased, hyphenated, punctuation and articles dropped: *Wrap errors with
-  `%w`…* → `wrap-errors-w`; *Lines <=80 cols…* → `lines-80-cols`.
+Derive it in these steps, which every worker must apply identically or the
+merge cannot fold:
 
-Two shapes break that recipe and need a stated answer, or the same rule gets
-two ids and the merge fails:
+1. Take the rule's `SKILL.md` line. A `rules.md` entry does not change this —
+   deriving from the entry's Contents key and from the line gives two ids for
+   one rule, so the line is always the source and the entry is only where the
+   detail lives.
+2. Split on `;` first: a line carrying two rules separated by a semicolon is
+   two rules with two ids, reported as two offenses. Never split on "and",
+   which joins clauses of one rule as often as it joins two.
+3. Drop everything that is not a word: punctuation, backticks, and the code
+   inside them, except where the code *is* the word (`%w` → `w`).
+4. Drop these words wherever they fall: *a an the is are be to of in on at by
+   with for from and or no not its it this that*. Nothing else is dropped —
+   "significant" was doing that job and eleven workers read it one way while
+   the twelfth read it another.
+5. Take the first three words that remain, lowercase, join with hyphens.
 
-- The line opens with code, so the first words are an identifier. Read the
-  identifier as one word and take two more prose words after it: *`context` is
-  the first parameter…* → `context-first-parameter`, not `contextcontext`.
-- The line carries two rules joined by a semicolon or `and`. Each half is its
-  own id, derived from its own first three words: *No work in `init()`; no
-  package-level mutable state…* → `no-work-init` and
-  `no-package-level-mutable`. Report them as separate offenses; one id covering
-  two rules cannot be folded or cut correctly.
+*Wrap errors with `%w` and add context…* → `wrap-errors-w`. *Lines <=80
+cols…* → `lines-80-cols`. *Receivers are a ~three-letter type abbreviation* →
+`receivers-three-letter-type`. *`context` is the first parameter…* →
+`context-first-parameter`. *No work in `init()`; no package-level mutable
+state…* → `no-work-init` and `no-package-level-mutable`.
+
+Under `fanout`, the parent derives the id for every rule it is dispatching
+against and sends that list with each worker's brief. Workers use the list and
+coin nothing; a rule they hit that is not on it comes back with the line quoted
+and no id, for the parent to key. This is what "fix the id, do not reconcile at
+the end" needs in order to be performable: twelve workers deriving
+independently produced one spelling for three rules and two for the fourth,
+which is a merge that has already failed.
 
 One offense is one rule broken in one file, however many times it is broken
 there — list every site on the offense, do not repeat the offense per site.

@@ -26,9 +26,12 @@ let the target fill them. The README is written once, by the target.
 3. Mark the spots: above each `go` fence where an example belongs, write a
    one-line `<!-- gmmce:… -->` marker (see Marker keys).
 4. Inject: run `gomake :doc:mce`; it fills each marked fence with the matching
-   function's body, refreshing it in place on re-runs. It scans `--dir`
-   (default `.`) recursively and writes `--file` (default `README.md` in
-   `--dir`) — pass both when the README is not at the scan root.
+   function's body, refreshing it in place on re-runs. `--dir` (default `.`) is
+   the tree scanned for examples, and also where the default `--file`
+   (`README.md`) is looked for; `--file` is the Markdown file written. For a
+   README outside the scan root, `--file` alone is enough — marker keys resolve
+   against the Markdown file's own directory, not against `--dir`, so narrowing
+   the scan is the only reason to pass `--dir` as well.
 5. Never hand-edit an injected fence: to change an example, edit its `Example…`
    function and re-run the target. An *example* `go` fence not backed by a
    passing `Example…` function is drift. This is about example code, not every
@@ -50,12 +53,15 @@ Use a buffer for stdout to capture program output without touching `os.Stdout`:
 ````
 
 The key is `<relpath>/<FuncName>`: the exact `Example…` function name (Go
-conventions: `ExampleType_method`, `ExampleFunc_suffix`) prefixed by the
-example package's directory **relative to the Markdown file** — `pkg/foo/ExampleNew`
-for a README at the repo root. Drop the prefix only when the `_test.go` lives in
-the same directory as the README. A bare `<!-- gmmce:ExampleNew -->` silently
-no-ops when the example is in a subpackage: a marker with no matching example is
-left untouched, so a wrong key looks like nothing happened rather than failing.
+conventions: `ExampleType_method`, `ExampleFunc_suffix`) prefixed by the example
+package's directory **relative to the Markdown file** — `pkg/foo/ExampleNew` for
+a README at the repo root. Drop the prefix only when the `_test.go` lives in the
+same directory as the README. Relative to the Markdown file, not to `--dir` and
+not to the module root: a `pkg/queue/README.md` beside its own example takes the
+bare key even when the run scans from the repo root. A key with the wrong
+prefix silently no-ops: a marker with no matching example is left untouched, so
+a wrong key looks like nothing happened rather than failing. The `Found` lines
+name the keys that matched — read them, not the fences.
 One marker per example.
 
 The function body lands with its trailing `// Output:` block, dedented by one
