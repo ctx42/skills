@@ -144,12 +144,21 @@ merge cannot fold:
    two rules with two ids, reported as two offenses. Never split on "and",
    which joins clauses of one rule as often as it joins two.
 3. Drop everything that is not a word: punctuation, backticks, and the code
-   inside them, except where the code *is* the word (`%w` → `w`).
+   inside them, except where the code *is* the word. Two forms qualify: a token
+   that is only letters after its punctuation (`%w` → `w`), and a dotted
+   identifier, which contributes the part before the first dot and nothing else
+   (`context.Context` → `context`, `errors.Is` → `errors`). Taking the part
+   after the dot instead turns one rule into `match-errors-is` for a worker who
+   read `errors.Is` first and `match-errors-as` for one who read `errors.As`.
 4. Drop these words wherever they fall: *a an the is are be to of in on at by
-   with for from and or no not its it this that*. Nothing else is dropped —
+   with for from and or its it this that*. Nothing else is dropped —
    "significant" was doing that job and eleven workers read it one way while
-   the twelfth read it another.
-5. Take the first three words that remain, lowercase, join with hyphens.
+   the twelfth read it another. Negations stay: `no-work-init` and
+   `work-init` would name opposite rules, so dropping *no* is how two rules
+   collide on one id.
+5. Collapse a word that repeats the word just before it (`errors errors` →
+   `errors`), then take the first three words that remain, lowercase, join with
+   hyphens.
 
 *Wrap errors with `%w` and add context…* → `wrap-errors-w`. *Lines <=80
 cols…* → `lines-80-cols`. *Receivers are a ~three-letter type abbreviation* →
@@ -181,8 +190,11 @@ Style fixes are non-behavioral (formatting, naming, comments, structure), so no
 failing-test reproduction is needed — the test gate is the proof.
 
 - Default: present the offenses as a numbered list and ask which to apply; apply
-  only the picked ones. `fix` applies all. `plan_first` never reaches here — it
-  stops before the check, so a run carrying it has no offense list to apply.
+  only the picked ones. `fix` applies all. A plan-first run — the flag, or the
+  automatic one a broad target triggers — reaches here only after the user has
+  answered the plan, and that answer agreed the budget, not the fixes: the pick
+  step still runs. Before the answer there is no offense list to apply at all,
+  because nothing has been checked yet.
 - For a rename or signature change, enumerate call sites with `LSP`
   (`findReferences`, `goToImplementation`) before editing so definition and
   dependents change together.
@@ -199,10 +211,15 @@ failing-test reproduction is needed — the test gate is the proof.
 
 - Single package or small module (<= ~6 packages): check in this context.
 - Larger module (> ~6 packages): fan out one subagent per package (each gets
-  `SKILL.md`, this reference, and the `depth`, and opens `rules.md` entries per
-  need like the parent), then merge into one report re-ranked to the global
-  `max_issues`. Report which packages were checked and which were skipped;
-  never silently truncate.
+  `SKILL.md`, this reference, the `depth`, and the parent's rule-id list, and
+  opens `rules.md` entries per need like the parent), then merge into one
+  report re-ranked to the global `max_issues`. The id list is every rule the
+  depth puts in scope, which at `standard` and `full` is the whole rulebook —
+  well over a hundred ids. That size is expected and is not a reason to trim
+  it: the parent cannot know which rules a package breaks until the package is
+  checked, and a worker that meets a rule missing from its list has to come
+  back with a quoted line and no id. Report which packages were checked and
+  which were skipped; never silently truncate.
 
   Workers do not get a share of `max_issues` — they report every offense they
   find, and the cap is applied once, at the merge, across the whole set. A

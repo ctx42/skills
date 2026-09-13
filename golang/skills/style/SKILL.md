@@ -183,7 +183,12 @@ its full text.
   declaration.
 - Separate distinct topics within a `--- Given ---`/`--- Then ---` block with a
   blank line; group statements by the subject they set up or verify; no blank
-  line between consecutive same-subject assertions.
+  line between consecutive same-subject assertions. The subject is the value
+  being set up or asserted about, not the call that produced it: everything
+  returned by one `--- When ---` call is one subject, so an `assert.NoError` and
+  the `assert.Equal` checking that call's result take no blank line between
+  them, while a second collaborator's setup or a second value's assertions take
+  one.
 - In `foo_test.go` with a matching `foo.go`, test functions follow the
   declaration order of their subject in `foo.go`; `Test_Foo` precedes
   `Test_Foo_tabular`; files without a 1-to-1 name match are exempt.

@@ -68,7 +68,11 @@
         "Folds by rule id before cutting: the godoc rule broken in all twelve packages is one finding listing twelve, not twelve findings",
         "The rule broken everywhere survives the cap, rather than being evicted by two offenses repeated twelve times apiece",
         "Every worker reports a given rule under one id and one severity: the parent pinned the id list before dispatch, so no rule comes back in two spellings and none is reconciled after the fact",
-        "Reports the raw total as the sum of the worker reports (54), not a figure carried from the plan — and says how many went unreported after folding and cutting"
+        "Reports the raw total as the sum of the worker reports — add the twelve figures up and the reported total equals them, rather than being carried from the plan or from the planted count — and says how many went unreported after folding and cutting",
+        "Runs the pick step after the plan is approved: the approval agreed the budget, not the fixes, so the run still asks which offenses to apply and edits no file until told which",
+        "Derives every id by the documented steps, negations included — a rule written `No work in init()` comes back as `no-work-init`, never `work-init`, and a dotted identifier contributes only the part before its dot",
+        "Finds the missing blank line between two `--- Given ---` topic groups in every package that has it, not in some of them — identical code graded identically",
+        "Flags no blank-line offense for an `assert.NoError` sitting next to the `assert.Equal` that checks the same call's result: one `--- When ---` call's returns are one subject"
       ]
     },
     {
