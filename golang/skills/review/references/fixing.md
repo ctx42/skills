@@ -17,8 +17,10 @@ Red/green proof output (below) is not a diff — report it.
 Before a rename, signature change, or interface change, use the `LSP` tool to
 find everything the edit must touch — `findReferences` for every call site,
 `goToImplementation` for every implementer — so the definition and all its
-dependents change together. LSP only locates code; edits still go through
-Edit/Write. Re-query after writing, since a pre-edit result goes stale. The
+dependents change together. With no `LSP` tool in this client, or no language
+server behind it, grep for the call sites and say the enumeration is
+grep-confident. LSP only locates code; edits still go through Edit/Write.
+Re-query after writing, since a pre-edit result goes stale. The
 test gate (below) remains the proof that no caller broke. No Go language
 server → fall back to grep to enumerate call sites.
 

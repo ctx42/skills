@@ -128,6 +128,18 @@ Derive it mechanically so every worker lands on the same string:
   lowercased, hyphenated, punctuation and articles dropped: *Wrap errors with
   `%w`…* → `wrap-errors-w`; *Lines <=80 cols…* → `lines-80-cols`.
 
+Two shapes break that recipe and need a stated answer, or the same rule gets
+two ids and the merge fails:
+
+- The line opens with code, so the first words are an identifier. Read the
+  identifier as one word and take two more prose words after it: *`context` is
+  the first parameter…* → `context-first-parameter`, not `contextcontext`.
+- The line carries two rules joined by a semicolon or `and`. Each half is its
+  own id, derived from its own first three words: *No work in `init()`; no
+  package-level mutable state…* → `no-work-init` and
+  `no-package-level-mutable`. Report them as separate offenses; one id covering
+  two rules cannot be folded or cut correctly.
+
 One offense is one rule broken in one file, however many times it is broken
 there — list every site on the offense, do not repeat the offense per site.
 Twelve workers reporting a receiver rule as one offense in some packages and

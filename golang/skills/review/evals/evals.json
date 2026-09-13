@@ -37,7 +37,7 @@
       "skills": [
         "review"
       ],
-      "setup": "A finished session with four corrections. Two are genuinely absent from `../style/SKILL.md`: the user rejected a package-level `var` used as mutable state between calls, and asked that a constructor returning `(*T, error)` validate its arguments before allocating. One repeats a rule the rulebook already carries verbatim — never store a `context.Context` in a struct field. The fourth was a rename specific to this project's domain vocabulary.",
+      "setup": "A finished session with four corrections. Two are genuinely absent from `../style/SKILL.md`: the user rejected a `time.After` inside a `select` loop because each iteration leaks a timer until it fires, and asked that a string built in a loop use `strings.Builder` rather than `+=`. One repeats a rule the rulebook already carries verbatim — never store a `context.Context` in a struct field. The fourth was a rename specific to this project's domain vocabulary.",
       "query": "/review learn",
       "files": []
     },

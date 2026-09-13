@@ -22,7 +22,7 @@ argument-hint: "[TARGET* | add|change|remove RULE | learn] [packages=a,b]
 /review /path/to/project                      review that module (a go.mod dir)
 /review ./... max_issues=15 depth=light       cap findings; set review depth
 /review ./... packages=parser,lexer           restrict to these packages
-/review ./... plan_first                      plan + top findings, then stop for approval
+/review ./... plan_first                      propose the budget, then stop for approval
 /review ./pkg/foo fix                         review, then apply the findings
 /review add "no naked returns in tests"       add a style rule
 /review change "receivers are three letters"  refine an existing style rule
@@ -79,14 +79,19 @@ Read these controls from `$ARGUMENTS` (any order, after the target):
 - `depth=light|standard|full` — default `standard`. `light` reports only
   blockers and major maintainability with minimal examples; `full` reviews
   everything deeply — use sparingly.
-- `plan_first` — produce a short prioritized plan plus the top findings, then
-  stop for approval before the full pass.
+- `plan_first` — propose the budget and the package list, then stop for the
+  user's answer. Propose-then-stop, not review-everything-then-present: the
+  point is to agree what the run will cost before spending it, and findings
+  presented alongside the proposal have already spent it.
 - `fix` — after reviewing, apply the findings (see Applying fixes).
 
-Default to plan-first: if the target is broad (whole module, many packages, or
-large LOC) and no budget was given, switch to `plan_first` automatically,
-propose defaults (the caps above, the package list), and ask before the full
-review.
+Default to plan-first: if the target is broad and no budget was given, switch
+to `plan_first` automatically, propose defaults (the caps above, the package
+list), and ask before the full review. Broad means the run would fan out — more
+than ~6 packages, or comparable LOC in fewer. That is the same threshold
+`golang:style` uses, deliberately: the two skills share a target and a budget,
+and a `./...` that is broad to one and not to the other cannot be delegated
+coherently. A module of three small packages is `./...` and still not broad.
 
 ### Workflow
 
@@ -120,8 +125,9 @@ review.
      reachable — confirm it with the `LSP` tool (`findReferences`,
      `goToImplementation`, `incomingCalls`, `hover`/`goToDefinition`) rather
      than asserting from the visible code. Skip at `depth=light`; reserve for
-     findings that cross a file/package boundary. No language server → fall
-     back to grep/read and note the reduced confidence in the finding.
+     findings that cross a file/package boundary. No `LSP` tool in this client,
+     or no language server behind it → fall back to grep/read and note the
+     reduced confidence in the finding.
 4. Reason only while reviewing: do not run gofmt, go vet, golangci-lint, or
    go test — judge by reading the code. `LSP` is allowed (read-only
    navigation). This governs the review, not the fix: applying findings
