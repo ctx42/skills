@@ -82,9 +82,10 @@ Copy this checklist and tick it off:
 ### 0. Start
 
 Invoke `srd:report-doc-gap` and `srd:kb` to drain what a prior session left
-buffered for this SRD. Each reports what it holds, including nothing: an empty
-buffer is a fact the run states in a clause, not a silence, or a drain that
-never happened looks identical to one that found nothing.
+buffered for this SRD. Each returns what it holds, including nothing, and shows
+the user nothing when empty — the clause saying both drains ran and found
+nothing is this skill's to write, in its own report, because a drain that never
+happened otherwise looks identical to one that found nothing.
 
 Then run the glossary-resolution procedure in
 [references/srd-procedures.md](references/srd-procedures.md): resolve the

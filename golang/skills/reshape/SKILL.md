@@ -145,7 +145,10 @@ Open with the ranked payload:
    (`(*oskit.File)(nil)`); a variable, field, or parameter declared as one
    (`var doc yaml.Node`); and a reference to one of its exported constants or
    sentinel errors (`yaml.DocumentNode`, `errors.Is(err, tidy.ErrEmpty)`). A
-   line using two of them counts twice; a use inside a loop counts once. Not
+   line using two of them counts twice, unless one is nested inside the other
+   — `must.NewClient(must.Options{…})` is one use, since a single reshape
+   changes it once and counting it twice inflates the denominator every Reach
+   is measured against. A use inside a loop counts once. Not
    files, not occurrences of the package name, not per-iteration executions.
 
    N is the denominator every `Reach` is a fraction of, so both must count the
@@ -163,7 +166,15 @@ Open with the ranked payload:
 3. Then each proposal, top-down:
    - the API change — the new signature/type; a concrete diff when local, an
      API-shape sketch when external;
-   - a representative call site before → after proving the payoff;
+   - a representative call site before → after proving the payoff. The
+     "before" is one real site, quoted from one file, cited `file:line-line`
+     and checkable there. Never stitch lines from several files into one
+     excerpt under a single citation, and never write a placeholder where the
+     before belongs (`// before — five keys, twenty lines`): a payoff nobody
+     can check against the code is the one thing this report exists to show,
+     and a composite excerpt looks exactly like evidence while being none. A
+     proposal with no single site that shows the payoff says so and gives the
+     count instead;
    - one line tying it to the rubric (why this impact).
 4. Anything deferred or needing the user's judgment; for an external library,
    the local wrapper to use where an upstream change can't land.

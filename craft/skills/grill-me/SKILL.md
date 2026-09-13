@@ -66,12 +66,12 @@ branch by branch, until you both share one understanding of the subject.
    one; it records the branches as a tracked plan (checkbox items + status
    table). A branch carried open with an owner does belong in the brief, as the
    one thing about it that is checkable: getting the answer. The item is
-   "<owner> answers <the question>", its acceptance criterion is that the
-   answer is recorded, and what it blocks goes in its body. Dropping it into
-   the reply instead leaves the blocker in chat while the durable artifact
-   shows work that looks unblocked. Say where it wrote. On decline, leave the summary in
-   chat. When another skill invoked this one on a subject, skip the offer: the
-   summary is that skill's input, so return to its flow.
+   "<owner> answers <the question>", its acceptance criterion is that the answer
+   is recorded, and what it blocks goes in its body. Dropping it into the reply
+   instead leaves the blocker in chat while the durable artifact shows work that
+   looks unblocked. Say where it wrote. On decline, leave the summary in chat.
+   When another skill invoked this one on a subject, skip the offer: the summary
+   is that skill's input, so return to its flow.
 
 ## Rules
 

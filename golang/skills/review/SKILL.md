@@ -129,7 +129,11 @@ coherently. A module of three small packages is `./...` and still not broad.
      or no language server behind it → fall back to grep/read and note the
      reduced confidence in the finding.
 4. Reason only while reviewing: do not run gofmt, go vet, golangci-lint, or
-   go test — judge by reading the code. `LSP` is allowed (read-only
+   go test — judge by reading the code. Say so in the report: one line naming
+   the tools this pass ran (normally none) and that the style dimension came
+   from `golang:style`. A reader cannot otherwise tell a review that honored
+   this from one that shelled out, and neither can anyone checking the run
+   afterwards. `LSP` is allowed (read-only
    navigation). This governs the review, not the fix: applying findings
    requires the test gate in `references/fixing.md`, which proves each bug red
    then green and runs `go test ./... -race` per chunk.

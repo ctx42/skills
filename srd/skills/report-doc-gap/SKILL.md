@@ -184,8 +184,10 @@ user invokes it directly to drain.
 ### A. Drain
 
 Read this SRD's buffer on skill start (a prior session may have cleared with
-gaps unfiled) and on direct invocation. Empty: say nothing, let the caller
-proceed. Otherwise resolve the channel before offering: with none reachable,
+gaps unfiled) and on direct invocation. Empty: tell the caller so and show the
+user nothing — the caller states in its own report that the drain ran and was
+empty. Invoked directly by the user, say it in one clause: there is no caller
+to say it for you. Otherwise resolve the channel before offering: with none reachable,
 give the count, say filing is unavailable, and do not offer work that cannot
 finish. Phase C checks it again for the capture path, which does not come
 through here. With a channel, surface count and topics and offer to work them
@@ -205,11 +207,15 @@ belongs here because the caller knows it now — it is what they were doing when
 the gap surfaced — and nobody can reconstruct it later; that is what makes it
 survive an opt-out. Leave the rest empty.
 
-One record per distinct missing fact. Same fact means the same thing is
-missing from the documentation — same `topic`, and a `detail` that would be
-closed by the same page — not the same requirement, the same SRD, or the same
-search terms. Two SRDs needing the retry count is one gap found twice; one SRD
-needing the retry count and the timeout is two gaps.
+One record per distinct missing fact. Same fact means the same thing is missing
+from the documentation — same `topic`, and a `detail` that would be closed by
+the same page — not the same requirement, the same SRD, or the same search
+terms. Two SRDs needing the retry count is one gap found twice. One SRD needing
+the retry count and the timeout is one gap when a single page on the gateway's
+resend behavior would state both, and two when they belong to different pages —
+the page is the test, not the count of facts. Two facts a backlog author would
+write in one sitting are one gap; a reviewer reading two records that resolve
+together learns nothing the first did not say.
 
 If the same fact is already buffered for this SRD, merge into it rather than
 duplicate: union `search_terms`, keep the richer `detail` and `target_claim`,
@@ -249,8 +255,11 @@ still applies to every record.
 
 ### D. Confirm and file
 
-Show the finder the assembled record and file only on their yes. On a
-correction, adjust and re-show; on a no, discard. Either outcome removes the
+Show the finder the assembled record and file only on their yes. Ask so that
+all three answers are on offer — file it, change something first, or drop it —
+rather than a bare "File it?", which reads as yes-or-no and buries the
+correction path the next two sentences depend on. On a correction, adjust and
+re-show; on a no, discard. Either outcome removes the
 record from the buffer.
 
 A discard is a decision, not a deletion: say what was dropped, and record the

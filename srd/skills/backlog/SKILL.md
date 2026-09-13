@@ -203,6 +203,14 @@ Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. Counts and what closed are enough — never
 re-print a drafted page or the rows just moved.
 
+Name `srd:kb` as the writer whenever a row moved or a page changed: this skill
+writes nothing under the KB root, and a report that says "closed two" without
+saying who wrote them reads as though it did.
+
+"What closed" is said once per sitting, in the closing line — not again as each
+list finishes, and not restated in two shapes ("`gap-0010`, `gap-0015`
+resolved" and "1 cluster closed (2 gaps)") in the same breath.
+
 ## Self-learning
 
 Obey this skill's lessons when it has any: read both a sibling `LESSONS.md`
