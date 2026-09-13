@@ -53,9 +53,12 @@ a reader has to be able to trust that everything in the file is agreed work.
 Anything else worth saying goes in the reply, where it stays a suggestion
 instead of hardening into a decision nobody made.
 
-A summary table first, so status is visible at a glance:
+The file opens with `# <Title>`, then a blank line, then the summary table, so
+status is visible at a glance:
 
 ```
+# <Title>
+
 ## Summary
 
 | #  | Item              | Status |
@@ -100,7 +103,10 @@ Then one section per item, numbered to match the table, each led by a checkbox:
 
 Checkbox to status: `[x]` = `Y` (implemented), `[ ]` = `N` (not yet). A rejected
 item keeps `[ ]`, is tagged `X`, and states why in one line — never delete it,
-so the record stays honest.
+so the record stays honest. That heading stays on one physical line however
+long the reason makes it: a wrapped heading is not a heading, and it is the one
+place the file is exempt from the prose wrap. Keep the reason short enough that
+the exemption barely shows.
 
 ## Write mode
 
@@ -122,14 +128,17 @@ so the record stays honest.
    items are; a detail inside an already-decided outcome is not that question —
    the item's acceptance criteria absorb it. When several are open and the
    shape is still moving, say so and offer `grill-me` rather than dripping
-   questions one per turn.
+   questions one per turn. Several open but the shape firm is not that case:
+   ask the one that most changes the items, and name the rest in the reply's
+   leave-outs, where they stay the user's to decide.
 
 4. Order by dependency and impact — blocking and highest-impact items first.
 
 5. Write the file to the format above: summary table (every item starts `N`,
    unchecked) then one section per item. Give each item acceptance criteria —
    what proves it done — so `Y` is verifiable, not asserted. Path: the name the
-   user gives, else `tmp/<slug>-plan.md`; no need to ask, the report names it.
+   user gives, else `tmp/<slug>-plan.md` relative to the working directory; no
+   need to ask, the report names it.
    If something is already there, say so and ask before overwriting.
 
 ## Update mode
@@ -157,6 +166,12 @@ so the record stays honest.
    thing only a human has seen work. Those stay `N` too, named as unverifiable
    *here* rather than unmet, which tells the user it needs their eyes and not
    more code.
+
+   So `Y` needs every criterion settled in the repo. One unmet, one only a
+   human can settle, one the user says is done but nothing in the repo shows —
+   any single one holds the item at `N`. An item half checkable and half
+   staging-only is not a third case needing its own rule: it is an item with a
+   criterion that did not settle.
 
 3. Append work the plan does not carry yet, when the update surfaced some: new
    items at the end with fresh numbers, status `N`, and the same shape as the
