@@ -162,6 +162,12 @@ rules landed, not the rules again. Always name the resolved path so the user
 knows whether a lesson shipped (sibling `LESSONS.md`) or stayed local
 (`.agent-data`); never fabricate a write you could not perform.
 
+A run that files nothing is a line or two and stops there: what was mined and
+that nothing qualified. Do not account for the retrofit check, name the store
+path a lesson would have taken, or explain what did not happen — the only
+resolved path worth naming is one something was written to. An empty run has
+the least to report, and is where the report most often grows instead.
+
 ## Self-learning
 
 Obey this skill's lessons when it has any: read both a sibling `LESSONS.md`

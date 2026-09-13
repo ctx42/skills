@@ -37,7 +37,7 @@
       "skills": [
         "enhance-skills"
       ],
-      "setup": "Two skills ran. First `/srd:create` drafted an SRD; the user corrected it: \"Status values are UPPERCASE — PROPOSED, not Proposed.\" Later `/craft:cm` wrote the commit message and the user corrected that too: \"derive the type from the diff, not from the branch name.\" Between the two, with no skill driving, the agent ran `git push` unasked and the user snapped: \"never push, I do that myself.\" Both skill directories are writable checkouts carrying the block; neither has a `LESSONS.md`.",
+      "setup": "A session correcting two skills. `craft:cm` was told to derive the commit type from the diff rather than the branch name. `srd:create` was told that Status values are written lowercase when the standard it loads requires uppercase — a rule `../../srd/skills/create/references/srd-standard.md` already carries as STA-1, and which `srd:create`'s own body already follows. A third correction, about running `git push`, belongs to no skill in the session.",
       "query": "/enhance-skills",
       "files": []
     },
@@ -67,7 +67,7 @@
       "skills": [
         "enhance-skills"
       ],
-      "setup": "The used skill ran from `~/.claude/plugins/cache/ctx42-skills/craft/skills/cm/` — a plugin install, not a checkout. The user corrected it: \"stop reaching for `chore` — every commit has a real type, and `chore` tells the reader nothing.\" `cm/SKILL.md` lists `chore` among the allowed types but says nothing about avoiding it. No `.agent-data` file exists for this skill yet.",
+      "setup": "The used skill ran from `~/.claude/plugins/cache/ctx42-skills/craft/skills/cm/` — a plugin install, not a checkout. The user corrected it: \"stop reaching for `chore` — every commit has a real type, and `chore` tells the reader nothing.\" `cm/SKILL.md` lists `chore` among the allowed types but says nothing about avoiding it. No `.agent-data` file exists for this skill yet. The install directory's OS permissions are writable, so only the `.../plugins/cache/` path itself marks it as clobbered by the next plugin update.",
       "query": "/enhance-skills",
       "files": []
     },
@@ -97,7 +97,7 @@
       "skills": [
         "enhance-skills"
       ],
-      "setup": "A session correcting `golang:review`: it refactored a helper the task did not mention. The proposal the user approves reads, word for word: \"never restructure or reshape code the task did not ask about\". `golang/skills/review/` is a writable checkout with no sibling `LESSONS.md`.",
+      "setup": "A session correcting `golang:review`: it refactored a helper the task did not mention. The proposal the user approves reads, word for word: \"never restructure or reshape code the task did not ask about\". `golang/skills/review/` is a writable checkout with no sibling `LESSONS.md` The approved sentence is long enough that writing it into the file requires wrapping it across two lines.",
       "query": "/enhance-skills",
       "files": []
     }
