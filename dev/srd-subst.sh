@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Applies the closed set of plugin-only substitutions to srd-standard content
-# read on stdin, printing the result. Called by the srd-sync skill (step 6),
+# read on stdin, printing the result. Called by the srd-sync skill (step 5),
 # which pipes its assembled pre-substitution candidate through this so an LLM
 # never performs the exact string replacement.
 #

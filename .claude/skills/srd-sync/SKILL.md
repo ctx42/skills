@@ -60,10 +60,15 @@ one blank line between the parts, with one edit to the header on the way in:
   <!-- GENERATED FILE — do not edit by hand; page_version NN. Assembled by the
        srd-sync skill from dev/srd-standard.header.md, the upstream
        "Guidelines for Software Requirements Documents" source, and
-       dev/srd-standard.footer.md. Edit the frame files or the upstream
-       source, then re-run srd-sync. See CONTRIBUTING.md "Syncing the SRD
-       standard". -->
+       dev/srd-standard.footer.md. Edit the frame files or the upstream source,
+       then re-run srd-sync. See CONTRIBUTING.md "Syncing the SRD standard". -->
   ```
+
+  Emit it with a 5-space continuation indent, and keep those line breaks
+  exactly — the specimen above is wrapped the way the artifact is, not the way
+  this file is. Re-wrapping it to sit prettier here puts a two-line hunk in
+  front of the maintainer on every single sync, on a banner whose only real
+  change is the version number.
 
 ## Transform (source → body)
 
@@ -115,9 +120,12 @@ swaps in at step 5.
 3. Frozen-node check. If the source `page_version` is newer than the copy's
    provenance version, the frozen nodes (the Quality Bar list and the Bad→Good
    example expands) may have changed without showing in the export. Run the
-   diff below. It stops the sync only when it finds something: an example
-   expand the guide does not account for, or a Quality Bar list the maintainer
-   has not re-checked at this version. Match expands by the rule they follow,
+   diff below. Only the expand diff can stop the sync, and only when it finds
+   something: an expand the guide does not account for, or one that has gone.
+   The Quality Bar is never a stop — it lives in the footer, which the export
+   does not carry, so no run can tell whether it was re-checked. Say in one
+   line that it wants a human look at this version and carry on. Match expands
+   by the rule they follow,
    not by id — the export stopped carrying localIds, so the rule each one sits
    under is the only stable key. A clean check is reported in one line and the
    sync continues — a version bump alone is a prompt to look, not a hard stop,
@@ -131,9 +139,19 @@ swaps in at step 5.
      version bumps. Report each new one with the rule it follows (read it in
      Confluence, then transcribe it into the guide or add it to the list) and
      each one that has gone (retire its guide section or list entry).
-   - Tell the maintainer to open the page, review the Quality Bar list and the
-     expands, and update `dev/srd-standard.footer.md` and the guide before
-     continuing.
+   - An entry in the list naming a file that holds the transcribed text —
+     today `dev/srd-glo4-example-pending.md` — is text already written and
+     parked because the shipped standard did not yet define its rule. When the
+     candidate body from step 4 defines that rule, paste the held section into
+     the guide where the pending file says, delete the pending file, drop its
+     list entry, and say all three happened. A sync that lifts the standard
+     past the rule and leaves the text parked is the version bump that silently
+     re-hides it.
+   - When the expand diff found something, stop: tell the maintainer to open
+     the page, review the expands and the Quality Bar list, and update
+     `dev/srd-standard.footer.md` and the guide before continuing. Found
+     nothing: report the clean check and the Quality Bar reminder in one line
+     and go on.
    - Re-read the footer after any edit, then continue.
 4. Transform the source into the body per the rules above.
 5. Apply substitutions to the body, before assembling and before wrapping:
@@ -189,9 +207,23 @@ swaps in at step 5.
    longer exists. A failed check blocks the write regardless of which bucket
    its hunk landed in.
 9. Write the final candidate to the copy (move the temp file into place).
-10. Run `./dev/lint-skills.sh` (must stay at 0 errors) and re-check the
-    srd:review fixture eval `srd/skills/review/assets/flawed-srd.md`: its
-    finding set must not shrink against the regenerated standard.
+10. Run `./dev/lint-skills.sh` (must stay at 0 errors), then check that the
+    regenerated standard can still back the srd:review fixture eval. The
+    fixture is `srd/skills/review/assets/flawed-srd.md` and its finding set
+    must not shrink. Check it this way rather than by re-reviewing the fixture,
+    which grades the reviewer and not this sync:
+    - Take the ids `srd/skills/review/evals/expectations.json` mentions, and
+      keep only those the **outgoing** standard defines as rules (`**ID:**`).
+      Calibrating against the old copy is what makes this checkable: the
+      expectations also name the fixture's own requirement ids — `GR-3`,
+      `SC-2`, `OSC-1` — which are the flawed SRD's content, never rules, and a
+      bare id regex reports all of them as missing on a perfectly good sync.
+    - Confirm each surviving id is still defined in the written standard. One
+      the new version dropped or renumbered takes its finding with it,
+      silently: the fixture still holds the defect, the reviewer has no rule
+      left to cite, and the eval fails on a skill nobody touched.
+    - Report any id that vanished, with the expectation that cites it, so the
+      fixture and its expectations are updated in the same change as the sync.
 
 ## Output
 
