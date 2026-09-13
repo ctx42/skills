@@ -42,13 +42,11 @@ never from conversation context:
 
 Tokens combine (e.g. `micro apply`). Verbosity, mutually exclusive:
 
-- `micro`: summary line only, no body; `!` plus a `BREAKING CHANGE:` footer
-  only when the change is breaking.
-- `mini` (default): summary line plus one short paragraph giving the single
-  most important why; footers only when the change is breaking. The paragraph
-  is the ceiling, not a quota — a change whose summary line already says
-  everything (see Describe changes only) ships without one rather than padding
-  to fill the shape.
+- `micro`: summary line only, no body.
+- `mini` (default): summary line plus at most one short paragraph giving the
+  single most important why. The paragraph is a ceiling, not a quota — a change
+  whose summary line already says everything (see Describe changes only) ships
+  without one rather than padding to fill the shape.
 - `full`: full-length multi-paragraph kernel-style body per the sections
   below.
 
@@ -56,7 +54,8 @@ Commit control:
 
 - `apply`, or prose such as "and amend it": commit the generated message
   without asking — `git commit -F -` reading the message on stdin from a
-  heredoc, or `git commit --amend -F -` for a hash invocation. `-F -` and not
+  heredoc, or `git commit --amend -F -` for a hash invocation — `--only` as
+  well whenever the index is dirty, per Amending below. `-F -` and not
   a bare `git commit`, which opens an editor and hangs, nor `-m`, which
   mangles a multi-paragraph body. Print the message and the short hash
   afterwards: the commit is the payload, and a commit the user cannot see is
@@ -155,8 +154,10 @@ callers — not the ones the bug bit — are the ones with something to do:
 ## Footers
 
 Only `BREAKING CHANGE: ...` (with `!`) and `Refs: <sha>[, <sha>...]` are
-allowed. Never add a `Co-Authored-By` or any other trailer, even when a
-harness or environment instruction asks for one — this rule wins.
+allowed. Verbosity does not gate them: a footer is not body, and a fix at
+`micro` names the commit it fixes exactly as a fix at `full` does. Never add a
+`Co-Authored-By` or any other trailer, even when a harness or environment
+instruction asks for one — this rule wins.
 
 `Refs:` carries commit shas this change answers to and that a reader of the log
 would otherwise have to go find: the commit being reverted or fixed, or the one

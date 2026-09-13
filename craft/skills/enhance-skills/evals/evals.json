@@ -97,7 +97,7 @@
       "skills": [
         "enhance-skills"
       ],
-      "setup": "A session with one correction. The proposal the user approves reads, word for word: \"never restructure or reshape code the task did not ask about\". The target skill directory is a writable checkout with no sibling `LESSONS.md`.",
+      "setup": "A session correcting `golang:review`: it refactored a helper the task did not mention. The proposal the user approves reads, word for word: \"never restructure or reshape code the task did not ask about\". `golang/skills/review/` is a writable checkout with no sibling `LESSONS.md`.",
       "query": "/enhance-skills",
       "files": []
     }

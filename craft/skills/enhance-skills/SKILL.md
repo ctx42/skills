@@ -35,8 +35,8 @@ you mine to be on file already.
 
 Lessons never live inline in a `SKILL.md` body: the always-loaded surface stays
 lean, and re-authoring a skill cannot clobber what it has learned. Each skill's
-lessons live in one of two places; resolve per skill from the base dir the host
-reports, and use the same resolution for reading and writing:
+lessons live in one of two places; resolve per skill from the directory its
+`SKILL.md` sits in, and use the same resolution for reading and writing:
 
 - In-place: directory writable (source checkout or `--plugin-dir` copy) —
   sibling `LESSONS.md`. Committed there, lessons ship to everyone.
@@ -122,8 +122,8 @@ learned there stays true once the checkout is writable again. Most runs have
 none; absence is the normal case and needs no comment. On a correction or
 self-caught mistake, append a one-line rule to the sibling when this directory
 is writable, else to the fallback, creating it, and report where.
-
 ```
+
 ## Lesson format
 
 A lessons file is a flat list of imperative rules, one per bullet, newest last:
@@ -146,6 +146,10 @@ Rules learned for the `<skill>` skill. Read before running; obey each line.
 - Supersede, don't stack: when a new rule overrules one on file, rewrite that
   line in place and show the before and after in the proposal. Two rules that
   disagree leave the next run to guess which one the user meant.
+- A rule that overrules the body is a skill edit, not a lesson: file nothing,
+  name the line it contradicts, and hand it to the user. A lessons file cannot
+  win an argument with the `SKILL.md` above it — both are read every run, and
+  which one prevails is undefined.
 - Create the file with the header above on the first lesson; append after.
 
 ## Output
