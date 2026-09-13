@@ -76,6 +76,17 @@
         "Still shows each record for confirmation before filing — opting out of the grill is not opting out of the confirmation",
         "Takes only the one-line `detail` for the opted-out gaps, leaving `target_claim` empty"
       ]
+    },
+    {
+      "id": 9,
+      "name": "probe-the-channel-without-writing",
+      "expected_behavior": [
+        "Probes with a read — `GET /gaps` — never with a `POST`: a write probe leaves a permanent record in a store that cannot delete it",
+        "Treats the read answering at all, rows or empty list, as proof the channel is up",
+        "Does not conclude the store is absent merely because the MCP tools are missing",
+        "Distinguishes no route on a live server from no server at all, and says which",
+        "Reports an error returned *by* the store rather than falling past it to \"no channel\""
+      ]
     }
   ]
 }

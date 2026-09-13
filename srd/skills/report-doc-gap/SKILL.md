@@ -82,6 +82,19 @@ genuinely is not there, never on one failed call:
 2. REST mirror, when the server runs but MCP is not wired into this client:
    `POST /gaps` with the record as a JSON body.
 
+**Probe with `GET /gaps`, never with `POST`.** The store is production and
+append-only: it has no delete, so a probe record is permanent and someone has
+to notice it and clean it out of a real backlog by hand. A successful `GET`
+proves the route, the host, and the schema — everything a probe is for. This is
+not hypothetical: an eval run took "probe it" at its word, sent a `POST` with a
+junk body to see whether the endpoint existed, and filed `gap-0025` into the
+real store.
+
+Reaching the host at all is the test. A `GET` that answers — with rows, or with
+an empty list — means the channel is up. Connection refused or no route means
+it is not. An error *from* the store is a working store with a problem: report
+it, do not fall past it and do not retry.
+
 Neither present means the store is not enabled;
 [Confirm and file](#d-confirm-and-file) says what happens then.
 
@@ -94,9 +107,9 @@ without this session:
 - `kind` — `missing` (nothing found), `wrong`, `incomplete`, or `ambiguous`.
 - `topic` — short label for the missing knowledge.
 - `demand` — why the gap blocks the SRD work at hand. The capturing skill
-  fills this from what it was doing when the gap surfaced, so it survives an
-  opt-out: the finder declining the grill does not make the blocking reason
-  unknown, and every record in the store carries one.
+  fills this at capture, from what it was doing when the gap surfaced, so it
+  survives an opt-out: the finder declining the grill does not make the
+  blocking reason unknown, and every record in the store carries one.
 - `detail` — what is missing, wrong, incomplete, or ambiguous. Required: the
   one field a finder must supply even on opt-out. May carry grilled prose in
   heavy mode.
@@ -129,7 +142,10 @@ mid-flow loses nothing.
   the id once assigned.
 - Contents: a JSON array of [gap records](#the-gap-record), filled as far as
   capture or grill got them. Buffered means unconfirmed: a record leaves on
-  filing or discard, and the file is deleted when it empties.
+  filing or discard, and the file is deleted when the last record leaves it. An
+  empty `[]` is never a resting state on disk: a file that exists means records
+  are pending, so an empty one would have every later drain report a buffer it
+  does not have.
 
 ## Invocation
 
@@ -147,6 +163,12 @@ user invokes it directly to drain.
       skill. A capture (phase B) is not a start: it records and returns
       without draining, or the no-interruption rule it exists to serve would
       be broken by the very invocation that serves it.
+
+      There are two moments, not one, and they carry different gaps. At the
+      caller's start you surface what a *prior* session left unfiled — work
+      the user may have forgotten. When the caller finishes you offer what
+      *this* session buffered, which they watched accumulate. Same phase C
+      and D either way; only the invitation differs.
 - [ ] B. On discovery: capture the gap light to the buffer, no interruption.
 - [ ] C. Working a gap: check the channel is reachable, then grill the finder
       at their chosen depth (or honor opt-out); assemble the record. Resolve
@@ -169,8 +191,11 @@ a time through phases C and D.
 Write a light record to the buffer at once and return: no user interruption,
 no grill, no `report_gap` call. Fill only what is free now: `detail` (the
 caller's one-line "what is missing") plus whatever the caller already holds
-(`kind`, `topic`, `srd_ref`, and the `doc_id`/`heading_path`/`source_url`/
-`search_terms` from the lookups that exposed the gap). Leave the rest empty.
+(`kind`, `topic`, `demand`, `srd_ref`, and the `doc_id`/`heading_path`/
+`source_url`/`search_terms` from the lookups that exposed the gap). `demand`
+belongs here because the caller knows it now — it is what they were doing when
+the gap surfaced — and nobody can reconstruct it later; that is what makes it
+survive an opt-out. Leave the rest empty.
 
 One record per distinct missing fact. Same fact means the same thing is
 missing from the documentation — same `topic`, and a `detail` that would be
@@ -216,13 +241,22 @@ Show the finder the assembled record and file only on their yes. On a
 correction, adjust and re-show; on a no, discard. Either outcome removes the
 record from the buffer.
 
+A discard is a decision, not a deletion: say what was dropped, and record the
+topic in the caller's output so the same weak lookup does not re-capture the
+same gap next session and put the finder through it again. Nothing durable is
+written for it — a rejected gap is not a gap — but the finder should not have
+to remember rejecting it.
+
 On yes, file through the [gap channel](#the-gap-channel) and record the
 returned `id` (`gap-NNNN`) in your report. Filing only records the gap; the
 corpus is unchanged, and the gap sits `open` for `srd:backlog`.
 
-No gap store (neither `report_gap` nor `POST /gaps` exists): say filing is
-unavailable, note the gap in the caller's output, and leave it buffered for a
-session where the store is reachable. Never invent a store.
+No gap store: say filing is unavailable, note the gap in the caller's output,
+and leave it buffered for a session where the store is reachable. Never invent
+a store. Say which kind of unavailable it is — no route on a server that
+answers, or no server answering at all — because the first is a deployment
+that needs the gap endpoint and the second is a host that is simply not up, and
+the reader fixes them differently.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.

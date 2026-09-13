@@ -82,6 +82,16 @@
       "setup": "Three gaps are buffered for `SRD-42`. The finder picks heavy for the first, then says \"just take the one-liners for the rest of these\".",
       "query": "/report-doc-gap SRD-42",
       "files": []
+    },
+    {
+      "id": 9,
+      "name": "probe-the-channel-without-writing",
+      "skills": [
+        "report-doc-gap"
+      ],
+      "setup": "One buffered gap. No `mcp__srd-doc__*` tools exist in this client, so the skill must establish whether the REST mirror is there. The store behind it is append-only and has no delete endpoint.",
+      "query": "/report-doc-gap SRD-42",
+      "files": []
     }
   ]
 }
