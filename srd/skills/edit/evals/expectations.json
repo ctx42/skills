@@ -9,7 +9,7 @@
         "Names STA-4 in the proposal and asks whether the approving authority has agreed — splitting a requirement changes it, and the user's own `Y` is not that agreement",
         "Front-loads a grouped issue summary, then walks entry by entry",
         "Proposes the split with location, before/after, and a one-line rationale",
-        "Splits add-only through sub-numbering and skips the taken `GR-3b`, adding `GR-3c` rather than renumbering or displacing it",
+        "Prepares the split as an add-only change — a new `GR-3c` rather than a renumber — and leaves it unapplied: the SRD contains no `GR-3c` after the run, because the authority STA-4 names has not agreed to it",
         "Applies nothing until approved, then re-validates the affected entry and its cross-references"
       ]
     },
@@ -65,7 +65,7 @@
       "id": 7,
       "name": "add-to-todo-on-demand",
       "expected_behavior": [
-        "Appends it as the next numbered item, creating the `## TODO` section as the last one if it is absent",
+        "Appends to the existing `## TODO` section as the next numbered item, renumbering nothing above it",
         "Skips the propose-and-confirm loop — the instruction is the confirmation",
         "Renumbers nothing else and reports only the single line added",
         "At session end, flags the non-empty `## TODO` as a follow-up blocking `ACCEPTED`"
@@ -110,7 +110,7 @@
         "Buffers the gap with `srd:report-doc-gap` silently — no interruption and no grilling mid-edit",
         "States the retry count as a fact in the proposal; the user's `Y` attests it, so `srd:kb` buffers it too",
         "Asks no separate \"bank this?\" question",
-        "At session end `srd:kb` writes the fact and reports a one-line pointer, and `srd:report-doc-gap` offers to work the buffered gap and respects a defer"
+        "Hands the unconfirmable claim to `srd:report-doc-gap` and the attested fact to `srd:kb`, and neither interrupts the edit in progress"
       ]
     },
     {
@@ -158,8 +158,8 @@
       "expected_behavior": [
         "Writes one decision-log entry per applied substitution — the batch path logs like every other applied edit",
         "Creates `specs/login.decisions.md` with its `cfsync-plugin: ignore-push` front matter on the first write",
-        "Logs nothing for the stale erratum it reported rather than applied",
-        "Leaves the same log a per-change loop would have left for the same two edits"
+        "Refuses the ambiguous erratum — its `old` text occurs twice, so the substitution is not uniquely located — applies the other two, and says which it refused and why",
+        "The log it writes has the same shape a per-change loop leaves: the frontmatter, one entry per applied substitution, each in prose rather than as a diff"
       ]
     },
     {

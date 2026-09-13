@@ -34,8 +34,9 @@ never edits metadata (Owners, Initiative, Designs), sets back-links, or changes
 `Status`; it flags those gaps (STR-2/3/5/7, STA-*). A finding outside that
 mandate is reported, not looped — even when the run entered at it: a feedback
 run starting at a metadata `#2` says so and advances to `#3`. An explicit `#n`
-sets the order for the rest of the run, so advancing means the next number, not
-a return to severity order — the user who named a number is reading the file by
+sets the order for the rest of the run: walk ascending from `n` to the end,
+then come back for the numbers below it, so nothing is dropped and the sequence
+never doubles back mid-run. The user who named a number is reading the file by
 number. It never proposes a Status
 transition (flag only a malformed `STA-*` value) and never proposes pushing,
 publishing, or syncing the SRD as a follow-up. Comment blocks are read-only:
@@ -343,6 +344,11 @@ free description ("the login timeout rule").
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
+
+Every count in the closing manifest — requirements checked, edits applied,
+findings still open, questions carried — is read off the finished file, never
+carried from the work. A run reported checking "all 45 requirements" over a
+section holding 44.
 
 ## Self-learning
 

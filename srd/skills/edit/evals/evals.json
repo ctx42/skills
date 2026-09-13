@@ -67,7 +67,7 @@
       "skills": [
         "edit"
       ],
-      "setup": "Mid-session, with a `## TODO` section already present holding two items.",
+      "setup": "Mid-session, with a `## TODO` section already present holding two items. The SRD already carries a `## TODO` section with two items.",
       "query": "Add: confirm the lockout threshold with security to TODO — then close the session",
       "files": []
     },
