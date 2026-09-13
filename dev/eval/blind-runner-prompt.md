@@ -16,6 +16,8 @@ READ ONLY:
 WORKSPACE: /home/thor/ws/ctx42/skills/tmp/blind/<WS>/  (create it; all work here)
 Never edit anything else under /home/thor/ws/ctx42/skills. Never run git commit/add/push. A scenario needing a repo gets its own `git init` inside the workspace.
 
+`/home/thor/.agent-data/` IS THE USER'S REAL STORE — lesson files, doc-gap buffers, session state. Never read or write under it. Substitute a path inside your workspace for every `$HOME/.agent-data/...` the skill resolves, and say in your report that you did. This applies to a skill that reaches the store indirectly through another skill just as much as to one that names the path itself: the run that leaked a fixture buffer into the real store was `srd:review`, which never mentions `.agent-data` and delegates to a skill that does.
+
 THE `srd-doc` SERVER ON localhost:7777 IS PRODUCTION — the real INFRAPORT corpus and gap store. `GET` is fine. Never POST, never resolve, never write. Capture what a skill *would* have filed into your workspace instead.
 
 For each scenario in evals.json:

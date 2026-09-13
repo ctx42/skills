@@ -31,7 +31,9 @@ branch by branch, until you both share one understanding of the subject.
 2. Map the decision tree — every branch. For a build plan: architecture, data
    model, UX, edge cases, deployment, external deps. For a topic to document:
    the claim itself, its boundaries and exceptions, the context a reader needs,
-   terms and synonyms.
+   terms and synonyms. Those are two worked examples, not the two cases: for
+   any other subject, derive the branches from what would have to be true for
+   the thing to be done, which is what both lists are.
 
 3. Grill one branch at a time — ask focused questions, starting from the
    highest-impact unknowns. Don't move on until the branch is resolved.
@@ -62,10 +64,12 @@ branch by branch, until you both share one understanding of the subject.
 7. Offer to persist — on yes, invoke `craft:plan-smith` in write mode with the
    summary as the brief, so a plan file exists rather than an intention to make
    one; it records the branches as a tracked plan (checkbox items + status
-   table). Say where it wrote. On decline, leave the summary in chat;
-   on decline, leave the summary in chat. When another skill invoked this one
-   on a subject, skip the offer: the summary is that skill's input, so return
-   to its flow.
+   table). A branch carried open with an owner has no acceptance criteria, so
+   it is not an item: keep it out of the brief and name it in the reply with
+   its owner and question, where it stays visible without becoming work
+   nobody can check off. Say where it wrote. On decline, leave the summary in
+   chat. When another skill invoked this one on a subject, skip the offer: the
+   summary is that skill's input, so return to its flow.
 
 ## Rules
 
@@ -105,10 +109,11 @@ branch by branch, until you both share one understanding of the subject.
   never mattered.
 
 - Track progress. Keep the map of resolved vs. open branches. Name the count
-  the first time you speak in a session — on a cold open that is the branch map
-  itself, so the user sees the shape of what is coming; resuming an interview
-  already under way, it is what remains. Then say how much is left as each
-  branch closes.
+  the first time you speak in this interview — on a cold open that is the
+  branch map itself, so the user sees the shape of what is coming; picking up
+  an interview already under way, it is what remains, and the count is owed on
+  that first turn too even though the interview did not start there. Then say
+  how much is left as each branch closes.
 
 - Re-audit on collapse. When an answer overturns an assumption an earlier
   branch was resolved on, that branch reopens — and so does every other one
