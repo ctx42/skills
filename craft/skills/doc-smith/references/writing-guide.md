@@ -116,9 +116,9 @@ Register example — the same facts, sub-B1 fragments raised to fluent B1:
   editing one (see the last bullet), ~80 columns when creating fresh or when
   the doc has no clear convention. Reflow every edited paragraph so no line
   exceeds that width. Exempt code fences, table rows, headings, and unbreakable
-  tokens (URLs, paths, links). Read the width before reflowing: these rules are
-  applied in written order, and reflowing a 100-column document to 80 is not
-  undone by reaching the override four bullets later.
+  tokens (URLs, paths, links). Measure the document's existing width before
+  reflowing anything, not after: a 100-column document reflowed to 80 has lost
+  its convention, and no later rule puts it back.
 - Align table columns — pad cells so `|` delimiters line up in the source;
   re-pad the whole table when adding a row.
 - Plain, spaced lists — items as plain sentences, no bold-label lead-ins;

@@ -6,7 +6,7 @@ description: >
   structural gaps, and dubious claims across the whole document. Use when
   asked to create, audit, review, proof, proofread, check, or work through
   technical docs, a user manual, or product documentation.
-argument-hint: "[create|audit*|proof|revise] [<file>...]"
+argument-hint: "[create|audit*|proof|revise] [<file>... | <desc>]"
 license: MIT
 ---
 
@@ -47,10 +47,11 @@ Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. A written or edited file is the payload: state
 its path and what changed; never paste the document back into chat.
 
-The scope line an audit opens with is the first fact, not preamble — without
-it a reader cannot tell a clean document from an unresolved target, and in a
-multi-file audit cannot tell which files were read. Narration is the sentence
-about what you are *about to* do; the scope line says what you did.
+The scope line an audit opens with is exempt: it is the first fact, not
+preamble — without it a reader cannot tell a clean document from an unresolved
+target, and in a multi-file audit cannot tell which files were read. Narration
+is the sentence about what you are *about to* do; the scope line says what you
+did.
 
 ## Whole-document pass (all modes)
 
@@ -111,15 +112,18 @@ rewritten or "corrected" with a fact you cannot ground.
 3. Audit against the guide's defect taxonomy; flag dubious technical claims as
    questions.
 
-4. Report only. Number the findings (one numbered list, so each can be
-   answered separately) and group them Blocker / Should-fix / Nit;
+4. Report only. Group the findings Blocker / Should-fix / Nit, numbered in
+   one run across the groups — 1..n, not restarting at each heading — so a
+   number identifies a finding on its own and the user can answer "3 and 7"
+   without naming a severity;
    each names the location, the problem in one line, the guide rule it breaks,
    and a minimal fix; a contradiction cites both locations. End with a verdict
    — fit to publish as it stands, or the class of defect that has to clear
    first — and per-severity counts.
 
 5. Fix on confirmation: apply approved findings, run the coherence check, and
-   state what changed.
+   state what changed. An audit that draws no answer is finished at step 4 —
+   the report is the deliverable, and nothing is applied on silence.
 
 ## Proof mode
 
