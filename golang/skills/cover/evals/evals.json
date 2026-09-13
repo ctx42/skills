@@ -27,8 +27,8 @@
       "skills": [
         "cover"
       ],
-      "setup": "`Dial` has one branch reachable only behind a network seam and one defensive `return` that no input can reach. The run is repeated afterwards with `include=all`.",
-      "query": "/cover func=Dial",
+      "setup": "`Dial` has one branch reachable only behind a network seam and one defensive `return` that no input can reach. The same package holds `MustDial`, whose godoc documents that it panics on a bad address, and `Retry`, whose backoff line is reached only by waiting out a real 100ms `time.Sleep` it calls directly. The run is repeated afterwards with `include=all`.",
+      "query": "/cover ./pkg/net",
       "files": []
     },
     {

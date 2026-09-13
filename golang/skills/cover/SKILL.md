@@ -46,6 +46,9 @@ Sources of truth:
   does not measure line length, so Verify passes them.
 - The package's own tests, then a sibling package (on-demand: when writing) —
   for the assertion library and helper conventions the style rules defer to.
+  Test *names* are not among them: style fixes those outright, so a package
+  whose tests carry suffixes style does not sanction is a package with a style
+  debt, not a local convention to copy.
 
 ## Target
 
@@ -104,22 +107,32 @@ what it meant.
 
 For each target function `Foo` (or method `T.Bar`), work in strict order.
 **Never start function B until function A's loop is complete and verified.**
-Keep each function's after-profile rather than overwriting one scratch file:
-`<tmp>/<Func>.after` per function. Writing every test first and then measuring
-them all produces the same final numbers and the same green suite, so nothing
-in the result distinguishes it — the per-function profiles are what do, and
-they are also what tells you which case covered which line when one of them
+Keep each function's profiles rather than overwriting one scratch file. They go
+in a gitignored scratch directory under the module — `tmp/cover/` unless the
+user names another — as `<Func>.before` from step 2 and `<Func>.after` from
+step 4. Both names are needed, not just the after: the plan runs step 2 for
+every function in scope before a line is written, so a single scratch path
+makes each function's before-measurement erase the last one, and the deltas the
+report owes have nothing behind them. Writing every test first and then
+measuring them all produces the same final numbers and the same green suite, so
+nothing in the result distinguishes it — the per-function profiles are what do,
+and they are also what tells you which case covered which line when one of them
 does not.
 
 1. Map to its direct-test family by style naming: every test whose name
-   starts with `Test_Foo` (`Test_Foo`, `Test_Foo_tabular`, `Test_Foo_EdgeCase`,
-   …); for a method `T.Bar`, every `Test_T_Bar…`. The prefix plus the
-   `($|_)` anchor in step 2 is the whole contract — `Test_Foobar` is not in
-   Foo's family. No test in the family, or only off-convention names, means
-   the function is uncovered — scaffold `Test_Foo`.
-2. Measure in isolation: `go test -run '^Test_Foo($|_)' -coverprofile=<tmp>
-   ./<pkg>` (methods: `^Test_T_Bar($|_)`). Read coverage of only Foo's own
-   line range from the profile; ignore blocks belonging to callees. The
+   starts with `Test_Foo`, whatever follows it — matching has to find the tests
+   that are there; for a method `T.Bar`, every `Test_T_Bar…`. The prefix plus
+   the `($|_)` anchor in step 2 is the whole contract — `Test_Foobar` is not in
+   Foo's family. What you may **write** is narrower than what this matches:
+   style sanctions `Test_Foo` and `Test_Foo_tabular`, so a suffix found in an
+   existing family is not a suffix to coin for a new test. A function whose
+   tests are all named off-convention (`TestFooFails`) has an empty family and
+   measures 0% — an uncovered function to scaffold `Test_Foo` for, and the
+   stray name is `golang:style`'s to fix, not this run's.
+2. Measure in isolation: `go test -run '^Test_Foo($|_)'
+   -coverprofile=tmp/cover/Foo.before ./<pkg>` (methods: `^Test_T_Bar($|_)`).
+   Read coverage of only Foo's own line range from the profile; ignore blocks
+   belonging to callees. The
    profile's rows are `file:startLine.col,endLine.col stmts count` — one row
    per basic block, not per line, and `stmts` is how many statements that
    block holds.
@@ -135,7 +148,7 @@ does not.
    and the package's test conventions, then add one targeted case — table row,
    subtest, or assertion — per easy line or branch (complex lines too under
    `include=all`; stop at `max_tests`). Never attempt un-coverable lines.
-4. Re-measure into `<tmp>/Foo.after`: re-run Foo's direct-test family and
+4. Re-measure into `tmp/cover/Foo.after`: re-run Foo's direct-test family and
    re-read the profile;
    confirm Foo's target lines went from 0 to hit. One measurement is the
    expected cost — do not re-measure per case added. If a target line did not
@@ -149,7 +162,10 @@ does not.
   error path, an extra table row, or a light fake the project already provides
   (e.g. `tester.Spy`). Cover it now.
 - complex — needs heavy scaffolding, concurrency, time, randomness, or
-  external I/O. Defer and report; cover only under `include=all`.
+  external I/O. Defer and report; cover only under `include=all`. A line a test
+  reaches by paying real time or real I/O — waiting out a `time.Sleep`, hitting
+  a real socket — is complex, not easy and not un-coverable: nothing is
+  unreachable and no seam is missing, so it is the cost that defers it.
 - un-coverable — one of the categories below. Never attempt; report with the
   reason.
 
@@ -197,7 +213,10 @@ Never attempt; always name the line and the reason:
   Un-coverable means no test could reach it whatever the author does; deferred
   means not from here.
 - generated files marked `DO NOT EDIT`,
-- panic-only paths with no recoverable contract.
+- panic-only paths with no recoverable contract. A *documented* panic is a
+  contract, not this category: a `MustFoo` that panics by design, or any panic
+  the godoc states, is easy — assert it. This category is the undocumented
+  defensive `panic("unreachable")` no caller is promised.
 
 ## Output
 
@@ -206,9 +225,17 @@ Never attempt; always name the line and the reason:
 - Tests added: `file:Test_Foo` + what each covers.
 - Deferred lines: `file:line — reason`.
 - Un-coverable lines: `file:line — reason`.
-- Under `max_tests`: what is left.
+- Cases added this run, counted the way `max_tests` counts them — and under
+  `max_tests`, what is left. Report the count on every run, capped or not: it is
+  the number the reader checks the tests-added list against, and a run with no
+  cap is exactly the run where nobody else is counting.
 - Module mode: which packages were covered and which were skipped.
 - Never skip a line silently. Suggest running `/review` on the new tests.
+
+Every number in that report is read back off the finished artifact, never
+carried from the work: the case count off the tests-added list, each coverage
+figure off the function's `.after` profile. The per-function profiles are kept
+precisely so this is a lookup and not a recollection.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.

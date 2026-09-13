@@ -17,7 +17,9 @@
       "expected_behavior": [
         "States the resolved kind (package) and the function set before measuring",
         "Presents a plan — per-function current coverage, proposed easy cases, deferred and un-coverable lines — and waits for approval before writing anything",
-        "Works one function to completion before starting the next — a per-function after-profile exists for each (`<Func>.after`), each written after that function's tests and before the next function's, so the order is visible in the artifacts rather than asserted"
+        "Works one function to completion before starting the next — a per-function after-profile exists for each (`<Func>.after`), alongside the `<Func>.before` the plan step wrote, each written after that function's tests and before the next function's, so the order is visible in the artifacts rather than asserted",
+        "Keeps the plan's before-measurements as distinct per-function files — every function in scope has its own `<Func>.before`, none overwritten by the next function's measurement, so the reported before-figures can be checked against a file",
+        "Reports how many cases were added, counted as `max_tests` counts them (one per table row or subtest), and that number equals the cases actually present in the tests-added list — even though this run carries no `max_tests`"
       ]
     },
     {
@@ -27,7 +29,10 @@
         "Covers the easy lines, defers the network branch with a stated reason, and names the defensive branch un-coverable",
         "Never attempts the un-coverable line",
         "Under `include=all`, builds the fake for the network branch and covers it",
-        "Still reports the defensive `return` as un-coverable under `include=all` — the flag does not turn it into an attempt"
+        "Still reports the defensive `return` as un-coverable under `include=all` — the flag does not turn it into an attempt",
+        "Classifies `MustDial`'s panic as easy and asserts it — a documented panic is a contract, not a panic-only path with no recoverable contract",
+        "Classifies `Retry`'s post-sleep line as complex and defers it, not as un-coverable: a test that waits does reach it, so nothing is unreachable and no seam is missing",
+        "Coins no test-name suffix beyond `Test_Foo` / `Test_Foo_tabular`, whatever suffixes the package's existing tests happen to carry"
       ]
     },
     {
