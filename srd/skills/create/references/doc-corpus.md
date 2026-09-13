@@ -22,6 +22,14 @@ one failed call:
    this client: `curl 'http://<host>:7777/search?q=TEXT&k=5'` and
    `curl 'http://<host>:7777/docs/<id>'`. Same engine, same results.
 
+   The same server carries the gap store, on the same host and port:
+   `mcp__srd-doc__report_gap`, `mcp__srd-doc__list_gaps`,
+   `mcp__srd-doc__resolve_gap`, mirrored as `GET /gaps`, `POST /gaps`, and
+   `POST /gaps/{id}/resolve`. `srd:report-doc-gap` and `srd:backlog` own what
+   may be called and when — this file is only where the address lives, so that
+   a skill needing the gap endpoint before its first corpus lookup still has
+   one place to read it.
+
    `<host>:<port>` is `localhost:7777` unless `SRD_DOC_HOST` and `SRD_DOC_PORT`
    say otherwise — both overridable, since a second instance on one machine
    cannot share the port — probe it

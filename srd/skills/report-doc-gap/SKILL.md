@@ -127,9 +127,11 @@ without this session:
 Captured gaps live in a per-SRD buffer until filed, so a session that clears
 mid-flow loses nothing.
 
-- Location: `$HOME/.agent-data/ctx42-skills/srd/docgaps/<srd-id>.json`,
-  outside every corpus source by construction, so cfsync never indexes or
-  clobbers it; beside the lessons files.
+- Location:
+  `${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/srd/docgaps/<srd-id>.json`
+  — `AGENT_DATA_DIR` lets a sandbox or an eval redirect the store, and unset
+  means the real one. Outside every corpus source by construction, so cfsync
+  never indexes or clobbers it; beside the lessons files.
 - Key: the SRD id (e.g. `SRD-42`). All four SRD skills share one buffer per
   SRD id on this machine, so a reviewer's session appends to the file an
   author's session started. Before an id exists, key off the SRD's absolute
@@ -139,7 +141,9 @@ mid-flow loses nothing.
   promise, since two skills that slugify differently silently keep separate
   buffers for one SRD. Resolve the path to absolute first; a relative path
   keyed from two working directories does the same damage. Rename the file to
-  the id once assigned.
+  the id once assigned — done by the next capture or drain that finds a
+  path-keyed file for an SRD that now has one, since no phase is entered at the
+  moment of assignment.
 - Contents: a JSON array of [gap records](#the-gap-record), filled as far as
   capture or grill got them. Buffered means unconfirmed: a record leaves on
   filing or discard, and the file is deleted when the last record leaves it. An
@@ -181,7 +185,11 @@ user invokes it directly to drain.
 
 Read this SRD's buffer on skill start (a prior session may have cleared with
 gaps unfiled) and on direct invocation. Empty: say nothing, let the caller
-proceed. Otherwise surface count and topics and offer to work them now: "N
+proceed. Otherwise resolve the channel before offering: with none reachable,
+give the count, say filing is unavailable, and do not offer work that cannot
+finish. Phase C checks it again for the capture path, which does not come
+through here. With a channel, surface count and topics and offer to work them
+now: "N
 unreported doc gaps for `SRD-42`; work them now or keep going?" Never force it;
 on defer the gaps stay buffered for the next start. On accept, work them one at
 a time through phases C and D.
@@ -205,8 +213,12 @@ needing the retry count and the timeout is two gaps.
 
 If the same fact is already buffered for this SRD, merge into it rather than
 duplicate: union `search_terms`, keep the richer `detail` and `target_claim`,
-keep the earliest `demand` and add the new one if it differs, union `srd_ref`,
-and keep the `doc_id`/`heading_path`/`source_url` already set — a later capture
+keep the earliest `demand` and add the new one if it differs, keep the existing
+`kind` unless the new capture is strictly more specific (`missing` yielding to
+`wrong` or `ambiguous`, never the reverse — the second finder saw the same
+absence, not a different one), append to `srd_ref` comma-separated since one
+gap can block two SRDs, and keep the `doc_id`/`heading_path`/`source_url`
+already set — a later capture
 that found nothing must not blank a pointer an earlier one recorded. Repeats
 are a priority signal the reviewer reads, not new gaps.
 
@@ -242,8 +254,9 @@ correction, adjust and re-show; on a no, discard. Either outcome removes the
 record from the buffer.
 
 A discard is a decision, not a deletion: say what was dropped, and record the
-topic in the caller's output so the same weak lookup does not re-capture the
-same gap next session and put the finder through it again. Nothing durable is
+topic in the caller's output — in this skill's own reply when the user invoked
+it directly — so the same weak lookup does not re-capture the same gap next
+session and put the finder through it again. Nothing durable is
 written for it — a rejected gap is not a gap — but the finder should not have
 to remember rejecting it.
 

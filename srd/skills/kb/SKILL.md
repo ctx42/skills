@@ -68,10 +68,15 @@ The KB is **user data on this machine**, not shipped content, so its path is
 resolved, never assumed. Resolve it once per run:
 
 ```bash
-MEM_DIR="$HOME/.agent-data/ctx42-skills/srd"
+MEM_DIR="${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/srd"
 mkdir -p "$MEM_DIR"
 KB_ROOT="$(cat "$MEM_DIR/kb-root" 2>/dev/null)"   # absolute path to the KB dir
 ```
+
+`AGENT_DATA_DIR` exists so a sandbox, a test, or an eval can point the store
+somewhere disposable; with it unset the default is the real one. Read it the
+same way everywhere — a run that honors it for reading and not for writing
+leaves state in two places.
 
 Empty or missing: ask the user for the directory, then write it to
 `$MEM_DIR/kb-root`. Ask once per usable answer, not once per session: a path

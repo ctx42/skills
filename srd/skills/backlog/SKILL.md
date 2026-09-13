@@ -49,8 +49,10 @@ system is.
   (on-demand: drafting a page in `gaps`) — how to write Markdown the corpus
   chunks and ranks well. `srd:kb` owns it.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
-  (on-demand: before the first corpus lookup in `gaps`) — how to reach the
-  corpus, including the host the REST mirror answers on. `srd:create` owns it;
+  (on-demand: before resolving the backends in step 1, which is earlier than
+  the first corpus lookup — step 1 calls `GET /gaps` on every sitting and the
+  host lives there) — how to reach the corpus and the gap store, including the
+  host the REST mirror answers on. `srd:create` owns it;
   the `search`/`get_doc` calls below are specified there, not here.
 
 ## Backends
