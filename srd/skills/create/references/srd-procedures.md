@@ -65,8 +65,10 @@ the user signals the requirements are complete or asks to fill In Scope:
    Out of Scope (SCO-3). Phrase each as a deliverable, not a restated
    requirement. Leave the candidates unnumbered: step 3 may drop or merge any
    of them, and an `SC-n` shown before that has to be taken back.
-3. Present the candidates and let the user edit them point by point through the
-   calling skill's confirm-each loop: keep, reword, merge, split, or drop each.
+3. Show the candidate list once, then take them through the calling skill's
+   confirm-each loop one at a time: approving keeps a candidate, `E` carries a
+   reword — and a merge or a split, which arrive as amended text — and a skip
+   drops it. Nothing is numbered yet, so a drop costs no renumbering.
 4. Replace the `--- TODO ---` marker with the confirmed `SC-n` items, numbered
    from 1 in order. Re-run the In-Scope-coverage check now that the marker is
    gone.

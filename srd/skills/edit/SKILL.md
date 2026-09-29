@@ -88,8 +88,7 @@ Procedure, trust, and where an outcome goes:
 [../create/references/doc-corpus.md](../create/references/doc-corpus.md). When
 a new or changed requirement asserts something about existing system behavior,
 `search` the corpus before accepting the edit; absent a corpus, edit offline. A
-figure the SRD *sets* asserts nothing about the existing system and needs no
-lookup; one it *reports* does.
+figure the SRD *sets* needs no lookup; one it *reports* does.
 Both delegates are probed at session start (see [Session
 start](#session-start-every-mode)) and invoked at session end. A platform fact
 is attested through the edit-discipline loop's confirmation: a proposal resting
@@ -101,18 +100,21 @@ empties with the session.
 
 ## Session start (every mode)
 
-Spend nothing this run does not need before it reaches the user's first
-question or proposal. Three steps, no questions of its own.
+Spend nothing this run does not need before the user's first question or
+proposal. Resolve the mode first ([Modes](#modes)): one that
+cannot run — `#n` or `autofix` with no `<srd>.review.md` — says so and stops
+before step 1: a run that will do nothing has nothing to read or probe.
+Otherwise three steps, no questions of its own.
 
-1. Read the whole SRD top to bottom — every mode, however narrow the target.
-   A cross-reference in an unread section is the one the edit breaks.
+1. Read the whole SRD top to bottom — every mode, however narrow the target: a
+   cross-reference in an unread section is the one the edit breaks.
 2. Probe the delegate buffers with
    `../create/scripts/probe-buffers.sh <srd> [<srd-id>]`, and invoke a delegate
-   only on a `pending` line. Both hold that a buffer file exists only while
-   records are pending, so the probe answers what invoking two skills answers,
-   and a miss is the usual case. Say nothing about a miss as it happens; the
-   closing manifest carries it. `kb-root: missing` means `srd:kb` will ask
-   where the knowledge base lives.
+   only on a `pending` line. A buffer file exists only while records are
+   pending, so the probe answers what invoking two skills answers, and a miss
+   is the usual case. Say nothing about a miss as it happens; the closing
+   manifest carries it. `kb-root: missing` means `srd:kb` will ask where the
+   knowledge base lives.
 3. Approval gate: read `Status` — `ACCEPTED` is approved, anything else
    in-progress — state which in one clause and go. Never ask the user to
    confirm it: every id change the gate governs is confirmed again in the
@@ -122,25 +124,25 @@ question or proposal. Three steps, no questions of its own.
 
 ### Glossary (on the first term)
 
-Nothing about the glossary happens at session start: most runs touch no term,
-and a run that never reaches one must never have asked about it. The whole
+Nothing about the glossary happens at session start: a run that never reaches
+a term must never have asked about one. The whole
 procedure in
 [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
 — memory record, path question on a first run, fingerprint, digest — waits for
 the first proposal that introduces, renames, or rests on a term that could be
 defined company-wide, and lands *before* that proposal reaches the user: a term
-proposed against an unresolved digest is a GLO-3 miss. A first run's path
-question belongs to that proposal, not to the loop's one question. Hold the
-digest for the session; `polish` and `autofix` never reach any of this.
+proposed against an unresolved digest is a GLO-3 miss. That path question
+belongs to the proposal, not to the loop's one question. Hold the digest for
+the session; `polish` and `autofix` never reach any of this.
 
 ## Id rules
 
-Two invariants hold without reading anything: on an approved SRD existing ids
-are frozen and content changes need STA-4, and any id change is stated and
-approved in the loop's confirmation, never applied quietly. The rest — the
-gate, sub-numbering, removal under STA-8, renumbering and comment blocks — is
-in [references/id-rules.md](references/id-rules.md), read before the first
-proposal on an approved SRD and before any proposal that touches an id.
+Two invariants hold without reading anything: on an approved SRD ids are frozen
+and content changes need STA-4, and any id change is stated and approved in the
+loop's confirmation, never applied quietly. The rest — sub-numbering, removal
+under STA-8, renumbering, comment blocks — is in
+[references/id-rules.md](references/id-rules.md), read before the first
+proposal on an approved SRD or any proposal touching an id.
 
 ## Edit discipline
 
@@ -235,11 +237,10 @@ confirmation: skip the loop, renumber nothing else, report only the line added.
 
 Only when the marker is present and the user signals the requirements are
 complete (or asks to fill In Scope): run the In Scope derivation procedure in
-[../create/references/srd-procedures.md](../create/references/srd-procedures.md)
-and walk its candidates through the loop unnumbered: one the user drops or
-merges would otherwise force a renumber of those already shown. Number the
-confirmed set `SC-1…n` in order as it replaces the marker, then re-run the
-SCO-2/3 check. Never trigger this on your own.
+[../create/references/srd-procedures.md](../create/references/srd-procedures.md),
+walking its unnumbered candidates through the loop; that file carries when the
+`SC-n` numbers are assigned and the re-check that follows. Never trigger this
+on your own.
 
 ## Modes
 
@@ -291,8 +292,11 @@ outcome.
    landed.
 
 Start point (path + `#n`): requires an existing `<srd>.review.md`; if absent,
-say so and stop. Enter at finding `#n` instead of severity order; after each
-finding, default to the next by number or jump to any number the user names.
+say so and stop — one or two lines naming the missing file. No gate line, probe
+result, manifest, or menu of other ways in: those report a run that happened,
+and this one did not. Enter at finding `#n` instead of severity order; after
+each finding, default to the next by number or jump to any number the user
+names.
 
 ### autofix
 
@@ -328,14 +332,12 @@ free description ("the login timeout rule").
    skips this step: its fixes are surface-only.
 2. Invoke `srd:kb` to write the facts the session's confirmations attested, and
    `srd:report-doc-gap` to offer to work the gaps it buffered this session.
-   Draining and writing are different operations, so the start probe gates only
-   the drain — what a *prior* session left — while this is what *this* session
-   produced: invoke each delegate exactly when this session handed it
-   something, and neither when it did not. `srd:kb` asks where the knowledge
-   base lives when no root is on file; the start probe already saw that, so ask
-   for the root at the first confirmation that attests a fact, since a setup
-   question between the last edit and the closing report reads as an
-   interruption of the report.
+   The start probe gates only the drain — what a *prior* session left; this is
+   what *this* session produced, so invoke each delegate exactly when this
+   session handed it something. `srd:kb` asks where the knowledge base lives
+   when no root is on file; the probe already saw that, so ask at the first
+   confirmation that attests a fact rather than between the last edit and the
+   closing report.
 3. Close with the manifest — approved edits, not a re-narration of diffs the
    user already saw:
    - What changed: entry/id, one line each.

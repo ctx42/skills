@@ -178,7 +178,7 @@
       "expected_behavior": [
         "The closing manifest's start clause reports that the probe found no buffers and that neither `srd:report-doc-gap` nor `srd:kb` ran",
         "Asks no approval-gate question: reads `IN PROGRESS`, says so in one clause, and proceeds",
-        "Asks no glossary question and resolves no glossary: the target names no term, and the run must not spend a setup question on one it never reaches. No corpus lookup either — the figure is one the SRD sets",
+        "Asks no glossary question and resolves no glossary: the target names no term, and the run must not spend a setup question on one it never reaches. The 2-second figure is presented as one the SRD sets, with no source cited for it",
         "Re-validates `GR-2`'s cross-references after applying, and the closing re-check covers the whole document",
         "Reaches the first proposal in its first or second turn, with no setup question and no narrated startup sequence"
       ]
@@ -190,7 +190,8 @@
         "Says the review file is absent and stops: `#n` names a finding only a review file can carry, and the skill never writes one",
         "Invents no findings and proposes no edit of its own, even though the SRD has real defects",
         "Leaves `specs/login.md` unchanged and writes no decision log",
-        "Says it in one or two lines, without a survey of what it could have done instead"
+        "Says it in one or two lines naming the missing file, and reports nothing about its own start — no gate line, no probe result, no closing manifest",
+        "Offers no menu of other ways in (run `review`, paste findings, drop the argument): the user asked for a finding number, and the answer is that there are none"
       ]
     }
   ]
