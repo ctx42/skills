@@ -45,8 +45,10 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   platform document defines, link that document and state only the SRD-level
   constraint.
 - Plain language: short sentences, everyday verbs, at most one condition
-  clause; never stack nested qualifiers. The linked platform document carries
-  the precision.
+  clause; never stack nested qualifiers. Aim for wording a B2 English reader
+  gets on one pass, and reach for it when a requirement is genuinely dense —
+  but a clear requirement is not a defect because a simpler phrasing exists.
+  The linked platform document carries the precision.
 - A device or product model named in a requirement is the correct scope when
   the UI surface or feature exists only for those models; never propose
   generalizing it away.
