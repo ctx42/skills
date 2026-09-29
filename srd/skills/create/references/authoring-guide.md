@@ -49,6 +49,11 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   gets on one pass, and reach for it when a requirement is genuinely dense —
   but a clear requirement is not a defect because a simpler phrasing exists.
   The linked platform document carries the precision.
+- REQ-8's three-or-four-letter prefix is a SHOULD, and a shorter one is a
+  deviation, not a defect: `GR-`, which the standard's own REQ-2 example and
+  every worked example here use, is compliant. Never raise a finding against a
+  prefix for its length alone; raise one only when the prefix is unclear or
+  collides with another group's.
 - A device or product model named in a requirement is the correct scope when
   the UI surface or feature exists only for those models; never propose
   generalizing it away.

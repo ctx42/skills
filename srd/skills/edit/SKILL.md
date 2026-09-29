@@ -68,6 +68,9 @@ user.**
   (on-demand: the first edit that asserts something about existing system
   behavior) — how to reach the documentation corpus, how its sources rank, and
   where an unconfirmed or undocumented fact goes.
+- [../review/references/review-file.md](../review/references/review-file.md)
+  (on-demand: feedback, autofix) — how `<srd>.review.md` is numbered, cited and
+  laid out. Never infer the shape.
 - [../create/references/errata.md](../create/references/errata.md) (on-demand:
   autofix) — the gate, allowlist, and exclusions of the bulk-fix errata class.
 - [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
@@ -165,11 +168,13 @@ Every mode but `autofix` runs this loop per change:
 2. Close the proposal with the choices (Yes / Yes Next / Skip / Edit) — the
    capital letter is the key — and apply only on explicit approval:
    - `Y` (Yes): apply, then stay on the current entry and propose its next
-     issue; when that entry has no more, say so and stop — `Y` never advances
-     the walk. In `feedback` the unit is the review's finding, not the entry,
-     so `Y` proposes the next finding on that entry and stops when the review
-     has no more — never an issue the review did not raise. Applying a review
-     means applying that review.
+     issue; when that entry has no more, say so and name the way on ("nothing
+     further on GR-3 — next entry, or name one"), then stop. `Y` never advances
+     the walk, and the user should not have to guess what does. In
+     `feedback` the unit is the review's finding, not the entry, so `Y`
+     proposes the next finding on that entry and stops when the review has no
+     more — never an issue the review did not raise. Applying a review means
+     applying that review.
    - `YN` (Yes Next): apply and move to the next entry, leaving its remaining
      issues flagged.
    - `S` (Skip): change nothing; leave the issue flagged. Like `Y`, it does not
@@ -223,24 +228,19 @@ block `ACCEPTED` and are reported as follow-ups at session end.
 - In Scope `--- TODO ---` marker: while `### In Scope` holds only this marker,
   In Scope is knowingly pending — suppress every SCO-2 / In-Scope-coverage
   complaint (issue summary, re-validation, consistency pass) and do not
-  fabricate `SC-n` items. Resolve it only via Generate In Scope below.
+  fabricate `SC-n` items. Resolve it only through the procedure below, taking
+  the template's instruction comment above it along: that comment is scaffold,
+  and the read-only rule protects the author's comments, not the template's
+  directions to them.
 - `## TODO` section: a numbered list of open issues the human must return to,
   kept as the document's last section.
 
-### Add to TODO (any time)
+### The two procedures
 
-On "Add X to TODO" (or similar), append X as the next numbered item of
-`## TODO`, creating the section last if absent. The instruction is the
-confirmation: skip the loop, renumber nothing else, report only the line added.
-
-### Generate In Scope (on the user's signal)
-
-Only when the marker is present and the user signals the requirements are
-complete (or asks to fill In Scope): run the In Scope derivation procedure in
-[../create/references/srd-procedures.md](../create/references/srd-procedures.md),
-walking its unnumbered candidates through the loop; that file carries when the
-`SC-n` numbers are assigned and the re-check that follows. Never trigger this
-on your own.
+On "Add X to TODO", or on the user's signal that the requirements are complete
+(or an ask to fill In Scope), follow
+[references/draft-scaffolds.md](references/draft-scaffolds.md). Never trigger
+the In Scope derivation on your own.
 
 ## Modes
 
@@ -343,9 +343,8 @@ free description ("the login timeout rule").
    - What changed: entry/id, one line each.
    - What was flagged and left (frozen-id conflicts, metadata gaps, anything
      the user declined).
-   - Outstanding human follow-ups (placeholders, Status), including an
-     unresolved In Scope `--- TODO ---` marker and any non-empty `## TODO`
-     section — both block `ACCEPTED`.
+   - Outstanding human follow-ups: placeholders, Status, and either draft
+     scaffold left standing.
    - The path to `<srd>.decisions.md`, whose newest session block is the
      summary to hand the author — omitted when nothing was applied, since the
      file does not exist.
