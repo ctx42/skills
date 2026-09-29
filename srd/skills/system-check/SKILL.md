@@ -45,6 +45,9 @@ against the target platform as the `srd-doc` corpus records it.
   (eager) — how to reach the documentation corpus, how its sources rank, and
   where an unconfirmed or undocumented fact goes (`srd:report-doc-gap`,
   `srd:kb`).
+- [../create/scripts/probe-buffers.sh](../create/scripts/probe-buffers.sh)
+  (run, not read) — says which delegate buffers hold pending records, so a
+  delegate is invoked only when it has something to drain.
 - [../review/SKILL.md](../review/SKILL.md) (on-demand: before invoking the
   review layer) — this skill delegates the standard checks there and depends on
   what that skill does to `<srd>.review.md`, so read its file lifecycle rather
@@ -56,8 +59,9 @@ The system-knowledge layer confronts the SRD against the corpus, whose
 knowledge-base source carries the platform facts earlier sessions banked. This
 skill consults it in system confrontation and before any "is this defined or
 documented?" question (step 3); a fact the walk confirms goes to `srd:kb` (see
-[Platform knowledge](#platform-knowledge)). Both delegates drain at step 1,
-buffer silently in between, and `srd:kb` writes when the walk ends.
+[Platform knowledge](#platform-knowledge)). Both delegates are probed at step 1
+and drained there only on a hit, buffer silently in between, and `srd:kb`
+writes when the walk ends.
 
 ## Invocation
 
@@ -72,10 +76,13 @@ which SRD to check; fall back to the user's prose for free-form input.
 
 ## review (default)
 
-1. Start: invoke `srd:report-doc-gap` and `srd:kb` to drain what a prior
-   session left buffered for this SRD, then resolve the corpus (see
-   [Support files](#support-files)). `srd:review` drains the gap buffer at its
-   own start too; tell it the drain is done so the user is not offered the same
+1. Start: probe the delegate buffers with
+   `../create/scripts/probe-buffers.sh <srd> [<srd-id>]` and invoke a delegate
+   only on a `pending` line — a buffer file exists only while records are
+   pending, so the probe answers what invoking two skills answers, and a miss
+   is the usual case. Then resolve the corpus (see
+   [Support files](#support-files)). `srd:review` probes the gap buffer at its
+   own start too; tell it the probe is done so the user is not offered the same
    pending gaps twice in one run. With none reachable, skip the
    system-knowledge layer and run the review layer alone rather than stopping.
 2. Get the review: run `srd:review path/to/srd.md` (default mode) and read the

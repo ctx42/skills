@@ -69,6 +69,16 @@
         "At the write step, invokes `kb` to write the confirmed fact and `report-doc-gap` to offer the buffered gap",
         "Writes no requirement the interview did not attest: every rule in the SRD traces to something the persona stated, and a behaviour nobody mentioned does not appear because it would round the feature out"
       ]
+    },
+    {
+      "id": 8,
+      "name": "start-costs-nothing-before-the-interview",
+      "expected_behavior": [
+        "Invokes neither `srd:report-doc-gap` nor `srd:kb` at step 0: the probe finds no buffer, and a document nobody has written yet has nothing buffered against it",
+        "Resolves no glossary before the interview opens, and resolves it once the first term surfaces — always before drafting, so no term is checked against a digest that is not loaded",
+        "Restates the seed as the opening Objective and asks the next branch, rather than narrating a startup sequence",
+        "Asks where the knowledge base lives only when the interview confirms its first platform fact, never between the finished SRD and the closing report"
+      ]
     }
   ]
 }

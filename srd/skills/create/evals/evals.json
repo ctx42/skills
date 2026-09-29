@@ -72,6 +72,16 @@
       "setup": "The `srd-doc` corpus is reachable. While stating a requirement the user says \"the gateway already retries a failed export three times\"; a corpus `search` finds no retry count anywhere.",
       "query": "/create",
       "files": []
+    },
+    {
+      "id": 8,
+      "name": "start-costs-nothing-before-the-interview",
+      "skills": [
+        "create"
+      ],
+      "setup": "A fresh project: no SRD exists yet, no buffer file exists under `$AGENT_DATA_DIR/ctx42-skills/srd/`, and the user has not named a path for the document. A Company Glossary directory is configured.",
+      "query": "/create a rate limit for the export API",
+      "files": []
     }
   ]
 }

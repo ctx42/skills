@@ -31,8 +31,9 @@ edits an existing SRD as a service (that is `edit`), and never marks an SRD
 
 ## Sources of truth
 
-- [references/doc-corpus.md](references/doc-corpus.md) (eager) — how to reach
-  the platform documentation corpus, how its sources rank, and where an
+- [references/doc-corpus.md](references/doc-corpus.md) (on-demand: the first
+  claim about the existing system, in the interview or the self-check) — how to
+  reach the platform documentation corpus, how its sources rank, and where an
   unconfirmed or undocumented fact goes (`srd:report-doc-gap`, `srd:kb`).
 - [references/srd-standard.md](references/srd-standard.md) (on-demand: steps
   3–4) — the SRD rule set (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, Quality
@@ -44,14 +45,18 @@ edits an existing SRD as a service (that is `edit`), and never marks an SRD
 - [references/errata.md](references/errata.md) (not read here) — the bulk-fix
   errata class `review` and `edit` apply; kept here because `create` owns the
   shared references.
-- [references/srd-procedures.md](references/srd-procedures.md) (on-demand:
-  step 0) — shared procedures: glossary resolution, In Scope derivation.
+- [references/srd-procedures.md](references/srd-procedures.md) (on-demand: the
+  first term the interview surfaces) — shared procedures: glossary resolution,
+  In Scope derivation.
 - [assets/srd-template.md](assets/srd-template.md) (on-demand: step 3) — the
   SRD skeleton in the required section order with the keyword notice. Fill it;
   do not restructure it.
 - [scripts/glossary-fingerprint.sh](scripts/glossary-fingerprint.sh) (run, not
   read) — hashes the Company Glossary so its term digest is rebuilt only when
   the glossary changes.
+- [scripts/probe-buffers.sh](scripts/probe-buffers.sh) (run, not read) — says
+  which delegate buffers hold pending records, so a delegate is invoked only
+  when it has something to drain.
 
 ## Documentation corpus
 
@@ -61,17 +66,17 @@ points: in the interview, when the user states a fact about the existing system
 or uses a term no glossary defines, and in the self-check, for every
 requirement that asserts existing behavior. A lookup that cannot confirm the
 claim goes to `srd:report-doc-gap`; a fact the corpus lacks but the user
-confirms goes to `srd:kb`. Both drain at step 0, buffer silently in between,
-and run again at step 5, where `srd:kb` writes its confirmed facts and
-`srd:report-doc-gap` offers to work the buffered gaps. A platform fact is confirmed
+confirms goes to `srd:kb`. Both are probed at step 0 and invoked there only on
+a hit, buffer silently in between, and run again at step 5, where `srd:kb`
+writes its confirmed facts and `srd:report-doc-gap` offers to work the buffered
+gaps. A platform fact is confirmed
 through the branch restatement in step 1, never through a separate prompt.
 
 ## Workflow
 
 Copy this checklist and tick it off:
 
-- [ ] 0. Drain the delegate buffers; resolve the Company Glossary and load its
-      term digest.
+- [ ] 0. Probe the delegate buffers; drain only a buffer that has records.
 - [ ] 1. Interview the user along the SRD spine.
 - [ ] 2. Propose requirement groups and prefixes; get confirmation.
 - [ ] 3. Draft the SRD from the template.
@@ -81,20 +86,26 @@ Copy this checklist and tick it off:
 
 ### 0. Start
 
-Invoke `srd:report-doc-gap` and `srd:kb` to drain what a prior session left
-buffered for this SRD. `srd:kb` asks where the knowledge base lives when no root
-is on file: let that question land here, not at step 5, where it would sit
-between the finished SRD and the closing report. Each returns what it holds,
-including nothing, and shows the user nothing when empty — the clause saying
-both drains ran and found nothing is this skill's to write, in its own report,
+Start cheap: the interview is what the user came for. Run
+`scripts/probe-buffers.sh <srd-path> [<srd-id>]` — for a new SRD, the path the
+user named, or none yet, which means there is no per-SRD buffer to drain — and
+invoke a delegate only on a `pending` line. Both hold that a buffer file exists
+only while records are pending, so the probe answers what invoking two skills
+answers, and a miss is the usual case for a document nobody has written yet. A
+delegate that does run shows the user nothing when empty; the clause saying the
+drain ran and found nothing is this skill's to write, in its own report,
 because a drain that never happened otherwise looks identical to one that found
-nothing.
+nothing. `kb-root: missing` means `srd:kb` will ask where the knowledge base
+lives — let that land at the first fact the interview confirms, not at step 5,
+where it would sit between the finished SRD and the closing report.
 
-Then run the glossary-resolution procedure in
-[references/srd-procedures.md](references/srd-procedures.md): resolve the
-per-project glossary path (a single Markdown file or a directory of them),
-fingerprint it, and load or regenerate its term digest. The digest lets the SRD
-satisfy GLO-3 / STR-10 without redefining known terms.
+Resolve the glossary when the first term surfaces (branch 6 at the latest, and
+always before drafting), not here: the procedure in
+[references/srd-procedures.md](references/srd-procedures.md) resolves the
+per-project path, fingerprints it, and may regenerate a model-synthesized
+digest, which is a poor way to spend the seconds before the opening question.
+The digest lets the SRD satisfy GLO-3 / STR-10 without redefining known terms,
+so it must be loaded before any term is checked against it, never after.
 
 ### 1. Interview
 
@@ -125,8 +136,9 @@ so confirming it confirms both the SRD and the knowledge base:
    `search` the corpus before accepting it; surface any contradiction at once
    in interview voice, never silently accept or fix. Route the other outcomes
    per [Documentation corpus](#documentation-corpus).
-6. Terms: as terms surface, check them against the glossary digest and mark
-   each as already defined (link to it) or needing a local Glossary entry.
+6. Terms: resolve the glossary now if no term has yet forced it (step 0), then
+   check each term that surfaces against its digest and mark it as already
+   defined (link to it) or needing a local Glossary entry.
    `search` the corpus before asking the user to define a term: it may already
    define it, or name the same concept differently (a naming conflict to
    surface). A definition the user supplies because no glossary carries it

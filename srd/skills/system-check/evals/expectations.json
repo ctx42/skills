@@ -5,7 +5,7 @@
       "id": 1,
       "name": "surfaces-a-system-contradiction",
       "expected_behavior": [
-        "States in one clause that both buffers were drained and were empty — the delegates show the user nothing, so this skill's own report is where a drain that ran becomes distinguishable from one that did not",
+        "Probes both buffers, finds neither holds records, and invokes neither delegate at the start — then states in one clause that both were checked and were empty, since a check that ran is otherwise indistinguishable from one that never did",
         "Runs `srd:review specs/labeling.md` once to create the review file, then reads it — and makes no edit to the SRD",
         "Writes `specs/labeling.questions.md` merging the reframed review findings with a system question noting that `GR-4` contradicts `ifp-doc/concepts/tags.md`. No question carries a severity tag, a rule id, or a finding number",
         "Asks the contradiction once, not twice in two voices, even though the review layer's own facts-vs-corpus pass found it too — the link back to the review finding lives in the file's bookkeeping, never in the question's text",

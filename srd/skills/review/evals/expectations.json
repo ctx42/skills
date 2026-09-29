@@ -96,10 +96,20 @@
       "id": 9,
       "name": "facts-vs-corpus-routes-doc-gaps",
       "expected_behavior": [
-        "Invokes `srd:report-doc-gap` first to drain the gaps left from the prior session, then searches the corpus for each claim about existing behaviour",
+        "Probes the gap buffer first, finds the prior session's records pending, and invokes `srd:report-doc-gap` to drain them, then searches the corpus for each claim about existing behaviour",
         "Hands the unconfirmable `GW-2` retry count to `srd:report-doc-gap` as a doc gap — it appears nowhere in `gateway.review.md`",
         "Records the contradicted `GW-5` timeout as a `reference` finding in the review file",
         "After the closing tally, offers to work the buffered `GW-2` gap now or later, and never files it silently"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "empty-gap-buffer-skips-the-delegate",
+      "expected_behavior": [
+        "Probes the gap buffer and invokes `srd:report-doc-gap` neither at the start nor at the close, since no buffer file exists and this run buffered nothing",
+        "Loads no doc-corpus reference: `check` runs no facts-vs-corpus pass",
+        "Re-verifies the open findings only and hunts no new defects, keeping every number",
+        "Reaches the first finding judgement without a narrated startup sequence"
       ]
     }
   ]

@@ -53,8 +53,12 @@ and tell the user.
   classifying a finding as errata) — the gate, allowlist, and exclusions of the
   bulk-fix errata class.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
-  (eager) — how to reach the documentation corpus, how its sources rank, and
-  where an unconfirmed claim goes.
+  (on-demand: the facts-vs-corpus pass, which only `review` and `walk` run) —
+  how to reach the documentation corpus, how its sources rank, and where an
+  unconfirmed claim goes. `check`, `errata`, and `feedback` never reach it.
+- [../create/scripts/probe-buffers.sh](../create/scripts/probe-buffers.sh)
+  (run, not read) — says whether the gap buffer holds pending records, so
+  `srd:report-doc-gap` is invoked only when it has something to drain.
 
 Apply the full rule set. `create` leaves STR-2..7 (≥ 2 owners, Initiative
 link, Designs link or `N/A` when no UI change) and STA-* (valid Status; not
@@ -67,11 +71,11 @@ a back-link finding.
 ## Documentation corpus
 
 Procedure, trust, and where an outcome goes: the shared corpus reference in
-Sources of truth. `review` and `walk` invoke `srd:report-doc-gap` twice: as
-their first step, to drain gaps a prior session left unfiled, and after the
-closing line, to offer the gaps this run buffered. When a corpus is reachable,
-they also run a facts-vs-corpus pass beside the rule checks: for every
-requirement that asserts something about existing system behavior ("the
+Sources of truth. `review` and `walk` probe the gap buffer as their first step
+and invoke `srd:report-doc-gap` only on a `pending` line, then invoke it again
+after the closing line to offer the gaps this run buffered. When a corpus is
+reachable, they also run a facts-vs-corpus pass beside the rule checks: for
+every requirement that asserts something about existing system behavior ("the
 gateway retries 3×", "the API returns Y"), `search` the corpus to confirm it. A
 claim the corpus contradicts is a `reference` finding; one it cannot confirm is
 a doc gap for `srd:report-doc-gap`, never a finding in `<srd>.review.md`.
@@ -184,8 +188,12 @@ in full, so it is not summarized here.
 
 ## review (default)
 
-1. Invoke `srd:report-doc-gap` to drain gaps a prior session left unfiled for
-   this SRD. Read the entire SRD top to bottom.
+1. Probe the gap buffer with
+   `../create/scripts/probe-buffers.sh <srd> [<srd-id>]`; on a `pending`
+   `docgaps` line invoke `srd:report-doc-gap` to drain what a prior session
+   left unfiled, and otherwise invoke nothing — a buffer file exists only while
+   records are pending, and a miss is the usual case. Read the entire SRD top
+   to bottom.
 2. Check it against every rule in
    [../create/references/srd-standard.md](../create/references/srd-standard.md),
    in document-section order, including the consistency pass and the house
@@ -206,8 +214,8 @@ in full, so it is not summarized here.
 
 ## walk
 
-Drain `srd:report-doc-gap` as in review, then go section by section in
-document order. For each section:
+Probe and drain the gap buffer as in review step 1, then go section by section
+in document order. For each section:
 
 1. Read it and identify every issue, including the facts-vs-corpus pass when a
    corpus is reachable.

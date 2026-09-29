@@ -93,6 +93,16 @@
       "setup": "The `srd-doc` corpus is reachable. `GW-2` states \"the gateway retries 3×\" and no corpus document states any retry count; `GW-5` names a timeout the corpus documents as a different value. A prior session left gaps buffered for this SRD.",
       "query": "/review specs/gateway.md",
       "files": []
+    },
+    {
+      "id": 10,
+      "name": "empty-gap-buffer-skips-the-delegate",
+      "skills": [
+        "review"
+      ],
+      "setup": "No gap buffer file exists for this SRD under `$AGENT_DATA_DIR/ctx42-skills/srd/docgaps/`, and no corpus is reachable. `specs/login.md` has two style defects and one duplicate id.",
+      "query": "/review specs/login.md check",
+      "files": []
     }
   ]
 }

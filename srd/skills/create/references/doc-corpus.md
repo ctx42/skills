@@ -78,7 +78,11 @@ have an owner; the calling skill only spots them and delegates:
   that the docs should eventually carry it. Send it to both.
 
 Both delegates buffer silently on discovery and drain when the calling skill
-starts, where they surface what a prior session left unfiled or unwritten. When
+starts, where they surface what a prior session left unfiled or unwritten. A
+buffer file exists only while records are pending, so a calling skill probes
+for one (`../scripts/probe-buffers.sh`) and invokes a delegate only when it has
+something to drain: an absent buffer drains to nothing, and loading a skill to
+learn that is the largest avoidable cost at session start. When
 the calling skill finishes, `srd:kb` writes its confirmed facts and
 `srd:report-doc-gap` offers to work the gaps buffered this session. `review`
 invokes only `srd:report-doc-gap`: a read-only review confirms no platform fact
