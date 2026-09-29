@@ -23,13 +23,18 @@ touches ids.
    whitespace/glyph class plus a neighboring word; derive the canonical fix
    from the class). A finding with neither shape is not appliable: exclude it,
    report it as malformed, and tell the user to re-run `review <srd> errata`.
+   A finding's number is the review file's global `#n`, kept when `review`
+   moved it under `## Errata` — never its position in that block, so `#7` stays
+   `#7` whether it sits first there or third.
 3. Present the batch: every appliable finding (number, anchor, substitution).
    The user may name numbers to exclude; default is all.
 4. One confirmation for the whole batch — `Yes` applies every included finding,
    `No` applies nothing. Not the loop.
 5. On `Yes`, verify before every write: scope the search to the finding's
    anchor — the requirement entry, glossary entry, or heading it names, never
-   the whole document — and count occurrences of `old`:
+   the whole document — and count occurrences of `old`. An entry anchor reaches
+   to the start of the next entry; a heading anchor reaches to the next heading
+   of the same or a higher level, taking its subsections with it. Then:
    - exactly one → apply the substitution there.
    - zero → stale anchor; change nothing and report it.
    - more than one, and the finding did not name that many sites → ambiguous;

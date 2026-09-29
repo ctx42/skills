@@ -40,10 +40,12 @@ glossary actually changes. Run this before drafting or editing:
 ### Glossary memory
 
 Keep one record per project at `.claude/srd/glossary-memory.md`, relative to
-the project root — the directory the SRD work is happening in, not the skill's
-own checkout. It holds: the glossary path (file or directory); the last content
-hash from `glossary-fingerprint.sh`; the date the digest was last regenerated;
-and the digest body.
+the project root — the root of the git repository the SRD lives in, or the
+SRD's own directory when it is in no repository. Never the skill's checkout,
+and never the working directory, which changes between runs and would scatter
+records a teammate then cannot find. It holds: the glossary path (file or
+directory); the last content hash from `glossary-fingerprint.sh`; the date the
+digest was last regenerated; and the digest body.
 
 That location, and not `$HOME/.agent-data`, because the binding is
 project-to-glossary: one machine works on several projects, and a

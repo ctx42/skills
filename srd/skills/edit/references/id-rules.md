@@ -14,8 +14,11 @@ wants the edit — rather than trailing a second question after the choices.
 Without that agreement, leave the edit marked for their ruling, unlanded. The
 decision log records only applied edits and this skill writes no review file,
 so an unlanded edit lives in the closing manifest or nowhere — list each with
-its STA-4 ask. Removal is the sharp case: STA-8 keeps the id and strikes the
-text, so "remove GR-4" is never a deletion (STA-7 keeps the number).
+its STA-4 ask. Removal is the sharp case, and it is written `**GR-6:** ~~the
+requirement text~~`: the strikethrough covers the requirement text, never the
+bold identifier, which STA-8 requires be kept — a struck id reads as retired
+numbering rather than a retired rule. STA-8 keeps the id and strikes the text,
+so "remove GR-4" is never a deletion (STA-7 keeps the number).
 Meaning-preserving editorial change is STA-5 and needs none of this — `polish`
 is that mode.
 

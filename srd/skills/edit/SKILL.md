@@ -109,7 +109,7 @@ Otherwise three steps, no questions of its own.
 1. Read the whole SRD top to bottom — every mode, however narrow the target: a
    cross-reference in an unread section is the one the edit breaks.
 2. Probe the delegate buffers with
-   `../create/scripts/probe-buffers.sh <srd> [<srd-id>]`, and invoke a delegate
+   `../create/scripts/probe-buffers.sh <srd> [<srd-id>]` and invoke a delegate
    only on a `pending` line. A buffer file exists only while records are
    pending, so the probe answers what invoking two skills answers, and a miss
    is the usual case. Say nothing about a miss as it happens; the closing
@@ -133,7 +133,7 @@ the first proposal that introduces, renames, or rests on a term that could be
 defined company-wide, and lands *before* that proposal reaches the user: a term
 proposed against an unresolved digest is a GLO-3 miss. That path question
 belongs to the proposal, not to the loop's one question. Hold the digest for
-the session; `polish` and `autofix` never reach any of this.
+the session; `polish` and `autofix` never reach any of it.
 
 ## Id rules
 
@@ -266,16 +266,16 @@ with a confirmation and expects no review file.
    section (Metadata, Introduction, Glossary, Scope, Requirements), each citing
    its rule id. Edit nothing yet.
 2. Walk entry by entry in document order — each requirement (`PFX-n`), glossary
-   term, and scope item — running the loop for every fix the user approves.
+   term, scope item — running the loop for every fix the user approves.
    Move on only on `YN` or an explicit ask, and never before the current entry
-   is resolved or skipped.
+   is resolved or skipped. An entry with no finding resolves on sight: say so
+   and move on — nothing was proposed, so no key is owed.
 
 Start point (path + line): resolve the line to the entry or paragraph at or
 nearest it, skip step 1, and begin step 2 there, continuing to the end. The
 walk is still one entry at a time and still never looks ahead — step 1's
 summary is what would have told you which later entry has a finding, and
-skipping it means learning that entry by entry. Say "no finding" and move on
-for a clean one rather than scanning forward for the next interesting entry.
+skipping it means learning that entry by entry, never by scanning forward.
 
 ### feedback
 
