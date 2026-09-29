@@ -44,11 +44,15 @@ touches ids.
    A multi-site finding is verified per site and applies only where it
    matches; report each site that did not. Never substitute by whole-document
    search-and-replace; never widen beyond the quoted `old`.
-6. When anything landed, hand off to `review <srd> check #n…` scoped to exactly
+6. Log every applied substitution in `<srd>.decisions.md` — one entry each,
+   per [decision-log.md](decision-log.md). The batch path owes the log exactly
+   what the loop owes it: this procedure covers finding and applying the
+   fixes, not the whole of what the mode owes.
+7. When anything landed, hand off to `review <srd> check #n…` scoped to exactly
    the applied errata numbers, so `review` moves them to `## Resolved` and
    leaves other findings untouched. Hand off by naming that exact command for
    the user to run: `edit` never invokes `review`, which owns the review file.
    Skip the hand-off if nothing landed.
-7. The closing manifest names the findings handed to `check` — not what `check`
+8. The closing manifest names the findings handed to `check` — not what `check`
    then did with them, which happens after this run ends — and every finding
    skipped as stale, ambiguous, or malformed.

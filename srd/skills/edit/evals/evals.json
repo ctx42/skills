@@ -97,7 +97,7 @@
       "skills": [
         "edit"
       ],
-      "setup": "`specs/login.review.md` exists and holds numbered findings. The run is repeated in a second scenario where the review file is absent. Partway through the walk the user names a finding number out of order (\"do #6 next\") before letting the run continue. Finding #2 is a substantive requirement finding the skill may fix — not a metadata gap, which scenario 15 covers.",
+      "setup": "`specs/login.review.md` exists and holds numbered findings. Partway through the walk the user names a finding number out of order (\"do #6 next\") before letting the run continue. Finding #2 is a substantive requirement finding the skill may fix — not a metadata gap, which scenario 15 covers.",
       "query": "/edit specs/login.md #2",
       "files": []
     },
@@ -183,6 +183,16 @@
       ],
       "setup": "No buffer file exists for this SRD under `$AGENT_DATA_DIR/ctx42-skills/srd/` — neither `docgaps/` nor `kb/` — and `Status` reads `IN PROGRESS`. The target requirement is vague and names no glossary term. The requirement asserts no fact about existing system behavior, so nothing in the run calls for a corpus lookup.",
       "query": "/edit specs/login.md GR-2",
+      "files": []
+    },
+    {
+      "id": 19,
+      "name": "feedback-without-a-review-file",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`specs/login.md` exists and has real defects, but no `specs/login.review.md` beside it — the user asks for a finding number anyway.",
+      "query": "/edit specs/login.md #2",
       "files": []
     }
   ]

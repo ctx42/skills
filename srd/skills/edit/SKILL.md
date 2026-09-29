@@ -122,18 +122,16 @@ question or proposal. Three steps, no questions of its own.
 
 ### Glossary (on the first term)
 
-Read the project's glossary memory record at session start — one small file —
-and when the project has none, ask for the path there, beside the gate line: a
-first-run setup question sprung mid-walk is the interruption this skill avoids
-everywhere else. The rest of the procedure in
+Nothing about the glossary happens at session start: most runs touch no term,
+and a run that never reaches one must never have asked about it. The whole
+procedure in
 [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
-— fingerprint, digest — waits for the first proposal that introduces, renames,
-or rests on a term that could be defined company-wide; hold the digest for the
-session — not at
-session start, which spends a file read, a hash, and maybe a digest synthesis
-on nothing. Resolve it *before* putting the proposal to the user: a term
-proposed against an unresolved digest is a GLO-3 miss. `polish` and
-`autofix` never reach it.
+— memory record, path question on a first run, fingerprint, digest — waits for
+the first proposal that introduces, renames, or rests on a term that could be
+defined company-wide, and lands *before* that proposal reaches the user: a term
+proposed against an unresolved digest is a GLO-3 miss. A first run's path
+question belongs to that proposal, not to the loop's one question. Hold the
+digest for the session; `polish` and `autofix` never reach any of this.
 
 ## Id rules
 
@@ -238,9 +236,10 @@ confirmation: skip the loop, renumber nothing else, report only the line added.
 Only when the marker is present and the user signals the requirements are
 complete (or asks to fill In Scope): run the In Scope derivation procedure in
 [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
-and walk its candidate `SC-n` items through the loop, applying each confirmed
-item. Replace the marker with the confirmed items, then re-run the SCO-2/3
-check. Never trigger this on your own.
+and walk its candidates through the loop unnumbered: one the user drops or
+merges would otherwise force a renumber of those already shown. Number the
+confirmed set `SC-1…n` in order as it replaces the marker, then re-run the
+SCO-2/3 check. Never trigger this on your own.
 
 ## Modes
 

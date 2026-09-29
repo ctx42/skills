@@ -60,10 +60,11 @@ the user signals the requirements are complete or asks to fill In Scope:
 
 1. Read every requirement group and cluster them by the distinct capability each
    delivers.
-2. Draft one candidate `SC-n` item per capability — a high-level overview of
-   one change (SCO-1), each covered by ≥ 1 requirement (SCO-2), none
-   contradicting Out of Scope (SCO-3). Phrase each as a deliverable, not a
-   restated requirement.
+2. Draft one candidate item per capability — a high-level overview of one
+   change (SCO-1), each covered by ≥ 1 requirement (SCO-2), none contradicting
+   Out of Scope (SCO-3). Phrase each as a deliverable, not a restated
+   requirement. Leave the candidates unnumbered: step 3 may drop or merge any
+   of them, and an `SC-n` shown before that has to be taken back.
 3. Present the candidates and let the user edit them point by point through the
    calling skill's confirm-each loop: keep, reword, merge, split, or drop each.
 4. Replace the `--- TODO ---` marker with the confirmed `SC-n` items, numbered

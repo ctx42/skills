@@ -5,8 +5,8 @@
       "id": 1,
       "name": "interactive-non-atomic-on-approved-srd",
       "expected_behavior": [
-        "States the gate in one clause from `Status: ACCEPTED` and starts editing — never asks the user to confirm or override it, and builds no glossary digest before a proposal needs one",
-        "Names STA-4 in the proposal and asks whether the approving authority has agreed — splitting a requirement changes it, and the user's own `Y` is not that agreement",
+        "States the gate in one clause from `Status: ACCEPTED` and starts editing — never asks the user to confirm or override it, and asks no glossary question before a proposal touches a term",
+        "Names STA-4 in the proposal and makes clear that approving it means the authority has agreed, not merely that the user wants the edit — folded into the one confirmation, not asked as a second question",
         "Front-loads a grouped issue summary, then walks entry by entry",
         "Proposes the split with location, before/after, and a one-line rationale",
         "Prepares the split as an add-only change — a new `GR-3c` rather than a renumber — and leaves it unapplied: the SRD contains no `GR-3c` after the run, because the authority STA-4 names has not agreed to it",
@@ -18,7 +18,7 @@
       "name": "apply-a-review-file",
       "expected_behavior": [
         "Parses the findings and works them blocker → major → minor",
-        "Fixes each finding it may fix through the edit loop — one change, confirm, re-validate — referring to findings by number, and reports rather than loops the one outside its mandate",
+        "Fixes each finding through the edit loop — one change, confirm, re-validate — referring to findings by number",
         "Leaves `login.review.md` untouched: `review` owns that file",
         "Closes by pointing at `review specs/login.md check` to tick off what landed, plus the manifest of what changed and what was left flagged"
       ]
@@ -56,7 +56,7 @@
       "name": "generate-in-scope-on-signal",
       "expected_behavior": [
         "Before the signal, never flags SCO-2 against the marker and never fabricates scope items",
-        "On the signal, derives candidate scope items from the requirement groups and presents them as candidates; `SC-n` numbers are settled when the items are confirmed, not before",
+        "On the signal, derives candidates from the requirement groups and presents them unnumbered; `SC-1…n` are assigned only as the confirmed set replaces the marker, so a dropped or merged candidate renumbers nothing",
         "Walks the candidates point by point for the user to keep, reword, merge, split, or drop",
         "Replaces the marker with the confirmed items and re-runs the SCO-2/3 coverage check"
       ]
@@ -80,7 +80,7 @@
         "Lists the three substitutions and takes one confirmation for the whole batch, not the per-change loop",
         "Verifies each `old` at its anchor, applies the two that match exactly once, and reports the third as stale rather than guessing where it belongs",
         "Writes no review file and invokes no `review` run; prints the exact hand-off command `review specs/login.md check #n #n`, scoped to the two applied errata, for the user to run",
-        "Closes with a manifest naming what was applied, reclassified, and skipped"
+        "Closes with a manifest naming what was applied, what was skipped and why, and the findings handed to `check` — not what `check` later did with them"
       ]
     },
     {
@@ -97,7 +97,6 @@
       "name": "feedback-from-a-finding-number",
       "expected_behavior": [
         "Enters at finding #2 rather than at the top of severity order",
-        "Says so and stops when the review file is absent — it cannot invent findings",
         "After each finding resolves or is skipped, defaults to the next by number",
         "Jumps to any number the user names out of order, and resumes the ascending walk from there",
         "Leaves the review file untouched and closes by pointing at `review specs/login.md check`"
@@ -107,7 +106,7 @@
       "id": 11,
       "name": "corpus-grounded-edit-routes-the-unconfirmable",
       "expected_behavior": [
-        "Searches the corpus before accepting the edit",
+        "Searches the corpus before accepting the edit, and the record it hands over names the queries tried — or says the corpus was unreachable, rather than leaving the attempt unstated",
         "Buffers the gap with `srd:report-doc-gap` silently — no interruption and no grilling mid-edit",
         "States the retry count as a fact inside the proposal, so the user's confirmation — whichever key they use — attests it and `srd:kb` receives it",
         "Asks no separate \"bank this?\" question",
@@ -118,7 +117,7 @@
       "id": 12,
       "name": "session-start-drains-prior-buffers",
       "expected_behavior": [
-        "Probes the two buffer files, finds both present, and drains both delegates — surfacing their counts and topics before any edit",
+        "Probes the two buffer files, finds both present, and invokes both delegates to surface their counts and topics before any edit",
         "Offers to work them now",
         "On a defer, proceeds into the normal interactive run — issue summary, then the walk — and leaves both buffer files on disk for the next start"
       ]
@@ -160,7 +159,7 @@
         "Writes one decision-log entry per applied substitution — the batch path logs like every other applied edit",
         "Creates `specs/login.decisions.md` with its `cfsync-plugin: ignore-push` front matter on the first write",
         "Refuses the third erratum because its `old` occurs twice in the anchor — not uniquely located — applies the other two, and names the reason it refused",
-        "The log it writes has the same shape a per-change loop leaves: the frontmatter, one entry per applied substitution, each in prose rather than as a diff"
+        "The log carries the `cfsync-plugin: ignore-push` frontmatter, a dated `##` session block, and one prose entry per applied substitution naming the entry and what changed — never a diff"
       ]
     },
     {
@@ -169,19 +168,29 @@
       "expected_behavior": [
         "Leaves the comment block byte-for-byte unchanged — comment text is verbatim history, never edited, answered, or rewritten",
         "Does not treat the `GR-9` reference as a broken cross-reference to repair, and does not renumber anything to make it resolve",
-        "Carries the unanswerable question in a numbered `## Open questions` list kept in the terminal reply and the closing manifest — never written into the SRD as a section",
-        "Does not leave it trailing the proposal as an aside, and does not block the walk on it"
+        "Carries the unanswerable question in a numbered `## Open questions` list kept in the terminal reply, and the closing manifest reproduces that numbered list rather than a bare count — never written into the SRD as a section",
+        "Does not trail the proposal with it as an aside, and does not make answering it a precondition for the rest of the run — a skip on that entry is not the same as blocking"
       ]
     },
     {
       "id": 18,
       "name": "absent-buffers-skip-the-delegates",
       "expected_behavior": [
-        "The closing manifest's start clause reports the probe found no buffers and that neither `srd:report-doc-gap` nor `srd:kb` ran — a probe that found nothing must not be reported the same way as one that never happened",
+        "The closing manifest's start clause reports that the probe found no buffers and that neither `srd:report-doc-gap` nor `srd:kb` ran",
         "Asks no approval-gate question: reads `IN PROGRESS`, says so in one clause, and proceeds",
-        "The same start clause reports that the glossary was not resolved, and no glossary or corpus question reaches the user for an edit that touches neither a term nor a claim about system behavior",
+        "Asks no glossary question and resolves no glossary: the target names no term, and the run must not spend a setup question on one it never reaches. No corpus lookup either — the figure is one the SRD sets",
         "Re-validates `GR-2`'s cross-references after applying, and the closing re-check covers the whole document",
-        "Reaches the first proposal without a setup question or a narrated startup sequence"
+        "Reaches the first proposal in its first or second turn, with no setup question and no narrated startup sequence"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "feedback-without-a-review-file",
+      "expected_behavior": [
+        "Says the review file is absent and stops: `#n` names a finding only a review file can carry, and the skill never writes one",
+        "Invents no findings and proposes no edit of its own, even though the SRD has real defects",
+        "Leaves `specs/login.md` unchanged and writes no decision log",
+        "Says it in one or two lines, without a survey of what it could have done instead"
       ]
     }
   ]
