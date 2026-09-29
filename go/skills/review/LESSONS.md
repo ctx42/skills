@@ -1,0 +1,1 @@
+- Before prescribing `ExpectFatal`/`assert.Panic` for a helper's failure path, read the helper's reporting call — `exekit.Exe` fails via `t.Error`, not `t.Fatal`.
