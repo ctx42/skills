@@ -46,6 +46,9 @@ touches ids.
    search-and-replace; never widen beyond the quoted `old`.
 6. When anything landed, hand off to `review <srd> check #n…` scoped to exactly
    the applied errata numbers, so `review` moves them to `## Resolved` and
-   leaves other findings untouched. Skip the hand-off if nothing landed.
-7. The closing manifest names which findings `check` reclassified and every
-   finding skipped as stale, ambiguous, or malformed.
+   leaves other findings untouched. Hand off by naming that exact command for
+   the user to run: `edit` never invokes `review`, which owns the review file.
+   Skip the hand-off if nothing landed.
+7. The closing manifest names the findings handed to `check` — not what `check`
+   then did with them, which happens after this run ends — and every finding
+   skipped as stale, ambiguous, or malformed.

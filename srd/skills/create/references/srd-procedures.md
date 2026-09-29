@@ -20,6 +20,10 @@ glossary actually changes. Run this before drafting or editing:
    with an empty set (every term must then be defined locally). A remembered path
    that resolves is used **silently** — never confirmed every run; the user
    overrides it only by asking.
+   "This project has no Company Glossary" is an answer, not a missing one:
+   record it as an explicit `none` and treat the known-term set as empty from
+   then on. Without that record the question returns every session, which is
+   the setup interruption this procedure exists to spend once.
 4. Fingerprint the docs: run `glossary-fingerprint.sh <path>` from the `create`
    skill's `scripts/` directory (`../scripts/` from this file); it prints one
    content hash covering every `*.md` under the path.

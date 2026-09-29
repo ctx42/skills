@@ -3,6 +3,11 @@
 `<srd>.decisions.md` — what it records, its shape, and what each mode owes it.
 Read before writing the first entry of a session; no mode needs it earlier.
 
+`<srd>.decisions.md` names the SRD's path with its `.md` extension replaced:
+`specs/login.md` gives `specs/login.decisions.md`, never
+`specs/login.md.decisions.md`. `<srd>.review.md` and `<srd>.questions.md` are
+formed the same way.
+
 `autofix` is a bulk path through the same gate, not an exception to it: every
 substitution it applies is an applied edit and owes its entry, and
 [`autofix.md`](autofix.md) is the procedure for finding and

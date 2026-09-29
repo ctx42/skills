@@ -65,84 +65,84 @@ user.**
   (eager) — house extensions (US English, sub-numbering, one term per concept,
   the consistency pass) and the Bad→Good defect classes to fix toward.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
-  (eager) — how to reach the documentation corpus, how its sources rank, and
+  (on-demand: the first edit that asserts something about existing system
+  behavior) — how to reach the documentation corpus, how its sources rank, and
   where an unconfirmed or undocumented fact goes.
 - [../create/references/errata.md](../create/references/errata.md) (on-demand:
   autofix) — the gate, allowlist, and exclusions of the bulk-fix errata class.
 - [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
-  (on-demand: session start for glossary resolution; Generate In Scope for the
-  derivation procedure).
+  (on-demand: the first proposal that touches a term, for glossary resolution;
+  Generate In Scope for the derivation procedure).
 - [../create/assets/srd-template.md](../create/assets/srd-template.md)
   (on-demand: restructuring) — the required section order.
 - [../create/scripts/glossary-fingerprint.sh](../create/scripts/glossary-fingerprint.sh)
   (run, not read) — hashes the Company Glossary so its term digest is rebuilt
   only on change; the digest keeps term edits linking, not redefining.
+- [../create/scripts/probe-buffers.sh](../create/scripts/probe-buffers.sh)
+  (run, not read) — says which delegate buffers hold pending records, so a
+  delegate is invoked only when it has something to drain.
 
 ## Documentation corpus
 
 Procedure, trust, and where an outcome goes:
 [../create/references/doc-corpus.md](../create/references/doc-corpus.md). When
 a new or changed requirement asserts something about existing system behavior,
-`search` the corpus before accepting the edit; absent a corpus, edit offline.
-Both delegates drain at session start and finish at session end. A platform
-fact is attested through the edit-discipline loop's confirmation: a proposal
-resting on it states that fact, so `Y`/`YN`/`E` attests it and `S` withholds
-it; `srd:kb` may only sharpen a fact the edit already put in play. A deferred
+`search` the corpus before accepting the edit; absent a corpus, edit offline. A
+figure the SRD *sets* asserts nothing about the existing system and needs no
+lookup; one it *reports* does.
+Both delegates are probed at session start (see [Session
+start](#session-start-every-mode)) and invoked at session end. A platform fact
+is attested through the edit-discipline loop's confirmation: a proposal resting
+on it states that fact, so `Y`/`YN`/`E` attests it and `S` withholds it;
+`srd:kb` may only sharpen a fact the edit already put in play. A deferred
 question goes to the knowledge base's open-questions list through `srd:kb`, not
 to this skill's `## Open questions`, which tracks questions about this SRD and
 empties with the session.
 
 ## Session start (every mode)
 
-Before any edit:
+Spend nothing this run does not need before it reaches the user's first
+question or proposal. Three steps, no questions of its own.
 
-1. Read the whole SRD top to bottom.
-2. Drain: invoke `srd:report-doc-gap` and `srd:kb` to surface what a prior
-   session left buffered for this SRD.
-3. Approval gate: read the `Status` metadata, pre-fill approved (`ACCEPTED`)
-   vs in-progress (anything else), then show it and ask the user to confirm or
-   override. The answer governs id rules for the whole session — never trust
-   `Status` silently.
-4. Glossary: run the glossary-resolution procedure in
-   [../create/references/srd-procedures.md](../create/references/srd-procedures.md).
+1. Read the whole SRD top to bottom — every mode, however narrow the target.
+   A cross-reference in an unread section is the one the edit breaks.
+2. Probe the delegate buffers with
+   `../create/scripts/probe-buffers.sh <srd> [<srd-id>]`, and invoke a delegate
+   only on a `pending` line. Both hold that a buffer file exists only while
+   records are pending, so the probe answers what invoking two skills answers,
+   and a miss is the usual case. Say nothing about a miss as it happens; the
+   closing manifest carries it. `kb-root: missing` means `srd:kb` will ask
+   where the knowledge base lives.
+3. Approval gate: read `Status` — `ACCEPTED` is approved, anything else
+   in-progress — state which in one clause and go. Never ask the user to
+   confirm it: every id change the gate governs is confirmed again in the
+   loop.
 
 `autofix` runs only steps 1–2: errata never touches ids or terms.
 
+### Glossary (on the first term)
+
+Read the project's glossary memory record at session start — one small file —
+and when the project has none, ask for the path there, beside the gate line: a
+first-run setup question sprung mid-walk is the interruption this skill avoids
+everywhere else. The rest of the procedure in
+[../create/references/srd-procedures.md](../create/references/srd-procedures.md)
+— fingerprint, digest — waits for the first proposal that introduces, renames,
+or rests on a term that could be defined company-wide; hold the digest for the
+session — not at
+session start, which spends a file read, a hash, and maybe a digest synthesis
+on nothing. Resolve it *before* putting the proposal to the user: a term
+proposed against an unresolved digest is a GLO-3 miss. `polish` and
+`autofix` never reach it.
+
 ## Id rules
 
-On an approved SRD the gate governs content, not only ids. STA-4: adding,
-removing, or changing a requirement needs the approving authority's agreement.
-The user's `Y` is not that — it makes the edit the one they want, not one the
-standard permits. So name STA-4 in the proposal and ask whether the authority
-has agreed; without it, leave the edit marked for their ruling, unlanded. The
-decision log records only applied edits and this skill writes no review file,
-so an unlanded edit lives in the closing manifest or nowhere — list each with
-its STA-4 ask.
-Removal is the sharp case: STA-8 keeps the id and strikes the text, so "remove
-GR-4" is never a deletion (STA-7 keeps the number). Meaning-preserving
-editorial change is STA-5 and needs none of this — `polish` is that mode.
-
-The gate then decides what may happen to requirement, scope, and glossary ids:
-
-- In-progress: sub-number a split first — `GR-3` becoming `GR-3a`/`GR-3b` keeps
-  every existing cross-reference working, which is why the authoring guide's
-  own REQ-1 example does it. Renumbering the group is free here and is the
-  right move when sub-numbering cannot express the change: an item crosses
-  groups, or the numbering is already wrong (REQ-2/3/4 collisions and gaps).
-  Update every cross-reference the change touches.
-- Approved: existing ids are frozen. Additions only, via sub-numbering
-  (`GR-1a`, `GR-1b`); never renumber or rename an existing id. A taken suffix
-  moves down the alphabet — splitting `GR-3a` beside an existing `GR-3b` adds
-  `GR-3c`. Never reuse a suffix, a struck-through one included: the id retires
-  with its requirement. If a real fix
-  cannot avoid touching an existing id, try add-only first; if that is
-  impossible, present the conflict and the trade-off and leave it flagged
-  unless the user explicitly approves the id change.
-
-Whenever any id must change, state the change and get explicit approval as part
-of the loop's confirmation. A renumbering pass excludes every comment block from
-the substitution (comment text is verbatim history and may name an id that
-never existed); verify afterwards that no comment line carries a new-scheme id.
+Two invariants hold without reading anything: on an approved SRD existing ids
+are frozen and content changes need STA-4, and any id change is stated and
+approved in the loop's confirmation, never applied quietly. The rest — the
+gate, sub-numbering, removal under STA-8, renumbering and comment blocks — is
+in [references/id-rules.md](references/id-rules.md), read before the first
+proposal on an approved SRD and before any proposal that touches an id.
 
 ## Edit discipline
 
@@ -156,39 +156,50 @@ user's trust in the whole list.
 
 Every mode but `autofix` runs this loop per change:
 
-1. Propose exactly one change: its location/id, the problem (cite the rule id),
-   the before and after text, and a one-line rationale.
+1. Propose exactly one change: its location, the problem (cite the rule id),
+   the before and after text, and a one-line rationale. Name the location the
+   way the user can find it in the file — the requirement, scope, or glossary
+   id, and for prose that has none the line number. Never an ordinal the user
+   would have to count out ("paragraph three"); this holds for what comes next
+   as much as for the proposal itself.
 2. Close the proposal with the choices (Yes / Yes Next / Skip / Edit) — the
    capital letter is the key — and apply only on explicit approval:
    - `Y` (Yes): apply, then stay on the current entry and propose its next
-     issue; advance only once the entry is exhausted. In `feedback` the unit
-     is the review's finding, not the entry, so `Y` proposes the next finding
-     on that entry and stops when the review has no more — never an issue the
-     review did not raise. Applying a review means applying that review.
+     issue; when that entry has no more, say so and stop — `Y` never advances
+     the walk. In `feedback` the unit is the review's finding, not the entry,
+     so `Y` proposes the next finding on that entry and stops when the review
+     has no more — never an issue the review did not raise. Applying a review
+     means applying that review.
    - `YN` (Yes Next): apply and move to the next entry, leaving its remaining
      issues flagged.
-   - `S` (Skip): change nothing; leave the issue flagged.
+   - `S` (Skip): change nothing; leave the issue flagged. Like `Y`, it does not
+     advance the walk, even when it was the entry's last issue.
    - `E` (Edit): apply the user's amended text in place of the proposal.
-   Advance to the next entry only on `YN` or an explicit ask; once an entry is
-   resolved, stop and wait, never walking ahead even for a read-only look.
-   Never batch unrelated changes; never edit without confirmation. Ask one
-   question at a time: never trail a proposal with loose questions or asides;
-   anything held over goes in an `## Open questions` numbered list — one line
-   each, no rationale — so the user answers by number ("1 yes, 2 skip"). That
-   list is terminal output, not a section of the SRD: it belongs to this
+   Advance to the next entry only on `YN` or an explicit ask — never on `Y` or
+   `S`, however little the entry has left; once an entry is resolved, stop and
+   wait, never walking ahead even for a read-only look. Never batch unrelated
+   changes; never edit without confirmation. Ask one question at a time — the
+   confirmation *is* that question. Never widen it into a menu of variants
+   (`E1`/`E2`), never pair it with an open design question or an offer to do
+   something else, and never put the held-over questions to the user as a set.
+   When a proposal has two defensible wordings, pick one and propose it; `E` is
+   how the user takes the other. Anything held over goes in an
+   `## Open questions` numbered list — one line each, no rationale — that you
+   carry silently and draw from one item at a time, in the order the user set.
+   That list is terminal output, not a section of the SRD: it belongs to this
    session, empties with it, and writing it into the document would leave
-   questions behind for the next reader to mistake for content. Carry it
-   forward in the conversation, renumbered from 1 each time you re-show it so
-   answered items leave no holes, until it empties; what is still open at the
-   end goes in the closing manifest.
+   questions behind for the next reader to mistake for content. Show it only
+   when the user asks what is still open, renumbered from 1 each time so
+   answered items leave no holes; what remains at the end goes in the closing
+   manifest.
 3. Re-validate the affected entry and its cross-refs at once against the
    standard, focusing on what the edit can touch: scope coverage (SCO-2/3,
    suspended while the In Scope `--- TODO ---` marker stands), id
    uniqueness/order (REQ-3/4), term use (GLO-3), and any requirement that
    references or is referenced by the edit. Report a problem the fix
-   introduced. When the edit asserts a claim about existing system behavior
-   and a corpus is available, confirm it against the docs and route the
-   outcome per [Documentation corpus](#documentation-corpus).
+   introduced. When the edit asserts a claim about existing system behavior and
+   a corpus is available, confirm it against the docs and route the outcome per
+   [Documentation corpus](#documentation-corpus).
 4. Log the change in `<srd>.decisions.md` before proposing the next one (see
    [Decision log](#decision-log)).
 
@@ -256,7 +267,8 @@ with a confirmation and expects no review file.
    its rule id. Edit nothing yet.
 2. Walk entry by entry in document order — each requirement (`PFX-n`), glossary
    term, and scope item — running the loop for every fix the user approves.
-   Move on only after the current entry is resolved or skipped.
+   Move on only on `YN` or an explicit ask, and never before the current entry
+   is resolved or skipped.
 
 Start point (path + line): resolve the line to the entry or paragraph at or
 nearest it, skip step 1, and begin step 2 there, continuing to the end. The
@@ -304,7 +316,8 @@ Edit one entry the user points to by requirement id (`GR-3a`), quoted text, or
 free description ("the login timeout rule").
 
 1. Locate the target; for quoted text or a description, confirm the match
-   before editing.
+   before editing. With nothing to fix on it, say so and ask what they want
+   changed rather than manufacturing a finding.
 2. Run the loop on that entry.
 3. Report the re-validation result explicitly: whether the edit introduced any
    inconsistency in the entry or its cross-refs.
@@ -314,13 +327,16 @@ free description ("the login timeout rule").
 1. Re-check the whole document against every rule in the standard plus the
    consistency pass in the authoring guide, and report what remains. `autofix`
    skips this step: its fixes are surface-only.
-2. Invoke `srd:kb` to write the facts the session's confirmations attested,
-   and `srd:report-doc-gap` to offer to work the gaps it buffered this
-   session. `srd:kb` asks where the knowledge base lives when no root is on
-   file, which on a first run lands here, just before the manifest. Resolve it
-   at session start instead when the session has facts to bank: a setup
+2. Invoke `srd:kb` to write the facts the session's confirmations attested, and
+   `srd:report-doc-gap` to offer to work the gaps it buffered this session.
+   Draining and writing are different operations, so the start probe gates only
+   the drain — what a *prior* session left — while this is what *this* session
+   produced: invoke each delegate exactly when this session handed it
+   something, and neither when it did not. `srd:kb` asks where the knowledge
+   base lives when no root is on file; the start probe already saw that, so ask
+   for the root at the first confirmation that attests a fact, since a setup
    question between the last edit and the closing report reads as an
-   interruption of the report, and the answer is needed either way.
+   interruption of the report.
 3. Close with the manifest — approved edits, not a re-narration of diffs the
    user already saw:
    - What changed: entry/id, one line each.
@@ -330,7 +346,11 @@ free description ("the login timeout rule").
      unresolved In Scope `--- TODO ---` marker and any non-empty `## TODO`
      section — both block `ACCEPTED`.
    - The path to `<srd>.decisions.md`, whose newest session block is the
-     summary to hand the author.
+     summary to hand the author — omitted when nothing was applied, since the
+     file does not exist.
+   - One start clause: what the probe found, which delegates ran, whether the
+     glossary resolved. A probe that found nothing otherwise looks like one
+     that never ran.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
