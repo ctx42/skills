@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# probe-buffers.sh SRD_PATH [SRD_ID]
+# probe-buffers.sh [SRD_PATH] [SRD_ID]
 #
 # Reports which SRD delegate buffers hold pending records for one SRD, so a
 # skill can invoke `srd:report-doc-gap` and `srd:kb` only when there is
@@ -10,7 +10,8 @@
 # buffer is the usual case and loading a skill to learn it is the single
 # largest waste at session start.
 #
-# SRD_PATH is the SRD's file path (need not exist yet). SRD_ID is the id the
+# SRD_PATH is the SRD's file path (need not exist yet); with none, no per-SRD
+# buffer can be keyed and only the kb-root line is meaningful. SRD_ID is the id the
 # document carries, when it carries one; both buffers are keyed by id once
 # assigned and by path before that, and a buffer opened before assignment may
 # still be path-keyed, so both keys are probed whenever an id is given. The
@@ -30,10 +31,6 @@ set -euo pipefail
 
 srd_path=${1:-}
 srd_id=${2:-}
-if [[ -z $srd_path ]]; then
-  echo "usage: probe-buffers.sh SRD_PATH [SRD_ID]" >&2
-  exit 2
-fi
 
 mem="${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/srd"
 
@@ -80,7 +77,15 @@ normalize() {
   printf '\n'
 }
 
-path_key="path-$(printf '%s' "$(abs_path "$srd_path")" | sha256 | cut -c1-12)"
+# With no SRD yet — a `create` interview before the file is named, or a mode
+# with no SRD at all — there is no per-SRD buffer to key, so only kb-root is
+# reported. Refusing to run would deny the caller the one signal it can still
+# use.
+if [[ -n $srd_path ]]; then
+  path_key="path-$(printf '%s' "$(abs_path "$srd_path")" | sha256 | cut -c1-12)"
+else
+  path_key=""
+fi
 
 report() {
   local name=$1 file=$2
@@ -91,7 +96,11 @@ report() {
   fi
 }
 
-printf 'key-path: %s\n' "$path_key"
+if [[ -n $path_key ]]; then
+  printf 'key-path: %s\n' "$path_key"
+else
+  printf 'key-path: none (no SRD path given)\n'
+fi
 if [[ -n $srd_id ]]; then
   printf 'key-id: %s\n' "$srd_id"
 fi
@@ -100,7 +109,7 @@ for store in docgaps kb; do
   hit=""
   if [[ -n $srd_id && -f "$mem/$store/$srd_id.json" ]]; then
     hit="$mem/$store/$srd_id.json"
-  elif [[ -f "$mem/$store/$path_key.json" ]]; then
+  elif [[ -n $path_key && -f "$mem/$store/$path_key.json" ]]; then
     hit="$mem/$store/$path_key.json"
   fi
   report "$store" "${hit:-/nonexistent}"

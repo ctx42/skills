@@ -106,9 +106,9 @@
       "id": 10,
       "name": "empty-gap-buffer-skips-the-delegate",
       "expected_behavior": [
-        "Probes the gap buffer and invokes `srd:report-doc-gap` neither at the start nor at the close, since no buffer file exists and this run buffered nothing",
-        "Loads no doc-corpus reference: `check` runs no facts-vs-corpus pass",
-        "Re-verifies the open findings only and hunts no new defects, keeping every number",
+        "Echoes the probe result and invokes `srd:report-doc-gap` neither at the start nor at the close — the buffer file is absent, and this run captured nothing to offer",
+        "Runs no facts-vs-corpus pass and says the corpus was unreachable, rather than silently omitting it",
+        "Creates `specs/login.review.md` and writes the three defects with fresh numbers from `#1`",
         "Reaches the first finding judgement without a narrated startup sequence"
       ]
     }

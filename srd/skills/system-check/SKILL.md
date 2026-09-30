@@ -83,7 +83,10 @@ which SRD to check; fall back to the user's prose for free-form input.
    is the usual case. Then resolve the corpus (see
    [Support files](#support-files)). `srd:review` probes the gap buffer at its
    own start too; tell it the probe is done so the user is not offered the same
-   pending gaps twice in one run. With none reachable, skip the
+   pending gaps twice in one run. The probe shows the user nothing, so the
+   clause saying both buffers were checked and were empty is this skill's to
+   write in its own report: a check that ran is otherwise indistinguishable
+   from one that never did. With none reachable, skip the
    system-knowledge layer and run the review layer alone rather than stopping.
 2. Get the review: run `srd:review path/to/srd.md` (default mode) and read the
    file it leaves. That mode never rewrites an existing file — on one that

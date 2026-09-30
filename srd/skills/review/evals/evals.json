@@ -100,8 +100,8 @@
       "skills": [
         "review"
       ],
-      "setup": "No gap buffer file exists for this SRD under `$AGENT_DATA_DIR/ctx42-skills/srd/docgaps/`, and no corpus is reachable. `specs/login.md` has two style defects and one duplicate id.",
-      "query": "/review specs/login.md check",
+      "setup": "No gap buffer file exists for this SRD under `$AGENT_DATA_DIR/ctx42-skills/srd/docgaps/`, and no corpus is reachable. `specs/login.md` has two style defects and one duplicate id, and no `specs/login.review.md` exists yet.",
+      "query": "/review specs/login.md",
       "files": []
     }
   ]

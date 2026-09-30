@@ -36,8 +36,7 @@ mandate is reported, not looped — even when the run entered at it: a feedback
 run starting at a metadata `#2` says so and advances to `#3`. An explicit `#n`
 sets the order for the rest of the run: walk ascending from `n` to the end,
 then come back for the numbers below it, so nothing is dropped and the sequence
-never doubles back mid-run. The user who named a number is reading the file by
-number. It never proposes a Status
+never doubles back mid-run. It never proposes a Status
 transition (flag only a malformed `STA-*` value) and never proposes pushing,
 publishing, or syncing the SRD as a follow-up. Comment blocks are read-only:
 a source of information about the SRD, never edited, answered, or rewritten,
@@ -115,8 +114,8 @@ Otherwise three steps, no questions of its own.
    `../create/scripts/probe-buffers.sh <srd> [<srd-id>]` and invoke a delegate
    only on a `pending` line. A buffer file exists only while records are
    pending, so the probe answers what invoking two skills answers, and a miss
-   is the usual case. Say nothing about a miss as it happens; the closing
-   manifest carries it. `kb-root: missing` means `srd:kb` will ask where the
+   is the usual case. Say nothing about a miss as it happens; the manifest
+   carries it. `kb-root: missing` means `srd:kb` will ask where the
    knowledge base lives.
 3. Approval gate: read `Status` — `ACCEPTED` is approved, anything else
    in-progress — state which in one clause and go. Never ask the user to
@@ -127,16 +126,17 @@ Otherwise three steps, no questions of its own.
 
 ### Glossary (on the first term)
 
-Nothing about the glossary happens at session start: a run that never reaches
-a term must never have asked about one. The whole
-procedure in
+Nothing about the glossary happens at session start: a run that reaches no term
+must never have asked about one. The whole procedure in
 [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
 — memory record, path question on a first run, fingerprint, digest — waits for
-the first proposal that introduces, renames, or rests on a term that could be
-defined company-wide, and lands *before* that proposal reaches the user: a term
-proposed against an unresolved digest is a GLO-3 miss. That path question
-belongs to the proposal, not to the loop's one question. Hold the digest for
-the session; `polish` and `autofix` never reach any of it.
+the first thing that needs a term settled and lands before it: the first
+proposal that introduces, renames or rests on a possibly company-defined term,
+or in `interactive` the step-1 summary, which promises every issue found and so
+owes GLO-3 too. A term put to the user against an unresolved digest is a GLO-3
+miss. That path question belongs to what it precedes, not to the loop's one
+question. Hold the digest for the session; `polish` and `autofix` never reach
+any of it.
 
 ## Id rules
 
@@ -150,7 +150,7 @@ proposal on an approved SRD or any proposal touching an id.
 ## Edit discipline
 
 When listing the issues found before the loop, keep only findings that survive
-scrutiny: a real rule violation, not a preference. Requirements that read as
+scrutiny — a real rule violation, not a preference. Requirements that read as
 overlapping are often independently testable (a disabled control vs a grayed
 one; a length cap vs its truncation format); a scope item covering one
 capability across many surfaces is atomic; a compound term whose parts are in
@@ -180,18 +180,18 @@ Every mode but `autofix` runs this loop per change:
    - `S` (Skip): change nothing; leave the issue flagged. Like `Y`, it does not
      advance the walk, even when it was the entry's last issue.
    - `E` (Edit): apply the user's amended text in place of the proposal.
-   Advance to the next entry only on `YN` or an explicit ask — never on `Y` or
-   `S`, however little the entry has left; once an entry is resolved, stop and
-   wait, never walking ahead even for a read-only look. Never batch unrelated
-   changes; never edit without confirmation. Ask one question at a time — the
-   confirmation *is* that question. Never widen it into a menu of variants
-   (`E1`/`E2`), never pair it with an open design question or an offer to do
-   something else, and never put the held-over questions to the user as a set.
-   When a proposal has two defensible wordings, pick one and propose it; `E` is
-   how the user takes the other. Anything held over goes in an
-   `## Open questions` numbered list — one line each, no rationale — that you
-   carry silently and draw from one item at a time, in the order the user set.
-   That list is terminal output, not a section of the SRD: it belongs to this
+   Advance to the next entry only on `YN` or an explicit ask — never on `Y`,
+   `E` or `S`, however little the entry has left; once an entry is resolved,
+   stop and wait, never walking ahead even for a read-only look. Never batch
+   unrelated changes; never edit without confirmation. Ask one question at a
+   time — the confirmation *is* that question. Never widen it into a menu of
+   variants (`E1`/`E2`), never pair it with an open design question or an offer
+   to do something else, and never put the held-over questions to the user as a
+   set. When a proposal has two defensible wordings, pick one and propose it;
+   `E` is how the user takes the other. Anything held over goes in an `## Open
+   questions` numbered list — one line each, no rationale — that you carry
+   silently and draw from one item at a time, in the order the user set. That
+   list is terminal output, not a section of the SRD: it belongs to this
    session, empties with it, and writing it into the document would leave
    questions behind for the next reader to mistake for content. Show it only
    when the user asks what is still open, renumbered from 1 each time so
@@ -200,17 +200,16 @@ Every mode but `autofix` runs this loop per change:
 3. Re-validate the affected entry and its cross-refs at once against the
    standard, focusing on what the edit can touch: scope coverage (SCO-2/3,
    suspended while the In Scope `--- TODO ---` marker stands), id
-   uniqueness/order (REQ-3/4), term use (GLO-3), and any requirement that
-   references or is referenced by the edit. Report a problem the fix
-   introduced. When the edit asserts a claim about existing system behavior and
-   a corpus is available, confirm it against the docs and route the outcome per
-   [Documentation corpus](#documentation-corpus).
+   uniqueness/order (REQ-3/4), term use (GLO-3), and anything referencing or
+   referenced by the edit. Report a problem the fix introduced. When the edit
+   asserts a claim about existing system behavior and a corpus is available,
+   confirm it against the docs and route the outcome per [Documentation
+   corpus](#documentation-corpus).
 4. Log the change in `<srd>.decisions.md` before proposing the next one (see
    [Decision log](#decision-log)).
 
 Write every edit to the LANG and REQ rules and the authoring guide (US English,
-one term per concept); when an edit restructures sections, follow the
-template's order.
+one term per concept); a restructuring edit follows the template's order.
 
 ## Decision log
 
@@ -349,16 +348,14 @@ free description ("the login timeout rule").
      summary to hand the author — omitted when nothing was applied, since the
      file does not exist.
    - One start clause: what the probe found, which delegates ran, whether the
-     glossary resolved. A probe that found nothing otherwise looks like one
+     glossary resolved — a probe that found nothing otherwise looks like one
      that never ran.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
-output the user can already see.
-
-Every count in the closing manifest — requirements checked, edits applied,
-findings still open, questions carried — is read off the finished file, never
-carried from the work. A run reported checking "all 45 requirements" over a
-section holding 44.
+output the user can already see. Every count in the manifest — requirements
+checked, edits applied, findings open, questions carried — is read off the
+finished file, never carried from the work: a run reported checking "all 45
+requirements" over a section holding 44.
 
 ## Self-learning
 

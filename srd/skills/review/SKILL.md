@@ -210,7 +210,9 @@ in full, so it is not summarized here.
    the same way — errata to
    `## Errata`, the rest to their document section. Bump `updated:`.
 5. Close with the task-oriented line (Modes), then invoke `srd:report-doc-gap`
-   to offer the gaps this run buffered.
+   to offer the gaps this run buffered — and only then: the start probe governs
+   a *prior* session's records, this offer covers what *this* run captured, so
+   a run that captured none invokes nothing here either.
 
 ## walk
 
