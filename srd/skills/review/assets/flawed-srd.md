@@ -1,5 +1,6 @@
-<!-- Eval fixture: deliberately defective. Expected findings:
-     evals/evals.json, scenario "fixture-regression". -->
+<!-- Eval fixture: deliberately defective. Every planted defect is listed in
+     evals/expectations.json, scenario "fixture-regression" — that list is the
+     regression baseline. Plant nothing here without adding its bullet there. -->
 
 # Widget Export
 

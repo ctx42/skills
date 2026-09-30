@@ -32,10 +32,12 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   is present.
 - Terminology consistency: use one term per concept throughout. Do not mix
   synonyms for the same thing (e.g. `MFA` / `2FA` / `two-factor`); pick one and
-  define it once. Qualify overloaded terms ("tag", "metadata", "header",
-  "channel") with what they belong to ("a sound file's `sen.kind` metadata
-  tag"); terseness never excuses a term that resolves differently in another
-  document.
+  define it once. This is the one definition of terminology drift — the
+  consistency pass and the defect class below both spot it, neither redefines
+  it, and a finding against it cites this house addition (`SRD:house`).
+  Qualify overloaded terms ("tag", "metadata", "header", "channel") with what
+  they belong to ("a sound file's `sen.kind` metadata tag"); terseness never
+  excuses a term that resolves differently in another document.
 - Glossary is conditional (STR-10 "terms that need a definition"): never
   require a Glossary section when nothing needs defining. Proper names
   (product or module names, external tools, device models) are not concepts
@@ -69,7 +71,12 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   Never raise a prefix "collision" with the standard as a finding.
 - Template wiki macros are deliberate: the template's `[[TOC]]`, the
   `[[!Status]]` macro, and the `[!INFO]` notice target the wiki the SRD is
-  exported to, not GFM — do not "fix" them to GitHub forms.
+  exported to, not GFM — do not "fix" them to GitHub forms. `[[TOC]]` sitting
+  between the metadata block and the keyword notice does not break STR-8: the
+  macro expands to a generated table of contents, not to document content, so
+  the notice is still the first thing the SRD itself says below the metadata.
+  Never raise that finding against a template-drafted SRD, and never move the
+  macro to answer it.
 - In Scope MAY be deferred: In Scope items derive from the requirements
   (SCO-2), so an SRD MAY leave `### In Scope` holding a single `--- TODO ---`
   marker line while the requirements are still in flux. While the marker stands,
@@ -101,8 +108,9 @@ and confirm:
   only the `--- TODO ---` marker, skip the coverage check — confirm instead that
   the marker still stands alone (In Scope is knowingly pending).
 - Numbering is still unique and in order, with no collisions or large gaps.
-- Each term is used consistently and is still defined (locally or in the company
-  glossary).
+- Each term is used consistently (the terminology-consistency house addition
+  above; a drift finding cites that, not the pass) and is still defined —
+  locally or in the Company Glossary.
 - Draft scaffolds: any `## TODO` section is the last section and well-formed (a
   numbered list); a non-empty `## TODO` or an unresolved In Scope `--- TODO ---`
   marker is flagged as blocking acceptance.
@@ -184,7 +192,7 @@ item to what the requirements actually deliver.
 Two numbered requirements stating the same rule in different words. Keep the
 clearer one; remove or merge the other so a reviewer never has to reconcile them.
 
-### Terminology inconsistency
+### Terminology inconsistency (house: terminology consistency)
 
 Using `MFA`, `2FA`, and `two-factor authentication` interchangeably when the
 feature is specifically one of them. Choose one term, define it, and use it

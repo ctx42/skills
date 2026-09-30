@@ -9,7 +9,18 @@ Operating procedures shared by the SRD skills. These are not rules
 
 The Company Glossary lets an SRD satisfy GLO-3 / STR-10 without redefining terms
 defined elsewhere. Each project has its own glossary — a single Markdown file or
-a directory of Markdown documents. Its path, a content hash, and a
+a directory of Markdown documents.
+
+One name, one document set: **the Company Glossary is the per-project glossary
+this procedure resolves**, and only the terms in its digest satisfy GLO-3 /
+STR-10. The documentation corpus carries glossary documents of its own
+(`ifp-doc/glossary/…`); those are corpus sources, consulted for what a term
+means, and are never the known-term set. A term defined only there is a term
+the SRD must define locally — say so once when it happens ("`Packet (PKT)` is
+defined in `ifp-doc/glossary/main_glossary.md`, which is not the resolved
+glossary; defining it locally"), and take a correction as the path override of
+step 3. Never call a corpus glossary the Company Glossary, and never let a
+corpus definition stand in for a glossary entry. Its path, a content hash, and a
 model-synthesized **digest** of its terms are remembered per project (see
 [Glossary memory](#glossary-memory)), so the digest is rebuilt only when the
 glossary actually changes. Run this before drafting or editing:
@@ -65,12 +76,14 @@ the user signals the requirements are complete or asks to fill In Scope:
 2. Draft one candidate item per capability — a high-level overview of one
    change (SCO-1), each covered by ≥ 1 requirement (SCO-2), none contradicting
    Out of Scope (SCO-3). Phrase each as a deliverable, not a restated
-   requirement. Leave the candidates unnumbered: step 3 may drop or merge any
-   of them, and an `SC-n` shown before that has to be taken back.
+   requirement. Give no candidate an `SC-n`: step 3 may drop or merge any of
+   them, and an `SC-n` shown before that has to be taken back. A positional
+   label to point at one by — "the third", "candidate 3" — carries no id and is
+   fine.
 3. Show the candidate list once, then take them through the calling skill's
    confirm-each loop one at a time: approving keeps a candidate, `E` carries a
    reword — and a merge or a split, which arrive as amended text — and a skip
-   drops it. Nothing is numbered yet, so a drop costs no renumbering.
+   drops it. No `SC-n` is assigned yet, so a drop costs no renumbering.
 4. Replace the `--- TODO ---` marker with the confirmed `SC-n` items, numbered
    from 1 in order. Re-run the In-Scope-coverage check now that the marker is
    gone.

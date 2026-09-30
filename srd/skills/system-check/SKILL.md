@@ -77,10 +77,10 @@ which SRD to check; fall back to the user's prose for free-form input.
 ## review (default)
 
 1. Start: probe the delegate buffers with
-   `../create/scripts/probe-buffers.sh <srd> [<srd-id>]` and invoke a delegate
-   only on a `pending` line — a buffer file exists only while records are
-   pending, so the probe answers what invoking two skills answers, and a miss
-   is the usual case. Then resolve the corpus (see
+   `../create/scripts/probe-buffers.sh <srd>` and invoke a delegate only on a
+   `pending` line — a buffer file exists only while records are pending, so the
+   probe answers what invoking two skills answers, and a miss is the usual
+   case. Then resolve the corpus (see
    [Support files](#support-files)). `srd:review` probes the gap buffer at its
    own start too; tell it the probe is done so the user is not offered the same
    pending gaps twice in one run. The probe shows the user nothing, so the
@@ -107,19 +107,26 @@ which SRD to check; fall back to the user's prose for free-form input.
      runs a facts-vs-corpus pass of its own, so the two layers can land the
      same contradiction twice — merge them into one question rather than asking
      the user the same thing in two voices. The merged question takes a `Qn`
-     like any other; note the review finding it came from in the questions
-     file's own bookkeeping, not in the question's text, which carries no rule
-     ids or finding numbers. Raise a question when the SRD contradicts a documented
-     API rule, service behavior, or glossary term; redefines or conflicts with
-     another SRD; uses a term undefined in the system; or cannot be built
-     without knowing something the system does not pin down ("can't build X
-     without knowing Y").
+     like any other; note the review finding it came from in the question's
+     bookkeeping comment (see [Questions file](#questions-file)), never in the
+     question's text, which carries no rule ids or finding numbers. Raise a
+     question when the SRD contradicts a documented API rule, service behavior,
+     or glossary term; redefines or conflicts with another SRD; uses a term
+     undefined in the system; or cannot be built without knowing something the
+     system does not pin down ("can't build X without knowing Y").
    - Before raising any "is this defined or documented?" question, look it up
      first: `search` the corpus, then `get_doc` the promising hit. Ask only
      when it genuinely is not there or what you found is partial, and then say
      what you found and what it fails to cover; a competent engineer does not
      ask what they could have looked up. When the lookup shows the docs
      themselves at fault, also hand the gap to `srd:report-doc-gap`.
+   - A review finding the lookup disproves — the term the corpus does define,
+     the claim the docs confirm — is not a question and is not dropped either.
+     This skill cannot write `<srd>.review.md`, and only `srd:review`'s `check`
+     mode withdraws, so name the numbers in the closing report with what
+     disproved each and the command that retires them:
+     `srd:review <srd> check #4,7`. Left unsaid, the finding stays open and the
+     next run raises it again.
    - Stale citation: when a knowledge-base page cites a document that no
      `list_docs` id matches, raise it as a question too and hand the repair to
      `srd:kb`. Match the way the corpus reference says: a citation written as a
@@ -173,10 +180,18 @@ walk ends — no questions remain, or the user stops — let `srd:kb` write its
 confirmed facts. With no questions left, the SRD is build-ready from the
 implementer's view.
 
+Close the walk by naming each delegate that ran and what it took —
+`srd:kb: 2 facts`, `srd:report-doc-gap: 1 gap offered` — and leave out the one
+that took nothing. A file a delegate wrote and a file this skill wrote look
+identical afterwards; this line is the only thing that tells them apart.
+
 ## Re-run after an SRD edit
 
 Re-running `/system-check path/to/srd.md` when `<srd>.questions.md` already
-exists is **resume mode**. Step 1 of review still runs; then:
+exists is **resume mode** — including when that file holds `No open questions.`
+and no `Qn`, which says the last walk cleared it. An absent file is the other
+state, "never checked", and takes the full flow. Step 1 of review still runs;
+then:
 
 1. Refresh the review layer: run `srd:review path/to/srd.md` in default mode —
    it re-verifies and resolves what the edit fixed, appends what the edit
@@ -225,7 +240,14 @@ Open questions only. Resolved items are removed; durable facts are banked.
 **Q1** <problem in a sentence, then the one thing to decide — colleague voice>
 
 **Q2** <...>
+<!-- review: #4 -->
 ```
+
+The HTML comment on the line below a question is this file's whole
+bookkeeping: the review findings the question was reframed from or merged with,
+comma-separated. It renders as nothing, which is what keeps finding numbers out
+of the question's own text. A question no review finding stands behind carries
+no comment.
 
 - One focused ask per question: if a requirement raises two concerns, write
   two questions.
@@ -240,6 +262,10 @@ Open questions only. Resolved items are removed; durable facts are banked.
   analysis and the walk order, never the file.
 - Questions are not list items: each begins with its bold `Qn` id, separated by
   one blank line.
+- Emptied, the file stays. Drop every `Qn`, keep the frontmatter, title,
+  `Source:` line and the standing note, and write `No open questions.` where
+  the questions were. A deleted file cannot be told from one nobody ever wrote,
+  and "never checked" and "all answered" are opposite states.
 - Ids are assigned in walk order the first time a question appears and never
   change after: a survivor keeps its number, and a question added on a re-run
   takes the next unused one. The file is therefore ordered by walk priority

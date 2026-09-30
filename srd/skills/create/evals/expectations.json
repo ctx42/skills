@@ -9,7 +9,7 @@
         "Interviews one branch at a time — objective, UI change, in/out of scope, the rules — rather than drafting straight from the one-line idea",
         "Rewrites a vague requirement (\"resets must be secure\") into a verifiable one (\"the system MUST require a reset token that expires after 15 minutes\") per REQ-6",
         "Keeps each requirement atomic per REQ-1",
-        "Produces the sections in the required order with the keyword notice, Status `IN PROGRESS`, and TODO placeholders for Owners, Initiative, and Designs",
+        "Produces the sections in this order — the metadata block, `[[TOC]]`, the RFC 2119 / RFC 8174 keyword notice, `## Introduction`, `## Glossary` (only if a term needs defining), `## Scope` holding `### In Scope` then `### Out of Scope`, `## Requirements` — with Status `IN PROGRESS` and marked TODO placeholders for Owners, Initiative, and Designs",
         "Every count the reply states matches the artifact it describes — the term count equals the terms in the digest, the TODO count equals the marked TODOs in the SRD"
       ]
     },
@@ -53,9 +53,8 @@
       "id": 6,
       "name": "terse-output",
       "expected_behavior": [
-        "The reply is the payload: the file path, the counts, and what is left open. No requirement text quoted back beyond a proposed rewording",
-        "One report after writing: the file path, the requirement groups and counts, and the outstanding human follow-ups",
-        "Does not re-paste the drafted SRD, and does not repeat findings already shown"
+        "One report after writing and nothing before it: the file path, the requirement groups with their counts, the outstanding human follow-ups, and any blocker the user chose to leave standing",
+        "Quotes nothing back that the user can already see — not the drafted SRD, not requirement text beyond a proposed rewording, not a finding already shown in the interview"
       ]
     },
     {
@@ -64,7 +63,7 @@
       "expected_behavior": [
         "Searches the corpus before accepting the claim, and neither silently accepts nor silently corrects it",
         "Hands the unconfirmable claim to `report-doc-gap`, and the confirmed fact to `kb` once the user confirms it in the branch restatement",
-        "Neither hand-off interrupts the interview",
+        "Neither hand-off interrupts the interview: no turn between the claim and the next branch is about the gap or the knowledge base. The restatement is followed by the interview's next question, and a turn asking about banking, filing, or where either delegate writes is the interruption this forbids — a question about the requirement itself is not",
         "Never asks permission to bank the fact — no \"should I record this?\" prompt. Confirming the requirement confirms the fact, and `srd:kb` captures it silently. Ordinary elicitation (\"is three the count today?\") is a requirement question, not a banking prompt, and does not breach this",
         "At the write step, invokes `kb` to write the confirmed fact and `report-doc-gap` to offer the buffered gap",
         "Writes no requirement the interview did not attest: every rule in the SRD traces to something the persona stated, and a behaviour nobody mentioned does not appear because it would round the feature out"

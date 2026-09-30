@@ -80,17 +80,18 @@ Copy this checklist and tick it off:
 - [ ] 1. Interview the user along the SRD spine.
 - [ ] 2. Propose requirement groups and prefixes; get confirmation.
 - [ ] 3. Draft the SRD from the template.
-- [ ] 4. Self-check: auto-fix mechanical issues, collect judgment ones.
+- [ ] 4. Self-check: auto-fix mechanical issues, settle the blockers with the
+      user, report the rest.
 - [ ] 5. Write the `.md` file to a user-named path; run the delegates'
       finish step; report once.
 
 ### 0. Start
 
 Start cheap: the interview is what the user came for. Run
-`scripts/probe-buffers.sh <srd-path> [<srd-id>]` — for a new SRD, the path the
-user named, or none yet, which means there is no per-SRD buffer to drain — and
-invoke a delegate only on a `pending` line. Both hold that a buffer file exists
-only while records are pending, so the probe answers what invoking two skills
+`scripts/probe-buffers.sh <srd-path>` — for a new SRD, the path the user named,
+or none yet, which means there is no per-SRD buffer to drain — and invoke a
+delegate only on a `pending` line. Both hold that a buffer file exists only
+while records are pending, so the probe answers what invoking two skills
 answers, and a miss is the usual case for a document nobody has written yet. A
 delegate that does run shows the user nothing when empty; the clause saying the
 drain ran and found nothing is this skill's to write, in its own report,
@@ -141,8 +142,11 @@ so confirming it confirms both the SRD and the knowledge base:
    defined (link to it) or needing a local Glossary entry.
    `search` the corpus before asking the user to define a term: it may already
    define it, or name the same concept differently (a naming conflict to
-   surface). A definition the user supplies because no glossary carries it
-   goes to `srd:kb`.
+   surface). What the corpus returns is meaning, not coverage — only the
+   resolved Company Glossary satisfies GLO-3, so a term the corpus defines and
+   the digest lacks still needs a local entry
+   ([references/srd-procedures.md](references/srd-procedures.md)). A definition
+   the user supplies because no glossary carries it goes to `srd:kb`.
 
 Do not collect Owners, Initiative links, or Designs links; those are left as
 marked placeholders (the skill fetches no such links). Status is always
@@ -192,8 +196,9 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
 2. Consistency pass: run the pass in
    [references/authoring-guide.md](references/authoring-guide.md), re-reading
    the whole draft top to bottom. Repeat after any fix.
-3. Collect the judgment checks for the step-5 report, each with its rule id and
-   location: missing/placeholder Owners, Initiative, Designs (STR-2/3/5/7; the
+3. Collect the judgment checks, each with its rule id and location — the
+   Quality-Bar blockers among them go to step 4, everything else to the step-5
+   report: missing/placeholder Owners, Initiative, Designs (STR-2/3/5/7; the
    back-links STR-4/6 are external and not reported); intro gaps (STR-9);
    undefined terms (STR-10/GLO-3); style (LANG-1/2/3/5/6/7); non-atomic or
    unverifiable requirements (REQ-1/5/6); glossary discipline (GLO-1/2); scope
@@ -209,6 +214,19 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    Marked placeholders (Initiative, Designs, Owners, an unresolved In Scope
    `--- TODO ---` marker, any non-empty `## TODO` section) are always
    outstanding human follow-ups.
+4. Settle the Quality-Bar blockers before writing: a non-atomic requirement
+   (REQ-1), an unverifiable one (REQ-5/6), an In Scope item no requirement
+   covers (SCO-2 — suspended, and so nothing to walk, while the In Scope
+   `--- TODO ---` marker stands). Each goes back to the user as one more
+   interview question — one at a time, the current text and the proposed fix
+   shown, the same discipline as branch 5 — and the answer is drafted in. An
+   authoring skill does not knowingly write a defect it has already named; the
+   author is still in the room, which is what separates this from an editor
+   working a finished document. "Leave it" is a legitimate answer: it goes to
+   the step-5 report as an accepted gap, not as something the self-check
+   missed. Everything else from step 3 — placeholders, style, intro gaps,
+   terminology drift, an unconfirmed platform claim — is reported, never
+   walked.
 
 Do not mark the draft acceptable: a new SRD is `IN PROGRESS` and acceptance
 (STA-3, Quality Bar) is a human decision.
@@ -218,8 +236,9 @@ Do not mark the draft acceptable: a new SRD is `IN PROGRESS` and acceptance
 Write the SRD as a single `.md` file to the path the user gives (ask if they
 have not said). Invoke `srd:kb` to write the facts the interview confirmed and
 `srd:report-doc-gap` to offer the gaps buffered this session. Then report
-once: the file path, the requirement groups with their counts, and the judgment
-findings and human follow-ups collected in step 4.
+once: the file path, the requirement groups with their counts, the judgment
+findings and human follow-ups collected in step 4, and any blocker the user
+chose to leave standing.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.

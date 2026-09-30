@@ -66,7 +66,8 @@
         "Finds `ACCEPTED` with an unapproved design and an unmet Quality Bar (STA-2 / STA-3)",
         "Finds MUST used in the Introduction (LANG-3)",
         "Collects the British spellings as minor findings under `## Errata`",
-        "This scenario is the repo's regression gate: whenever the shared references under `../create/` change, the finding set here must not shrink. A defect that stops being found is a regression in the references, not a change in the fixture."
+        "Finds the keyword notice citing RFC 8174 alone, with the RFC 2119 reference missing (STR-8), and collects it under `## Errata` as the whole-block substitution the errata allowlist admits",
+        "This scenario is the repo's regression gate, and the bullets above are its committed baseline: every defect listed there must still be found whenever the shared references under `../create/` change. Grade by diffing the review file against that list — a defect that stops being found is a regression in the references, not a change in the fixture, and a defect the fixture plants but no bullet lists is a gap in the baseline, to be added here rather than graded silently."
       ]
     },
     {
@@ -97,7 +98,7 @@
       "name": "facts-vs-corpus-routes-doc-gaps",
       "expected_behavior": [
         "Probes the gap buffer first, finds the prior session's records pending, and invokes `srd:report-doc-gap` to drain them, then searches the corpus for each claim about existing behaviour",
-        "Hands the unconfirmable `GW-2` retry count to `srd:report-doc-gap` as a doc gap — it appears nowhere in `gateway.review.md`",
+        "Routes the unconfirmable `GW-2` retry count to `srd:report-doc-gap` as a doc gap and files no finding against it in `gateway.review.md` — an unconfirmable claim goes to the gap buffer, never into the review file. Quoting the claim inside some other finding is not the test; where the gap went is",
         "Records the contradicted `GW-5` timeout as a `reference` finding in the review file",
         "After the closing tally, offers to work the buffered `GW-2` gap now or later, and never files it silently"
       ]

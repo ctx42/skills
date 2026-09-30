@@ -7,9 +7,9 @@
       "expected_behavior": [
         "Probes both buffers, finds neither holds records, and invokes neither delegate at the start — then states in one clause that both were checked and were empty, since a check that ran is otherwise indistinguishable from one that never did",
         "Runs `srd:review specs/labeling.md` once to create the review file, then reads it — and makes no edit to the SRD",
-        "Writes `specs/labeling.questions.md` merging the reframed review findings with a system question noting that `GR-4` contradicts `ifp-doc/concepts/tags.md`. No question carries a severity tag, a rule id, or a finding number",
-        "Asks the contradiction once, not twice in two voices, even though the review layer's own facts-vs-corpus pass found it too — the link back to the review finding lives in the file's bookkeeping, never in the question's text",
-        "Walks one question at a time and does not advance until the user moves on"
+        "Writes `specs/labeling.questions.md` holding at least two questions — the `GR-4` contradiction with `ifp-doc/concepts/tags.md` and `GR-7`'s unmeasurable \"fast\" reframed from the review — and no question carries a severity tag, a rule id, or a finding number",
+        "Asks the contradiction once, not twice in two voices, even though the review layer's own facts-vs-corpus pass found it too — the link back to the review finding lives in the question's `<!-- review: #n -->` bookkeeping comment, never in its text",
+        "Walks one question at a time: puts the first question and stops, with the second nowhere in that turn, and does not advance until the user moves on"
       ]
     },
     {
@@ -30,7 +30,7 @@
       "expected_behavior": [
         "Searches the corpus and confirms \"Namespace\" is defined before raising it — it does not ask what it could have looked up",
         "Restates the resolution with the tenant fact folded in, and removes the question on confirmation",
-        "Hands the fact to `srd:kb` instead of writing any file itself",
+        "Writes no file itself and closes by naming the delegate that took the fact (`srd:kb: 1 fact`) — the write and the naming are separate claims, and only the second is visible in the transcript",
         "Shows no separate \"bank this?\" prompt — the restatement is the confirmation"
       ]
     },
@@ -40,7 +40,7 @@
       "expected_behavior": [
         "Raises the stale citation as a question alongside the others",
         "Raises only the citation that is genuinely absent: the live source written as a checkout path is not reported stale, since no `list_docs` id equals that string and comparing the raw strings would condemn every source on the page",
-        "Hands the repair to `srd:kb`, which owns knowledge-base files, rather than editing the page here",
+        "Writes no knowledge-base file itself and closes by naming `srd:kb` as the delegate the citation repair went to",
         "Does not silently drop the fact the stale page carried"
       ]
     },
@@ -60,7 +60,7 @@
       "expected_behavior": [
         "Restates both candidates once as a single list and takes the user's confirmation as the gate",
         "Does not restate the SRD in play — `learn` needs no SRD",
-        "Hands the confirmed facts to `srd:kb`, whose coverage check drops the documented one and banks only the tribal one",
+        "Names `srd:kb` as the delegate it handed the confirmed facts to, whose coverage check drops the documented one and banks only the tribal one — the skill writes no page of its own",
         "Reports what was banked and what was dropped as already covered, once, without re-printing the page"
       ]
     }

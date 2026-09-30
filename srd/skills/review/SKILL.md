@@ -91,7 +91,8 @@ Tag each finding:
   `--- TODO ---` marker stands), requirement contradicting Out of Scope
   (SCO-3), undefined term (GLO-3/STR-10), rule hidden in a glossary entry or
   metadata (GLO-1/2), duplicate or out-of-order id (REQ-3/4), missing forward
-  link (STR-2/3/5/7), invalid or over-claimed Status (STA-*), an unresolved
+  link (STR-2/3/5/7), a missing or altered RFC 2119 / RFC 8174 keyword notice
+  (STR-8), invalid or over-claimed Status (STA-*), an unresolved
   draft scaffold — the In Scope `--- TODO ---` marker or a non-empty `## TODO`
   section (house additions).
 - `major` — real defect, does not block: style (LANG-1/2/5/6/7), terminology
@@ -101,7 +102,7 @@ Tag each finding:
   acting on it is misled without the SRD being unacceptable.
 - `minor` — cosmetic: British spelling, spacing, punctuation.
 
-The rows are the common cases — STR-8/9/11-13, STA-4-8 and REQ-2/7/8 have
+The rows are the common cases — STR-9/11-13, STA-4-8 and REQ-2/7/8 have
 none. Place an unlisted rule by what breaking it costs: the Quality Bar
 (blocker), a reader who must still act (major), the eye alone (minor). Say
 which tier and why, so the next run lands in the same place. Never a fourth.
@@ -123,8 +124,9 @@ entry leads and the lower becomes the second tag:
 - `logical` — two rules conflict, a case no rule covers, precedence between
   rules unstated.
 - `coverage` — an In Scope item no requirement covers, a requirement
-  contradicting Out of Scope, or a rule stated only in a Note or the
-  Introduction (SCO-2, SCO-3).
+  contradicting Out of Scope, or a rule stated where rules do not live: a
+  glossary entry, the metadata, a Note, the Introduction (SCO-2, SCO-3,
+  GLO-1/2).
 - `reference` — a link, ticket id, or claim about the live system that is
   wrong or stale. The standard forbids no such error, so this finding cites
   evidence where others cite a rule: the corpus doc id and heading that
@@ -136,7 +138,9 @@ entry leads and the lower becomes the second tag:
   inside a rule, a rule stating appearance instead of behavior (REQ-1, REQ-7,
   LANG-5, SCO-1).
 - `terminology` — one concept under many names, an undefined term, casing that
-  drifts from the glossary (GLO-1, GLO-2, GLO-3).
+  drifts from the glossary (GLO-3). A rule *hidden* in a glossary entry is
+  `coverage`, not this: the defect is a requirement in the wrong place, not a
+  word in the wrong form.
 - `linguistic` — grammar, spelling, a missing word, the wrong subject or
   voice, a misplaced or lowercase normative keyword (LANG-1, LANG-2, LANG-3,
   LANG-4, LANG-6).
@@ -188,12 +192,11 @@ in full, so it is not summarized here.
 
 ## review (default)
 
-1. Probe the gap buffer with
-   `../create/scripts/probe-buffers.sh <srd> [<srd-id>]`; on a `pending`
-   `docgaps` line invoke `srd:report-doc-gap` to drain what a prior session
-   left unfiled, and otherwise invoke nothing — a buffer file exists only while
-   records are pending, and a miss is the usual case. Read the entire SRD top
-   to bottom.
+1. Probe the gap buffer with `../create/scripts/probe-buffers.sh <srd>`; on a
+   `pending` `docgaps` line invoke `srd:report-doc-gap` to drain what a prior
+   session left unfiled, and otherwise invoke nothing — a buffer file exists
+   only while records are pending, and a miss is the usual case. Read the
+   entire SRD top to bottom.
 2. Check it against every rule in
    [../create/references/srd-standard.md](../create/references/srd-standard.md),
    in document-section order, including the consistency pass and the house
@@ -208,7 +211,9 @@ in full, so it is not summarized here.
    document order (Metadata → Introduction → Glossary → Scope → Requirements,
    and by position within each), so two runs over the same defects number them
    the same way — errata to
-   `## Errata`, the rest to their document section. Bump `updated:`.
+   `## Errata`, the rest to their document section. Bump `updated:` only if
+   something else in the file changed (review-file.md): a pass that resolves
+   nothing and appends nothing writes nothing.
 5. Close with the task-oriented line (Modes), then invoke `srd:report-doc-gap`
    to offer the gaps this run buffered — and only then: the start probe governs
    a *prior* session's records, this offer covers what *this* run captured, so
@@ -225,14 +230,16 @@ in document order. For each section:
 3. Wait for the user to confirm which to keep (all, some, none).
 4. Append only confirmed findings to the review file with fresh numbers,
    written as author-facing guidance. Create the file before the first write;
-   bump `updated:` on each.
+   bump `updated:` on each write, and a section where the user confirmed
+   nothing produces no write at all.
 5. Move on only after the user confirms or skips.
 
 After the last section, close as in review step 5.
 
 ## check
 
-Re-verify only — hunt no new defects. Keep every number; bump `updated:`.
+Re-verify only — hunt no new defects. Keep every number; bump `updated:` only
+if something else in the file changed (review-file.md).
 
 Trailing finding numbers scope the pass to those findings; the rest stay
 untouched. Accept them comma- or space-separated, `#` optional — `check #4,6`,
@@ -248,8 +255,15 @@ open finding.
 2. Withdrawal is check-only: a finding that proves invalid (mistaken, the
    author justified the text, or it cites a rule absent from the standard such
    as a defunct `MD-*`) moves to `## Withdrawn` with a reason. Never carry a
-   non-enforceable finding open. No other mode withdraws.
-3. Report a short status table: number, current state, assessment.
+   non-enforceable finding open. No other mode withdraws — which is why this
+   mode is where another skill's invalidity report lands: `srd:system-check`
+   cannot write the review file, so it names the numbers its corpus lookups
+   disproved and the user runs `check #n…` over them. Re-verify such a number
+   like any other and withdraw it on the evidence, never on the report alone.
+3. Close with both, in this order: the status table — number, current state,
+   assessment — then the task-oriented line (Modes) beneath it. The table says
+   what this pass did to each finding; the line says where the SRD now stands.
+   Neither replaces the other.
 
 ## errata
 
@@ -275,7 +289,9 @@ It still edits only the review file.
    every part qualifies, the original number goes with the first substitution.
    Report each split (the defects were already recorded, so this is not
    hunting).
-2. Leave every other finding untouched; the pass is idempotent.
+2. Leave every other finding untouched, and drop any document section the move
+   left with no open findings — `review-file.md` omits an empty section, and a
+   heading left standing would move on the next run. The pass is idempotent.
 3. If the review file does not exist, fall through to a normal review.
 4. Report which numbers moved ("moved #4, #6, #9 to Errata"); say so when none
    moved.
@@ -291,10 +307,16 @@ Emit plain text for an email or ticket — no file write:
   `#4 GR-2: "behaviour" should read "behavior"`.
 - One bullet per open finding, blank-line separated. Keep the finding number
   and the SRD's own requirement id (`#7 GR-3a:`), then a one-line
-  problem-and-fix. Drop the checkbox, the severity tag, the category tag, and
-  the rule-id citation. No bold. One bullet is one paragraph — it wraps like
-  any prose, and "no multi-line bullets" means no sub-bullets and no blank
-  line inside a bullet, not a bullet that fits on one physical line.
+  problem-and-fix. A finding against text with no id of its own — a metadata
+  field, an Introduction sentence — is anchored the way the review file anchors
+  it: the section name, and a short quote when the section holds more than one
+  candidate. `#2 Metadata (Owners): only one owner is listed; add a secondary
+  owner.` `#5 Introduction ("the system handles all remaining cases"): states a
+  rule outside Requirements; move it or drop it.` Drop the checkbox, the
+  severity tag, the category tag, and the rule-id citation. No bold. One
+  bullet is one paragraph — it wraps like any prose, and "no multi-line
+  bullets" means no sub-bullets and no blank line inside a bullet, not a
+  bullet that fits on one physical line.
 - Open findings only — omit Resolved and Withdrawn.
 
 ## Self-learning

@@ -109,7 +109,7 @@
         "report-doc-gap",
         "kb"
       ],
-      "setup": "The `srd-doc` corpus is reachable. The user wants `GR-2` to say the gateway retries a failed token check three times; the retry count appears in no document.",
+      "setup": "The `srd-doc` corpus is reachable. The user wants `GR-2` to say the gateway retries a failed token check three times; the retry count appears in no document. The user approves the proposal with `YN`.",
       "query": "/edit specs/login.md GR-2",
       "files": []
     },

@@ -42,7 +42,10 @@ and `SCO`; never cite a rule absent from
 [../../create/references/srd-standard.md](../../create/references/srd-standard.md)
 (e.g. a defunct `MD-*`). A consistency-pass finding cites `(SRD:consistency)`
 and sits under the section where the conflict surfaces; a house-addition
-finding (US English, draft scaffolds) cites `(SRD:house)`. A `reference`
+finding (US English, draft scaffolds, terminology drift) cites `(SRD:house)`.
+When both could fit — the consistency pass surfaced it, a house addition
+defines it — cite the house addition: the rule that defines the defect outranks
+the pass that spotted it, so terminology drift is always `(SRD:house)`. A `reference`
 finding cites its evidence in the same slot and the same shape —
 `(SRD:ref ifp-doc/formats/x.md#heading)` for a corpus contradiction,
 `(SRD:ref <the dead link>)` for a broken pointer — so every finding closes with
@@ -112,8 +115,13 @@ one blank line after a section heading before its first finding.
 ## Frontmatter and worked example
 
 The metadata is YAML frontmatter with lowercase keys; `prepared` and `updated`
-carry a date and time. Include `cfsync-plugin: ignore-push` verbatim so the
-Confluence sync never pushes this generated artifact.
+carry a date and time. `updated:` moves only when something else in the file
+moved with it: a mode that resolves nothing, appends nothing, and re-sorts
+nothing writes no bytes at all, so a second run over an unchanged SRD leaves a
+file byte-identical to the first run's. This governs every mode that writes the
+file; none bumps the timestamp unconditionally. Include
+`cfsync-plugin: ignore-push` verbatim so the Confluence sync never pushes this
+generated artifact.
 
 ```
 ---

@@ -20,6 +20,11 @@ author-facing account of what changed and why, which a diff cannot carry.
   clears mid-flow must lose nothing.
 - Accumulate: one file per SRD, `##` session blocks headed by the date, newest
   first. Never rewrite or prune an earlier block.
+- One `###` heading per section per session: a later entry for a section this
+  session already wrote under appends to that block, it never opens a second
+  one. A new `###` heading only for a section the session has not touched yet.
+  Incremental writing is what makes this explicit — the entries arrive one at a
+  time, and the block they join is the one already on the page.
 - Record the entry/id, the change in prose (not a diff), and the reason: the
   user's rationale when they gave one, the proposal's when it stood unamended.
 - Rephrase the user's words into clean prose — fix typos, expand shorthand,
@@ -53,4 +58,15 @@ DET-14 was removed. Retention and data accessibility are not part of this SRD,
 so the requirement and its open "retention period to be confirmed" note went
 with it. DET-13 still covers keeping historical measurements available after a
 channel is reassigned.
+
+DET-9 now names the sample rate in hertz. "High resolution" was not something
+QA could test for, and the rate is the thing the page actually promises.
+
+### General
+
+The British spellings in the Introduction were changed to US English.
 ````
+
+The second Details page entry was written later in the same session and joined
+the heading already there; General is a second heading because the session had
+not written under it before.

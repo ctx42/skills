@@ -8,7 +8,7 @@
         "system-check",
         "review"
       ],
-      "setup": "`specs/labeling.md` has `GR-4` requiring Tag names to be written as a slash-separated path. No `specs/labeling.review.md` exists. The corpus contradicts it: `ifp-doc/concepts/tags.md` states that Tag names are a comma-separated series of named nodes. The doc-gap and knowledge-base buffers for this SRD are empty.",
+      "setup": "`specs/labeling.md` has `GR-4` requiring Tag names to be written as a slash-separated path, and `GR-7` requiring Tag lookups to be \"fast\" with no criterion. No `specs/labeling.review.md` exists. The corpus contradicts `GR-4`: `ifp-doc/concepts/tags.md` states that Tag names are a comma-separated series of named nodes. The doc-gap and knowledge-base buffers for this SRD are empty.",
       "query": "/system-check specs/labeling.md",
       "files": []
     },

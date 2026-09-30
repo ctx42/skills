@@ -14,7 +14,10 @@
 # buffer can be keyed and only the kb-root line is meaningful. SRD_ID is the id the
 # document carries, when it carries one; both buffers are keyed by id once
 # assigned and by path before that, and a buffer opened before assignment may
-# still be path-keyed, so both keys are probed whenever an id is given. The
+# still be path-keyed, so both keys are probed whenever an id is given. The SRD
+# skills pass none: the SRD template has no id field, so documents in this
+# project are path-keyed throughout, and the argument is for a caller holding an
+# id from elsewhere. The
 # path key is "path-" plus the first 12 hex characters of the SHA-256 of the
 # absolute path — the derivation both delegates specify; deriving it any other
 # way probes a file neither of them wrote.

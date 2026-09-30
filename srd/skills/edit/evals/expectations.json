@@ -56,7 +56,7 @@
       "name": "generate-in-scope-on-signal",
       "expected_behavior": [
         "Before the signal, never flags SCO-2 against the marker and never fabricates scope items",
-        "On the signal, derives candidates from the requirement groups and presents them unnumbered; `SC-1…n` are assigned only as the confirmed set replaces the marker, so a dropped or merged candidate renumbers nothing",
+        "On the signal, derives candidates from the requirement groups and gives none of them an `SC-n`; a positional label (\"candidate 3\") is fine. `SC-1…n` are assigned only as the confirmed set replaces the marker, so a dropped or merged candidate renumbers nothing",
         "Walks the candidates point by point for the user to keep, reword, merge, split, or drop",
         "Replaces the marker with the confirmed items and re-runs the SCO-2/3 coverage check"
       ]
@@ -108,7 +108,7 @@
       "expected_behavior": [
         "Searches the corpus before accepting the edit, and the record it hands over names the queries tried — or says the corpus was unreachable, rather than leaving the attempt unstated",
         "Buffers the gap with `srd:report-doc-gap` silently — no interruption and no grilling mid-edit",
-        "States the retry count as a fact inside the proposal, so the user's confirmation — whichever key they use — attests it and `srd:kb` receives it",
+        "States the retry count as a fact inside the proposal, so the user's `YN` attests it and `srd:kb` receives it — the fact is in front of the user when the key is pressed, not looked up afterwards",
         "Asks no separate \"bank this?\" question",
         "Hands the unconfirmable claim to `srd:report-doc-gap` and the attested fact to `srd:kb`, and neither interrupts the edit in progress"
       ]
@@ -187,7 +187,7 @@
       "id": 19,
       "name": "feedback-without-a-review-file",
       "expected_behavior": [
-        "Says the review file is absent and stops: `#n` names a finding only a review file can carry, and the skill never writes one",
+        "Says the review file is absent and stops: `#n` names a finding only a review file can carry",
         "Invents no findings and proposes no edit of its own, even though the SRD has real defects",
         "Leaves `specs/login.md` unchanged and writes no decision log",
         "Says it in one or two lines naming the missing file, and reports nothing about its own start — no gate line, no probe result, no closing manifest",

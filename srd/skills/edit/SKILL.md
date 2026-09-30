@@ -63,10 +63,11 @@ user.**
 - [../create/references/authoring-guide.md](../create/references/authoring-guide.md)
   (eager) — house extensions (US English, sub-numbering, one term per concept,
   the consistency pass) and the Bad→Good defect classes to fix toward.
-- [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
-  (on-demand: the first edit that asserts something about existing system
-  behavior) — how to reach the documentation corpus, how its sources rank, and
-  where an unconfirmed or undocumented fact goes.
+- [../create/references/doc-corpus.md](../create/references/doc-corpus.md) and
+  [references/corpus-edits.md](references/corpus-edits.md) (on-demand: the
+  first edit that asserts something about existing system behavior) — how to
+  reach the corpus and where an unconfirmed fact goes, and when this skill
+  looks, what it states in the proposal, and what the confirmation attests.
 - [../review/references/review-file.md](../review/references/review-file.md)
   (on-demand: feedback, autofix) — how `<srd>.review.md` is numbered, cited and
   laid out. Never infer the shape.
@@ -88,17 +89,11 @@ user.**
 
 Procedure, trust, and where an outcome goes:
 [../create/references/doc-corpus.md](../create/references/doc-corpus.md). When
-a new or changed requirement asserts something about existing system behavior,
-`search` the corpus before accepting the edit; absent a corpus, edit offline. A
-figure the SRD *sets* needs no lookup; one it *reports* does.
-Both delegates are probed at session start (see [Session
-start](#session-start-every-mode)) and invoked at session end. A platform fact
-is attested through the edit-discipline loop's confirmation: a proposal resting
-on it states that fact, so `Y`/`YN`/`E` attests it and `S` withholds it;
-`srd:kb` may only sharpen a fact the edit already put in play. A deferred
-question goes to the knowledge base's open-questions list through `srd:kb`, not
-to this skill's `## Open questions`, which tracks questions about this SRD and
-empties with the session.
+*this skill* consults it — the lookup before the proposal, the
+set-versus-reported reading, what a confirmation attests, where a deferred
+platform question goes — is in
+[references/corpus-edits.md](references/corpus-edits.md). Absent a corpus, edit
+offline.
 
 ## Session start (every mode)
 
@@ -110,12 +105,10 @@ Otherwise three steps, no questions of its own.
 
 1. Read the whole SRD top to bottom — every mode, however narrow the target: a
    cross-reference in an unread section is the one the edit breaks.
-2. Probe the delegate buffers with
-   `../create/scripts/probe-buffers.sh <srd> [<srd-id>]` and invoke a delegate
-   only on a `pending` line. A buffer file exists only while records are
-   pending, so the probe answers what invoking two skills answers, and a miss
-   is the usual case. Say nothing about a miss as it happens; the manifest
-   carries it. `kb-root: missing` means `srd:kb` will ask where the
+2. Probe the delegate buffers with `../create/scripts/probe-buffers.sh <srd>`
+   and invoke a delegate only on a `pending` line — a miss is the usual case
+   and costs nothing to skip. Say nothing about a miss as it happens; the
+   manifest carries it. `kb-root: missing` means `srd:kb` will ask where the
    knowledge base lives.
 3. Approval gate: read `Status` — `ACCEPTED` is approved, anything else
    in-progress — state which in one clause and go. Never ask the user to
@@ -124,7 +117,7 @@ Otherwise three steps, no questions of its own.
 
 `autofix` runs only steps 1–2: errata never touches ids or terms.
 
-### Glossary (on the first term)
+### Setup questions (on the first term, one per turn)
 
 Nothing about the glossary happens at session start: a run that reaches no term
 must never have asked about one. The whole procedure in
@@ -134,9 +127,16 @@ the first thing that needs a term settled and lands before it: the first
 proposal that introduces, renames or rests on a possibly company-defined term,
 or in `interactive` the step-1 summary, which promises every issue found and so
 owes GLO-3 too. A term put to the user against an unresolved digest is a GLO-3
-miss. That path question belongs to what it precedes, not to the loop's one
-question. Hold the digest for the session; `polish` and `autofix` never reach
-any of it.
+miss. Hold the digest for the session; `polish` and `autofix` never reach any
+of it.
+
+That path question and the one `srd:kb` asks when `kb-root` is missing are the
+only questions outside the loop, and at most one of them reaches the user per
+turn. Each belongs to what it precedes — the path to the proposal that needs
+the term, the kb root to the first confirmation that attests a fact — and
+neither shares a turn with the other or with a confirmation. Both due at once:
+the path goes first, and the kb root waits for the next attesting
+confirmation.
 
 ## Id rules
 
@@ -160,11 +160,14 @@ user's trust in the whole list.
 Every mode but `autofix` runs this loop per change:
 
 1. Propose exactly one change: its location, the problem (cite the rule id),
-   the before and after text, and a one-line rationale. Name the location the
-   way the user can find it in the file — the requirement, scope, or glossary
-   id, and for prose that has none the line number. Never an ordinal the user
-   would have to count out ("paragraph three"); this holds for what comes next
-   as much as for the proposal itself.
+   the before and after text, and a one-line rationale. A change asserting
+   existing system behavior gets its corpus lookup here, before the proposal is
+   put, and the proposal states what it found
+   ([references/corpus-edits.md](references/corpus-edits.md)). Name the
+   location the way the user can find it in the file — the requirement, scope,
+   or glossary id, and for prose that has none the line number. Never an
+   ordinal the user would have to count out ("paragraph three"); this holds for
+   what comes next as much as for the proposal itself.
 2. Close the proposal with the choices (Yes / Yes Next / Skip / Edit) — the
    capital letter is the key — and apply only on explicit approval:
    - `Y` (Yes): apply, then stay on the current entry and propose its next
@@ -197,14 +200,12 @@ Every mode but `autofix` runs this loop per change:
    when the user asks what is still open, renumbered from 1 each time so
    answered items leave no holes; what remains at the end goes in the closing
    manifest.
-3. Re-validate the affected entry and its cross-refs at once against the
-   standard, focusing on what the edit can touch: scope coverage (SCO-2/3,
-   suspended while the In Scope `--- TODO ---` marker stands), id
-   uniqueness/order (REQ-3/4), term use (GLO-3), and anything referencing or
-   referenced by the edit. Report a problem the fix introduced. When the edit
-   asserts a claim about existing system behavior and a corpus is available,
-   confirm it against the docs and route the outcome per [Documentation
-   corpus](#documentation-corpus).
+3. Re-validate what the applied edit touched, against the standard: scope
+   coverage (SCO-2/3, suspended while the In Scope `--- TODO ---` marker
+   stands), id uniqueness/order (REQ-3/4), term use (GLO-3), and anything
+   referencing or referenced by the edit. Report a problem the fix introduced.
+   No corpus lookup happens here: step 1 already did it
+   ([references/corpus-edits.md](references/corpus-edits.md)).
 4. Log the change in `<srd>.decisions.md` before proposing the next one (see
    [Decision log](#decision-log)).
 
@@ -227,19 +228,15 @@ block `ACCEPTED` and are reported as follow-ups at session end.
 - In Scope `--- TODO ---` marker: while `### In Scope` holds only this marker,
   In Scope is knowingly pending — suppress every SCO-2 / In-Scope-coverage
   complaint (issue summary, re-validation, consistency pass) and do not
-  fabricate `SC-n` items. Resolve it only through the procedure below, taking
-  the template's instruction comment above it along: that comment is scaffold,
-  and the read-only rule protects the author's comments, not the template's
-  directions to them.
+  fabricate `SC-n` items.
 - `## TODO` section: a numbered list of open issues the human must return to,
   kept as the document's last section.
 
-### The two procedures
-
 On "Add X to TODO", or on the user's signal that the requirements are complete
 (or an ask to fill In Scope), follow
-[references/draft-scaffolds.md](references/draft-scaffolds.md). Never trigger
-the In Scope derivation on your own.
+[references/draft-scaffolds.md](references/draft-scaffolds.md), which carries
+both procedures and what each may touch. Never trigger the In Scope derivation
+on your own.
 
 ## Modes
 
@@ -327,16 +324,13 @@ free description ("the login timeout rule").
 ## Session end (every mode)
 
 1. Re-check the whole document against every rule in the standard plus the
-   consistency pass in the authoring guide, and report what remains. `autofix`
-   skips this step: its fixes are surface-only.
+   consistency pass in the authoring guide, and report what remains.
 2. Invoke `srd:kb` to write the facts the session's confirmations attested, and
    `srd:report-doc-gap` to offer to work the gaps it buffered this session.
    The start probe gates only the drain — what a *prior* session left; this is
    what *this* session produced, so invoke each delegate exactly when this
-   session handed it something. `srd:kb` asks where the knowledge base lives
-   when no root is on file; the probe already saw that, so ask at the first
-   confirmation that attests a fact rather than between the last edit and the
-   closing report.
+   session handed it something. `srd:kb`'s kb-root question is not asked here:
+   it landed at the first attesting confirmation (Setup questions).
 3. Close with the manifest — approved edits, not a re-narration of diffs the
    user already saw:
    - What changed: entry/id, one line each.
@@ -350,6 +344,12 @@ free description ("the login timeout rule").
    - One start clause: what the probe found, which delegates ran, whether the
      glossary resolved — a probe that found nothing otherwise looks like one
      that never ran.
+
+`autofix`'s exceptions are listed here and nowhere else: it skips step 1
+(surface-only fixes) and invokes no delegate in step 2 (it attests no fact and
+buffers no gap; a prior session's drain ran at session start). It owes step 3's
+manifest like every mode, plus what
+[references/autofix.md](references/autofix.md) step 8 adds.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. Every count in the manifest — requirements

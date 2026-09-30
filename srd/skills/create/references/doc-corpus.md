@@ -82,13 +82,19 @@ starts, where they surface what a prior session left unfiled or unwritten. A
 buffer file exists only while records are pending, so a calling skill probes
 for one (`../scripts/probe-buffers.sh`) and invokes a delegate only when it has
 something to drain: an absent buffer drains to nothing, and loading a skill to
-learn that is the largest avoidable cost at session start. When
-the calling skill finishes, `srd:kb` writes its confirmed facts and
-`srd:report-doc-gap` offers to work the gaps buffered this session. `review`
-invokes only `srd:report-doc-gap`: a read-only review confirms no platform fact
-with the user. The user
-must never experience a second track beside the skill's own work: no
+learn that is the largest avoidable cost at session start. When the calling
+skill finishes, `srd:kb` writes its confirmed facts and `srd:report-doc-gap`
+offers to work the gaps buffered this session. `review` invokes only
+`srd:report-doc-gap`: a read-only review confirms no platform fact with the
+user. The user must never experience a second track beside the skill's own
+work: no
 knowledge-base phase, no separate questions, no "bank this?" prompt.
 Confirmation of a platform fact rides on the calling skill's own confirmation
 step, and `srd:kb` may ask only to deepen a subject that step already opened,
 never to open a new one.
+
+A buffer is keyed by the SRD's path. The SRD template carries no id field and
+no skill assigns one, so nothing in this project is id-keyed: pass the probe
+the path and nothing else, and never invent an id to key by. The script's
+optional `SRD_ID` is for a caller that already holds an id from somewhere else
+— a ticketing system, another repository — and wants both keys probed.

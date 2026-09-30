@@ -14,8 +14,12 @@ confirmation: skip the loop, renumber nothing else, report only the line added.
 ## Generate In Scope (on the user's signal)
 
 Only when the marker is present and the user signals the requirements are
-complete (or asks to fill In Scope): run the In Scope derivation procedure in
+complete (or asks to fill In Scope). Take the template's instruction comment
+above the marker along when the marker goes: that comment is scaffold, and the
+read-only rule protects the author's comments, not the template's directions to
+them. Run the In Scope derivation procedure in
 [../../create/references/srd-procedures.md](../../create/references/srd-procedures.md),
-walking its unnumbered candidates through the loop; that file carries when the
+walking its candidates — none of them yet carrying an `SC-n` — through the
+loop; that file carries when the
 `SC-n` numbers are assigned and the re-check that follows. Never trigger this
 on your own.

@@ -7,7 +7,7 @@
       "skills": [
         "review"
       ],
-      "setup": "`specs/login.md`: `GR-3a` reads \"The system SHALL validate the token and log the attempt\", one `In Scope` item has no requirement covering it, and one requirement spells a word in British English.",
+      "setup": "`specs/login.md`: `GR-3a` reads \"The system SHALL validate the token and log the attempt\", one `In Scope` item has no requirement covering it, and `GR-6` spells `behaviour` where US English wants `behavior`.",
       "query": "/review specs/login.md",
       "files": []
     },
