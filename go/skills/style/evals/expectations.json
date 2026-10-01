@@ -61,18 +61,10 @@
       "id": 7,
       "name": "broad-target-auto-plan-first",
       "expected_behavior": [
-        "Switches to plan-first: proposes the `max_issues` and `depth` defaults and the package list, and stops without checking",
-        "Skips that prompt when the invocation already carries `packages=a,b` or `max_issues=N`",
-        "Past the approval, fans out one subagent per package, each checking the same rule set and reporting which rules it checked",
-        "Gives workers no share of `max_issues` — they report everything and the cap applies once at the merge",
-        "Folds by rule id before cutting: the godoc rule broken in all twelve packages is one finding listing twelve, not twelve findings",
-        "The rule broken everywhere survives the cap, rather than being evicted by two offenses repeated twelve times apiece",
-        "Every worker reports a given rule under one id and one severity: the parent pinned the id list before dispatch, so no rule comes back in two spellings and none is reconciled after the fact",
-        "Reports the raw total as the sum of the worker reports — add the twelve figures up and the reported total equals them, rather than being carried from the plan or from the planted count — and says how many went unreported after folding and cutting",
-        "Runs the pick step after the plan is approved: the approval agreed the budget, not the fixes, so the run still asks which offenses to apply and edits no file until told which",
-        "Derives every id by the documented steps, negations included — a rule written `No work in init()` comes back as `no-work-init`, never `work-init`, and a dotted identifier contributes only the part before its dot",
-        "Finds the missing blank line between two `--- Given ---` topic groups in every package that has it, not in some of them — identical code graded identically",
-        "Flags no blank-line offense for an `assert.NoError` sitting next to the `assert.Equal` that checks the same call's result: one `--- When ---` call's returns are one subject"
+        "Switches to plan-first on its own: the target is broad and the invocation carries no budget, so it proposes rather than checking",
+        "The proposal names the `max_issues` and `depth` defaults it would use and the packages in scope",
+        "Stops there and waits: no package is checked, no offense list is produced, no file is edited",
+        "Presents no findings alongside the proposal — plan-first is propose-then-stop, not check-everything-then-present, which would have spent the run before the budget was agreed"
       ]
     },
     {
@@ -101,6 +93,26 @@
         "Gives the same offense the same severity in all three packages, decided from the rubric rather than per-package judgement",
         "Gives the same offense the same rule id in all three packages, taken from the `rules.md` key rather than coined per package",
         "Puts the missing exported godoc at Blocker and the receiver naming at Should-fix, per the rubric"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "fanout-folds-then-caps",
+      "expected_behavior": [
+        "Does not stop for a plan: the invocation already carries `max_issues=N`, so the budget needs no proposing and the run proceeds to check",
+        "Fans out one subagent per package, each checking the same pinned rule set",
+        "Gives workers no share of `max_issues` — they report everything and the cap applies once at the merge",
+        "Folds by rule id before cutting: the godoc rule broken in all twelve packages is one finding listing twelve, not twelve findings",
+        "The rule broken everywhere survives the cap, rather than being evicted by two offenses repeated twelve times apiece",
+        "The merged report carries each rule under exactly one id and one severity across all twelve packages — no rule appearing in two spellings or two tiers, and no note reconciling them at the end",
+        "Reports the raw total as the sum of the worker reports plus any adjustment the merge made, each adjustment itemised — add the twelve figures and the itemised adjustments up and the reported total equals them, rather than being carried from the plan or from the planted count — and says how many went unreported after folding and cutting",
+        "Still runs the pick step: a budget supplied on the invocation agreed the budget, not the fixes, so the run asks which offenses to apply and edits no file until told which",
+        "Derives every id by the documented steps, negations included — a rule written `No work in init()` comes back as `no-work-init`, never `work-init`, and a dotted identifier contributes only the part before its dot",
+        "The final report grades identical code identically: across the packages that differ only in their package name, every rule it reports on one it reports on all, with no rule reported in a minority of them — the missing blank line between two `--- Given ---` topic groups among them. Graded on the report the user sees, not on the worker reports",
+        "Resolves a split before reporting it: where the worker reports flag a rule in some of the identical packages and not others, or its sites prescribe opposing fixes, the run shows a re-check of the disagreeing packages — what it searched for and what it found — before the report, and the report carries the reconciled count rather than the raw spread. Passes trivially when the worker reports agree",
+        "No folded finding prescribes inserting what another of its own sites prescribes deleting",
+        "Flags no blank-line offense for an `assert.NoError` sitting next to the `assert.Equal` that checks the same call's result: one `--- When ---` call's returns are one subject",
+        "Every offense quotes the source text that triggered it, so a reader can tell a located offense from a pattern-matched one"
       ]
     }
   ]
