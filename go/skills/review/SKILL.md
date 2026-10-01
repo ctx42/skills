@@ -109,9 +109,9 @@ coherently. A module of three small packages is `./...` and still not broad.
 
    One defect can be both. A `%v` wrap is a style offense and, where it breaks
    an error chain a caller unwraps, a correctness bug. Report it once, under
-   correctness, and name the style rule it also breaks — a reader counting
-   blockers should not meet the same line twice, and correctness is the
-   severity that governs the fix.
+   correctness, with the higher of its two grades, and name the style rule it
+   also breaks — a reader counting blockers should not meet the same line
+   twice.
 3. Review each file for what style does not cover, in this order:
    - Correctness: bugs, wrong logic, nil/bounds, ignored errors, data races.
    - Edge cases: empty/large/concurrent inputs and every error path.
@@ -156,7 +156,20 @@ coherently. A module of three small packages is `./...` and still not broad.
 
 ### Output
 
-Group by severity: Blocker / Should-fix / Nit. Each finding:
+Group by severity: Blocker / Should-fix / Nit. Style offenses keep the tier
+`go:style` gave them. Grade a correctness finding by the worst consequence a
+reachable input or state produces, naming that input in the finding — one you
+cannot tie to an input is at most Should-fix. First match wins:
+
+1. Blocker — a reachable input gives a wrong result, a panic, lost or
+   corrupted data, a leak, a data race, a security exposure, or a swallowed
+   error a caller depends on; or a test passes while the code is wrong.
+2. Should-fix — correct for every current caller but fragile: an edge case no
+   caller reaches yet, an error too vague to diagnose, an API easy to misuse, a
+   reachable branch with no test, a performance cliff on realistic input.
+3. Nit — no behavioural consequence: clarity, dead code, a micro-optimization.
+
+Each finding:
 - `file:line` — the problem in one line.
 - The rule id or dimension (e.g. `wrap-errors-w`, `correctness`) — a style
   offense keeps the bare id `go:style` derived it under, unprefixed, so a
