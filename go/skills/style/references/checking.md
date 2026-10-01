@@ -77,13 +77,16 @@ no single line spells out.
    presentation (trailing newline, padding).
 5. An assertion must be able to fail: pin the output or error cause unique to
    the wanted branch, never a token shared across sibling paths.
-6. When a line overflows 80 cols, name the overflowing piece as a local — a
+6. When a line overflows the limit, name the overflowing piece as a local — a
    `format` string, a split literal, a `want` value — rather than wrapping the
    call.
 
 ## Workflow
 
-1. Resolve the target and budget; list the packages/files in scope.
+1. Resolve the target, the budget, and the line settings — `max_line_length`
+   and `tab_width` from the module root's `.editorconfig`, else 80 and 4,
+   resolved once for the whole run; open the `rules.md` entry only when that
+   file does not settle them. List the packages/files in scope.
 2. Check each file against the rules in `SKILL.md` — Production for `*.go`,
    Test for `*_test.go` — reasoning from the Principles above. Open a keyed
    `rules.md` entry only when about to flag its rule; never preload the file.
@@ -102,10 +105,12 @@ no single line spells out.
 
 ## Offense list
 
-Open with one line naming the resolved target and the files in scope, then the
+Open with one line naming the resolved target, the files in scope, and the
+resolved line settings (`limit N, tab W (from <path>|default)`), then the
 offenses. That line is the report's first fact, not preamble — it is what makes
 the list checkable, since a reader cannot tell an empty result from an
-unresolved target without it.
+unresolved target without it, nor an over-width call from one the settings
+allow.
 
 Group by severity Blocker / Should-fix / Nit. Severity is a property of the
 rule, not of the instance or the reader's taste: the same rule broken in two
@@ -160,8 +165,8 @@ merge cannot fold:
    `errors`), then take the first three words that remain, lowercase, join with
    hyphens.
 
-*Wrap errors with `%w` and add context…* → `wrap-errors-w`. *Lines <=80
-cols…* → `lines-80-cols`. *Receivers are a ~three-letter type abbreviation* →
+*Wrap errors with `%w` and add context…* → `wrap-errors-w`. *Lines fit the
+limit…* → `lines-fit-limit`. *Receivers are a ~three-letter type abbreviation* →
 `receivers-three-letter-type`. *`context` is the first parameter…* →
 `context-first-parameter`. *No work in `init()`; no package-level mutable
 state…* → `no-work-init` and `no-package-level-mutable`.

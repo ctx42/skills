@@ -8,6 +8,7 @@ when about to flag its rule; never preload the file. Grows via
 
 ## Contents
 
+- Lines fit the limit (Production + Test)
 - No name stutter (Production)
 - Method over a single-receiver-arg func (Production)
 - Name a helper for behavior, not its caller (Production)
@@ -26,6 +27,21 @@ when about to flag its rule; never preload the file. Grows via
 - Test helpers in all_test.go (Test)
 - Test order mirrors source order (Test)
 - Field-count guard forces new-field coverage (Test)
+
+## Lines fit the limit (Production + Test)
+
+Resolve the two settings once per run, with full EditorConfig semantics, for a
+notional `.go` file in the module root (the `go.mod` directory): walk up until
+a `root = true` file, closer files override farther ones, later matching
+sections override earlier ones, `tab_width` falls back to `indent_size`, and
+`indent_size = tab` means `tab_width`. One setting governs the whole module —
+`.editorconfig` files below the module root are ignored whatever the target
+(diff, package, or `./...`). No `tab_width` and no numeric `indent_size` → a
+tab is 4 columns; no `max_line_length`, or `max_line_length = off` → 80.
+
+A generated line (`DO NOT EDIT`) over the limit is an offense against the
+generator template that produced it, never against the generated file: file it
+at the template's block and cite the generated site as evidence.
 
 ## No name stutter (Production)
 

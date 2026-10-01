@@ -5,7 +5,7 @@
       "id": 1,
       "name": "production-rules-while-writing",
       "expected_behavior": [
-        "Applies the Production section: gofmt and goimports, lines within 80 columns, `%w` error wrapping with short context, godoc on exported symbols",
+        "Applies the Production section: gofmt and goimports, lines within the line limit it resolved for the module, `%w` error wrapping with short context, godoc on exported symbols",
         "Applies no Test-only rule to the production file — no `have`/`want` naming, no subtest conventions"
       ]
     },
@@ -23,7 +23,7 @@
       "id": 3,
       "name": "pass-lists-offenses-then-asks",
       "expected_behavior": [
-        "Resolves the target, lists the files in scope, and reads `references/checking.md`",
+        "Resolves the target, the line limit and tab width, and lists the files in scope on the report's first line; reads `references/checking.md`",
         "Reasons only for detection — runs no gofmt, vet, or linter",
         "Opens only the `rules.md` entries for the rules it flags — the file is never read whole, which is visible in the commands the run issued",
         "Reports style offenses only: the off-by-one is left to `go:review`, not reported here",

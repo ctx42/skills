@@ -49,17 +49,18 @@ its full text.
 ### Formatting
 
 - gofmt + goimports always; never hand-format or reorder imports manually.
-- Lines <=80 cols including the `//` prefix, counting a tab as gofmt renders
-  it (8 columns), not as one character; break only when over, one
-  logical arg per line with `(` on the call line.
+- Lines fit the limit, counting the `//` prefix and a tab as the tab width —
+  both from the module's `.editorconfig`, else 80 and 4; break only when over,
+  one logical arg per line with `(` on the call line.
 - When a function signature spans multiple lines, put each parameter on its
   own line and open the body with a blank line.
-- Collapse a multi-line signature to one line when it fits <=80 (through the
-  opening `{`, or the full type for func-typed params/fields); re-check after a
-  change (e.g. a shorter param type) that makes a wrapped signature now fit.
+- Collapse a multi-line signature to one line when it fits the limit (through
+  the opening `{`, or the full type for func-typed params/fields); re-check
+  after a change (a shorter param type, a wider resolved limit) that makes a
+  wrapped signature now fit.
 - Extract a long or complex format string into a `format` local before the
   call (`fmt.Errorf`, `Sprintf`, `Printf`); prefer it to breaking the call
-  across lines to fit <=80.
+  across lines to fit the limit.
 - Split a string literal too long for one line into per-line `"..."` segments
   joined with `+`, led by an empty `"" +` on the opening line so every segment
   aligns; keep `\n` explicit and never use a raw backtick string for multi-line
@@ -221,7 +222,8 @@ its full text.
 - Match several substrings of one error with one `ErrorRegexp("a.*b")`, not
   stacked `ErrorContain` calls.
 - Hoist a literal into a `want` (or other) local only to keep the line within
-  80 cols; when the inlined form fits, inline it at each use even if repeated.
+  the limit; when the inlined form fits, inline it at each use even if
+  repeated.
 - Hoist a multi-line structured-data literal (JSON, YAML) passed to a call into
   a pretty-printed backtick raw-string local; don't inline it or split it across
   `+`-joined segments to fit the line limit.

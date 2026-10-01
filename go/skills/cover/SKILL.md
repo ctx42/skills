@@ -42,7 +42,7 @@ Sources of truth:
   section and the Production rules Test inherits, Formatting and Naming
   above all) — obey it in every test written; it is the rule spec, do not
   restate it. Test does not replace Production, it adds to it: a run that
-  reads Test alone writes tests that break the 80-column rule, and `gofmt -l`
+  reads Test alone writes tests that break the line-limit rule, and `gofmt -l`
   does not measure line length, so Verify passes them.
 - The package's own tests, then a sibling package (on-demand: when writing) —
   for the assertion library and helper conventions the style rules defer to.

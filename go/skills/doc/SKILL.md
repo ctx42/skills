@@ -224,8 +224,8 @@ Wait for approval, then run the per-item loop and Verify.
 
 End of run:
 1. Run `gofmt -l` on every edited file and fix any listing; then re-check that
-   every edited comment line stays <= 80 cols (style "Formatting") — gofmt
-   does not enforce that.
+   every edited comment line stays within the style line limit (style
+   "Formatting") — gofmt does not enforce that.
 2. Run `go build ./<pkg>` on every edited package; it must pass — guards
    against a directive comment broken by an edit.
 3. Run `go test ./<pkg>` only if the package already has `Example*`
