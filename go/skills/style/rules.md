@@ -12,7 +12,7 @@ when about to flag its rule; never preload the file. Grows via
 - No name stutter (Production)
 - Method over a single-receiver-arg func (Production)
 - Name a helper for behavior, not its caller (Production)
-- No godoc on interface-implementing methods (Production)
+- On interface-implementing methods, never restate the interface's contract (Production)
 - Use godoc cross-references (Production)
 - Example functions for public APIs (Production)
 - Reusable package ships a README (Production)
@@ -67,11 +67,13 @@ generalize incidental wrap text too ("checking cache file" → "checking file").
 Detect: a helper named for its caller or domain (`cached`, `writeConfig`) whose
 body touches only stdlib fs/string/math ops and no domain type.
 
-## No godoc on interface-implementing methods (Production)
+## On interface-implementing methods, never restate the interface's contract (Production)
 
-The only allowed comment is a one-line reference: `// implements
-[io.WriterTo].` Detect: a full godoc on a method whose signature matches an
-interface the type implements (confirm with `goToImplementation`).
+Never restate the interface's contract; godoc may carry only what the type adds
+beyond it (ordering, concurrency, side effects, error behavior), or the
+one-line reference `// implements [io.WriterTo].` Detect: godoc on a method
+whose signature matches a declared interface and whose text only paraphrases
+that interface's contract (confirm with `goToImplementation`).
 
 The rule is about methods written *to* an interface, not methods that happen to
 match one. Nearly every `Close() error`, `String() string`, and `Error() string`

@@ -121,7 +121,8 @@ its full text.
   covers members whose name and type say it all.
 - Godoc states only what the signature can't; never restate the obvious.
 - In godoc prose name the type, not the receiver variable.
-- No godoc on interface-implementing methods.
+- On interface-implementing methods, never restate the interface's contract;
+  document only behavior beyond it, or nothing.
 - Use godoc cross-references for exported symbols only: `[Type]`,
   `[pkg.Symbol]`; name unexported identifiers in plain text.
 - nolint: no space `//nolint:name`; line-level at end of line; func-scoped as
