@@ -279,7 +279,10 @@ Body rules:
 
 - The body states attested facts only. Anything the agent concluded but the
   user did not confirm never enters it — that is an open question, not a fact.
-  This rule alone keeps a large KB trustworthy.
+  This rule alone keeps a large KB trustworthy. After each write, re-read the
+  page and delete every sentence no attested statement says, a consequence or
+  generalization of the fact included; a sentence meant to be cut is cut only
+  once the file no longer holds it.
 - Mark tribal sections in place. A section carrying something the platform
   docs do not state opens with one line under its heading, so the mark travels
   inside the chunk:
