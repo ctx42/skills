@@ -35,7 +35,7 @@
       "id": 4,
       "name": "fix-applies-everything-behind-a-green-gate",
       "expected_behavior": [
-        "Runs `go test ./... -race` for a green baseline first, and stops without editing if that baseline is red",
+        "Runs `go test ./... -race` for a green baseline before editing anything",
         "Applies every listed fix, then re-runs the gate",
         "Reports each fix as one `file:sym — what changed` line plus the gate result",
         "Prints no diffs and never commits"
@@ -101,10 +101,10 @@
         "Does not stop for a plan: the invocation already carries `max_issues=N`, so the budget needs no proposing and the run proceeds to check",
         "Fans out one subagent per package, each checking the same pinned rule set",
         "Gives workers no share of `max_issues` — they report everything and the cap applies once at the merge",
-        "Folds by rule id before cutting: the godoc rule broken in all twelve packages is one finding listing twelve, not twelve findings",
-        "Cuts nothing: the ten folded findings fit under the cap of 25, so the report carries all ten and says no offense went unreported — a cap applied before folding would have dropped 29 of the 54",
-        "The merged report carries each rule under exactly one id and one severity across all twelve packages — no rule appearing in two spellings or two tiers, and no note reconciling them at the end",
-        "Reports the raw total as the sum of the worker reports plus any adjustment the merge made, each adjustment itemised — add the twelve figures and the itemised adjustments up and the reported total equals them, rather than being carried from the plan or from the planted count — and says how many went unreported after folding and cutting",
+        "Folds by rule id before cutting: the godoc rule broken in all eight packages is one finding listing eight, not eight findings",
+        "Cuts nothing: the ten folded findings fit under the cap of 25, so the report carries all ten and says no offense went unreported — a cap applied before folding would have dropped 13 of the 38",
+        "The merged report carries each rule under exactly one id and one severity across all eight packages — no rule appearing in two spellings or two tiers, and no note reconciling them at the end",
+        "Reports the raw total as the sum of the worker reports plus any adjustment the merge made, each adjustment itemised — add the eight figures and the itemised adjustments up and the reported total equals them, rather than being carried from the plan or from the planted count — and says how many went unreported after folding and cutting",
         "Still runs the pick step: a budget supplied on the invocation agreed the budget, not the fixes, so the run asks which offenses to apply and edits no file until told which",
         "Derives ids by the documented steps: the four rules broken in every package come back as `wrap-errors-w`, `receivers-three-letter-type`, `every-exported-symbol`, and `separate-distinct-topics`; a negation survives (`No work in init()` gives `no-work-init`, never `work-init`); a dotted identifier contributes only the part before its dot",
         "The final report grades identical code identically: across the packages that differ only in their package name, every rule it reports on one it reports on all, with no rule reported in a minority of them — the missing blank line between two `--- Given ---` topic groups among them. Graded on the report the user sees, not on the worker reports",
