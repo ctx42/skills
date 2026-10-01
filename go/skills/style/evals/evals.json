@@ -68,7 +68,7 @@
       "skills": [
         "style"
       ],
-      "setup": "A 12-package module. Every package holds the same four offenses — a `%v` error wrap, a single-letter receiver, missing godoc on an exported symbol, and a missing blank line between test topic groups. Invoked with no budget controls at all, so the run has to propose one.",
+      "setup": "A 12-package module. Every package holds the same four offenses — a `%v` error wrap, a single-letter receiver, missing godoc on an exported symbol, and a missing blank line between test topic groups. Invoked with no budget controls at all, so the run has to propose one. Nothing else in the module breaks any rule.",
       "query": "/style ./...",
       "files": []
     },
@@ -108,7 +108,17 @@
       "skills": [
         "style"
       ],
-      "setup": "The same 12-package module, and this time the offenses are counted: every package holds the same four — a `%v` error wrap, a single-letter receiver, missing godoc on an exported symbol, and a missing blank line between two `--- Given ---` topic groups — so 48 offenses fold to 4 findings. Two packages hold three further offenses each that no other package has, giving 54 in all and 10 findings after folding. Nothing else in the module breaks any rule — check every package against the full rule set, not only the planted ones, so 54 is the true count. One package also has an `assert.NoError` sitting next to the `assert.Equal` that checks the same call's result. The cap is supplied as 25, so it binds on the unfolded list and does not bind on the folded one — the difference the run has to get right.",
+      "setup": "The same 12-package module, and this time the offenses are counted: every package holds the same four — a `%v` error wrap, a single-letter receiver, missing godoc on an exported symbol, and a missing blank line between two `--- Given ---` topic groups — so 48 offenses fold to 4 findings. Two packages hold three further offenses each that no other package has, giving 54 in all and 10 findings after folding. Nothing else in the module breaks any rule — check every package against the full rule set, not only the planted ones, so 54 is the true count. Locals of the receiver's type already use the three-letter name the receiver should have, so the single-letter receiver is the only naming offense. One package also has an `assert.NoError` sitting next to the `assert.Equal` that checks the same call's result. The cap is supplied as 25, so it binds on the unfolded list and does not bind on the folded one — the difference the run has to get right.",
+      "query": "/style ./... max_issues=25 depth=standard",
+      "files": []
+    },
+    {
+      "id": 12,
+      "name": "fanout-opposing-fixes-kept-apart",
+      "skills": [
+        "style"
+      ],
+      "setup": "An 8-package module, byte-identical apart from the package name except in one test: four packages have a `--- Given ---` block with no blank line between two distinct subjects (two variables, each with its own setup), and the other four have a blank line splitting one `--- Then ---` subject (an `assert.NoError` and the `assert.Equal` checking the same call's result). So one rule is broken at eight sites, four needing a blank line inserted and four needing one deleted — both directions genuinely right where they are. Every package also has a correct blank line between two distinct `--- Then ---` subjects. Nothing else in the module breaks any rule.",
       "query": "/style ./... max_issues=25 depth=standard",
       "files": []
     }

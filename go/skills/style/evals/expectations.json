@@ -54,7 +54,7 @@
       "name": "rules-change-only-through-review",
       "expected_behavior": [
         "Routes the request to `go:review` rule-edit mode instead of hand-editing `SKILL.md` or `rules.md`",
-        "The resulting change is one dense rule line in `SKILL.md`, plus a keyed `rules.md` entry only where the line alone is not enough"
+        "The redirect names the rule-edit command to run (`/review add …`) with the user's rule carried in it, and `style` writes nothing itself — `SKILL.md`, `rules.md`, and every other file stay unchanged"
       ]
     },
     {
@@ -63,8 +63,7 @@
       "expected_behavior": [
         "Switches to plan-first on its own: the target is broad and the invocation carries no budget, so it proposes rather than checking",
         "The proposal names the `max_issues` and `depth` defaults it would use and the packages in scope",
-        "Stops there and waits: no package is checked, no offense list is produced, no file is edited",
-        "Presents no findings alongside the proposal — plan-first is propose-then-stop, not check-everything-then-present, which would have spent the run before the budget was agreed"
+        "Stops there and waits: no package is checked, no offense list or finding is presented alongside the proposal, no file is edited — plan-first is propose-then-stop, not check-everything-then-present"
       ]
     },
     {
@@ -103,16 +102,29 @@
         "Fans out one subagent per package, each checking the same pinned rule set",
         "Gives workers no share of `max_issues` — they report everything and the cap applies once at the merge",
         "Folds by rule id before cutting: the godoc rule broken in all twelve packages is one finding listing twelve, not twelve findings",
-        "The rule broken everywhere survives the cap, rather than being evicted by two offenses repeated twelve times apiece",
+        "Cuts nothing: the ten folded findings fit under the cap of 25, so the report carries all ten and says no offense went unreported — a cap applied before folding would have dropped 29 of the 54",
         "The merged report carries each rule under exactly one id and one severity across all twelve packages — no rule appearing in two spellings or two tiers, and no note reconciling them at the end",
         "Reports the raw total as the sum of the worker reports plus any adjustment the merge made, each adjustment itemised — add the twelve figures and the itemised adjustments up and the reported total equals them, rather than being carried from the plan or from the planted count — and says how many went unreported after folding and cutting",
         "Still runs the pick step: a budget supplied on the invocation agreed the budget, not the fixes, so the run asks which offenses to apply and edits no file until told which",
-        "Derives every id by the documented steps, negations included — a rule written `No work in init()` comes back as `no-work-init`, never `work-init`, and a dotted identifier contributes only the part before its dot",
+        "Derives ids by the documented steps: the four rules broken in every package come back as `wrap-errors-w`, `receivers-three-letter-type`, `every-exported-symbol`, and `separate-distinct-topics`; a negation survives (`No work in init()` gives `no-work-init`, never `work-init`); a dotted identifier contributes only the part before its dot",
         "The final report grades identical code identically: across the packages that differ only in their package name, every rule it reports on one it reports on all, with no rule reported in a minority of them — the missing blank line between two `--- Given ---` topic groups among them. Graded on the report the user sees, not on the worker reports",
-        "Resolves a split before reporting it: where the worker reports flag a rule in some of the identical packages and not others, or its sites prescribe opposing fixes, the run shows a re-check of the disagreeing packages — what it searched for and what it found — before the report, and the report carries the reconciled count rather than the raw spread. Passes trivially when the worker reports agree",
+        "Resolves a split before reporting it: where the worker reports flag a rule in some of the identical packages and not others, or its sites prescribe opposing fixes, the run shows a re-check of the disagreeing packages — what it searched for and what it found — in the reply or in a file it saved before the reply, and the report carries the reconciled count rather than the raw spread. Passes trivially when the worker reports agree",
         "No folded finding prescribes inserting what another of its own sites prescribes deleting",
         "Flags no blank-line offense for an `assert.NoError` sitting next to the `assert.Equal` that checks the same call's result: one `--- When ---` call's returns are one subject",
         "Every offense quotes the source text that triggered it, so a reader can tell a located offense from a pattern-matched one"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "fanout-opposing-fixes-kept-apart",
+      "expected_behavior": [
+        "Fans out one subagent per package — eight — each checking the same pinned rule set",
+        "Reports the blank-line topic rule as one finding under one id and one severity, listing all eight packages",
+        "Keeps each site's own fix: the four packages missing a blank line get an `insert`, the four with a surplus one get a `delete` — no site's fix replaced by the majority's or by one prescription for all eight",
+        "Shows a re-check of the opposing sites against the source — what it searched for and what it found — in the reply or in a file it saved before the reply, before the report",
+        "Flags no offense at the correct blank line between the two distinct `--- Then ---` subjects present in every package",
+        "Every fix opens with its verb, so the direction at each site reads without parsing prose",
+        "Edits no file before the pick step; if fixes are picked, the four missing packages gain exactly one blank line and the four surplus packages lose exactly one, and nothing else in any file changes"
       ]
     }
   ]
