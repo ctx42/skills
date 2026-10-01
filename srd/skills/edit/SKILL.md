@@ -35,8 +35,7 @@ never edits metadata (Owners, Initiative, Designs), sets back-links, or changes
 mandate is reported, not looped — even when the run entered at it: a feedback
 run starting at a metadata `#2` says so and advances to `#3`. An explicit `#n`
 sets the order for the rest of the run: walk ascending from `n` to the end,
-then come back for the numbers below it, so nothing is dropped and the sequence
-never doubles back mid-run. It never proposes a Status
+then come back for the numbers below it. It never proposes a Status
 transition (flag only a malformed `STA-*` value) and never proposes pushing,
 publishing, or syncing the SRD as a follow-up. Comment blocks are read-only:
 a source of information about the SRD, never edited, answered, or rewritten,
@@ -160,7 +159,9 @@ user's trust in the whole list.
 Every mode but `autofix` runs this loop per change:
 
 1. Propose exactly one change: its location, the problem (cite the rule id),
-   the before and after text, and a one-line rationale. A change asserting
+   the before and after text, and a one-line rationale. Never invent a figure
+   neither the SRD nor the user gives: the after text holds a placeholder
+   (`<lockout minutes>`). A change asserting
    existing system behavior gets its corpus lookup here, before the proposal is
    put, and the proposal states what it found
    ([references/corpus-edits.md](references/corpus-edits.md)). Name the
@@ -195,8 +196,7 @@ Every mode but `autofix` runs this loop per change:
    questions` numbered list — one line each, no rationale — that you carry
    silently and draw from one item at a time, in the order the user set. That
    list is terminal output, not a section of the SRD: it belongs to this
-   session, empties with it, and writing it into the document would leave
-   questions behind for the next reader to mistake for content. Show it only
+   session and empties with it. Show it only
    when the user asks what is still open, renumbered from 1 each time so
    answered items leave no holes; what remains at the end goes in the closing
    manifest.
@@ -303,7 +303,8 @@ this mode only)*: read it before applying anything.
 
 ### polish
 
-Mechanical-only cleanup through the loop, confirming each change. Scope:
+Mechanical-only cleanup through the loop, confirming each change, in document
+order with no summary first. Scope:
 British → US spelling, identifier format/order (REQ-2/3/4, subject to the
 approval gate), keyword capitalization (LANG-4), valid Markdown, stray
 example/note text (REQ-7), spacing and punctuation. Never rewrite requirement
@@ -315,9 +316,10 @@ Edit one entry the user points to by requirement id (`GR-3a`), quoted text, or
 free description ("the login timeout rule").
 
 1. Locate the target; for quoted text or a description, confirm the match
-   before editing. With nothing to fix on it, say so and ask what they want
-   changed rather than manufacturing a finding.
-2. Run the loop on that entry.
+   before editing, inside the proposal: it is the loop's one question. With
+   nothing to fix on it, say so and ask what they want changed rather than
+   manufacturing a finding.
+2. Run the loop on that entry; its resolution ends the run (Session end).
 3. Report the re-validation result explicitly: whether the edit introduced any
    inconsistency in the entry or its cross-refs.
 
@@ -354,8 +356,7 @@ manifest like every mode, plus what
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. Every count in the manifest — requirements
 checked, edits applied, findings open, questions carried — is read off the
-finished file, never carried from the work: a run reported checking "all 45
-requirements" over a section holding 44.
+finished file, never carried from the work.
 
 ## Self-learning
 
