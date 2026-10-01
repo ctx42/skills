@@ -55,10 +55,12 @@ Nothing outside this list is errata.
 - Boilerplate the standard fixes verbatim: the STR-8 keyword notice. This is
   the one entry that cannot meet the 40-character rule above — the notice is a
   multi-line block with two URLs — so it is quoted as the whole block and
-  applied by replacing it entire. That works because the standard fixes its
-  text: there is exactly one correct form to replace it with, which is what
-  makes the substitution safe to apply unreviewed. No other long fix inherits
-  this exemption.
+  applied by replacing it entire: both `old` and `new` quoted in full, every
+  line verbatim with its leading `>` and the callout header line included, or
+  applying it unreviewed breaks the callout. That works because the standard
+  fixes its text: there is exactly one correct form to replace it with, which
+  is what makes the substitution safe to apply unreviewed. No other long fix
+  inherits this exemption.
 
 ## Exclusions
 
