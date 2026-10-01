@@ -336,8 +336,10 @@ Each question lives in **two** places, with one owner:
   count, link to the page. It is the list view, and it holds only a label, so
   the two copies cannot drift.
 
-A question whose subject has no page yet lives in the index alone, with an empty
-page link, until a page exists to take it.
+A fact held in `_inbox.md` has a page: its question goes under that section's
+`## Open questions`. A question whose subject has no page at all lives in the
+index alone, with an empty page link and its full wording as the label, until a
+page exists to take it.
 
 On meeting a question that is already open, **bump its hit count** rather than
 adding a row: repeats are a priority signal, the same way repeated gap reports
