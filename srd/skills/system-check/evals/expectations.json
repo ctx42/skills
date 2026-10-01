@@ -29,7 +29,7 @@
       "name": "looks-it-up-before-asking",
       "expected_behavior": [
         "Searches the corpus and confirms \"Namespace\" is defined before raising it — it does not ask what it could have looked up",
-        "Restates the resolution with the tenant fact folded in, and removes the question on confirmation",
+        "Drops the Namespace question without asking it, telling the user it was dropped and that the Main Glossary defines the term; the tenant fact the user volunteers later is folded into the next restatement and confirmed there",
         "Writes no file itself and closes by naming the delegate that took the fact (`srd:kb: 1 fact`) — the write and the naming are separate claims, and only the second is visible in the transcript",
         "Shows no separate \"bank this?\" prompt — the restatement is the confirmation"
       ]

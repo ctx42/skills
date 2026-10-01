@@ -30,7 +30,7 @@
         "system-check",
         "kb"
       ],
-      "setup": "An open question asks whether \"Namespace\" is a defined term — the Glossary does define it. Answering, the user adds \"remember that sessions can't span tenants.\"",
+      "setup": "An open question asks whether \"Namespace\" is a defined term — the Glossary does define it. Later in the walk, the user adds \"remember that sessions can't span tenants.\"",
       "query": "/system-check specs/labeling.md",
       "files": []
     },

@@ -198,8 +198,9 @@ then:
    broke, keeps every number, and bumps `updated:`, without rewriting the file.
    Not `check`: that mode re-verifies only and hunts no new defects, so an edit
    that introduced a fresh blocker would reach no question at all.
-2. Re-check each open question against the current SRD; drop the ones the edit
-   answered and tell the user which.
+2. Re-check each open question against the current SRD and the corpus; drop
+   the ones the edit or a lookup answered, without asking them, and tell the
+   user which and what answered each.
 3. Re-run system confrontation on the new text for fresh contradictions or gaps.
 4. Walk the refreshed open set.
 
