@@ -338,9 +338,9 @@ free description ("the login timeout rule").
      the user declined).
    - Outstanding human follow-ups: placeholders, Status, and either draft
      scaffold left standing.
-   - The path to `<srd>.decisions.md`, whose newest session block is the
-     summary to hand the author — omitted when nothing was applied, since the
-     file does not exist.
+   - `Decision log: <srd>.decisions.md — hand the author its newest block,
+     ## <date>, as this session's summary`, with the block's real heading;
+     omitted when nothing was applied, since the file does not exist.
    - One start clause: what the probe found, which delegates ran, whether the
      glossary resolved — a probe that found nothing otherwise looks like one
      that never ran.
