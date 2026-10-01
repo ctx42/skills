@@ -99,8 +99,9 @@ its full text.
 ### Declarations & files
 
 - Group related consts into one `const (...)` block with a headline comment
-  naming the group; keep each member's own godoc. Reserve standalone `const`
-  for a value with no relatives.
+  naming the group; give a member its own comment only when its name and type
+  don't already say what it is. Reserve standalone `const` for a value with no
+  relatives.
 - Put the package godoc comment in the file named after the package (`foo.go`
   in package `foo`) when one exists; don't keep a separate `doc.go` for it.
 - Keep package-wide top-level declarations (exported consts/vars) in the
@@ -116,7 +117,8 @@ its full text.
   agreement, restrictive "that" vs "which".
 - Comments explain the code; never trace it to a spec — no requirement/ticket
   ids in code comments (`// CLI-4`, `// JIRA-123`).
-- Every exported symbol and the package have godoc.
+- Every exported symbol and the package have godoc; a const-group headline
+  covers members whose name and type say it all.
 - Godoc states only what the signature can't; never restate the obvious.
 - In godoc prose name the type, not the receiver variable.
 - No godoc on interface-implementing methods.
