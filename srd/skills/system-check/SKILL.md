@@ -219,7 +219,8 @@ durable facts, before they scroll away.
 3. Hand the confirmed facts to `srd:kb`; coverage checks against the corpus,
    dedup, and the writing are its job, not this skill's.
 
-Report tersely: what was banked and what was dropped as already covered, once.
+Report tersely, once: what `srd:kb` banked and what it dropped as already
+covered, named as its work (`srd:kb: 1 fact`) as the walk's close names it.
 
 ## Questions file
 
