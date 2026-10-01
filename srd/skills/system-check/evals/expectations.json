@@ -16,8 +16,7 @@
       "id": 2,
       "name": "resume-after-an-srd-edit",
       "expected_behavior": [
-        "Refreshes the review layer with `srd:review` in default mode, which resolves what the edit fixed and appends what it broke",
-        "Does not use `check`: that mode re-verifies only, so the two new blockers would reach no question",
+        "Refreshes the review layer with `srd:review` in default mode, which resolves what the edit fixed and appends what it broke — not `check`, which re-verifies only, so the two new blockers would reach no question",
         "Leaves the author's review file intact — every finding number survives and nothing is renumbered — because the default mode updates in place rather than rewriting",
         "Turns both new defects — `GR-12`'s unmeasurable quality and the In Scope item `SC-4` that no requirement covers — into questions in the refreshed set",
         "Drops the open questions the edit answered and names which ones went",
@@ -30,7 +29,7 @@
       "expected_behavior": [
         "Searches the corpus and confirms \"Namespace\" is defined before raising it — it does not ask what it could have looked up",
         "Drops the Namespace question without asking it, telling the user it was dropped and that the Main Glossary defines the term; the tenant fact the user volunteers later is folded into the next restatement and confirmed there",
-        "Writes no file itself and closes by naming the delegate that took the fact (`srd:kb: 1 fact`) — the write and the naming are separate claims, and only the second is visible in the transcript",
+        "Writes no `kb/` page itself and closes by naming the delegate that took the fact (`srd:kb: 1 fact`)",
         "Shows no separate \"bank this?\" prompt — the restatement is the confirmation"
       ]
     },
@@ -50,7 +49,7 @@
       "expected_behavior": [
         "No preamble and no step narration — nothing like \"I'll now read…\" or \"Let me run review\"",
         "Reports a one-line pointer after writing (\"wrote `specs/labeling.questions.md`, 6 open questions\") without re-listing the questions already in the file",
-        "Opens the walk with the first question rather than a summary of what it just did",
+        "After that pointer line, the next thing in the reply is the first question — no summary of what the run did sits between them",
         "The finding counts in the reply match what the review file holds — count them from the file rather than from memory of writing it"
       ]
     },
@@ -59,7 +58,7 @@
       "name": "learn-banks-only-uncovered-facts",
       "expected_behavior": [
         "Restates both candidates once as a single list and takes the user's confirmation as the gate",
-        "Does not restate the SRD in play — `learn` needs no SRD",
+        "Does not restate the SRD in play: the candidates it lists are platform facts only, with no SRD requirement, id, or decision among them",
         "Names `srd:kb` as the delegate it handed the confirmed facts to, whose coverage check drops the documented one and banks only the tribal one — the skill writes no page of its own",
         "Reports what was banked and what was dropped as already covered, once, without re-printing the page"
       ]

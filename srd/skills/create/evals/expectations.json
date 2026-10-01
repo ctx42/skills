@@ -7,10 +7,10 @@
       "expected_behavior": [
         "Resolves the per-project glossary (file or directory) and loads its term digest before drafting",
         "Interviews one branch at a time — objective, UI change, in/out of scope, the rules — rather than drafting straight from the one-line idea",
-        "Rewrites a vague requirement (\"resets must be secure\") into a verifiable one (\"the system MUST require a reset token that expires after 15 minutes\") per REQ-6",
+        "Rewrites a vague requirement (\"resets must be secure\") into a verifiable one per REQ-6 — a measurable threshold, its figure supplied by the user when asked rather than made up",
         "Keeps each requirement atomic per REQ-1",
         "Produces the sections in this order — the metadata block, `[[TOC]]`, the RFC 2119 / RFC 8174 keyword notice, `## Introduction`, `## Glossary` (only if a term needs defining), `## Scope` holding `### In Scope` then `### Out of Scope`, `## Requirements` — with Status `IN PROGRESS` and marked TODO placeholders for Owners, Initiative, and Designs",
-        "Every count the reply states matches the artifact it describes — the term count equals the terms in the digest, the TODO count equals the marked TODOs in the SRD"
+        "Every count the reply states — the requirement-group counts at least — matches the SRD it describes"
       ]
     },
     {
@@ -18,8 +18,8 @@
       "name": "reuse-the-company-glossary",
       "expected_behavior": [
         "Adds no local Glossary entry for the known term (GLO-3 / STR-10). The SRD may use the term bare — the Company Glossary is what defines it — and the reply says which terms were recognised, so the author can see the lookup happened",
-        "Defines locally every term the Company Glossary does not carry, however many that is, and defines no term it does carry — the count is whatever the glossary leaves out, not a fixed number",
-        "Defines that term and nothing else — no behaviour, no rules inside the entry (GLO-1)"
+        "Defines Retention Period locally, because the Company Glossary does not carry it, and does not redefine Audit Log, which it does",
+        "The Retention Period entry defines the term and nothing else — no behaviour, no rules inside the entry (GLO-1)"
       ]
     },
     {
@@ -46,7 +46,7 @@
       "expected_behavior": [
         "Rewrites the British spellings to US English — \"color\", \"standardize\"",
         "Flags the duplicate pair and the term used inconsistently across sections — the recompute trigger, which one section states as new evidence arriving and another as a measurement being added",
-        "Uses one-letter sub-numbering (`GR-1a`, `GR-1b`, `GR-1c`) for the tight cluster while keeping flat numbers elsewhere"
+        "Uses one-letter sub-numbering under the group's prefix (for example `GR-1a`, `GR-1b`, `GR-1c`) for the tight cluster while keeping flat numbers elsewhere"
       ]
     },
     {
@@ -73,10 +73,9 @@
       "id": 8,
       "name": "start-costs-nothing-before-the-interview",
       "expected_behavior": [
-        "Invokes neither `srd:report-doc-gap` nor `srd:kb` at step 0: the probe finds no buffer, and a document nobody has written yet has nothing buffered against it",
+        "Runs the start probe and, on its empty result, invokes neither `srd:report-doc-gap` nor `srd:kb` at step 0",
         "Resolves no glossary before the interview opens, and resolves it once the first term surfaces — always before drafting, so no term is checked against a digest that is not loaded",
-        "Restates the seed as the opening Objective and asks the next branch, rather than narrating a startup sequence",
-        "Asks where the knowledge base lives only when the interview confirms its first platform fact, never between the finished SRD and the closing report"
+        "Restates the seed as the opening Objective and asks the next branch, rather than narrating a startup sequence"
       ]
     }
   ]

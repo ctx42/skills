@@ -18,7 +18,7 @@
       "name": "apply-a-review-file",
       "expected_behavior": [
         "Parses the findings and works them blocker → major → minor",
-        "Fixes each finding through the edit loop — one change, confirm, re-validate — referring to findings by number",
+        "Fixes each finding through the edit loop — one change, confirm, re-validate — referring to findings by number, and says after each applied change what its re-validation found",
         "Leaves `login.review.md` untouched: `review` owns that file",
         "Closes by pointing at `review specs/login.md check` to tick off what landed, plus the manifest of what changed and what was left flagged"
       ]
@@ -28,7 +28,7 @@
       "name": "targeted-edit-by-description",
       "expected_behavior": [
         "Locates the matching requirement and confirms the match before editing anything",
-        "Proposes a concrete, verifiable replacement — a measurable threshold — per REQ-5/6, with before/after",
+        "Proposes a verifiable replacement — a measurable threshold — per REQ-5/6, with before/after; the figure comes from the user or stands as a named placeholder, never one the run made up",
         "Re-validates that entry and its cross-references after applying, and reports whether anything new broke"
       ]
     },
@@ -98,7 +98,7 @@
       "expected_behavior": [
         "Enters at finding #2 rather than at the top of severity order",
         "After each finding resolves or is skipped, defaults to the next by number",
-        "Jumps to any number the user names out of order, and resumes the ascending walk from there",
+        "Jumps to any number the user names out of order, resumes the ascending walk from there, and after the highest number returns to the lowest one still open",
         "Leaves the review file untouched and closes by pointing at `review specs/login.md check`"
       ]
     },
@@ -126,7 +126,7 @@
       "id": 13,
       "name": "decision-log-written-per-edit",
       "expected_behavior": [
-        "Appends the applied change to `specs/login.decisions.md` before proposing the next one, so nothing is lost if the session dies mid-flow",
+        "Appends the applied change to `specs/login.decisions.md` before proposing the next one: the entry is in the file by the turn that puts the next proposal, so nothing is lost if the session dies mid-flow",
         "Creates the file with `cfsync-plugin: ignore-push` front matter on the first write",
         "Records the entry, the change in prose, and the user's reason quoted verbatim — never paraphrased, never a diff, and never a rationale neither the user nor the proposal stated",
         "Does not log the skipped proposal",
@@ -159,7 +159,7 @@
         "Writes one decision-log entry per applied substitution — the batch path logs like every other applied edit",
         "Creates `specs/login.decisions.md` with its `cfsync-plugin: ignore-push` front matter on the first write",
         "Refuses the third erratum because its `old` occurs twice in the anchor — not uniquely located — applies the other two, and names the reason it refused",
-        "The log carries the `cfsync-plugin: ignore-push` frontmatter, a dated `##` session block, and one prose entry per applied substitution naming the entry and what changed — never a diff"
+        "Each log entry is prose naming the entry and what changed, under a dated `##` session block — never a diff"
       ]
     },
     {
@@ -178,7 +178,7 @@
       "expected_behavior": [
         "The closing manifest's start clause reports that the probe found no buffers and that neither `srd:report-doc-gap` nor `srd:kb` ran",
         "Asks no approval-gate question: reads `IN PROGRESS`, says so in one clause, and proceeds",
-        "Asks no glossary question and resolves no glossary: the target names no term, and the run must not spend a setup question on one it never reaches. The 2-second figure is presented as one the SRD sets, with no source cited for it",
+        "Asks no glossary question and resolves no glossary: the target names no term, and the run must not spend a setup question on one it never reaches. The fix's figure is not made up: with none in the SRD or from the user, the proposal carries a named placeholder",
         "Re-validates `GR-2`'s cross-references after applying, and the closing re-check covers the whole document",
         "Reaches the first proposal in its first or second turn, with no setup question and no narrated startup sequence"
       ]

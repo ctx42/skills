@@ -17,7 +17,7 @@
       "skills": [
         "create"
       ],
-      "setup": "During the interview the user uses \"Audit Log\", already defined in the Company Glossary, alongside a term the glossary has never carried.",
+      "setup": "During the interview the user uses \"Audit Log\", already defined in the Company Glossary, alongside \"Retention Period\", which the glossary has never carried.",
       "query": "/create",
       "files": []
     },
@@ -27,7 +27,7 @@
       "skills": [
         "create"
       ],
-      "setup": "The draft reaching self-check contains a two-rule requirement, a lowercase \"must\", an `In Scope` item no requirement covers, and an `Example:` annotation. The draft as it stood before the self-check is kept beside the SRD as `<srd>.draft-before-self-check.md`, so the self-check's effect can be read as a diff.",
+      "setup": "The user dictates the affected requirements verbatim and declines every rewording the interview offers, so the draft reaching self-check still carries the defects below. The draft reaching self-check contains a two-rule requirement, a lowercase \"must\", an `In Scope` item no requirement covers, and an `Example:` annotation. The draft as it stood before the self-check is kept beside the SRD as `<srd>.draft-before-self-check.md`, so the self-check's effect can be read as a diff.",
       "query": "/create",
       "files": []
     },
@@ -47,7 +47,7 @@
       "skills": [
         "create"
       ],
-      "setup": "The draft carries \"the colour MUST standardise…\", two requirements stating the same rule in different words, and a tight cluster of three related rules under one group. One term is also used inconsistently across sections: the scope item says severity is recomputed when new evidence arrives, while the requirement says when a measurement is added.",
+      "setup": "The user dictates the affected requirements verbatim and declines every rewording the interview offers, so the draft reaching self-check still carries the defects below. The draft carries \"the colour MUST standardise…\", two requirements stating the same rule in different words, and a tight cluster of three related rules under one group. One term is also used inconsistently across sections: the scope item says severity is recomputed when new evidence arrives, while the requirement says when a measurement is added.",
       "query": "/create",
       "files": []
     },
@@ -57,7 +57,7 @@
       "skills": [
         "create"
       ],
-      "setup": "An interview that has reached the write step.",
+      "setup": "An interview that has reached the write step. During it the self-check raised a blocker, which the agent showed and the user chose to leave standing.",
       "query": "/create",
       "files": []
     },
@@ -79,7 +79,7 @@
       "skills": [
         "create"
       ],
-      "setup": "A fresh project: no SRD exists yet, no buffer file exists under `$AGENT_DATA_DIR/ctx42-skills/srd/`, and the user has not named a path for the document. A Company Glossary directory is configured.",
+      "setup": "A fresh project: no SRD exists yet, no buffer file exists under `$AGENT_DATA_DIR/ctx42-skills/srd/`, and the user has not named a path for the document. A Company Glossary directory is configured. No glossary memory exists yet, so resolving the glossary writes one.",
       "query": "/create a rate limit for the export API",
       "files": []
     }

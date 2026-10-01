@@ -79,7 +79,7 @@
       "skills": [
         "review"
       ],
-      "setup": "`specs/login.review.md` holds a British-spelling finding `#4` under Requirements, stated as prose rather than a substitution, and a scope blocker `#2`. There is no `## Errata` block yet.",
+      "setup": "`specs/login.review.md` holds a British-spelling finding `#4` under Requirements, stated as prose that names GR-2 but does not quote the misspelled word, and a scope blocker `#2`. There is no `## Errata` block yet.",
       "query": "/srd:review specs/login.md errata, then the same command again",
       "files": []
     },

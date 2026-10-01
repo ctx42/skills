@@ -17,8 +17,7 @@
       "id": 2,
       "name": "applies-rules-create-only-stubs",
       "expected_behavior": [
-        "Flags the single owner (STR-2), the missing Initiative link (STR-3), and `ACCEPTED` without an approved design (STA-2), all as blockers",
-        "Does not excuse them as authoring placeholders — unlike `create`, the review applies the full standard",
+        "Flags the single owner (STR-2), the missing Initiative link (STR-3), and `ACCEPTED` without an approved design (STA-2), all as blockers, without excusing them as authoring placeholders — unlike `create`, the review applies the full standard",
         "Raises no back-link finding: STR-4/6 live in external systems",
         "Records all three under the Metadata section of the review file"
       ]
@@ -27,7 +26,7 @@
       "id": 3,
       "name": "check-a-prior-review",
       "expected_behavior": [
-        "Classifies each open finding fixed / partial / not-addressed against the current text, in a short status table keyed by finding number",
+        "Classifies each open finding fixed / partial / not-addressed / invalid against the current text, in a short status table keyed by finding number",
         "Re-verifies only — hunts for no new defects",
         "Ticks fixed findings and moves them to `## Resolved`, keeping their numbers",
         "Annotates partials with `*(Partial — …)*` and moves the invalid finding to `## Withdrawn` with a reason",
@@ -49,7 +48,7 @@
       "id": 5,
       "name": "walk-records-only-confirmed-findings",
       "expected_behavior": [
-        "Goes section by section, presenting each section's findings and waiting for the user to confirm which to keep before recording anything",
+        "Goes section by section, presenting each section's findings and waiting for the user's answer: the review file gains a section's findings only in a turn after the user confirmed them",
         "Writes only the confirmed findings to `login.review.md`, as author-facing guidance",
         "Never edits `login.md`"
       ]
@@ -67,7 +66,9 @@
         "Finds MUST used in the Introduction (LANG-3)",
         "Collects the British spellings as minor findings under `## Errata`",
         "Finds the keyword notice citing RFC 8174 alone, with the RFC 2119 reference missing (STR-8), and collects it under `## Errata` as the whole-block substitution the errata allowlist admits",
-        "This scenario is the repo's regression gate, and the bullets above are its committed baseline: every defect listed there must still be found whenever the shared references under `../create/` change. Grade by diffing the review file against that list — a defect that stops being found is a regression in the references, not a change in the fixture, and a defect the fixture plants but no bullet lists is a gap in the baseline, to be added here rather than graded silently."
+        "Finds the `Designs` placeholder left in an `ACCEPTED` SRD whose GR-3 changes the UI (STR-5)",
+        "Finds the second GR-3 describing how the badge looks rather than what the system does (LANG-5)",
+        "Finds GR-4's \"export run\" drifting from the glossary's Export Job"
       ]
     },
     {
@@ -89,15 +90,14 @@
         "Reclassifies only — hunts no new defects",
         "Bumps `updated:` because something moved, and reports the moved number",
         "Reads the SRD to quote the `old` text exactly when rewriting the prose fix, while editing only the review file",
-        "Run twice in a row, the second run changes nothing at all — not a moved finding, not a fresh `updated:` timestamp",
-        "The file after the second run is byte-identical to the file after the first"
+        "Run twice in a row, the second run changes nothing at all — not a moved finding, not a fresh `updated:` timestamp"
       ]
     },
     {
       "id": 9,
       "name": "facts-vs-corpus-routes-doc-gaps",
       "expected_behavior": [
-        "Probes the gap buffer first, finds the prior session's records pending, and invokes `srd:report-doc-gap` to drain them, then searches the corpus for each claim about existing behaviour",
+        "Probes the gap buffer first and, on the prior session's pending records, invokes `srd:report-doc-gap` to drain them before any corpus search",
         "Routes the unconfirmable `GW-2` retry count to `srd:report-doc-gap` as a doc gap and files no finding against it in `gateway.review.md` — an unconfirmable claim goes to the gap buffer, never into the review file. Quoting the claim inside some other finding is not the test; where the gap went is",
         "Records the contradicted `GW-5` timeout as a `reference` finding in the review file",
         "After the closing tally, offers to work the buffered `GW-2` gap now or later, and never files it silently"
@@ -110,7 +110,7 @@
         "Echoes the probe result and invokes `srd:report-doc-gap` neither at the start nor at the close — the buffer file is absent, and this run captured nothing to offer",
         "Runs no facts-vs-corpus pass and says the corpus was unreachable, rather than silently omitting it",
         "Creates `specs/login.review.md` and writes the three defects with fresh numbers from `#1`",
-        "Reaches the first finding judgement without a narrated startup sequence"
+        "The reply opens with the outcome — findings, the review file, the tally — with no narrated startup sequence (\"first I probe…, then I read…\")"
       ]
     }
   ]

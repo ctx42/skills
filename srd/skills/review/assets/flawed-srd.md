@@ -1,6 +1,6 @@
-<!-- Eval fixture: deliberately defective. Every planted defect is listed in
-     evals/expectations.json, scenario "fixture-regression" — that list is the
-     regression baseline. Plant nothing here without adding its bullet there. -->
+<!-- Eval fixture: deliberately defective. Its planted defects are the
+     regression baseline of srd:review's fixture scenario; see CONTRIBUTING.md
+     before changing it. -->
 
 # Widget Export
 

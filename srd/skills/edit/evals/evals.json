@@ -7,7 +7,7 @@
       "skills": [
         "edit"
       ],
-      "setup": "`specs/login.md` carries `Status: ACCEPTED`. `GR-3a` reads \"The system SHALL validate the token and log the attempt\" — two rules in one requirement — and `GR-3b` already exists beside it. The approving authority has not been consulted.",
+      "setup": "`specs/login.md` carries `Status: ACCEPTED`. `GR-3a` reads \"The system SHALL validate the token and log the attempt\" — two rules in one requirement — and `GR-3b` already exists beside it. The approving authority has not been consulted. The user answers the split's proposal with `S`: the authority has not agreed.",
       "query": "/edit specs/login.md",
       "files": []
     },
@@ -67,7 +67,7 @@
       "skills": [
         "edit"
       ],
-      "setup": "Mid-session, with a `## TODO` section already present holding two items. The SRD already carries a `## TODO` section with two items.",
+      "setup": "Mid-session; the SRD already carries a `## TODO` section with two items.",
       "query": "Add: confirm the lockout threshold with security to TODO — then close the session",
       "files": []
     },
@@ -141,7 +141,7 @@
       "skills": [
         "edit"
       ],
-      "setup": "`specs/login.md` is `ACCEPTED`. A review finding says `GR-6` duplicates `GR-2` and should be removed. The approving authority has agreed to the removal.",
+      "setup": "`specs/login.md` is `ACCEPTED`. A review finding says `GR-6` duplicates `GR-2` and should be removed; `GR-7` follows `GR-6` in the same group. The approving authority has agreed to the removal.",
       "query": "/edit specs/login.md specs/login.review.md",
       "files": []
     },

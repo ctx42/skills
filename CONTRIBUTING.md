@@ -78,7 +78,10 @@ the runner's own don't-read-`tmp/` rule. Hand them over verbatim.
   followable", not "an uninformed agent follows them".
 - *`"files": []`.* The runner then authors the corpus it is graded on. A real
   fixture under `assets/` is stronger; `srd:review`'s `flawed-srd.md` is the
-  model.
+  model. Its scenario's bullets are the baseline of every defect it plants:
+  plant one only with its bullet, and add any defect a run finds that no
+  bullet lists. A fixture never names its expectations file — a blind runner
+  reads it.
 - *An interview skill.* `grill-me`, `srd:create`, `srd:edit` need someone to
   play the user, and one agent playing both sides is a weak test. Have it
   write the persona's ground truth down first and say where it was generous.

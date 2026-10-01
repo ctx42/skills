@@ -8,7 +8,7 @@
         "system-check",
         "review"
       ],
-      "setup": "`specs/labeling.md` has `GR-4` requiring Tag names to be written as a slash-separated path, and `GR-7` requiring Tag lookups to be \"fast\" with no criterion. No `specs/labeling.review.md` exists. The corpus contradicts `GR-4`: `ifp-doc/concepts/tags.md` states that Tag names are a comma-separated series of named nodes. The doc-gap and knowledge-base buffers for this SRD are empty.",
+      "setup": "`specs/labeling.md` has `GR-4` requiring Tag names to be written as a slash-separated path, and `GR-7` requiring Tag lookups to be \"fast\" with no criterion. No `specs/labeling.review.md` exists. The corpus contradicts `GR-4`: `ifp-doc/concepts/tags.md` states that Tag names are a comma-separated series of named nodes. The doc-gap and knowledge-base buffers for this SRD are empty. The user answers the first question and then says \"next\".",
       "query": "/system-check specs/labeling.md",
       "files": []
     },
@@ -19,7 +19,7 @@
         "system-check",
         "review"
       ],
-      "setup": "A re-run after the author edited the SRD. Both `specs/labeling.questions.md` and `specs/labeling.review.md` already exist, the latter written by the author's own review pass. The edit fixed six findings and introduced two new blockers: `GR-12` states a vague quality attribute with no measurable criterion (REQ-6), and the In Scope item `SC-4` is covered by no requirement (SCO-2).",
+      "setup": "A re-run after the author edited the SRD. Both `specs/labeling.questions.md` and `specs/labeling.review.md` already exist, the latter written by the author's own review pass. The edit fixed six findings and introduced two new blockers: `GR-12` states a vague quality attribute with no measurable criterion (REQ-6), and the In Scope item `SC-4` is covered by no requirement (SCO-2). After the refreshed set is put, the user answers the first question and says \"next\".",
       "query": "/system-check specs/labeling.md",
       "files": []
     },
