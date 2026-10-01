@@ -74,8 +74,9 @@ its full text.
   (`var _ Contract = (*T)(nil)`) and a godoc saying why.
 - Receivers are a ~three-letter type abbreviation, not a single letter:
   `pag *page`, `cfg *config`.
-- A local of type `T` reuses `T`'s receiver name (`pag` for `*page`, `cfg` for
-  `*config`).
+- Typed locals reuse their type's receiver name (`pag` for `*page`, `cfg` for
+  `*config`) — the name the receiver rule gives it, never a single-letter
+  receiver that rule is fixing.
 - Name a helper for what it does, not its one caller: a domain-agnostic body
   gets a domain-agnostic name and error text (`fileExists`, not `cached`).
 
@@ -157,7 +158,8 @@ its full text.
 
 ### Docs & examples
 
-- Provide `Example*` for non-trivial public APIs; they must pass `go test`.
+- Provide `Example*` for non-trivial public APIs; they must pass `go test`;
+  skip `main`, `internal`, and test-only packages.
 - A reusable package ships a `README.md` (or `doc.go` package overview):
   purpose, import path, and one runnable usage example; skip `main`,
   `internal`, and test-only packages.
@@ -189,14 +191,17 @@ its full text.
   returned by one `--- When ---` call is one subject, so an `assert.NoError` and
   the `assert.Equal` checking that call's result take no blank line between
   them, while a second collaborator's setup or a second value's assertions take
-  one.
+  one. Check every such block with two or more subjects: label each statement
+  with its subject first, then flag each boundary with no blank line and each
+  blank line inside a subject.
 - In `foo_test.go` with a matching `foo.go`, test functions follow the
   declaration order of their subject in `foo.go`; `Test_Foo` precedes
   `Test_Foo_tabular`; files without a 1-to-1 name match are exempt.
 
 ### Naming
 
-- Name tests `Test_Func` and `Test_Type_Method`; add `_tabular` for table tests.
+- Test function names are `Test_Func` and `Test_Type_Method`; add `_tabular`
+  for table tests.
 - Subtest names use only `[a-zA-Z0-9 _-]`; keep them flat, no `/`.
 - Keep subtest names terse — name the condition or trigger, not a full
   sentence.
@@ -223,14 +228,15 @@ its full text.
   stacked `ErrorContain` calls.
 - Hoist a literal into a `want` (or other) local only to keep the line within
   the limit; when the inlined form fits, inline it at each use even if
-  repeated.
+  repeated. A `--- When ---` argument is the exception: `--- Given ---`
+  prepares it whatever its length.
 - Hoist a multi-line structured-data literal (JSON, YAML) passed to a call into
   a pretty-printed backtick raw-string local; don't inline it or split it across
   `+`-joined segments to fit the line limit.
 
 ### Helpers & fixtures
 
-- Call `t.Helper()` in test helpers.
+- Test helpers call `t.Helper()`.
 - The packages these rules name: `tester` and `assert` come from
   `github.com/ctx42/testing/pkg/{tester,assert}`; `ring` from
   `github.com/ctx42/ring/pkg/ring`; `oskit` from

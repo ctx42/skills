@@ -157,9 +157,6 @@ rule, same severity, opposite edits. The line settles the `--- Then ---`
 subject; in `--- Given ---` it is the variable being declared, which the
 sibling rule "keep a variable's setup next to its declaration" already fixes —
 its setup lines belong to it, and the next declaration opens the next subject.
-Detect: label every statement in the block with its subject, top to bottom,
-then flag each subject boundary with no blank line and each blank line inside
-a subject.
 
 ## Don't wrap a one-liner in a test helper (Test)
 

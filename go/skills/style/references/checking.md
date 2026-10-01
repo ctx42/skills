@@ -47,7 +47,8 @@ Read these from `$ARGUMENTS` (any order, after the target):
 - `fix` — apply every listed offense's fix without asking (skips the pick step).
 
 Default to plan-first for a broad target with no budget: propose defaults (the
-caps above, the package list) and ask before applying anything. Broad means the
+caps above, the package list) and ask before applying anything. Either
+`packages=` or `max_issues=` is a budget; `depth=` alone is not. Broad means the
 run would fan out — more than ~6 packages, the same threshold Scale uses. A
 module of three small packages is `./...` and still not broad: check it in this
 context and use the normal pick step, which asks before applying anyway.
@@ -122,11 +123,13 @@ Decide it from the fix the rule prescribes in general — never from what this
 site happens to need — by the first of these that matches:
 
 1. Blocker — the code is wrong or will mislead: a swallowed or `%v`-wrapped
-   error, a data race the style rules forbid, an exported symbol with no godoc,
-   a name that states the opposite of what the code does.
+   error, an error matched with `==`, an exported symbol with no godoc, a name
+   that states the opposite of what the code does, an assertion that passes on
+   the wrong branch.
 2. Nit — `gofmt`/`goimports` would produce the fix, or the fix only inserts,
-   removes, or rewraps whitespace or rewords a comment, leaving every
-   identifier, statement, and declaration where it is.
+   removes, or rewraps whitespace or inserts, rewords, or deletes a comment (a
+   marker comment included), leaving every identifier, statement, and declaration
+   where it is.
 3. Should-fix — everything else: the fix renames, moves, regroups, or
    restructures.
 
@@ -134,8 +137,9 @@ First match wins, so a rule answering to both 1 and 2 takes 1, and no rule
 "fits none" — 3 is the residue. The contested cases are settled by 2's closing
 clause, *leaving every identifier, statement, and declaration where it is*: a
 rule whose prescribed fix moves any code fails 2 and lands in 3, even at a site
-needing only a blank line. That is what separates the two blank-line rules —
-switch cases prescribe blank lines alone and are a Nit, while `--- Given ---`
+needing only a blank line, and so does one that adds or removes an identifier,
+table-row field keys included. That is what separates the two blank-line rules
+— switch cases prescribe blank lines alone and are a Nit, while `--- Given ---`
 topics also prescribe grouping statements by subject and are a Should-fix.
 Graded by taste instead, twelve workers split 6/6 on the second over
 byte-identical code.
@@ -147,7 +151,9 @@ Each offense:
   and not a restatement of the rule — the thing on the line. An offense whose
   trigger cannot be quoted was not located, and under `fanout` the quote is
   what lets the merge re-check a package that reported nothing.
-- the minimal fix.
+- the minimal fix, opening with its verb — `insert`, `delete`, `rename`,
+  `move`, `replace`, or `reword` — so the merge can compare directions across
+  sites without parsing prose.
 
 Rule ids are not coined per run, and "the exact rule phrase" is not an id —
 asked for one, twelve workers turned the same `%w` rule into
@@ -167,20 +173,22 @@ merge cannot fold:
    rule, so the bullet is always the source and the entry is only where the
    detail lives.
 2. Drop backticks and the code inside them, except where the code *is* the
-   word. First cut each token at its opening parenthesis, arguments and all
-   (`init()` → `init`, `ErrorRegexp("a.*b")` → `ErrorRegexp`), or a dot inside
-   a string argument reaches the next test and yields `ErrorRegexp("a`. Then
-   three tests, in this order, the first match winning:
-   a token carrying a file extension contributes nothing (`foo_test.go`,
-   `README.md`) — it names an example file, not the rule; a dotted identifier
-   contributes the part before the first dot and nothing else
-   (`context.Context` → `context`, `errors.Is` → `errors`); a token that is
-   letters once its *outer* punctuation is stripped contributes those letters
-   (`%w` → `w`). Anything left contributes nothing: internal punctuation marks
-   a code token rather than a word, so `Test_Func` and `//nolint:name` add no
-   word, where treating them as one gives `name-tests-testfunc`. The order is
-   the rule, not a formality: `errors.Is` answers to two tests both, and
-   unstated precedence makes one rule `match-errors-never` for one worker and
+   word. A backtick span holding spaces is several tokens: split it on
+   whitespace first (`--- Given ---` → `---`, `Given`, `---`). Then cut each
+   token at its opening parenthesis, arguments and all (`init()` → `init`,
+   `ErrorRegexp("a.*b")` → `ErrorRegexp`), or a dot inside a string argument
+   reaches the next test and yields `ErrorRegexp("a`. Then three tests, in
+   this order, the first match winning: a token carrying a file extension
+   contributes nothing (`foo_test.go`, `README.md`) — it names an example
+   file, not the rule; a dotted identifier contributes the part before the
+   first dot and nothing else (`context.Context` → `context`, `errors.Is` →
+   `errors`); a token that is letters once its *outer* punctuation — any
+   leading or trailing non-letter, `_` included — is stripped contributes
+   those letters (`%w` → `w`, `_tabular` → `tabular`). Anything left
+   contributes nothing: internal punctuation marks a code token rather than a
+   word, so `Test_Func` and `//nolint:name` add no word. The order is the
+   rule, not a formality: `errors.Is` answers to two tests both, and unstated
+   precedence makes one rule `match-errors-never` for one worker and
    `match-errors-errorsis` for the next. Taking the part after the dot instead
    turns one rule into `match-errors-is` for a worker who read `errors.Is`
    first and `match-errors-as` for one who read `errors.As`.
@@ -219,14 +227,17 @@ the end" needs in order to be performable: twelve workers deriving
 independently produced one spelling for three rules and two for the fourth,
 which is a merge that has already failed.
 
-One offense is one rule broken in one file, however many times it is broken
-there — list every site on the offense, do not repeat the offense per site.
-Twelve workers reporting a receiver rule as one offense in some packages and
-one per site in others makes every count noise, and a cap applied to sites
-rather than rules spends itself on whichever rule happens to repeat most.
+Folding across packages is a merge step: an in-context run lists offenses per
+file and folds nothing. One offense is one rule broken in one file, however
+many times it is broken there — list every site on the offense, do not repeat
+the offense per site. Twelve workers reporting a receiver rule as one offense
+in some packages and one per site in others makes every count noise, and a cap
+applied to sites rather than rules spends itself on whichever rule happens to
+repeat most.
 
 Stop at `max_issues`, highest-severity first; say how many offenses went
-unreported. End with a one-line verdict (clean / fix-first) and per-severity
+unreported — counted in offenses, every site of a dropped finding included,
+never in findings. End with a one-line verdict (clean / fix-first) and per-severity
 counts.
 
 ## Fixing
@@ -240,6 +251,10 @@ failing-test reproduction is needed — the test gate is the proof.
   answered the plan, and that answer agreed the budget, not the fixes: the pick
   step still runs. Before the answer there is no offense list to apply at all,
   because nothing has been checked yet.
+- Measure every line a fix writes — a reworded comment as much as code —
+  against the limit before applying it; a fix that overflows is itself an
+  offense. Where the approved wording cannot fit, say so and give the wording
+  applied.
 - For a rename or signature change, enumerate call sites with `LSP`
   (`findReferences`, `goToImplementation`) before editing so definition and
   dependents change together.
@@ -248,18 +263,23 @@ failing-test reproduction is needed — the test gate is the proof.
 - Never print diffs of applied fixes: report each as one line (`file:sym — what
   changed`) plus the gate result. Never `git commit`.
 - Big job (offenses span many packages / large LOC): write an ordered plan to a
-  gitignored scratch file (`tmp/style-fix-plan.md`), one chunk per package with
-  status boxes; get a go-ahead, work chunks in order, gate per chunk, consult
-  after each changed chunk.
+  scratch file kept out of git (`tmp/style-fix-plan.md`, gitignored or listed
+  in `.git/info/exclude`), one chunk per package with
+  status boxes; the pick answer is the go-ahead, so do not ask again before the
+  first chunk; work chunks in order, gate per chunk, and after each changed
+  chunk report it and ask before starting the next.
 
 ## Scale
 
 - Single package or small module (<= ~6 packages): check in this context.
 - Larger module (> ~6 packages): fan out one subagent per package (each gets
-  `SKILL.md`, this reference, the `depth`, and the parent's rule-id list, and
-  opens `rules.md` entries per need like the parent), then merge into one
-  report re-ranked to the global `max_issues`. The id list is every rule the
-  depth puts in scope, which at `standard` and `full` is the whole rulebook —
+  the paths of `SKILL.md` and this reference, not their text, the `depth`, and
+  the parent's rule-id list, and opens `rules.md` entries per need like the
+  parent; the brief also has it walk every `--- Given ---`/`--- Then ---` block
+  subject by subject for the topic rule, which a read-through misses most),
+  then merge into one report re-ranked to the global `max_issues`. The id list
+  is every rule the depth puts in scope, which at `standard` and `full` is the
+  whole rulebook —
   one id per bullet, bar the few bullets step 5 folds onto a shared id. That
   size is expected and is not a reason to trim it: the parent cannot know which
   rules a package breaks until the package is checked, and a worker that meets
