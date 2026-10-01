@@ -83,7 +83,8 @@ which SRD to check; fall back to the user's prose for free-form input.
    case. Then resolve the corpus (see
    [Support files](#support-files)). `srd:review` probes the gap buffer at its
    own start too; tell it the probe is done so the user is not offered the same
-   pending gaps twice in one run. The probe shows the user nothing, so the
+   pending gaps twice in one run, and so its report carries no probe clause of
+   its own — this skill's covers both. The probe shows the user nothing, so the
    clause saying both buffers were checked and were empty is this skill's to
    write in its own report: a check that ran is otherwise indistinguishable
    from one that never did. With none reachable, skip the
@@ -182,8 +183,10 @@ implementer's view.
 
 Close the walk by naming each delegate that ran and what it took —
 `srd:kb: 2 facts`, `srd:report-doc-gap: 1 gap offered` — and leave out the one
-that took nothing. A file a delegate wrote and a file this skill wrote look
-identical afterwards; this line is the only thing that tells them apart.
+that took nothing. `srd:review` is not named here: it is the review layer, and
+its findings already appear as questions. A file a delegate wrote and a file
+this skill wrote look identical afterwards; this line is the only thing that
+tells them apart.
 
 ## Re-run after an SRD edit
 
@@ -211,13 +214,15 @@ platform — no SRD, no walk. Use it when a conversation that was not SRD work
 (a debugging session, a design discussion, a call you are recounting) surfaced
 durable facts, before they scroll away.
 
-1. Scan this session for durable, reusable platform facts: general facts about
+1. Probe the buffers with `../create/scripts/probe-buffers.sh` and no path; a
+   `pending` `kb` line means `srd:kb` drains the session record first.
+2. Scan this session for durable, reusable platform facts: general facts about
    the system the user stated or confirmed, not ones specific to an SRD,
    ticket, or review, and never something the agent inferred. Restatements of
    an SRD in play do not qualify.
-2. Restate the candidates once, as one list; the user's confirmation is the
+3. Restate the candidates once, as one list; the user's confirmation is the
    gate, and a correction corrects the list.
-3. Hand the confirmed facts to `srd:kb`; coverage checks against the corpus,
+4. Hand the confirmed facts to `srd:kb`; coverage checks against the corpus,
    dedup, and the writing are its job, not this skill's.
 
 Report tersely, once: what `srd:kb` banked and what it dropped as already
