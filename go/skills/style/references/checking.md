@@ -116,45 +116,80 @@ Group by severity Blocker / Should-fix / Nit. Severity is a property of the
 rule, not of the instance or the reader's taste: the same rule broken in two
 packages is the same severity in both, and a worker that finds switch spacing a
 Nit in four packages and Should-fix in two has graded the code rather than the
-rule. Decide it once, the same way every time:
+rule.
 
-- Blocker — the code is wrong or will mislead: a swallowed or `%v`-wrapped
-  error, a data race the style rules forbid, an exported symbol with no godoc,
-  a name that states the opposite of what the code does.
-- Should-fix — the rule is broken and a reader pays for it, but nothing is
-  incorrect: naming, stutter, receiver conventions, test structure, ordering.
-- Nit — mechanical and local: spacing, comment wording, import grouping.
+Decide it from the fix the rule prescribes in general — never from what this
+site happens to need — by the first of these that matches:
 
-A rule that fits none cleanly takes the nearest tier and says so in the
-offense, rather than being graded afresh each time it appears.
+1. Blocker — the code is wrong or will mislead: a swallowed or `%v`-wrapped
+   error, a data race the style rules forbid, an exported symbol with no godoc,
+   a name that states the opposite of what the code does.
+2. Nit — `gofmt`/`goimports` would produce the fix, or the fix only inserts,
+   removes, or rewraps whitespace or rewords a comment, leaving every
+   identifier, statement, and declaration where it is.
+3. Should-fix — everything else: the fix renames, moves, regroups, or
+   restructures.
+
+First match wins, so a rule answering to both 1 and 2 takes 1, and no rule
+"fits none" — 3 is the residue. The contested cases are settled by 2's closing
+clause, *leaving every identifier, statement, and declaration where it is*: a
+rule whose prescribed fix moves any code fails 2 and lands in 3, even at a site
+needing only a blank line. That is what separates the two blank-line rules —
+switch cases prescribe blank lines alone and are a Nit, while `--- Given ---`
+topics also prescribe grouping statements by subject and are a Should-fix.
+Graded by taste instead, twelve workers split 6/6 on the second over
+byte-identical code.
 
 Each offense:
 - `file:line` — the offense in one line.
 - the rule id (e.g. `wrap-errors-w`, `no-name-stutter`).
+- the trigger: the source text that makes it an offense, quoted. Not the fix
+  and not a restatement of the rule — the thing on the line. An offense whose
+  trigger cannot be quoted was not located, and under `fanout` the quote is
+  what lets the merge re-check a package that reported nothing.
 - the minimal fix.
 
 Rule ids are not coined per run, and "the exact rule phrase" is not an id —
 asked for one, twelve workers turned the same `%w` rule into
 `Wrap errors with %w and add context…`, `style: %w`, and a lower-cased variant.
-An id is a bare slug: no `style:` prefix, no backticks, no capitals.
 
 Derive it in these steps, which every worker must apply identically or the
 merge cannot fold:
 
-1. Take the rule's `SKILL.md` line. A `rules.md` entry does not change this —
-   deriving from the entry's Contents key and from the line gives two ids for
-   one rule, so the line is always the source and the entry is only where the
+1. Take the rule's whole `SKILL.md` bullet. One bullet is one rule is one id:
+   never split it, and in particular never split on `;`. Most rulebook bullets
+   carry a semicolon, and it almost always joins a rule to its negative half or
+   its elaboration (*gofmt + goimports always; never hand-format*, *Wrap errors
+   with `%w`…; never swallow the error*) — splitting those produced two ids for
+   one rule and ids naming no rule at all (`none-before-first`,
+   `break-only-when`). A `rules.md` entry does not change this either: deriving
+   from the entry's Contents key and from the bullet gives two ids for one
+   rule, so the bullet is always the source and the entry is only where the
    detail lives.
-2. Split on `;` first: a line carrying two rules separated by a semicolon is
-   two rules with two ids, reported as two offenses. Never split on "and",
-   which joins clauses of one rule as often as it joins two.
-3. Drop everything that is not a word: punctuation, backticks, and the code
-   inside them, except where the code *is* the word. Two forms qualify: a token
-   that is only letters after its punctuation (`%w` → `w`), and a dotted
-   identifier, which contributes the part before the first dot and nothing else
-   (`context.Context` → `context`, `errors.Is` → `errors`). Taking the part
-   after the dot instead turns one rule into `match-errors-is` for a worker who
-   read `errors.Is` first and `match-errors-as` for one who read `errors.As`.
+2. Drop backticks and the code inside them, except where the code *is* the
+   word. First cut each token at its opening parenthesis, arguments and all
+   (`init()` → `init`, `ErrorRegexp("a.*b")` → `ErrorRegexp`), or a dot inside
+   a string argument reaches the next test and yields `ErrorRegexp("a`. Then
+   three tests, in this order, the first match winning:
+   a token carrying a file extension contributes nothing (`foo_test.go`,
+   `README.md`) — it names an example file, not the rule; a dotted identifier
+   contributes the part before the first dot and nothing else
+   (`context.Context` → `context`, `errors.Is` → `errors`); a token that is
+   letters once its *outer* punctuation is stripped contributes those letters
+   (`%w` → `w`). Anything left contributes nothing: internal punctuation marks
+   a code token rather than a word, so `Test_Func` and `//nolint:name` add no
+   word, where treating them as one gives `name-tests-testfunc`. The order is
+   the rule, not a formality: `errors.Is` answers to two tests both, and
+   unstated precedence makes one rule `match-errors-never` for one worker and
+   `match-errors-errorsis` for the next. Taking the part after the dot instead
+   turns one rule into `match-errors-is` for a worker who read `errors.Is`
+   first and `match-errors-as` for one who read `errors.As`.
+3. Split what is left into words: a hyphen inside a word keeps it one word
+   (`three-letter`, `multi-line`), an apostrophe is deleted (`member's` →
+   `members`, `don't` → `dont`), and every other run of non-alphanumerics
+   separates words (`func/method` → `func`, `method`). An id therefore carries
+   letters, digits, and the hyphens joining its words — no slashes, no
+   apostrophes, no `style:` prefix, no backticks, no capitals.
 4. Drop these words wherever they fall: *a an the is are be to of in on at by
    with for from and or its it this that*. Nothing else is dropped —
    "significant" was doing that job and eleven workers read it one way while
@@ -163,18 +198,23 @@ merge cannot fold:
    collide on one id.
 5. Collapse a word that repeats the word just before it (`errors errors` →
    `errors`), then take the first three words that remain, lowercase, join with
-   hyphens.
+   hyphens. Two bullets landing on one id is right only where the rulebook
+   states the same rule in both sections (the one-expression wrapper rule says
+   so itself); anywhere else, extend both to the first word that tells them
+   apart.
 
 *Wrap errors with `%w` and add context…* → `wrap-errors-w`. *Lines fit the
 limit…* → `lines-fit-limit`. *Receivers are a ~three-letter type abbreviation* →
 `receivers-three-letter-type`. *`context` is the first parameter…* →
-`context-first-parameter`. *No work in `init()`; no package-level mutable
-state…* → `no-work-init` and `no-package-level-mutable`.
+`context-first-parameter`. *Every new func/method…* → `every-new-func`. *No
+work in `init()`; no package-level mutable state…* → `no-work-init`, one id for
+the bullet, not one per clause.
 
-Under `fanout`, the parent derives the id for every rule it is dispatching
-against and sends that list with each worker's brief. Workers use the list and
-coin nothing; a rule they hit that is not on it comes back with the line quoted
-and no id, for the parent to key. This is what "fix the id, do not reconcile at
+Under `fanout`, the parent derives the id *and the severity* for every rule it
+is dispatching against and sends that list with each worker's brief. Workers
+use the list and neither coin an id nor grade a tier; a rule they hit that is
+not on it comes back with the line quoted, no id, and no severity, for the
+parent to key and grade. This is what "fix the id, do not reconcile at
 the end" needs in order to be performable: twelve workers deriving
 independently produced one spelling for three rules and two for the fourth,
 which is a merge that has already failed.
@@ -220,11 +260,12 @@ failing-test reproduction is needed — the test gate is the proof.
   opens `rules.md` entries per need like the parent), then merge into one
   report re-ranked to the global `max_issues`. The id list is every rule the
   depth puts in scope, which at `standard` and `full` is the whole rulebook —
-  well over a hundred ids. That size is expected and is not a reason to trim
-  it: the parent cannot know which rules a package breaks until the package is
-  checked, and a worker that meets a rule missing from its list has to come
-  back with a quoted line and no id. Report which packages were checked and
-  which were skipped; never silently truncate.
+  one id per bullet, bar the few bullets step 5 folds onto a shared id. That
+  size is expected and is not a reason to trim it: the parent cannot know which
+  rules a package breaks until the package is checked, and a worker that meets
+  a rule missing from its list has to come back with a quoted line and no id.
+  Report which packages were checked and which were skipped; never silently
+  truncate.
 
   Workers do not get a share of `max_issues` — they report every offense they
   find, and the cap is applied once, at the merge, across the whole set. A
@@ -239,11 +280,23 @@ failing-test reproduction is needed — the test gate is the proof.
   fell outside it — the worst finding in the run, unreported.
 
   Every worker checks the same rules: the Production section, plus Test for
-  `_test.go`. Each reports which rules it checked, and the merge says so. Left
-  to choose, twelve workers on byte-identical code detected zero-value safety
-  in ten, cross-references in four, and returned per-package totals from 3 to
-  10 for the same file — a spread that looks like a finding about the packages
-  and is really a finding about the workers.
+  `_test.go`. A worker's own claim to have checked them all is not evidence:
+  on byte-identical code, twelve workers each claimed full coverage while
+  detecting cross-references in three packages of nine, output assertions in
+  two, and a hoisted literal in one. That spread looks like a finding about the
+  packages and is really one about the workers, so the merge tests it rather
+  than relaying it.
+
+  After folding and before cutting, take every rule flagged in some packages
+  but not all, and every rule whose folded sites prescribe opposing fixes. For
+  each, search the disagreeing packages for the trigger the offense quoted —
+  the parent does this against the source, not by asking the worker again —
+  and report the reconciled count, not the spread. A rule flagged in three
+  packages of nine is an offense in nine or in none. A rule whose sites say
+  *insert a blank line* in eight packages and *delete one* in four has one
+  side backwards, and folding them to the majority fix prescribes an edit that
+  is wrong wherever the minority was right — a `fix` run then edits correct
+  code.
 
   The merge is only performable if workers agree on ids and severity, which is
   what the rubric and the id rule above are for: merging means concatenating,
@@ -252,8 +305,11 @@ failing-test reproduction is needed — the test gate is the proof.
   down — a fan-out's "N offenses across M packages, K unreported" is the one
   number the reader cannot re-derive without the worker output, and a merge
   that reported 48 where the workers summed to 45 got it by carrying a figure
-  rather than adding one. If a rule id arrives in two spellings, the merge has already
-  failed — fix the id, do not reconcile at the end.
+  rather than adding one. If a rule id arrives in two spellings, the merge has
+  already failed — fix the id, do not reconcile at the end. That is about
+  keying, which the pinned list settles before dispatch; detection is the
+  opposite case, and reconciling it at the merge is the only place it can be
+  caught at all.
 
 ## Delegated by go:review
 

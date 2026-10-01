@@ -21,6 +21,7 @@ when about to flag its rule; never preload the file. Grows via
 - Read the environment through the ring (Production + Test)
 - Name the overflow (Production + Test)
 - Break an over-width table row positionally (Test)
+- Separate distinct topics with a blank line (Test)
 - Don't wrap a one-liner in a test helper (Test)
 - Assert on distinctive output, not shared tokens (Test)
 - must.Value for error not under test (Test)
@@ -145,6 +146,20 @@ keys add noise; this runs against the Go habit of keying multi-line struct
 literals, so never "fix" a positional row back to keys. Detect: a multi-line
 table-row literal using `field: value` keys, or a single-line row past the width
 limit that should wrap.
+
+## Separate distinct topics with a blank line (Test)
+
+Determine the subjects first, then read the blank lines off them. A run that
+scans for blank lines instead judges each one alone and reads the rule
+backwards as often as forwards — on identical code, twelve workers split eight
+flagging a missing blank line against four calling a correct one surplus: same
+rule, same severity, opposite edits. The line settles the `--- Then ---`
+subject; in `--- Given ---` it is the variable being declared, which the
+sibling rule "keep a variable's setup next to its declaration" already fixes —
+its setup lines belong to it, and the next declaration opens the next subject.
+Detect: label every statement in the block with its subject, top to bottom,
+then flag each subject boundary with no blank line and each blank line inside
+a subject.
 
 ## Don't wrap a one-liner in a test helper (Test)
 
