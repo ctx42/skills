@@ -9,8 +9,10 @@
         "Names the tools the pass ran — none — in the report, rather than leaving a reader unable to tell a review that judged by reading from one that shelled out",
         "Says in the report that the style dimension came from `go:style`, and the style offenses it merges carry that skill's rule ids",
         "Applies no fix and edits no rule: the working tree is unchanged after the run, which is what a review-only pass leaves behind",
-        "Groups findings Blocker / Should-fix / Nit, each with `file:line`, the rule id or dimension (`style: %w`, `correctness`), and a minimal fix",
-        "Ends with a ship / fix-first verdict and per-severity counts"
+        "Groups findings Blocker / Should-fix / Nit, each with `file:line`, the rule id or dimension (`wrap-errors-w`, `correctness`), and a minimal fix",
+        "Ends with a ship / fix-first verdict and per-severity counts",
+        "Grades the dropped error return a Blocker and names the input or call that reaches it — the failure whose error is now lost",
+        "Reports the `%v` wrap once, under correctness as a Blocker because the `errors.Is` caller can no longer match it, and names `wrap-errors-w` as the style rule it also breaks — the line appears in no second finding"
       ]
     },
     {

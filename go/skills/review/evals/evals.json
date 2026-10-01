@@ -7,7 +7,7 @@
       "skills": [
         "review"
       ],
-      "setup": "A staged diff that drops one error return and wraps another with `fmt.Errorf` using `%v` instead of `%w`. Nothing names a target.",
+      "setup": "A staged diff that drops one error return and wraps another with `fmt.Errorf` using `%v` instead of `%w`. Nothing names a target. A caller in the same package matches the `%v`-wrapped error with `errors.Is`.",
       "query": "/review",
       "files": []
     },
