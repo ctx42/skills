@@ -128,7 +128,7 @@
       "expected_behavior": [
         "Appends the applied change to `specs/login.decisions.md` before proposing the next one, so nothing is lost if the session dies mid-flow",
         "Creates the file with `cfsync-plugin: ignore-push` front matter on the first write",
-        "Records the entry, the change in prose, and the user's reason tidied into a clean sentence — never a diff and never an invented rationale",
+        "Records the entry, the change in prose, and the user's reason quoted verbatim — never paraphrased, never a diff, and never a rationale neither the user nor the proposal stated",
         "Does not log the skipped proposal",
         "The closing manifest points at the file's newest session block as the author's summary"
       ]

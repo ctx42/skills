@@ -25,14 +25,14 @@ author-facing account of what changed and why, which a diff cannot carry.
   one. A new `###` heading only for a section the session has not touched yet.
   Incremental writing is what makes this explicit — the entries arrive one at a
   time, and the block they join is the one already on the page.
-- Record the entry/id, the change in prose (not a diff), and the reason: the
-  user's rationale when they gave one, the proposal's when it stood unamended.
-  A bare `Y` carries the proposal's reason, paraphrased from the proposal's
-  own text with nothing added — no audience, consequence, or rule the proposal
-  did not state; a proposal that stated no reason logs none.
-- Rephrase the user's words into clean prose — fix typos, expand shorthand,
-  drop the conversational frame — keeping decision and reason intact. Never
-  invent a reason the user did not give.
+- Record the entry/id, the change in prose (not a diff), and the reason,
+  quoted verbatim: the user's words when they gave a reason, else the
+  proposal's one-line rationale when it stood unamended (a bare `Y`). Quote,
+  never paraphrase — a paraphrase is where invented reasons got in. Trim only
+  the conversational frame around the quote (`yes, because`) and the
+  interaction text a rationale carries — keystroke hints (`` `E` to give a
+  different limit ``) and process notes (`so no corpus lookup`); keep its
+  typos and shorthand. No quotable reason, no reason logged.
 - Every applied edit, loop or not: `autofix` logs one entry per substitution,
   Add-to-TODO logs its line. Same changes, same log.
 - Skipped and flagged-but-unfixed issues are not logged: they stay in the
@@ -57,13 +57,12 @@ cfsync-plugin: ignore-push
 
 ### Details page
 
-DET-14 was removed. Retention and data accessibility are not part of this SRD,
-so the requirement and its open "retention period to be confirmed" note went
-with it. DET-13 still covers keeping historical measurements available after a
-channel is reassigned.
+DET-14 was removed, with its open "retention period to be confirmed" note.
+Reason: "retention isnt part of this srd, DET-13 already covers history after
+reassignment".
 
-DET-9 now names the sample rate in hertz, which the page promises in place of
-"high resolution".
+DET-9 now names the sample rate in hertz instead of "high resolution".
+Reason: "Names a measurable value in place of an untestable adjective."
 
 ### General
 
