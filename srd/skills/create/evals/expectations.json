@@ -63,7 +63,7 @@
       "expected_behavior": [
         "Searches the corpus before accepting the claim, and neither silently accepts nor silently corrects it",
         "Hands the unconfirmable claim to `report-doc-gap`, and the confirmed fact to `kb` once the user confirms it in the branch restatement",
-        "Neither hand-off interrupts the interview: no turn between the claim and the next branch is about the gap or the knowledge base. The restatement is followed by the interview's next question, and a turn asking about banking, filing, or where either delegate writes is the interruption this forbids — a question about the requirement itself is not",
+        "Neither hand-off interrupts the interview: no turn between the claim and the next branch is about the gap or about banking or filing either one. The one exception is the knowledge-base location, asked once at the first confirmed fact when none is on record; the turn after it resumes the interview. A question about the requirement itself is not an interruption",
         "Never asks permission to bank the fact — no \"should I record this?\" prompt. Confirming the requirement confirms the fact, and `srd:kb` captures it silently. Ordinary elicitation (\"is three the count today?\") is a requirement question, not a banking prompt, and does not breach this",
         "At the write step, invokes `kb` to write the confirmed fact and `report-doc-gap` to offer the buffered gap",
         "Writes no requirement the interview did not attest: every rule in the SRD traces to something the persona stated, and a behaviour nobody mentioned does not appear because it would round the feature out"
