@@ -27,6 +27,9 @@ author-facing account of what changed and why, which a diff cannot carry.
   time, and the block they join is the one already on the page.
 - Record the entry/id, the change in prose (not a diff), and the reason: the
   user's rationale when they gave one, the proposal's when it stood unamended.
+  A bare `Y` carries the proposal's reason, paraphrased from the proposal's
+  own text with nothing added — no audience, consequence, or rule the proposal
+  did not state; a proposal that stated no reason logs none.
 - Rephrase the user's words into clean prose — fix typos, expand shorthand,
   drop the conversational frame — keeping decision and reason intact. Never
   invent a reason the user did not give.
@@ -59,8 +62,8 @@ so the requirement and its open "retention period to be confirmed" note went
 with it. DET-13 still covers keeping historical measurements available after a
 channel is reassigned.
 
-DET-9 now names the sample rate in hertz. "High resolution" was not something
-QA could test for, and the rate is the thing the page actually promises.
+DET-9 now names the sample rate in hertz, which the page promises in place of
+"high resolution".
 
 ### General
 
