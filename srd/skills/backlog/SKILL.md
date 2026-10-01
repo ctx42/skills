@@ -179,7 +179,10 @@ Draft the page that fixes the user manual; a human publishes it.
    heavy grill). Spot them by a populated `target_claim`, read those first as a
    starting point, not gospel.
    Run `craft:grill-me` on the cluster to fill what the record leaves open,
-   never re-asking what it answers. Do not draft from guesses.
+   never re-asking what it answers. Do not draft from guesses: every sentence
+   of the draft is something the user confirmed or the corpus states — a
+   gap's own claim is the reporter's word until the user confirms it, and a
+   draft states no consequence or summary neither source gave.
 5. Draft one page (or the edit to an existing one) against
    [../kb/references/retrieval-authoring.md](../kb/references/retrieval-authoring.md),
    to a neutral drafts location the user names, outside every corpus source —

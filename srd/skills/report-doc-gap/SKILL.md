@@ -220,7 +220,8 @@ together learns nothing the first did not say.
 
 If the same fact is already buffered for this SRD, merge into it rather than
 duplicate: union `search_terms`, keep the richer `detail` and `target_claim`,
-keep the earliest `demand` and add the new one if it differs, keep the existing
+keep the earliest `demand` and add the new one if it differs, each in the
+words its capture recorded — the merge writes no sentence of its own — keep the existing
 `kind` unless the new capture is strictly more specific (`missing` yielding to
 `wrong` or `ambiguous`, never the reverse — the second finder saw the same
 absence, not a different one), append to `srd_ref` comma-separated since one
