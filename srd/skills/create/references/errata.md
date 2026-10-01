@@ -60,7 +60,10 @@ Nothing outside this list is errata.
   applying it unreviewed breaks the callout. That works because the standard
   fixes its text: there is exactly one correct form to replace it with, which
   is what makes the substitution safe to apply unreviewed. No other long fix
-  inherits this exemption.
+  inherits this exemption. The one correct form is the notice in
+  [../assets/srd-template.md](../assets/srd-template.md) (`[!INFO]` callout, "in
+  this document"); the one in `srd-standard.md` describes the standard itself
+  and is never the replacement.
 
 ## Exclusions
 
