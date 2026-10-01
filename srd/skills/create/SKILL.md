@@ -103,7 +103,8 @@ lives — let that land at the first fact the interview confirms, not at step 5,
 where it would sit between the finished SRD and the closing report.
 
 Resolve the glossary when the first term surfaces (branch 6 at the latest, and
-always before drafting), not here: the procedure in
+always before drafting; a seed's term surfaces with the user's first answer),
+not here: the procedure in
 [references/srd-procedures.md](references/srd-procedures.md) resolves the
 per-project path, fingerprints it, and may regenerate a model-synthesized
 digest, which is a poor way to spend the seconds before the opening question.
@@ -149,7 +150,8 @@ so confirming it confirms both the SRD and the knowledge base:
    resolved Company Glossary satisfies GLO-3, so a term the corpus defines and
    the digest lacks still needs a local entry
    ([references/srd-procedures.md](references/srd-procedures.md)). A definition
-   the user supplies because no glossary carries it goes to `srd:kb`.
+   the user supplies because no glossary carries it goes to `srd:kb` when it
+   names a platform concept; one specific to this SRD gets its local entry only.
 
 Do not collect Owners, Initiative links, or Designs links; those are left as
 marked placeholders (the skill fetches no such links). Status is always
@@ -227,9 +229,9 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    author is still in the room, which is what separates this from an editor
    working a finished document. "Leave it" is a legitimate answer: it goes to
    the step-5 report as an accepted gap, not as something the self-check
-   missed. Everything else from step 3 — placeholders, style, intro gaps,
-   terminology drift, an unconfirmed platform claim — is reported, never
-   walked.
+   missed, and to no `## TODO` entry. Everything else from step 3 —
+   placeholders, style, intro gaps, terminology drift, an unconfirmed platform
+   claim — is reported, never walked.
 
 Do not mark the draft acceptable: a new SRD is `IN PROGRESS` and acceptance
 (STA-3, Quality Bar) is a human decision.
@@ -238,7 +240,8 @@ Do not mark the draft acceptable: a new SRD is `IN PROGRESS` and acceptance
 
 Write the SRD as a single `.md` file to the path the user gives (ask if they
 have not said). Invoke `srd:kb` to write the facts the interview confirmed and
-`srd:report-doc-gap` to offer the gaps buffered this session. Then report
+`srd:report-doc-gap` to offer the gaps buffered this session — each only when
+the session handed it something. Then report
 once: the file path, the requirement groups with their counts, the judgment
 findings and human follow-ups collected in step 4, and any blocker the user
 chose to leave standing.
