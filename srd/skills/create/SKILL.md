@@ -70,7 +70,9 @@ confirms goes to `srd:kb`. Both are probed at step 0 and invoked there only on
 a hit, buffer silently in between, and run again at step 5, where `srd:kb`
 writes its confirmed facts and `srd:report-doc-gap` offers to work the buffered
 gaps. A platform fact is confirmed
-through the branch restatement in step 1, never through a separate prompt.
+through the branch restatement in step 1, never through a separate prompt, and
+reaches the `srd:kb` buffer only once that restatement is confirmed — the
+user's answer inside the branch is not the confirmation.
 
 ## Workflow
 
@@ -110,9 +112,10 @@ so it must be loaded before any term is checked against it, never after.
 
 ### 1. Interview
 
-When the invocation carries a seed, treat it as the user's opening Objective
-and restate it for confirmation instead of asking cold; with no seed, open with
-the Objective question.
+When the invocation carries a seed, treat it as the user's opening Objective:
+restate it and ask the next branch in the same turn, so the answer confirms or
+corrects the restatement, instead of asking cold; with no seed, open with the
+Objective question.
 
 Drive the conversation; do not wait to be fed content. Ask one branch at a
 time, in this order, and restate each resolved branch before moving on, folding
