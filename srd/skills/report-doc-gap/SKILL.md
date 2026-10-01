@@ -132,18 +132,19 @@ mid-flow loses nothing.
   — `AGENT_DATA_DIR` lets a sandbox or an eval redirect the store, and unset
   means the real one. Outside every corpus source by construction, so cfsync
   never indexes or clobbers it; beside the lessons files.
-- Key: the SRD id (e.g. `SRD-42`). All four SRD skills share one buffer per
-  SRD id on this machine, so a reviewer's session appends to the file an
-  author's session started. Before an id exists, key off the SRD's absolute
-  file path — a path is not a filename, so derive one the same way every time:
-  `path-` plus the first 12 hex characters of the path's SHA-256
-  (`printf %s "$abs" | sha256sum`). Any other transform breaks the shared-file
-  promise, since two skills that slugify differently silently keep separate
-  buffers for one SRD. Resolve the path to absolute first; a relative path
-  keyed from two working directories does the same damage. Rename the file to
-  the id once assigned — done by the next capture or drain that finds a
-  path-keyed file for an SRD that now has one, since no phase is entered at the
-  moment of assignment.
+- Key: the SRD id (e.g. `SRD-42`). All four SRD skills share one buffer per SRD
+  id on this machine, so a reviewer's session appends to the file an author's
+  session started. Before the SRD has even a path (a `create` interview not yet
+  written), key `_session` and rename at the first write. Before an id exists,
+  key off the SRD's absolute file path — a path is not a filename, so derive one
+  the same way every time: `path-` plus the first 12 hex characters of the
+  path's SHA-256 (`printf %s "$abs" | sha256sum`). Any other transform breaks
+  the shared-file promise, since two skills that slugify differently silently
+  keep separate buffers for one SRD. Resolve the path to absolute first; a
+  relative path keyed from two working directories does the same damage. Rename
+  the file to the id once assigned — done by the next capture or drain that
+  finds a path-keyed file for an SRD that now has one, since no phase is entered
+  at the moment of assignment.
 - Contents: a JSON array of [gap records](#the-gap-record), filled as far as
   capture or grill got them. Buffered means unconfirmed: a record leaves on
   filing or discard, and the file is deleted when the last record leaves it. An

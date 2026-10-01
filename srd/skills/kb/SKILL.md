@@ -161,7 +161,8 @@ write and not a silence either. Otherwise name the count and topics
 and offer to work them now. Never force it; on defer they stay buffered.
 
 Buffer location `$MEM_DIR/kb/<srd-id>.json`, keyed by SRD id (`_session.json`
-when no SRD is in play, as in `system-check learn`), falling back to
+when no SRD is in play, as in `system-check learn`, or none is written yet),
+falling back to
 the SRD's absolute path until an id exists. Buffered means unconfirmed. A
 candidate is removed on write or discard, and the file is deleted when it
 empties.
@@ -306,7 +307,8 @@ Body rules:
   rest on documents, which on a conversation. An index, not the mechanism.
   Every write adds or updates its row there, whether the write creates the
   page or appends a section to one: a roll-up nobody maintains indexes a page
-  that has moved on. A page with no `## Provenance` yet gets one on the first
+  that has moved on. A citation repair updates the row of the fact it
+  repairs; it adds none. A page with no `## Provenance` yet gets one on the first
   write that touches it.
 - `## Open questions` holds what this page's subject leaves unanswered. See
   [Open questions](#open-questions) below.

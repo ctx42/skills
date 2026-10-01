@@ -51,8 +51,8 @@ the path the file has in a checkout. Ids are namespaced by source — `ifp-doc/`
 `ifp-doc/formats/x.md` in the corpus. Record the id. Checking a path-shaped
 citation against `list_docs` finds no match for any of them and reports a whole
 page of live sources as stale; that is a defect in the comparison, not a stale
-citation. Match on the trailing path first, and call a citation stale only when
-no id ends in it.
+citation. Strip the checkout prefix (`docs/infraport/formats/x.md` →
+`formats/x.md`); a citation is stale only when no id ends in the rest.
 
 ## Trust
 
