@@ -245,6 +245,10 @@ counts.
 Style fixes are non-behavioral (formatting, naming, comments, structure), so no
 failing-test reproduction is needed — the test gate is the proof.
 
+Aggregate style-only fixes (formatting, naming, godoc, line length) into one
+change across files and rules, not one commit per offense; keep each
+behavioral fix, with its red/green test, a separate change.
+
 - Default: present the offenses as a numbered list and ask which to apply; apply
   only the picked ones. `fix` applies all. A plan-first run — the flag, or the
   automatic one a broad target triggers — reaches here only after the user has

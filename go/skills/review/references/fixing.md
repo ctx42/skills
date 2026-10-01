@@ -78,3 +78,7 @@ not edit straight through:
 Never `git commit`: commits belong to the user. Keep each chunk a
 self-contained, separately committable change and say when one is ready;
 commit only if the user explicitly asks, and never with a red or unrun suite.
+
+Aggregate style-only fixes (formatting, naming, godoc, line length) into one
+change across files and rules, not one commit per offense; keep each
+behavioral fix, with its red/green test, a separate change.
