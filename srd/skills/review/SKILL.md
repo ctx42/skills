@@ -195,8 +195,9 @@ in full, so it is not summarized here.
 1. Probe the gap buffer with `../create/scripts/probe-buffers.sh <srd>`; on a
    `pending` `docgaps` line invoke `srd:report-doc-gap` to drain what a prior
    session left unfiled, and otherwise invoke nothing — a buffer file exists
-   only while records are pending, and a miss is the usual case. Read the
-   entire SRD top to bottom.
+   only while records are pending, and a miss is the usual case. Finish the
+   drain — every pending record filed or declined — before any corpus search.
+   Read the entire SRD top to bottom.
 2. Check it against every rule in
    [../create/references/srd-standard.md](../create/references/srd-standard.md),
    in document-section order, including the consistency pass and the house
@@ -214,10 +215,12 @@ in full, so it is not summarized here.
    `## Errata`, the rest to their document section. Bump `updated:` only if
    something else in the file changed (review-file.md): a pass that resolves
    nothing and appends nothing writes nothing.
-5. Close with the task-oriented line (Modes), then invoke `srd:report-doc-gap`
-   to offer the gaps this run buffered — and only then: the start probe governs
-   a *prior* session's records, this offer covers what *this* run captured, so
-   a run that captured none invokes nothing here either.
+5. Close with the task-oriented line (Modes) and one start clause naming what
+   the probe found (`docgaps: none`, or what was drained) — a probe that found
+   nothing otherwise looks like one that never ran. Then invoke
+   `srd:report-doc-gap` to offer the gaps this run buffered — and only then:
+   the start probe governs a *prior* session's records, this offer covers what
+   *this* run captured, so a run that captured none invokes nothing here either.
 
 ## walk
 
