@@ -63,7 +63,8 @@ describe it in words ("two consecutive spaces before the word *in*"), because
 wrapping the review file normalizes whitespace and destroys the quoted proof.
 
 Wrap every finding at 80 columns, breaking onto continuation lines indented two
-spaces. Only a single unbreakable token (a long URL or path) may overflow. A
+spaces. Only a single unbreakable token (a long URL or path), or a verbatim
+line of the STR-8 notice inside its erratum, may overflow. A
 `*(Partial — …)*` note starts its own continuation line.
 
 ## Layout

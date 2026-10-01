@@ -11,7 +11,9 @@ the allowlist, and the exclusions below, never by feel.
 
 A finding is errata **only if** its fix can be stated as an exact literal
 substitution, `old → new`, anchored to one named id or verbatim heading, where
-`old` appears in that anchor and nowhere ambiguous within it. If the fix has to
+`old` appears in that anchor and nowhere ambiguous within it. A duplicated id
+is no anchor: under one, the fix is errata only when `old` occurs under exactly
+one of the duplicates and the finding names which by its text. If the fix has to
 be described in prose ("reword", "restate with the system as subject", "make it
 consistent"), it is **not** errata, however small it looks.
 

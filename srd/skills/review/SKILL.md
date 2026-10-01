@@ -150,7 +150,11 @@ entry leads and the lower becomes the second tag:
 `reference` covers a wrong pointer or fact, `terminology` a diverging word
 choice: an SRD that renames an existing platform concept is `terminology`.
 Category is orthogonal to `## Errata`: an errata finding is `format` or
-`linguistic`, but not every `format` or `linguistic` finding is errata.
+`linguistic` — or `structure` for the STR-8 notice, the one boilerplate the
+allowlist admits — but not every `format` or `linguistic` finding is errata. A
+normative keyword in the Introduction is `coverage` when its sentence states a
+rule, `linguistic` (LANG-3) when it does not. A duplicate id's fix in an
+`ACCEPTED` SRD gives the later item a fresh id and renumbers nothing (STA-7).
 
 ## Modes
 
@@ -205,7 +209,8 @@ in full, so it is not summarized here.
    facts-vs-corpus pass ([Documentation corpus](#documentation-corpus)),
    handing each doc gap to `srd:report-doc-gap` on discovery.
 3. If the review file does not exist, create it and write all findings with
-   fresh numbers starting at `#1`, grouped and tagged as above.
+   fresh numbers starting at `#1`, assigned in the document order of step 4,
+   grouped and tagged as above.
 4. If it exists, do not rewrite it. First resolve: re-verify open findings and
    tick+move each fixed one to `## Resolved` (a regression moves back, same
    number). Then append newly found defects with fresh numbers, assigned in
@@ -216,8 +221,9 @@ in full, so it is not summarized here.
    something else in the file changed (review-file.md): a pass that resolves
    nothing and appends nothing writes nothing.
 5. Close with the task-oriented line (Modes) and one start clause naming what
-   the probe found (`docgaps: none`, or what was drained) — a probe that found
-   nothing otherwise looks like one that never ran. Then invoke
+   the probe found (`docgaps: none`, or what was drained), unless a caller
+   said it ran the probe and so owns the clause — a probe that found nothing
+   otherwise looks like one that never ran. Then invoke
    `srd:report-doc-gap` to offer the gaps this run buffered — and only then:
    the start probe governs a *prior* session's records, this offer covers what
    *this* run captured, so a run that captured none invokes nothing here either.
