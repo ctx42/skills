@@ -16,7 +16,7 @@ license: MIT
 
 ```
 /kb                 capture (default): drain, confirm, write
-/kb capture SRD-42  capture for one SRD, by id or path
+/kb capture <srd>   capture for one SRD, by its path
 /kb restructure     reorganize pages and repair every reference
 ```
 
@@ -160,12 +160,11 @@ own report that the drain ran and was empty, which is not this skill's line to
 write and not a silence either. Otherwise name the count and topics
 and offer to work them now. Never force it; on defer they stay buffered.
 
-Buffer location `$MEM_DIR/kb/<srd-id>.json`, keyed by SRD id (`_session.json`
-when no SRD is in play, as in `system-check learn`, or none is written yet),
-falling back to
-the SRD's absolute path until an id exists. Buffered means unconfirmed. A
-candidate is removed on write or discard, and the file is deleted when it
-empties.
+Buffer location `$MEM_DIR/kb/<key>.json`, keyed by the SRD's path exactly as
+`srd:report-doc-gap` keys its buffer (`_session.json` when no SRD is in play,
+as in `system-check learn`, or none is written yet). Buffered means
+unconfirmed. A candidate is removed on write or discard, and the file is
+deleted when it empties.
 
 ### B. Capture on discovery
 

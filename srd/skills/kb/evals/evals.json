@@ -48,7 +48,7 @@
         "kb",
         "create"
       ],
-      "setup": "`srd:create` starts on SRD-42 with two candidates left buffered by a prior session. The interview then confirms a third fact in a branch restatement.",
+      "setup": "`srd:create` starts on specs/gateway.md with two candidates left buffered by a prior session. The interview then confirms a third fact in a branch restatement.",
       "query": "/create",
       "files": []
     },

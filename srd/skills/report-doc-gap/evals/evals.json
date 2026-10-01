@@ -38,8 +38,8 @@
       "skills": [
         "report-doc-gap"
       ],
-      "setup": "A second caller session hands over the retry-count gap already buffered for `SRD-42`, with different search terms. At drain the finder says \"skip the questions\".",
-      "query": "/report-doc-gap SRD-42",
+      "setup": "A second caller session hands over the retry-count gap already buffered for `specs/gateway.md`, with different search terms. At drain the finder says \"skip the questions\".",
+      "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },
     {
@@ -49,7 +49,7 @@
         "report-doc-gap"
       ],
       "setup": "A buffer with one gap, against a server exposing neither `report_gap` nor `POST /gaps`.",
-      "query": "/report-doc-gap SRD-42",
+      "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },
     {
@@ -59,7 +59,7 @@
         "report-doc-gap"
       ],
       "setup": "One buffered gap. The finder works it, then answers no at the confirmation gate — the record is wrong and they do not want it filed.",
-      "query": "/report-doc-gap SRD-42",
+      "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },
     {
@@ -68,8 +68,8 @@
       "skills": [
         "report-doc-gap"
       ],
-      "setup": "A buffered gap for `SRD-42`, on a machine where neither the MCP tool nor the REST mirror is reachable.",
-      "query": "/report-doc-gap SRD-42",
+      "setup": "A buffered gap for `specs/gateway.md`, on a machine where neither the MCP tool nor the REST mirror is reachable.",
+      "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },
     {
@@ -79,8 +79,8 @@
         "report-doc-gap",
         "grill-me"
       ],
-      "setup": "Three gaps are buffered for `SRD-42`. The finder picks heavy for the first, then says \"just take the one-liners for the rest of these\".",
-      "query": "/report-doc-gap SRD-42",
+      "setup": "Three gaps are buffered for `specs/gateway.md`. The finder picks heavy for the first, then says \"just take the one-liners for the rest of these\".",
+      "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },
     {
@@ -90,7 +90,7 @@
         "report-doc-gap"
       ],
       "setup": "One buffered gap. No `mcp__srd-doc__*` tools exist in this client, so the skill must establish whether the REST mirror is there. The store behind it is append-only and has no delete endpoint.",
-      "query": "/report-doc-gap SRD-42",
+      "query": "/report-doc-gap specs/gateway.md",
       "files": []
     }
   ]
