@@ -29,7 +29,7 @@ For each scenario in evals.json:
 
 Then report back, under 400 words:
 - one or two lines per scenario on what the skill did
-- anything in SKILL.md or its references that was ambiguous, self-contradictory, factually wrong about the tooling, or that you had to guess at — be specific and quote it. This is the most valuable thing you produce.
+- anything in SKILL.md or its references that was ambiguous, self-contradictory, factually wrong about the tooling, or that you had to guess at — be specific and quote it, and mark each one that changed what this run actually output (a reading you chose that a different reading would have reported, graded, or edited differently). These go to a backlog; only the marked ones are weighed for an edit.
 - any scenario you marked BLOCKED and why
 
 Do not speculate about whether you "passed". You have not seen the criteria, and saying so is the point.

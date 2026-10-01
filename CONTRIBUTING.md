@@ -53,7 +53,8 @@ Run them with two agents, never one: a runner that sees `evals.json` and never
 `expectations.json`, then a grader that sees `expectations.json` and never
 `SKILL.md`. Ask the runner what in the instructions was ambiguous or had to be
 guessed at — in the first full round that question found more defects than the
-pass counts did.
+pass counts did — but its answer is a backlog, not a work list (see *The eval
+loop* below).
 
 A scenario may add `requires` when it cannot run on an ordinary checkout — a
 private mirror, a live service, a toolchain. Say what is needed and what a
@@ -94,6 +95,28 @@ four runs noticed. A skill that reports a count needs a line telling it to read
 that count off the finished artifact rather than carry it from the work, and a
 scenario that grades the count against the file. It is the one number nobody
 re-derives, which is exactly why it is worth grading.
+
+**The eval loop.** A round costs hundreds of thousands of tokens, and a runner
+always finds something new to doubt, so the loop ends only on these rules:
+
+- Edit a skill only for a graded FAIL, a disagreement measured on identical
+  input (workers or runs splitting on the same bytes), or a miss on real code
+  the user reports. Anything else — a runner's ambiguity list included — goes
+  to `tmp/eval-backlog.md` and triggers no re-run.
+- Before any round, state its scope and rough cost and get the user's go-ahead.
+- A wording or clarification edit gets lint and a re-read, no eval; a
+  behaviour change re-runs only the scenarios it reaches, never the suite.
+- One fix-and-re-run per FAIL; a bullet that fails again after its fix goes to
+  the user as a design question, not another rewording.
+- At most two rounds per change unless the user raises it; a round with every
+  gradable bullet PASS and no measured split ends the loop — no confirmation
+  round, no new scenario for a guard that has never fired.
+- Freeze `expectations.json` while a loop runs: batch the defects a grader
+  finds and apply them after it ends, so no round grades a moved target.
+
+Without these rules, three consecutive `go:style` rounds passed every bullet,
+yet cost about a million tokens, because each runner's new ambiguity list was
+treated as the next round's work and nothing measured what those edits bought.
 
 **Live services and real stores.** The `srd-doc` server on `localhost:7777` is
 production — the INFRAPORT corpus and a gap store whose API has no delete — and
