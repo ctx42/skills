@@ -1,3 +1,4 @@
 - Before prescribing `ExpectFatal`/`assert.Panic` for a helper's failure path, read the helper's reporting call — `exekit.Exe` fails via `t.Error`, not `t.Fatal`.
 - Command text can turn a backslash-u escape into its rune (even in quoted heredocs and scripts): build escapes in Go sources from chr(92), then grep the file for non-ASCII bytes before running tests.
 - `go mod tidy` never merges separate single-line `require` statements into one block; prescribe a manual merge, not tidy, for that nit.
+- When a fix moves a Given-held value (e.g. an `*SL` return pointer) under a When that returns only `err`, keep a descriptive name for it (not `have`) and give its Then assertion its own blank-line group after the `err` check.
