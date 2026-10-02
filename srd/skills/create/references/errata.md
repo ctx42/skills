@@ -37,7 +37,8 @@ Nothing outside this list is errata.
   `massage → message`, `U ser → User`. The intended word must be beyond doubt
   from the sentence.
 - British → US spelling: `behaviour → behavior`, `grey → gray`,
-  `standardised → standardized`, `cancelled → canceled`.
+  `standardised → standardized`, `cancelled → canceled`, and `dialogue →
+  dialog` for a UI element.
 - Whitespace: trailing spaces; two consecutive spaces where one belongs; a
   space trapped inside a bold identifier.
 - Glyph: a curly quote closing with the wrong direction; a hyphen where a
