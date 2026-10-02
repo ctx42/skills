@@ -65,7 +65,7 @@
         "Hands the unconfirmable claim to `report-doc-gap` as a draft, and the confirmed fact to `kb` once the user confirms it in the branch restatement",
         "Neither hand-off interrupts the interview: no turn between the claim and the next branch is about the gap or about banking or filing either one. A question about the requirement itself is not an interruption",
         "Never asks permission to bank the fact — no \"should I record this?\" prompt. Confirming the requirement confirms the fact, and `srd:kb` writes it to the inbox silently. Ordinary elicitation (\"is three the count today?\") is a requirement question, not a banking prompt, and does not breach this",
-        "At the write step, invokes `report-doc-gap` with the SRD path, which sets `srd_ref` on the draft captured before the path existed and offers it; the fact is already in `kb/_inbox.md`, written at its confirmation",
+        "Folds a proposed SRD path under `initiatives` into the branch restatement that follows the gap, and once it is confirmed has `report-doc-gap` set the draft's `srd_ref` — no draft is left without a path", "At the write step, writes to that path and invokes `report-doc-gap` to offer the draft gap; the fact is already in `kb/_inbox.md`, written at its confirmation",
         "Writes no requirement the interview did not attest: every rule in the SRD traces to something the persona stated, and a behaviour nobody mentioned does not appear because it would round the feature out"
       ]
     },

@@ -108,8 +108,9 @@ without this session:
   content from content that exists but does not rank.
 - `srd_ref` — the SRD's path from the project root (e.g.
   `initiatives/gateway/srd.md`). One gap blocking two SRDs lists both,
-  comma-separated. Empty only while a `create` interview has no path yet; set
-  it with `update_gap` once the path exists. Never invent an id.
+  comma-separated. Empty only between a `create` gap's capture and the branch
+  restatement that agrees the path; set it with `update_gap` then. Never
+  invent an id.
 
 ## Invocation
 

@@ -64,7 +64,11 @@ fact about the existing system or uses a term no glossary defines, and in the
 self-check, for every requirement that asserts existing behavior. A lookup that
 cannot confirm the claim goes to `srd:report-doc-gap`; a fact the corpus lacks
 but the user confirms goes to `srd:kb`, which writes it to the inbox at once.
-Gaps are captured as server-side drafts on discovery and offered at step 5. A
+Gaps are captured as server-side drafts on discovery and offered at step 5.
+When the first gap surfaces and no SRD path is agreed yet, fold a proposed path
+(its own folder under `initiatives`) into that branch's restatement; once it is
+confirmed, hand it to `srd:report-doc-gap`, which sets the draft's `srd_ref` —
+a draft left without a path is invisible to every later draft check. A
 platform fact is confirmed through the branch restatement in step 1, never
 through a separate prompt, and reaches `srd:kb` only once that restatement is
 confirmed — the user's answer inside the branch is not the confirmation.
@@ -79,8 +83,8 @@ Copy this checklist and tick it off:
 - [ ] 3. Draft the SRD from the template.
 - [ ] 4. Self-check: auto-fix mechanical issues, settle the blockers with the
       user, report the rest.
-- [ ] 5. Write the `.md` file to the agreed path; hand pathless drafts their
-      `srd_ref` and offer them; report once.
+- [ ] 5. Write the `.md` file to the agreed path; offer the session's drafts;
+      report once.
 
 ### 0. Start
 
@@ -221,13 +225,12 @@ Do not mark the draft acceptable: a new SRD is `IN PROGRESS` and acceptance
 
 ### 5. Write
 
-Write the SRD as a single `.md` file to the path the user gives; when they have
-not said, propose one in its own folder under `initiatives` and ask. When this
-session captured drafts, invoke `srd:report-doc-gap` with the path: it sets
-`srd_ref` on any draft captured before the path existed and offers the session's
-drafts. Then report once: the file path, the requirement groups with their
-counts, the judgment findings and human follow-ups collected in step 4, and any
-blocker the user chose to leave standing.
+Write the SRD as a single `.md` file to the path agreed at the first gap, or the
+one the user gives; when neither exists, propose one in its own folder under
+`initiatives` and ask. When this session captured drafts, invoke
+`srd:report-doc-gap` to offer them. Then report once: the file path, the
+requirement groups with their counts, the judgment findings and human follow-ups
+collected in step 4, and any blocker the user chose to leave standing.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
