@@ -25,7 +25,7 @@
       "name": "reclassifies-rather-than-skipping",
       "expected_behavior": [
         "Has `srd:kb` change the row's kind from `deferred` to `unknown` in place, and says so",
-        "Writes nothing under the `kb` folder itself: the reply names `srd:kb` as the writer for each change, so the delegation is visible and not merely asserted",
+        "Writes nothing under the `kb` folder itself, and the reply names `srd:kb` as the writer for each change",
         "Does not treat it as a skip or leave the row mislabeled",
         "Does not file it as a documentation gap: it says nothing about the user manual"
       ]

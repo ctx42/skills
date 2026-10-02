@@ -27,7 +27,7 @@
       "name": "stays-inside-the-interview",
       "expected_behavior": [
         "Asks nothing about valves — an adjacent subject the interview never opened",
-        "May ask what values the sensor-type field takes, because the interview already opened that subject",
+        "Any question it asks stays on the sensor-type field, the subject the interview already opened",
         "On \"skip that for now\", routes the question to `_open-questions.md` marked deferred and moves on without re-asking"
       ]
     },

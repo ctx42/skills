@@ -8,7 +8,7 @@
         "report-doc-gap",
         "review"
       ],
-      "setup": "`srd:review` is mid-pass. The SRD claims \"the gateway retries 3×\"; two corpus searches find no document stating any retry count.",
+      "setup": "`srd:review` is mid-pass. The SRD claims \"the gateway retries 3×\"; corpus searches find no document stating any retry count.",
       "query": "/review specs/gateway.md",
       "files": []
     },

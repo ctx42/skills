@@ -25,8 +25,7 @@
       "expected_behavior": [
         "Captures the Retention Sweep item as a draft: the platform documentation is what falls short",
         "Refuses the GR-7/GR-9 contradiction — neither captured nor filed — because the SRD is what is wrong, not the docs",
-        "Tells the caller to keep the SRD defect in its own findings",
-        "Splits the pair rather than taking or refusing both together"
+        "Tells the caller to keep the SRD defect in its own findings"
       ]
     },
     {
