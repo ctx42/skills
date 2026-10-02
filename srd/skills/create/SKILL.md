@@ -141,7 +141,8 @@ so confirming it confirms both the SRD and the knowledge base:
    `glossary_terms` lacks still needs a local entry
    ([references/srd-procedures.md](references/srd-procedures.md)). A definition
    the user supplies because no glossary carries it goes to `srd:kb` when it
-   names a platform concept; one specific to this SRD gets its local entry only.
+   names a platform concept — one that exists whether or not this SRD ships;
+   one this SRD introduces gets its local entry only.
 
 Do not collect Owners, Initiative links, or Designs links; those are left as
 marked placeholders (the skill fetches no such links). Status is always
