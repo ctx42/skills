@@ -2,3 +2,4 @@
 - Command text can turn a backslash-u escape into its rune (even in quoted heredocs and scripts): build escapes in Go sources from chr(92), then grep the file for non-ASCII bytes before running tests.
 - `go mod tidy` never merges separate single-line `require` statements into one block; prescribe a manual merge, not tidy, for that nit.
 - When a fix moves a Given-held value (e.g. an `*SL` return pointer) under a When that returns only `err`, keep a descriptive name for it (not `have`) and give its Then assertion its own blank-line group after the `err` check.
+- ctx42 `assert.ErrorIs` ends the subtest when it fails, so later assertions run only once it passes; prove a later assertion can fail with the earlier one disabled.

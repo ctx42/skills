@@ -5,3 +5,4 @@
 - Before committing a chunk, compare `git diff --cached --name-only` against the expected file list in the same command and abort on mismatch; printing the stat is not a check, and files the user staged earlier ride along unnoticed.
 - Derive every causal claim in the body from the diff; "a rename of X to Y also replaced ..." is a guess about history the diff does not show — state only what the changed lines say.
 - Keep conversation facts out of the body even when true (e.g. what another package lacks); if the diff does not show it, the message does not say it.
+- Sort file lists with `LC_ALL=C sort` before comparing them to an expected string; locale collation reorders mixed-case paths (`AGENTS.md`, `pkg/...`) and fakes a mismatch.
