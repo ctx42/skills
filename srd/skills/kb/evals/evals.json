@@ -27,7 +27,7 @@
       "skills": [
         "kb"
       ],
-      "setup": "The SRD concerns hydrophone sensor types. Valve maintenance intervals would round out the asset model, but nothing in this SRD touches valves. The sensor-type field's allowed values did come up.",
+      "setup": "The SRD concerns hydrophone sensor types. Valve maintenance intervals would round out the asset model, but nothing in this SRD touches valves. The sensor-type field's allowed values did come up. When the interview asks whether the field may be empty, the user says \"skip that for now\".",
       "query": "/kb capture",
       "files": []
     },
@@ -58,7 +58,7 @@
       "skills": [
         "kb"
       ],
-      "setup": "A `##` section moves out of `_inbox.md` into a new page. A gap record cites the inbox section's `doc_id`, and an SRD cites it too.",
+      "setup": "A `##` section moves out of `_inbox.md` into a new page. A gap record cites the inbox section's `doc_id`, and an SRD cites it too. `_open-questions.md` holds one index-only question linking to that section.",
       "query": "/kb restructure",
       "files": []
     },

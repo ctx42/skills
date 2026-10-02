@@ -26,7 +26,7 @@
       "id": 3,
       "name": "check-a-prior-review",
       "expected_behavior": [
-        "Classifies each open finding fixed / partial / not-addressed / invalid against the current text, in a short status table keyed by finding number",
+        "Classifies each open finding fixed / partial / not-addressed / invalid (or labels that map one-to-one onto those) against the current text, in a short status table keyed by finding number",
         "Re-verifies only — hunts for no new defects",
         "Ticks fixed findings and moves them to `## Resolved`, keeping their numbers",
         "Annotates partials with `*(Partial — …)*` and moves the invalid finding to `## Withdrawn` with a reason",
@@ -39,7 +39,7 @@
       "expected_behavior": [
         "Emits plain text grouped by section heading, one bullet per open issue, and writes no file",
         "Lists the `Errata` group first, since it holds open findings",
-        "Keeps the finding number and the SRD's own requirement id (`#7 GR-3a:`) but drops the checkbox, rule-id citations, and severity tags",
+        "Keeps each finding's number and the SRD's own requirement id in the form `#<n> <requirement id>:` but drops the checkbox, rule-id citations, and severity tags",
         "Uses no markdown beyond bullets — it is going into a ticket or an email",
         "Lists open findings only, omitting Resolved and Withdrawn"
       ]
@@ -64,8 +64,8 @@
         "Finds the single owner (STR-2) and the missing Initiative link (STR-3)",
         "Finds `ACCEPTED` with an unapproved design and an unmet Quality Bar (STA-2 / STA-3)",
         "Finds MUST used in the Introduction (LANG-3)",
-        "Collects the British spellings as minor findings under `## Errata`",
-        "Finds the keyword notice citing RFC 8174 alone, with the RFC 2119 reference missing (STR-8), and collects it under `## Errata` as the whole-block substitution the errata allowlist admits",
+        "Collects the British spellings `colourise` and `dialogue` as minor findings under `## Errata`",
+        "Finds the keyword notice citing RFC 8174 alone, with the RFC 2119 reference missing (STR-8), and collects it under `## Errata` as one substitution replacing the whole notice",
         "Finds the `Designs` placeholder left in an `ACCEPTED` SRD whose GR-3 changes the UI (STR-5)",
         "Finds the second GR-3 describing how the badge looks rather than what the system does (LANG-5)",
         "Finds GR-4's \"export run\" drifting from the glossary's Export Job"
@@ -110,7 +110,7 @@
         "Echoes the draft-check result and invokes `srd:report-doc-gap` neither at the start nor at the close — no draft exists, and this run captured nothing to offer",
         "Raises no `reference` finding and captures no gap: the SRD asserts no platform fact",
         "Creates `specs/login.review.md` and writes the three defects with fresh numbers from `#1`",
-        "The reply opens with the outcome — findings, the review file, the tally — with no narrated startup sequence (\"first I check…, then I read…\")"
+        "The reply leads with the outcome — findings and the tally — with no narrated startup sequence (\"first I check…, then I read…\"); the one-clause draft-check result bullet 1 asks for is not narration"
       ]
     },
     {

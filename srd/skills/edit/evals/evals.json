@@ -57,7 +57,7 @@
       "skills": [
         "edit"
       ],
-      "setup": "`### In Scope` holds only the `--- TODO ---` marker. Partway through the session the user says the requirements are final and asks for In Scope to be filled.",
+      "setup": "`### In Scope` holds only the `--- TODO ---` marker. Partway through the session the user says the requirements are final and asks for In Scope to be filled. The user rewords one candidate and asks to merge two others.",
       "query": "/edit specs/login.md",
       "files": []
     },

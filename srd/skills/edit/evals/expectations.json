@@ -9,7 +9,7 @@
         "Names STA-4 in the proposal and makes clear that approving it means the authority has agreed, not merely that the user wants the edit — folded into the one confirmation, not asked as a second question",
         "Front-loads a grouped issue summary, then walks entry by entry",
         "Proposes the split with location, before/after, and a one-line rationale",
-        "Prepares the split as an add-only change — a new `GR-3c` rather than a renumber — and leaves it unapplied: the SRD contains no `GR-3c` after the run, because the authority STA-4 names has not agreed to it",
+        "Proposes the split as an add-only change — a new `GR-3c` rather than a renumber",
         "Applies nothing: the SRD is byte-identical after the run and no decision log exists, because the authority never agreed"
       ]
     },
@@ -97,7 +97,7 @@
       "name": "feedback-from-a-finding-number",
       "expected_behavior": [
         "Enters at finding #2 rather than at the top of severity order",
-        "After each finding resolves or is skipped, defaults to the next by number",
+        "After each finding resolves or is skipped, defaults to the next by number, unless a `Y` keeps it on another open finding for the same requirement",
         "Jumps to any number the user names out of order, resumes the ascending walk from there, and after the highest number returns to the lowest one still open",
         "Leaves the review file untouched and closes by pointing at `review specs/login.md check`"
       ]

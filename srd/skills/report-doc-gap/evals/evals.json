@@ -18,7 +18,7 @@
       "skills": [
         "report-doc-gap"
       ],
-      "setup": "Two draft gaps with `srd_ref` `specs/gateway.md` sit on the server.",
+      "setup": "Two draft gaps with `srd_ref` `specs/gateway.md` sit on the server. Offered them, the finder works them now.",
       "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },

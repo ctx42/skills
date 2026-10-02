@@ -37,7 +37,7 @@
       "skills": [
         "backlog"
       ],
-      "setup": "Three open gaps, two of which report the same missing fact from different SRDs. The corpus covers a third of that fact already, but in an unranked page.",
+      "setup": "Three open gaps, two of which report the same missing fact from different SRDs. The corpus covers a third of that fact already, but in an unranked page. Once the draft is ready, the user publishes it in the sitting and gives its URL.",
       "query": "/backlog gaps",
       "files": []
     },

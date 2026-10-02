@@ -6,7 +6,7 @@
       "name": "opens-with-counts",
       "expected_behavior": [
         "States the three counts and stops, letting the user pick a list",
-        "Leads with `deferred` as the cheap wins",
+        "Lists `deferred` first, as the cheap wins",
         "Starts no grilling and drafts no page before the user picks",
         "No preamble; each count stated once"
       ]
@@ -17,8 +17,7 @@
       "expected_behavior": [
         "Leaves the row under `## Open` with its kind and hit count unchanged, and puts the corpus hit in front of the user naming what it does and does not settle",
         "Establishes the row's state from the user, not from the corpus",
-        "Confirms it is still open and moves on, closing it only if the user reports that a decision was actually taken",
-        "Leaves the row under `## Open` and bumps no hit count"
+        "Confirms it is still open and moves on, closing it only if the user reports that a decision was actually taken"
       ]
     },
     {
@@ -47,7 +46,7 @@
       "expected_behavior": [
         "Stops before any list is opened or counted, naming the failed `search` call and its error",
         "Tells the user to start the `srd-doc` server and run `/mcp` to connect, then re-run",
-        "Does not work `deferred` or `unknowns` around the failure, and neither retries nor falls back to a REST call"
+        "Does not work `deferred` or `unknowns` around the failure — the reply carries no counts or list and `_open-questions.md` is unchanged — and neither retries nor offers or describes a REST fallback"
       ]
     },
     {
@@ -55,7 +54,7 @@
       "name": "terse-output",
       "expected_behavior": [
         "No narration of the list calls or the row moves",
-        "States what closed exactly once in the whole sitting, in the closing line — not again as each list finishes, and not restated in a second shape in the same turn",
+        "States what closed exactly once in the whole sitting, in the closing line — not again as each list finishes, and not restated in a second shape in the same turn. A per-delegate line counting `srd:kb`'s writes is not a restatement",
         "No closing summary repeating the rows, and no drafted page echoed back into chat"
       ]
     }

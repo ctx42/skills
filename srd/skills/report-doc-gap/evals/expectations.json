@@ -7,7 +7,7 @@
       "expected_behavior": [
         "Captures a light draft — `report_gap` with `draft: true`, carrying `detail`, `srd_ref`, and the `search_terms` from the failed lookups — and returns at once",
         "Runs no grill and makes no `submit_gap` call at capture time",
-        "Prompts the user for nothing: the caller's pass continues uninterrupted"
+        "Prompts the user for nothing at capture time: the caller's pass continues uninterrupted, and only the end-of-pass offer asks anything"
       ]
     },
     {
@@ -16,8 +16,7 @@
       "expected_behavior": [
         "Surfaces the count and the topics, and offers to work them now",
         "Per gap asks light or heavy, assembles the record, and shows it",
-        "Files via `submit_gap` only on the finder's yes and records the gap's `gap-NNNN`",
-        "On \"keep going\", leaves both drafts on the server and returns to the caller"
+        "Files via `submit_gap` only on the finder's yes and records the gap's `gap-NNNN`"
       ]
     },
     {
@@ -34,7 +33,7 @@
       "id": 4,
       "name": "opt-out-and-duplicate-merge",
       "expected_behavior": [
-        "Merges into the existing draft with `update_gap` rather than capturing a twin: `search_terms` and `srd_ref` are unioned, the existing `detail`, `kind`, and pointer fields survive, and the pointer-less second capture blanks nothing",
+        "Merges into the existing draft with `update_gap` rather than capturing a twin: `search_terms` are unioned, the existing `detail`, `kind`, and pointer fields survive, and the pointer-less second capture blanks nothing",
         "Takes only the one-line `detail` and leaves `target_claim` empty, honouring the opt-out",
         "Still shows the record for confirmation before filing: opting out of the grill is not opting out of the confirmation"
       ]
@@ -56,7 +55,7 @@
         "Files nothing",
         "Says the record was discarded (`discard_gap`), so the finder is not left wondering where it went",
         "Offers the amend path before the gate, not after: a correction adjusts and re-shows, a no discards",
-        "Records the topic in the caller's output so the same weak lookup does not re-capture it next session"
+        "Names the dropped topic in its reply, so the finder can tell the same weak lookup not to re-capture it"
       ]
     },
     {

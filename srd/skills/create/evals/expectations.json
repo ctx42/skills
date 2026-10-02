@@ -54,7 +54,7 @@
       "name": "terse-output",
       "expected_behavior": [
         "One report after writing and nothing before it: the file path, the requirement groups with their counts, the outstanding human follow-ups, and any blocker the user chose to leave standing",
-        "Quotes nothing back that the user can already see — not the drafted SRD, not requirement text beyond a proposed rewording, not a finding already shown in the interview"
+        "Quotes nothing back that the user can already see — not the drafted SRD, not requirement text beyond a proposed rewording, not a finding already shown in the interview. Naming the standing blocker in the report, as bullet 1 requires, is not quoting it"
       ]
     },
     {
@@ -65,7 +65,8 @@
         "Hands the unconfirmable claim to `report-doc-gap` as a draft, and the confirmed fact to `kb` once the user confirms it in the branch restatement",
         "Neither hand-off interrupts the interview: no turn between the claim and the next branch is about the gap or about banking or filing either one. A question about the requirement itself is not an interruption",
         "Never asks permission to bank the fact — no \"should I record this?\" prompt. Confirming the requirement confirms the fact, and `srd:kb` writes it to the inbox silently. Ordinary elicitation (\"is three the count today?\") is a requirement question, not a banking prompt, and does not breach this",
-        "Folds a proposed SRD path under `initiatives` into the branch restatement that follows the gap, and once it is confirmed has `report-doc-gap` set the draft's `srd_ref` — no draft is left without a path", "At the write step, writes to that path and invokes `report-doc-gap` to offer the draft gap; the fact is already in `kb/_inbox.md`, written at its confirmation",
+        "Folds a proposed SRD path under `initiatives` into the branch restatement that follows the gap, and once it is confirmed has `report-doc-gap` set the draft's `srd_ref` — no draft is left without a path",
+        "At the write step, writes to that path and invokes `report-doc-gap` to offer the draft gap; the fact is already in `kb/_inbox.md`, written at its confirmation",
         "Writes no requirement the interview did not attest: every rule in the SRD traces to something the persona stated, and a behaviour nobody mentioned does not appear because it would round the feature out"
       ]
     },
@@ -74,7 +75,7 @@
       "name": "start-costs-nothing-before-the-interview",
       "expected_behavior": [
         "Passes the gate and, with no SRD path named, runs no draft check and invokes neither `srd:report-doc-gap` nor `srd:kb` at step 0",
-        "Calls no `glossary_terms` before the interview opens, and loads the term set once the first term surfaces — always before drafting, so no term is checked against a set that is not loaded",
+        "Calls no `glossary_terms` before the interview opens, and loads the term set once the first term surfaces — at the latest with the user's first answer, and always before drafting",
         "Restates the seed as the opening Objective and asks the next branch, rather than narrating a startup sequence"
       ]
     }
