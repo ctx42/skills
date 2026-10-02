@@ -5,8 +5,8 @@
       "id": 1,
       "name": "write-from-brief",
       "expected_behavior": [
-        "Writes one file containing a `## Summary` table with the Y/N/X legend and one numbered section per item, each led by a checkbox",
-        "Carries exactly the four pieces of work the brief named — no invented items such as tests, CI, monitoring, rollout, or migration, which the user did not ask for",
+        "Writes one file containing a `## Summary` table with the Y/N/X legend and one numbered section per item, each heading carrying a checkbox",
+        "Carries exactly the four pieces of work the brief named, plus the closing `Remove this plan` item last — no invented items such as tests, CI, monitoring, rollout, or migration, which the user did not ask for",
         "Every item starts unchecked and `N`, since nothing has been built yet",
         "Each item states acceptance criteria concrete enough to verify against the finished work, not a restatement of the item name",
         "Does not silently settle a decision the brief left open — such as OIDC versus SAML, or which session store ships — and the file carries only the summary table and the numbered item sections, with no extra assumptions or open-choices section bolted on",
@@ -31,7 +31,7 @@
       "expected_behavior": [
         "Writes the plan straight from the six resolved branches without re-interviewing the user about decisions the summary already settled",
         "Carries each branch's own verification into that item's acceptance criteria rather than inventing different ones",
-        "Keeps all six branches as items — none dropped, none merged away, none added",
+        "Keeps all six branches as items — none dropped, none merged away, none added — followed by the closing `Remove this plan` item as item 7",
         "Every item starts unchecked and `N`",
         "Reports the path and the counts tersely instead of replaying the summary the user just read"
       ]
@@ -42,7 +42,7 @@
       "expected_behavior": [
         "Flips login flow and session storage to `[x]` / `Y`, leaves provider config `N`, and marks the operator docs item `X` with the one-line reason the user gave",
         "Keeps the rejected docs item in the file with its `[ ]` checkbox and its original prose — not deleted, not renumbered away",
-        "Records the force-logout work discovered in staging as a new item appended after the existing four, so items 1-4 keep their numbers",
+        "Records the force-logout work discovered in staging as a new item appended after the existing four, so items 1-4 keep their numbers, and appends the closing `Remove this plan` item after it since the plan lacked one",
         "Rewrites the summary table so every row's status matches its section's checkbox and tag, and keeps the table aligned",
         "Leaves the untouched items' prose exactly as it was",
         "Reports what changed and the new counts, without pasting the plan back"
@@ -75,6 +75,17 @@
         "Keeps the `Item` column padded to its existing 30 characters: the appended row is padded out to match, not the table narrowed to the new widest cell",
         "Leaves every row it did not change byte-identical — the three existing rows and the separator are unchanged apart from item 1's status",
         "Marks item 1 `Y` from the implementation actually present in the repo, and appends the TODO's work as a new item at `N` with the next number"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "update-completes-plan",
+      "expected_behavior": [
+        "Flips item 3 to `[x]` / `Y` from the audit code and its test",
+        "Seeing every work item now `Y`, asks the user whether to delete the plan file",
+        "Does not delete the file, nor mark the closing item, before the user answers",
+        "Leaves items 1-4 numbered as they were",
+        "On the user's \"No, keep it.\", keeps the file and marks the closing item `X`, in both its section and its table row"
       ]
     }
   ]

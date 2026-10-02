@@ -35,7 +35,7 @@ existing one?
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. After writing, point to the file and give the
-status counts (e.g. `wrote tmp/sso-plan.md — 0 Y / 4 N / 0 X`); never paste
+status counts (e.g. `wrote tmp/sso-plan.md — 0 Y / 5 N / 0 X`); never paste
 the plan back, and don't narrate it either — the item names and the order you
 chose are in the file the user is about to open.
 
@@ -108,6 +108,21 @@ long the reason makes it: a wrapped heading is not a heading, and it is the one
 place the file is exempt from the prose wrap. Keep the reason short enough that
 the exemption barely shows.
 
+The last item is always the closing one, worded exactly so:
+
+```
+## <n>. Remove this plan — [ ]
+
+When every other item is `Y` or `X`, ask the user whether to delete this file.
+
+Done when: the user has answered — yes deletes the file, no marks this item `X`.
+```
+
+It is the only item the skill adds on its own and the only one whose number may
+change: it moves down when work is appended, so it stays last. A finished plan
+left on disk reads as live work; asking once, at the end, keeps that the user's
+call.
+
 ## Write mode
 
 1. Gather the items. From the brief (or a `grill-me` summary), list the
@@ -119,7 +134,7 @@ the exemption barely shows.
    a guard so it can't recur — is not, however sensible it looks. Those are
    suggestions: name them in the reply, one line each, and let the user turn
    one into an item. Written in unasked, they sit at `N` forever and make the
-   counts lie about what was agreed.
+   counts lie about what was agreed. The closing item is the one exception.
 
 3. Settle what the brief left open before writing, not inside the file. An
    outcome nobody has chosen has no acceptance criteria, so it can never be
@@ -135,10 +150,10 @@ the exemption barely shows.
 4. Order by dependency and impact — blocking and highest-impact items first.
 
 5. Write the file to the format above: summary table (every item starts `N`,
-   unchecked) then one section per item. Give each item acceptance criteria —
-   what proves it done — so `Y` is verifiable, not asserted. Path: the name the
-   user gives, else `tmp/<slug>-plan.md` relative to the working directory; no
-   need to ask, the report names it.
+   unchecked) then one section per item, closing item last. Give each item
+   acceptance criteria — what proves it done — so `Y` is verifiable, not
+   asserted. Path: the name the user gives, else `tmp/<slug>-plan.md` relative
+   to the working directory; no need to ask, the report names it.
    If something is already there, say so and ask before overwriting.
 
 ## Update mode
@@ -179,9 +194,11 @@ the exemption barely shows.
    criterion that did not settle.
 
 3. Append work the plan does not carry yet, when the update surfaced some: new
-   items at the end with fresh numbers, status `N`, and the same shape as the
-   rest. Never renumber to slot one into the middle — the numbers are how the
-   table and the sections stay married.
+   items after the last work item with fresh numbers, status `N`, and the same
+   shape as the rest; the closing item moves down one number per new item and
+   stays last. Never renumber anything else to slot one into the middle — the
+   numbers are how the table and the sections stay married. A plan with no
+   closing item (written before it existed) gets one appended.
 
 4. Rewrite the summary table and the changed items' checkboxes/tags only, so
    table and sections keep the same numbering and statuses; leave all other
@@ -189,6 +206,12 @@ the exemption barely shows.
 
 5. Report the deltas, the new counts, and anything left `N` for want of
    evidence.
+
+6. When every item but the closing one is now `Y` or `X`, end the report by
+   asking whether to delete the plan file — after the rewrite, so the update
+   is on disk whatever the answer; never delete unasked. Yes: delete it and
+   say so. No: mark the closing item `X` (kept — the user's call) and fix its
+   table row, so the question is not asked again.
 
 ## Self-learning
 

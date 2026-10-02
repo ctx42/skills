@@ -37,7 +37,7 @@
       "skills": [
         "plan-smith"
       ],
-      "setup": "The plan written earlier is at `sso-plan.md` in the working directory. Work has been going on for two weeks.",
+      "setup": "The plan written earlier is at `sso-plan.md` in the working directory, a git repo of the Go service. Work has been going on for two weeks. The repo carries merged commits implementing login flow (authorization-code with PKCE: `/login` redirects, `/callback` exchanges the code, a replayed code is rejected, with a test for each) and session storage (Redis-keyed opaque session ID, 12-hour TTL, logout deletes the key, with tests). Provider config has no code yet. A committed CI log from the staging end-to-end job records the login round trip against the staging provider passing.",
       "query": "/plan-smith update sso-plan.md — login flow and session storage are both done and merged. We're dropping the operator docs item, the platform team is folding SSO into their own runbook instead. Provider config hasn't been started. Also, staging showed we need a way to force-logout a user across every session, that wasn't in the plan.",
       "files": [
         "assets/sso-plan.md"
@@ -76,6 +76,18 @@
       "query": "/plan-smith update tmp/wide-column-plan.md",
       "files": [
         "assets/wide-column-plan.md"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "update-completes-plan",
+      "skills": [
+        "plan-smith"
+      ],
+      "setup": "`assets/done-plan.md` copied into the workspace as `tmp/done-plan.md`. Items 1 and 2 are `Y`; item 3 (audit log) is `N`, and the repo now shows it done: every export writes one audit row with user, timestamp, and row count, and a test asserts exactly that. Item 4 is the closing `Remove this plan` item. Asked whether to delete the plan file, the user answers: \"No, keep it.\"",
+      "query": "/plan-smith update tmp/done-plan.md",
+      "files": [
+        "assets/done-plan.md"
       ]
     }
   ]
