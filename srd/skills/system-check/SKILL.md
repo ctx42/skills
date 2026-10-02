@@ -126,19 +126,23 @@ input.
      next run raises it again.
    - Stale citation: when a knowledge-base page cites a document that no
      `list_docs` id matches, raise it as a question too and hand the repair to
-     `srd:kb`. Match the way the corpus reference says: a citation written as a
-     checkout path matches no id literally, and comparing the raw strings
-     condemns every live source on the page.
+     `srd:kb` — a citation repair, not a doc gap; only a fact the vanished page
+     carried that no document now states goes to `srd:report-doc-gap`. Match the
+     way the corpus reference says: a citation written as a checkout path
+     matches no id literally, and comparing the raw strings condemns every live
+     source on the page.
 4. Write `<srd>.questions.md` next to the SRD (open questions only), per
    [Questions file](#questions-file).
 5. Walk one question at a time (see [Walk](#walk)), ordered: was-blocker
    first, then system-confrontation and was-major questions, then was-minor
-   last. No severity tags or rule ids ever appear — priority is felt through
-   order.
+   last; a question another one settles goes right after it. No severity tags
+   or rule ids ever appear — priority is felt through order.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. A short pointer ("wrote `<srd>.questions.md`,
 N open questions") is enough — do not re-list the questions you just wrote.
+The start clause and any draft note go with that pointer, before it; nothing
+sits between the pointer and the first question.
 
 Every count you report — questions written, findings the review layer holds,
 what remains open — is read back off the file, never carried in your head from
