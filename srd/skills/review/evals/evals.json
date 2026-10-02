@@ -90,17 +90,27 @@
         "review",
         "report-doc-gap"
       ],
-      "setup": "The `srd-doc` corpus is reachable. `GW-2` states \"the gateway retries 3×\" and no corpus document states any retry count; `GW-5` names a timeout the corpus documents as a different value. A prior session left gaps buffered for this SRD.",
+      "setup": "`GW-2` states \"the gateway retries 3×\" and no corpus document states any retry count; `GW-5` names a timeout the corpus documents as a different value. A prior session left draft gaps for this SRD on the server; offered them at the start, the user keeps them as drafts for later.",
       "query": "/review specs/gateway.md",
       "files": []
     },
     {
       "id": 10,
-      "name": "empty-gap-buffer-skips-the-delegate",
+      "name": "no-drafts-skip-the-delegate",
       "skills": [
         "review"
       ],
-      "setup": "No gap buffer file exists for this SRD under `$AGENT_DATA_DIR/ctx42-skills/srd/docgaps/`, and no corpus is reachable. `specs/login.md` has two style defects and one duplicate id, and no `specs/login.review.md` exists yet.",
+      "setup": "The server holds no draft gap for this SRD. `specs/login.md` has two style defects and one duplicate id, asserts nothing about existing system behavior, and no `specs/login.review.md` exists yet.",
+      "query": "/review specs/login.md",
+      "files": []
+    },
+    {
+      "id": 11,
+      "name": "gate-stops-without-project-config",
+      "skills": [
+        "review"
+      ],
+      "setup": "Do not copy the fixture `project-config.md`: no `project-config.md` exists in the scenario directory or any parent up to the workspace root. `specs/login.md` exists and has defects.",
       "query": "/review specs/login.md",
       "files": []
     }

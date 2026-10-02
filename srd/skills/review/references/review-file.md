@@ -38,16 +38,15 @@ Open finding shape — number first, then severity, then category:
 
 Close each finding with its rule-id citation namespaced `SRD:` — `(SRD:REQ-1)`,
 `(SRD:GLO-3)`. The only rule namespaces are `STR`, `STA`, `LANG`, `REQ`, `GLO`,
-and `SCO`; never cite a rule absent from
-[../../create/references/srd-standard.md](../../create/references/srd-standard.md)
-(e.g. a defunct `MD-*`). A consistency-pass finding cites `(SRD:consistency)`
-and sits under the section where the conflict surfaces; a house-addition
-finding (US English, draft scaffolds, terminology drift) cites `(SRD:house)`.
-When both could fit — the consistency pass surfaced it, a house addition
-defines it — cite the house addition: the rule that defines the defect outranks
-the pass that spotted it, so terminology drift is always `(SRD:house)`. A `reference`
-finding cites its evidence in the same slot and the same shape —
-`(SRD:ref confluence/infraport/formats/x.md#heading)` for a corpus
+and `SCO`; never cite a rule absent from the standard fetched through the
+server (e.g. a defunct `MD-*`). A consistency-pass finding cites
+`(SRD:consistency)` and sits under the section where the conflict surfaces; a
+house-addition finding (US English, draft scaffolds, terminology drift) cites
+`(SRD:house)`. When both could fit — the consistency pass surfaced it, a house
+addition defines it — cite the house addition: the rule that defines the defect
+outranks the pass that spotted it, so terminology drift is always
+`(SRD:house)`. A `reference` finding cites its evidence in the same slot and the
+same shape — `(SRD:ref confluence/infraport/formats/x.md#heading)` for a corpus
 contradiction, `(SRD:ref <the dead link>)` for a broken pointer — so every
 finding closes with a parenthesis a reader can act on, and none carries a rule
 namespace that does not exist.

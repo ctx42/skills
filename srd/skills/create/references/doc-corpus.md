@@ -3,64 +3,39 @@
 How the SRD skills ground claims about the existing platform in its live
 documentation, and where what a lookup teaches goes. Shared by `create`,
 `review`, `edit`, and `system-check`: each skill says *when* it consults the
-corpus, this file says *how*. Absent a corpus, every skill runs offline: skip
-the lookups, never stop — but skipping the lookup does not confirm the claim.
-An assertion about existing system behavior that no one checked stays
-unconfirmed, and is flagged as such, offline exactly as it would be online. The
-only thing the corpus's absence changes is who can settle it: with a corpus,
-the lookup; without one, the user. Silently accepting a platform claim because
-there was nothing to check it against is the one outcome this file rules out.
+corpus, this file says *how*. The gate in [project-config.md](project-config.md)
+guarantees the server answers before any skill starts. An assertion about
+existing system behavior that no lookup confirms stays unconfirmed and is
+flagged as such; silently accepting a platform claim is the one outcome this
+file rules out.
 
 ## Contents
 
-- Backends
+- Tools
 - Trust
 - Where a lookup's outcome goes
 
-## Backends
+## Tools
 
-Fall through in this order, only when a step genuinely is not there, never on
-one failed call:
+All corpus and gap-store calls go to `mcp__<mcp-server>__<tool>`, with
+`<mcp-server>` from `project-config.md`:
 
-1. The `srd-doc` MCP tools: `mcp__srd-doc__search` (query, optional `k`),
-   `mcp__srd-doc__get_doc` (document id), `mcp__srd-doc__list_docs` (no args).
-2. The `srd-doc` REST mirror, when the server runs but MCP is not wired into
-   this client: `curl 'http://<host>:7777/search?q=TEXT&k=5'` and
-   `curl 'http://<host>:7777/docs/<id>'`. Same engine, same results.
-
-   The same server carries the gap store, on the same host and port:
-   `mcp__srd-doc__report_gap`, `mcp__srd-doc__list_gaps`,
-   `mcp__srd-doc__mark_gap_kb`, `mcp__srd-doc__resolve_gap`, mirrored as
-   `GET /gaps`, `POST /gaps`, `POST /gaps/{id}/kb`, and
-   `POST /gaps/{id}/resolve`. `srd:report-doc-gap` and `srd:backlog` own what
-   may be called and when — this file is only where the address lives, so that
-   a skill needing the gap endpoint before its first corpus lookup still has
-   one place to read it.
-
-   `<host>:<port>` is `localhost:7777` unless `SRD_DOC_HOST` and `SRD_DOC_PORT`
-   say otherwise — both overridable, since a second instance on one machine
-   cannot share the port — probe it
-   before concluding there is no corpus. Missing MCP tools are not evidence the
-   server is down; they are evidence this client has no MCP wiring, which is
-   the exact case this step exists for. Reporting "no corpus" without a
-   `curl 'http://localhost:7777/docs'` is the common way to miss a corpus that
-   is running.
-3. Scoped Grep/Read over a local corpus checkout, limited to the relevant
-   subdirectory. A stopgap, never a blind whole-corpus read.
+- Read: `search` (query, optional `k`), `get_doc` (document id), `list_docs`
+  (no args), `glossary_terms` (optional substring filter).
+- Gaps: `report_gap` (optional `draft: true`), `update_gap`, `submit_gap`,
+  `discard_gap`, `list_gaps` (filters `status`, `srd_ref`), `mark_gap_kb`,
+  `resolve_gap`. `srd:report-doc-gap` and `srd:backlog` own which may be called
+  and when.
 
 Default to `search` with `k` about 5; `get_doc` only when a hit needs its full
-table or context; `list_docs` to orient. Every backend is read-only: it queries
-the docs, never edits the SRD.
+table or context; `list_docs` to orient. A call that errors is reported, never
+retried or worked around. The read tools query the docs, never edit the SRD.
 
-A source pointer is a document id: the string `get_doc` accepts. An id is the
-source name plus the file's path inside that source — `confluence/`,
-`initiatives/`, `kb/` — so one page is `confluence/infraport/formats/x.md` in
-the corpus. Record the id, not a checkout path: where a source's name differs
-from its directory the two differ, and checking a path-shaped citation against
-`list_docs` then finds no match and reports a whole page of live sources as
-stale; that is a defect in the comparison, not a stale citation. Strip the
-checkout prefix down to the path inside the source; a citation is stale only
-when no id ends in the rest.
+A source pointer is a document id: its path from the project root, the string
+`get_doc` accepts (`confluence/infraport/formats/x.md`). Record the id, not an
+absolute checkout path. To check a citation written as a checkout path, strip
+the prefix down to the id; a citation is stale only when no `list_docs` id ends
+in the rest — comparing raw strings condemns every live source on the page.
 
 ## Trust
 
@@ -76,33 +51,30 @@ A lookup that confirms the claim needs nothing more. The other outcomes each
 have an owner; the calling skill only spots them and delegates:
 
 - The corpus cannot confirm the claim (content missing, wrong, incomplete, or
-  ambiguous): a documentation gap. Hand it to `srd:report-doc-gap`, which owns
-  capture, the grill, and the confirmed `report_gap` filing. A defect in the
-  SRD itself is never a doc gap; it stays in the calling skill's own findings.
+  ambiguous): a documentation gap. Hand it to `srd:report-doc-gap`, which
+  captures it as a server-side draft and owns the grill and the filing. A
+  defect in the SRD itself is never a doc gap; it stays in the calling skill's
+  own findings.
 - The corpus is silent but the user confirms the fact: tribal knowledge. Hand
-  it to `srd:kb`, which owns capture, the pages, and the writing. A term the
-  user defines because no glossary carries it is the same case.
+  it to `srd:kb` once confirmed; it writes it to `<kb>/_inbox.md` at once. A
+  term the user defines because no glossary carries it is the same case.
 - One fact may be both: `srd:kb` states it now, `srd:report-doc-gap` records
   that the docs should eventually carry it. Send it to both.
 
-Both delegates buffer silently on discovery and drain when the calling skill
-starts, where they surface what a prior session left unfiled or unwritten. A
-buffer file exists only while records are pending, so a calling skill probes
-for one (`../scripts/probe-buffers.sh`) and invokes a delegate only when it has
-something to drain: an absent buffer drains to nothing, and loading a skill to
-learn that is the largest avoidable cost at session start. When the calling
-skill finishes, `srd:kb` writes its confirmed facts and `srd:report-doc-gap`
-offers to work the gaps buffered this session. `review` invokes only
-`srd:report-doc-gap`: a read-only review confirms no platform fact with the
-user. The user must never experience a second track beside the skill's own
-work: no
+**Draft check at start.** A calling skill with an SRD calls `list_gaps` with
+`status: draft` and `srd_ref` the SRD's path from the project root, and invokes
+`srd:report-doc-gap` only when that returns a record — an empty list is the
+usual case and needs no skill loaded. The calling skill's report says, in one
+clause, that the check ran and what it found. With no SRD path yet there is
+nothing to check.
+
+When the calling skill finishes, it invokes `srd:report-doc-gap` to offer the
+drafts captured this session, only when there are any. `review` hands nothing
+to `srd:kb`: a read-only review confirms no platform fact with the user.
+
+The user must never experience a second track beside the skill's own work: no
 knowledge-base phase, no separate questions, no "bank this?" prompt.
 Confirmation of a platform fact rides on the calling skill's own confirmation
 step, and `srd:kb` may ask only to deepen a subject that step already opened,
-never to open a new one.
-
-A buffer is keyed by the SRD's path. The SRD template carries no id field and
-no skill assigns one, so nothing in this project is id-keyed: pass the probe
-the path and nothing else, and never invent an id to key by. The script's
-optional `SRD_ID` is for a caller that already holds an id from somewhere else
-— a ticketing system, another repository — and wants both keys probed.
+never to open a new one. Nothing in this flow keys by an SRD id: SRDs carry
+none, so pass the path and never invent one.

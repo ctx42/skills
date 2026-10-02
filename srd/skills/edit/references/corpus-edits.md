@@ -14,7 +14,7 @@ behavior, `search` the corpus **before the proposal is put** (loop step 1) and
 state what it found in the proposal: attestation works on the first reading, so
 the fact the user's key attests has to be in front of them when they press it.
 Step 3 re-validates only what the edit touched and never returns to the corpus
-for a claim the proposal already carried. Absent a corpus, edit offline.
+for a claim the proposal already carried.
 
 ## Set versus reported
 
@@ -28,7 +28,8 @@ overturn it. Never a second question.
 ## What a confirmation attests
 
 A proposal resting on a platform fact states it, so `Y`/`YN`/`E` attests the
-fact and `S` withholds it; `srd:kb` may only sharpen a fact the edit already
+fact and `S` withholds it — an attested fact goes to `srd:kb` at once, which
+writes it to the inbox; `srd:kb` may only sharpen a fact the edit already
 put in play. A deferred question goes to the knowledge base's open-questions
 list through `srd:kb`, not to `edit`'s own `## Open questions`, which tracks
 questions about this SRD and empties with the session.

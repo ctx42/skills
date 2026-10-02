@@ -7,8 +7,8 @@
       "skills": [
         "kb"
       ],
-      "setup": "During an SRD interview the user confirms that correlation uses a per-material propagation speed. A knowledge-base page on correlation already exists and is long enough to look worth splitting.",
-      "query": "/kb capture",
+      "setup": "`kb/_inbox.md` holds a confirmed fact that correlation uses a per-material propagation speed. A knowledge-base page on correlation already exists and is long enough to look worth splitting.",
+      "query": "/kb file",
       "files": []
     },
     {
@@ -33,22 +33,22 @@
     },
     {
       "id": 4,
-      "name": "refuses-a-sync-managed-root",
+      "name": "gate-rejects-an-absolute-kb-path",
       "skills": [
         "kb"
       ],
-      "setup": "First run. The user offers a directory that the repo's `.cfsync.yaml` maps to a Confluence space.",
+      "setup": "`project-config.md` sets `kb: /srv/vault/kb`, an absolute path.",
       "query": "/kb",
       "files": []
     },
     {
       "id": 5,
-      "name": "drains-at-start-writes-at-the-end",
+      "name": "writes-to-the-inbox-at-confirmation",
       "skills": [
         "kb",
         "create"
       ],
-      "setup": "`srd:create` starts on specs/gateway.md with two candidates left buffered by a prior session. The interview then confirms a third fact in a branch restatement.",
+      "setup": "`srd:create` runs on specs/gateway.md. The interview surfaces a platform fact the corpus does not carry, and the user confirms it in a branch restatement.",
       "query": "/create",
       "files": []
     },
@@ -68,8 +68,8 @@
       "skills": [
         "kb"
       ],
-      "setup": "A capture run that writes two sections across two pages.",
-      "query": "/kb capture",
+      "setup": "A `file` run that moves two inbox sections onto two pages.",
+      "query": "/kb file",
       "files": []
     },
     {

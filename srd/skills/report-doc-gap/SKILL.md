@@ -6,7 +6,7 @@ description: >
   incomplete, or ambiguous. Use when an SRD skill cannot confirm a claim
   against the corpus, when a doc gap should reach the documentation backlog,
   or to work an SRD's unreported doc gaps.
-argument-hint: "[<srd path or id>]"
+argument-hint: "[<srd path>]"
 license: MIT
 ---
 
@@ -15,35 +15,37 @@ license: MIT
 ## Usage
 
 ```
-/report-doc-gap <srd>  work <srd>'s buffered doc gaps: grill, confirm, file each (default)
+/report-doc-gap <srd>  work <srd>'s draft doc gaps: grill, confirm, file each (default)
 ```
 
 Rarely invoked by hand: `create`, `edit`, `review`, and `system-check` delegate
 every gap here, and `backlog` later closes what this files. Invoke it yourself
-to work one SRD's pending gaps before moving on.
+to work one SRD's draft gaps before moving on.
 
-Producer end of the doc-gap loop: `srd:create`, `srd:edit`, `srd:review`, and
-`srd:system-check` delegate all gap handling here, and `srd:backlog` later
-closes what this files. This skill owns capture, the buffer, the grill, and the
-filing; the caller owns only its primary flow.
+Producer end of the doc-gap loop: this skill owns capture, the grill, and the
+filing; the caller owns only its primary flow. A captured gap is a server-side
+**draft** until filed — nothing is kept on this machine.
 
 ## Boundaries
 
-- Role: the single producer-side gap handler. Capture a gap the moment a caller
-  finds one, hold it in a buffer, grill the finder for context, file it on
-  their yes.
+- Role: the single producer-side gap handler. Capture a gap as a draft the
+  moment a caller finds one, grill the finder for context, file it on their
+  yes.
 - Must not: file silently (every record is confirmed first; the backlog is
   human-curated, so noise is the enemy); author or edit the corpus; draft the
   fix (that is `srd:backlog`); file an SRD gap (see
   [The boundary](#the-doc-gap-vs-srd-gap-boundary)); file an unknown, a fact
   nobody has pinned down, which belongs in the knowledge base's open-questions
   list through `srd:kb`.
-- Depends on: the `srd-doc` server's gap store, reached through the
-  [gap channel](#the-gap-channel). Absent, capture still runs and filing
-  degrades as [Confirm and file](#d-confirm-and-file) says.
+- Depends on: the gap tools of the server named in `project-config.md`, which
+  the gate in
+  [../create/references/project-config.md](../create/references/project-config.md)
+  checks before anything else.
 
 ## Support files
 
+- [../create/references/project-config.md](../create/references/project-config.md)
+  (eager) — the gate, and the server and project root it names.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
   (on-demand: when unsure whether a handed-over item is a doc gap, tribal
   knowledge for `srd:kb`, or both) — the shared corpus reference; its "Where a
@@ -62,41 +64,25 @@ caller's own findings:
   count": doc gap; hand it here.
 
 When unsure, ask whether the deficiency is in the SRD or in the docs; only the
-latter crosses into the buffer. A fact the corpus lacks but the user confirms
-is also tribal knowledge for `srd:kb`: one fact may be both, and the caller
-sends it to both.
+latter becomes a draft. A fact the corpus lacks but the user confirms is also
+tribal knowledge for `srd:kb`: one fact may be both, and the caller sends it to
+both.
 
-## The gap channel
+## The gap tools
 
-Reach `report_gap` by, in priority order, falling through only when a step
-genuinely is not there, never on one failed call:
+All on `mcp__<mcp-server>__`, from `project-config.md`:
 
-1. MCP: `mcp__srd-doc__report_gap` with the record below; returns the assigned
-   `id` (`gap-NNNN`). The read tools `mcp__srd-doc__search`, `get_doc`, and
-   `list_docs` come from the same server; the caller uses them to decide a
-   claim is unconfirmable before handing the gap here.
+| Step           | Call                                                       |
+|----------------|------------------------------------------------------------|
+| capture        | `report_gap` with `draft: true` and `srd_ref` → draft `id` |
+| grill / refine | `update_gap` on the draft's descriptive fields             |
+| file           | `submit_gap` → status `open`                               |
+| drop           | `discard_gap` (deletes the draft)                          |
+| drain / resume | `list_gaps` with `status: draft`, `srd_ref: <srd>`         |
 
-   The absence of these tools says this client has no MCP wiring, not that the
-   server is down — fall through to REST and probe it before reporting no
-   channel.
-2. REST mirror, when the server runs but MCP is not wired into this client:
-   `POST /gaps` with the record as a JSON body.
-
-**Probe with `GET /gaps`, never with `POST`.** The store is production and
-append-only: it has no delete, so a probe record is permanent and someone has
-to notice it and clean it out of a real backlog by hand. A successful `GET`
-proves the route, the host, and the schema — everything a probe is for. This is
-not hypothetical: an eval run took "probe it" at its word, sent a `POST` with a
-junk body to see whether the endpoint existed, and filed `gap-0025` into the
-real store.
-
-Reaching the host at all is the test. A `GET` that answers — with rows, or with
-an empty list — means the channel is up. Connection refused or no route means
-it is not. An error *from* the store is a working store with a problem: report
-it, do not fall past it and do not retry.
-
-Neither present means the store is not enabled;
-[Confirm and file](#d-confirm-and-file) says what happens then.
+Only a draft is editable or discardable; a submitted gap is permanent, so
+`report_gap` without `draft: true` is never called. An error from a call is a
+working store with a problem: report it, never retry or work around it.
 
 ## The gap record
 
@@ -106,10 +92,10 @@ without this session:
 
 - `kind` — `missing` (nothing found), `wrong`, `incomplete`, or `ambiguous`.
 - `topic` — short label for the missing knowledge.
-- `demand` — why the gap blocks the SRD work at hand. The capturing skill
-  fills this at capture, from what it was doing when the gap surfaced, so it
-  survives an opt-out: the finder declining the grill does not make the
-  blocking reason unknown, and every record in the store carries one.
+- `demand` — why the gap blocks the SRD work at hand, including the SRD section
+  that raised it. The capturing skill fills this at capture, from what it was
+  doing when the gap surfaced, so it survives an opt-out: the finder declining
+  the grill does not make the blocking reason unknown.
 - `detail` — what is missing, wrong, incomplete, or ambiguous. Required: the
   one field a finder must supply even on opt-out. May carry grilled prose in
   heavy mode.
@@ -120,51 +106,24 @@ without this session:
   found.
 - `search_terms` — the queries tried, so a reviewer can tell genuinely absent
   content from content that exists but does not rank.
-- `srd_ref` — the SRD's path and section that raised it (e.g.
-  `specs/gateway.md §4.3`), or the caller's id in place of the path when it
-  holds one.
-
-## The buffer
-
-Captured gaps live in a per-SRD buffer until filed, so a session that clears
-mid-flow loses nothing.
-
-- Location:
-  `${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/srd/docgaps/<key>.json`
-  — `AGENT_DATA_DIR` lets a sandbox or an eval redirect the store, and unset
-  means the real one. Outside every corpus source by construction, so cfsync
-  never indexes or clobbers it; beside the lessons files.
-- Key: the SRD's absolute file path — SRDs carry no id, so all four SRD skills
-  share one buffer per path on this machine, and a reviewer's session appends to
-  the file an author's session started. A path is not a filename, so derive one
-  the same way every time: `path-` plus the first 12 hex characters of the
-  path's SHA-256 (`printf %s "$abs" | sha256sum`). Any other transform breaks
-  the shared-file promise, since two skills that slugify differently silently
-  keep separate buffers for one SRD. Resolve the path to absolute first; a
-  relative path keyed from two working directories does the same damage. Before
-  the SRD has even a path (a `create` interview not yet written), key `_session`
-  and rename at the first write. Never invent an id to key by; a caller holding
-  one from elsewhere (a ticket) passes it as `SRD_ID` to the probe, beside the
-  path.
-- Contents: a JSON array of [gap records](#the-gap-record), filled as far as
-  capture or grill got them. Buffered means unconfirmed: a record leaves on
-  filing or discard, and the file is deleted when the last record leaves it. An
-  empty `[]` is never a resting state on disk: a file that exists means records
-  are pending, so an empty one would have every later drain report a buffer it
-  does not have.
+- `srd_ref` — the SRD's path from the project root (e.g.
+  `initiatives/gateway/srd.md`). One gap blocking two SRDs lists both,
+  comma-separated. Empty only while a `create` interview has no path yet; set
+  it with `update_gap` once the path exists. Never invent an id.
 
 ## Invocation
 
-The first token is the SRD path or id; callers pass it. A gap handed over in the
+The first token is the SRD path; callers pass it. A gap handed over in the
 invocation prose means capture (phase B); otherwise drain (phase A). With no
 arguments, ask which SRD.
 
 ## Workflow
 
-Callers invoke this skill at start (drain) and on gap discovery (capture); the
-user invokes it directly to drain.
+Run the gate first. Callers invoke this skill at start (drain, only when their
+draft check found drafts) and on gap discovery (capture); the user invokes it
+directly to drain.
 
-- [ ] A. On start: drain the buffer for this SRD; offer to work pending gaps.
+- [ ] A. On start: list this SRD's drafts; offer to work them.
       "Start" means the caller's session start, not every entry into this
       skill. A capture (phase B) is not a start: it records and returns
       without draining, or the no-interruption rule it exists to serve would
@@ -173,40 +132,34 @@ user invokes it directly to drain.
       There are two moments, not one, and they carry different gaps. At the
       caller's start you surface what a *prior* session left unfiled — work
       the user may have forgotten. When the caller finishes you offer what
-      *this* session buffered, which they watched accumulate. Same phase C
+      *this* session captured, which they watched accumulate. Same phase C
       and D either way; only the invitation differs.
-- [ ] B. On discovery: capture the gap light to the buffer, no interruption.
-- [ ] C. Working a gap: check the channel is reachable, then grill the finder
-      at their chosen depth (or honor opt-out); assemble the record. Resolve
-      the channel first — interviewing someone about a gap that cannot then be
-      filed spends their attention for nothing. With no channel, say so, leave
-      the gap buffered, and do not open the grill.
-- [ ] D. Confirm the record, file via `report_gap`, drop it from the buffer.
+- [ ] B. On discovery: capture a light draft, no interruption.
+- [ ] C. Working a draft: grill the finder at their chosen depth (or honor
+      opt-out); write what it yields with `update_gap`.
+- [ ] D. Confirm the record; `submit_gap` on yes, `discard_gap` on no.
 
 ### A. Drain
 
-Read this SRD's buffer on skill start (a prior session may have cleared with
-gaps unfiled) and on direct invocation. Empty: tell the caller so and show the
-user nothing — the caller states in its own report that the drain ran and was
-empty. Invoked directly by the user, say it in one clause: there is no caller to
-say it for you. Otherwise resolve the channel before offering: with none
-reachable, give the count, say filing is unavailable, and do not offer work that
-cannot finish. Phase C checks it again for the capture path, which does not come
-through here. With a channel, surface count and topics and offer to work them
-now: "N unreported doc gaps for `specs/gateway.md`; work them now or keep
-going?" Never force it; on defer the gaps stay buffered for the next start. On
-accept, work them one at a time through phases C and D.
+`list_gaps` with `status: draft` and `srd_ref` this SRD. Empty: tell the caller
+so and show the user nothing — the caller states in its own report that the
+drain ran and was empty. Invoked directly by the user, say it in one clause:
+there is no caller to say it for you. Otherwise surface count and topics and
+offer to work them now: "N unreported doc gaps for
+`initiatives/gateway/srd.md`; work them now or keep going?" Never force it; on
+defer the drafts stay on the server for the next start. On accept, work them
+one at a time through phases C and D.
 
 ### B. Capture on discovery
 
-Write a light record to the buffer at once and return: no user interruption,
-no grill, no `report_gap` call. Fill only what is free now: `detail` (the
-caller's one-line "what is missing") plus whatever the caller already holds
-(`kind`, `topic`, `demand`, `srd_ref`, and the `doc_id`/`heading_path`/
-`source_url`/`search_terms` from the lookups that exposed the gap). `demand`
-belongs here because the caller knows it now — it is what they were doing when
-the gap surfaced — and nobody can reconstruct it later; that is what makes it
-survive an opt-out. Leave the rest empty.
+Call `report_gap` with `draft: true` at once and return: no user interruption,
+no grill, no filing. Fill only what is free now: `detail` (the caller's
+one-line "what is missing") plus whatever the caller already holds (`kind`,
+`topic`, `demand`, `srd_ref`, and the `doc_id`/`heading_path`/`source_url`/
+`search_terms` from the lookups that exposed the gap). `demand` belongs here
+because the caller knows it now — it is what they were doing when the gap
+surfaced — and nobody can reconstruct it later; that is what makes it survive
+an opt-out. Leave the rest empty. Keep the returned draft `id` for the session.
 
 One record per distinct missing fact. Same fact means the same thing is missing
 from the documentation — same `topic`, and a `detail` that would be closed by
@@ -218,17 +171,19 @@ the page is the test, not the count of facts. Two facts a backlog author would
 write in one sitting are one gap; a reviewer reading two records that resolve
 together learns nothing the first did not say.
 
-If the same fact is already buffered for this SRD, merge into it rather than
+Before capturing, check every draft (`list_gaps`, `status: draft`, no `srd_ref`
+filter — another SRD's draft may hold the same fact): if it is already a
+draft, merge into it with `update_gap` rather than
 duplicate: union `search_terms`, keep the richer `detail` and `target_claim`,
-keep the earliest `demand` and add the new one if it differs, each in the
-words its capture recorded — the merge writes no sentence of its own — keep the existing
-`kind` unless the new capture is strictly more specific (`missing` yielding to
-`wrong` or `ambiguous`, never the reverse — the second finder saw the same
-absence, not a different one), append to `srd_ref` comma-separated since one
-gap can block two SRDs, and keep the `doc_id`/`heading_path`/`source_url`
-already set — a later capture
-that found nothing must not blank a pointer an earlier one recorded. Repeats
-are a priority signal the reviewer reads, not new gaps.
+keep the earliest `demand` and add the new one if it differs, each in the words
+its capture recorded — the merge writes no sentence of its own — keep the
+existing `kind` unless the new capture is strictly more specific (`missing`
+yielding to `wrong` or `ambiguous`, never the reverse — the second finder saw
+the same absence, not a different one), append to `srd_ref` comma-separated
+since one gap can block two SRDs, and keep the `doc_id`/`heading_path`/
+`source_url` already set — a later capture that found nothing must not blank a
+pointer an earlier one recorded. Repeats are a priority signal the reviewer
+reads, not new gaps.
 
 ### C. Grill at chosen depth
 
@@ -242,8 +197,10 @@ theirs per gap: some gaps deserve a full extraction, others a one-liner.
   needs, terms and synonyms) and fold it into `detail` and `target_claim` as
   prose; the schema does not change.
 
-This grill is a head start for `srd:backlog`, which runs its own authoring
-grill when the page is written, not a substitute for it.
+Write what the grill yields to the draft with `update_gap` before phase D, so a
+session that clears mid-flow loses nothing. This grill is a head start for
+`srd:backlog`, which runs its own authoring grill when the page is written, not
+a substitute for it.
 
 #### Opt-out
 
@@ -260,27 +217,19 @@ still applies to every record.
 Show the finder the assembled record and file only on their yes. Ask so that
 all three answers are on offer — file it, change something first, or drop it —
 rather than a bare "File it?", which reads as yes-or-no and buries the
-correction path the next two sentences depend on. On a correction, adjust and
-re-show; on a no, discard. Either outcome removes the
-record from the buffer.
+correction path the next two sentences depend on. On a correction, `update_gap`
+and re-show; on a no, `discard_gap`.
 
 A discard is a decision, not a deletion: say what was dropped, and record the
 topic in the caller's output — in this skill's own reply when the user invoked
 it directly — so the same weak lookup does not re-capture the same gap next
-session and put the finder through it again. Nothing durable is
-written for it — a rejected gap is not a gap — but the finder should not have
-to remember rejecting it.
+session and put the finder through it again. Nothing durable is written for it
+— a rejected gap is not a gap — but the finder should not have to remember
+rejecting it.
 
-On yes, file through the [gap channel](#the-gap-channel) and record the
-returned `id` (`gap-NNNN`) in your report. Filing only records the gap; the
-corpus is unchanged, and the gap sits `open` for `srd:backlog`.
-
-No gap store: say filing is unavailable, note the gap in the caller's output,
-and leave it buffered for a session where the store is reachable. Never invent
-a store. Say which kind of unavailable it is — no route on a server that
-answers, or no server answering at all — because the first is a deployment
-that needs the gap endpoint and the second is a host that is simply not up, and
-the reader fixes them differently.
+On yes, `submit_gap` and record the gap's `id` (`gap-NNNN`) in your report.
+Filing only records the gap; the corpus is unchanged, and the gap sits `open`
+for `srd:backlog`.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.

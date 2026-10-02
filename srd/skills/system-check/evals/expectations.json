@@ -5,7 +5,7 @@
       "id": 1,
       "name": "surfaces-a-system-contradiction",
       "expected_behavior": [
-        "Probes both buffers, finds neither holds records, and invokes neither delegate at the start — then states in one clause that both were checked and were empty, since a check that ran is otherwise indistinguishable from one that never did",
+        "Runs the draft check, finds no draft, and invokes no delegate at the start — then states in one clause that the check ran and found none, since a check that ran is otherwise indistinguishable from one that never did",
         "Runs `srd:review specs/labeling.md` once to create the review file, then reads it — and makes no edit to the SRD",
         "Writes `specs/labeling.questions.md` holding at least two questions — the `GR-4` contradiction with `confluence/infraport/concepts/tags.md` and `GR-7`'s unmeasurable \"fast\" reframed from the review — and no question carries a severity tag, a rule id, or a finding number",
         "Asks the contradiction once, not twice in two voices, even though the review layer's own facts-vs-corpus pass found it too — the link back to the review finding lives in the question's `<!-- review: #n -->` bookkeeping comment, never in its text",

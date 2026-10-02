@@ -40,27 +40,27 @@ system is.
 ## Boundaries
 
 - Role: the consumer end of every backlog — list, triage, extract, close.
-- Must not: write any file under the KB root (`srd:kb` owns it; every
+- Must not: write any file under the `kb` folder (`srd:kb` owns it; every
   knowledge-base write, row move, or row edit is delegated there); publish to
   Confluence; author or edit an SRD; file new gaps (`srd:report-doc-gap` owns
   that).
-- Depends on: `srd:kb` for the KB lists, the `srd-doc` gap store for `gaps`.
+- Depends on: `srd:kb` for the KB lists, the server's gap store for `gaps`.
 
 ## Sources of truth
 
 - [../kb/references/retrieval-authoring.md](../kb/references/retrieval-authoring.md)
   (on-demand: drafting a page in `gaps`) — how to write Markdown the corpus
   chunks and ranks well. `srd:kb` owns it.
+- [../create/references/project-config.md](../create/references/project-config.md)
+  (eager) — the gate every sitting passes first, and the `kb` folder and
+  server it names.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
-  (on-demand: before resolving the backends in step 1, which is earlier than
-  the first corpus lookup — step 1 calls `GET /gaps` on every sitting and the
-  host lives there) — how to reach the corpus and the gap store, including the
-  host the REST mirror answers on. `srd:create` owns it;
-  the `search`/`get_doc` calls below are specified there, not here.
+  (on-demand: the first corpus lookup) — the server's tools and how to use
+  them. `srd:create` owns it.
 
 ## Backends
 
-The KB lists read `_open-questions.md` at the KB root, which `srd:kb` resolves:
+The KB lists read `<kb>/_open-questions.md`, `kb` from `project-config.md`:
 one row per question under `## Open` (label, kind `deferred` or `unknown`, date
 raised, hit count, `Lives in` page link) or `## Closed`, which keeps the same
 columns — `kind` included, so a closed row still says whether it had been a
@@ -70,53 +70,31 @@ with an empty page link has only its label. When a question closes, its wording
 leaves that section — the answer is in the page body now, and a question still
 posed beside its own answer reads as unresolved to the next person — and when
 that was the last one, the heading goes too, since an empty heading promises a
-list the page does not have. Without a KB root, say so and
-work `gaps` alone.
+list the page does not have.
 
-The `gaps` list reaches the store by, in priority order — falling through only
-when a step is genuinely absent, never because one call failed. Absent means
-the tool is not in the tool set, or the mirror's host does not answer at all; a
-call that reaches the store and returns an error is a working store with a
-problem, and is reported rather than retried or fallen past:
-
-1. MCP — `mcp__srd-doc__list_gaps` (optional `status`),
-   `mcp__srd-doc__mark_gap_kb` (`gap_id`, `kb_ref`, optional `note`),
-   `mcp__srd-doc__resolve_gap` (`gap_id`, `published_url`, optional `note`);
-   the read tools `search`, `get_doc`, `list_docs` come from the same server.
-2. The REST mirror — `GET /gaps?status=open`, `POST /gaps/{id}/kb` with
-   `{"kb_ref": "…", "note": "…"}`, `POST /gaps/{id}/resolve` with
-   `{"published_url": "…", "note": "…"}`; `GET /search?q=…&k=5`,
-   `GET /docs/<id>`.
-
-Fall through only when a step genuinely is not there, not on one failed call.
-What the response says, in order:
-
-- No host answering, or the MCP tool absent — that backend is not there. Fall
-  through.
-- `404` on `/gaps` from a host that answers other routes — the server is up
-  without the gap endpoint. The store is not enabled: say so and work the KB
-  lists alone.
-- Any other error, `500` and friends — a store that exists and is unwell.
-  Report it with its status and stop working `gaps`; do not fall through, do
-  not retry, and do not describe it as not enabled, which would send someone
-  to configure a thing that is already configured.
+The `gaps` list uses the server's gap tools on `mcp__<mcp-server>__`:
+`list_gaps` (optional `status`), `mark_gap_kb` (`gap_id`, `kb_ref`, optional
+`note`), `resolve_gap` (`gap_id`, `published_url`, optional `note`); the read
+tools `search`, `get_doc`, `list_docs` come from the same server. An error from
+a call is a store that exists and is unwell: report it with its message and
+stop working `gaps`; never retry it or work around it.
 
 A gap record carries `id`, `status`, `created_at`, `kind`
 (missing/wrong/incomplete/ambiguous), `topic`, `doc_id`, `heading_path`,
 `source_url`, `demand`, `target_claim`, `detail`, `search_terms`, `srd_ref`,
 and, once parked, `kb_marked_at` and `kb_entry` (`ref`, `note`).
 Empty `doc_id`/`heading_path`/`source_url` mean the reporter found nothing
-relevant. Statuses: `open`, `kb`, `resolved`, `duplicate`, `wontfix`.
+relevant. Statuses: `draft`, `open`, `kb`, `resolved`, `duplicate`,
+`wontfix`. A `draft` is still `srd:report-doc-gap`'s — never in this backlog.
 
 ## Workflow
 
 The first token names one list, or `all` (default). Copy this checklist and
 tick it off:
 
-- [ ] 1. Open the sitting: resolve the KB root and the gap store, count each
-      list, stop for the user's pick. Skipped when a list was named. (Two
-      backends in that sense — the MCP/REST fallthrough below is one backend
-      reached two ways, not a second one.)
+- [ ] 0. Pass the gate. Always, before anything below.
+- [ ] 1. Open the sitting: count each list, stop for the user's pick. Skipped
+      when a list was named.
 - [ ] 2. `deferred`: ask, hand the answer to `srd:kb`.
 - [ ] 3. `unknowns`: triage, never answer.
 - [ ] 4. `gaps`: cluster, check the corpus, grill, draft, resolve or park.
@@ -126,11 +104,8 @@ own mechanism, one call per item.
 
 ### 1. Open the sitting
 
-State the counts in one line and stop. With a backend missing, state the counts
-you have and name the list you cannot see in the same line — two counts and
-"no gap store configured" is the opening for that sitting, not a reason to
-skip the opening or to stop. Lead with `deferred` when it is non-empty: a
-sitting that opens with quick closes keeps going. All three empty:
+State the counts in one line and stop. Lead with `deferred` when it is
+non-empty: a sitting that opens with quick closes keeps going. All three empty:
 say the backlog is clear and stop.
 
 ### 2. deferred
@@ -170,7 +145,7 @@ closed with a guess is a fact the corpus will serve as truth.
 
 Draft the page that fixes the user manual; a human publishes it.
 
-1. List open gaps (`list_gaps` with `status: open`, or `GET /gaps?status=open`).
+1. List open gaps (`list_gaps` with `status: open`).
    `kb` gaps are not in it; list them with `status: kb` only when a page for
    one is being written or published.
 2. Cluster the gaps one page would resolve — same `doc_id`, same
@@ -194,9 +169,9 @@ Draft the page that fixes the user manual; a human publishes it.
 5. Draft one page (or the edit to an existing one) against
    [../kb/references/retrieval-authoring.md](../kb/references/retrieval-authoring.md),
    to a neutral drafts location the user names, outside every corpus source —
-   the KB root included: a draft inside a source is clobbered by the next sync
-   and pollutes the index. Unsure whether a path is outside every source: ask
-   which directories are sources first.
+   the `kb` folder included: a draft inside a source is clobbered by the next
+   sync and pollutes the index. The sources are the top-level folders the
+   `list_docs` ids start with; unsure whether a path is outside them, ask.
 6. Resolve once the human gives the published URL: `resolve_gap` for every gap
    in the cluster, so each moves from `open` or `kb` to `resolved` with the URL
    recorded. An edit to an existing page has a URL already — that page's — and
@@ -208,11 +183,11 @@ Draft the page that fixes the user manual; a human publishes it.
    restart unless the server watches its sources.
 7. Park instead of steps 5–6 when the user decides the fact stays in the KB for
    now — no page planned this sitting. Only once `srd:kb` has written the
-   section and the file exists under the KB root: `mark_gap_kb` for every gap in
-   the cluster, `kb_ref` the KB document ID plus anchor
+   section and the file exists under the `kb` folder: `mark_gap_kb` for every
+   gap in the cluster, `kb_ref` the KB document ID plus anchor
    (`kb/users-and-access.md#customer-and-project-timezones`), `note` saying
-   which decision parked it. Never park against a buffered or unconfirmed fact,
-   nor a section that only partly covers the gap — leave that one `open`.
+   which decision parked it. Never park against an unconfirmed fact, nor a
+   section that only partly covers the gap — leave that one `open`.
 
 A platform fact the grill surfaces also goes to `srd:kb`; the gap and the KB
 entry close independently.
@@ -223,7 +198,7 @@ re-print a drafted page or the rows just moved.
 
 Name `srd:kb` as the writer whenever a row moved or a page changed, as a count
 per delegate (`srd:kb: 2 answers`), never a list of files written or rows
-moved: this skill writes nothing under the KB root, and a report that says
+moved: this skill writes nothing under the `kb` folder, and a report that says
 "closed two" without saying who wrote them reads as though it did.
 
 "What closed" is said once per sitting, in the closing line — not again as each

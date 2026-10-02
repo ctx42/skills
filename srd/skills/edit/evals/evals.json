@@ -109,19 +109,18 @@
         "report-doc-gap",
         "kb"
       ],
-      "setup": "The `srd-doc` corpus is reachable. The user wants `GR-2` to say the gateway retries a failed token check three times; the retry count appears in no document. The user approves the proposal with `YN`.",
+      "setup": "The user wants `GR-2` to say the gateway retries a failed token check three times; the retry count appears in no document. The user approves the proposal with `YN`.",
       "query": "/edit specs/login.md GR-2",
       "files": []
     },
     {
       "id": 12,
-      "name": "session-start-drains-prior-buffers",
+      "name": "session-start-drains-prior-drafts",
       "skills": [
         "edit",
-        "report-doc-gap",
-        "kb"
+        "report-doc-gap"
       ],
-      "setup": "A previous session for this SRD ended with two unfiled doc gaps and one unwritten platform fact still buffered. The user defers both when offered, asking to get on with the edit.",
+      "setup": "A previous session for this SRD ended with two doc gaps still drafts on the server (`srd_ref` `specs/login.md`). The user defers when offered, asking to get on with the edit.",
       "query": "/edit specs/login.md",
       "files": []
     },
@@ -177,11 +176,11 @@
     },
     {
       "id": 18,
-      "name": "absent-buffers-skip-the-delegates",
+      "name": "no-drafts-skip-the-delegates",
       "skills": [
         "edit"
       ],
-      "setup": "No buffer file exists for this SRD under `$AGENT_DATA_DIR/ctx42-skills/srd/` — neither `docgaps/` nor `kb/` — and `Status` reads `IN PROGRESS`. The target requirement is vague and names no glossary term. The requirement asserts no fact about existing system behavior, so nothing in the run calls for a corpus lookup.",
+      "setup": "The server holds no draft gap for this SRD, and `Status` reads `IN PROGRESS`. The target requirement is vague and names no glossary term. The requirement asserts no fact about existing system behavior, so nothing in the run calls for a corpus lookup.",
       "query": "/edit specs/login.md GR-2",
       "files": []
     },

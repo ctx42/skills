@@ -97,20 +97,29 @@
       "id": 9,
       "name": "facts-vs-corpus-routes-doc-gaps",
       "expected_behavior": [
-        "Probes the gap buffer first and, on the prior session's pending records, invokes `srd:report-doc-gap` to drain them before any corpus search",
-        "Routes the unconfirmable `GW-2` retry count to `srd:report-doc-gap` as a doc gap and files no finding against it in `gateway.review.md` — an unconfirmable claim goes to the gap buffer, never into the review file. Quoting the claim inside some other finding is not the test; where the gap went is",
+        "Runs the draft check first and, on the prior session's drafts, invokes `srd:report-doc-gap` to drain them before any corpus search",
+        "Routes the unconfirmable `GW-2` retry count to `srd:report-doc-gap` as a draft gap and files no finding against it in `gateway.review.md` — an unconfirmable claim becomes a draft gap, never a review finding. Quoting the claim inside some other finding is not the test; where the gap went is",
         "Records the contradicted `GW-5` timeout as a `reference` finding in the review file",
-        "After the closing tally, offers to work the buffered `GW-2` gap now or later, and never files it silently"
+        "After the closing tally, offers to work the `GW-2` draft gap now or later, and never files it silently"
       ]
     },
     {
       "id": 10,
-      "name": "empty-gap-buffer-skips-the-delegate",
+      "name": "no-drafts-skip-the-delegate",
       "expected_behavior": [
-        "Echoes the probe result and invokes `srd:report-doc-gap` neither at the start nor at the close — the buffer file is absent, and this run captured nothing to offer",
-        "Runs no facts-vs-corpus pass and says the corpus was unreachable, rather than silently omitting it",
+        "Echoes the draft-check result and invokes `srd:report-doc-gap` neither at the start nor at the close — no draft exists, and this run captured nothing to offer",
+        "Raises no `reference` finding and captures no gap: the SRD asserts no platform fact",
         "Creates `specs/login.review.md` and writes the three defects with fresh numbers from `#1`",
-        "The reply opens with the outcome — findings, the review file, the tally — with no narrated startup sequence (\"first I probe…, then I read…\")"
+        "The reply opens with the outcome — findings, the review file, the tally — with no narrated startup sequence (\"first I check…, then I read…\")"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "gate-stops-without-project-config",
+      "expected_behavior": [
+        "Stops in one line naming the failed check: `project-config.md` not found in the start directory or any parent",
+        "Reads no part of the SRD, calls no server tool, and runs no draft check before stopping",
+        "Writes no `specs/login.review.md` and asks the user nothing"
       ]
     }
   ]

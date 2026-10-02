@@ -1,9 +1,9 @@
 # SRD Authoring Guide — House Extensions and Defect Classes
 
-Practical guidance that extends the SRD standard in
-[srd-standard.md](srd-standard.md). The standard's rules are normative; the
-items here are this project's additions plus worked examples that help the agent
-draft well and recognize defects during the self-check.
+Practical guidance that extends the SRD standard, read live through the
+server ([project-config.md](project-config.md)). The standard's rules are
+normative; the items here are this project's additions plus worked examples
+that help the agent draft well and recognize defects during the self-check.
 
 **These examples never go into an SRD.** Every `Bad`/`Good` pair below is
 authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
@@ -120,10 +120,7 @@ This pass is the self-check's feedback loop — repeat it until it is clean.
 ## Defect classes (Bad → Good)
 
 <!-- Each Bad→Good section below transcribes an upstream source example block,
-     annotated with the rule it follows. The export stopped carrying localIds at
-     page_version 16, so the rule is the key srd-sync matches on; the localIds
-     still shown are historical. Untranscribed examples are listed in
-     dev/srd-untranscribed-examples.md, keyed the same way. -->
+     annotated with the rule it follows; the localIds shown are historical. -->
 
 ### Glossary pollution — behavior hidden in a definition (GLO-1/2)
 <!-- expand: 563d87a5-e660-4203-887b-17c549fbd7f2 (follows GLO-1) -->

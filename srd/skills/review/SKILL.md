@@ -42,9 +42,12 @@ them and never restates a rule. It depends on `../create/references/*` — do
 not move or rename `create`. If a referenced file is missing at run time, stop
 and tell the user.
 
-- [../create/references/srd-standard.md](../create/references/srd-standard.md)
-  (eager) — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, Quality
-  Bar). The review checks every rule.
+- [../create/references/project-config.md](../create/references/project-config.md)
+  (eager) — the gate every mode passes first, and the project paths,
+  standard, and server it names.
+- The SRD standard (fetched live per that file; every mode but `feedback`,
+  which only lists findings already in the file) — the rules (`STR`, `STA`,
+  `LANG`, `REQ`, `GLO`, `SCO`, Quality Bar). The review checks every rule.
 - [../create/references/authoring-guide.md](../create/references/authoring-guide.md)
   (eager) — house additions (US English, sub-numbering, draft scaffolds,
   terminology consistency), the consistency pass, and the Bad→Good defect
@@ -56,9 +59,9 @@ and tell the user.
   (on-demand: the facts-vs-corpus pass, which only `review` and `walk` run) —
   how to reach the documentation corpus, how its sources rank, and where an
   unconfirmed claim goes. `check`, `errata`, and `feedback` never reach it.
-- [../create/scripts/probe-buffers.sh](../create/scripts/probe-buffers.sh)
-  (run, not read) — says whether the gap buffer holds pending records, so
-  `srd:report-doc-gap` is invoked only when it has something to drain.
+- [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
+  (on-demand: the first GLO-3 / STR-10 check) — the Company Glossary's term
+  set, from the server.
 
 Apply the full rule set. `create` leaves STR-2..7 (≥ 2 owners, Initiative
 link, Designs link or `N/A` when no UI change) and STA-* (valid Status; not
@@ -71,16 +74,15 @@ a back-link finding.
 ## Documentation corpus
 
 Procedure, trust, and where an outcome goes: the shared corpus reference in
-Sources of truth. `review` and `walk` probe the gap buffer as their first step
-and invoke `srd:report-doc-gap` only on a `pending` line, then invoke it again
-after the closing line to offer the gaps this run buffered. When a corpus is
-reachable, they also run a facts-vs-corpus pass beside the rule checks: for
-every requirement that asserts something about existing system behavior ("the
-gateway retries 3×", "the API returns Y"), `search` the corpus to confirm it. A
+Sources of truth. `review` and `walk` run its draft check as their first step,
+then invoke `srd:report-doc-gap` again after the closing line to offer the
+drafts this run captured. They also run a facts-vs-corpus pass beside the rule
+checks: for every requirement that asserts something about existing system
+behavior ("the gateway retries 3×", "the API returns Y"), `search` the corpus
+to confirm it. A
 claim the corpus contradicts is a `reference` finding; one it cannot confirm is
 a doc gap for `srd:report-doc-gap`, never a finding in `<srd>.review.md`.
-Absent a corpus, skip the pass and review offline. `srd:kb` is not invoked: a
-review confirms no platform facts with the user.
+`srd:kb` is not invoked: a review confirms no platform facts with the user.
 
 ## Severity
 
@@ -158,10 +160,12 @@ rule, `linguistic` (LANG-3) when it does not. A duplicate id's fix in an
 
 ## Modes
 
-The review file path is auto-derived, never passed as an argument. The first
-token is the SRD path; the next selects the mode (default review when omitted).
-With no arguments, ask which SRD to review; fall back to the user's prose for
-free-form input.
+Every mode runs the gate in
+[../create/references/project-config.md](../create/references/project-config.md)
+first. The review file path is auto-derived, never passed as an argument. The
+first token is the SRD path; the next selects the mode (default review when
+omitted). With no arguments, ask which SRD to review; fall back to the user's
+prose for free-form input.
 
 - the SRD path only → review (default): read the whole SRD, write the review file.
 - path + `walk` → walk: interactive, section by section; record only findings
@@ -196,18 +200,14 @@ in full, so it is not summarized here.
 
 ## review (default)
 
-1. Probe the gap buffer with `../create/scripts/probe-buffers.sh <srd>`; on a
-   `pending` `docgaps` line invoke `srd:report-doc-gap` to drain what a prior
-   session left unfiled, and otherwise invoke nothing — a buffer file exists
-   only while records are pending, and a miss is the usual case. Finish the
-   drain — every pending record filed or declined — before any corpus search.
-   Read the entire SRD top to bottom.
-2. Check it against every rule in
-   [../create/references/srd-standard.md](../create/references/srd-standard.md),
-   in document-section order, including the consistency pass and the house
-   additions of the authoring guide. When a corpus is reachable, also run the
-   facts-vs-corpus pass ([Documentation corpus](#documentation-corpus)),
-   handing each doc gap to `srd:report-doc-gap` on discovery.
+1. Run the draft check; on a draft, `srd:report-doc-gap` drains what a prior
+   session left unfiled — every draft filed, kept, or discarded — before any
+   corpus search. Read the entire SRD top to bottom.
+2. Check it against every rule in the standard, in document-section order,
+   including the consistency pass and the house additions of the authoring
+   guide. Also run the facts-vs-corpus pass
+   ([Documentation corpus](#documentation-corpus)), handing each doc gap to
+   `srd:report-doc-gap` on discovery.
 3. If the review file does not exist, create it and write all findings with
    fresh numbers starting at `#1`, assigned in the document order of step 4,
    grouped and tagged as above.
@@ -216,25 +216,24 @@ in full, so it is not summarized here.
    number). Then append newly found defects with fresh numbers, assigned in
    document order (Metadata → Introduction → Glossary → Scope → Requirements,
    and by position within each), so two runs over the same defects number them
-   the same way — errata to
-   `## Errata`, the rest to their document section. Bump `updated:` only if
-   something else in the file changed (review-file.md): a pass that resolves
-   nothing and appends nothing writes nothing.
+   the same way — errata to `## Errata`, the rest to their document section.
+   Bump `updated:` only if something else in the file changed (review-file.md):
+   a pass that resolves nothing and appends nothing writes nothing.
 5. Close with the task-oriented line (Modes) and one start clause naming what
-   the probe found (`docgaps: none`, or what was drained), unless a caller
-   said it ran the probe and so owns the clause — a probe that found nothing
-   otherwise looks like one that never ran. Then invoke
-   `srd:report-doc-gap` to offer the gaps this run buffered — and only then:
-   the start probe governs a *prior* session's records, this offer covers what
+   the draft check found (`draft gaps: none`, or what was drained), unless a
+   caller said it ran the check and so owns the clause — a check that found
+   nothing otherwise looks like one that never ran. Then, unless a caller said
+   it makes the closing offer, invoke `srd:report-doc-gap` to offer the drafts
+   this run captured — and only then:
+   the start check governs a *prior* session's drafts, this offer covers what
    *this* run captured, so a run that captured none invokes nothing here either.
 
 ## walk
 
-Probe and drain the gap buffer as in review step 1, then go section by section
+Run the draft check as in review step 1, then go section by section
 in document order. For each section:
 
-1. Read it and identify every issue, including the facts-vs-corpus pass when a
-   corpus is reachable.
+1. Read it and identify every issue, including the facts-vs-corpus pass.
 2. Present the findings — problem and fix for each. Record nothing yet.
 3. Wait for the user to confirm which to keep (all, some, none).
 4. Append only confirmed findings to the review file with fresh numbers,

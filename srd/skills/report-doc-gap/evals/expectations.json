@@ -5,8 +5,8 @@
       "id": 1,
       "name": "capture-does-not-interrupt",
       "expected_behavior": [
-        "Writes a light record — `detail`, `srd_ref`, and the `search_terms` from the failed lookups — to the per-SRD buffer and returns at once",
-        "Runs no grill and makes no `report_gap` call at capture time",
+        "Captures a light draft — `report_gap` with `draft: true`, carrying `detail`, `srd_ref`, and the `search_terms` from the failed lookups — and returns at once",
+        "Runs no grill and makes no `submit_gap` call at capture time",
         "Prompts the user for nothing: the caller's pass continues uninterrupted"
       ]
     },
@@ -16,16 +16,16 @@
       "expected_behavior": [
         "Surfaces the count and the topics, and offers to work them now",
         "Per gap asks light or heavy, assembles the record, and shows it",
-        "Files via `report_gap` only on the finder's yes, records the returned `gap-NNNN`, and drops the record from the buffer",
-        "On \"keep going\", leaves both gaps buffered and returns to the caller"
+        "Files via `submit_gap` only on the finder's yes and records the gap's `gap-NNNN`",
+        "On \"keep going\", leaves both drafts on the server and returns to the caller"
       ]
     },
     {
       "id": 3,
       "name": "an-srd-gap-is-refused",
       "expected_behavior": [
-        "Buffers the Retention Sweep item: the platform documentation is what falls short",
-        "Refuses the GR-7/GR-9 contradiction — neither buffered nor filed — because the SRD is what is wrong, not the docs",
+        "Captures the Retention Sweep item as a draft: the platform documentation is what falls short",
+        "Refuses the GR-7/GR-9 contradiction — neither captured nor filed — because the SRD is what is wrong, not the docs",
         "Tells the caller to keep the SRD defect in its own findings",
         "Splits the pair rather than taking or refusing both together"
       ]
@@ -34,18 +34,19 @@
       "id": 4,
       "name": "opt-out-and-duplicate-merge",
       "expected_behavior": [
-        "Merges into the existing record rather than adding a twin: `search_terms` and `srd_ref` are unioned, the existing `detail`, `kind`, and pointer fields survive, and the pointer-less second capture blanks nothing",
+        "Merges into the existing draft with `update_gap` rather than capturing a twin: `search_terms` and `srd_ref` are unioned, the existing `detail`, `kind`, and pointer fields survive, and the pointer-less second capture blanks nothing",
         "Takes only the one-line `detail` and leaves `target_claim` empty, honouring the opt-out",
         "Still shows the record for confirmation before filing: opting out of the grill is not opting out of the confirmation"
       ]
     },
     {
       "id": 5,
-      "name": "terse-output-with-no-store",
+      "name": "gate-stops-without-the-server",
       "expected_behavior": [
-        "States once that filing is unavailable, notes the gap in the output, and leaves it buffered",
-        "No preamble; each fact stated once",
-        "No closing restatement of what was already shown"
+        "Stops before any other work, saying no `mcp__srd-doc__*` tools are in the session",
+        "Tells the user to start the `srd-doc` server and run `/mcp` to connect, then re-run",
+        "Falls back to nothing — no REST call, no local checkout, no gap kept anywhere else",
+        "No preamble; each fact stated once"
       ]
     },
     {
@@ -53,19 +54,18 @@
       "name": "declined-at-the-confirm-gate",
       "expected_behavior": [
         "Files nothing",
-        "Says the record was discarded and dropped from the buffer, so the finder is not left wondering where it went",
+        "Says the record was discarded (`discard_gap`), so the finder is not left wondering where it went",
         "Offers the amend path before the gate, not after: a correction adjusts and re-shows, a no discards",
         "Records the topic in the caller's output so the same weak lookup does not re-capture it next session"
       ]
     },
     {
       "id": 7,
-      "name": "no-channel-means-no-grill",
+      "name": "missing-config-stops-the-run",
       "expected_behavior": [
-        "Establishes that the channel is unreachable before opening the grill",
-        "Does not interview the finder about a gap it cannot file — their attention is spent for nothing",
-        "Says filing is unavailable, leaves the gap buffered intact, and stops",
-        "Does not retry the failed probe or invent a store"
+        "Stops before any other work, naming the missing `project-config.md` and the directory the search started from",
+        "Grills nobody, captures nothing, and calls no gap tool",
+        "Guesses no server name or path to carry on with"
       ]
     },
     {
@@ -80,13 +80,11 @@
     },
     {
       "id": 9,
-      "name": "probe-the-channel-without-writing",
+      "name": "drafts-survive-a-new-session",
       "expected_behavior": [
-        "Probes with a read — `GET /gaps` — never with a `POST`: a write probe leaves a permanent record in a store that cannot delete it",
-        "Treats the read answering at all, rows or empty list, as proof the channel is up",
-        "Does not conclude the store is absent merely because the MCP tools are missing",
-        "Distinguishes no route on a live server from no server at all, and says which",
-        "Reports an error returned *by* the store rather than falling past it to \"no channel\""
+        "Finds the draft with `list_gaps` (`status: draft`, `srd_ref` `specs/gateway.md`) and reads no local file for it",
+        "Offers to work it rather than capturing it again",
+        "Writes nothing outside the server: no buffer file, nothing under `$HOME/.agent-data`"
       ]
     }
   ]

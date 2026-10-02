@@ -51,14 +51,15 @@ that file.
 ## Sources of truth
 
 The rules, checklist, procedures, template, and glossary live with `create`;
-reuse them, never duplicate. **This skill depends on `../create/references/*`,
-`../create/assets/*`, and `../create/scripts/*` — do not move or rename
-`create`. If a referenced file is missing at run time, stop and tell the
-user.**
+reuse them, never duplicate. **This skill depends on `../create/references/*`
+and `../create/assets/*` — do not move or rename `create`. If a referenced file
+is missing at run time, stop and tell the user.**
 
-- [../create/references/srd-standard.md](../create/references/srd-standard.md)
-  (eager) — the rules (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, Quality Bar);
-  every edit and check cites these ids.
+- [../create/references/project-config.md](../create/references/project-config.md)
+  (eager) — the gate, and the project paths, standard, and server it names.
+- The SRD standard (eager, fetched live per that file) — the rules (`STR`,
+  `STA`, `LANG`, `REQ`, `GLO`, `SCO`, Quality Bar); every edit and check cites
+  these ids.
 - [../create/references/authoring-guide.md](../create/references/authoring-guide.md)
   (eager) — house extensions (US English, sub-numbering, one term per concept,
   the consistency pass) and the Bad→Good defect classes to fix toward.
@@ -77,12 +78,6 @@ user.**
   Generate In Scope for the derivation procedure).
 - [../create/assets/srd-template.md](../create/assets/srd-template.md)
   (on-demand: restructuring) — the required section order.
-- [../create/scripts/glossary-fingerprint.sh](../create/scripts/glossary-fingerprint.sh)
-  (run, not read) — hashes the Company Glossary so its term digest is rebuilt
-  only on change; the digest keeps term edits linking, not redefining.
-- [../create/scripts/probe-buffers.sh](../create/scripts/probe-buffers.sh)
-  (run, not read) — says which delegate buffers hold pending records, so a
-  delegate is invoked only when it has something to drain.
 
 ## Documentation corpus
 
@@ -91,24 +86,23 @@ Procedure, trust, and where an outcome goes:
 *this skill* consults it — the lookup before the proposal, the
 set-versus-reported reading, what a confirmation attests, where a deferred
 platform question goes — is in
-[references/corpus-edits.md](references/corpus-edits.md). Absent a corpus, edit
-offline.
+[references/corpus-edits.md](references/corpus-edits.md).
 
 ## Session start (every mode)
 
 Spend nothing this run does not need before the user's first question or
-proposal. Resolve the mode first ([Modes](#modes)): one that
-cannot run — `#n` or `autofix` with no `<srd>.review.md` — says so and stops
-before step 1: a run that will do nothing has nothing to read or probe.
+proposal. Run the project gate first
+([../create/references/project-config.md](../create/references/project-config.md)),
+then resolve the mode ([Modes](#modes)): one that cannot run — `#n` or
+`autofix` with no `<srd>.review.md` — says so and stops before step 1: a run
+that will do nothing has nothing to read or check.
 Otherwise three steps, no questions of its own.
 
 1. Read the whole SRD top to bottom — every mode, however narrow the target: a
    cross-reference in an unread section is the one the edit breaks.
-2. Probe the delegate buffers with `../create/scripts/probe-buffers.sh <srd>`
-   and invoke a delegate only on a `pending` line — a miss is the usual case
-   and costs nothing to skip. Say nothing about a miss as it happens; the
-   manifest carries it. `kb-root: missing` means `srd:kb` will ask where the
-   knowledge base lives.
+2. Run the draft check in
+   [../create/references/doc-corpus.md](../create/references/doc-corpus.md);
+   say nothing about an empty result as it happens — the manifest carries it.
 3. Approval gate: read `Status` — `ACCEPTED` is approved, anything else
    in-progress — state which in one clause and go. Never ask the user to
    confirm it: every id change the gate governs is confirmed again in the
@@ -116,26 +110,17 @@ Otherwise three steps, no questions of its own.
 
 `autofix` runs only steps 1–2: errata never touches ids or terms.
 
-### Setup questions (on the first term, one per turn)
+### Glossary (on the first term)
 
 Nothing about the glossary happens at session start: a run that reaches no term
-must never have asked about one. The whole procedure in
+never calls `glossary_terms`. The procedure in
 [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
-— memory record, path question on a first run, fingerprint, digest — waits for
-the first thing that needs a term settled and lands before it: the first
-proposal that introduces, renames or rests on a possibly company-defined term,
-or in `interactive` the step-1 summary, which promises every issue found and so
-owes GLO-3 too. A term put to the user against an unresolved digest is a GLO-3
-miss. Hold the digest for the session; `polish` and `autofix` never reach any
-of it.
-
-That path question and the one `srd:kb` asks when `kb-root` is missing are the
-only questions outside the loop, and at most one of them reaches the user per
-turn. Each belongs to what it precedes — the path to the proposal that needs
-the term, the kb root to the first confirmation that attests a fact — and
-neither shares a turn with the other or with a confirmation. Both due at once:
-the path goes first, and the kb root waits for the next attesting
-confirmation.
+waits for the first thing that needs a term settled and lands before it: the
+first proposal that introduces, renames or rests on a possibly company-defined
+term, or in `interactive` the step-1 summary, which promises every issue found
+and so owes GLO-3 too. A term put to the user against an unloaded term set is a
+GLO-3 miss. Hold the set for the session; `polish` and `autofix` never reach it.
+This skill asks no setup question.
 
 ## Id rules
 
@@ -288,10 +273,10 @@ outcome.
    landed.
 
 Start point (path + `#n`): requires an existing `<srd>.review.md`; if absent,
-say so and stop — one or two lines naming the missing file. No gate line, probe
-result, manifest, or menu of other ways in: those report a run that happened,
-and this one did not. Enter at finding `#n` instead of severity order; after
-each finding, default to the next by number or jump to any number the user
+say so and stop — one or two lines naming the missing file. No approval-gate
+line, draft check, manifest, or menu of other ways in: those report a run that
+happened, and this one did not. Enter at finding `#n` instead of severity order;
+after each finding, default to the next by number or jump to any number the user
 names.
 
 ### autofix
@@ -327,12 +312,10 @@ free description ("the login timeout rule").
 
 1. Re-check the whole document against every rule in the standard plus the
    consistency pass in the authoring guide, and report what remains.
-2. Invoke `srd:kb` to write the facts the session's confirmations attested, and
-   `srd:report-doc-gap` to offer to work the gaps it buffered this session.
-   The start probe gates only the drain — what a *prior* session left; this is
-   what *this* session produced, so invoke each delegate exactly when this
-   session handed it something. `srd:kb`'s kb-root question is not asked here:
-   it landed at the first attesting confirmation (Setup questions).
+2. Invoke `srd:report-doc-gap` to offer the draft gaps this session captured,
+   only when there are any. The start check covers what a *prior* session
+   left; this covers what *this* session produced. `srd:kb` already wrote each
+   attested fact at its confirmation.
 3. Close with the manifest — approved edits, not a re-narration of diffs the
    user already saw:
    - What changed: entry/id, one line each.
@@ -343,14 +326,14 @@ free description ("the login timeout rule").
    - `Decision log: <srd>.decisions.md — hand the author its newest block,
      ## <date>, as this session's summary`, with the block's real heading;
      omitted when nothing was applied, since the file does not exist.
-   - One start clause: what the probe found, which delegates ran, whether the
-     glossary resolved — a probe that found nothing otherwise looks like one
-     that never ran.
+   - One start clause: what the draft check found, which delegates ran,
+     whether the glossary resolved — a check that found nothing otherwise looks
+     like one that never ran.
 
 `autofix`'s exceptions are listed here and nowhere else: it skips step 1
 (surface-only fixes) and invokes no delegate in step 2 (it attests no fact and
-buffers no gap; a prior session's drain ran at session start). It owes step 3's
-manifest like every mode, plus what
+captures no gap; a prior session's drafts were checked at session start). It
+owes step 3's manifest like every mode, plus what
 [references/autofix.md](references/autofix.md) step 8 adds.
 
 Report tersely: no preamble or narration; state each fact once; don't restate

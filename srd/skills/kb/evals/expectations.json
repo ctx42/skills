@@ -5,8 +5,8 @@
       "id": 1,
       "name": "appends-instead-of-fragmenting",
       "expected_behavior": [
-        "Searches the corpus before writing and finds the existing page",
-        "Adds or updates a `##` section on that page rather than creating a second correlation page",
+        "Finds the existing correlation page and proposes moving the inbox section there before touching a file",
+        "Moves it as a `##` section on that page, with its attestation line and provenance row, rather than creating a second correlation page",
         "Does not split the existing page to make room",
         "Reports a pointer to what was written, not the page's contents"
       ]
@@ -17,7 +17,7 @@
       "expected_behavior": [
         "Writes the attested behaviour to the page body",
         "Keeps the inferred retention period out of the body entirely",
-        "Records it as an open question, mirrored into `_open-questions.md`",
+        "Records it as an open question: in the page's `## Open questions` with a row in `_open-questions.md`, or — when the fact sits in the inbox — as an index row alone carrying the full wording",
         "Opens the section carrying undocumented content with its attestation line",
         "Adds nothing the attestation does not carry: every clause in the written section traces to something the user said, and a section marked as absent from the platform docs enumerates no specifics of its own"
       ]
@@ -33,20 +33,20 @@
     },
     {
       "id": 4,
-      "name": "refuses-a-sync-managed-root",
+      "name": "gate-rejects-an-absolute-kb-path",
       "expected_behavior": [
-        "Refuses the path and says why: a sync pull would clobber every agent write and the page would silently revert",
-        "Asks for a different directory rather than proceeding",
-        "Writes no page anywhere in the meantime"
+        "Stops before any other work and says `kb` is absolute, naming the value",
+        "Says paths are relative to the project root",
+        "Writes no page anywhere and asks no question about where the knowledge base lives"
       ]
     },
     {
       "id": 5,
-      "name": "drains-at-start-writes-at-the-end",
+      "name": "writes-to-the-inbox-at-confirmation",
       "expected_behavior": [
-        "On the caller's start, names the two buffered candidates and offers to work them — and says nothing at all when the buffer is empty",
-        "Buffers the third fact silently on discovery, with no corpus call and no question to the user",
-        "Writes nothing until `srd:create` reaches its write step, then writes the confirmed facts and empties the buffer",
+        "Writes nothing at discovery — no file, no corpus call, no question to the user",
+        "Once the restatement is confirmed, appends the fact to `kb/_inbox.md` as its own `##` section with the attestation line and no `## Provenance` row, before the interview moves on",
+        "Writes it to no topic page and creates no new page",
         "Asks no \"bank this?\" question at any point"
       ]
     },
@@ -56,7 +56,7 @@
       "expected_behavior": [
         "Shows the proposed moves and waits for confirmation before touching a file",
         "Moves the section with its attestation line, provenance rows, and open questions",
-        "States that references from SRDs cannot be repaired, and names the old ids so they can be found by hand",
+        "Repairs no SRD, and lists each SRD under the `initiatives` folder that cites an old id so the user can fix it",
         "Reports each stale gap-store `doc_id` with the value it should take, rather than writing it — this skill holds read access there"
       ]
     },
@@ -73,7 +73,7 @@
       "id": 8,
       "name": "bare-capture-with-no-srd",
       "expected_behavior": [
-        "Defaults to capture and writes the fact without asking which SRD it belongs to — a bare capture has none",
+        "Defaults to capture and writes the fact to `kb/_inbox.md` without asking which SRD it belongs to — a bare capture has none",
         "Names the session as the source in the attestation line rather than inventing an SRD reference or leaving the slot blank",
         "Invents no SRD id: with no SRD in play the attestation names the session, and `srd_ref` carries nothing the fixture did not already hold",
         "Omits the `· gap-NNNN` segment, since no gap was filed"

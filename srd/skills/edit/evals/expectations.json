@@ -5,7 +5,7 @@
       "id": 1,
       "name": "interactive-non-atomic-on-approved-srd",
       "expected_behavior": [
-        "States the gate in one clause from `Status: ACCEPTED` and starts editing — never asks the user to confirm or override it, and asks no glossary question before a proposal touches a term",
+        "States the approval gate in one clause from `Status: ACCEPTED` and starts editing — never asks the user to confirm or override it, and asks no glossary question before a proposal touches a term",
         "Names STA-4 in the proposal and makes clear that approving it means the authority has agreed, not merely that the user wants the edit — folded into the one confirmation, not asked as a second question",
         "Front-loads a grouped issue summary, then walks entry by entry",
         "Proposes the split with location, before/after, and a one-line rationale",
@@ -76,7 +76,7 @@
       "name": "autofix-bulk-applies-errata",
       "expected_behavior": [
         "Acts on nothing outside the `## Errata` block: no mechanical issue absent from it is fixed, and the SRD is not re-scanned for new ones",
-        "Runs neither the glossary resolution nor the approval gate — errata touch neither ids nor terms — so no `Status` clause and no glossary question reach the user, and no glossary memory file is written",
+        "Runs neither the glossary resolution nor the approval gate — errata touch neither ids nor terms — so no `Status` clause and no glossary question reach the user, and no `glossary_terms` call is made",
         "Lists the three substitutions and takes one confirmation for the whole batch, not the per-change loop",
         "Verifies each `old` at its anchor, applies the two that match exactly once, and reports the third as stale rather than guessing where it belongs",
         "Writes no review file and invokes no `review` run; prints the exact hand-off command `review specs/login.md check #n #n`, scoped to the two applied errata, for the user to run",
@@ -106,8 +106,8 @@
       "id": 11,
       "name": "corpus-grounded-edit-routes-the-unconfirmable",
       "expected_behavior": [
-        "Searches the corpus before accepting the edit, and the record it hands over names the queries tried — or says the corpus was unreachable, rather than leaving the attempt unstated",
-        "Buffers the gap with `srd:report-doc-gap` silently — no interruption and no grilling mid-edit",
+        "Searches the corpus before accepting the edit, and the draft gap it hands over names the queries tried",
+        "Captures the gap with `srd:report-doc-gap` as a draft silently — no interruption and no grilling mid-edit",
         "States the retry count as a fact inside the proposal, so the user's `YN` attests it and `srd:kb` receives it — the fact is in front of the user when the key is pressed, not looked up afterwards",
         "Asks no separate \"bank this?\" question",
         "Hands the unconfirmable claim to `srd:report-doc-gap` and the attested fact to `srd:kb`, and neither interrupts the edit in progress"
@@ -115,11 +115,11 @@
     },
     {
       "id": 12,
-      "name": "session-start-drains-prior-buffers",
+      "name": "session-start-drains-prior-drafts",
       "expected_behavior": [
-        "Probes the two buffer files, finds both present, and invokes both delegates to surface their counts and topics before any edit",
+        "Runs the draft check, finds the two drafts, and invokes `srd:report-doc-gap` to surface their count and topics before any edit",
         "Offers to work them now",
-        "On a defer, proceeds into the normal interactive run — issue summary, then the walk — and leaves both buffer files on disk for the next start"
+        "On a defer, proceeds into the normal interactive run — issue summary, then the walk — and leaves both drafts on the server for the next start"
       ]
     },
     {
@@ -174,11 +174,11 @@
     },
     {
       "id": 18,
-      "name": "absent-buffers-skip-the-delegates",
+      "name": "no-drafts-skip-the-delegates",
       "expected_behavior": [
-        "The closing manifest's start clause reports that the probe found no buffers and that neither `srd:report-doc-gap` nor `srd:kb` ran",
+        "The closing manifest's start clause reports that the draft check found none and that neither `srd:report-doc-gap` nor `srd:kb` ran",
         "Asks no approval-gate question: reads `IN PROGRESS`, says so in one clause, and proceeds",
-        "Asks no glossary question and resolves no glossary: the target names no term, and the run must not spend a setup question on one it never reaches. The fix's figure is not made up: with none in the SRD or from the user, the proposal carries a named placeholder",
+        "Asks no glossary question and calls no `glossary_terms`: the target names no term, and the run must not spend a call on one it never reaches. The fix's figure is not made up: with none in the SRD or from the user, the proposal carries a named placeholder",
         "Re-validates `GR-2`'s cross-references after applying, and the closing re-check covers the whole document",
         "Reaches the first proposal in its first or second turn, with no setup question and no narrated startup sequence"
       ]
@@ -190,7 +190,7 @@
         "Says the review file is absent and stops: `#n` names a finding only a review file can carry",
         "Invents no findings and proposes no edit of its own, even though the SRD has real defects",
         "Leaves `specs/login.md` unchanged and writes no decision log",
-        "Says it in one or two lines naming the missing file, and reports nothing about its own start — no gate line, no probe result, no closing manifest",
+        "Says it in one or two lines naming the missing file, and reports nothing about its own start — no approval-gate line, no draft-check result, no closing manifest",
         "Offers no menu of other ways in (run `review`, paste findings, drop the argument): the user asked for a finding number, and the answer is that there are none"
       ]
     }

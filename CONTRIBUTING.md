@@ -121,14 +121,22 @@ Without these rules, three consecutive `go:style` rounds passed every bullet,
 yet cost about a million tokens, because each runner's new ambiguity list was
 treated as the next round's work and nothing measured what those edits bought.
 
-**Live services and real stores.** The `srd-doc` server on `localhost:7777` is
-production — the INFRAPORT corpus and a gap store whose API has no delete — and
-`$HOME/.agent-data/` holds the user's real lesson files and gap buffers. Tell
-every agent so explicitly: `GET` is the only safe verb, and every
+**Live services and real stores.** The `srd-doc` server is production — the
+INFRAPORT corpus and a gap store whose drafts are real records — and
+`$HOME/.agent-data/` holds the user's real lesson files. Tell every agent so
+explicitly: the server's read tools are the only safe calls, and every
 `$HOME/.agent-data` path a skill resolves must be redirected into the run's
 workspace. Both have been violated by eval agents following the skills
 faithfully — once filing a probe record that needed a hand edit to remove,
-once by a skill that reaches the buffer only through another skill.
+once by a skill that reached a store only through another skill.
+
+**The SRD standard in evals.** At run time the srd skills read the standard
+live through the server (`get_doc` on the `srd-standard` id in the project's
+`project-config.md`); no copy ships. Evals grade against a fixed one instead:
+`srd/evals/fixtures/srd-standard.md`, test data only, with
+`srd/evals/fixtures/project-config.md` beside it for the gate.
+`dev/eval/blind-runner-prompt.md` tells the runner to substitute both. Change
+the frozen standard only together with the scenarios graded on it.
 
 Skills ship no `README.md`. Everything a user or agent needs lives in
 `SKILL.md`, its bundled files, and `evals/evals.json`; the repo-level

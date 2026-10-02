@@ -26,7 +26,7 @@
       "name": "reclassifies-rather-than-skipping",
       "expected_behavior": [
         "Has `srd:kb` change the row's kind from `deferred` to `unknown` in place, and says so",
-        "Writes nothing under the KB root itself: the reply names `srd:kb` as the writer for each change, so the delegation is visible and not merely asserted",
+        "Writes nothing under the `kb` folder itself: the reply names `srd:kb` as the writer for each change, so the delegation is visible and not merely asserted",
         "Does not treat it as a skip or leave the row mislabeled",
         "Does not file it as a documentation gap: it says nothing about the user manual"
       ]
@@ -37,18 +37,17 @@
       "expected_behavior": [
         "Clusters the two duplicates and surfaces the cluster size as priority",
         "Checks the corpus before drafting, separating content that is absent from content that is present but unranked",
-        "Writes the draft outside every corpus source, the KB root included",
+        "Writes the draft outside every corpus source, the `kb` folder included",
         "Publishes nothing itself; once given the published URL it resolves every gap in the cluster"
       ]
     },
     {
       "id": 5,
-      "name": "degrades-without-a-gap-store",
+      "name": "gate-stops-when-the-server-fails",
       "expected_behavior": [
-        "Opens with the counts it has and names the missing list in the same line — \"no gap store configured\" is part of the opening, not a reason to skip it",
-        "Works `deferred` and `unknowns` normally — the backends fail independently",
-        "Calls it a store that is not enabled — a host answering other routes but not `/gaps` — rather than a host that is down, since the two send the reader to different fixes",
-        "Invents no store and does not retry the failed probe"
+        "Stops before any list is opened or counted, naming the failed `search` call and its error",
+        "Tells the user to start the `srd-doc` server and run `/mcp` to connect, then re-run",
+        "Does not work `deferred` or `unknowns` around the failure, and neither retries nor falls back to a REST call"
       ]
     },
     {

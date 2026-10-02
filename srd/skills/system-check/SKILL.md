@@ -25,7 +25,7 @@ without coming back to guess?*
 
 This skill is a **thin orchestration layer**: it delegates the standard checks
 to `srd:review` and adds the **system-knowledge layer** — judging the SRD
-against the target platform as the `srd-doc` corpus records it.
+against the target platform as the corpus records it.
 
 ## Boundaries
 
@@ -41,13 +41,13 @@ against the target platform as the `srd-doc` corpus records it.
 
 ## Support files
 
+- [../create/references/project-config.md](../create/references/project-config.md)
+  (eager) — the gate every mode passes first, and the project paths and
+  server it names.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
   (eager) — how to reach the documentation corpus, how its sources rank, and
   where an unconfirmed or undocumented fact goes (`srd:report-doc-gap`,
   `srd:kb`).
-- [../create/scripts/probe-buffers.sh](../create/scripts/probe-buffers.sh)
-  (run, not read) — says which delegate buffers hold pending records, so a
-  delegate is invoked only when it has something to drain.
 - [../review/SKILL.md](../review/SKILL.md) (on-demand: before invoking the
   review layer) — this skill delegates the standard checks there and depends on
   what that skill does to `<srd>.review.md`, so read its file lifecycle rather
@@ -59,14 +59,16 @@ The system-knowledge layer confronts the SRD against the corpus, whose
 knowledge-base source carries the platform facts earlier sessions banked. This
 skill consults it in system confrontation and before any "is this defined or
 documented?" question (step 3); a fact the walk confirms goes to `srd:kb` (see
-[Platform knowledge](#platform-knowledge)). Both delegates are probed at step 1
-and drained there only on a hit, buffer silently in between, and `srd:kb`
-writes when the walk ends.
+[Platform knowledge](#platform-knowledge)) and is written at its
+confirmation. Draft gaps are checked at step 1 and captured on discovery.
 
 ## Invocation
 
-The first token is the SRD path, or a literal mode word. With no arguments, ask
-which SRD to check; fall back to the user's prose for free-form input.
+Every mode runs the gate in
+[../create/references/project-config.md](../create/references/project-config.md)
+first. The first token is the SRD path, or a literal mode word. With no
+arguments, ask which SRD to check; fall back to the user's prose for free-form
+input.
 
 - an SRD path → **review** (default): the full flow below. Re-running on
   an SRD that already has a `<srd>.questions.md` resumes the open questions (see
@@ -76,19 +78,13 @@ which SRD to check; fall back to the user's prose for free-form input.
 
 ## review (default)
 
-1. Start: probe the delegate buffers with
-   `../create/scripts/probe-buffers.sh <srd>` and invoke a delegate only on a
-   `pending` line — a buffer file exists only while records are pending, so the
-   probe answers what invoking two skills answers, and a miss is the usual
-   case. Then resolve the corpus (see
-   [Support files](#support-files)). `srd:review` probes the gap buffer at its
-   own start too; tell it the probe is done so the user is not offered the same
-   pending gaps twice in one run, and so its report carries no probe clause of
-   its own — this skill's covers both. The probe shows the user nothing, so the
-   clause saying both buffers were checked and were empty is this skill's to
-   write in its own report: a check that ran is otherwise indistinguishable
-   from one that never did. With none reachable, skip the
-   system-knowledge layer and run the review layer alone rather than stopping.
+1. Start: run the draft check in the corpus reference. `srd:review` runs it at
+   its own start too; tell it the check is done and that this skill makes the
+   closing offer, so the user is not offered the same drafts twice in one run
+   and its report carries no clause of its own — this skill's covers both. The
+   check shows the user nothing, so the clause saying it ran and found nothing
+   is this skill's to write in its own report: a check that ran is otherwise
+   indistinguishable from one that never did.
 2. Get the review: run `srd:review path/to/srd.md` (default mode) and read the
    file it leaves. That mode never rewrites an existing file — on one that
    exists it re-verifies open findings, ticks and moves the fixed ones to
@@ -156,9 +152,9 @@ question, the interaction ends in one of:
 
 - Answer: the user answers. Restate the resolution in a line, folding any
   durable platform fact it carries into the restatement, so confirming it
-  confirms both. Then remove the item from the questions file and hand the
-  fact to `srd:kb`, which captures it silently — never a separate "bank this?"
-  prompt (see [Platform knowledge](#platform-knowledge)).
+  confirms both. Then remove the item from the questions file and hand the fact
+  to `srd:kb`, which writes it to the inbox silently — never a separate "bank
+  this?" prompt (see [Platform knowledge](#platform-knowledge)).
 
   An answer that is about this SRD rather than the platform has nowhere to go:
   `srd:kb` takes platform facts only, this skill does not edit the SRD, and
@@ -177,9 +173,10 @@ and resume later.
 
 **Stay on the current question until the user says to move on.** Do not advance
 on your own — the user may want several edits to the same item first. When the
-walk ends — no questions remain, or the user stops — let `srd:kb` write its
-confirmed facts. With no questions left, the SRD is build-ready from the
-implementer's view.
+walk ends — no questions remain, or the user stops — invoke
+`srd:report-doc-gap` to offer the drafts this run captured, if any — the
+review layer's and the walk's together. With no questions left, the SRD is
+build-ready from the implementer's view.
 
 Close the walk by naming each delegate that ran and what it took —
 `srd:kb: 2 facts`, `srd:report-doc-gap: 1 gap offered` — and leave out the one
@@ -214,15 +211,13 @@ platform — no SRD, no walk. Use it when a conversation that was not SRD work
 (a debugging session, a design discussion, a call you are recounting) surfaced
 durable facts, before they scroll away.
 
-1. Probe the buffers with `../create/scripts/probe-buffers.sh` and no path; a
-   `pending` `kb` line means `srd:kb` drains the session record first.
-2. Scan this session for durable, reusable platform facts: general facts about
+1. Scan this session for durable, reusable platform facts: general facts about
    the system the user stated or confirmed, not ones specific to an SRD,
    ticket, or review, and never something the agent inferred. Restatements of
    an SRD in play do not qualify.
-3. Restate the candidates once, as one list; the user's confirmation is the
+2. Restate the candidates once, as one list; the user's confirmation is the
    gate, and a correction corrects the list.
-4. Hand the confirmed facts to `srd:kb`; coverage checks against the corpus,
+3. Hand the confirmed facts to `srd:kb`; coverage checks against the corpus,
    dedup, and the writing are its job, not this skill's.
 
 Report tersely, once: what `srd:kb` banked and what it dropped as already
@@ -296,10 +291,9 @@ platform fact the walk or `learn` confirms goes to `srd:kb`, the knowledge
 base's single owner, and confirmation rides on this skill's own restatement
 (see [Walk](#walk)) — never on a prompt of its own.
 
-Old pattern: a `memory.md` under `$HOME/.agent-data/ctx42-skills/srd/` is the
-leftover of a retired per-machine store. Its tribal facts belong in the
-knowledge base through `srd:kb`; its documented facts are served live by the
-corpus.
+Old pattern: a `memory.md` under a per-machine skill-data directory is the
+leftover of a retired store. Its tribal facts belong in the knowledge base
+through `srd:kb`; its documented facts are served live by the corpus.
 
 ## Self-learning
 

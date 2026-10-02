@@ -6,7 +6,7 @@ description: >
   retrievable. Use when an SRD interview surfaces a fact the documentation
   does not carry, when banking what a session taught about the platform, or
   when reorganizing the knowledge base.
-argument-hint: "[capture*|restructure] [<srd path or id>]"
+argument-hint: "[capture*|file|restructure] [<srd path>]"
 license: MIT
 ---
 
@@ -15,92 +15,73 @@ license: MIT
 ## Usage
 
 ```
-/kb                 capture (default): drain, confirm, write
+/kb                 capture (default): confirm, write to the inbox
 /kb capture <srd>   capture for one SRD, by its path
+/kb file            file inbox facts into topic pages
 /kb restructure     reorganize pages and repair every reference
 ```
 
 Rarely invoked by hand: `srd:create` and `srd:edit` call it themselves,
 `srd:system-check learn` banks what a non-SRD conversation taught, and
 `srd:backlog` hands it every answered, moot, or reclassified open question.
-Reach for it directly only to restructure, or to work a session's captures with
-no SRD skill driving.
+Reach for it directly to file the inbox, to restructure, or to work a session's
+facts with no SRD skill driving.
 
 Single owner of the **knowledge base** (KB): Markdown pages stating what the
 platform *is* — rules, entities, behavior — written by the agent from what the
 user attests during SRD work, and served back to every agent through the
-`srd-doc` corpus. It exists because such knowledge has nowhere else to live:
-not in the platform docs (that is what makes it tribal), otherwise only in a
+corpus. It exists because such knowledge has nowhere else to live: not in the
+platform docs (that is what makes it tribal), otherwise only in a
 `<srd>.questions.md` that empties as questions resolve, or in one person's
 memory.
 
 ## Boundaries
 
-- Role: the single knowledge-base handler. Capture what the user attests,
-  buffer it, write and maintain the pages, keep them findable.
-- Owns: every file under the KB root. No other skill writes there.
+- Role: the single knowledge-base handler. Write what the user attests, keep
+  the pages coherent and findable.
+- Owns: every file under the `kb` folder. No other skill writes there.
 - Must not: run `git` — the agent writes the working tree, the user commits;
-  write outside the KB root, ever; file documentation gaps (that is
+  write outside the `kb` folder, ever; file documentation gaps (that is
   `srd:report-doc-gap`); author or edit an SRD (`srd:create`, `srd:edit`);
-  publish anything to Confluence; write a fact the user has not confirmed.
-- Depends on: the `srd-doc` corpus read tools for dedup and coverage checks.
-  The corpus indexes the knowledge base under its own `kb/` prefix, and that
-  index can lag or outlive the files, and it may be indexing a different
-  knowledge base than the root resolved here — the corpus serves whatever the
-  server was built over, not whatever this machine points at. Either way a hit
-  under `kb/` is evidence a page existed somewhere, not that it is in this KB
-  root now. Resolve every hit to a real path under the root before appending
-  to it; a hit with no file behind it is a new page to write, not a page to
+  publish anything to Confluence; write a fact the user has not confirmed;
+  keep anything in per-machine state.
+- Depends on: the corpus read tools for dedup and coverage checks. The corpus
+  indexes the KB under the `kb` folder's id prefix, and that index can lag the
+  files. A hit under it is evidence a page existed, not that it does now:
+  resolve every hit to its file (`<project root>/<doc_id>`) before appending to
+  it; a hit with no file behind it is a new section to write, not a page to
   extend, however well its text matches.
-  Without them, capture still works but every write is blind — say so and
-  prefer the inbox over creating a page.
 
 ## Support files
 
+- [../create/references/project-config.md](../create/references/project-config.md)
+  (eager) — the gate every mode passes first, and the `kb` folder, project
+  root, and server it names.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
-  (eager) — how to reach the `srd-doc` corpus, how its sources rank, and the
-  drain / buffer / confirm / write contract every caller relies on.
+  (eager) — how to reach the corpus, how its sources rank, and the
+  confirm / write contract every caller relies on.
 - [references/retrieval-authoring.md](references/retrieval-authoring.md)
-  (on-demand: before writing or editing a page, never on capture) — how to
-  write Markdown that the BM25 corpus chunks and ranks well. Mirrors the
-  server's own `docs/authoring.md`; every page obeys it.
+  (on-demand: before writing or editing a page) — how to write Markdown that
+  the BM25 corpus chunks and ranks well. Mirrors the server's own
+  `docs/authoring.md`; every page obeys it.
 
-## The KB root
+## The KB folder
 
-The KB is **user data on this machine**, not shipped content, so its path is
-resolved, never assumed. Resolve it once per run:
+The KB is the `kb` folder in `project-config.md`, relative to the project root;
+the gate resolves it, so nothing is asked and nothing is remembered. Two files
+there are fixed: `_inbox.md`, where every confirmed fact lands first, and
+`_open-questions.md`, the open-questions index.
 
-```bash
-MEM_DIR="${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/srd"
-mkdir -p "$MEM_DIR"
-KB_ROOT="$(cat "$MEM_DIR/kb-root" 2>/dev/null)"   # absolute path to the KB dir
-```
-
-`AGENT_DATA_DIR` exists so a sandbox, a test, or an eval can point the store
-somewhere disposable; with it unset the default is the real one. Read it the
-same way everywhere — a run that honors it for reading and not for writing
-leaves state in two places.
-
-Empty or missing: ask the user for the directory, then write it to
-`$MEM_DIR/kb-root`. Ask once per usable answer, not once per session: a path
-that fails a check below is not an answer, so say why and ask again. The
-"once" is about not re-asking for a root already on file, never about
-accepting a bad one because the question was already spent.
-
-- It is **not** managed by a Confluence sync. A sync pull clobbers agent writes
-  and the page silently reverts. Check the sync config (`.cfsync.yaml` or
-  equivalent) at the repo root: the KB directory must appear in no mapping.
-  A path that fails this check is a data-loss bug, not a preference: refuse
-  it and never write to it.
-- It is a directory inside a git repository, so a bad write is recoverable.
-  Warn — do not refuse — if the directory is untracked or the repo has no
-  remote; say which, once.
+The folder must **not** be managed by a Confluence sync: a sync pull clobbers
+agent writes and the page silently reverts. Before the first write of a
+session, check the sync config (`.cfsync.yaml` or equivalent) at the project
+root: the `kb` folder must appear in no mapping. A folder that fails this is a
+data-loss bug, not a preference — refuse to write and say why.
 
 ## The corpus
 
-The KB is one source in the `srd-doc` corpus the other SRD skills read; reach
-it per the backends in the shared corpus reference. Two facts about it govern
-every decision below. **A page written now is searchable only after a
+The KB is one source in the corpus the other SRD skills read. Two facts about
+it govern every decision below. **A page written now is searchable only after a
 re-index**: a server with watching enabled rebuilds shortly after a change,
 one without never re-reads its sources until restarted. Verify a write with
 `search` rather than assuming; when a just-written page does not appear,
@@ -122,62 +103,43 @@ writes:
 
 ## Invocation
 
-The first token is a mode word; the next is the SRD path or id when one is in
-play. Callers pass both. With no arguments, default to capture.
+Every mode runs the gate first. The first token is a mode word; the next is the
+SRD path when one is in play. Callers pass both. With no arguments, default to
+capture.
 
-With no SRD named and no caller to name one, there is no per-SRD buffer to
-drain: the session itself is the source. Take what this conversation attested,
-buffer it under the session, and attest it to the session rather than to an SRD
-— do not infer an id from the conversation to fill the slot, which invents a
-provenance nobody can check. The `*` in the argument hint marks the default,
-here and in every skill that carries one.
+With no SRD named and no caller to name one, the session itself is the source:
+take what this conversation attested and attest it to the session rather than
+to an SRD — do not infer an id from the conversation to fill the slot, which
+invents a provenance nobody can check. The `*` in the argument hint marks the
+default, here and in every skill that carries one.
 
-- `capture` (default) — buffer, confirm, and write what the session
-  surfaced. The flow below.
+- `capture` (default) — confirm and write what the session surfaced. The flow
+  below.
+- `file` — move inbox facts into topic pages. See [File](#file).
 - `restructure` — reorganize the KB and repair every reference. See
   [Restructure](#restructure).
 
 ## Workflow
 
-Callers (`srd:create`, `srd:edit`, `srd:system-check`, `srd:backlog`) invoke
-this skill **at start** (drain), **on discovery** (capture), and **when they
-finish** (write); confirmation rides on the caller's own confirmation step in
-between.
+Callers (`srd:create`, `srd:edit`, `srd:system-check`, `srd:backlog`) hand a
+fact over **once it is confirmed** — confirmation rides on the caller's own
+confirmation step. Nothing is buffered: an unconfirmed candidate lives only in
+the conversation, and a confirmed one is on disk in `_inbox.md` before the
+caller moves on.
 
-- [ ] A. On the caller's start: drain the buffer for this SRD.
-- [ ] B. On discovery: buffer the candidate silently, no interruption.
-- [ ] C. At the caller's confirmation step: confirm the facts inside what the
+- [ ] A. On discovery: note the candidate in the conversation; no write, no
+      interruption.
+- [ ] B. At the caller's confirmation step: confirm the facts inside what the
       caller already restates or proposes.
-- [ ] D. When the caller finishes (its write or report step) — or at once when
-      a caller hands over facts it has already confirmed — write each
-      confirmed fact to the KB and drop it from the buffer.
+- [ ] C. On confirmation: write each confirmed fact to `<kb>/_inbox.md`.
 
-### A. Drain
-
-Read this SRD's buffer on the caller's start — a prior session may have cleared
-with candidates unwritten.
-
-Empty: tell the caller so and show the user nothing — the caller states in its
-own report that the drain ran and was empty, which is not this skill's line to
-write and not a silence either. Otherwise name the count and topics
-and offer to work them now. Never force it; on defer they stay buffered.
-
-Buffer location `$MEM_DIR/kb/<key>.json`, keyed by the SRD's path exactly as
-`srd:report-doc-gap` keys its buffer (`_session.json` when no SRD is in play,
-as in `system-check learn`, or none is written yet). Buffered means
-unconfirmed. A candidate is removed on write or discard, and the file is
-deleted when it empties.
-
-### B. Capture on discovery
+### A. Discovery
 
 A candidate is a fact about the platform that the corpus does not carry and the
-user has stated or confirmed. Write it to the buffer at once and return: no user
-interruption, no corpus call, no page write.
-
-Record what is free at this moment — the fact in one line, the subject it
-belongs to, the SRD id, and any `doc_id` the lookup that exposed the gap
-returned. Nothing else. One record per **distinct** fact: if the same fact is
-already buffered for this SRD, merge rather than duplicate.
+user has stated or confirmed. Note it — the fact in one line, its subject, the
+SRD path, and any `doc_id` the lookup that exposed the gap returned — and
+return: no user interruption, no corpus call, no write. One candidate per
+**distinct** fact.
 
 Not a candidate: anything the agent inferred but the user did not confirm;
 anything specific to this SRD, ticket, or review rather than to the platform; a
@@ -186,7 +148,7 @@ gap for `srd:report-doc-gap`, not a KB candidate — though one fact may be both
 since the KB states it now and the gap records that the docs should eventually
 carry it.
 
-### C. Confirm at the caller's confirmation step
+### B. Confirm at the caller's confirmation step
 
 Confirmation rides on a step the caller already performs — a branch
 restatement in `srd:create`, a one-change proposal in `srd:edit` — never a
@@ -207,7 +169,7 @@ The user may wave off any such question with a word. Nothing is lost: route it
 to `_open-questions.md` marked `deferred` and move on immediately. Never re-ask
 in the same session.
 
-### D. Write
+### C. Write to the inbox
 
 A caller may also hand over a stale citation: a KB page citing a corpus id
 absent from `list_docs`. Repair it in place (re-find the document by `search`,
@@ -215,32 +177,48 @@ or drop the citation and mark the fact as attested only) and report the page.
 
 For each confirmed fact, in order:
 
-1. Search before writing. Query the corpus for the fact's own words. Three
-   outcomes:
+1. Search before writing. Query the corpus for the fact's own words:
    - The platform docs already state it — do **not** write. It is not tribal.
-     If the docs state it *wrongly*, that is a doc gap, not a KB page.
-   - A KB page already covers the subject — add or update a `##` section there.
-   - Nothing covers it — it is new. Go to step 2.
-2. Place it. A fact belongs to the KB page whose subject contains it. When no
-   page does, write it to `_inbox.md` — never to a category invented at this
-   moment. The inbox is indexed and retrievable, so nothing waits on a filing
-   decision.
-3. Write the section per [Page anatomy](#page-anatomy) and
-   [references/retrieval-authoring.md](references/retrieval-authoring.md).
-4. Promote when earned. When **two or more** inbox facts share a subject,
-   create the top-level page, move them in, remove them from the inbox, and say
-   what was created. A single fact never earns a page — that rule governs
-   promotion out of the inbox, where a lone fact is better found under a
-   subject heading than alone on a page of its own. It does not govern
-   `restructure`, which moves sections that already have a home because the
-   home turned out to be the wrong one; there, one section may be exactly what
-   moves.
+     If the docs state it *wrongly*, that is a doc gap, not a KB entry.
+   - A KB page or inbox section already states it — do not write a twin. On a
+     page, bump `last_verified` and append the SRD to `srd_ref` when the source
+     differs; in the inbox, add the SRD and date to the section's attestation
+     line instead.
+   - Otherwise it is new.
+2. Append it to `<kb>/_inbox.md` as its own `##` section: a subject-titled
+   heading, the attestation line (see [Page anatomy](#page-anatomy)), the
+   fact. The inbox carries only `title` and `cfsync-plugin: ignore-push` in
+   its front matter and has no `## Provenance` table — each section's
+   attestation line is its provenance; create the file that way when missing.
+   Never to a topic page or a category invented at this moment: filing is
+   [File](#file)'s job. The inbox is indexed and retrievable, so nothing waits
+   on a filing decision.
+3. Write per [references/retrieval-authoring.md](references/retrieval-authoring.md)
+   and the body rules in [Page anatomy](#page-anatomy).
 
-The inbox is staging, not storage. A fact there inherits the inbox's title
-field, which says nothing about its subject, so it ranks far below the same fact
-on a subject-titled page (a fact absent from the top 10 for its own query
-reaches rank 1 after promotion). Promotion is what makes a fact findable; drain
-the inbox at every opportunity.
+## File
+
+`/kb file` moves inbox facts to where they rank. A fact in the inbox inherits
+the inbox's title field, which says nothing about its subject, so it ranks far
+below the same fact on a subject-titled page (a fact absent from the top 10 for
+its own query reaches rank 1 after promotion). Offer it whenever the inbox
+holds a fact a topic page would take.
+
+1. For each inbox section, find the topic page whose subject contains it; when
+   one does, propose moving the section there.
+2. When **two or more** inbox facts share a subject no page covers, propose
+   creating the top-level page and moving them in. A single fact never earns a
+   page — it stays in the inbox, better found under a subject heading than
+   alone on a page of its own. That rule governs filing only, not
+   [Restructure](#restructure), which moves sections that already have a home
+   because the home turned out wrong; there, one section may be exactly what
+   moves.
+3. Show the proposed moves and get confirmation before touching anything.
+4. Move each section with everything bound to it and repair every reference
+   the move breaks, as [references/restructure.md](references/restructure.md)
+   steps 2–3 say: a moved section's id changes, and `_open-questions.md` rows
+   and gap `kb_ref` values may point at it.
+5. Report what moved where, counted.
 
 Append by default. Two half-pages on one subject are strictly worse than one
 fat page: scattered names split matches, so both rank below where one would.
@@ -263,7 +241,7 @@ title: Acoustic Leak Detection
 aliases: [AUTOCO, automated cross-correlation]
 cfsync-plugin: ignore-push
 attested: 2026-09-11
-srd_ref: INT-384, INT-392
+srd_ref: initiatives/leak/srd.md, initiatives/autoco/srd.md
 last_verified: 2026-09-11
 ---
 ```
@@ -290,8 +268,8 @@ Body rules:
   inside the chunk:
 
   ```
-  > Not in the platform docs. Attested INT-384 interview 2026-09-11 ·
-  > `gap-0019`.
+  > Not in the platform docs. Attested `initiatives/leak/srd.md` interview
+  > 2026-09-11 · `gap-0019`.
   ```
 
   The source and the date are required; the `· gap-NNNN` is there only when
@@ -309,8 +287,9 @@ Body rules:
   Every write adds or updates its row there, whether the write creates the
   page or appends a section to one: a roll-up nobody maintains indexes a page
   that has moved on. A citation repair updates the row of the fact it
-  repairs; it adds none. A page with no `## Provenance` yet gets one on the first
-  write that touches it.
+  repairs; it adds none. A page with no `## Provenance` yet gets one on the
+  first write that touches it. The inbox is the exception: it has none, and a
+  section filed out of it gets its row on arrival.
 - `## Open questions` holds what this page's subject leaves unanswered. See
   [Open questions](#open-questions) below.
 
@@ -338,10 +317,10 @@ Each question lives in **two** places, with one owner:
   count, link to the page. It is the list view, and it holds only a label, so
   the two copies cannot drift.
 
-A fact held in `_inbox.md` has a page: its question goes under that section's
-`## Open questions`. A question whose subject has no page at all lives in the
-index alone, with an empty page link and its full wording as the label, until a
-page exists to take it.
+A question about a fact held in `_inbox.md`, or whose subject has no page at
+all, lives in the index alone: its full wording as the label, the page link
+pointing at the inbox section or empty. The page that later takes the fact
+takes the wording too.
 
 On meeting a question that is already open, **bump its hit count** rather than
 adding a row: repeats are a priority signal, the same way repeated gap reports

@@ -5,7 +5,7 @@
       "id": 1,
       "name": "author-from-a-vague-idea",
       "expected_behavior": [
-        "Resolves the per-project glossary (file or directory) and loads its term digest before drafting",
+        "Loads the Company Glossary's term set with `glossary_terms` before drafting",
         "Interviews one branch at a time — objective, UI change, in/out of scope, the rules — rather than drafting straight from the one-line idea",
         "Rewrites a vague requirement (\"resets must be secure\") into a verifiable one per REQ-6 — a measurable threshold, its figure supplied by the user when asked rather than made up",
         "Keeps each requirement atomic per REQ-1",
@@ -62,10 +62,10 @@
       "name": "undocumented-platform-fact",
       "expected_behavior": [
         "Searches the corpus before accepting the claim, and neither silently accepts nor silently corrects it",
-        "Hands the unconfirmable claim to `report-doc-gap`, and the confirmed fact to `kb` once the user confirms it in the branch restatement",
-        "Neither hand-off interrupts the interview: no turn between the claim and the next branch is about the gap or about banking or filing either one. The one exception is the knowledge-base location, asked once at the first confirmed fact when none is on record; the turn after it resumes the interview. A question about the requirement itself is not an interruption",
-        "Never asks permission to bank the fact — no \"should I record this?\" prompt. Confirming the requirement confirms the fact, and `srd:kb` captures it silently. Ordinary elicitation (\"is three the count today?\") is a requirement question, not a banking prompt, and does not breach this",
-        "At the write step, invokes `kb` to write the confirmed fact and `report-doc-gap` to offer the buffered gap",
+        "Hands the unconfirmable claim to `report-doc-gap` as a draft, and the confirmed fact to `kb` once the user confirms it in the branch restatement",
+        "Neither hand-off interrupts the interview: no turn between the claim and the next branch is about the gap or about banking or filing either one. A question about the requirement itself is not an interruption",
+        "Never asks permission to bank the fact — no \"should I record this?\" prompt. Confirming the requirement confirms the fact, and `srd:kb` writes it to the inbox silently. Ordinary elicitation (\"is three the count today?\") is a requirement question, not a banking prompt, and does not breach this",
+        "At the write step, invokes `report-doc-gap` with the SRD path, which sets `srd_ref` on the draft captured before the path existed and offers it; the fact is already in `kb/_inbox.md`, written at its confirmation",
         "Writes no requirement the interview did not attest: every rule in the SRD traces to something the persona stated, and a behaviour nobody mentioned does not appear because it would round the feature out"
       ]
     },
@@ -73,8 +73,8 @@
       "id": 8,
       "name": "start-costs-nothing-before-the-interview",
       "expected_behavior": [
-        "Runs the start probe and, on its empty result, invokes neither `srd:report-doc-gap` nor `srd:kb` at step 0",
-        "Resolves no glossary before the interview opens, and resolves it once the first term surfaces — always before drafting, so no term is checked against a digest that is not loaded",
+        "Passes the gate and, with no SRD path named, runs no draft check and invokes neither `srd:report-doc-gap` nor `srd:kb` at step 0",
+        "Calls no `glossary_terms` before the interview opens, and loads the term set once the first term surfaces — always before drafting, so no term is checked against a set that is not loaded",
         "Restates the seed as the opening Objective and asks the next branch, rather than narrating a startup sequence"
       ]
     }

@@ -24,20 +24,24 @@ standard, and self-checking the draft before saving it.
 
 `create` is the authority for SRD format, style, logic, and rules, and the
 author of new SRDs (interview → draft → self-check). It owns the shared files
-under `references/`, `assets/`, and `scripts/`; the other SRD skills read them.
+under `references/` and `assets/`; the other SRD skills read them.
 It never reviews or audits an SRD written elsewhere (that is `review`), never
 edits an existing SRD as a service (that is `edit`), and never marks an SRD
 `ACCEPTED`: acceptance is a human decision (STA-3).
 
 ## Sources of truth
 
+- [references/project-config.md](references/project-config.md) (eager: before
+  anything) — the gate every run passes first, and the project paths, the
+  standard, and the server it names.
 - [references/doc-corpus.md](references/doc-corpus.md) (on-demand: the first
   claim about the existing system, in the interview or the self-check) — how to
   reach the platform documentation corpus, how its sources rank, and where an
   unconfirmed or undocumented fact goes (`srd:report-doc-gap`, `srd:kb`).
-- [references/srd-standard.md](references/srd-standard.md) (on-demand: steps
-  3–4) — the SRD rule set (`STR`, `STA`, `LANG`, `REQ`, `GLO`, `SCO`, Quality
-  Bar). Read it before drafting; not needed for the glossary or the interview.
+- The SRD standard (on-demand: steps 3–4) — the rule set (`STR`, `STA`,
+  `LANG`, `REQ`, `GLO`, `SCO`, Quality Bar), fetched live through the server
+  per [references/project-config.md](references/project-config.md). Fetch it
+  before drafting; not needed for the glossary or the interview.
 - [references/authoring-guide.md](references/authoring-guide.md) (on-demand:
   steps 2–4) — house extensions (US English, sub-numbering, one term per
   concept, the consistency pass) and Bad→Good defect examples to draft against
@@ -51,65 +55,47 @@ edits an existing SRD as a service (that is `edit`), and never marks an SRD
 - [assets/srd-template.md](assets/srd-template.md) (on-demand: step 3) — the
   SRD skeleton in the required section order with the keyword notice. Fill it;
   do not restructure it.
-- [scripts/glossary-fingerprint.sh](scripts/glossary-fingerprint.sh) (run, not
-  read) — hashes the Company Glossary so its term digest is rebuilt only when
-  the glossary changes.
-- [scripts/probe-buffers.sh](scripts/probe-buffers.sh) (run, not read) — says
-  which delegate buffers hold pending records, so a delegate is invoked only
-  when it has something to drain.
 
 ## Documentation corpus
 
-When a corpus is reachable, ground every claim about the existing system in it
-instead of guessing; absent one, run offline. `create` consults it at two
-points: in the interview, when the user states a fact about the existing system
-or uses a term no glossary defines, and in the self-check, for every
-requirement that asserts existing behavior. A lookup that cannot confirm the
-claim goes to `srd:report-doc-gap`; a fact the corpus lacks but the user
-confirms goes to `srd:kb`. Both are probed at step 0 and invoked there only on
-a hit, buffer silently in between, and run again at step 5, where `srd:kb`
-writes its confirmed facts and `srd:report-doc-gap` offers to work the buffered
-gaps. A platform fact is confirmed
-through the branch restatement in step 1, never through a separate prompt, and
-reaches the `srd:kb` buffer only once that restatement is confirmed — the
-user's answer inside the branch is not the confirmation.
+Ground every claim about the existing system in the corpus instead of guessing.
+`create` consults it at two points: in the interview, when the user states a
+fact about the existing system or uses a term no glossary defines, and in the
+self-check, for every requirement that asserts existing behavior. A lookup that
+cannot confirm the claim goes to `srd:report-doc-gap`; a fact the corpus lacks
+but the user confirms goes to `srd:kb`, which writes it to the inbox at once.
+Gaps are captured as server-side drafts on discovery and offered at step 5. A
+platform fact is confirmed through the branch restatement in step 1, never
+through a separate prompt, and reaches `srd:kb` only once that restatement is
+confirmed — the user's answer inside the branch is not the confirmation.
 
 ## Workflow
 
 Copy this checklist and tick it off:
 
-- [ ] 0. Probe the delegate buffers; drain only a buffer that has records.
+- [ ] 0. Pass the gate; check for draft gaps only when an SRD path is named.
 - [ ] 1. Interview the user along the SRD spine.
 - [ ] 2. Propose requirement groups and prefixes; get confirmation.
 - [ ] 3. Draft the SRD from the template.
 - [ ] 4. Self-check: auto-fix mechanical issues, settle the blockers with the
       user, report the rest.
-- [ ] 5. Write the `.md` file to a user-named path; run the delegates'
-      finish step; report once.
+- [ ] 5. Write the `.md` file to the agreed path; hand pathless drafts their
+      `srd_ref` and offer them; report once.
 
 ### 0. Start
 
-Start cheap: the interview is what the user came for. Run
-`scripts/probe-buffers.sh <srd-path>` — for a new SRD, the path the user named,
-or none yet, which means there is no per-SRD buffer to drain — and invoke a
-delegate only on a `pending` line. Both hold that a buffer file exists only
-while records are pending, so the probe answers what invoking two skills
-answers, and a miss is the usual case for a document nobody has written yet. A
-delegate that does run shows the user nothing when empty; the clause saying the
-drain ran and found nothing is this skill's to write, in its own report,
-because a drain that never happened otherwise looks identical to one that found
-nothing. `kb-root: missing` means `srd:kb` will ask where the knowledge base
-lives — let that land at the first fact the interview confirms, not at step 5,
-where it would sit between the finished SRD and the closing report.
+Start cheap: the interview is what the user came for. Run the gate in
+[references/project-config.md](references/project-config.md). When the user
+named the SRD's path, run the draft check in
+[references/doc-corpus.md](references/doc-corpus.md); with no path yet there is
+nothing to check. The report says in one clause what the check found, because a
+check that never ran otherwise looks identical to one that found nothing.
 
 Resolve the glossary when the first term surfaces (branch 6 at the latest, and
 always before drafting; a seed's term surfaces with the user's first answer),
-not here: the procedure in
-[references/srd-procedures.md](references/srd-procedures.md) resolves the
-per-project path, fingerprints it, and may regenerate a model-synthesized
-digest, which is a poor way to spend the seconds before the opening question.
-The digest lets the SRD satisfy GLO-3 / STR-10 without redefining known terms,
-so it must be loaded before any term is checked against it, never after.
+not here: [references/srd-procedures.md](references/srd-procedures.md). The
+term set lets the SRD satisfy GLO-3 / STR-10 without redefining known terms, so
+it must be loaded before any term is checked against it, never after.
 
 ### 1. Interview
 
@@ -142,13 +128,13 @@ so confirming it confirms both the SRD and the knowledge base:
    in interview voice, never silently accept or fix. Route the other outcomes
    per [Documentation corpus](#documentation-corpus).
 6. Terms: resolve the glossary now if no term has yet forced it (step 0), then
-   check each term that surfaces against its digest and mark it as already
+   check each term that surfaces against its term set and mark it as already
    defined (link to it) or needing a local Glossary entry.
    `search` the corpus before asking the user to define a term: it may already
    define it, or name the same concept differently (a naming conflict to
    surface). What the corpus returns is meaning, not coverage — only the
-   resolved Company Glossary satisfies GLO-3, so a term the corpus defines and
-   the digest lacks still needs a local entry
+   Company Glossary satisfies GLO-3, so a term the corpus defines and
+   `glossary_terms` lacks still needs a local entry
    ([references/srd-procedures.md](references/srd-procedures.md)). A definition
    the user supplies because no glossary carries it goes to `srd:kb` when it
    names a platform concept; one specific to this SRD gets its local entry only.
@@ -182,14 +168,13 @@ the standard and the authoring guide. Decisions specific to a new draft:
   deferred; derive them from the requirements before acceptance.
 - Add a `## TODO` section as the last section only when open authoring issues
   need tracking.
-- Local Glossary entries only for terms the Company Glossary digest lacks.
+- Local Glossary entries only for terms `glossary_terms` lacks.
 
 ### 4. Self-check
 
-Check the draft against every rule in
-[references/srd-standard.md](references/srd-standard.md), in document-section
-order (metadata → Introduction → Glossary → Scope → Requirements), recognizing
-the defect classes in
+Check the draft against every rule in the standard fetched through the server,
+in document-section order (metadata → Introduction → Glossary → Scope →
+Requirements), recognizing the defect classes in
 [references/authoring-guide.md](references/authoring-guide.md). Loop until the
 mechanical checks all pass. This is `create`'s action policy on a finding:
 
@@ -211,11 +196,9 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    contradicting Out of Scope (SCO-2/3); duplicate or overlapping requirements
    and terminology drift (authoring guide); any Quality Bar item not yet met.
    Also flag any requirement whose claim about existing system behavior went
-   unconfirmed — a facts gap distinct from the format checks. With a corpus,
-   that means the lookup failed, and it routes per
-   [Documentation corpus](#documentation-corpus); offline it means nobody
-   checked, and it goes to the user as an open question. Either way it is
-   flagged, never assumed true because there was nothing to check it against.
+   unconfirmed — a facts gap distinct from the format checks. It routes per
+   [Documentation corpus](#documentation-corpus) and is flagged, never assumed
+   true.
    Marked placeholders (Initiative, Designs, Owners, an unresolved In Scope
    `--- TODO ---` marker, any non-empty `## TODO` section) are always
    outstanding human follow-ups.
@@ -238,22 +221,21 @@ Do not mark the draft acceptable: a new SRD is `IN PROGRESS` and acceptance
 
 ### 5. Write
 
-Write the SRD as a single `.md` file to the path the user gives (ask if they
-have not said). Invoke `srd:kb` to write the facts the interview confirmed and
-`srd:report-doc-gap` to offer the gaps buffered this session — each only when
-the session handed it something. Then report
-once: the file path, the requirement groups with their counts, the judgment
-findings and human follow-ups collected in step 4, and any blocker the user
-chose to leave standing.
+Write the SRD as a single `.md` file to the path the user gives; when they have
+not said, propose one in its own folder under `initiatives` and ask. When this
+session captured drafts, invoke `srd:report-doc-gap` with the path: it sets
+`srd_ref` on any draft captured before the path existed and offers the session's
+drafts. Then report once: the file path, the requirement groups with their
+counts, the judgment findings and human follow-ups collected in step 4, and any
+blocker the user chose to leave standing.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
 
-Every count in the report — terms digested, requirements written, TODOs left,
-findings the self-check raised — is read off the finished artifact, never
-carried from the work that produced it. A run told the user "12 terms digested
-from 3 files" over a glossary defining 10; nobody re-derives that number, so
-nobody catches it.
+Every count in the report — glossary terms reused, requirements written, TODOs
+left, findings the self-check raised — is read off the finished artifact, never
+carried from the work that produced it. A run told the user "12 terms" over a
+glossary defining 10; nobody re-derives that number, so nobody catches it.
 
 ## Self-learning
 

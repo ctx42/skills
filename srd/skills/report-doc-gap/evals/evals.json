@@ -18,7 +18,7 @@
       "skills": [
         "report-doc-gap"
       ],
-      "setup": "Two gaps sit buffered for `specs/gateway.md`.",
+      "setup": "Two draft gaps with `srd_ref` `specs/gateway.md` sit on the server.",
       "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },
@@ -38,17 +38,17 @@
       "skills": [
         "report-doc-gap"
       ],
-      "setup": "A second caller session hands over the retry-count gap already buffered for `specs/gateway.md`, with different search terms. At drain the finder says \"skip the questions\".",
+      "setup": "A second caller session hands over the retry-count gap already a draft for `specs/gateway.md`, with different search terms. At drain the finder says \"skip the questions\".",
       "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },
     {
       "id": 5,
-      "name": "terse-output-with-no-store",
+      "name": "gate-stops-without-the-server",
       "skills": [
         "report-doc-gap"
       ],
-      "setup": "A buffer with one gap, against a server exposing neither `report_gap` nor `POST /gaps`.",
+      "setup": "`project-config.md` names `mcp-server: srd-doc`, but no `mcp__srd-doc__*` tools exist in this session. One draft gap would otherwise be waiting.",
       "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },
@@ -58,17 +58,17 @@
       "skills": [
         "report-doc-gap"
       ],
-      "setup": "One buffered gap. The finder works it, then answers no at the confirmation gate — the record is wrong and they do not want it filed.",
+      "setup": "One draft gap. The finder works it, then answers no at the confirmation gate — the record is wrong and they do not want it filed.",
       "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },
     {
       "id": 7,
-      "name": "no-channel-means-no-grill",
+      "name": "missing-config-stops-the-run",
       "skills": [
         "report-doc-gap"
       ],
-      "setup": "A buffered gap for `specs/gateway.md`, on a machine where neither the MCP tool nor the REST mirror is reachable.",
+      "setup": "No `project-config.md` exists in the SRD's directory or any parent directory.",
       "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },
@@ -79,17 +79,17 @@
         "report-doc-gap",
         "grill-me"
       ],
-      "setup": "Three gaps are buffered for `specs/gateway.md`. The finder picks heavy for the first, then says \"just take the one-liners for the rest of these\".",
+      "setup": "Three draft gaps exist for `specs/gateway.md`. The finder picks heavy for the first, then says \"just take the one-liners for the rest of these\".",
       "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },
     {
       "id": 9,
-      "name": "probe-the-channel-without-writing",
+      "name": "drafts-survive-a-new-session",
       "skills": [
         "report-doc-gap"
       ],
-      "setup": "One buffered gap. No `mcp__srd-doc__*` tools exist in this client, so the skill must establish whether the REST mirror is there. The store behind it is append-only and has no delete endpoint.",
+      "setup": "A prior session captured one gap for `specs/gateway.md` as a draft and ended before filing it. This is a fresh session; nothing about the gap exists on this machine.",
       "query": "/report-doc-gap specs/gateway.md",
       "files": []
     }

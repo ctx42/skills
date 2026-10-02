@@ -43,11 +43,11 @@
     },
     {
       "id": 5,
-      "name": "degrades-without-a-gap-store",
+      "name": "gate-stops-when-the-server-fails",
       "skills": [
         "backlog"
       ],
-      "setup": "The server exposes neither `list_gaps` nor `GET /gaps`. `_open-questions.md` still holds 2 deferred and 1 unknown.",
+      "setup": "The `mcp__srd-doc__*` tools are in the session, but the gate's `search` call returns a connection error. `_open-questions.md` still holds 2 deferred and 1 unknown.",
       "query": "/backlog",
       "files": []
     },

@@ -69,7 +69,7 @@
         "report-doc-gap",
         "kb"
       ],
-      "setup": "The `srd-doc` corpus is reachable. While stating a requirement the user says \"the gateway already retries a failed export three times\"; a corpus `search` finds no retry count anywhere.",
+      "setup": "No SRD path has been named yet. While stating a requirement the user says \"the gateway already retries a failed export three times\"; a corpus `search` finds no retry count anywhere.",
       "query": "/create",
       "files": []
     },
@@ -79,7 +79,7 @@
       "skills": [
         "create"
       ],
-      "setup": "A fresh project: no SRD exists yet, no buffer file exists under `$AGENT_DATA_DIR/ctx42-skills/srd/`, and the user has not named a path for the document. A Company Glossary directory is configured. No glossary memory exists yet, so resolving the glossary writes one.",
+      "setup": "A fresh project: `project-config.md` at its root names the server, the knowledge base, and a Company Glossary. No SRD exists yet, and the user has not named a path for the document.",
       "query": "/create a rate limit for the export API",
       "files": []
     }

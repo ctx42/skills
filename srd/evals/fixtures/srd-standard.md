@@ -1,10 +1,11 @@
 # SRD Standard
 
-<!-- GENERATED FILE — do not edit by hand; page_version 19. Assembled by the
-     srd-sync skill from dev/srd-standard.header.md, the upstream
-     "Guidelines for Software Requirements Documents" source, and
-     dev/srd-standard.footer.md. Edit the frame files or the upstream source,
-     then re-run srd-sync. See CONTRIBUTING.md "Syncing the SRD standard". -->
+<!-- EVAL TEST DATA ONLY — never a runtime source. The srd skills read the
+     live standard through the MCP server (`get_doc` with the `srd-standard`
+     id from project-config.md). This frozen copy (upstream page_version 19,
+     trimmed for agent use) stands in for that `get_doc` result in eval runs,
+     so a scenario grades against fixed rules. Do not update it to track the
+     live page; change it only together with the scenarios graded on it. -->
 
 The rule set every SRD must satisfy. An SRD states what a system or feature
 must do — clearly enough that an engineer can build it and a reviewer can
@@ -13,8 +14,10 @@ and `review` reviews against them; each rule is a checkable statement and
 keeps its identifier so a finding can cite it, and each skill applies its own
 action policy on a finding. Check in document-section order (metadata,
 Introduction, Glossary, Scope, Requirements); for cross-cutting checks run the
-consistency pass in [authoring-guide.md](authoring-guide.md), which also holds
-the house additions (US English, sub-numbering, one term per concept).
+consistency pass in
+[authoring-guide.md](../../skills/create/references/authoring-guide.md), which
+also holds the house additions (US English, sub-numbering, one term per
+concept).
 
 ## Contents
 
@@ -33,7 +36,7 @@ written:
   `REQ-2`, … if that suits the document.
 - A real SRD carries no `Example` / `Don't` / `Do` annotations. They are a
   teaching device only (REQ-7); the Bad→Good examples live in
-  [authoring-guide.md](authoring-guide.md).
+  [authoring-guide.md](../../skills/create/references/authoring-guide.md).
 
 > The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 > "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in an
