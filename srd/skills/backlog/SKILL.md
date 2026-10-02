@@ -30,6 +30,9 @@ first.
 | `unknowns`  | nobody has pinned it down   | deciding or finding out |
 | `gaps`      | the user manual falls short | someone writing a page  |
 
+A gap whose fact the KB states, with no page planned yet, is parked as `kb`:
+out of the open backlog, still resolvable once a page is published.
+
 The lists are not interchangeable: an unknown filed as a gap sits forever in a
 backlog whose only tool is authorship, and a gap says nothing about what the
 system is.
@@ -77,9 +80,11 @@ call that reaches the store and returns an error is a working store with a
 problem, and is reported rather than retried or fallen past:
 
 1. MCP — `mcp__srd-doc__list_gaps` (optional `status`),
+   `mcp__srd-doc__mark_gap_kb` (`gap_id`, `kb_ref`, optional `note`),
    `mcp__srd-doc__resolve_gap` (`gap_id`, `published_url`, optional `note`);
    the read tools `search`, `get_doc`, `list_docs` come from the same server.
-2. The REST mirror — `GET /gaps?status=open`, `POST /gaps/{id}/resolve` with
+2. The REST mirror — `GET /gaps?status=open`, `POST /gaps/{id}/kb` with
+   `{"kb_ref": "…", "note": "…"}`, `POST /gaps/{id}/resolve` with
    `{"published_url": "…", "note": "…"}`; `GET /search?q=…&k=5`,
    `GET /docs/<id>`.
 
@@ -98,9 +103,10 @@ What the response says, in order:
 
 A gap record carries `id`, `status`, `created_at`, `kind`
 (missing/wrong/incomplete/ambiguous), `topic`, `doc_id`, `heading_path`,
-`source_url`, `demand`, `target_claim`, `detail`, `search_terms`, `srd_ref`.
+`source_url`, `demand`, `target_claim`, `detail`, `search_terms`, `srd_ref`,
+and, once parked, `kb_marked_at` and `kb_entry` (`ref`, `note`).
 Empty `doc_id`/`heading_path`/`source_url` mean the reporter found nothing
-relevant.
+relevant. Statuses: `open`, `kb`, `resolved`, `duplicate`, `wontfix`.
 
 ## Workflow
 
@@ -113,7 +119,7 @@ tick it off:
       reached two ways, not a second one.)
 - [ ] 2. `deferred`: ask, hand the answer to `srd:kb`.
 - [ ] 3. `unknowns`: triage, never answer.
-- [ ] 4. `gaps`: cluster, check the corpus, grill, draft, resolve.
+- [ ] 4. `gaps`: cluster, check the corpus, grill, draft, resolve or park.
 
 Work one list at a time in the user's chosen order; close each item through its
 own mechanism, one call per item.
@@ -165,6 +171,8 @@ closed with a guess is a fact the corpus will serve as truth.
 Draft the page that fixes the user manual; a human publishes it.
 
 1. List open gaps (`list_gaps` with `status: open`, or `GET /gaps?status=open`).
+   `kb` gaps are not in it; list them with `status: kb` only when a page for
+   one is being written or published.
 2. Cluster the gaps one page would resolve — same `doc_id`, same
    `heading_path`, or one topic phrased differently. Rank by cluster size:
    repeated reports mean higher priority. The user picks one; work one at a
@@ -190,7 +198,7 @@ Draft the page that fixes the user manual; a human publishes it.
    and pollutes the index. Unsure whether a path is outside every source: ask
    which directories are sources first.
 6. Resolve once the human gives the published URL: `resolve_gap` for every gap
-   in the cluster, so each moves from `open` to `resolved` with the URL
+   in the cluster, so each moves from `open` or `kb` to `resolved` with the URL
    recorded. An edit to an existing page has a URL already — that page's — and
    it is the right one to record: the gap is closed by what the reader can now
    find there. When nobody can publish in this sitting, resolve nothing: say
@@ -198,6 +206,13 @@ Draft the page that fixes the user manual; a human publishes it.
    resolved against an unpublished draft reads as done to everyone after. Say
    that the corpus reflects the page only after the next sync and server
    restart.
+7. Park instead of steps 5–6 when the user decides the fact stays in the KB for
+   now — no page planned this sitting. Only once `srd:kb` has written the
+   section and the file exists under the KB root: `mark_gap_kb` for every gap in
+   the cluster, `kb_ref` the KB document ID plus anchor
+   (`kb/users-and-access.md#customer-and-project-timezones`), `note` saying
+   which decision parked it. Never park against a buffered or unconfirmed fact,
+   nor a section that only partly covers the gap — leave that one `open`.
 
 A platform fact the grill surfaces also goes to `srd:kb`; the gap and the KB
 entry close independently.
@@ -213,7 +228,9 @@ moved: this skill writes nothing under the KB root, and a report that says
 
 "What closed" is said once per sitting, in the closing line — not again as each
 list finishes, and not restated in two shapes ("`gap-0010`, `gap-0015`
-resolved" and "1 cluster closed (2 gaps)") in the same breath.
+resolved" and "1 cluster closed (2 gaps)") in the same breath. Name parked gaps
+apart from resolved ones (`gap-0003` parked as `kb`): a parked gap still owes a
+page.
 
 ## Self-learning
 

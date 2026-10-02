@@ -11,6 +11,12 @@ only thing the corpus's absence changes is who can settle it: with a corpus,
 the lookup; without one, the user. Silently accepting a platform claim because
 there was nothing to check it against is the one outcome this file rules out.
 
+## Contents
+
+- Backends
+- Trust
+- Where a lookup's outcome goes
+
 ## Backends
 
 Fall through in this order, only when a step genuinely is not there, never on
@@ -24,7 +30,8 @@ one failed call:
 
    The same server carries the gap store, on the same host and port:
    `mcp__srd-doc__report_gap`, `mcp__srd-doc__list_gaps`,
-   `mcp__srd-doc__resolve_gap`, mirrored as `GET /gaps`, `POST /gaps`, and
+   `mcp__srd-doc__mark_gap_kb`, `mcp__srd-doc__resolve_gap`, mirrored as
+   `GET /gaps`, `POST /gaps`, `POST /gaps/{id}/kb`, and
    `POST /gaps/{id}/resolve`. `srd:report-doc-gap` and `srd:backlog` own what
    may be called and when — this file is only where the address lives, so that
    a skill needing the gap endpoint before its first corpus lookup still has

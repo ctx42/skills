@@ -37,6 +37,9 @@ built in, never a bare file move.
      that store: report each stale `doc_id` with its gap id and the value it
      should take, and leave the edit to whoever owns the record. A restructure
      is not blocked by it — the move proceeds and the list goes in the report.
+   - `kb_ref` values on gaps parked as `kb` (`list_gaps` with `status: kb`, or
+     `GET /gaps?status=kb`), which point at a KB page and anchor. Report each
+     stale one the same way as a stale `doc_id`.
 4. Report what moved and what was repaired, counted.
 
 State plainly that references from SRDs cannot be repaired: SRDs live wherever
