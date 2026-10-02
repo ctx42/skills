@@ -25,9 +25,6 @@
 # `source` must be a real plugin directory (with .claude-plugin/plugin.json), and
 # every shipped skill on disk must live under exactly one plugin's skills/
 # directory (skills under .claude/skills/ are project-local and exempt).
-# On machines with the vr checkout it also runs dev/check-srd-standard.sh
-# (warning only) to catch drift between srd-standard.md and its Confluence
-# source; regenerating it is the srd-sync skill's job.
 #
 # No external dependencies (pure bash + coreutils; no jq).
 #
@@ -250,8 +247,8 @@ lint_skill() {
         check_wrap "$f"
         lines="$(wc -l <"$f")"
         if [ "$lines" -gt 100 ]; then
-            # head -40, not -25: the generated provenance banner pushes the
-            # `## Contents` heading down in srd-standard.md.
+            # head -40, not -25: a leading banner comment may push the
+            # `## Contents` heading down.
             head -40 "$f" | grep -qiE '^#+[[:space:]]+Contents|^Contents' \
                 || warn "${f#"$SKILLS_SRC"/}: $lines lines, no Contents list"
         fi
@@ -338,20 +335,6 @@ if [ -x "$SKILLS_SRC/dev/version.sh" ]; then
         || err "manifest versions drifted from VER (run ./dev/version.sh sync)"
 else
     warn "skipping version-drift check (dev/version.sh missing or not executable)"
-fi
-
-# srd-standard.md must stay current with its Confluence source. A warning, not
-# an error: the source mirror exists only on machines with the vr checkout
-# (elsewhere the check SKIPs and passes), and a red lint on those machines
-# would train people to ignore it. Regeneration is the srd-sync skill; this is
-# only the passive page_version tripwire.
-if [ -x "$SKILLS_SRC/dev/check-srd-standard.sh" ]; then
-    if ! sync_out="$("$SKILLS_SRC/dev/check-srd-standard.sh" 2>&1)"; then
-        warn "srd-standard.md drifted from its source (run the srd-sync skill):"
-        printf '%s\n' "$sync_out" | sed 's/^/       /'
-    fi
-else
-    warn "skipping SRD drift check (dev/check-srd-standard.sh missing or not executable)"
 fi
 
 echo "----"

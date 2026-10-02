@@ -271,57 +271,6 @@ Supporting commands (you rarely run these directly):
 fails the lint gate as a backstop. The hook fails closed: if a manifest cannot be
 written, the commit aborts rather than releasing drift.
 
-## Syncing the SRD standard
-
-`srd/skills/create/references/srd-standard.md` is a **generated artifact** —
-never edit it by hand. It is assembled from a Confluence page (id `1949564932`,
-mirrored by cfsync into the private `vr` checkout), trimmed for agent use, and
-two hand-maintained frame files in `dev/`:
-
-```
-srd-standard.md = dev/srd-standard.header.md + transform(source) + dev/srd-standard.footer.md
-```
-
-There is **no reword layer**: the copy mirrors the source text exactly, minus
-the trims, so any editorial change must be made in Confluence. Override the
-source path with `SRD_STANDARD_SRC`.
-
-Regeneration is the **`srd-sync` skill** (`.claude/skills/srd-sync/`) — an
-LLM-driven task, not a script, because it runs rarely and with a human in the
-loop; its `SKILL.md` owns the transform, the diff buckets, and the checks. Two
-scripts support it: `dev/srd-subst.sh` applies the deterministic
-vr-internal-reference swaps so an LLM never edits rule text, and
-`dev/check-srd-standard.sh` is the passive tripwire — it compares the source
-`page_version` to the version in the copy's provenance banner, and
-`lint-skills.sh` runs it as a warning where the source exists (elsewhere it
-SKIPs and passes).
-
-**Source changed** (someone edited the Confluence page):
-
-1. `cfsync pull` the mirror.
-2. Review the **frozen nodes** first — the Bad→Good example expands and the
-   Quality Bar list are not in the export, so a `page_version` bump can hide an
-   edit inside them. Open the page, re-check them, and update
-   `srd/skills/create/references/authoring-guide.md` (transcribe new expands,
-   or list their ids in `dev/srd-untranscribed-examples.md`) and
-   `dev/srd-standard.footer.md` (the transcribed Quality Bar) by hand.
-3. Invoke the `srd-sync` skill and review its reported diffs. LOCAL-ONLY and
-   TEXT DIFFERS units are debt — push them upstream to Confluence and re-sync,
-   or accept losing them (a write adopts the source wording). Hunks inside the
-   header or footer part are reported as FRAME and need no confirmation. If
-   the source grew a new top-level section, the skill hard-stops until the
-   transform is extended.
-4. After the skill writes, run `./dev/lint-skills.sh` and re-check the
-   srd:review fixture eval (`srd/skills/review/assets/flawed-srd.md`) — its
-   finding set must not shrink.
-
-**Rule change conceived here**: a rule added to the local mirror is part of the
-sync source — it surfaces as SOURCE-ONLY and a write bakes it in. Never run
-srd-sync with unpushed mirror edits: add the rule to the mirror, `cfsync push`,
-`cfsync pull` (confirms the page took it and bumps `page_version`), then run the
-source-changed flow above. If you must sync first, `cfsync pull` to clobber the
-local edit.
-
 ## Renaming a Skill
 
 1. Rename the directory (keep the `name:` frontmatter in `SKILL.md` in sync).
