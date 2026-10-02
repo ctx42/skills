@@ -100,12 +100,13 @@ coherently. A module of three small packages is `./...` and still not broad.
    (`packages`, `depth`), instructing it to report offenses only. Take its
    offense list as the style findings; do not re-derive style rules here.
 
-   On the fan-out path each subagent invokes it for its own package, which
-   keeps the rulebook out of this context. Reviewing in-context there is no
-   separate process to delegate to: loading the skill brings the rules in here,
-   so read them once, take the offenses, and do not consult them again while
-   judging correctness — the two dimensions stay separate in the report even
-   when they share a context.
+   On the fan-out path each subagent invokes it for its own package, which keeps
+   the rulebook out of this context. Reviewing in-context there is no separate
+   process to delegate to: loading the skill — the Skill tool or reading
+   `../style/SKILL.md` and its `references/checking.md` — brings the rules in
+   here, so read them once, take the offenses, and do not consult them again
+   while judging correctness — the two dimensions stay separate in the report
+   even when they share a context.
 
    One defect can be both. A `%v` wrap is a style offense and, where it breaks
    an error chain a caller unwraps, a correctness bug. Report it once, under
@@ -126,11 +127,13 @@ coherently. A module of three small packages is `./...` and still not broad.
      `goToImplementation`, `incomingCalls`, `hover`/`goToDefinition`) rather
      than asserting from the visible code. Skip at `depth=light`; reserve for
      findings that cross a file/package boundary. No `LSP` tool in this client,
-     or no language server behind it → fall back to grep/read and note the
-     reduced confidence in the finding.
+     no language server behind it, or one answering empty for a symbol the
+     code visibly uses (an unindexed nested module) → fall back to grep/read
+     and note the reduced confidence in the finding.
 4. Reason only while reviewing: do not run gofmt, go vet, golangci-lint, or
-   go test — judge by reading the code. Say so in the report: one line naming
-   the tools this pass ran (normally none) and that the style dimension came
+   go test — judge by reading the code. A shell width measure (`awk` line
+   length) is allowed. Say so in the report: one line naming the tools this
+   pass ran (normally none) and that the style dimension came
    from `go:style`. A reader cannot otherwise tell a review that honored
    this from one that shelled out, and neither can anyone checking the run
    afterwards. `LSP` is allowed (read-only
