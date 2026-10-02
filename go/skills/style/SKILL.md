@@ -136,7 +136,7 @@ its full text.
   uses `:=`.
 - Discard an intentionally-ignored return explicitly with `_` (`_, _ =
   fmt.Fprintf(w, ...)`); never leave it bare, so the discard reads as
-  deliberate.
+  deliberate. `_` on an error a caller needs is still a swallow.
 - Export sentinel errors as `ErrXxx`; unexported as `errXxx`.
 - Keep wrap context short and meaningful; no `failed to ...` prefixes.
 - Match errors with `errors.Is`/`errors.As`, never `==`.
@@ -193,10 +193,10 @@ its full text.
   being set up or asserted about, not the call that produced it: everything
   returned by one `--- When ---` call is one subject, so an `assert.NoError` and
   the `assert.Equal` checking that call's result take no blank line between
-  them, while a second collaborator's setup or a second value's assertions take
-  one. Check every such block with two or more subjects: label each statement
-  with its subject first, then flag each boundary with no blank line and each
-  blank line inside a subject.
+  them, while a second collaborator's setup, a receiver field or argument the
+  call mutated, or a second value's assertions take one. Check every such block
+  with two or more subjects: label each statement with its subject first, then
+  flag each boundary with no blank line and each blank line inside a subject.
 - In `foo_test.go` with a matching `foo.go`, test functions follow the
   declaration order of their subject in `foo.go`; `Test_Foo` precedes
   `Test_Foo_tabular`; files without a 1-to-1 name match are exempt.

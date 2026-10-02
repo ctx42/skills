@@ -99,7 +99,8 @@ no single line spells out.
    call sites, no-godoc-on-an-interface-method, an unused symbol), confirm it
    with the `LSP` tool (`findReferences`, `goToImplementation`, `hover`) rather
    than asserting from the visible code. Skip at `depth=light`. No language
-   server → fall back to grep and note reduced confidence.
+   server, or one answering empty for a symbol the code visibly uses (an
+   unindexed nested module) → fall back to grep and note reduced confidence.
 4. Reason only for detection: do not run gofmt, goimports, vet, or linters —
    judge by reading. `LSP` is allowed (read-only navigation).
 5. List the offenses (below), then fix per Fixing.
@@ -125,13 +126,14 @@ site happens to need — by the first of these that matches:
 1. Blocker — the code is wrong or will mislead: a swallowed or `%v`-wrapped
    error, an error matched with `==`, an exported symbol with no godoc, a name
    that states the opposite of what the code does, an assertion that passes on
-   the wrong branch.
+   the wrong branch, work that continues after its context is cancelled.
 2. Nit — `gofmt`/`goimports` would produce the fix, or the fix only inserts,
    removes, or rewraps whitespace or inserts, rewords, or deletes a comment (a
    marker comment included), leaving every identifier, statement, and declaration
    where it is.
 3. Should-fix — everything else: the fix renames, moves, regroups, or
-   restructures.
+   restructures; one error handled twice (logged and returned) is one, as is
+   a missing package overview.
 
 First match wins, so a rule answering to both 1 and 2 takes 1, and no rule
 "fits none" — 3 is the residue. The contested cases are settled by 2's closing
@@ -172,8 +174,8 @@ merge cannot fold:
    from the entry's Contents key and from the bullet gives two ids for one
    rule, so the bullet is always the source and the entry is only where the
    detail lives.
-2. Drop backticks and the code inside them, except where the code *is* the
-   word. A backtick span holding spaces is several tokens: split it on
+2. Drop backticks; the code inside them contributes only what the tests below
+   let through. A backtick span holding spaces is several tokens: split it on
    whitespace first (`--- Given ---` → `---`, `Given`, `---`). Then cut each
    token at its opening parenthesis, arguments and all (`init()` → `init`,
    `ErrorRegexp("a.*b")` → `ErrorRegexp`), or a dot inside a string argument
@@ -249,12 +251,13 @@ Aggregate style-only fixes (formatting, naming, godoc, line length) into one
 change across files and rules, not one commit per offense; keep each
 behavioral fix, with its red/green test, a separate change.
 
-- Default: present the offenses as a numbered list and ask which to apply; apply
-  only the picked ones. `fix` applies all. A plan-first run — the flag, or the
-  automatic one a broad target triggers — reaches here only after the user has
-  answered the plan, and that answer agreed the budget, not the fixes: the pick
-  step still runs. Before the answer there is no offense list to apply at all,
-  because nothing has been checked yet.
+- Default: present the offenses as a numbered list — one number per offense or
+  folded finding, its sites beneath — and ask which to apply; apply only the
+  picked ones, every site of a picked number. `fix` applies all. A plan-first
+  run — the flag, or the automatic one a broad target triggers — reaches here
+  only after the user has answered the plan, and that answer agreed the budget,
+  not the fixes: the pick step still runs. Before the answer there is no offense
+  list to apply at all, because nothing has been checked yet.
 - Measure every line a fix writes — a reworded comment as much as code —
   against the limit before applying it; a fix that overflows is itself an
   offense. Where the approved wording cannot fit, say so and give the wording
@@ -266,12 +269,13 @@ behavioral fix, with its red/green test, a separate change.
   stop and report. Run it again after — the job is not done until it passes.
 - Never print diffs of applied fixes: report each as one line (`file:sym — what
   changed`) plus the gate result. Never `git commit`.
-- Big job (offenses span many packages / large LOC): write an ordered plan to a
-  scratch file kept out of git (`tmp/style-fix-plan.md`, gitignored or listed
-  in `.git/info/exclude`), one chunk per package with
-  status boxes; the pick answer is the go-ahead, so do not ask again before the
-  first chunk; work chunks in order, gate per chunk, and after each changed
-  chunk report it and ask before starting the next.
+- Big job (the fixes are large — many changed lines or restructuring edits;
+  small fixes across many packages are one aggregated change with one gate, per
+  Fixing): write an ordered plan to a scratch file kept out of git
+  (`tmp/style-fix-plan.md`, gitignored or listed in `.git/info/exclude`), one
+  chunk per package with status boxes; the pick answer is the go-ahead, so do
+  not ask again before the first chunk; work chunks in order, gate per chunk,
+  and after each changed chunk report it and ask before starting the next.
 
 ## Scale
 
