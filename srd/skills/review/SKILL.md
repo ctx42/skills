@@ -220,13 +220,13 @@ in full, so it is not summarized here.
    Bump `updated:` only if something else in the file changed (review-file.md):
    a pass that resolves nothing and appends nothing writes nothing.
 5. Close with the task-oriented line (Modes) and one start clause naming what
-   the draft check found (`draft gaps: none`, or what was drained), unless a
-   caller said it ran the check and so owns the clause — a check that found
+   the draft check found (`prior draft gaps: none`, or what was drained), unless
+   a caller said it ran the check and so owns the clause — a check that found
    nothing otherwise looks like one that never ran. Then, unless a caller said
    it makes the closing offer, invoke `srd:report-doc-gap` to offer the drafts
-   this run captured — and only then:
-   the start check governs a *prior* session's drafts, this offer covers what
-   *this* run captured, so a run that captured none invokes nothing here either.
+   this run captured — and only then: the start check governs a *prior*
+   session's drafts, this offer covers what *this* run captured, so a run that
+   captured none invokes nothing here either.
 
 ## walk
 

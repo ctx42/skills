@@ -66,7 +66,8 @@ Nothing outside this list is errata.
   inherits this exemption. The one correct form is the notice in
   [../assets/srd-template.md](../assets/srd-template.md) (`[!INFO]` callout, "in
   this document"); the one in the SRD standard describes the standard itself
-  and is never the replacement.
+  and is never the replacement. Its anchor is the notice block itself, which
+  appears once; cite `Metadata` as the location.
 
 ## Exclusions
 

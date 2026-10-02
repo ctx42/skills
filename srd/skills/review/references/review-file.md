@@ -27,7 +27,8 @@ when they share one root cause. No bullet says "do A and B".
 Two rules breaking on one edit is the mirror case and resolves the same way: a
 `Status` field that violates both STA-2 and STA-3 takes one correction and one
 yes, so it is one finding. Cite the rule the fix is derived from and name the
-other in the text. Atomicity is about the fix, not about how many rules the
+other in the text; when both derive it, as with STA-2 and STA-3, cite STA-3
+and name STA-2. Atomicity is about the fix, not about how many rules the
 defect trips.
 
 Open finding shape — number first, then severity, then category:
@@ -37,14 +38,15 @@ Open finding shape — number first, then severity, then category:
 ## Citations
 
 Close each finding with its rule-id citation namespaced `SRD:` — `(SRD:REQ-1)`,
-`(SRD:GLO-3)`. The only rule namespaces are `STR`, `STA`, `LANG`, `REQ`, `GLO`,
-and `SCO`; never cite a rule absent from the standard fetched through the
-server (e.g. a defunct `MD-*`). A consistency-pass finding cites
-`(SRD:consistency)` and sits under the section where the conflict surfaces; a
-house-addition finding (US English, draft scaffolds, terminology drift) cites
-`(SRD:house)`. When both could fit — the consistency pass surfaced it, a house
-addition defines it — cite the house addition: the rule that defines the defect
-outranks the pass that spotted it, so terminology drift is always
+`(SRD:GLO-3)`. A punctuation or spacing errata finding no rule names cites
+`(SRD:LANG-2)`, as the worked example does. The only rule namespaces are `STR`,
+`STA`, `LANG`, `REQ`, `GLO`, and `SCO`; never cite a rule absent from the
+standard fetched through the server (e.g. a defunct `MD-*`). A consistency-pass
+finding cites `(SRD:consistency)` and sits under the section where the conflict
+surfaces; a house-addition finding (US English, draft scaffolds, terminology
+drift) cites `(SRD:house)`. When both could fit — the consistency pass surfaced
+it, a house addition defines it — cite the house addition: the rule that defines
+the defect outranks the pass that spotted it, so terminology drift is always
 `(SRD:house)`. A `reference` finding cites its evidence in the same slot and the
 same shape — `(SRD:ref confluence/infraport/formats/x.md#heading)` for a corpus
 contradiction, `(SRD:ref <the dead link>)` for a broken pointer — so every
