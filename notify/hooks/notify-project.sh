@@ -3,6 +3,9 @@
 
 INPUT=$(cat)
 
+# Only the main agent asks for attention; `agent_id` is set only inside a subagent.
+[ -n "$(echo "$INPUT" | jq -r '.agent_id // empty')" ] && exit 0
+
 CWD=$(echo "$INPUT" | jq -r '.cwd // "Unknown project"')
 MESSAGE=$(echo "$INPUT" | jq -r '.message // "Claude needs your attention"')
 PROJECT_NAME=$(basename "$CWD")

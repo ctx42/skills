@@ -94,7 +94,8 @@ source of truth.
 Ships no skills. `hooks/hooks.json` registers `Stop` and `Notification`, both
 running `hooks/notify-project.sh` via `${CLAUDE_PLUGIN_ROOT}`; that script reads
 the hook JSON from stdin and hands the message and project name to
-`hooks/notify-monitors.py`, which draws a GTK card on every monitor. Linux
+`hooks/notify-monitors.py`, which draws a GTK card on every monitor. Events
+carrying `agent_id` (fired inside a subagent) are dropped. Linux
 (X11/XWayland) and macOS only, degrading to `notify-send` and then to stderr.
 Hooks are read at session start — test a change by restarting, not with
 `/reload-plugins`.
