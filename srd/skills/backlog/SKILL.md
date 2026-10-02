@@ -183,11 +183,13 @@ Draft the page that fixes the user manual; a human publishes it.
    restart unless the server watches its sources.
 7. Park instead of steps 5–6 when the user decides the fact stays in the KB for
    now — no page planned this sitting. Only once `srd:kb` has written the
-   section and the file exists under the `kb` folder: `mark_gap_kb` for every
+   section in a topic page under the `kb` folder: `mark_gap_kb` for every
    gap in the cluster, `kb_ref` the KB document ID plus anchor
    (`kb/users-and-access.md#customer-and-project-timezones`), `note` saying
-   which decision parked it. Never park against an unconfirmed fact, nor a
-   section that only partly covers the gap — leave that one `open`.
+   which decision parked it. Never park against `_inbox.md`: its anchors
+   break on the next `/kb file`, and no skill can re-point a parked gap. Never
+   park against an unconfirmed fact, nor a section that only partly covers the
+   gap. Leave each such gap `open`.
 
 A platform fact the grill surfaces also goes to `srd:kb`; the gap and the KB
 entry close independently.
