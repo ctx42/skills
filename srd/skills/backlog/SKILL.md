@@ -60,17 +60,17 @@ system is.
 
 ## Backends
 
-The KB lists read `<kb>/_open-questions.md`, `kb` from `project-config.md`:
-one row per question under `## Open` (label, kind `deferred` or `unknown`, date
+The KB lists read `<kb>/_open-questions.md`, `kb` from `project-config.md`: one
+row per question under `## Open` (label, kind `deferred` or `unknown`, date
 raised, hit count, `Lives in` page link) or `## Closed`, which keeps the same
 columns — `kind` included, so a closed row still says whether it had been a
-deferred question or an unknown — plus the date closed and where the answer
-now lives. The wording lives in the page's `## Open questions` section; a row
-with an empty page link has only its label. When a question closes, its wording
-leaves that section — the answer is in the page body now, and a question still
-posed beside its own answer reads as unresolved to the next person — and when
-that was the last one, the heading goes too, since an empty heading promises a
-list the page does not have.
+deferred question or an unknown — plus the date closed and where the answer now
+lives. The wording lives in the page's `## Open questions` section; a row with
+an empty page link has only its label. When a question closes, its wording
+leaves that section — the answer is on the page or in the inbox now, and a
+question still posed beside its own answer reads as unresolved to the next
+person — and when that was the last one, the heading goes too, since an empty
+heading promises a list the page does not have.
 
 The `gaps` list uses the server's gap tools on `mcp__<mcp-server>__`:
 `list_gaps` (optional `status`), `mark_gap_kb` (`gap_id`, `kb_ref`, optional
@@ -99,8 +99,9 @@ tick it off:
 - [ ] 3. `unknowns`: triage, never answer.
 - [ ] 4. `gaps`: cluster, check the corpus, grill, draft, resolve or park.
 
-Work one list at a time in the user's chosen order; close each item through its
-own mechanism, one call per item.
+Work one list at a time; a pick names one list, and when it is done offer the
+next non-empty one. Close each item through its own mechanism, one call per
+item.
 
 ### 1. Open the sitting
 
@@ -153,9 +154,10 @@ Draft the page that fixes the user manual; a human publishes it.
    repeated reports mean higher priority. The user picks one; work one at a
    time.
 3. Check the corpus: `search` each gap's `search_terms`, `get_doc` any cited
-   `doc_id`. Genuinely absent content needs new prose; present-but-unranked
-   content needs a structural edit to the existing page, never a duplicate
-   (the reference's "Absent vs unfindable").
+   `doc_id`. Genuinely absent content needs new prose — added to the existing
+   page when it is partly present there; present-but-unranked content needs a
+   structural edit to the existing page, never a duplicate (the reference's
+   "Absent vs unfindable").
 4. Extract what the page must state. A record says what is missing, not what
    is true — but some were grilled at depth when filed and already carry
    knowledge in `detail` and `target_claim` (`srd:report-doc-gap` calls that a
@@ -191,8 +193,9 @@ Draft the page that fixes the user manual; a human publishes it.
    park against an unconfirmed fact, nor a section that only partly covers the
    gap. Leave each such gap `open`.
 
-A platform fact the grill surfaces also goes to `srd:kb`; the gap and the KB
-entry close independently.
+A platform fact the grill surfaces also goes to `srd:kb`, unless this sitting
+publishes a page that states it: the KB holds only what the docs do not. The
+gap and the KB entry close independently.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. Counts and what closed are enough — never
