@@ -57,21 +57,24 @@ holds the scenarios it is expected to handle.
 
 ---
 
-## 4. The knowledge base
+## 4. Set up a project for the SRD skills
 
-The SRD skills build a knowledge base about your platform as you use them —
-facts you confirm during an interview become Markdown pages that every agent can
-search. `srd:kb` owns it; you never invoke it directly.
+The SRD skills keep nothing on the machine: everything lives in the project.
+Commit a `project-config.md` at the project root whose YAML front matter names:
 
-It lives in a directory you choose on first use, remembered at:
+| Key            | Holds                                                              |
+|----------------|--------------------------------------------------------------------|
+| `mcp-server`   | the MCP server the skills call (`mcp__<name>__<tool>`)             |
+| `kb`           | the knowledge-base folder; confirmed facts land in its `_inbox.md` |
+| `initiatives`  | the SRD folder, one folder per SRD                                 |
+| `srd-standard` | the document id of the SRD guidelines page                         |
+| `glossary`     | the Company Glossary (a file or a folder)                          |
 
-```
-~/.agent-data/ctx42-skills/srd/kb-root
-```
-
-Pick a directory in a git repository that **no Confluence sync manages** — a
-sync pull would clobber agent writes. Serve it to agents by adding it as a
-source in your `mcp-doc.yaml`, then work what it still owes with
+Paths are relative to the project root; an absolute path is an error. Start the
+server, connect it with `/mcp`, and run any srd skill from inside the project:
+each one stops with the exact problem when the file, a key, or the server is
+missing. Facts you confirm during SRD work land in the knowledge base, which
+`srd:kb` owns; doc gaps live on the server; work what both still owe with
 `/srd:backlog`.
 
 ---

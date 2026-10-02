@@ -173,9 +173,10 @@ edits via `/go:review add …` — must be done against your clone with
 `--plugin-dir ./go`, then committed, so the change reaches the repo. A
 marketplace install is a versioned *copy* under `~/.claude/plugins/cache/`; edits
 made there land in that throwaway copy and are lost on the next update, never
-reaching the source of truth. (Per-machine data — the knowledge-base pointer,
-skill buffers, lessons — is exempt: it lives at a fixed external path, not
-inside the plugin.)
+reaching the source of truth. (Lessons, the one per-machine data, are exempt:
+they live at a fixed external path, not inside the plugin. The `srd` skills'
+project data lives in the project — see
+[STRUCTURE.md](./STRUCTURE.md#where-skill-data-lives).)
 
 Run `./dev/lint-skills.sh` before committing; it checks every skill against the
 mechanical parts of the authoring standard and the marketplace wiring.

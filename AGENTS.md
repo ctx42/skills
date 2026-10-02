@@ -61,18 +61,19 @@ source of truth.
 ### srd
 
 - `create` — interviews, drafts, and self-checks a new SRD; owns the shared
-  SRD references.
+  SRD references, including the `project-config.md` gate every srd skill runs
+  first.
 - `review` — read-only SRD review; findings go to `<srd>.review.md` beside the
   source.
 - `edit` — edits an existing SRD in place, one confirmed change at a time.
 - `system-check` — build-readiness questions for an SRD; owns
   `<srd>.questions.md`. Banks platform facts through `kb`.
 - `report-doc-gap` — producer side of the doc-gap loop: captures gaps found
-  during SRD work, buffers them, files them on confirmation.
+  during SRD work as server-side drafts, files them on confirmation.
 - `backlog` — one sitting over three lists: questions deferred during SRD work,
   facts nobody has pinned down, and reported gaps in the user manual.
-- `kb` — owns the knowledge base: writes what the platform is from facts
-  attested during SRD interviews.
+- `kb` — owns the knowledge base: writes facts attested during SRD interviews
+  to its inbox, then files them into topic pages.
 
 ### craft
 

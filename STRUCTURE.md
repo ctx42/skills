@@ -19,13 +19,9 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │   ├── lint-skills.sh              # Checks skills against the authoring standard
 │   ├── version.sh                  # Syncs manifest versions with the VER file
 │   ├── token-report.sh             # Per-skill always-loaded token surface
-│   ├── check-srd-standard.sh       # Passive tripwire: source page_version vs the copy's provenance banner
-│   ├── srd-subst.sh                # Deterministic vr-internal-reference swaps for the srd-sync skill
-│   ├── srd-standard.header.md      # Hand-maintained frame prepended to srd-standard.md (srd-sync skill)
-│   ├── srd-untranscribed-examples.md # Upstream example ids not yet transcribed into authoring-guide.md
-│   └── srd-standard.footer.md      # Hand-maintained frame appended to srd-standard.md (Quality Bar)
+│   └── eval/                       # Blind-runner and grader prompts
 ├── .claude/
-│   └── skills/srd-sync/            # Project-local maintainer skill: regenerate srd-standard.md (not shipped)
+│   └── hooks/skill-guard.sh        # Reminds an edit in a skill of the authoring conventions
 ├── .claude-plugin/
 │   └── marketplace.json            # Marketplace catalog: the four plugins below
 │
@@ -39,6 +35,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       └── reshape/             # Consumer-driven library API-change proposals
 ├── srd/                            # Plugin: SRD lifecycle
 │   ├── .claude-plugin/plugin.json
+│   ├── evals/fixtures/             # Eval-only test data: frozen SRD standard, project-config.md
 │   └── skills/
 │       ├── create/              # Author a new SRD to the SRD standard
 │       ├── review/              # Read-only review of an SRD
@@ -103,7 +100,9 @@ edit-test dev loop (`--plugin-dir` + `/reload-plugins`) is in
 Skills in the same plugin are copied together into the plugin cache, so they
 reference each other with relative paths from their own directory:
 
-- `review`, `edit`, and `system-check` read `../create/references/*`.
+- `review`, `edit`, `system-check`, `kb`, `report-doc-gap`, and `backlog` read
+  `../create/references/*`; every srd skill runs the gate in
+  `../create/references/project-config.md` first.
 - `backlog` reads `../kb/references/retrieval-authoring.md`, which `kb` owns.
 - `cover` and `doc` read `../style/SKILL.md`; `review` invokes `go:style`
   for the style pass and writes rule edits to `../style/SKILL.md` +
@@ -120,24 +119,25 @@ only link to a sibling by carrying the SKILL.md spelling.
 
 ---
 
-## Per-machine data
+## Where skill data lives
 
-Skills that keep user data store it outside the repo, under one fixed,
-`$HOME`-rooted root so it survives plugin updates:
+The `srd` skills keep no per-machine state for project data. Everything they
+need lives in the skill or in the project:
+
+- `project-config.md` at the project root — committed; names the MCP server,
+  the knowledge-base folder, the SRD folder, the SRD standard's document id,
+  and the Company Glossary. Every srd skill reads it and checks the server
+  before any work.
+- Doc gaps — server-side, in the gap store; an unfiled gap is a `draft` there.
+- Platform facts — `<kb>/_inbox.md` the moment they are confirmed, filed into
+  topic pages later by `srd:kb`.
+- The SRD standard and the glossary — read live through the server.
+
+The only per-machine data is self-learning lessons, under one `$HOME`-rooted
+root so they survive plugin updates:
 
 ```
-~/.agent-data/ctx42-skills/srd/kb-root            the knowledge-base directory
-~/.agent-data/ctx42-skills/srd/kb/<srd-id>.json   kb capture buffer
-~/.agent-data/ctx42-skills/srd/docgaps/<srd-id>.json   doc-gap buffer
-~/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md self-learning lessons
+~/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md
 ```
-
-The `srd/` segment scopes that subtree to the `srd` skills, so only they load
-it. See each skill's `SKILL.md` for the resolution rules.
-
-Old pattern: `system-check` used to keep platform knowledge in a per-machine
-`memory.md` under the same root, seeded from a shipped template. That store is
-retired — platform knowledge now lives in the knowledge base, which `srd:kb`
-owns and the `srd-doc` corpus serves to every agent on every machine.
 
 ---
