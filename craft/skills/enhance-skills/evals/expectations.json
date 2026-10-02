@@ -34,7 +34,7 @@
       "name": "attribute-to-the-driving-skill",
       "expected_behavior": [
         "Files the commit-type rule under `craft/skills/cm/` — against the skill that was driving when the correction landed",
-        "Drops the Status correction rather than filing it: `srd:create` already loads a reference stating STA-1 and its own body already follows it, so a lesson would restate a rule the skill has. The report names the drop and where the rule already lives",
+        "Drops the Status correction rather than filing it: `srd:create` already loads a standard stating STA-1 and its own body already follows it, so a lesson would restate a rule the skill has. The report names the drop and where the rule already lives",
         "Does not file either correction against both skills, and does not cross-file them",
         "Does not invent a home for the `git push` correction by attaching it to whichever skill happens to be nearby: it belongs to the agent's standing instructions, and the report says so instead of writing it into a skill",
         "Proposes all of this in one pass and waits for confirmation before writing"

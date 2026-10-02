@@ -37,7 +37,7 @@
       "skills": [
         "enhance-skills"
       ],
-      "setup": "A session correcting two skills. `craft:cm` was told to derive the commit type from the diff rather than the branch name. `srd:create` was told that Status values are written lowercase when the standard it loads requires uppercase — a rule `../../srd/skills/create/references/srd-standard.md` already carries as STA-1, and which `srd:create`'s own body already follows. A third correction, about running `git push`, belongs to no skill in the session.",
+      "setup": "A session correcting two skills. `craft:cm` was told to derive the commit type from the diff rather than the branch name. `srd:create` was told that Status values are written lowercase when the standard it loads requires uppercase — a rule the SRD standard it fetches live already carries as STA-1 (the frozen eval copy is `srd/evals/fixtures/srd-standard.md`), and which `srd:create`'s own body already follows. A third correction, about running `git push`, belongs to no skill in the session.",
       "query": "/enhance-skills",
       "files": []
     },
