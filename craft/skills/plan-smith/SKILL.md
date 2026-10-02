@@ -193,12 +193,15 @@ call.
    staging-only is not a third case needing its own rule: it is an item with a
    criterion that did not settle.
 
-3. Append work the plan does not carry yet, when the update surfaced some: new
-   items after the last work item with fresh numbers, status `N`, and the same
-   shape as the rest; the closing item moves down one number per new item and
-   stays last. Never renumber anything else to slot one into the middle — the
-   numbers are how the table and the sections stay married. A plan with no
-   closing item (written before it existed) gets one appended.
+3. Append work the plan does not carry yet that the user or the repo names —
+   a need the user reports, a `TODO` in the code: new items after the last
+   work item with fresh numbers, status `N`, and the same shape as the rest;
+   the closing item moves down one number per new item and stays last. Take
+   their acceptance criteria from what was stated; an open choice inside one
+   goes to the report's leave-outs, as in write step 3. Never renumber
+   anything else to slot one into the middle — the numbers are how the table
+   and the sections stay married. A plan with no closing item (written before
+   it existed) gets one appended.
 
 4. Rewrite the summary table and the changed items' checkboxes/tags only, so
    table and sections keep the same numbering and statuses; leave all other
@@ -210,8 +213,8 @@ call.
 6. When every item but the closing one is now `Y` or `X`, end the report by
    asking whether to delete the plan file — after the rewrite, so the update
    is on disk whatever the answer; never delete unasked. Yes: delete it and
-   say so. No: mark the closing item `X` (kept — the user's call) and fix its
-   table row, so the question is not asked again.
+   say so. No: tag the closing item `(X: rejected — the user kept the plan)`
+   and fix its table row, so the question is not asked again.
 
 ## Self-learning
 

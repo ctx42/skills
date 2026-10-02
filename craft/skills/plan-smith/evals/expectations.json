@@ -11,7 +11,7 @@
         "Each item states acceptance criteria concrete enough to verify against the finished work, not a restatement of the item name",
         "Does not silently settle a decision the brief left open — such as OIDC versus SAML, or which session store ships — and the file carries only the summary table and the numbered item sections, with no extra assumptions or open-choices section bolted on",
         "The summary table is aligned: every row the same character width, separator dashes flush to the pipes with no surrounding spaces",
-        "Reports the path and the status counts in roughly one line, and does not paste the plan back into the reply"
+        "Reports the path and the status counts on one line, any further lines being the leave-outs — a name and at most a half-line each — and does not paste the plan back into the reply"
       ]
     },
     {
