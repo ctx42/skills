@@ -29,7 +29,8 @@ The gate then decides what may happen to requirement, scope, and glossary ids:
   own REQ-1 example does it. Renumbering the group is free here and is the
   right move when sub-numbering cannot express the change: an item crosses
   groups, or the numbering is already wrong (REQ-2/3/4 collisions and gaps).
-  Update every cross-reference the change touches.
+  Removing a requirement deletes it outright; strikethrough is for approved
+  SRDs only (STA-8). Update every cross-reference the change touches.
 - Approved: existing ids are frozen. Additions only, via sub-numbering
   (`GR-1a`, `GR-1b`); never renumber or rename an existing id. A taken suffix
   moves down the alphabet — splitting `GR-3a` beside an existing `GR-3b` adds

@@ -35,7 +35,8 @@ never edits metadata (Owners, Initiative, Designs), sets back-links, or changes
 mandate is reported, not looped — even when the run entered at it: a feedback
 run starting at a metadata `#2` says so and advances to `#3`. An explicit `#n`
 sets the order for the rest of the run: walk ascending from `n` to the end,
-then come back for the numbers below it. It never proposes a Status
+then come back for the lowest still open; a jump re-anchors the walk the same
+way. It never proposes a Status
 transition (flag only a malformed `STA-*` value) and never proposes pushing,
 publishing, or syncing the SRD as a follow-up. Comment blocks are read-only:
 a source of information about the SRD, never edited, answered, or rewritten,
@@ -245,7 +246,8 @@ with a confirmation and expects no review file.
 
 1. Front-load a grouped issue summary — every issue found, grouped by document
    section (Metadata, Introduction, Glossary, Scope, Requirements), each citing
-   its rule id. Edit nothing yet.
+   its rule id. Edit nothing yet; the first proposal may follow in the same
+   turn.
 2. Walk entry by entry in document order — each requirement (`PFX-n`), glossary
    term, scope item — running the loop for every fix the user approves.
    Move on only on `YN` or an explicit ask, and never before the current entry
@@ -289,7 +291,8 @@ this mode only)*: read it before applying anything.
 ### polish
 
 Mechanical-only cleanup through the loop, confirming each change, in document
-order with no summary first. Scope:
+order with no summary first; metadata gaps go to the closing manifest, not the
+walk. Scope:
 British → US spelling, identifier format/order (REQ-2/3/4, subject to the
 approval gate), keyword capitalization (LANG-4), valid Markdown, stray
 example/note text (REQ-7), spacing and punctuation. Never rewrite requirement
@@ -311,7 +314,9 @@ free description ("the login timeout rule").
 ## Session end (every mode)
 
 1. Re-check the whole document against every rule in the standard plus the
-   consistency pass in the authoring guide, and report what remains.
+   consistency pass in the authoring guide, and report what remains. GLO-3
+   covers only terms this session already settled: a session that never loaded
+   the term set does not load it here.
 2. Invoke `srd:report-doc-gap` to offer the draft gaps this session captured,
    only when there are any. The start check covers what a *prior* session
    left; this covers what *this* session produced. `srd:kb` already wrote each

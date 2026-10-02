@@ -27,6 +27,8 @@ touches ids.
    moved it under `## Errata` — never its position in that block, so `#7` stays
    `#7` whether it sits first there or third.
 3. Present the batch: every appliable finding (number, anchor, substitution).
+   Appliable means well-shaped, not yet verified: say anchors are checked on
+   apply, never that every finding will land.
    The user may name numbers to exclude; default is all.
 4. One confirmation for the whole batch — `Yes` applies every included finding,
    `No` applies nothing. Not the loop.

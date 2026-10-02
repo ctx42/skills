@@ -31,8 +31,11 @@ author-facing account of what changed and why, which a diff cannot carry.
   never paraphrase — a paraphrase is where invented reasons got in. Trim only
   the conversational frame around the quote (`yes, because`) and the
   interaction text a rationale carries — keystroke hints (`` `E` to give a
-  different limit ``) and process notes (`so no corpus lookup`); keep its
-  typos and shorthand. No quotable reason, no reason logged.
+  different limit ``) and process notes (`so no corpus lookup`, `read as a
+  figure the SRD sets`); keep its typos and shorthand. No quotable reason, no
+  reason logged — an `autofix` entry has no proposal, so it logs the user's
+  words or nothing, never the review finding's text. A reason that holds a
+  double quote is wrapped in single quotes.
 - Every applied edit, loop or not: `autofix` logs one entry per substitution,
   Add-to-TODO logs its line. Same changes, same log.
 - Skipped and flagged-but-unfixed issues are not logged: they stay in the
