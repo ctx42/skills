@@ -163,7 +163,7 @@ its full text.
 
 - Provide `Example*` for non-trivial public APIs; they must pass `go test`;
   skip `main`, `internal`, and test-only packages.
-- A reusable package ships a `README.md` (or `doc.go` package overview):
+- A reusable package ships a `README.md` (or a package-godoc overview):
   purpose, import path, and one runnable usage example; skip `main`,
   `internal`, and test-only packages.
 

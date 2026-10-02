@@ -100,17 +100,18 @@ in a diff with no accompanying example.
 
 ## Reusable package ships a README (Production)
 
-Scope to the module root and each public sub-package; never demand one per
-file. Detect: a package meant for outside consumption whose directory has
-neither a `README.md` nor a `doc.go` overview beyond a one-line synopsis, or
-one missing the essentials (purpose, import path, one runnable snippet).
+Scope to the module root and each public sub-package; never demand one per file.
+Detect: a package meant for outside consumption whose directory has neither a
+`README.md` nor a package-godoc overview — in the package-named file, or
+`doc.go` when none exists — beyond a one-line synopsis, or one missing the
+essentials (purpose, import path, one runnable snippet).
 
 ## Package godoc lives in the package-named file (Production)
 
-Relation: the README rule accepts a `doc.go` overview as a README substitute
-only when no package-named file exists to host it. Detect: a `doc.go` whose
-sole content is the package doc comment while a package-named file exists —
-move the comment there and delete `doc.go`.
+Relation: the README rule accepts a package-godoc overview as a README
+substitute wherever this rule puts it, so the two never conflict. Detect: a
+`doc.go` whose sole content is the package doc comment while a package-named
+file exists — move the comment there and delete `doc.go`.
 
 ## Output belongs to the entry point, not leaf functions (Production)
 
