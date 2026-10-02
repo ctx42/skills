@@ -25,7 +25,7 @@
       "expected_behavior": [
         "Resolves the target, the line limit and tab width, and lists the files in scope on the report's first line; reads `references/checking.md`",
         "Reasons only for detection — runs no gofmt, vet, or linter",
-        "Opens only the `rules.md` entries for the rules it flags — the file is never read whole, which is visible in the commands the run issued",
+        "Opens only the `rules.md` entries for the rules it flags — the file is never read whole, which is visible in the commands the run issued. UNVERIFIABLE, not PASS, when the runner read `rules.md` whole before this scenario's invocation (a shared start-of-run read for several scenarios)",
         "Reports style offenses only: the off-by-one is left to `go:review`, not reported here",
         "Groups findings Blocker / Should-fix / Nit with `file:line`, the rule id, and a minimal fix; ends with a clean / fix-first verdict and per-severity counts",
         "Asks which offenses to apply rather than editing unprompted"
@@ -108,7 +108,7 @@
         "Still runs the pick step: a budget supplied on the invocation agreed the budget, not the fixes, so the run asks which offenses to apply and edits no file until told which",
         "Derives ids by the documented steps: the four rules broken in every package come back as `wrap-errors-w`, `receivers-three-letter-type`, `every-exported-symbol`, and `separate-distinct-topics`; a negation survives (`No work in init()` gives `no-work-init`, never `work-init`); a dotted identifier contributes only the part before its dot",
         "The final report grades identical code identically: across the packages that differ only in their package name, every rule it reports on one it reports on all, with no rule reported in a minority of them — the missing blank line between two `--- Given ---` topic groups among them. Graded on the report the user sees, not on the worker reports",
-        "Resolves a split before reporting it: where the worker reports flag a rule in some of the identical packages and not others, or its sites prescribe opposing fixes, the run shows a re-check of the disagreeing packages — what it searched for and what it found — in the reply or in a file it saved before the reply, and the report carries the reconciled count rather than the raw spread. Passes trivially when the worker reports agree",
+        "Resolves a split before reporting it: every rule flagged in some packages but not all — at least the six offenses only two packages hold — gets a re-check of the packages that did not flag it, shown (what it searched for and what it found) in the reply or in a file it saved before the reply, and the report carries the reconciled count rather than the raw spread. FAIL when no such re-check is shown",
         "No folded finding prescribes inserting what another of its own sites prescribes deleting",
         "Flags no blank-line offense for an `assert.NoError` sitting next to the `assert.Equal` that checks the same call's result: one `--- When ---` call's returns are one subject",
         "Every offense quotes the source text that triggered it, so a reader can tell a located offense from a pattern-matched one"
