@@ -18,7 +18,7 @@ skill that passed the gate this session reuses that result.
 | `kb`           | knowledge-base folder; confirmed facts land in `<kb>/_inbox.md` |
 | `initiatives`  | SRD folder, one folder per SRD                                  |
 | `srd-standard` | document id of the SRD standard, read with `get_doc`            |
-| `glossary`     | the Company Glossary location (a file or a folder)              |
+| `glossary`     | Company Glossary location; GLO-4/5 links must point under it    |
 
 Every srd skill needs all five: each one delegates to the others. Every path is
 relative to the project root; an absolute path is invalid.
