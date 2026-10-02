@@ -204,8 +204,8 @@ Draft the page that fixes the user manual; a human publishes it.
    find there. When nobody can publish in this sitting, resolve nothing: say
    where the draft is and that the gaps stay `open` until it lands, since a gap
    resolved against an unpublished draft reads as done to everyone after. Say
-   that the corpus reflects the page only after the next sync and server
-   restart.
+   that the corpus reflects the page only after the next sync, plus a server
+   restart unless the server watches its sources.
 7. Park instead of steps 5–6 when the user decides the fact stays in the KB for
    now — no page planned this sitting. Only once `srd:kb` has written the
    section and the file exists under the KB root: `mark_gap_kb` for every gap in

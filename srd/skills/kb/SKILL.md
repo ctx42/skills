@@ -100,12 +100,14 @@ accepting a bad one because the question was already spent.
 
 The KB is one source in the `srd-doc` corpus the other SRD skills read; reach
 it per the backends in the shared corpus reference. Two facts about it govern
-every decision below. **A running server never re-reads its sources**, so a
-page written now is not searchable until the server restarts — say so once
-when it matters, and never conclude a page is missing because a just-written
-page does not appear. And **search returns sections, not pages**: a `##`
-section arrives at an agent alone, stripped of the rest of its file. Anything
-a reader must know to trust a fact has to sit inside the same section.
+every decision below. **A page written now is searchable only after a
+re-index**: a server with watching enabled rebuilds shortly after a change,
+one without never re-reads its sources until restarted. Verify a write with
+`search` rather than assuming; when a just-written page does not appear,
+re-check once, then say a restart may be needed — never conclude the page is
+missing. And **search returns sections, not pages**: a `##` section arrives at
+an agent alone, stripped of the rest of its file. Anything a reader must know
+to trust a fact has to sit inside the same section.
 
 ### Authority
 
