@@ -66,7 +66,8 @@ caller's own findings:
 When unsure, ask whether the deficiency is in the SRD or in the docs; only the
 latter becomes a draft. A fact the corpus lacks but the user confirms is also
 tribal knowledge for `srd:kb`: one fact may be both, and the caller sends it to
-both.
+both — invoked directly, this skill hands a fact the grill confirmed to
+`srd:kb` itself.
 
 ## The gap tools
 
@@ -173,18 +174,17 @@ write in one sitting are one gap; a reviewer reading two records that resolve
 together learns nothing the first did not say.
 
 Before capturing, check every draft (`list_gaps`, `status: draft`, no `srd_ref`
-filter — another SRD's draft may hold the same fact): if it is already a
-draft, merge into it with `update_gap` rather than
-duplicate: union `search_terms`, keep the richer `detail` and `target_claim`,
-keep the earliest `demand` and add the new one if it differs, each in the words
-its capture recorded — the merge writes no sentence of its own — keep the
-existing `kind` unless the new capture is strictly more specific (`missing`
-yielding to `wrong` or `ambiguous`, never the reverse — the second finder saw
-the same absence, not a different one), append to `srd_ref` comma-separated
-since one gap can block two SRDs, and keep the `doc_id`/`heading_path`/
-`source_url` already set — a later capture that found nothing must not blank a
-pointer an earlier one recorded. Repeats are a priority signal the reviewer
-reads, not new gaps.
+filter — another SRD's draft may hold the same fact): if it is already a draft,
+merge into it with `update_gap` rather than duplicate: union `search_terms`,
+keep the richer `detail` and `target_claim`, keep the earliest `demand` and add
+the new one on its own line if it differs, each in the words its capture
+recorded — the merge writes no sentence of its own — keep the existing `kind`
+unless the new capture is strictly more specific (`missing` yielding to `wrong`
+or `ambiguous`, never the reverse — the second finder saw the same absence, not
+a different one), append to `srd_ref` comma-separated since one gap can block
+two SRDs, and keep the `doc_id`/`heading_path`/ `source_url` already set — a
+later capture that found nothing must not blank a pointer an earlier one
+recorded. Repeats are a priority signal the reviewer reads, not new gaps.
 
 ### C. Grill at chosen depth
 
@@ -219,7 +219,7 @@ Show the finder the assembled record and file only on their yes. Ask so that
 all three answers are on offer — file it, change something first, or drop it —
 rather than a bare "File it?", which reads as yes-or-no and buries the
 correction path the next two sentences depend on. On a correction, `update_gap`
-and re-show; on a no, `discard_gap`.
+and re-show the whole record; on a no, `discard_gap`.
 
 A discard is a decision, not a deletion: say what was dropped, and record the
 topic in the caller's output — in this skill's own reply when the user invoked
