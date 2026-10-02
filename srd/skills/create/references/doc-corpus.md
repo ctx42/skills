@@ -52,14 +52,15 @@ Default to `search` with `k` about 5; `get_doc` only when a hit needs its full
 table or context; `list_docs` to orient. Every backend is read-only: it queries
 the docs, never edits the SRD.
 
-A source pointer is a document id: the string `get_doc` accepts, which is not
-the path the file has in a checkout. Ids are namespaced by source — `ifp-doc/`,
-`user-doc/`, `kb/` — so one page is `docs/infraport/formats/x.md` on disk and
-`ifp-doc/formats/x.md` in the corpus. Record the id. Checking a path-shaped
-citation against `list_docs` finds no match for any of them and reports a whole
-page of live sources as stale; that is a defect in the comparison, not a stale
-citation. Strip the checkout prefix (`docs/infraport/formats/x.md` →
-`formats/x.md`); a citation is stale only when no id ends in the rest.
+A source pointer is a document id: the string `get_doc` accepts. An id is the
+source name plus the file's path inside that source — `confluence/`,
+`initiatives/`, `kb/` — so one page is `confluence/infraport/formats/x.md` in
+the corpus. Record the id, not a checkout path: where a source's name differs
+from its directory the two differ, and checking a path-shaped citation against
+`list_docs` then finds no match and reports a whole page of live sources as
+stale; that is a defect in the comparison, not a stale citation. Strip the
+checkout prefix down to the path inside the source; a citation is stale only
+when no id ends in the rest.
 
 ## Trust
 

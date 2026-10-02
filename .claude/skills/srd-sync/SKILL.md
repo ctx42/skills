@@ -28,12 +28,12 @@ that writes it. Maintainer task: it needs the cfsync mirror in the private
 
 ## Files
 
-| Role            | Path                                                                                                 | Load    |
-|-----------------|------------------------------------------------------------------------------------------------------|---------|
-| Source (mirror) | `$SRD_STANDARD_SRC`, else `~/ws/vr/docs/docs/infraport/guidelines_for_software_requirements_documents.md` | (eager) |
-| Generated copy  | `srd/skills/create/references/srd-standard.md`                                                       | (eager) |
-| Header frame    | `dev/srd-standard.header.md`                                                                         | (eager) |
-| Footer frame    | `dev/srd-standard.footer.md`                                                                         | (eager) |
+| Role            | Path                                                                                                            | Load    |
+|-----------------|-----------------------------------------------------------------------------------------------------------------|---------|
+| Source (mirror) | `$SRD_STANDARD_SRC`, else `~/ws/vr/docs/confluence/infraport/guidelines_for_software_requirements_documents.md` | (eager) |
+| Generated copy  | `srd/skills/create/references/srd-standard.md`                                                                  | (eager) |
+| Header frame    | `dev/srd-standard.header.md`                                                                                    | (eager) |
+| Footer frame    | `dev/srd-standard.footer.md`                                                                                    | (eager) |
 
 The copy's provenance banner (below) is the sole record of the source version
 it was generated from; read it with

@@ -14,16 +14,16 @@ a directory of Markdown documents.
 One name, one document set: **the Company Glossary is the per-project glossary
 this procedure resolves**, and only the terms in its digest satisfy GLO-3 /
 STR-10. The documentation corpus carries glossary documents of its own
-(`ifp-doc/glossary/…`); those are corpus sources, consulted for what a term
-means, and are never the known-term set. A term defined only there is a term
-the SRD must define locally — say so once when it happens ("`Packet (PKT)` is
-defined in `ifp-doc/glossary/main_glossary.md`, which is not the resolved
-glossary; defining it locally"), and take a correction as the path override of
-step 3. Never call a corpus glossary the Company Glossary, and never let a
-corpus definition stand in for a glossary entry. Its path, a content hash, and a
-model-synthesized **digest** of its terms are remembered per project (see
-[Glossary memory](#glossary-memory)), so the digest is rebuilt only when the
-glossary actually changes. Run this before drafting or editing:
+(`confluence/infraport/glossary/…`); those are corpus sources, consulted for
+what a term means, and are never the known-term set. A term defined only there
+is a term the SRD must define locally — say so once when it happens ("`Packet
+(PKT)` is defined in `confluence/infraport/glossary/main_glossary.md`, which is
+not the resolved glossary; defining it locally"), and take a correction as the
+path override of step 3. Never call a corpus glossary the Company Glossary, and
+never let a corpus definition stand in for a glossary entry. Its path, a content
+hash, and a model-synthesized **digest** of its terms are remembered per project
+(see [Glossary memory](#glossary-memory)), so the digest is rebuilt only when
+the glossary actually changes. Run this before drafting or editing:
 
 1. Read the glossary memory for this project.
 2. No record (first run) → ask the user for the glossary path and save it.
