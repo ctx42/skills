@@ -37,7 +37,7 @@ built in, never a bare file move.
      past `draft`: report each stale `doc_id` with its gap id and the value it
      should take, for the user to fix. A restructure is not blocked by it — the
      move proceeds and the list goes in the report.
-   - `kb_ref` values on gaps parked as `kb` (`list_gaps` with `status: kb`),
+   - `kb_entry.ref` values on gaps parked as `kb` (`list_gaps` with `status: kb`),
      which point at a KB page and anchor. Report each
      stale one the same way as a stale `doc_id`.
 4. Report what moved and what was repaired, counted.

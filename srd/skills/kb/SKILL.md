@@ -98,7 +98,10 @@ writes:
 
 - A conflict is a finding, never a silent tie-break. When an attested fact
   contradicts a corpus document, either the document is stale or the KB is
-  wrong. Surface it; hand a stale document to `srd:report-doc-gap`.
+  wrong. Surface it; hand a stale document to `srd:report-doc-gap`. A fact the
+  user confirmed against it is written without a further question, its
+  attestation line opening `> Contradicts <doc_id>.` in place of `> Not in the
+  platform docs.`
 - A KB page links to a glossary term; it never redefines one.
 
 ## Invocation
@@ -107,7 +110,8 @@ Every mode runs the gate first. The first token is a mode word; the next is the
 SRD path when one is in play. Callers pass both. With no arguments, default to
 capture.
 
-With no SRD named and no caller to name one, the session itself is the source:
+An SRD path the conversation states counts as named. With no SRD named and
+no caller to name one, the session itself is the source:
 take what this conversation attested and attest it to the session rather than
 to an SRD — do not infer an id from the conversation to fill the slot, which
 invents a provenance nobody can check. The `*` in the argument hint marks the
@@ -220,7 +224,7 @@ holds a fact a topic page would take.
 4. Move each section with everything bound to it and repair every reference
    the move breaks, as [references/restructure.md](references/restructure.md)
    steps 2–3 say: a moved section's id changes, and `_open-questions.md` rows
-   and gap `kb_ref` values may point at it.
+   and gap `kb_entry.ref` values may point at it.
 5. Report what moved where, counted.
 
 Append by default. Two half-pages on one subject are strictly worse than one
@@ -279,8 +283,10 @@ Body rules:
   `srd:report-doc-gap` actually filed one and returned an id. Most captures
   have none — a fact can be missing from the docs without anyone reporting
   that as a gap — so omit the segment rather than inventing a number or
-  holding the write until a gap exists. Where there is no SRD in play (a bare
-  capture), name the session instead: `Attested session 2026-09-11`.
+  holding the write until a gap exists. When a gap for the fact is filed
+  later in the same session, add its id to the line then. Where there is no
+  SRD in play (a bare capture, a `/backlog` sitting), name the session
+  instead: `Attested session 2026-09-11`.
 
   A page-level provenance table cannot do this job: it is its own chunk, and an
   agent reading a fact never receives it.
@@ -328,7 +334,9 @@ takes the wording too.
 On meeting a question that is already open, **bump its hit count** rather than
 adding a row: repeats are a priority signal, the same way repeated gap reports
 are. On closing one, move the row to `## Closed` with the answer and the page
-that now states it, so the next session does not re-open it.
+that now states it, so the next session does not re-open it; its `Lives in`
+points at the section holding the answer, never at an `## Open questions`
+heading the close may remove.
 
 `srd:backlog` works this list and hands every row change here: close a row as
 answered (with the answer and the page) or as moot (with the reason), or change
