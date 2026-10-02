@@ -44,8 +44,8 @@
       "id": 5,
       "name": "writes-to-the-inbox-at-confirmation",
       "expected_behavior": [
-        "Writes nothing at discovery — no file, no corpus call, no question to the user",
-        "Once the restatement is confirmed, appends the fact to `kb/_inbox.md` as its own `##` section with the attestation line and no `## Provenance` row, before the interview moves on",
+        "`srd:kb` writes nothing and runs no duplicate-check search until the restatement is confirmed, and asks the user nothing; the caller's own interview lookup and draft-gap capture do not count",
+        "Once the restatement is confirmed, appends the fact to `kb/_inbox.md` as its own `##` section with the attestation line and a row in the inbox's `## Provenance` table, before the interview moves on",
         "Writes it to no topic page and creates no new page",
         "Asks no \"bank this?\" question at any point"
       ]

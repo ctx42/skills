@@ -15,12 +15,12 @@ built in, never a bare file move.
    any of its entries under `## Open questions`. A section that arrives
    stripped of its attestation line is silently an unsourced claim.
 
-   Moving out of `_inbox.md` is the case with nothing to carry: the inbox has
-   no `## Provenance` table, and a question that lived in the index alone has
-   no wording on the page. Write both on arrival, from the attestation line and
-   the `_open-questions.md` row, rather than leaving the new page short of what
-   every other page has — a promoted fact that loses its provenance row is the
-   same unsourced claim by a slower route.
+   Moving out of `_inbox.md` carries the section's inbox `## Provenance` row
+   like any other move. What it cannot carry is a question that lived in the
+   index alone, with no wording on the page: write that wording on arrival,
+   from the `_open-questions.md` row, rather than leaving the new page short of
+   what every other page has. A promoted fact that loses its provenance row is
+   an unsourced claim by a slower route.
 3. Repair every inbound reference in the same pass. Five kinds, all greppable
    in the `kb` folder except the gap-store ones:
    - Page links between KB pages.

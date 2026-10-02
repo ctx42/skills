@@ -177,19 +177,22 @@ or drop the citation and mark the fact as attested only) and report the page.
 
 For each confirmed fact, in order:
 
-1. Search before writing. Query the corpus for the fact's own words:
+1. Search before writing — here, after confirmation, never at discovery; a
+   lookup the caller ran during its interview does not count. Query the
+   corpus for the fact's own words:
    - The platform docs already state it — do **not** write. It is not tribal.
      If the docs state it *wrongly*, that is a doc gap, not a KB entry.
    - A KB page or inbox section already states it — do not write a twin. On a
      page, bump `last_verified` and append the SRD to `srd_ref` when the source
      differs; in the inbox, add the SRD and date to the section's attestation
-     line instead.
+     line and its `## Provenance` row instead.
    - Otherwise it is new.
 2. Append it to `<kb>/_inbox.md` as its own `##` section: a subject-titled
    heading, the attestation line (see [Page anatomy](#page-anatomy)), the
-   fact. The inbox carries only `title` and `cfsync-plugin: ignore-push` in
-   its front matter and has no `## Provenance` table — each section's
-   attestation line is its provenance; create the file that way when missing.
+   fact — and its row in the inbox's `## Provenance` table. The inbox's front
+   matter carries `title`, `cfsync-plugin: ignore-push`, and `last_verified`
+   (each write bumps it), never `srd_ref`: each section's attestation line
+   names its source. Create the file that way when missing.
    Never to a topic page or a category invented at this moment: filing is
    [File](#file)'s job. The inbox is indexed and retrievable, so nothing waits
    on a filing decision.
@@ -288,8 +291,8 @@ Body rules:
   page or appends a section to one: a roll-up nobody maintains indexes a page
   that has moved on. A citation repair updates the row of the fact it
   repairs; it adds none. A page with no `## Provenance` yet gets one on the
-  first write that touches it. The inbox is the exception: it has none, and a
-  section filed out of it gets its row on arrival.
+  first write that touches it. The inbox keeps one too, and a section filed
+  out of it carries its row along.
 - `## Open questions` holds what this page's subject leaves unanswered. See
   [Open questions](#open-questions) below.
 
