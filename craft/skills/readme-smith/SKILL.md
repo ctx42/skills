@@ -107,7 +107,9 @@ unnoticed defect.
 
 2. Ask only the gaps. List what code cannot reveal — positioning (what problem,
    for whom), audience, notable features to lead with, roadmap — and ask in one
-   batched round. Do not ask what the repo already answers.
+   batched round, a numbered list, then stop: draft only once the user has
+   answered. A TODO marker is for what the answers left open, never a stand-in
+   for a question not yet asked. Do not ask what the repo already answers.
 
 3. Draft from the blueprint in `references/template.md`. A fact neither the
    scan nor the answers yielded is a `<!-- TODO: … -->` marker, never a guess.
