@@ -2,6 +2,6 @@
 type: regex
 target: last_message
 match: not_contains
-flags: "s"
+flags: "m"
 ---
-\*\*Q\d+\*\*[^*]{0,500}\?
+^(?![ \t]*>)[^\n]*\*\*Q\d+:?\*\*[^\n]*\?

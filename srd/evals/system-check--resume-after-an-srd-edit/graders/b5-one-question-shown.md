@@ -2,5 +2,6 @@
 type: regex
 target: last_message
 match: "count:1"
+flags: "m"
 ---
-\*\*Q\d+\*\*
+^\*\*Q\d+:?\*\*[^\n]*\?\s*$

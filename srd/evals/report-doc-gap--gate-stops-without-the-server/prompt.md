@@ -4,6 +4,8 @@ runs: 1
 max_turns: 20
 timeout_seconds: 300
 allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, WebFetch]
+append_system_prompt: |
+  The user writes English; reply in English.
 ---
 
 /srd:report-doc-gap specs/gateway.md

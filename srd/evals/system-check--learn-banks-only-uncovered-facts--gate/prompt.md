@@ -5,6 +5,7 @@ max_turns: 40
 timeout_seconds: 300
 allowed_tools: [Read, Glob, Grep, Skill, Write, Edit]
 append_system_prompt: |
+  The user writes English; reply in English.
   Session so far, before the user typed the command: a debugging session on
   failed Sound File imports. `specs/labeling.md` is open in the editor and was
   mentioned once, but the session is not SRD work.

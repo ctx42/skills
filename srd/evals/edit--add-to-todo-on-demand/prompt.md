@@ -5,6 +5,7 @@ max_turns: 60
 timeout_seconds: 300
 allowed_tools: [Read, Glob, Grep, Skill, Write, Edit]
 append_system_prompt: |
+  The user writes English; reply in English.
   Session so far: the user ran `/srd:edit specs/login.md`. The srd:edit skill
   front-loaded its issue summary and the user skipped (`S`) its one proposal,
   on GR-2. The edit session on specs/login.md is still running: load the

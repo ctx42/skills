@@ -4,6 +4,8 @@ runs: 1
 max_turns: 40
 timeout_seconds: 300
 allowed_tools: [Read, Glob, Grep, Skill, Write, Edit]
+append_system_prompt: |
+  The user writes English; reply in English.
 ---
 
 /srd:create Per-client request rate limiting at the API Gateway for external API clients, written to specs/gateway.md. The API Gateway already identifies each external API client by its API key, sent in the X-Api-Key request header, and each external client has exactly one active API key.
