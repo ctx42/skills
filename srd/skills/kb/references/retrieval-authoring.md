@@ -1,11 +1,15 @@
 # Authoring a page for retrieval
 
-<!-- MIRRORED FILE — these rules mirror srd-mcp-doc/docs/authoring.md, which
-     documents the indexer that actually chunks and ranks these pages. Mirrored
-     from commit 538eb93 (2026-07-14). The copy is deliberate: the skills must
-     work without the server repo checked out. When the server's chunking or
-     ranking changes, update this file and bump the commit above — otherwise
-     every page written against it chunks or ranks wrongly, and silently. -->
+<!-- MIRRORED FILE — these rules mirror the srd-mcp-doc README section
+     "Writing documents that search well", which documents the indexer that
+     actually chunks and ranks these pages. Checked against commit 5f41353
+     (2026-10-02). The copy is deliberate: the skills must work without the
+     server repo checked out. When the server's chunking or ranking changes,
+     update this file and bump the commit above — otherwise every page written
+     against it chunks or ranks wrongly, and silently. Deliberate departures:
+     the citation rule omits the Confluence body-link preference the
+     server is dropping (front-matter `url` already wins); the target_claim
+     note and "Absent vs unfindable" are skill-side additions. -->
 
 Pages written for the `srd-doc` corpus — knowledge-base pages, and doc-gap
 drafts — are retrieved by **BM25 keyword search over section chunks**, with no
@@ -25,8 +29,8 @@ it indexes and ranks well.
 
 ## Title and names
 
-- Give the page a descriptive title — it indexes into the boosted title field
-  for every chunk.
+- Give the page a descriptive front-matter `title` — it indexes into the
+  boosted title field for every chunk.
 - Name the file/page for its topic; `_`, `-`, and `/` split into searchable
   terms.
 - Declare synonyms once in front-matter `aliases` (they index as extra title
@@ -39,15 +43,19 @@ it indexes and ranks well.
   searching for its words. For a doc-gap draft, write the gap's exact
   `target_claim` as a plain declarative sentence.
 - Prefer one canonical term per concept; scattered names split matches.
-- Keep glossary-style definitions one per `##` heading.
+- Keep glossary-style definitions one per `##` heading — each becomes its own
+  chunk and a `glossary_terms` entry.
 
 ## Links and tables
 
-- Put the canonical URL first in the body — a citation uses the first
-  `atlassian.net` link, else the first `http(s)` URL. A draft written before
-  publication has no such URL yet: leave the line as a marked placeholder and
-  fill it when the page is published, rather than citing a URL that does not
-  resolve or silently shipping a page with no citation at all.
+- Set the canonical URL as front-matter `url`; without it, the citation is
+  the first `http(s)` URL in the body, so an incidental link placed earlier
+  becomes the wrong citation.
+- A draft written before publication has no canonical URL yet: leave `url`
+  out — the server cites it as given, so a placeholder there becomes the
+  citation — and put a marked placeholder line in the body that is not an
+  `http(s)` URL; set `url` when the page is published, rather than citing a
+  URL that does not resolve or silently shipping a page with no citation.
 - Give tables real column headers and a one-line caption sentence; bare pipe
   cells tokenize poorly.
 

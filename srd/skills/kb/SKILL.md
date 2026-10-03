@@ -62,8 +62,8 @@ memory.
   confirm / write contract every caller relies on.
 - [references/retrieval-authoring.md](references/retrieval-authoring.md)
   (on-demand: before writing or editing a page) — how to write Markdown that
-  the BM25 corpus chunks and ranks well. Mirrors the server's own
-  `docs/authoring.md`; every page obeys it.
+  the BM25 corpus chunks and ranks well. Mirrors the server README's
+  *Writing documents that search well*; every page obeys it.
 
 ## The KB folder
 
