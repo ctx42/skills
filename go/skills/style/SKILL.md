@@ -109,6 +109,8 @@ its full text.
   package-godoc rule above.
 - Domain-agnostic, typeless helpers (`fileExists`, `isDigits`) live in
   `helpers.go`, their tests in `helpers_test.go` — mirrors `all_test.go`.
+- Declare an empty slice as `var s []T` (nil) or `make([]T, 0)` (non-nil),
+  never `s := []T{}`.
 
 ### Godoc & comments
 
@@ -180,8 +182,14 @@ its full text.
   positional in field order — never add field-name keys.
 - Keep the table-test loop body branch-free — every row runs the same
   assertions; move any case needing different assertions to its own test.
-- Prepare every value passed to the `--- When ---` call in `--- Given ---`;
-  never construct an argument inline in the call.
+- Build a non-trivial `--- When ---` argument (composite literal, multi-step
+  value) in `--- Given ---`; keep literals, variables, dereferences, field
+  reads and simple calls inline unless the call would exceed the line limit;
+  never move the call under test out of `--- When ---`.
+- Use `t.Context()`, never `context.Background()`; pass it inline in the
+  `--- When ---` call, and hoist `ctx := t.Context()` only when used more than
+  once or inlining exceeds the line limit, then as the first `--- Given ---`
+  line.
 - Omit the `--- Given ---` marker when the subtest has no arrange step;
   never leave an empty `--- Given ---` section.
 - Declare those `--- Given ---` argument variables in the same left-to-right
@@ -189,14 +197,20 @@ its full text.
   declaration.
 - Separate distinct topics within a `--- Given ---`/`--- Then ---` block with a
   blank line; group statements by the subject they set up or verify; no blank
-  line between consecutive same-subject assertions. The subject is the value
-  being set up or asserted about, not the call that produced it: everything
-  returned by one `--- When ---` call is one subject, so an `assert.NoError` and
-  the `assert.Equal` checking that call's result take no blank line between
-  them, while a second collaborator's setup, a receiver field or argument the
-  call mutated, or a second value's assertions take one. Check every such block
-  with two or more subjects: label each statement with its subject first, then
-  flag each boundary with no blank line and each blank line inside a subject.
+  line between consecutive same-subject assertions. A subject includes every
+  statement that configures it (files written into a fixture dir and their
+  content values, a chdir into it, env set on a ring); consecutive standalone
+  declarations of distinct subjects run together, multi-line literals and one
+  built from the previous (`items := []T{tgt}`) included. The subject is the
+  value being set up or asserted about, not the call that produced it:
+  everything returned by one `--- When ---` call is one subject, so an
+  `assert.NoError` and the `assert.Equal` checking that call's result take no
+  blank line between them, nor do assertions on a receiver, argument or output
+  the call mutated, nor a `--- Then ---` local or comment; in `--- Then ---`
+  only a second action (a further call on the result, such as `Execute`) takes
+  one. Check every such block with two or more subjects: label each statement
+  with its subject first, then flag each missing blank line around a
+  multi-statement subject and each blank line inside a subject.
 - In `foo_test.go` with a matching `foo.go`, test functions follow the
   declaration order of their subject in `foo.go`; `Test_Foo` precedes
   `Test_Foo_tabular`; files without a 1-to-1 name match are exempt.
@@ -229,10 +243,9 @@ its full text.
   paths; a dispatch test must observe an outcome only that branch yields.
 - Match several substrings of one error with one `ErrorRegexp("a.*b")`, not
   stacked `ErrorContain` calls.
-- Hoist a literal into a `want` (or other) local only to keep the line within
-  the limit; when the inlined form fits, inline it at each use even if
-  repeated. A `--- When ---` argument is the exception: `--- Given ---`
-  prepares it whatever its length.
+- Hoist a literal or a readback (file read, path join) into a local only to
+  keep the line within the limit; when the inlined form fits, inline it at each
+  use even if repeated.
 - Hoist a multi-line structured-data literal (JSON, YAML) passed to a call into
   a pretty-printed backtick raw-string local; don't inline it or split it across
   `+`-joined segments to fit the line limit.
@@ -268,6 +281,10 @@ its full text.
 - When a test guards a struct's field count, a new field must both bump the
   count and gain an assertion in the same change — never bump the count alone.
 - Cover error paths and edge cases, not just the happy path.
+- Don't chase coverage: skip tests of `//go:build ignore` tools and of a test
+  helper's trivial error branches that need platform tricks (a fake binary on
+  `PATH`, `chmod 0`, a removed working directory); never add a production
+  override (env var, hook, parameter) only so a test can reach a branch.
 
 ## Self-learning
 

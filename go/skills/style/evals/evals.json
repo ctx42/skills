@@ -118,7 +118,7 @@
       "skills": [
         "style"
       ],
-      "setup": "An 8-package module, byte-identical apart from the package name except in one test: four packages have a `--- Given ---` block with no blank line between two distinct subjects (two variables, each with its own setup), and the other four have a blank line splitting one `--- Then ---` subject (an `assert.NoError` and the `assert.Equal` checking the same call's result). So one rule is broken at eight sites, four needing a blank line inserted and four needing one deleted — both directions genuinely right where they are. Every package also has a correct blank line between two distinct `--- Then ---` subjects. Nothing else in the module breaks any rule.",
+      "setup": "An 8-package module, byte-identical apart from the package name except in one test: four packages have a `--- Given ---` block with no blank line between two distinct subjects (two variables, each with its own setup), and the other four have a blank line splitting one `--- Then ---` subject (an `assert.NoError` and the `assert.Equal` checking the same call's result). So one rule is broken at eight sites, four needing a blank line inserted and four needing one deleted — both directions genuinely right where they are. Every package also has a correct blank line in `--- Then ---` before a second action (a further call on the `--- When ---` result, asserted on its own). Nothing else in the module breaks any rule.",
       "query": "/style ./... max_issues=25 depth=standard",
       "files": []
     }

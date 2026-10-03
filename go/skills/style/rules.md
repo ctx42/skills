@@ -28,6 +28,7 @@ when about to flag its rule; never preload the file. Grows via
 - Test helpers in all_test.go (Test)
 - Test order mirrors source order (Test)
 - Field-count guard forces new-field coverage (Test)
+- Cover error paths and edge cases (Test)
 
 ## Lines fit the limit (Production + Test)
 
@@ -92,9 +93,10 @@ an unexported identifier; when editing a comment, fix the whole comment.
 
 ## Example functions for public APIs (Production)
 
-Non-trivial means a constructor, a primary entry point, or anything needing
-non-obvious setup; trivial getters, setters, and self-evident one-liners are
-exempt. Detect: such a symbol with no matching `Example`, `ExampleT`, or
+Non-trivial means correct use takes more than one call (construct then use, a
+call sequence) or a non-obvious argument; a func used in one self-evident call
+— a ~6-line `Load(path)` — is trivial, as are getters, setters, and one-liners.
+Detect: such a symbol with no matching `Example`, `ExampleT`, or
 `ExampleT_method` in the package's `_test.go` files — typically new public API
 in a diff with no accompanying example.
 
@@ -159,7 +161,13 @@ flagging a missing blank line against four calling a correct one surplus: same
 rule, same severity, opposite edits. The line settles the `--- Then ---`
 subject; in `--- Given ---` it is the variable being declared, which the
 sibling rule "keep a variable's setup next to its declaration" already fixes —
-its setup lines belong to it, and the next declaration opens the next subject.
+its setup lines belong to it, as does any later statement that configures it
+(a chdir into a fixture dir, an `EnvSet` on a ring, a `Parse` on a flag set),
+and the next unrelated declaration opens the next subject. A blank line between
+a flag set, its flag and its `Parse` is over-separation, not a boundary. In
+`--- Then ---` everything that observes the `--- When ---` call (results,
+mutated arguments, captured output, locals and comments) is one run; only a
+second action on the result opens a new group.
 
 ## Don't wrap a one-liner in a test helper (Test)
 
@@ -204,3 +212,10 @@ The guard is `assert.Fields(t, N, T{})`: it fails when `T` gains or loses a
 field so the author must update the per-field assertions. Detect: a diff that
 changes `N` (or adds a struct field) without adding an assertion referencing the
 new field in the same change.
+
+## Cover error paths and edge cases (Test)
+
+Flag only an error return, or an edge case the godoc names, that no test
+reaches; an untested branch the godoc is silent on is coverage work for
+`go:cover`, not a style offense. Detect: per such return or named case, grep the
+package's `_test.go` files for an input that drives it.

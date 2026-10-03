@@ -25,7 +25,7 @@
       "expected_behavior": [
         "Resolves the target, the line limit and tab width, and lists the files in scope on the report's first line; reads `references/checking.md`",
         "Reasons only for detection — runs no gofmt, vet, or linter",
-        "Opens only the `rules.md` entries for the rules it flags — the file is never read whole, which is visible in the commands the run issued. UNVERIFIABLE, not PASS, when the runner read `rules.md` whole before this scenario's invocation (a shared start-of-run read for several scenarios)",
+        "Opens only the `rules.md` entries for the rules it flags — the file is never read whole, which is visible in the commands the run issued.",
         "Reports style offenses only: the off-by-one is left to `go:review`, not reported here",
         "Groups findings Blocker / Should-fix / Nit with `file:line`, the rule id, and a minimal fix; ends with a clean / fix-first verdict and per-severity counts",
         "Asks which offenses to apply rather than editing unprompted"
@@ -89,8 +89,8 @@
       "id": 10,
       "name": "severity-and-ids-are-stable",
       "expected_behavior": [
-        "Gives the same offense the same severity in all three packages, decided from the rubric rather than per-package judgement",
-        "Gives the same offense the same rule id in all three packages, taken from the `rules.md` key rather than coined per package",
+        "Gives the same offense the same severity in all three packages",
+        "Gives the same offense the same rule id in all three packages — the `rules.md` key, never a coined one",
         "Puts the missing exported godoc at Blocker and the receiver naming at Should-fix, per the rubric"
       ]
     },
@@ -104,7 +104,7 @@
         "Folds by rule id before cutting: the godoc rule broken in all eight packages is one finding listing eight, not eight findings",
         "Cuts nothing: the ten folded findings fit under the cap of 25, so the report carries all ten and says no offense went unreported — a cap applied before folding would have dropped 13 of the 38",
         "The merged report carries each rule under exactly one id and one severity across all eight packages — no rule appearing in two spellings or two tiers, and no note reconciling id or severity spellings at the end",
-        "Reports the raw total as the sum of the worker reports plus any adjustment the merge made, each adjustment itemised — add the eight figures and the itemised adjustments up and the reported total equals them, rather than being carried from the plan or from the planted count — and says how many went unreported after folding and cutting",
+        "Reports the raw total as the sum of the worker reports plus any adjustment the merge made, each adjustment itemised — add the eight figures and the itemised adjustments up and the reported total equals them, rather than being carried from the plan or from the planted count",
         "Still runs the pick step: a budget supplied on the invocation agreed the budget, not the fixes, so the run asks which offenses to apply and edits no file until told which",
         "Derives ids by the documented steps: the four rules broken in every package come back as `wrap-errors-w`, `receivers-three-letter-type`, `every-exported-symbol`, and `separate-distinct-topics`; a negation survives (`No work in init()` gives `no-work-init`, never `work-init`); a dotted identifier contributes only the part before its dot",
         "The final report grades identical code identically: across the packages that differ only in their package name, every rule it reports on one it reports on all, with no rule reported in a minority of them — the missing blank line between two `--- Given ---` topic groups among them. Graded on the report the user sees, not on the worker reports",
@@ -122,7 +122,7 @@
         "Reports the blank-line topic rule as one finding under one id and one severity, listing all eight packages",
         "Keeps each site's own fix: the four packages missing a blank line get an `insert`, the four with a surplus one get a `delete` — no site's fix replaced by the majority's or by one prescription for all eight",
         "Shows a re-check of the opposing sites against the source — what it searched for and what it found — in the reply or in a file it saved before the reply, before the report",
-        "Flags no offense at the correct blank line between the two distinct `--- Then ---` subjects present in every package",
+        "Flags no offense at the correct blank line before the second action in `--- Then ---` present in every package",
         "Every fix opens with its verb, so the direction at each site reads without parsing prose",
         "Edits no file before the pick step; if fixes are picked, the four missing packages gain exactly one blank line and the four surplus packages lose exactly one, and nothing else in any file changes"
       ]

@@ -49,9 +49,12 @@ Read these from `$ARGUMENTS` (any order, after the target):
 Default to plan-first for a broad target with no budget: propose defaults (the
 caps above, the package list) and ask before applying anything. Either
 `packages=` or `max_issues=` is a budget; `depth=` alone is not. Broad means the
-run would fan out — more than ~6 packages, the same threshold Scale uses. A
-module of three small packages is `./...` and still not broad: check it in this
-context and use the normal pick step, which asks before applying anyway.
+target has more than ~6 packages, or comparable LOC in fewer — the same
+threshold as `go:review`. Whether it then fans out is a separate call made by
+size (Scale): many packages under ~500 lines of Go in all are checked in this
+context, and the proposal says which and why. A module of three small
+packages is `./...` and still not broad: check it in this context and use the
+normal pick step, which asks before applying anyway.
 
 Plan-first is propose-then-stop: the defaults and the package list, and no
 check until the user answers. It is not check-everything-then-present — that
@@ -266,7 +269,9 @@ behavioral fix, with its red/green test, a separate change.
   (`findReferences`, `goToImplementation`) before editing so definition and
   dependents change together.
 - Run `go test ./... -race` for a green baseline before editing; if already red,
-  stop and report. Run it again after — the job is not done until it passes.
+  or it cannot run at all (no toolchain or shell, a dependency it cannot
+  fetch), stop and report why — a gate that never ran verifies nothing. Run
+  it again after — the job is not done until it passes.
 - Never print diffs of applied fixes: report each as one line (`file:sym — what
   changed`) plus the gate result. Never `git commit`.
 - Big job (the fixes are large — many changed lines or restructuring edits;
@@ -279,8 +284,12 @@ behavioral fix, with its red/green test, a separate change.
 
 ## Scale
 
-- Single package or small module (<= ~6 packages): check in this context.
-- Larger module (> ~6 packages): fan out one subagent per package (each gets
+- Single package or small module (<= ~6 packages, or more under ~500 lines of
+  Go in all): check in this context.
+- Larger module (> ~6 packages and over ~500 lines, or comparable LOC in
+  fewer): fan out — even when the packages look alike, since near-identical
+  packages are what the merge's reconcile step is for — one subagent per
+  package (each gets
   the paths of `SKILL.md` and this reference, not their text, the `depth`, and
   the parent's rule-id list, and opens `rules.md` entries per need like the
   parent; the brief also has it walk every `--- Given ---`/`--- Then ---` block
@@ -327,10 +336,17 @@ behavioral fix, with its red/green test, a separate change.
   is wrong wherever the minority was right — a `fix` run then edits correct
   code.
 
+  Merge only once every worker has returned: a report sent with one still out
+  is a partial merge the reader takes for the whole, and a later note does not
+  undo it. Every merged fix opens with one of the six verbs above — a worker's
+  "add a blank line" is merged as `insert a blank line`.
+
   The merge is only performable if workers agree on ids and severity, which is
   what the rubric and the id rule above are for: merging means concatenating,
   sorting by severity then rule id, collapsing exact duplicates, and cutting at
-  `max_issues`. Sum the raw total from the worker reports when you write it
+  `max_issues`. The verdict line always carries that raw total and the
+  unreported count, zero included ("38 offenses across 8 packages, 0
+  unreported"). Sum the raw total from the worker reports when you write it
   down — a fan-out's "N offenses across M packages, K unreported" is the one
   number the reader cannot re-derive without the worker output, and a merge
   that reported 48 where the workers summed to 45 got it by carrying a figure
