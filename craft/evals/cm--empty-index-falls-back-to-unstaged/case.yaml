@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: cm--empty-index-falls-back-to-unstaged
+context:
+  scaffold_script: scaffold.sh
