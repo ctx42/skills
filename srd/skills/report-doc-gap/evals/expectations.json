@@ -33,7 +33,7 @@
       "name": "opt-out-and-duplicate-merge",
       "expected_behavior": [
         "Merges into the existing draft with `update_gap` rather than capturing a twin: `search_terms` are unioned, the existing `detail`, `kind`, and pointer fields survive, and the pointer-less second capture blanks nothing",
-        "Takes only the one-line `detail` and leaves `target_claim` empty, honouring the opt-out",
+        "Takes only the one-line `detail` and leaves `target_claim` empty, honoring the opt-out",
         "Still shows the record for confirmation before filing: opting out of the grill is not opting out of the confirmation"
       ]
     },
@@ -41,8 +41,8 @@
       "id": 5,
       "name": "gate-stops-without-the-server",
       "expected_behavior": [
-        "Stops before any other work, saying no `mcp__srd-doc__*` tools are in the session",
-        "Tells the user to start the `srd-doc` server and run `/mcp` to connect, then re-run",
+        "Stops before any other work, saying no `mcp__doc-corpus__*` tools are in the session",
+        "Tells the user to start the `doc-corpus` server and run `/mcp` to connect, then re-run",
         "Falls back to nothing — no REST call, no local checkout, no gap kept anywhere else",
         "No preamble; each fact stated once"
       ]
@@ -73,7 +73,7 @@
         "Runs a full `craft:grill-me` extraction for the first gap, rather than a deeper version of the light questions",
         "Honours the opt-out for the remaining two without re-asking the depth question for each",
         "Still shows each record for confirmation before filing — opting out of the grill is not opting out of the confirmation",
-        "Takes only the one-line `detail` for the opted-out gaps, leaving `target_claim` empty"
+        "Takes only the one-line `detail` for the opted-out gaps and leaves `target_claim` empty, honoring the opt-out"
       ]
     },
     {

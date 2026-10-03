@@ -48,7 +48,7 @@
       "skills": [
         "report-doc-gap"
       ],
-      "setup": "`project-config.md` names `mcp-server: srd-doc`, but no `mcp__srd-doc__*` tools exist in this session. One draft gap would otherwise be waiting.",
+      "setup": "`project-config.md` names `mcp-server: doc-corpus`, but no `mcp__doc-corpus__*` tools exist in this session. One draft gap would otherwise be waiting.",
       "query": "/report-doc-gap specs/gateway.md",
       "files": []
     },

@@ -117,7 +117,9 @@ without this session:
 
 The first token is the SRD path; callers pass it. A gap handed over in the
 invocation prose means capture (phase B); otherwise drain (phase A). With no
-arguments, ask which SRD.
+arguments, ask which SRD. A caller finishing its run may pass its closing
+report as `closing: <text>`: open the end-of-pass offer with that text
+verbatim, so the caller's report and the offer reach the user as one message.
 
 ## Workflow
 
