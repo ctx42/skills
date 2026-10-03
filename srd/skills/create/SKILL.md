@@ -92,8 +92,10 @@ Start cheap: the interview is what the user came for. Run the gate in
 [references/project-config.md](references/project-config.md). When the user
 named the SRD's path, run the draft check in
 [references/doc-corpus.md](references/doc-corpus.md); with no path yet there is
-nothing to check. The report says in one clause what the check found, because a
-check that never ran otherwise looks identical to one that found nothing.
+nothing to check. The step-5 report says in one clause what the check found,
+because a check that never ran otherwise looks identical to one that found
+nothing. The opening turn says nothing of the gate or the check: it is the
+first interview question.
 
 Resolve the glossary when the first term surfaces (branch 6 at the latest, and
 always before drafting; a seed's term surfaces with the user's first answer),
@@ -187,7 +189,9 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    keyword notice placement (STR-8), identifier format/uniqueness/order
    (REQ-2/3/4), keyword capitalization (LANG-4), stray example or note text
    (REQ-7), valid Markdown, Status defaulting to `IN PROGRESS`, Designs `N/A`
-   when the user said no UI change, British → US spelling.
+   when the user said no UI change, British → US spelling. These apply even
+   where the user declined a rewording in the interview: a refusal there is
+   about meaning, and a keyword's case or a stray example carries none.
 2. Consistency pass: run the pass in
    [references/authoring-guide.md](references/authoring-guide.md), re-reading
    the whole draft top to bottom. Repeat after any fix.
@@ -226,12 +230,14 @@ Do not mark the draft acceptable: a new SRD is `IN PROGRESS` and acceptance
 
 ### 5. Write
 
-Write the SRD as a single `.md` file to the path agreed at the first gap, or the
-one the user gives; when neither exists, propose one in its own folder under
-`initiatives` and ask. When this session captured drafts, invoke
-`srd:report-doc-gap` to offer them. Then report once: the file path, the
-requirement groups with their counts, the judgment findings and human follow-ups
-collected in step 4, and any blocker the user chose to leave standing.
+Write only once step 4 has settled every blocker. Write the SRD as a single
+`.md` file to the path agreed at the first gap, or the one the user gives; when
+neither exists, propose one in its own folder under `initiatives` and ask. When
+this session captured drafts, invoke `srd:report-doc-gap` to offer them. Then
+report once: the file path, the requirement groups with their counts (counts
+only — the requirement text is in the file, never quoted back), the judgment
+findings and human follow-ups collected in step 4, and any blocker the
+user chose to leave standing.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.
