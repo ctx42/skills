@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: doc-smith--normalize-to-the-doc-s-own-convention
+context:
+  scaffold_script: scaffold.sh
