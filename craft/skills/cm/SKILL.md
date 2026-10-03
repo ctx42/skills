@@ -47,8 +47,9 @@ Tokens combine (e.g. `micro apply`). Verbosity, mutually exclusive:
   single most important why. The paragraph is a ceiling, not a quota — a change
   whose summary line already says everything (see Describe changes only) ships
   without one rather than padding to fill the shape.
-- `full`: full-length multi-paragraph kernel-style body per the sections
-  below.
+- `full`: full-length kernel-style body per the sections below — at least
+  two paragraphs (what changed and why, then its effect on callers or
+  behavior), even for a small diff: the user asked for the long form.
 
 Commit control:
 
@@ -60,7 +61,9 @@ Commit control:
   mangles a multi-paragraph body. Print the message and the short hash
   afterwards: the commit is the payload, and a commit the user cannot see is
   worse than no commit. Otherwise present the message only and never propose
-  committing; the user decides when.
+  committing or amending, nor say how to ("run `/cm HEAD apply`", "ask me to
+  amend"): naming a commit is not asking to rewrite it, and the user decides
+  when.
 - `apply` needs something staged. When the diff came from the unstaged
   fallback there is nothing to commit, and `git commit` would either fail or
   make an empty commit — so stage nothing on the user's behalf: report the
@@ -177,7 +180,9 @@ to name, omit the footer; it is not a slot to fill.
 
 Present the full message in a fenced code block with zero leading whitespace
 on every line. Report tersely: no preamble or narration; state each fact once;
-don't restate output the user can already see.
+don't restate output the user can already see. After the block, at most one
+line — why the body was left out, or what to check — never a list of the
+diff's edits: the user has the diff.
 
 ## Self-learning
 

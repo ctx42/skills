@@ -52,7 +52,7 @@
       "id": 6,
       "name": "verbosity-arguments",
       "expected_behavior": [
-        "`micro` emits the summary line alone — no body, no footers, unless the change is breaking",
+        "`micro` emits the summary line alone — no body, and no footers beyond a breaking change or a `Refs:` the diff identifies (verbosity does not gate footers)",
         "`full` emits the summary plus a full-length multi-paragraph kernel-style body",
         "The difference between them is length of body, not a different summary line"
       ]
