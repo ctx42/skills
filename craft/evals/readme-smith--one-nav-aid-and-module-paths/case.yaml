@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: readme-smith--one-nav-aid-and-module-paths
+context:
+  scaffold_script: scaffold.sh

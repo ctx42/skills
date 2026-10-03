@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: readme-smith--gomake-installed-but-project-does-not-use-it
+context:
+  scaffold_script: scaffold.sh
