@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: review--default-review-of-a-flawed-srd
+context:
+  scaffold_script: scaffold.sh

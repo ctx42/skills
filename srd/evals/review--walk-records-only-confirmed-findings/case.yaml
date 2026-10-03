@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: review--walk-records-only-confirmed-findings
+context:
+  scaffold_script: scaffold.sh
