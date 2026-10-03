@@ -5,8 +5,8 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd-doc
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/infraport/guidelines_for_software_requirements_documents.md
-glossary: confluence/infraport/glossary
+srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
+glossary: confluence/example/glossary
 ---
 
 # Project configuration (eval fixture)
@@ -82,7 +82,7 @@ last_verified: 2026-09-18
 
 # Logger Battery and Power
 
-How INFRAPORT reports a logger's battery and what the battery figures mean.
+How EXAMPLE reports a logger's battery and what the battery figures mean.
 
 ## Battery status is reported in percent
 
@@ -112,7 +112,7 @@ last_verified: 2026-09-12
 
 # Projects and Project Settings
 
-What a Project is in INFRAPORT and which settings belong to it.
+What a Project is in EXAMPLE and which settings belong to it.
 
 ## Feature flags are set per Project
 

@@ -5,8 +5,8 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd-doc
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/infraport/guidelines_for_software_requirements_documents.md
-glossary: confluence/infraport/glossary
+srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
+glossary: confluence/example/glossary
 ---
 
 # Project configuration (eval fixture)
@@ -31,7 +31,7 @@ last_verified: 2026-09-29
 > Not in the platform docs. Attested `initiatives/leak-correlation/srd.md`
 > interview 2026-09-29.
 
-Correlation uses a per-material propagation speed. When INFRAPORT correlates
+Correlation uses a per-material propagation speed. When EXAMPLE correlates
 two recordings, the speed of sound it uses for each pipe segment between the
 two loggers is the speed for that segment's pipe material, not one speed for
 the whole network.
@@ -77,17 +77,17 @@ last_verified: 2026-09-20
 
 # Leak Noise Correlation
 
-How INFRAPORT correlates the recordings of two loggers to place a leak: which
+How EXAMPLE correlates the recordings of two loggers to place a leak: which
 loggers pair, which recordings are used, what a result carries, and how results
 are shown and handled.
 
-## What correlation is in INFRAPORT
+## What correlation is in EXAMPLE
 
 > Not in the platform docs. Attested `initiatives/autoco/srd.md` interview
 > 2026-09-10.
 
 Correlation compares the recordings of two loggers that sit on the same pipe
-network and estimates where between them a leak noise originates. INFRAPORT
+network and estimates where between them a leak noise originates. EXAMPLE
 runs it on the recordings the loggers transfer each day. A correlation result
 names the logger pair, the estimated leak position along the pipe path, and a
 quality value.
@@ -193,7 +193,7 @@ Where each section of this page comes from.
 
 | Section                                         | Source                                           |
 |-------------------------------------------------|--------------------------------------------------|
-| What correlation is in INFRAPORT                | `initiatives/autoco/srd.md` interview 2026-09-10 |
+| What correlation is in EXAMPLE                | `initiatives/autoco/srd.md` interview 2026-09-10 |
 | Logger pairs eligible for correlation           | `initiatives/autoco/srd.md` interview 2026-09-10 |
 | Recording window used for correlation           | `initiatives/autoco/srd.md` interview 2026-09-10 |
 | Correlation quality value                       | `initiatives/autoco/srd.md` interview 2026-09-10 |

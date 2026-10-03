@@ -2,8 +2,8 @@
 mcp-server: srd-doc
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/infraport/guidelines_for_software_requirements_documents.md
-glossary: confluence/infraport/glossary
+srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
+glossary: confluence/example/glossary
 ---
 
 # Project configuration (eval fixture)

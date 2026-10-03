@@ -5,8 +5,8 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd-doc
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/infraport/guidelines_for_software_requirements_documents.md
-glossary: confluence/infraport/glossary
+srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
+glossary: confluence/example/glossary
 ---
 
 # Project configuration (eval fixture)
@@ -39,11 +39,11 @@ cat > specs/labeling.md <<'EOF_SRD'
 ## Introduction
 
 This document defines how API clients label a
-[Sound File](../confluence/infraport/glossary/main_glossary.md#Sound-File-(SND))
-with existing [Tags](../confluence/infraport/glossary/main_glossary.md#Tag-(TAG))
+[Sound File](../confluence/example/glossary/main_glossary.md#Sound-File-(SND))
+with existing [Tags](../confluence/example/glossary/main_glossary.md#Tag-(TAG))
 and how they find Sound Files by Tag. The system will let an API client attach
 a Tag to a Sound File, remove it again, and look up the Sound Files of a
-[Project](../confluence/infraport/glossary/main_glossary.md#Project-(PRJ)) that
+[Project](../confluence/example/glossary/main_glossary.md#Project-(PRJ)) that
 carry a given Tag.
 
 ## Scope

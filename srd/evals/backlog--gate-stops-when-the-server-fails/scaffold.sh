@@ -5,8 +5,8 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd-doc
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/infraport/guidelines_for_software_requirements_documents.md
-glossary: confluence/infraport/glossary
+srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
+glossary: confluence/example/glossary
 ---
 
 # Project configuration (eval fixture)
@@ -32,7 +32,7 @@ Every open question the knowledge base tracks, one row each.
 | Question                                     | Kind     | Raised     | Hits | Lives in |
 |----------------------------------------------|----------|------------|------|----------|
 | Does a Project archive keep its Tags?        | deferred | 2026-08-11 | 1    |          |
-| Can a Customer rename an INFRAPORT Instance? | deferred | 2026-09-14 | 1    |          |
+| Can a Customer rename an EXAMPLE Instance?   | deferred | 2026-09-14 | 1    |          |
 | Do LoRa motes keep readings across a reboot? | unknown  | 2026-09-17 | 1    |          |
 
 ## Closed

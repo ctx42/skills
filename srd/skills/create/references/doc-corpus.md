@@ -32,7 +32,7 @@ table or context; `list_docs` to orient. A call that errors is reported, never
 retried or worked around. The read tools query the docs, never edit the SRD.
 
 A source pointer is a document id: its path from the project root, the string
-`get_doc` accepts (`confluence/infraport/formats/x.md`). Record the id, not an
+`get_doc` accepts (`confluence/example/formats/x.md`). Record the id, not an
 absolute checkout path. To check a citation written as a checkout path, strip
 the prefix down to the id; a citation is stale only when no `list_docs` id ends
 in the rest — comparing raw strings condemns every live source on the page.

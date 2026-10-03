@@ -14,9 +14,9 @@ append_system_prompt: |
   message you would send the user at that point.
 
   1. To which cluster to work: "The Sound File retention one."
-  2. To any question about the fact the page must state: "Raw Sound Files are deleted 400 days after upload, archived or not. Only an INFRAPORT administrator can change that period, and only for a whole INFRAPORT Instance. The 90-day move to the archive tier stays as documented."
+  2. To any question about the fact the page must state: "Raw Sound Files are deleted 400 days after upload, archived or not. Only an EXAMPLE administrator can change that period, and only for a whole EXAMPLE Instance. The 90-day move to the archive tier stays as documented."
   3. To where the draft goes: "Put it at `drafts/sound-file-retention.md`."
-  4. Once the draft is ready: "I've published it: https://confluence.example.com/infraport/operations/storage-housekeeping"
+  4. Once the draft is ready: "I've published it: https://confluence.example.com/example/operations/storage-housekeeping"
   5. To any offer of another cluster or list: "No, that's all for today."
 ---
 

@@ -1,7 +1,7 @@
 ---
 type: agent
 ---
-For the id `confluence/infraport/concepts/leak-correlation.md` answer with this document:
+For the id `confluence/example/concepts/leak-correlation.md` answer with this document:
 
 # Leak correlation
 

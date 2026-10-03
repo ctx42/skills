@@ -88,7 +88,7 @@ A statement of something the document does not cover on purpose.
 
 ## Company Glossary
 
-The shared glossary that defines terms used across INFRAPORT documents. It is
+The shared glossary that defines terms used across EXAMPLE documents. It is
 kept outside any single SRD.
 
 ## Quality Bar

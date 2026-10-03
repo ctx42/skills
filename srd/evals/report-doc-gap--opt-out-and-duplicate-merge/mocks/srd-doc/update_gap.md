@@ -3,7 +3,7 @@ type: agent
 ---
 The documentation-gap store of the srd-doc server. At the start of this run the store holds exactly these gaps:
 
-{"id":"gap-0311","status":"draft","kind":"missing","topic":"API Gateway retry count for failed upstream calls","doc_id":"confluence/infraport/api-gateway/overview.md","heading_path":["API Gateway","Upstream calls"],"source_url":"https://confluence.example.com/infraport/api-gateway/overview#upstream-calls","demand":"GW-2 needs the retry count","target_claim":"","detail":"The API Gateway overview page describes how the gateway forwards upstream calls and answers HTTP 502, but never states how many times it retries a failed upstream call or how long it waits between tries.","search_terms":["gateway retry count","upstream retries"],"srd_ref":"specs/gateway.md"}
+{"id":"gap-0311","status":"draft","kind":"missing","topic":"API Gateway retry count for failed upstream calls","doc_id":"confluence/example/api-gateway/overview.md","heading_path":["API Gateway","Upstream calls"],"source_url":"https://confluence.example.com/example/api-gateway/overview#upstream-calls","demand":"GW-2 needs the retry count","target_claim":"","detail":"The API Gateway overview page describes how the gateway forwards upstream calls and answers HTTP 502, but never states how many times it retries a failed upstream call or how long it waits between tries.","search_terms":["gateway retry count","upstream retries"],"srd_ref":"specs/gateway.md"}
 
 Every earlier gap call this run changes the store; always answer from the
 store as those calls left it.

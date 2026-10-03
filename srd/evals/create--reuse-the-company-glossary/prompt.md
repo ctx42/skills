@@ -31,7 +31,7 @@ append_system_prompt: |
      entry."
   8. What "Audit Log" means: "It's the Audit Log from the Company Glossary."
   9. What "Super Admin" means: "A user with full administrative rights on the
-     INFRAPORT Instance."
+     EXAMPLE Instance."
   10. Any restatement or summary to confirm: "Yes, correct."
   11. A proposed requirement grouping or prefixes: "Fine, use those."
   12. A self-check blocker: "Leave it."

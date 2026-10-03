@@ -7,7 +7,7 @@
       "expected_behavior": [
         "Runs the draft check, finds no draft, and invokes no `srd:report-doc-gap` at the start — then states in one clause that the check ran and found none, since a check that ran is otherwise indistinguishable from one that never did",
         "Runs `srd:review specs/labeling.md` once to create the review file, then reads it — and makes no edit to the SRD",
-        "Writes `specs/labeling.questions.md` holding at least two questions — the `GR-4` contradiction with `confluence/infraport/concepts/tags.md` and `GR-7`'s unmeasurable \"fast\" reframed from the review — and no question carries a severity tag, a rule id, or a finding number",
+        "Writes `specs/labeling.questions.md` holding at least two questions — the `GR-4` contradiction with `confluence/example/concepts/tags.md` and `GR-7`'s unmeasurable \"fast\" reframed from the review — and no question carries a severity tag, a rule id, or a finding number",
         "Asks the contradiction once, not twice in two voices, even though the review layer's own facts-vs-corpus pass found it too — the link back to the review finding lives in the question's `<!-- review: #n -->` bookkeeping comment, never in its text",
         "Walks one question at a time: puts the first question and stops, with the second nowhere in that turn, and does not advance until the user moves on"
       ]

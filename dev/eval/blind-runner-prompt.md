@@ -20,7 +20,7 @@ Never edit anything else under <REPO>. Never run git commit/add/push. A scenario
 
 `<HOME>/.agent-data/` IS THE USER'S REAL STORE — lesson files. Never read or write under it. Never list, stat, or probe it either, not even with output discarded. Substitute a path inside your workspace for every `$HOME/.agent-data/...` the skill resolves, and say in your report that you did. This applies to a skill that reaches the store indirectly through another skill just as much as to one that names the path itself.
 
-THE `srd-doc` SERVER IS PRODUCTION — the real INFRAPORT corpus and gap store. Read tools (`search`, `get_doc`, `list_docs`, `glossary_terms`, `list_gaps`) are fine. Never call a write tool — `report_gap` (draft or not), `update_gap`, `submit_gap`, `discard_gap`, `mark_gap_kb`, `resolve_gap` — and never POST. Record each call a skill *would* have made, with its arguments, in WORKSPACE/<scenario-name>/server-calls.md instead.
+THE `srd-doc` SERVER IS PRODUCTION — the real documentation corpus and gap store. Read tools (`search`, `get_doc`, `list_docs`, `glossary_terms`, `list_gaps`) are fine. Never call a write tool — `report_gap` (draft or not), `update_gap`, `submit_gap`, `discard_gap`, `mark_gap_kb`, `resolve_gap` — and never POST. Record each call a skill *would* have made, with its arguments, in WORKSPACE/<scenario-name>/server-calls.md instead.
 
 SRD SKILL STAND-INS. The srd skills start with a gate that reads `project-config.md` and checks the server:
   - Copy `<REPO>/srd/evals/fixtures/project-config.md` to the root of each scenario's fixture, then apply whatever the scenario's `setup` says about the config.

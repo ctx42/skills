@@ -11,8 +11,8 @@ PROJECT_CONFIG = """---
 mcp-server: srd-doc
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/infraport/guidelines_for_software_requirements_documents.md
-glossary: confluence/infraport/glossary
+srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
+glossary: confluence/example/glossary
 ---
 
 # Project configuration (eval fixture)
@@ -201,7 +201,7 @@ KB_EDIT = r'"file_path":"[^"]*kb/'
 DEF_ROWS_1 = [
     ["Does a Project archive keep its Tags?", "deferred", "2026-08-11", "1", ""],
     ["Which unit does the Infobar use for flow?", "deferred", "2026-08-27", "4", ""],
-    ["Can a Customer rename an INFRAPORT Instance?", "deferred", "2026-09-14", "1", ""],
+    ["Can a Customer rename an EXAMPLE Instance?", "deferred", "2026-09-14", "1", ""],
     ["Is a per-sensor-type propagation speed needed?", "unknown", "2026-08-19", "4", ""],
     ["Do LoRa motes keep readings across a reboot?", "unknown", "2026-09-17", "1", ""],
 ]
@@ -285,13 +285,13 @@ Where each section of this page comes from.
 """
 OQ_2 = open_questions([[UNK_LABEL, "unknown", "2026-08-19", "4",
                         "[correlation.md](correlation.md#open-questions)"]])
-LEAK_DOC = ("confluence/infraport/concepts/leak-correlation.md")
+LEAK_DOC = ("confluence/example/concepts/leak-correlation.md")
 SEARCH_2 = f"""---
 type: agent
 ---
 The documentation corpus holds exactly one section relevant here:
 
-{{"doc_id":"{LEAK_DOC}","heading_path":["Leak correlation","Propagation speed"],"source_url":"https://confluence.example.com/infraport/concepts/leak-correlation#propagation-speed","score":0.81,"text":"Leak correlation computes the position of a leak from the difference in arrival time of its noise at two Sensors. It uses a propagation speed of 1,250 m/s by default."}}
+{{"doc_id":"{LEAK_DOC}","heading_path":["Leak correlation","Propagation speed"],"source_url":"https://confluence.example.com/example/concepts/leak-correlation#propagation-speed","score":0.81,"text":"Leak correlation computes the position of a leak from the difference in arrival time of its noise at two Sensors. It uses a propagation speed of 1,250 m/s by default."}}
 
 For a query about propagation speed, sound speed, leak correlation, or sensor
 types, answer {{"results":[<that section>]}}. For every other query answer
@@ -409,13 +409,13 @@ write_case(
 
 # --- 4. clusters-gaps-and-drafts-outside-the-corpus -----------------------
 
-HK_DOC = "confluence/infraport/operations/storage-housekeeping.md"
+HK_DOC = "confluence/example/operations/storage-housekeeping.md"
 GAPS_4 = [
     gap("gap-0021", "How long raw Sound Files are kept", "initiatives/sound-export/srd.md",
         ["sound file retention", "how long are sound files kept", "delete sound files"],
         "The docs do not say how long a raw Sound File is kept before it is deleted, nor who can change that period.",
         doc_id=HK_DOC, heading=["Storage housekeeping", "Cold storage"],
-        url="https://confluence.example.com/infraport/operations/storage-housekeeping#cold-storage",
+        url="https://confluence.example.com/example/operations/storage-housekeeping#cold-storage",
         created="2026-09-08T10:12:00Z"),
     gap("gap-0027", "Infobar for a Device without a location", "initiatives/device-map/srd.md",
         ["infobar device without location"], "The docs do not say what the Infobar shows for a Device with no location.",
@@ -425,10 +425,10 @@ GAPS_4 = [
         "Nowhere states when recorded Sound Files are deleted.", created="2026-09-22T09:05:00Z"),
 ]
 LIST_DOCS_4 = json.dumps({"docs": [
-    {"id": "confluence/infraport/guidelines_for_software_requirements_documents.md",
+    {"id": "confluence/example/guidelines_for_software_requirements_documents.md",
      "title": "Guidelines for Software Requirements Documents"},
-    {"id": "confluence/infraport/glossary/main_glossary.md", "title": "Main Glossary"},
-    {"id": "confluence/infraport/glossary/user_interface_glossary.md", "title": "User Interface Glossary"},
+    {"id": "confluence/example/glossary/main_glossary.md", "title": "Main Glossary"},
+    {"id": "confluence/example/glossary/user_interface_glossary.md", "title": "User Interface Glossary"},
     {"id": HK_DOC, "title": "Storage housekeeping"},
     {"id": "kb/_inbox.md", "title": "Knowledge base inbox"},
 ]}, separators=(",", ":"))
@@ -480,7 +480,7 @@ write_case(
     },
     **case4_common,
 )
-URL_4 = "https://confluence.example.com/infraport/operations/storage-housekeeping"
+URL_4 = "https://confluence.example.com/example/operations/storage-housekeeping"
 DRAFT_4 = r'"file_path":"[^"]*drafts/sound-file-retention\.md"'
 CORPUS_WRITE = r'"file_path":"[^"]*/(kb|confluence)/(?!_inbox|_open-questions)'
 
@@ -495,8 +495,8 @@ write_case(
     max_turns=80,
     answers=['To which cluster to work: "The Sound File retention one."',
              'To any question about the fact the page must state: "Raw Sound Files are deleted 400 days '
-             'after upload, archived or not. Only an INFRAPORT administrator can change that period, and only '
-             'for a whole INFRAPORT Instance. The 90-day move to the archive tier stays as documented."',
+             'after upload, archived or not. Only an EXAMPLE administrator can change that period, and only '
+             'for a whole EXAMPLE Instance. The 90-day move to the archive tier stays as documented."',
              'To where the draft goes: "Put it at `drafts/sound-file-retention.md`."',
              f'Once the draft is ready: "I\'ve published it: {URL_4}"',
              'To any offer of another cluster or list: "No, that\'s all for today."'],
@@ -522,7 +522,7 @@ write_case(
 
 OQ_5 = open_questions([
     ["Does a Project archive keep its Tags?", "deferred", "2026-08-11", "1", ""],
-    ["Can a Customer rename an INFRAPORT Instance?", "deferred", "2026-09-14", "1", ""],
+    ["Can a Customer rename an EXAMPLE Instance?", "deferred", "2026-09-14", "1", ""],
     ["Do LoRa motes keep readings across a reboot?", "unknown", "2026-09-17", "1", ""],
 ])
 write_case(
@@ -605,7 +605,7 @@ write_case(
              '400 days after upload, archived or not. Nothing to add."',
              'To where the draft goes: "Put it at `drafts/sound-file-retention.md`."',
              'Once the draft is ready: "Published: '
-             'https://confluence.example.com/infraport/operations/sound-file-retention"',
+             'https://confluence.example.com/example/operations/sound-file-retention"',
              'To anything else: "That\'s all for today."'],
     files={"kb/_open-questions.md": OQ_6, "kb/altecno-logger.md": LOGGER_PAGE, "kb/_inbox.md": INBOX},
     mocks={"list_gaps": gaps_world(GAPS_6)},

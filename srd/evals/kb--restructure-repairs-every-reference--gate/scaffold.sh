@@ -5,8 +5,8 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd-doc
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/infraport/guidelines_for_software_requirements_documents.md
-glossary: confluence/infraport/glossary
+srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
+glossary: confluence/example/glossary
 ---
 
 # Project configuration (eval fixture)
@@ -31,7 +31,7 @@ last_verified: 2026-10-01
 > Not in the platform docs. Attested `initiatives/gw-firmware/srd.md` interview
 > 2026-09-26 · `gap-0042`.
 
-INFRAPORT pushes a firmware update to an ALTECNO LoRa Gateway only between
+EXAMPLE pushes a firmware update to an ALTECNO LoRa Gateway only between
 01:00 and 04:00 in the Project's time zone.
 
 ## Feature flags are set per Project

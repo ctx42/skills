@@ -50,7 +50,7 @@ drift) cites `(SRD:house)`. When both could fit — the consistency pass surface
 it, a house addition defines it — cite the house addition: the rule that defines
 the defect outranks the pass that spotted it, so terminology drift is always
 `(SRD:house)`. A `reference` finding cites its evidence in the same slot and the
-same shape — `(SRD:ref confluence/infraport/formats/x.md#heading)` for a corpus
+same shape — `(SRD:ref confluence/example/formats/x.md#heading)` for a corpus
 contradiction, `(SRD:ref <the dead link>)` for a broken pointer — so every
 finding closes with a parenthesis a reader can act on, and none carries a rule
 namespace that does not exist.

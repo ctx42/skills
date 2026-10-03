@@ -8,7 +8,7 @@
         "system-check",
         "review"
       ],
-      "setup": "`specs/labeling.md` has `GR-4` requiring Tag names to be written as a slash-separated path, and `GR-7` requiring Tag lookups to be \"fast\" with no criterion. No `specs/labeling.review.md` exists. The corpus contradicts `GR-4`: `confluence/infraport/concepts/tags.md` states that Tag names are a comma-separated series of named nodes. The server holds no draft gap for this SRD. The user answers the first question and then says \"next\".",
+      "setup": "`specs/labeling.md` has `GR-4` requiring Tag names to be written as a slash-separated path, and `GR-7` requiring Tag lookups to be \"fast\" with no criterion. No `specs/labeling.review.md` exists. The corpus contradicts `GR-4`: `confluence/example/concepts/tags.md` states that Tag names are a comma-separated series of named nodes. The server holds no draft gap for this SRD. The user answers the first question and then says \"next\".",
       "query": "/system-check specs/labeling.md",
       "files": []
     },
@@ -41,7 +41,7 @@
         "system-check",
         "kb"
       ],
-      "setup": "A knowledge-base page consulted during the walk cites two sources. One is a corpus document id that `list_docs` no longer returns. The other is a live document, cited the way the page's own Source table writes them — as an absolute checkout path, `/home/user/vault/confluence/infraport/formats/sound_file_documentation.md`, where the corpus serves that same page under the id `confluence/infraport/formats/sound_file_documentation.md`.",
+      "setup": "A knowledge-base page consulted during the walk cites two sources. One is a corpus document id that `list_docs` no longer returns. The other is a live document, cited the way the page's own Source table writes them — as an absolute checkout path, `/home/user/vault/confluence/example/formats/sound_file_documentation.md`, where the corpus serves that same page under the id `confluence/example/formats/sound_file_documentation.md`.",
       "query": "/system-check specs/labeling.md",
       "files": []
     },

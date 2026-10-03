@@ -137,8 +137,8 @@ yet cost about a million tokens, because each runner's new ambiguity list was
 treated as the next round's work and nothing measured what those edits bought.
 
 **Live services and real stores.** The `srd-doc` server is production — the
-INFRAPORT corpus and a gap store whose drafts are real records — and
-`$HOME/.agent-data/` holds the user's real lesson files. Tell every agent so
+real documentation corpus and a gap store whose drafts are real records —
+and `$HOME/.agent-data/` holds the user's real lesson files. Tell every agent so
 explicitly: the server's read tools are the only safe calls, and every
 `$HOME/.agent-data` path a skill resolves must be redirected into the run's
 workspace. Both have been violated by eval agents following the skills
