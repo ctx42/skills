@@ -51,15 +51,23 @@ branch by branch, until you both share one understanding of the subject.
    document when the subject is one.
    Resolved is a property of the answer, not of the user calling it done: an
    answer that leaves a case in its own scope unhandled keeps its branch open,
-   and the unhandled case is the next question. Acceptance criteria are the
-   test — a branch you cannot write a pass/fail check for is not resolved, and
-   a criterion that only restates the answer in other words is the tell.
+   and the unhandled case is the next question. Its scope is what the branch
+   asked. An edge the branch never raised, found while writing the summary —
+   a case another branch's answer creates included (a refused export meeting
+   the audit branch) — is one statement in the summary for the user to weigh
+   ("Not covered: refused exports and the audit log"), not a question, and
+   never a reason to reopen a settled branch or to withhold the summary.
+   Acceptance criteria are the test — a branch you cannot write a pass/fail
+   check for is not resolved, and a criterion that only restates the answer in
+   other words is the tell. Holding open a branch the user called done, say
+   which check its answer leaves unwritable ("no number, nothing to test").
 
    A branch nobody present can resolve — it needs a number no one has, or a
    decision that is someone else's — does not block the summary and is not
    quietly closed either. Carry it as open with an owner and the question they
-   must answer. The summary is then honest about what is settled, which is the
-   point of producing one.
+   must answer. One the user in this conversation could answer is not that
+   branch: ask it. The summary is then honest about what is settled, which is
+   the point of producing one.
 
 7. Offer to persist — on yes, invoke `craft:plan-smith` in write mode with the
    summary as the brief, so a plan file exists rather than an intention to make
@@ -110,18 +118,23 @@ branch by branch, until you both share one understanding of the subject.
   answer you are about to get; the rest either becomes actionable later or
   never mattered.
 
-- Track progress. Keep the map of resolved vs. open branches. Name the count
-  the first time you speak in this interview — on a cold open that is the
-  branch map itself, so the user sees the shape of what is coming; picking up
-  an interview already under way, it is what remains, and the count is owed on
-  that first turn too even though the interview did not start there. Then say
-  how much is left as each branch closes.
+- Track progress. Keep the map of resolved vs. open branches. Name the count,
+  in digits as `N resolved, M open`, the first time you speak in this
+  interview — on a cold open that is the branch map itself, so the user sees
+  the shape of what is coming; picking up an interview already under way, it
+  is what remains, and the count is owed on that first turn too even though
+  the interview did not start there. Then say how much is left as each branch
+  closes.
 
 - Re-audit on collapse. When an answer overturns an assumption an earlier
   branch was resolved on, that branch reopens — and so does every other one
-  that rested on the same assumption, not just the one you were in. Say which
-  reopened and why in a line; terseness is not a reason to let a resolved
-  branch keep an answer that is now known to be wrong.
+  that rested on the same assumption, not just the one you were in. Before the
+  next question, check every resolved branch against the collapsed assumption,
+  then name each one that reopens and why in a line; terseness is not a reason
+  to let a resolved branch keep an answer that is now known to be wrong. A
+  conflict counts before it is settled: when an answer contradicts an
+  assumption earlier branches rest on, name every branch that reopens if it
+  wins, then ask which side holds.
 
 ## Self-learning
 
