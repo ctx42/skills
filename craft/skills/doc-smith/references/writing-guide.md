@@ -153,7 +153,9 @@ heuristic per class:
   respecting the doc's own convention over the house default.
 - Spelling-variety defect — English varieties mixed within one doc. Normalize
   to the doc's predominant variety, US only when it has none; report the mix
-  either way, since the author may have meant the other one.
+  either way as both counts — sites already in the kept variety and sites
+  changed (`British kept: 10 sites; 2 US spellings changed`) — since the
+  author may have meant the other one and the outliers alone cannot show it.
 - Flat/choppy prose — grammatical but sub-register: fragmentary or staccato
   sentences, missing connectives, unidiomatic phrasing. Raise it to fluent B1;
   distinct from filler (cut, not rewritten) and from vocabulary level (tracks

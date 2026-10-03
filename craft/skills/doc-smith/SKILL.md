@@ -92,7 +92,8 @@ rewritten or "corrected" with a fact you cannot ground.
    sections the product needs. Confirm the outline before drafting a long
    document.
 
-3. Draft to the guide.
+3. Draft to the guide. A fact neither the sources nor the user settled stays
+   out of the text and goes on the reply's open list, never a `TODO` in the file.
 
 4. Write the file(s).
 
