@@ -3,4 +3,4 @@ type: regex
 target: last_message
 flags: "i"
 ---
-2\s*Y\s*[/·,|]\s*[23]\s*N\s*[/·,|]\s*1\s*X
+[12]\s*Y\s*(?:[/·,|]|,?\s+and\b)\s*[2-4]\s*N\s*(?:[/·,|]|,?\s+and\b)\s*1\s*X

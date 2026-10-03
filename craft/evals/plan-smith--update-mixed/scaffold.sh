@@ -244,11 +244,38 @@ func Test_Callback_RejectsReplayedCode(t *testing.T) {
 	}
 }
 EOF_4
+mkdir -p cmd/svc
+cat > cmd/svc/main.go <<'EOF_5'
+// Command svc serves the operator API.
+package main
+
+import (
+	"log"
+	"net/http"
+
+	"example.com/svc/auth"
+)
+
+func main() {
+	flow := &auth.Flow{
+		AuthURL:     "https://idp.staging.example/authorize",
+		ClientID:    "svc",
+		RedirectURI: "https://svc.staging.example/callback",
+	}
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /health", func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+	mux.HandleFunc("GET /login", flow.Login)
+	mux.HandleFunc("GET /callback", flow.Callback)
+	log.Fatal(http.ListenAndServe(":8080", mux))
+}
+EOF_5
 git add -A && git commit -q -m 'feat(auth): authorization-code login flow with PKCE'
 git checkout -q main && git merge -q --no-ff feat/login-flow -m 'Merge pull request #41 from feat/login-flow'
 git checkout -q -b feat/session-storage
 mkdir -p session
-cat > session/store.go <<'EOF_5'
+cat > session/store.go <<'EOF_6'
 // Package session keeps login sessions in Redis.
 package session
 
@@ -257,91 +284,123 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"time"
-
-	"github.com/redis/go-redis/v9"
 )
 
 // TTL is how long a session lives without being renewed.
 const TTL = 12 * time.Hour
 
+// KV is the slice of a Redis client the store uses.
+type KV interface {
+	Set(ctx context.Context, key, val string, ttl time.Duration) error
+	Get(ctx context.Context, key string) (string, error)
+	Del(ctx context.Context, key string) error
+}
+
 // Store keeps sessions in Redis keyed by an opaque session ID; the cookie
 // carries only that ID.
-type Store struct{ rdb *redis.Client }
+type Store struct{ kv KV }
 
-// New returns a Store backed by rdb.
-func New(rdb *redis.Client) *Store { return &Store{rdb: rdb} }
+// New returns a Store backed by kv.
+func New(kv KV) *Store { return &Store{kv: kv} }
 
 // Create stores a session for subject and returns its opaque ID.
-func (s *Store) Create(ctx context.Context, subject string) (string, error) {
-	b := make([]byte, 32)
-	if _, err := rand.Read(b); err != nil {
+func (sto *Store) Create(ctx context.Context, subject string) (string, error) {
+	buf := make([]byte, 32)
+	if _, err := rand.Read(buf); err != nil {
 		return "", err
 	}
-	id := hex.EncodeToString(b)
-	return id, s.rdb.Set(ctx, key(id), subject, TTL).Err()
+	id := hex.EncodeToString(buf)
+	return id, sto.kv.Set(ctx, key(id), subject, TTL)
 }
 
 // Get returns the subject of session id.
-func (s *Store) Get(ctx context.Context, id string) (string, error) {
-	return s.rdb.Get(ctx, key(id)).Result()
+func (sto *Store) Get(ctx context.Context, id string) (string, error) {
+	return sto.kv.Get(ctx, key(id))
 }
 
 // Logout deletes session id.
-func (s *Store) Logout(ctx context.Context, id string) error {
-	return s.rdb.Del(ctx, key(id)).Err()
+func (sto *Store) Logout(ctx context.Context, id string) error {
+	return sto.kv.Del(ctx, key(id))
 }
 
 func key(id string) string { return "session:" + id }
-EOF_5
+EOF_6
 mkdir -p session
-cat > session/store_test.go <<'EOF_6'
+cat > session/store_test.go <<'EOF_7'
 package session
 
 import (
 	"context"
+	"errors"
 	"testing"
 	"time"
-
-	"github.com/alicebob/miniredis/v2"
-	"github.com/redis/go-redis/v9"
 )
 
+// fakeRedis is an in-memory KV with a settable clock; it outlives any Store
+// built on it, as a Redis server outlives the app.
+type fakeRedis struct {
+	now  time.Time
+	vals map[string]string
+	exp  map[string]time.Time
+}
+
+func newFakeRedis() *fakeRedis {
+	return &fakeRedis{now: time.Unix(0, 0), vals: map[string]string{}, exp: map[string]time.Time{}}
+}
+
+func (fr *fakeRedis) Set(_ context.Context, key, val string, ttl time.Duration) error {
+	fr.vals[key], fr.exp[key] = val, fr.now.Add(ttl)
+	return nil
+}
+
+func (fr *fakeRedis) Get(_ context.Context, key string) (string, error) {
+	val, ok := fr.vals[key]
+	if !ok || !fr.now.Before(fr.exp[key]) {
+		return "", errors.New("redis: nil")
+	}
+	return val, nil
+}
+
+func (fr *fakeRedis) Del(_ context.Context, key string) error {
+	delete(fr.vals, key)
+	return nil
+}
+
 func Test_Create_SetsTwelveHourTTL(t *testing.T) {
-	mr := miniredis.RunT(t)
-	s := New(redis.NewClient(&redis.Options{Addr: mr.Addr()}))
-	id, _ := s.Create(context.Background(), "alice")
-	if have := mr.TTL("session:" + id); have != 12*time.Hour {
+	fr := newFakeRedis()
+	id, _ := New(fr).Create(context.Background(), "alice")
+	if have := fr.exp["session:"+id].Sub(fr.now); have != 12*time.Hour {
 		t.Fatalf("want 12h TTL, have %s", have)
 	}
-	mr.FastForward(12*time.Hour + time.Second)
-	if _, err := s.Get(context.Background(), id); err == nil {
+	fr.now = fr.now.Add(12*time.Hour + time.Second)
+	if _, err := New(fr).Get(context.Background(), id); err == nil {
 		t.Fatal("want the session expired after 12 hours")
 	}
 }
 
 func Test_Session_SurvivesAppRestart(t *testing.T) {
-	mr := miniredis.RunT(t)
-	id, _ := New(redis.NewClient(&redis.Options{Addr: mr.Addr()})).Create(context.Background(), "alice")
-	restarted := New(redis.NewClient(&redis.Options{Addr: mr.Addr()}))
+	fr := newFakeRedis()
+	id, _ := New(fr).Create(context.Background(), "alice")
+	restarted := New(fr)
 	if have, err := restarted.Get(context.Background(), id); err != nil || have != "alice" {
 		t.Fatalf("want the session after a restart, have %q %v", have, err)
 	}
 }
 
 func Test_Logout_DeletesKey(t *testing.T) {
-	mr := miniredis.RunT(t)
-	s := New(redis.NewClient(&redis.Options{Addr: mr.Addr()}))
-	id, _ := s.Create(context.Background(), "alice")
-	_ = s.Logout(context.Background(), id)
-	if mr.Exists("session:" + id) {
+	fr := newFakeRedis()
+	sto := New(fr)
+	id, _ := sto.Create(context.Background(), "alice")
+	_ = sto.Logout(context.Background(), id)
+	if _, ok := fr.vals["session:"+id]; ok {
 		t.Fatal("want the key deleted on logout")
 	}
 }
-EOF_6
+EOF_7
 git add -A && git commit -q -m 'feat(session): Redis session storage with 12h TTL'
 git checkout -q main && git merge -q --no-ff feat/session-storage -m 'Merge pull request #44 from feat/session-storage'
 mkdir -p ci/logs
-cat > ci/logs/staging-e2e-2026-09-30.log <<'EOF_7'
+cat > ci/logs/staging-e2e-2026-09-30.log <<'EOF_8'
 2026-09-30T02:14:07Z job=staging-e2e commit=main provider=https://idp.staging.example
 2026-09-30T02:14:09Z RUN  sso/login_round_trip
 2026-09-30T02:14:11Z      GET /login -> 302 https://idp.staging.example/authorize (code_challenge_method=S256)
@@ -353,5 +412,5 @@ cat > ci/logs/staging-e2e-2026-09-30.log <<'EOF_7'
 2026-09-30T02:14:15Z      GET /callback (same code again) -> 400 invalid or replayed code
 2026-09-30T02:14:15Z PASS sso/replayed_code (0.4s)
 2026-09-30T02:14:15Z ok   staging-e2e 2 passed, 0 failed
-EOF_7
+EOF_8
 git add -A && git commit -q -m 'ci: keep the staging e2e log'

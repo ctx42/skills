@@ -4,4 +4,4 @@ target: trace
 flags: "i"
 match: not_contains
 ---
-"command":"(?:[^"\\]|\\.)*?\bgit\s+commit\b(?:[^"\\]|\\.)*Co-Authored-By
+"command":"(?:[^"\\]|\\.)*?(?:\b|\\n)git\s+commit\b(?:[^"\\]|\\.)*Co-Authored-By

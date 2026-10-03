@@ -1,5 +1,5 @@
 ---
-type: tool_order
-before: {tool: Read, input_match: '"file_path":"[^"]*cmd/portcheck/main\.go"'}
-after: {tool: Write, input_match: '"file_path":"[^"]*README\.md"'}
+type: regex
+target: trace
 ---
+^(?:(?!"name":"Write","input":\{"file_path":"[^"]*README\.md")[\s\S])*?"name":"(?:Read|Bash)","input":\{"(?:file_path|command)":"(?:[^"\\]|\\.)*?cmd/portcheck/main\.go

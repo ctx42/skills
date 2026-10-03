@@ -2,4 +2,4 @@
 type: regex
 target: {source: file, path: example_test.go}
 ---
-Split\(
+\bSplit(After)?N?\(|\bLines\(|bufio\.NewScanner

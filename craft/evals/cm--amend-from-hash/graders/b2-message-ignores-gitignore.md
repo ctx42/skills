@@ -3,4 +3,4 @@ type: regex
 target: trace
 match: not_contains
 ---
-"command":"(?:[^"\\]|\\.)*?\bgit\s+commit\b(?:[^"\\]|\\.)*gitignore|"command":"(?:[^"\\]|\\.)*?\bgit\s+commit\b(?:[^"\\]|\\.)*coverage\.out
+"command":"(?:[^"\\]|\\.)*?(?:\b|\\n)git\s+commit\b(?:[^"\\]|\\.)*gitignore|"command":"(?:[^"\\]|\\.)*?(?:\b|\\n)git\s+commit\b(?:[^"\\]|\\.)*coverage\.out

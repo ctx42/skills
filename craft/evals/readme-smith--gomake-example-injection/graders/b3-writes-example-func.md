@@ -1,6 +1,5 @@
 ---
-type: tool_used
-tool: Write
-input_match: '_test\.go"[\s\S]*func Example'
-min: 1
+type: regex
+target: {source: file, path: example_test.go}
 ---
+func Example

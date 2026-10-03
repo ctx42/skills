@@ -1,6 +1,5 @@
 ---
-type: tool_used
-tool: Read
-input_match: 'plan-smith/LESSONS'
-min: 1
+type: regex
+target: trace
 ---
+"name":"(?:Read|Bash)","input":\{"(?:file_path|command)":"(?:[^"\\]|\\.)*?plan-smith/LESSONS

@@ -1,6 +1,5 @@
 ---
-type: tool_used
-tool: Read
-input_match: 'craft/skills/cm/SKILL'
-min: 1
+type: regex
+target: trace
 ---
+"name":"(?:Read|Bash)","input":\{"(?:file_path|command)":"(?:[^"\\]|\\.)*?craft/skills/cm/SKILL
