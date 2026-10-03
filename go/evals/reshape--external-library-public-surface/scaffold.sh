@@ -122,3 +122,4 @@ func Set(data []byte, key, value string) ([]byte, error) {
 	return yaml.Marshal(top)
 }
 EOF_3
+go mod download

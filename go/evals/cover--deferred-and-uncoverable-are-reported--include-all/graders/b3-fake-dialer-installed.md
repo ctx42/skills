@@ -2,4 +2,4 @@
 type: regex
 target: trace
 ---
-"name":"(Write|Edit)"[^\n]*\bdialer\s*=
+"name":"(Write|Edit|Bash)"[^\n]*\bdialer\s*=

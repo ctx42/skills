@@ -2,4 +2,4 @@
 type: regex
 target: trace
 ---
-"name":"(?:Agent|Task|Write)","input":\{(?:"[^"]*":(?:"(?:[^"\\]|\\.)*"|[^,}"]*),)*"[^"]*":"(?:[^"\\]|\\.)*?no-work-init
+"name":"(?:Agent|Task|Write|Bash)","input":\{(?:"[^"]*":(?:"(?:[^"\\]|\\.)*"|[^,}"]*),)*"[^"]*":"(?:[^"\\]|\\.)*?no-work-init

@@ -208,3 +208,6 @@ func Test_Buffer_String(t *testing.T) {
 	assert.Equal(t, "abc", have)
 }
 EOF_PKG_NET_BUFFER_TEST_GO
+# Runs have no network: fill the run's module cache now, from the local cache
+# that dev/eval-changed.sh serves as GOPROXY.
+go mod download

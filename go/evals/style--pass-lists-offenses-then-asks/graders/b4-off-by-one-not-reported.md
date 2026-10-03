@@ -4,4 +4,4 @@ target: last_message
 match: not_contains
 flags: "mi"
 ---
-foo\.go:2[12]\b|^\s*\d+\.[^\n]*(<= k|off-by-one)
+^\s*\d+\.[^\n]*(foo\.go:2[12]\b|<= k|off-by-one)

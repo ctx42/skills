@@ -26,8 +26,58 @@ func Route(routes map[string]string, path string) string {
 	return ""
 }
 EOF_1
+mkdir -p api
+cat > api/helpers.go <<'EOF_2'
+package api
+
+import (
+	"sort"
+	"strings"
+)
+
+// Keys returns the keys of m in ascending order.
+func Keys(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// Sum returns the total of values.
+func Sum(values []int) int {
+	total := 0
+	for _, val := range values {
+		total += val
+	}
+	return total
+}
+
+// Clamp returns val limited to the range lo to hi.
+func Clamp(val, lo, hi int) int {
+	if val < lo {
+		return lo
+	}
+	if val > hi {
+		return hi
+	}
+	return val
+}
+
+// Join returns parts joined by sep, skipping empty parts.
+func Join(parts []string, sep string) string {
+	kept := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			kept = append(kept, part)
+		}
+	}
+	return strings.Join(kept, sep)
+}
+EOF_2
 mkdir -p auth
-cat > auth/auth.go <<'EOF_2'
+cat > auth/auth.go <<'EOF_3'
 // Package auth checks bearer tokens.
 package auth
 
@@ -37,9 +87,59 @@ import "strings"
 func Token(header string) string {
 	return strings.TrimPrefix(header, "Bearer ")[0:32]
 }
-EOF_2
+EOF_3
+mkdir -p auth
+cat > auth/helpers.go <<'EOF_4'
+package auth
+
+import (
+	"sort"
+	"strings"
+)
+
+// Keys returns the keys of m in ascending order.
+func Keys(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// Sum returns the total of values.
+func Sum(values []int) int {
+	total := 0
+	for _, val := range values {
+		total += val
+	}
+	return total
+}
+
+// Clamp returns val limited to the range lo to hi.
+func Clamp(val, lo, hi int) int {
+	if val < lo {
+		return lo
+	}
+	if val > hi {
+		return hi
+	}
+	return val
+}
+
+// Join returns parts joined by sep, skipping empty parts.
+func Join(parts []string, sep string) string {
+	kept := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			kept = append(kept, part)
+		}
+	}
+	return strings.Join(kept, sep)
+}
+EOF_4
 mkdir -p cache
-cat > cache/cache.go <<'EOF_3'
+cat > cache/cache.go <<'EOF_5'
 // Package cache holds values in memory.
 package cache
 
@@ -52,9 +152,59 @@ type Cache struct {
 func (c *Cache) Set(k, v string) {
 	c.m[k] = v
 }
-EOF_3
+EOF_5
+mkdir -p cache
+cat > cache/helpers.go <<'EOF_6'
+package cache
+
+import (
+	"sort"
+	"strings"
+)
+
+// Keys returns the keys of m in ascending order.
+func Keys(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// Sum returns the total of values.
+func Sum(values []int) int {
+	total := 0
+	for _, val := range values {
+		total += val
+	}
+	return total
+}
+
+// Clamp returns val limited to the range lo to hi.
+func Clamp(val, lo, hi int) int {
+	if val < lo {
+		return lo
+	}
+	if val > hi {
+		return hi
+	}
+	return val
+}
+
+// Join returns parts joined by sep, skipping empty parts.
+func Join(parts []string, sep string) string {
+	kept := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			kept = append(kept, part)
+		}
+	}
+	return strings.Join(kept, sep)
+}
+EOF_6
 mkdir -p config
-cat > config/config.go <<'EOF_4'
+cat > config/config.go <<'EOF_7'
 // Package config reads settings from key=value lines.
 package config
 
@@ -69,9 +219,59 @@ func Parse(text string) map[string]string {
 	}
 	return out
 }
-EOF_4
+EOF_7
+mkdir -p config
+cat > config/helpers.go <<'EOF_8'
+package config
+
+import (
+	"sort"
+	"strings"
+)
+
+// Keys returns the keys of m in ascending order.
+func Keys(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// Sum returns the total of values.
+func Sum(values []int) int {
+	total := 0
+	for _, val := range values {
+		total += val
+	}
+	return total
+}
+
+// Clamp returns val limited to the range lo to hi.
+func Clamp(val, lo, hi int) int {
+	if val < lo {
+		return lo
+	}
+	if val > hi {
+		return hi
+	}
+	return val
+}
+
+// Join returns parts joined by sep, skipping empty parts.
+func Join(parts []string, sep string) string {
+	kept := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			kept = append(kept, part)
+		}
+	}
+	return strings.Join(kept, sep)
+}
+EOF_8
 mkdir -p events
-cat > events/events.go <<'EOF_5'
+cat > events/events.go <<'EOF_9'
 // Package events fans events out to subscribers.
 package events
 
@@ -86,9 +286,59 @@ func (bus *Bus) Publish(ev string) {
 		sub <- ev
 	}
 }
-EOF_5
+EOF_9
+mkdir -p events
+cat > events/helpers.go <<'EOF_10'
+package events
+
+import (
+	"sort"
+	"strings"
+)
+
+// Keys returns the keys of m in ascending order.
+func Keys(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// Sum returns the total of values.
+func Sum(values []int) int {
+	total := 0
+	for _, val := range values {
+		total += val
+	}
+	return total
+}
+
+// Clamp returns val limited to the range lo to hi.
+func Clamp(val, lo, hi int) int {
+	if val < lo {
+		return lo
+	}
+	if val > hi {
+		return hi
+	}
+	return val
+}
+
+// Join returns parts joined by sep, skipping empty parts.
+func Join(parts []string, sep string) string {
+	kept := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			kept = append(kept, part)
+		}
+	}
+	return strings.Join(kept, sep)
+}
+EOF_10
 mkdir -p httpx
-cat > httpx/httpx.go <<'EOF_6'
+cat > httpx/httpx.go <<'EOF_11'
 // Package httpx holds HTTP helpers.
 package httpx
 
@@ -98,9 +348,59 @@ import "net/http"
 func IsOK(resp *http.Response) bool {
 	return resp.StatusCode >= 200 && resp.StatusCode <= 300
 }
-EOF_6
+EOF_11
+mkdir -p httpx
+cat > httpx/helpers.go <<'EOF_12'
+package httpx
+
+import (
+	"sort"
+	"strings"
+)
+
+// Keys returns the keys of m in ascending order.
+func Keys(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// Sum returns the total of values.
+func Sum(values []int) int {
+	total := 0
+	for _, val := range values {
+		total += val
+	}
+	return total
+}
+
+// Clamp returns val limited to the range lo to hi.
+func Clamp(val, lo, hi int) int {
+	if val < lo {
+		return lo
+	}
+	if val > hi {
+		return hi
+	}
+	return val
+}
+
+// Join returns parts joined by sep, skipping empty parts.
+func Join(parts []string, sep string) string {
+	kept := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			kept = append(kept, part)
+		}
+	}
+	return strings.Join(kept, sep)
+}
+EOF_12
 mkdir -p logx
-cat > logx/logx.go <<'EOF_7'
+cat > logx/logx.go <<'EOF_13'
 // Package logx formats log lines.
 package logx
 
@@ -110,9 +410,59 @@ import "fmt"
 func Line(level, msg string) string {
 	return fmt.Sprintf("[%s] %s", level, msg)
 }
-EOF_7
+EOF_13
+mkdir -p logx
+cat > logx/helpers.go <<'EOF_14'
+package logx
+
+import (
+	"sort"
+	"strings"
+)
+
+// Keys returns the keys of m in ascending order.
+func Keys(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// Sum returns the total of values.
+func Sum(values []int) int {
+	total := 0
+	for _, val := range values {
+		total += val
+	}
+	return total
+}
+
+// Clamp returns val limited to the range lo to hi.
+func Clamp(val, lo, hi int) int {
+	if val < lo {
+		return lo
+	}
+	if val > hi {
+		return hi
+	}
+	return val
+}
+
+// Join returns parts joined by sep, skipping empty parts.
+func Join(parts []string, sep string) string {
+	kept := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			kept = append(kept, part)
+		}
+	}
+	return strings.Join(kept, sep)
+}
+EOF_14
 mkdir -p metrics
-cat > metrics/metrics.go <<'EOF_8'
+cat > metrics/metrics.go <<'EOF_15'
 // Package metrics counts events.
 package metrics
 
@@ -130,9 +480,59 @@ func (cnt *Counter) Inc() {
 func (cnt *Counter) Value() int {
 	return cnt.n
 }
-EOF_8
+EOF_15
+mkdir -p metrics
+cat > metrics/helpers.go <<'EOF_16'
+package metrics
+
+import (
+	"sort"
+	"strings"
+)
+
+// Keys returns the keys of m in ascending order.
+func Keys(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// Sum returns the total of values.
+func Sum(values []int) int {
+	total := 0
+	for _, val := range values {
+		total += val
+	}
+	return total
+}
+
+// Clamp returns val limited to the range lo to hi.
+func Clamp(val, lo, hi int) int {
+	if val < lo {
+		return lo
+	}
+	if val > hi {
+		return hi
+	}
+	return val
+}
+
+// Join returns parts joined by sep, skipping empty parts.
+func Join(parts []string, sep string) string {
+	kept := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			kept = append(kept, part)
+		}
+	}
+	return strings.Join(kept, sep)
+}
+EOF_16
 mkdir -p queue
-cat > queue/queue.go <<'EOF_9'
+cat > queue/queue.go <<'EOF_17'
 // Package queue is a FIFO of ints.
 package queue
 
@@ -147,9 +547,59 @@ func (que *Queue) Pop() int {
 	que.items = que.items[1:]
 	return v
 }
-EOF_9
+EOF_17
+mkdir -p queue
+cat > queue/helpers.go <<'EOF_18'
+package queue
+
+import (
+	"sort"
+	"strings"
+)
+
+// Keys returns the keys of m in ascending order.
+func Keys(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// Sum returns the total of values.
+func Sum(values []int) int {
+	total := 0
+	for _, val := range values {
+		total += val
+	}
+	return total
+}
+
+// Clamp returns val limited to the range lo to hi.
+func Clamp(val, lo, hi int) int {
+	if val < lo {
+		return lo
+	}
+	if val > hi {
+		return hi
+	}
+	return val
+}
+
+// Join returns parts joined by sep, skipping empty parts.
+func Join(parts []string, sep string) string {
+	kept := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			kept = append(kept, part)
+		}
+	}
+	return strings.Join(kept, sep)
+}
+EOF_18
 mkdir -p retry
-cat > retry/retry.go <<'EOF_10'
+cat > retry/retry.go <<'EOF_19'
 // Package retry repeats a call until it succeeds.
 package retry
 
@@ -161,9 +611,59 @@ func Do(n int, fn func() error) error {
 	}
 	return err
 }
-EOF_10
+EOF_19
+mkdir -p retry
+cat > retry/helpers.go <<'EOF_20'
+package retry
+
+import (
+	"sort"
+	"strings"
+)
+
+// Keys returns the keys of m in ascending order.
+func Keys(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// Sum returns the total of values.
+func Sum(values []int) int {
+	total := 0
+	for _, val := range values {
+		total += val
+	}
+	return total
+}
+
+// Clamp returns val limited to the range lo to hi.
+func Clamp(val, lo, hi int) int {
+	if val < lo {
+		return lo
+	}
+	if val > hi {
+		return hi
+	}
+	return val
+}
+
+// Join returns parts joined by sep, skipping empty parts.
+func Join(parts []string, sep string) string {
+	kept := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			kept = append(kept, part)
+		}
+	}
+	return strings.Join(kept, sep)
+}
+EOF_20
 mkdir -p worker
-cat > worker/worker.go <<'EOF_11'
+cat > worker/worker.go <<'EOF_21'
 // Package worker runs jobs in the background.
 package worker
 
@@ -187,6 +687,56 @@ func (poo *Pool) Run(jobs []func()) {
 	}
 	wg.Wait()
 }
-EOF_11
+EOF_21
+mkdir -p worker
+cat > worker/helpers.go <<'EOF_22'
+package worker
+
+import (
+	"sort"
+	"strings"
+)
+
+// Keys returns the keys of m in ascending order.
+func Keys(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// Sum returns the total of values.
+func Sum(values []int) int {
+	total := 0
+	for _, val := range values {
+		total += val
+	}
+	return total
+}
+
+// Clamp returns val limited to the range lo to hi.
+func Clamp(val, lo, hi int) int {
+	if val < lo {
+		return lo
+	}
+	if val > hi {
+		return hi
+	}
+	return val
+}
+
+// Join returns parts joined by sep, skipping empty parts.
+func Join(parts []string, sep string) string {
+	kept := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			kept = append(kept, part)
+		}
+	}
+	return strings.Join(kept, sep)
+}
+EOF_22
 git add -A
 git commit -qm 'initial'

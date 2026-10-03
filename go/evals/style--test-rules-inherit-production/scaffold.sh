@@ -56,3 +56,6 @@ func (svc *Service) Close() error {
 	return nil
 }
 EOF_SERVICE_GO
+# Runs have no network: fill the run's module cache now, from the local cache
+# that dev/eval-changed.sh serves as GOPROXY.
+go mod download

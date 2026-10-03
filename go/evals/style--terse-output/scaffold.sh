@@ -141,3 +141,6 @@ func Test_Setting_String(t *testing.T) {
 	assert.Equal(t, "a=1", have)
 }
 EOF_PKG_FOO_FOO_TEST_GO
+# Runs have no network: fill the run's module cache now, from the local cache
+# that dev/eval-changed.sh serves as GOPROXY.
+go mod download

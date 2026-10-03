@@ -2,5 +2,6 @@
 type: regex
 target: {source: file, path: pkg/svc/foo.go}
 match: "not_contains"
+flags: "i"
 ---
-//[^\n]*\n\t+i\+\+|increment i
+//\s*(increment|incr|add one to|bump)\b[^\n]*\bi\b

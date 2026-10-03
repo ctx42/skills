@@ -1,5 +1,5 @@
 ---
-tags: [case:review--broad-target-auto-plan-first, skill:review, sec:review:usage, sec:review:working-diff-injected, sec:review:check-mode, ref:style/checking, sec:style:production]
+tags: [case:review--broad-target-auto-plan-first, skill:review, sec:review:usage, sec:review:working-diff-injected, sec:review:check-mode, ref:style/checking, sec:style:production, fan-out]
 runs: 1
 max_turns: 80
 timeout_seconds: 600

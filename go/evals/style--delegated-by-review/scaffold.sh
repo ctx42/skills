@@ -53,6 +53,9 @@ func Test_Store_Inc(t *testing.T) {
 	assert.Equal(t, 1, sto.counts["a"])
 }
 EOF_PKG_STORE_STORE_TEST_GO
+# Runs have no network: fill the run's module cache now, from the local cache
+# that dev/eval-changed.sh serves as GOPROXY.
+go mod download
 git init -q -b main
 git add -A
 git -c user.name=eval -c user.email=eval@example.com commit -qm init

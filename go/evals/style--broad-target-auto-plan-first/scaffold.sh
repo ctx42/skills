@@ -1116,3 +1116,6 @@ func Test_Split(t *testing.T) {
 	})
 }
 EOF_INTERNAL_HOTEL_HOTEL_TEST_GO
+# Runs have no network: fill the run's module cache now, from the local cache
+# that dev/eval-changed.sh serves as GOPROXY.
+go mod download

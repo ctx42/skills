@@ -1,5 +1,5 @@
 ---
-tags: [case:style--fanout-opposing-fixes-kept-apart--gate, skill:style, sec:style:usage, sec:style:production, sec:style:test, sec:style:self-learning, ref:style/checking]
+tags: [case:style--fanout-opposing-fixes-kept-apart--gate, skill:style, sec:style:usage, sec:style:production, sec:style:test, sec:style:self-learning, ref:style/checking, fan-out]
 runs: 1
 max_turns: 80
 timeout_seconds: 600
