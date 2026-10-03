@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: backlog--gate-stops-when-the-server-fails
+context:
+  scaffold_script: scaffold.sh
