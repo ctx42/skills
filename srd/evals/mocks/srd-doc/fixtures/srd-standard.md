@@ -15,7 +15,7 @@ keeps its identifier so a finding can cite it, and each skill applies its own
 action policy on a finding. Check in document-section order (metadata,
 Introduction, Glossary, Scope, Requirements); for cross-cutting checks run the
 consistency pass in
-[authoring-guide.md](../../skills/create/references/authoring-guide.md), which
+[authoring-guide.md](../../../../skills/create/references/authoring-guide.md), which
 also holds the house additions (US English, sub-numbering, one term per
 concept).
 
@@ -36,7 +36,7 @@ written:
   `REQ-2`, … if that suits the document.
 - A real SRD carries no `Example` / `Don't` / `Do` annotations. They are a
   teaching device only (REQ-7); the Bad→Good examples live in
-  [authoring-guide.md](../../skills/create/references/authoring-guide.md).
+  [authoring-guide.md](../../../../skills/create/references/authoring-guide.md).
 
 > The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 > "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in an

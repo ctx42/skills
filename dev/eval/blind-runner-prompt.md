@@ -22,7 +22,7 @@ THE `srd-doc` SERVER IS PRODUCTION — the real INFRAPORT corpus and gap store. 
 
 SRD SKILL STAND-INS. The srd skills start with a gate that reads `project-config.md` and checks the server:
   - Copy `/home/thor/ws/ctx42/skills/srd/evals/fixtures/project-config.md` to the root of each scenario's fixture, then apply whatever the scenario's `setup` says about the config.
-  - Wherever a skill fetches the SRD standard with `get_doc` on the `srd-standard` id, read `/home/thor/ws/ctx42/skills/srd/evals/fixtures/srd-standard.md` instead — a frozen copy, so every run grades against the same rules. Never fetch the live standard in an eval.
+  - Wherever a skill fetches the SRD standard with `get_doc` on the `srd-standard` id, read `/home/thor/ws/ctx42/skills/srd/evals/mocks/srd-doc/fixtures/srd-standard.md` instead — a frozen copy, so every run grades against the same rules. Never fetch the live standard in an eval.
   - Where `setup` states server-side facts — a Company Glossary's terms, draft or open gaps, corpus hits, a tool missing or failing — take them as what the tool returns, ahead of the live server, and say so in your self-report. Otherwise read the live server.
 
 For each scenario in evals.json:

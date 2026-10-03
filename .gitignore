@@ -3,3 +3,8 @@
 # Per-machine Claude Code settings (local permissions, etc.). Not shipped.
 .claude/settings.local.json
 /tmp/
+
+# claude plugin eval results (per run, regenerated).
+/*/evals/results/
+# Session files the eval harness drops beside a history_file on each run.
+/*/evals/*/*-*-*-*-*.jsonl

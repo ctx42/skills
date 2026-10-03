@@ -1,0 +1,313 @@
+{
+  "tools": [
+    {
+      "name": "discard_gap",
+      "description": "Delete a draft gap from the store. Only a draft can be deleted; a submitted gap is kept forever.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "gap_id": {
+            "type": "string",
+            "description": "the ID of the draft gap"
+          }
+        },
+        "required": [
+          "gap_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_doc",
+      "description": "Return the whole document with the given ID, for reading full tables or following links. IDs come from search results and list_docs.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "the document ID"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "glossary_terms",
+      "description": "List the terms the glossary defines, each with its name, abbreviation, defining document ID, heading anchor, and plain-text definition, optionally filtered by a substring of the term.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "term": {
+            "type": "string",
+            "description": "keep only terms whose heading contains this text, ignoring case; omit for every term"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_docs",
+      "description": "List the ID and title of every document in the corpus.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "list_gaps",
+      "description": "List recorded documentation gaps, optionally filtered by status (draft, open, kb, resolved, duplicate, wontfix) and by a substring of the SRD reference.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "filter by status: draft, open, kb, resolved, duplicate, or wontfix; empty returns all"
+          },
+          "srd_ref": {
+            "type": "string",
+            "description": "keep only gaps whose srd_ref contains this text, for example an SRD document ID"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "mark_gap_kb",
+      "description": "Mark an open gap as covered by the knowledge base, recording the KB document that states the fact while the published documentation does not. The gap leaves the open backlog and can still be resolved once a documentation page is published.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "gap_id": {
+            "type": "string",
+            "description": "the ID of the gap to mark"
+          },
+          "kb_ref": {
+            "type": "string",
+            "description": "KB document ID stating the fact, optionally with a section anchor"
+          },
+          "note": {
+            "type": "string",
+            "description": "optional remark"
+          }
+        },
+        "required": [
+          "gap_id",
+          "kb_ref"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "report_gap",
+      "description": "Record a documentation gap hit while authoring an SRD: content that is missing, wrong, incomplete, or ambiguous. Returns the new gap ID. With draft set the gap is recorded unconfirmed, in draft status, to be edited with update_gap and then confirmed with submit_gap or dropped with discard_gap. This only captures the gap; the fix is published to the documentation by hand later.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "description": "one of missing, wrong, incomplete, ambiguous"
+          },
+          "topic": {
+            "type": "string",
+            "description": "short label for the missing knowledge"
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "related corpus document ID from a search or get_doc result, empty when none is relevant"
+          },
+          "heading_path": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "section heading path, copied verbatim from a result"
+          },
+          "source_url": {
+            "type": "string",
+            "description": "canonical URL, copied verbatim from a result"
+          },
+          "demand": {
+            "type": "string",
+            "description": "why the gap blocks the SRD work at hand"
+          },
+          "target_claim": {
+            "type": "string",
+            "description": "the specific fact the documentation should state"
+          },
+          "detail": {
+            "type": "string",
+            "description": "what is missing, wrong, incomplete, or ambiguous"
+          },
+          "search_terms": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "queries tried, so a reviewer can tell absent content from unfindable content"
+          },
+          "srd_ref": {
+            "type": "string",
+            "description": "the SRD location that raised the gap"
+          },
+          "draft": {
+            "type": "boolean",
+            "description": "record the gap unconfirmed, in draft status; omit to record it open"
+          }
+        },
+        "required": [
+          "kind",
+          "topic",
+          "demand",
+          "detail"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "resolve_gap",
+      "description": "Mark an open or kb gap resolved, recording the URL of the documentation page authored or edited by hand to cover it.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "gap_id": {
+            "type": "string",
+            "description": "the ID of the gap to resolve"
+          },
+          "published_url": {
+            "type": "string",
+            "description": "URL of the documentation page authored or edited to cover the gap"
+          },
+          "note": {
+            "type": "string",
+            "description": "optional remark about the fix"
+          }
+        },
+        "required": [
+          "gap_id",
+          "published_url"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "search",
+      "description": "Search the documentation corpus and return the most relevant sections with citations. Retrieval only; no LLM.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "the search query"
+          },
+          "k": {
+            "type": "integer",
+            "description": "maximum number of results, 1 to 100; omit for 10"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "submit_gap",
+      "description": "Confirm a draft gap, moving it to open status so it enters the documentation backlog.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "gap_id": {
+            "type": "string",
+            "description": "the ID of the draft gap"
+          }
+        },
+        "required": [
+          "gap_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "update_gap",
+      "description": "Replace the descriptive fields of a draft gap with the given ones; fields left out become empty. Only a draft can be edited.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "gap_id": {
+            "type": "string",
+            "description": "the ID of the draft gap to edit"
+          },
+          "kind": {
+            "type": "string",
+            "description": "one of missing, wrong, incomplete, ambiguous"
+          },
+          "topic": {
+            "type": "string",
+            "description": "short label for the missing knowledge"
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "related corpus document ID from a search or get_doc result, empty when none is relevant"
+          },
+          "heading_path": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "section heading path, copied verbatim from a result"
+          },
+          "source_url": {
+            "type": "string",
+            "description": "canonical URL, copied verbatim from a result"
+          },
+          "demand": {
+            "type": "string",
+            "description": "why the gap blocks the SRD work at hand"
+          },
+          "target_claim": {
+            "type": "string",
+            "description": "the specific fact the documentation should state"
+          },
+          "detail": {
+            "type": "string",
+            "description": "what is missing, wrong, incomplete, or ambiguous"
+          },
+          "search_terms": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "queries tried, so a reviewer can tell absent content from unfindable content"
+          },
+          "srd_ref": {
+            "type": "string",
+            "description": "the SRD location that raised the gap"
+          }
+        },
+        "required": [
+          "gap_id",
+          "kind",
+          "topic",
+          "demand",
+          "detail"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}
