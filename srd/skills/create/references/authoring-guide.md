@@ -110,7 +110,9 @@ and confirm:
 - Numbering is still unique and in order, with no collisions or large gaps.
 - Each term is used consistently (the terminology-consistency house addition
   above; a drift finding cites that, not the pass) and is still defined —
-  locally or in the Company Glossary.
+  locally or in the Company Glossary. Check every glossary heading against
+  each requirement that names its concept: a variant wording (`export run` for
+  `Export Job`) is drift.
 - Draft scaffolds: any `## TODO` section is the last section and well-formed (a
   numbered list); a non-empty `## TODO` or an unresolved In Scope `--- TODO ---`
   marker is flagged as blocking acceptance.
