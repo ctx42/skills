@@ -32,8 +32,9 @@ counterpart to the read-only `review`. It never invents or restates rules
 (format, style, logic, and rules come from `create`'s reference files) and
 never edits metadata (Owners, Initiative, Designs), sets back-links, or changes
 `Status`; it flags those gaps (STR-2/3/5/7, STA-*). A finding outside that
-mandate is reported, not looped — even when the run entered at it: a feedback
-run starting at a metadata `#2` says so and advances to `#3`. An explicit `#n`
+mandate is reported as the author's to fix, not looped — even when the run
+entered at it: a feedback run starting at a metadata `#2` says so and advances
+to `#3`. An explicit `#n`
 sets the order for the rest of the run: walk ascending from `n` to the end,
 then come back for the lowest still open; a jump re-anchors the walk the same
 way. It never proposes a Status
@@ -105,9 +106,10 @@ Otherwise three steps, no questions of its own.
    [../create/references/doc-corpus.md](../create/references/doc-corpus.md);
    say nothing about an empty result as it happens — the manifest carries it.
 3. Approval gate: read `Status` — `ACCEPTED` is approved, anything else
-   in-progress — state which in one clause and go. Never ask the user to
-   confirm it: every id change the gate governs is confirmed again in the
-   loop.
+   in-progress — state which in one clause and go; it is the reply's only
+   setup line (no gate, standard, draft-check or glossary report). Never ask
+   the user to confirm it: every id change the gate governs is confirmed again
+   in the loop.
 
 `autofix` runs only steps 1–2: errata never touches ids or terms.
 
@@ -274,12 +276,13 @@ outcome.
 4. Close by pointing the user to `review <srd> check` to reclassify what
    landed.
 
-Start point (path + `#n`): requires an existing `<srd>.review.md`; if absent,
-say so and stop — one or two lines naming the missing file. No approval-gate
-line, draft check, manifest, or menu of other ways in: those report a run that
-happened, and this one did not. Enter at finding `#n` instead of severity order;
-after each finding, default to the next by number or jump to any number the user
-names.
+Start point (path + `#n`): requires an existing `<srd>.review.md` (the SRD's
+path with `.md` replaced: `specs/login.md` → `specs/login.review.md`); if
+absent, say so and stop — one or two lines naming the missing file, nothing
+more. No approval-gate line, draft check, manifest, or way in — not even "run
+`srd:review` first": those report a run that happened, and this one did not.
+Enter at finding `#n` instead of severity order; after each finding, default to
+the next by number or jump to any number the user names.
 
 ### autofix
 
@@ -304,7 +307,8 @@ Edit one entry the user points to by requirement id (`GR-3a`), quoted text, or
 free description ("the login timeout rule").
 
 1. Locate the target; for quoted text or a description, confirm the match
-   before editing, inside the proposal: it is the loop's one question. With
+   before editing, inside the proposal: it is the loop's one question, so say
+   the match outright ("taking 'fast' to be GR-4"), and `E` corrects it. With
    nothing to fix on it, say so and ask what they want changed rather than
    manufacturing a finding.
 2. Run the loop on that entry; its resolution ends the run (Session end).
@@ -327,7 +331,9 @@ free description ("the login timeout rule").
    - What was flagged and left (frozen-id conflicts, metadata gaps, anything
      the user declined).
    - Outstanding human follow-ups: placeholders, Status, and either draft
-     scaffold left standing.
+     scaffold left standing — by name and item count, not its items.
+   - `## Open questions`: what remains of the held-over list, numbered from 1,
+     one line each — the list itself, never a bare count.
    - `Decision log: <srd>.decisions.md — hand the author its newest block,
      ## <date>, as this session's summary`, with the block's real heading;
      omitted when nothing was applied, since the file does not exist.

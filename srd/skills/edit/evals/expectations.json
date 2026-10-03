@@ -97,7 +97,7 @@
       "name": "feedback-from-a-finding-number",
       "expected_behavior": [
         "Enters at finding #2 rather than at the top of severity order",
-        "After each finding resolves or is skipped, defaults to the next by number, unless a `Y` keeps it on another open finding for the same requirement",
+        "After each finding resolves or is skipped, defaults to the next by number",
         "Jumps to any number the user names out of order, resumes the ascending walk from there, and after the highest number returns to the lowest one still open",
         "Leaves the review file untouched and closes by pointing at `review specs/login.md check`"
       ]
