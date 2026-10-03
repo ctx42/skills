@@ -203,9 +203,12 @@ output the user can already see. Counts and what closed are enough — never
 re-print a drafted page or the rows just moved.
 
 Name `srd:kb` as the writer whenever a row moved or a page changed, as a count
-per delegate (`srd:kb: 2 answers`), never a list of files written or rows
-moved: this skill writes nothing under the `kb` folder, and a report that says
-"closed two" without saying who wrote them reads as though it did.
+per delegate: this skill writes nothing under the `kb` folder, and a report
+that says "closed two" without saying who wrote them reads as though it did.
+Never say what the answers were or where they landed, in any shape — the user
+gave them minutes ago. Wrong: `srd:kb saved 2 answers (3.4 V threshold, 6-hour
+uploads)`, or "the threshold (3.4 V) is now on `kb/logger.md`". Right:
+`srd:kb: 2 answers`.
 
 "What closed" is said once per sitting, in the closing line — not again as each
 list finishes, and not restated in two shapes ("`gap-0010`, `gap-0015`
