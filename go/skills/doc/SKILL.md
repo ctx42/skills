@@ -236,7 +236,8 @@ End of run:
 - The Verify result, one line: which packages were gate-checked and that
   `gofmt -l` and `go build` passed. A gate whose outcome never reaches the
   reply is indistinguishable from one that never ran.
-- Changes made: `file:Symbol — which checklist item`.
+- Changes made, one line each, in exactly this shape:
+  `file:Symbol — <checklist item #>: <what changed>`.
 - Flagged unverifiable: `file:Symbol — the fact left unwritten and why`.
 - Never-touched in scope: `file:Symbol — reason`.
 - Module mode: which packages were done and which were skipped.
