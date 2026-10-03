@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: create--reuse-the-company-glossary
+context:
+  scaffold_script: scaffold.sh
