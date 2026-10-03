@@ -316,7 +316,8 @@ behavioral fix, with its red/green test, a separate change.
   than relaying it.
 
   After folding and before cutting, take every rule flagged in some packages
-  but not all, and every rule whose folded sites prescribe opposing fixes. For
+  but not all — one package alone included — and every rule whose folded
+  sites prescribe opposing fixes. For
   each, search the disagreeing packages for the trigger the offense quoted —
   the parent does this against the source, not by asking the worker again —
   and report the reconciled count, not the spread. A rule flagged in three
