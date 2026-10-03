@@ -17,7 +17,7 @@
       "skills": [
         "review"
       ],
-      "setup": "A module of eleven packages. The invocation names no budget and no depth. The user answers the proposal in a following turn with \"go ahead, those defaults are fine\", so the run continues past the gate in the same session.",
+      "setup": "A module of eleven packages, about 660 lines of Go in all — over the ~500-line size below which a broad target is reviewed in context. The invocation names no budget and no depth. The user answers the proposal in a following turn with \"go ahead, those defaults are fine\", so the run continues past the gate in the same session.",
       "query": "/review ./...",
       "files": []
     },

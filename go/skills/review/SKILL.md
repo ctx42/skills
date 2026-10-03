@@ -87,11 +87,13 @@ Read these controls from `$ARGUMENTS` (any order, after the target):
 
 Default to plan-first: if the target is broad and no budget was given, switch
 to `plan_first` automatically, propose defaults (the caps above, the package
-list), and ask before the full review. Broad means the run would fan out — more
-than ~6 packages, or comparable LOC in fewer. That is the same threshold
-`go:style` uses, deliberately: the two skills share a target and a budget,
-and a `./...` that is broad to one and not to the other cannot be delegated
-coherently. A module of three small packages is `./...` and still not broad.
+list), and ask before the full review. Broad means more than ~6 packages, or
+comparable LOC in fewer. Whether a broad run fans out is a separate call made
+by size (Scale): many packages under ~500 lines of Go in all are reviewed in
+this context, and the plan-first proposal says which and why. That is the
+same threshold `go:style` uses, deliberately: the two skills share a target and
+a budget, and a `./...` that is broad to one and not to the other cannot be
+delegated coherently. A module of three small packages is `./...` and still not broad.
 
 ### Workflow
 
@@ -132,8 +134,9 @@ coherently. A module of three small packages is `./...` and still not broad.
      and note the reduced confidence in the finding.
 4. Reason only while reviewing: do not run gofmt, go vet, golangci-lint, or
    go test — judge by reading the code. A shell width measure (`awk` line
-   length) is allowed. Say so in the report: one line naming the tools this
-   pass ran (normally none) and that the style dimension came
+   length) is allowed. Say so in the report: one line naming every command
+   this pass ran — the `awk` measure and a `grep` count; "none" only when
+   nothing ran — and that the style dimension came
    from `go:style`. A reader cannot otherwise tell a review that honored
    this from one that shelled out, and neither can anyone checking the run
    afterwards. `LSP` is allowed (read-only
@@ -145,15 +148,16 @@ coherently. A module of three small packages is `./...` and still not broad.
 
 ### Scale
 
-- Single package or small module (<= ~6 packages): review in this context,
-  package by package, highest-risk first.
-- Larger module (> ~6 packages): fan out one review subagent per package (each
-  invokes `go:style` on its package for the style offenses and reviews
-  correctness itself, with the `depth`), then synthesize one merged report,
-  re-ranking findings to the global `max_issues` cap. Workers get no share of
-  the cap — they report everything they find, and the cap is applied once at
-  the merge, or a package full of nits evicts another package's blocker while
-  the global budget still has room.
+- Single package or small module (<= ~6 packages, or more under ~500 lines of
+  Go in all): review in this context, package by package, highest-risk first.
+- Larger module (> ~6 packages and over ~500 lines, or comparable LOC in
+  fewer): fan out one review subagent per package, never several packages to
+  one worker (each invokes `go:style` on its package for the style offenses
+  and reviews correctness itself, with the `depth`), then synthesize one
+  merged report, re-ranking findings to the global `max_issues` cap. Workers
+  get no share of the cap — they report everything they find, and the cap is
+  applied once at the merge, or a package full of nits evicts another
+  package's blocker while the global budget still has room.
 - If the target is too large, do the highest-risk packages first and name the
   skipped ones in the report; never silently truncate.
 
@@ -176,7 +180,8 @@ Each finding:
 - `file:line` — the problem in one line.
 - The rule id or dimension (e.g. `wrap-errors-w`, `correctness`) — a style
   offense keeps the bare id `go:style` derived it under, unprefixed, so a
-  finding merged from there is still the same string.
+  finding merged from there is still the same string; one finding that is
+  both names both (`correctness`, `wrap-errors-w`), never a paraphrase.
 - A minimal suggested fix.
 
 End with a one-line verdict (ship / fix-first) and the per-severity counts. For
