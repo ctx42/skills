@@ -55,6 +55,28 @@ List available skills. They are namespaced by plugin, e.g.:
 Each skill's `SKILL.md` opens with a `## Usage` block; its `evals/evals.json`
 holds the scenarios it is expected to handle.
 
+### Eval runs (maintainers)
+
+`./dev/eval-changed.sh` checks the machine before every run and stops with the
+fix when something is missing: `git`, `node`, `go`, `gofmt` on `PATH`, and on
+Linux a `bwrap` sandbox that can start a shell. The eval sandbox runs each
+command in a user namespace nested inside `bwrap`'s and needs a capability
+there. Ubuntu (24.04 and later) refuses it twice: the
+`kernel.apparmor_restrict_unprivileged_userns` sysctl, and the
+`bwrap-userns-restrict` AppArmor profile, which denies every capability to
+whatever `bwrap` starts. Lift both, persistently:
+
+```bash
+sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+echo 'kernel.apparmor_restrict_unprivileged_userns=0' |
+    sudo tee /etc/sysctl.d/60-userns.conf
+sudo ln -sf /etc/apparmor.d/bwrap-userns-restrict /etc/apparmor.d/disable/
+sudo apparmor_parser -R /etc/apparmor.d/bwrap-userns-restrict
+```
+
+This drops a hardening layer for every `bwrap` user on the machine (Flatpak
+and others), not only the evals.
+
 ---
 
 ## 4. Set up a project for the SRD skills

@@ -15,12 +15,14 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 ├── STRUCTURE.md
 ├── ONBOARDING.md
 ├── AGENTS.md                       # Guide for AI agents working in this repo
-├── dev/                            # Maintainer scripts (no jq / external deps)
+├── dev/                            # Maintainer scripts (no jq; node for case lint)
 │   ├── lint-skills.sh              # Checks skills against the authoring standard
+│   ├── lint-cases.mjs              # Its native-case half (node: JS regexes)
 │   ├── version.sh                  # Syncs manifest versions with the VER file
 │   ├── token-report.sh             # Per-skill always-loaded token surface
 │   ├── eval-changed.sh             # Runs the native eval cases a diff reaches
 │   └── eval/                       # Native-case guide; blind-runner and grader prompts
+│       └── gen/<skill>/            # Case generators: the source of a skill's cases
 ├── .claude/
 │   └── hooks/skill-guard.sh        # Reminds an edit in a skill of the authoring conventions
 ├── .claude-plugin/

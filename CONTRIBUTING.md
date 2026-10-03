@@ -70,7 +70,8 @@ ids match and that no `expected_behavior` leaks back into `evals.json`.
 
 The two prompts are `dev/eval/blind-runner-prompt.md` and
 `dev/eval/grader-prompt.md`, kept outside `tmp/` so reading one does not break
-the runner's own don't-read-`tmp/` rule. Hand them over verbatim.
+the runner's own don't-read-`tmp/` rule. Hand them over verbatim once
+`<REPO>` and `<HOME>` are replaced with the repo root and your home directory.
 
 **What to distrust in a result.**
 
@@ -147,11 +148,12 @@ once by a skill that reached a store only through another skill.
 **The SRD standard in evals.** At run time the srd skills read the standard
 live through the server (`get_doc` on the `srd-standard` id in the project's
 `project-config.md`); no copy ships. Evals grade against a fixed one instead:
-`srd/evals/mocks/srd-doc/fixtures/srd-standard.md`, test data only, which
-the native cases' `get_doc` mock serves, with
-`srd/evals/fixtures/project-config.md` for the gate.
-`dev/eval/blind-runner-prompt.md` tells the runner to substitute both. Change
-the frozen standard only together with the scenarios graded on it.
+`srd/evals/mocks/srd-doc/fixtures/srd-standard.md`, test data only, which the
+native cases' `get_doc` mock serves, with `srd/evals/fixtures/project-config.md`
+for the gate. `dev/eval/blind-runner-prompt.md` tells the runner to substitute
+both. Cases that override `get_doc` carry copies of the standard, which
+`dev/lint-skills.sh` keeps identical to it. Change the frozen standard only
+together with the scenarios graded on it.
 
 Skills ship no `README.md`. Everything a user or agent needs lives in
 `SKILL.md`, its bundled files, and `evals/evals.json`; the repo-level

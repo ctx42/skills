@@ -26,7 +26,11 @@
 # every shipped skill on disk must live under exactly one plugin's skills/
 # directory (skills under .claude/skills/ are project-local and exempt).
 #
-# No external dependencies (pure bash + coreutils; no jq).
+# Then it lints the native eval cases (<group>/evals/<case>/) via
+# dev/lint-cases.mjs: scenario coverage, tags, the English line, limits, and
+# that every grader pattern compiles as JavaScript.
+#
+# No external dependencies beyond node for the case checks (no jq).
 #
 # Exit status is 0 when clean, 1 when any error is found. Warnings do not fail.
 set -euo pipefail
@@ -335,6 +339,27 @@ if [ -x "$SKILLS_SRC/dev/version.sh" ]; then
         || err "manifest versions drifted from VER (run ./dev/version.sh sync)"
 else
     warn "skipping version-drift check (dev/version.sh missing or not executable)"
+fi
+
+# Every tracked JSON file parses — settings.json, manifests, and eval specs.
+# (A stray shell redirect once left a bare `2` in .claude/settings.json.)
+if command -v node >/dev/null; then
+    while IFS= read -r f; do
+        node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$f" 2>/dev/null ||
+            err "${f#"$SKILLS_SRC"/}: not valid JSON"
+    done < <(git -C "$SKILLS_SRC" ls-files '*.json' | sed "s#^#$SKILLS_SRC/#")
+fi
+
+# Native eval cases: patterns must compile as JavaScript, so this half runs in
+# node (dev/lint-cases.mjs); its last line carries its counts.
+if command -v node >/dev/null; then
+    cases_out="$(node "$SKILLS_SRC/dev/lint-cases.mjs" || true)"
+    printf '%s\n' "$cases_out" | sed '$d'
+    read -r ce cw < <(printf '%s\n' "$cases_out" | tail -1 |
+        sed -E 's/^cases: ([0-9]+) error\(s\), ([0-9]+) warning\(s\)$/\1 \2/')
+    errors=$((errors + ${ce:-1})); warnings=$((warnings + ${cw:-0}))
+else
+    warn "skipping native-case checks (node not found)"
 fi
 
 echo "----"

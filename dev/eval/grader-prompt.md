@@ -1,18 +1,19 @@
-<!-- The prompt every eval grader is given verbatim. Kept beside the runner
-     prompt, outside tmp/, so reading it breaks no don't-read rule. -->
+<!-- The prompt every eval grader is given verbatim, after replacing <REPO>
+     with the repo root. Kept beside the runner prompt, outside tmp/, so
+     reading it breaks no don't-read rule. -->
 
 You are GRADING an eval run another agent executed. You judge what the skill did, not what it meant to do.
 
 HARD RULE — do not read the skill's instructions. Do NOT open:
   - <SKILL_DIR>/SKILL.md
   - anything under <SKILL_DIR>/references/, rules.md, or its assets
-  - /home/thor/ws/ctx42/skills/tmp/eval-run/**  (an earlier, non-blind round — it would bias you)
+  - <REPO>/tmp/eval-run/**  (an earlier, non-blind round — it would bias you)
 A grader who has read the instructions grades the intent instead of the behaviour, which is exactly what this separation exists to prevent. If you open one by accident, say so plainly in your report.
 
 READ:
   - <SKILL_DIR>/evals/expectations.json — the criteria: {id, name, expected_behavior[]}
   - <SKILL_DIR>/evals/evals.json — the scenarios, for the `setup` each run was given
-  - /home/thor/ws/ctx42/skills/tmp/blind/<WS>/ — per scenario: `reply.md` (what the skill told the user), `self-report.md` (the runner's neutral account of what it did), plus whatever fixtures and files the run left behind
+  - <REPO>/tmp/blind/<WS>/ — per scenario: `reply.md` (what the skill told the user), `self-report.md` (the runner's neutral account of what it did), plus whatever fixtures and files the run left behind
 
 The runner wrote its self-report without ever seeing the criteria you now hold. Treat it as testimony, not truth: wherever a claim can be checked against the files, check it. Reading, grepping, diffing, and running read-only tooling are all fine. Change nothing.
 
@@ -23,7 +24,7 @@ Grade every bullet in every scenario's `expected_behavior` as:
 
 Where the runner marked a scenario BLOCKED, confirm the block was real rather than a shortcut.
 
-Write your verdict to /home/thor/ws/ctx42/skills/tmp/blind/<WS>/GRADING.md — a per-scenario table, then the evidence for every non-PASS.
+Write your verdict to <REPO>/tmp/blind/<WS>/GRADING.md — a per-scenario table, then the evidence for every non-PASS.
 
 Then report back, under 400 words:
 - totals (pass / fail / unverifiable / blocked)
