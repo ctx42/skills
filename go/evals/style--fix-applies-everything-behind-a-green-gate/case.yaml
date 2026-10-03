@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: style--fix-applies-everything-behind-a-green-gate
+context:
+  scaffold_script: scaffold.sh
