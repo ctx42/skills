@@ -1,0 +1,1 @@
+{"gaps":[{"id":"gap-0331","status":"draft","kind":"missing","topic":"API Gateway rate-limit response headers","doc_id":"","heading_path":null,"source_url":"","demand":"GW-4 needs the rate-limit header names","target_claim":"","detail":"No corpus page names the headers the gateway sends with an HTTP 429 answer.","search_terms":["rate limit headers"],"srd_ref":"specs/gateway.md"}]}

@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: report-doc-gap--gate-stops-without-the-server
+context:
+  scaffold_script: scaffold.sh
