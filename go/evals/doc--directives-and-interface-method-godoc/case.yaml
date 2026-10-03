@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: doc--directives-and-interface-method-godoc
+context:
+  scaffold_script: scaffold.sh

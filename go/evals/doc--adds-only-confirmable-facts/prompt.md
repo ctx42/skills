@@ -1,0 +1,11 @@
+---
+tags: [case:doc--adds-only-confirmable-facts, skill:doc, sec:doc:usage, sec:doc:target, sec:doc:the-checklist, sec:doc:accuracy, sec:doc:per-item-loop, sec:doc:output, sec:style:production, needs-shell]
+runs: 1
+max_turns: 40
+timeout_seconds: 300
+allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, LSP, Bash(go:*), Bash(gofmt:*)]
+append_system_prompt: |
+  The user writes English; reply in English.
+---
+
+/go:doc func=Store
