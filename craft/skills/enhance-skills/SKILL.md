@@ -67,8 +67,9 @@ otherwise stay stranded there.
      and the reference files it loads for the work in question, since a rule
      stated in a reference governs the run just as firmly as one in the body.
      It was missed, not missing, and a line repeating it costs every future run
-     context while changing nothing. A rule that keeps getting missed needs
-     rewording where it lives: a skill edit, not a lesson.
+     context while changing nothing. Point at the line (`SKILL.md:28`) and
+     offer rewording it there — a skill edit, not a lesson — on the first miss
+     too: a missed rule was not clear enough to its reader.
    - A fact about this project or this task: a name, a path, a version, a
      number. It outlives nothing, and the project's own instructions are its
      home.
@@ -138,7 +139,8 @@ Rules learned for the `<skill>` skill. Read before running; obey each line.
 ```
 
 - One rule per bullet, one sentence, imperative — the bar of a style rule. A
-  rule that needs a clause per case is two rules, or none.
+  rule that needs a clause per case is two rules, or none; a rewrite that
+  supersedes one keeps that bar too — no `;`-joined "X when …; Y only when …".
 - Wrap at ~80 columns; indent continuation lines two spaces.
 - Concrete and general: "Derive the commit type from the diff, not the branch
   name" — not "the user wanted fix not feat here".
@@ -150,7 +152,9 @@ Rules learned for the `<skill>` skill. Read before running; obey each line.
 - A rule that overrules the body is a skill edit, not a lesson: file nothing,
   name the line it contradicts, and hand it to the user. A lessons file cannot
   win an argument with the `SKILL.md` above it — both are read every run, and
-  which one prevails is undefined.
+  which one prevails is undefined. Narrowing is not overruling: a ban on
+  something the body merely permits ("never reach for `chore`" where `chore`
+  is an allowed type) leaves the body true, and is a lesson.
 - Create the file with the header above on the first lesson; append after.
 
 ## Output
