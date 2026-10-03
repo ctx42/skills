@@ -30,18 +30,20 @@ request:
 - Update — re-read an existing plan and refresh each item's checkbox and status
   from what has since happened.
 
-If the request is ambiguous, ask one question: write a new plan or update an
-existing one?
+If the request is ambiguous, ask one question, as the reply's first line: write
+a new plan or update an existing one?
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. After writing, point to the file and give the
-status counts (e.g. `wrote tmp/sso-plan.md — 0 Y / 5 N / 0 X`); never paste
-the plan back, and don't narrate it either — the item names and the order you
-chose are in the file the user is about to open.
+status counts in exactly this shape: `wrote tmp/sso-plan.md — 0 Y / 5 N / 0 X`;
+never paste the plan back, and don't narrate it either — the item names and
+the order you chose are in the file the user is about to open.
 
 What you deliberately left out of the file belongs here, and only here: an
-unpinned decision, a suggestion the brief didn't ask for. Give each a name and
-at most a half-line of why it matters. They are there so nothing is hidden, not
+unpinned decision, a suggestion the brief didn't ask for. One bullet per item,
+never several folded into one: a name and at most a half-line (~60
+characters, one clause) of why it matters — the options themselves belong in
+a question, not a leave-out. They are there so nothing is hidden, not
 to be argued — a paragraph defending one has made the reply longer than the
 part of the plan it is about.
 
@@ -144,8 +146,13 @@ call.
    the item's acceptance criteria absorb it. When several are open and the
    shape is still moving, say so and offer `grill-me` rather than dripping
    questions one per turn. Several open but the shape firm is not that case:
-   ask the one that most changes the items, and name the rest in the reply's
-   leave-outs, where they stay the user's to decide.
+   ask the one that most changes the items and wait for the answer before
+   writing, naming the rest as leave-outs, where they stay the user's to
+   decide. Write in the same turn only when nothing open changes what the items
+   are. A point changes them when its answer changes what an item does or
+   contains — where the output goes, which protocol, which store — not only
+   how many items there are; listing such a point as a leave-out and writing
+   anyway is the guess this step forbids.
 
 4. Order by dependency and impact — blocking and highest-impact items first.
 
