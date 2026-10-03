@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: edit--polish-leaves-metadata-and-meaning
+context:
+  scaffold_script: scaffold.sh

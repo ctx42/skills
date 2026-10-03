@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: edit--no-drafts-skip-the-delegates
+context:
+  scaffold_script: scaffold.sh
