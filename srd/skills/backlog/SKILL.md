@@ -100,7 +100,8 @@ tick it off:
 - [ ] 4. `gaps`: cluster, check the corpus, grill, draft, resolve or park.
 
 Work one list at a time; a pick names one list, and when it is done offer the
-next non-empty one. Close each item through its own mechanism, one call per
+next non-empty one in a line naming only that list — what closed waits for the
+closing line. Close each item through its own mechanism, one call per
 item.
 
 ### 1. Open the sitting
