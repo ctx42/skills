@@ -6,7 +6,7 @@
       "name": "opens-with-counts",
       "expected_behavior": [
         "States the three counts and stops, letting the user pick a list",
-        "Lists `deferred` first, as the cheap wins",
+        "Lists `deferred` first",
         "Starts no grilling and drafts no page before the user picks",
         "No preamble; each count stated once"
       ]

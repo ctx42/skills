@@ -16,7 +16,7 @@
       "expected_behavior": [
         "Surfaces the count and the topics, and offers to work them now",
         "Per gap asks light or heavy, assembles the record, and shows it",
-        "Files via `submit_gap` only on the finder's yes and records the gap's `gap-NNNN`"
+        "Files via `submit_gap` only on the finder's yes and names each filed gap's `gap-NNNN` in the reply"
       ]
     },
     {

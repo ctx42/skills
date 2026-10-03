@@ -76,7 +76,7 @@
       "name": "autofix-bulk-applies-errata",
       "expected_behavior": [
         "Acts on nothing outside the `## Errata` block: no mechanical issue absent from it is fixed, and the SRD is not re-scanned for new ones",
-        "Runs neither the glossary resolution nor the approval gate — errata touch neither ids nor terms — so no `Status` clause and no glossary question reach the user, and no `glossary_terms` call is made",
+        "Runs neither the glossary resolution nor the approval gate — errata touch neither ids nor terms — so no approval-gate `Status` line and no glossary question reach the user, and no `glossary_terms` call is made; the closing manifest's Status follow-up is not a gate line",
         "Lists the three substitutions and takes one confirmation for the whole batch, not the per-change loop",
         "Verifies each `old` at its anchor, applies the two that match exactly once, and reports the third as stale rather than guessing where it belongs",
         "Writes no review file and invokes no `review` run; prints the exact hand-off command `review specs/login.md check #n #n`, scoped to the two applied errata, for the user to run",

@@ -61,7 +61,7 @@
       "id": 7,
       "name": "undocumented-platform-fact",
       "expected_behavior": [
-        "Searches the corpus before accepting the claim, and neither silently accepts nor silently corrects it",
+        "Searches the corpus before accepting the claim, and neither silently accepts nor silently corrects it: the branch restatement or the final report says the docs do not confirm it",
         "Hands the unconfirmable claim to `report-doc-gap` as a draft, and the confirmed fact to `kb` once the user confirms it in the branch restatement",
         "Neither hand-off interrupts the interview: no turn between the claim and the next branch is about the gap or about banking or filing either one. A question about the requirement itself is not an interruption",
         "Never asks permission to bank the fact — no \"should I record this?\" prompt. Confirming the requirement confirms the fact, and `srd:kb` writes it to the inbox silently. Ordinary elicitation (\"is three the count today?\") is a requirement question, not a banking prompt, and does not breach this",

@@ -77,7 +77,7 @@
       "skills": [
         "edit"
       ],
-      "setup": "`specs/login.review.md` has an `## Errata` block of three findings. Two anchors still match their quoted `old` text exactly once; the third entry has since been reworded, so its anchor no longer contains the quoted text.",
+      "setup": "`specs/login.review.md` has an `## Errata` block of three findings. Two anchors still match their quoted `old` text exactly once; the third entry has since been reworded, so its anchor no longer contains the quoted text. The SRD also carries one British spelling the `## Errata` block does not list.",
       "query": "/edit specs/login.md autofix",
       "files": []
     },
