@@ -3,3 +3,5 @@
 - `go mod tidy` never merges separate single-line `require` statements into one block; prescribe a manual merge, not tidy, for that nit.
 - When a fix moves a Given-held value (e.g. an `*SL` return pointer) under a When that returns only `err`, keep a descriptive name for it (not `have`) and give its Then assertion its own blank-line group after the `err` check.
 - ctx42 `assert.ErrorIs` ends the subtest when it fails, so later assertions run only once it passes; prove a later assertion can fail with the earlier one disabled.
+- On the fix path, re-measure line widths of every line a rename touched; lengthening a receiver (`m` to `met`) pushed a signature past the limit unnoticed.
+- On the fix path, run `gofmt -l` on touched files before every commit, not only `go vet`/`go test`; a block cut by a script left a double blank line that vet and tests passed.
