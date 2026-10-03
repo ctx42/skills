@@ -99,16 +99,30 @@ that count off the finished artifact rather than carry it from the work, and a
 scenario that grades the count against the file. It is the one number nobody
 re-derives, which is exactly why it is worth grading.
 
-**The eval loop.** A round costs hundreds of thousands of tokens, and a runner
-always finds something new to doubt, so the loop ends only on these rules:
+**Three tiers.** A skill change is confirmed in minutes, not in a round:
+
+1. *Lint* (`./dev/lint-skills.sh`, seconds). A wording or clarification edit
+   stops here, after a re-read.
+2. *Native cases* (`./dev/eval-changed.sh`, a few minutes). A behaviour change
+   runs the cases its diff reaches: each one invokes the real skill through
+   `claude plugin eval`, on a scripted fixture with mocked MCP servers, graded
+   mostly by deterministic checks. Authoring rules: `dev/eval/native-cases.md`.
+   A scenario edited in `evals.json` or `expectations.json` gets its case
+   updated in the same change. Run it without asking; it costs cents per case.
+3. *Blind round* (the runner and grader prompts above). An audit before a
+   release or after a large refactor, never the gate on an ordinary change.
+
+**The eval loop.** A blind round costs hundreds of thousands of tokens, and a
+runner always finds something new to doubt, so the loop ends only on these
+rules:
 
 - Edit a skill only for a graded FAIL, a disagreement measured on identical
   input (workers or runs splitting on the same bytes), or a miss on real code
   the user reports. Anything else — a runner's ambiguity list included — goes
   to `tmp/eval-backlog.md` and triggers no re-run.
-- Before any round, state its scope and rough cost and get the user's go-ahead.
-- A wording or clarification edit gets lint and a re-read, no eval; a
-  behaviour change re-runs only the scenarios it reaches, never the suite.
+- Before any blind round, state its scope and rough cost and get the user's
+  go-ahead.
+- A behaviour change re-runs only the scenarios it reaches, never the suite.
 - One fix-and-re-run per FAIL; a bullet that fails again after its fix goes to
   the user as a design question, not another rewording.
 - At most two rounds per change unless the user raises it; a round with every
@@ -133,8 +147,9 @@ once by a skill that reached a store only through another skill.
 **The SRD standard in evals.** At run time the srd skills read the standard
 live through the server (`get_doc` on the `srd-standard` id in the project's
 `project-config.md`); no copy ships. Evals grade against a fixed one instead:
-`srd/evals/fixtures/srd-standard.md`, test data only, with
-`srd/evals/fixtures/project-config.md` beside it for the gate.
+`srd/evals/mocks/srd-doc/fixtures/srd-standard.md`, test data only, which
+the native cases' `get_doc` mock serves, with
+`srd/evals/fixtures/project-config.md` for the gate.
 `dev/eval/blind-runner-prompt.md` tells the runner to substitute both. Change
 the frozen standard only together with the scenarios graded on it.
 

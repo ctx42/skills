@@ -28,6 +28,9 @@ Skills ship no `README.md`; the repo-level one orients humans.
 5. **Lint before committing.** Run `./dev/lint-skills.sh` after editing any skill; it
    checks the mechanical parts of the authoring standard and the marketplace
    wiring, and exits non-zero on any error.
+6. **Confirm a behaviour change with `./dev/eval-changed.sh`.** It runs the
+   native eval cases the diff reaches (`dev/eval/native-cases.md`) in minutes;
+   a blind round is a release audit, not the gate on a change.
 
 ## Dev loop
 

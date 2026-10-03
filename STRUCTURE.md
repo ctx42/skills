@@ -19,7 +19,8 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │   ├── lint-skills.sh              # Checks skills against the authoring standard
 │   ├── version.sh                  # Syncs manifest versions with the VER file
 │   ├── token-report.sh             # Per-skill always-loaded token surface
-│   └── eval/                       # Blind-runner and grader prompts
+│   ├── eval-changed.sh             # Runs the native eval cases a diff reaches
+│   └── eval/                       # Native-case guide; blind-runner and grader prompts
 ├── .claude/
 │   └── hooks/skill-guard.sh        # Reminds an edit in a skill of the authoring conventions
 ├── .claude-plugin/
@@ -27,6 +28,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │
 ├── go/                             # Plugin: Go workflow
 │   ├── .claude-plugin/plugin.json
+│   ├── evals/                      # Native eval cases (<skill>--<scenario>/)
 │   └── skills/
 │       ├── style/               # Go style ruleset + style-only pass (prod + test)
 │       ├── review/              # Done-time Go review (delegates style) + rule editing
@@ -35,7 +37,8 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       └── reshape/             # Consumer-driven library API-change proposals
 ├── srd/                            # Plugin: SRD lifecycle
 │   ├── .claude-plugin/plugin.json
-│   ├── evals/fixtures/             # Eval-only test data: frozen SRD standard, project-config.md
+│   ├── evals/                      # Native eval cases (<skill>--<scenario>/), srd-doc mocks
+│   │                               #   with the frozen SRD standard, fixtures/project-config.md
 │   └── skills/
 │       ├── create/              # Author a new SRD to the SRD standard
 │       ├── review/              # Read-only review of an SRD
@@ -46,6 +49,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       └── kb/                  # Owns the knowledge base: capture and write
 ├── craft/                          # Plugin: cross-cutting engineering-craft aids
 │   ├── .claude-plugin/plugin.json
+│   ├── evals/                      # Native eval cases (<skill>--<scenario>/)
 │   └── skills/
 │       ├── cm/                     # Conventional commit messages
 │       ├── grill-me/               # Planning interview
