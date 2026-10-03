@@ -101,7 +101,9 @@ writes:
   wrong. Surface it; hand a stale document to `srd:report-doc-gap`. A fact the
   user confirmed against it is written without a further question, its
   attestation line opening `> Contradicts <doc_id>.` in place of `> Not in the
-  platform docs.`
+  platform docs.` — whether the conflict was known at confirmation or turned
+  up after it, at write time: a fact written while a document says otherwise
+  always carries the line.
 - A KB page links to a glossary term; it never redefines one.
 
 ## Invocation
@@ -354,9 +356,13 @@ when a write would restructure rather than append.
 ## Output
 
 Report tersely in every mode, capture included: no preamble or narration;
-state each fact once; don't restate output the user can already see. A pointer
-("wrote `kb/correlation.md`, 2 sections") is enough — never re-print a page
-just written.
+state each fact once; don't restate output the user can already see. One
+pointer line per page touched, with its count — `kb/correlation.md: 2
+sections` — is the report. Never what the facts say (the page holds them),
+never a re-printed page, and nothing on how the write was done (searches,
+provenance rows, re-indexing, sync) unless it needs the user to act. Wrong:
+"`kb/logger.md` now has the battery-low threshold (15 %)". Right:
+"`kb/logger.md`: 1 section".
 
 ## Self-learning
 
