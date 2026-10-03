@@ -49,7 +49,7 @@
       "name": "module-mode-honors-its-controls",
       "expected_behavior": [
         "Touches only `svc` and `api`, leaving the other seven packages alone",
-        "Dispatches one subagent per package and merges their reports, listing packages covered and skipped — each worker's per-package report survives on disk, so the fan-out is visible in the artifacts rather than asserted",
+        "Dispatches one subagent per package and merges their reports, listing packages covered and skipped and attributing each result to the package that produced it, so the fan-out is visible in the report rather than asserted",
         "Adds at most five tests or cases across the whole run and reports what is left under the cap",
         "Each worker finishes and verifies one function before starting the next — its per-function after-profiles exist, one per function it touched"
       ]
@@ -58,7 +58,7 @@
       "id": 6,
       "name": "writes-into-existing-tests",
       "expected_behavior": [
-        "Adds the two new cases as rows in `Test_Encode_tabular`, since they fit the existing table's shape, rather than creating a parallel test function",
+        "Makes the two shapes run as rows of `Test_Encode_tabular` — the pending rows already there — rather than creating a parallel test function",
         "Keeps the table loop branch-free: the two added rows are driven by the same fields the existing rows use, and no `if` on a row field appears in the loop body",
         "Deletes the now-unused helper from `all_test.go`, and drops the file if nothing is left in it",
         "Ends with `gofmt -l` clean and `go test -v -race` showing `--- PASS` for every test in the edited files"

@@ -57,7 +57,7 @@
       "skills": [
         "cover"
       ],
-      "setup": "`Test_Encode_tabular` already exists for the target function, covering happy-path rows. The uncovered lines are two more happy-path shapes, not error branches. A helper in `all_test.go` loses its last caller during the edit.",
+      "setup": "`Test_Encode_tabular` already exists for the target function, covering happy-path rows. The uncovered lines are two more happy-path shapes, not error branches: the table already holds a row for each, marked `pending` and skipped through a helper in `all_test.go`, which loses its last caller once they run.",
       "query": "/cover pkg/svc/foo.go",
       "files": []
     },
@@ -77,7 +77,7 @@
       "skills": [
         "cover"
       ],
-      "setup": "`Upload` calls `http.Post` directly on a package-level client with no injection point. The branch handling a failed POST is reachable only by adding a seam to the production code.",
+      "setup": "`Upload` builds its own `http.Client` inside the function and calls `Post` on it, with no injection point. The branch handling a failed POST is reachable only by adding a seam to the production code.",
       "query": "/cover func=Upload include=all",
       "files": []
     },

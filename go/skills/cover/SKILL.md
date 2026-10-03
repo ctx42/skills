@@ -165,7 +165,9 @@ does not.
   external I/O. Defer and report; cover only under `include=all`. A line a test
   reaches by paying real time or real I/O — waiting out a `time.Sleep`, hitting
   a real socket — is complex, not easy and not un-coverable: nothing is
-  unreachable and no seam is missing, so it is the cost that defers it.
+  unreachable and no seam is missing, so it is the cost that defers it. A fake
+  the test must write itself is complex too, however small, even against an
+  existing seam (a package `dialer` var).
 - un-coverable — one of the categories below. Never attempt; report with the
   reason.
 
@@ -177,7 +179,9 @@ Run loop steps 1–2 for every function in scope, then present:
 - deferred lines (`file:line — reason`),
 - un-coverable lines (`file:line — reason`).
 
-Wait for approval, then run steps 3–4 function by function.
+Wait for approval, then run steps 3–4 function by function: `Foo.after` is
+measured before any test for the next function is written, even when one batch
+would be quicker.
 
 ## Write
 
@@ -220,9 +224,13 @@ Never attempt; always name the line and the reason:
 
 ## Output
 
+Use the labels below verbatim ("Deferred lines:", not "Left for later"):
+readers and callers scan for them.
+
 - Per-function coverage delta (before → after), one row per function in
   scope.
-- Tests added: `file:Test_Foo` + what each covers.
+- Tests added: `file:Test_Foo` + what each covers; one bullet per case added,
+  table rows nested under their test function, so the list counts.
 - Deferred lines: `file:line — reason`.
 - Un-coverable lines: `file:line — reason`.
 - Cases added this run, counted the way `max_tests` counts them — and under
