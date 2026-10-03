@@ -1,6 +1,7 @@
 # The review file
 
-How `<srd>.review.md` is laid out, numbered, cited, and ordered. Read before
+How `<srd>.review.md` (the SRD's path with `.md` replaced: `specs/login.md` →
+`specs/login.review.md`) is laid out, numbered, cited, and ordered. Read before
 writing or updating one — every mode that touches the file needs it, and no
 mode needs it before then.
 
@@ -28,8 +29,9 @@ Two rules breaking on one edit is the mirror case and resolves the same way: a
 `Status` field that violates both STA-2 and STA-3 takes one correction and one
 yes, so it is one finding. Cite the rule the fix is derived from and name the
 other in the text; when both derive it, as with STA-2 and STA-3, cite STA-3
-and name STA-2. Atomicity is about the fix, not about how many rules the
-defect trips.
+and name STA-2. An `ACCEPTED` status that breaks STA-2 always takes that
+citation, even when the Quality Bar is otherwise met — never STA-2 alone.
+Atomicity is about the fix, not about how many rules the defect trips.
 
 Open finding shape — number first, then severity, then category:
 

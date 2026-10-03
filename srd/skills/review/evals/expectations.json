@@ -17,7 +17,7 @@
       "id": 2,
       "name": "applies-rules-create-only-stubs",
       "expected_behavior": [
-        "Flags the single owner (STR-2), the missing Initiative link (STR-3), and `ACCEPTED` without an approved design (STA-2), all as blockers, without excusing them as authoring placeholders — unlike `create`, the review applies the full standard",
+        "Flags the single owner (STR-2), the missing Initiative link (STR-3), and `ACCEPTED` without an approved design (STA-2), all as blockers, none excused as an authoring placeholder",
         "Raises no back-link finding: STR-4/6 live in external systems",
         "Records all three under the Metadata section of the review file"
       ]

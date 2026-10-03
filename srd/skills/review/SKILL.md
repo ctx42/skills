@@ -181,6 +181,8 @@ prose for free-form input.
 A file-writing run closes with one task-oriented line — e.g. "4 of 15 tasks
 resolved, 2 withdrawn; 1 blocker still open." — plus the per-severity count of
 open findings and whether a blocker stands between the SRD and the Quality Bar.
+The findings live in the file the user is pointed to: the reply never lists
+them — one per line, by group, or in a table — nor quotes their trigger text.
 `errata` is a file-writing run and owes it too: its own "which numbers moved"
 line says what the re-sort did, not what the file now holds, and the two answer
 different questions.
@@ -222,11 +224,15 @@ in full, so it is not summarized here.
 5. Close with the task-oriented line (Modes) and one start clause naming what
    the draft check found (`prior draft gaps: none`, or what was drained), unless
    a caller said it ran the check and so owns the clause — a check that found
-   nothing otherwise looks like one that never ran. Then, unless a caller said
-   it makes the closing offer, invoke `srd:report-doc-gap` to offer the drafts
-   this run captured — and only then: the start check governs a *prior*
-   session's drafts, this offer covers what *this* run captured, so a run that
-   captured none invokes nothing here either.
+   nothing otherwise looks like one that never ran. When the delegate makes the
+   offer (below), pass that line and clause in its args as `closing: <text>`
+   so its offer opens with them; otherwise write them as the reply.
+   Then, unless a caller said it makes the closing offer, invoke
+   `srd:report-doc-gap` to offer the drafts this run captured — and only then:
+   the start check governs a *prior* session's drafts, this offer covers what
+   *this* run captured, so a run that captured none invokes nothing here
+   either. The offer is the delegate's, never written inline, so its
+   file/change/drop choices reach the user.
 
 ## walk
 
