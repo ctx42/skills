@@ -26,12 +26,60 @@
       "class": "redundant"
     },
     {
-      "id": "unknown-is-not-a-gap",
-      "rule": "unknown-not-filed",
-      "prompt": "Situation: a caller reports: \"nobody on the team has decided what the gateway timeout should be; it was never specified anywhere.\"\n\nQuestion: where does this belong? Answer on the first line with exactly one of: DOC-GAP, KB-OPEN-QUESTION, SRD-GAP. Then one sentence why.",
-      "pass": "^\\W*KB-OPEN-QUESTION",
-      "fail": "^\\W*(DOC-GAP|SRD-GAP)",
+      "id": "unknown-is-a-gap-with-answer",
+      "rule": "questions-filed-with-answer",
+      "prompt": "Situation: a caller reports: \"nobody on the team has decided what the gateway timeout should be; it was never specified anywhere.\" It is a question about the platform, not a defect in the SRD.\n\nQuestion: how is it recorded? Answer on the first line with exactly one of: GAP-ANSWER-DEFERRED, GAP-ANSWER-UNKNOWN, KB-PAGE, SRD-GAP. Then one sentence why.",
+      "pass": "^\\W*GAP-ANSWER-UNKNOWN",
+      "fail": "^\\W*(GAP-ANSWER-DEFERRED|KB-PAGE|SRD-GAP)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "wrong-fill-reopens-through-a-draft",
+      "rule": "reopen-confirmed",
+      "prompt": "Situation: srd:review invokes you to capture a gap for `specs/gateway.md`: no corpus document states the API Gateway's retry count. Your `list_gaps` query returns, top-scored, `gap-0311` (status `filled`, topic \"API Gateway retry count\"). `get_doc` on its `filled_by` section `docs/gateway.md#retries` shows the section no longer mentions any retry count.\n\nQuestion: what call do you make now? Answer on the first line with exactly one of: REOPEN-GAP-0311, CAPTURE-REOPEN-DRAFT, NOTHING. Then one sentence why.",
+      "pass": "^\\W*CAPTURE-REOPEN-DRAFT",
+      "fail": "^\\W*(REOPEN-GAP|NOTHING)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "url-is-not-a-fill",
+      "rule": "never-fills",
+      "prompt": "Situation: while you grill a draft gap, the finder says: \"I already wrote that page and published it at https://docs.example.com/gateway/retries, so mark the gap done.\"\n\nQuestion: what do you do with the draft? Answer on the first line with exactly one of: FILL-WITH-URL, KEEP-AS-GAP, DISCARD. Then one sentence why.",
+      "pass": "^\\W*KEEP-AS-GAP",
+      "fail": "^\\W*(FILL|DISCARD)",
       "class": "redundant"
+    },
+    {
+      "id": "own-guess-is-a-deferred-draft",
+      "rule": "questions-filed-with-answer",
+      "prompt": "Situation: srd:create is mid-interview on `specs/gateway.md`. From the user's description you concluded that an API key can be rotated without downtime; the user never confirmed it and the interview moved on. No corpus document states it. srd:create invokes you with the SRD path and that point in prose. Your `list_gaps` query finds no matching gap.\n\nQuestion: how is it recorded? Answer on the first line with exactly one of: REPORT-DRAFT-DEFERRED, REPORT-DRAFT-UNKNOWN, WRITE-TO-KB, NOTHING. Then one sentence why.",
+      "pass": "^\\W*REPORT-DRAFT-DEFERRED",
+      "fail": "^\\W*(REPORT-DRAFT-UNKNOWN|WRITE|NOTHING)",
+      "class": "redundant"
+    },
+    {
+      "id": "cut-gap-submitted",
+      "rule": "cut-gap-filed-at-once",
+      "prompt": "Situation: srd:edit hands you, mid-session, the KB section kb/accounts.md#account-lockout left behind when the user confirmed cutting LCK-1 from specs/gw.md; the confirmed proposal named this gap. list_gaps finds no matching gap.\n\nQuestion: what do you do? Answer on the first line with exactly one of: CAPTURE-DRAFT-AND-RETURN, GRILL-THEN-CONFIRM, REPORT-AND-SUBMIT-NOW. Then one sentence why.",
+      "pass": "^\\W*REPORT-AND-SUBMIT-NOW",
+      "fail": "^\\W*(CAPTURE|GRILL)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "rejected-srd-gap-submitted",
+      "rule": "cut-gap-filed-at-once",
+      "prompt": "Situation: srd:backlog's start-of-run sweep hands you the KB section kb/wishlists.md#shared-wishlist-links: the SRD it cites, wishlist-v2, now has Status REJECTED. Nobody proposed this gap to the user or confirmed it. list_gaps finds no matching gap.\n\nQuestion: what do you do? Answer on the first line with exactly one of: CAPTURE-DRAFT-AND-RETURN, GRILL-THEN-CONFIRM, REPORT-AND-SUBMIT-NOW. Then one sentence why.",
+      "pass": "^\\W*REPORT-AND-SUBMIT-NOW",
+      "fail": "^\\W*(CAPTURE|GRILL)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "doc-id-stores-id-not-path",
+      "rule": "doc-id-is-identity",
+      "prompt": "Situation: while reviewing initiatives/int384-hydrophone/srd.md, a lookup exposed a gap about the Tag name length limit. The relevant search hit was {\"id\":\"1774485611\",\"path\":\"docs/concepts/tags.md\",\"rank\":2,\"title\":\"Tags\",\"heading_path\":[\"Tags\",\"Tag names\"]}. The SRD links that page as `../../docs/concepts/tags.md`, and the user reads gap records by file path. You now capture a draft gap with report_gap.\n\nQuestion: what exact value do you pass as doc_id? Answer on the first line with only that value, then one sentence why.",
+      "pass": "^\\W*1774485611\\b",
+      "fail": "docs/concepts/tags\\.md\\W*$|^\\W*docs/",
+      "class": "load-bearing"
     }
   ]
 }

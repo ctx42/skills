@@ -89,6 +89,76 @@
         "counts\\ only",
         "read\\ off\\ the\\ finished\\ artifact,\\ never\\ carried\\ from\\ the\\ work\\ that\\ produced\\ it"
       ]
+    },
+    {
+      "id": "srd-kb-never-contradict",
+      "file": "references/doc-corpus.md",
+      "rule": "KB and SRDs describe the target system and never contradict; a contradiction is a finding no rank settles; a confirmed fact changes the KB at once",
+      "must": [
+        "so\\ no\\ rank\\ settles\\ an\\ SRD\\ claim\\ a\\ KB\\ section\\ contradicts",
+        "The\\ KB\\ and\\ the\\ SRDs\\ both\\ describe\\ the\\ target\\ system",
+        "a\\ confirmed\\ fact\\ changes\\ the\\ KB\\ at\\ once"
+      ]
+    },
+    {
+      "id": "rank-settles-sources",
+      "rule": "Conflicting corpus sources are settled by the server's rank (lower wins), never by folder name or a remembered order",
+      "file": "../create/references/doc-corpus.md",
+      "must": [
+        "the\\ lower\\ `rank`\\ states\\ the\\ platform",
+        "Never\\ settle\\ by\\ folder\\ name,\\ source\\ type,\\ or\\ a\\ remembered\\ order"
+      ],
+      "must_not": [
+        "doc/(infraport|user_docs|devices)",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "store-identity",
+      "rule": "A stored document reference is the result's id copied as is, never its path; Markdown links stay paths",
+      "file": "../create/references/doc-corpus.md",
+      "must": [
+        "copy\\ the\\ result's\\ `id`\\ as\\ is,\\ never\\ its\\ `path`",
+        "A\\ Markdown\\ link\\ stays\\ a\\ relative\\ path\\ built\\ from\\ `path`"
+      ]
+    },
+    {
+      "id": "srd-ref-folder",
+      "rule": "An SRD reference is the SRD's folder name under initiatives, never a document identity",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "SRD's\\ folder\\ name\\ under\\ `initiatives`"
+      ],
+      "must_not": [
+        "doc/(infraport|user_docs|devices)",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "frontmatter-neutral",
+      "rule": "Reads only id, title, url, aliases; never adds or removes a front-matter key or marker another tool owns",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "Read only the front-matter keys `id`, `title`, `url`, and `aliases`",
+        "Never add, remove, or change a front-matter key or marker"
+      ],
+      "must_not": [
+        "cfsync|confluence|atlassian|\\.obsidian|page_id|space_id|page_version|heading_anchors|ignore-push"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "doc/(infraport|user_docs|devices)",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
     }
   ]
 }

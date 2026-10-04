@@ -79,10 +79,13 @@ then invoke `srd:report-doc-gap` again after the closing line to offer the
 drafts this run captured. They also run a facts-vs-corpus pass beside the rule
 checks: for every requirement that asserts something about existing system
 behavior ("the gateway retries 3×", "the API returns Y"), `search` the corpus
-to confirm it. A
-claim the corpus contradicts is a `reference` finding; one it cannot confirm is
-a doc gap for `srd:report-doc-gap`, never a finding in `<srd>.review.md`.
-`srd:kb` is not invoked: a review confirms no platform facts with the user.
+to confirm it. A claim the corpus contradicts is a `reference` finding; one it
+cannot confirm is a doc gap for `srd:report-doc-gap`, never a finding in
+`<srd>.review.md`. A KB section contradicting the SRD is a `reference` finding
+too, never settled by `rank` (an SRD has none): it names both claims and both
+fixes — align the SRD, or confirm its fact through `srd:edit` so `srd:kb`
+rewrites the section — and calls neither side wrong. `srd:kb` is not invoked: a
+review confirms no platform facts with the user.
 
 ## Severity
 
@@ -130,9 +133,9 @@ entry leads and the lower becomes the second tag:
   glossary entry, the metadata, a Note, the Introduction (SCO-2, SCO-3,
   GLO-1/2).
 - `reference` — a link, ticket id, or claim about the live system that is
-  wrong or stale. The standard forbids no such error, so this finding cites
-  evidence where others cite a rule: the corpus doc id and heading that
-  contradict it, or the dead link.
+  wrong or stale, or a claim a KB section contradicts. The standard forbids
+  no such error, so this finding cites evidence where others cite a rule: the
+  corpus doc id and heading that contradict it, or the dead link.
 - `redundancy` — two rules state the same thing, or one subsumes the other.
 - `verifiability` — a vague quality, an unmeasurable criterion, an open-ended
   list (REQ-5, REQ-6, LANG-7).

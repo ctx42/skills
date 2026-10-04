@@ -1,0 +1,101 @@
+{
+  "skill_name": "doc-edit",
+  "probes": [
+    {
+      "id": "fill-ref-uses-id",
+      "rule": "fill-ref-identity",
+      "prompt": "Situation: You are editing `docs/operations/correlation.md` with srd:doc-edit. `list_docs` lists it as {\"id\":\"1882030917\",\"path\":\"docs/operations/correlation.md\",\"rank\":3,\"title\":\"Correlation\"}. Open gap gap-0410 asks for the minimum recording overlap. The user answered your proposal Y; you added the fact under a new heading `## Recording overlap` and saved the file. The user reads gaps by file path.\n\nQuestion: what exact single `filled_by` entry do you pass to fill_gap? Answer on the first line with only that value, then one sentence why.",
+      "pass": "^\\W*1882030917#recording-overlap\\b",
+      "fail": "^\\W*docs/",
+      "class": "redundant"
+    },
+    {
+      "id": "inbox-fills-nothing",
+      "rule": "kb-fill-topic-page-only",
+      "prompt": "Situation: You are editing `docs/operations/correlation.md` with srd:doc-edit. `list_docs` lists it as {\"id\":\"1882030917\",\"path\":\"docs/operations/correlation.md\",\"rank\":3,\"title\":\"Correlation\"}. Open gap gap-0410 asks for the minimum recording overlap. The user supplied the fact and pressed K (the KB instead). srd:kb reports `kb/_inbox.md: 1 section`, under the heading `## Correlation minimum overlap`; that section states the whole fact.\n\nQuestion: what do you do about gap-0410 now? Answer on the first line with exactly one of: FILL-FROM-INBOX-SECTION, FILL-FROM-THIS-DOCUMENT, NO-FILL-OFFER-KB-FILE. Then one sentence why.",
+      "pass": "^\\W*NO-FILL",
+      "fail": "^\\W*FILL-FROM",
+      "class": "redundant"
+    },
+    {
+      "id": "kb-topic-page-fills",
+      "rule": "kb-fill-topic-page-only",
+      "prompt": "Situation: You are editing `docs/operations/correlation.md` with srd:doc-edit. `list_docs` lists it as {\"id\":\"1882030917\",\"path\":\"docs/operations/correlation.md\",\"rank\":3,\"title\":\"Correlation\"}. Open gap gap-0410 asks for the minimum recording overlap. The user pressed K; srd:kb wrote the fact to the inbox, and the user then ran `/kb file`, which moved the section into the topic page `kb/correlation.md` under the heading `## Minimum recording overlap`. Your correlation page is unchanged.\n\nQuestion: what exact single `filled_by` entry do you pass to fill_gap? Answer on the first line with only that value (or NONE), then one sentence why.",
+      "pass": "^\\W*kb/correlation\\.md#minimum-recording-overlap\\b",
+      "fail": "^\\W*(NONE|1882030917|kb/_inbox)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "srd-goes-to-edit",
+      "rule": "srd-hands-off",
+      "prompt": "Situation: the user runs `/doc-edit initiatives/sso/srd.md tighten the wording of GR-2`. The gate passed; the file exists and is a plain Markdown requirements document. You can see a clearer wording for GR-2.\n\nQuestion: what do you do? Answer on the first line with exactly one of: PROPOSE-THE-REWORDING, INVOKE-SRD-EDIT. Then one sentence why.",
+      "pass": "^\\W*INVOKE-SRD-EDIT",
+      "fail": "^\\W*PROPOSE",
+      "class": "redundant"
+    },
+    {
+      "id": "kb-page-written-by-kb",
+      "rule": "kb-writes-via-kb",
+      "prompt": "Situation: you are editing `kb/correlation.md`, a knowledge-base topic page, with srd:doc-edit. The user answered Y to your proposal correcting its overlap figure from 20 to 30 minutes, a fact the user confirmed. You have Edit access to the file.\n\nQuestion: who writes the change? Answer on the first line with exactly one of: EDIT-THE-FILE-MYSELF, HAND-TO-SRD-KB. Then one sentence why.",
+      "pass": "^\\W*HAND-TO-SRD-KB",
+      "fail": "^\\W*EDIT-THE",
+      "class": "redundant"
+    },
+    {
+      "id": "unconfirmed-goes-to-report-doc-gap",
+      "rule": "gaps-via-report-doc-gap",
+      "prompt": "Situation: You are editing `docs/operations/correlation.md` with srd:doc-edit. `list_docs` lists it as {\"id\":\"1882030917\",\"path\":\"docs/operations/correlation.md\",\"rank\":3,\"title\":\"Correlation\"}. Its Correlation section says runs use recordings from 02:00 to 04:00. No search hit confirms it; asked in your proposal, the user says: \"no idea, the acoustics team would know.\" You have the gap tools, report_gap included.\n\nQuestion: what do you do with that unconfirmed claim? Answer on the first line with exactly one of: CALL-REPORT-GAP-DIRECTLY, HAND-TO-SRD-REPORT-DOC-GAP, DELETE-THE-CLAIM. Then one sentence why.",
+      "pass": "^\\W*HAND-TO-SRD-REPORT-DOC-GAP",
+      "fail": "^\\W*(CALL|DELETE)",
+      "class": "redundant"
+    },
+    {
+      "id": "srd-never-fills",
+      "rule": "fill-from-corpus-section",
+      "prompt": "Situation: You are editing `docs/operations/correlation.md` with srd:doc-edit. `list_docs` lists it as {\"id\":\"1882030917\",\"path\":\"docs/operations/correlation.md\",\"rank\":3,\"title\":\"Correlation\"}. Open gap gap-0410 asks for the minimum recording overlap. The user says: \"we settled that in initiatives/autoco/srd.md, AC-4 states 30 minutes — fill the gap from there, don't touch this page.\"\n\nQuestion: do you call fill_gap with `initiatives/autoco/srd.md#...`? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "one-change-per-turn",
+      "rule": "one-confirmed-change",
+      "prompt": "Situation: the user asks srd:doc-edit to fix two unrelated things on `docs/operations/correlation.md`: a typo in the intro and the missing overlap figure in Prerequisites. Both lookups are done.\n\nQuestion: how many changes does your next message propose? Answer on the first line with exactly one of: ONE, BOTH. Then one sentence why.",
+      "pass": "^\\W*ONE\\b",
+      "fail": "^\\W*BOTH",
+      "class": "redundant"
+    },
+    {
+      "id": "front-matter-untouched",
+      "rule": "no-front-matter",
+      "prompt": "Situation: editing `docs/glossary/main_glossary.md`, you add the abbreviation AUTOCO to the Correlation entry. The file's front matter has `title` but no `aliases`; adding `aliases: [AUTOCO]` would help search find the page.\n\nQuestion: do you add the `aliases` key? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "push-is-users-job",
+      "rule": "synced-upstream",
+      "prompt": "Situation: You are editing `docs/operations/correlation.md` with srd:doc-edit. `list_docs` lists it as {\"id\":\"1882030917\",\"path\":\"docs/operations/correlation.md\",\"rank\":3,\"title\":\"Correlation\"}. (its front-matter `id` differs from its path, so it is a synced page). You applied the user's change and filled the gap. You are writing the closing manifest.\n\nQuestion: what does it say about the page's source? Answer on the first line with exactly one of: OFFER-TO-PUSH-IT, USER-MUST-PUSH-UPSTREAM, NOTHING. Then one sentence why.",
+      "pass": "^\\W*USER-MUST-PUSH",
+      "fail": "^\\W*(OFFER|NOTHING)",
+      "class": "redundant"
+    },
+    {
+      "id": "rank-not-folder",
+      "rule": "trust-by-rank",
+      "prompt": "Situation: editing `docs/operations/correlation.md` (rank 3), you look up the overlap figure. `kb/correlation.md#overlap` (rank 1) says 30 minutes; `docs/api-gateway/acoustics.md#overlap` (rank 2), the official API documentation, says 20 minutes.\n\nQuestion: which figure states the platform? Answer on the first line with exactly one of: 30-MINUTES, 20-MINUTES, ASK-THE-USER. Then one sentence why.",
+      "pass": "^\\W*30-MINUTES",
+      "fail": "^\\W*(20|ASK)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "gap-doc-id-is-id",
+      "rule": "gap-doc-id-identity",
+      "prompt": "Situation: You are editing `docs/operations/correlation.md` with srd:doc-edit. `list_docs` lists it as {\"id\":\"1882030917\",\"path\":\"docs/operations/correlation.md\",\"rank\":3,\"title\":\"Correlation\"}. Its Prerequisites section states a spacing nobody can confirm, and you hand the gap to srd:report-doc-gap. The user reads gaps by file path.\n\nQuestion: what exact `doc_id` do you pass for the gap? Answer on the first line with only that value, then one sentence why.",
+      "pass": "^\\W*1882030917\\b",
+      "fail": "^\\W*docs/",
+      "class": "redundant"
+    }
+  ]
+}

@@ -36,6 +36,30 @@
       "pass": "^\\W*SEARCH-CORPUS",
       "fail": "^\\W*(ACCEPT|ASK-USER)",
       "class": "redundant"
+    },
+    {
+      "id": "interview-kb-conflict-changes-kb-now",
+      "rule": "srd-kb-never-contradict",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: interviewing for a new SRD, specs/gw.md, the user says accounts lock after 3 failed sign-in attempts. Your corpus search returned: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/sso.md` interview 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" specs/sso.md is ACCEPTED. You surfaced the conflict; the user confirms 3 is what will be built.\n\nQuestion: when does the KB section change? Answer on the first line with exactly one of: NOW-VIA-SRD-KB, WHEN-GW-IS-ACCEPTED, WHEN-SSO-IS-REVISED, NEVER-KB-WINS. Then one sentence why.",
+      "pass": "^\\W*NOW-VIA-SRD-KB",
+      "fail": "^\\W*(WHEN|NEVER)",
+      "class": "redundant"
+    },
+    {
+      "id": "rank-settles-corpus-conflict",
+      "rule": "rank-settles-sources",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: interviewing for specs/tags.md, you search the corpus for the Tag name separator. Two results disagree. Result A: {\"id\":\"1774485611\",\"path\":\"docs/user_manual/tags.md\",\"rank\":2,\"title\":\"Tags (user manual)\",\"text\":\"Tag node names are separated by commas.\"}. Result B: {\"id\":\"docs/api-reference/tags.md\",\"path\":\"docs/api-reference/tags.md\",\"rank\":5,\"title\":\"Tags API reference\",\"text\":\"Tag node names are separated by dots.\"}. The user has not said which is right.\n\nQuestion: which statement do you treat as the platform's behavior? Answer on the first line with exactly one of: COMMAS-FROM-A, DOTS-FROM-B, NEITHER-ASK-THE-USER. Then one sentence why.",
+      "pass": "^\\W*COMMAS-FROM-A",
+      "fail": "^\\W*(DOTS|NEITHER)",
+      "class": "redundant"
     }
   ]
 }

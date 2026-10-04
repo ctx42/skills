@@ -12,16 +12,20 @@ skill that passed the gate this session reuses that result.
 2. Read the file's YAML front matter; keys are flat. Ignore keys not listed
    below — they belong to the server.
 
-| Key            | Holds                                                           |
-|----------------|-----------------------------------------------------------------|
-| `mcp-server`   | server name; its tools are `mcp__<mcp-server>__<tool>`          |
-| `kb`           | knowledge-base folder; confirmed facts land in `<kb>/_inbox.md` |
-| `initiatives`  | SRD folder, one folder per SRD                                  |
-| `srd-standard` | document id of the SRD standard, read with `get_doc`            |
-| `glossary`     | Company Glossary location; GLO-4/5 links must point under it    |
+| Key            | Holds                                                                      |
+|----------------|----------------------------------------------------------------------------|
+| `mcp-server`   | server name; its tools are `mcp__<mcp-server>__<tool>`                     |
+| `kb`           | knowledge-base folder; confirmed facts land in `<kb>/_inbox.md`            |
+| `initiatives`  | SRD folder, one folder per SRD; the server gives its documents no `rank`   |
+| `srd-standard` | identity of the SRD standard, read with `get_doc`                          |
+| `glossary`     | Company Glossary location; GLO-4/5 links must point under it               |
+| `gaps`         | server's gap folder, one `gap-NNNN-<slug>.md` per gap; reach it via tools  |
+| `precedence`   | server's trust order: folders, most trusted first; drives each `rank`      |
 
-Every srd skill needs all five: each one delegates to the others. Every path is
-relative to the project root; an absolute path is invalid.
+Every srd skill needs the first five: each one delegates to the others. Every
+path is relative to the project root; an absolute path is invalid. `gaps` and
+`precedence` are optional and server-validated: never read the gap folder or
+the `precedence` list directly — use the gap tools and the `rank` on results.
 
 ## 2. Check the server
 
@@ -44,16 +48,23 @@ then re-run. Never fall back to a REST call, a local checkout, or offline work.
 
 ## 4. Use what it names
 
-- A document id is its path from the project root: `<kb>/_inbox.md` is both the
-  file and its id, because each server source is a top-level folder named as
-  its id prefix.
-- The SRD standard is `get_doc` on the `srd-standard` id, fetched once per
-  session before the first rule check; it is the only source of the `STR`,
+- A document's **identity** is its front-matter `id`, else its path from the
+  project root; every result carries both as `id` and `path`. A KB page has no
+  `id`, so `<kb>/_inbox.md` is both its file and its identity. Store and pass
+  identities per [doc-corpus.md](doc-corpus.md#identity).
+- Read only the front-matter keys `id`, `title`, `url`, and `aliases` of a
+  corpus document. Never add, remove, or change a front-matter key or marker
+  no srd skill defines, in any file — a key another tool owns stays as found.
+- The SRD standard is `get_doc` on the `srd-standard` identity, fetched once
+  per session before the first rule check; it is the only source of the `STR`,
   `STA`, `LANG`, `REQ`, `GLO`, `SCO` rules and the Quality Bar. Never use a
-  stored or remembered copy. A not-found id stops the run like a gate failure:
-  `srd-standard` names no document (`<value>`).
+  stored or remembered copy. A not-found identity stops the run like a gate
+  failure: `srd-standard` names no document (`<value>`).
 - The standard's "Company Glossary" is the `glossary` location; its terms come
   from the server ([srd-procedures.md](srd-procedures.md)).
-- An SRD's `srd_ref` is its path from the project root.
+- An SRD reference (gap `srd_ref`, KB `srd_ref`, attestation lines) is the
+  SRD's folder name under `initiatives` (`int384-hydrophone`); an SRD outside
+  `initiatives` uses its path from the project root. Never a document
+  identity, never an invented id.
 - Project data lives in the project or on the server — `<kb>/`, server-side
   gaps — never in per-machine state. Only skill lessons live per machine.

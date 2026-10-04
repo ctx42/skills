@@ -62,7 +62,7 @@ Authors a new Software Requirement Document (SRD) to the SRD standard.
 
 ## Steps
 
-1. Load the SRD standard from the srd-doc server (`get_doc`) and obey every
+1. Load the SRD standard from the srd server (`get_doc`) and obey every
    rule it states.
 2. Interview the user for the gaps.
 3. Write the SRD. Set the header `Status` to one of the standard's STA-1
@@ -83,8 +83,8 @@ none; absence is the normal case and needs no comment. On a correction or
 self-caught mistake, append a one-line rule to the sibling when this directory
 is writable, else to the fallback, creating it, and report where.
 EOF_1
-mkdir -p srd/evals/mocks/srd-doc/fixtures
-cat > srd/evals/mocks/srd-doc/fixtures/srd-standard.md <<'EOF_2'
+mkdir -p srd/evals/mocks/srd/fixtures
+cat > srd/evals/mocks/srd/fixtures/srd-standard.md <<'EOF_2'
 # SRD standard (frozen eval copy)
 
 ## Header

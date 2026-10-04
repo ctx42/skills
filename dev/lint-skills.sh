@@ -344,7 +344,8 @@ fi
 # Every tracked JSON file parses — settings.json, manifests, and eval specs.
 # (A stray shell redirect once left a bare `2` in .claude/settings.json.)
 # One node process parses them all (one per file cost ~5 s); untracked files
-# that are not ignored count too, so a new spec is checked before it is added.
+# that are not ignored count too, so a new spec is checked before it is added;
+# a tracked file deleted in the working tree is skipped.
 if command -v node >/dev/null; then
     while IFS= read -r f; do
         err "$f: not valid JSON"
@@ -352,6 +353,7 @@ if command -v node >/dev/null; then
         (cd "$SKILLS_SRC" && node -e '
             const fs = require("fs");
             for (const f of fs.readFileSync(0, "utf8").split("\n").filter(Boolean)) {
+                if (!fs.existsSync(f)) continue; // tracked but deleted
                 try { JSON.parse(fs.readFileSync(f, "utf8")); } catch { console.log(f); }
             }'))
 fi

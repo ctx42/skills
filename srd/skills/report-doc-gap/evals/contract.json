@@ -19,10 +19,10 @@
     },
     {
       "id": "drafts-only",
-      "rule": "Never report_gap without draft: true; only drafts editable or discardable",
+      "rule": "Never report_gap without draft: true; only a draft is discardable",
       "must": [
         "`report_gap`\\ without\\ `draft:\\ true`\\ is\\ never\\ called",
-        "Only\\ a\\ draft\\ is\\ editable\\ or\\ discardable"
+        "Only\\ a\\ draft\\ is\\ discardable"
       ]
     },
     {
@@ -42,11 +42,11 @@
       ]
     },
     {
-      "id": "unknown-not-filed",
-      "rule": "An unknown belongs in open-questions via srd:kb, not a gap",
+      "id": "questions-filed-with-answer",
+      "rule": "A deferred or unknown platform question is filed here as a gap with answer set, never written to the KB",
       "must": [
-        "file\\ an\\ unknown,\\ a\\ fact\\ nobody\\ has\\ pinned\\ down",
-        "open\\-questions\\ list\\ through\\ `srd:kb`"
+        "A\\ platform\\ question\\ SRD\\ work\\ leaves\\ open\\ is\\ a\\ gap\\ too,\\ marked\\ by\\ `answer`",
+        "Both\\ are\\ filed\\ here,\\ never\\ written\\ to\\ the\\ KB"
       ]
     },
     {
@@ -65,10 +65,26 @@
     },
     {
       "id": "dedup-merge",
-      "rule": "Check all drafts and merge a same-fact draft rather than duplicate",
+      "rule": "Query every gap before capturing and merge a same-fact draft rather than duplicate",
       "must": [
+        "run\\ `list_gaps`\\ with\\ `query`\\ the\\ topic\\ and\\ detail\\ words,\\ no\\ `status`\\ or\\ `srd_ref`\\ filter",
         "merge\\ into\\ it\\ with\\ `update_gap`\\ rather\\ than\\ duplicate",
-        "keep\\ the\\ `doc_id`/`heading_path`/\\ `source_url`\\ already\\ set"
+        "keep\\ the\\ `doc_id`/`heading_path`\\ already\\ set"
+      ]
+    },
+    {
+      "id": "open-dup-add-hit",
+      "rule": "A same-fact open gap gets add_hit, never a new record",
+      "must": [
+        "`open`:\\ `update_gap`\\ with\\ `add_hit:\\ true`"
+      ]
+    },
+    {
+      "id": "reopen-confirmed",
+      "rule": "A filled gap whose sections lack the fact is reopened only through a confirmed draft",
+      "must": [
+        "capture\\ a\\ draft\\ whose\\ `detail`\\ opens\\ `Reopens\\ gap\\-NNNN:`",
+        "on\\ yes,\\ `reopen_gap`\\ on\\ `gap\\-NNNN`"
       ]
     },
     {
@@ -91,6 +107,40 @@
       "rule": "Filing only records the gap; corpus unchanged",
       "must": [
         "Filing\\ only\\ records\\ the\\ gap;\\ the\\ corpus\\ is\\ unchanged"
+      ]
+    },
+    {
+      "id": "never-fills",
+      "rule": "Never fills or wontfixes a gap; that is srd:backlog",
+      "must": [
+        "fill\\ a\\ gap,\\ or\\ close\\ it\\ as\\ wontfix\\ \\(that\\ is\\ `srd:backlog`\\)"
+      ]
+    },
+    {
+      "id": "cut-gap-filed-at-once",
+      "rule": "A cut requirement's or REJECTED SRD's KB-section gap arrives confirmed: kind wrong, submitted at once, no grill",
+      "must": [
+        "A\\ KB\\ section\\ left\\ behind\\ by\\ a\\ cut\\ requirement\\ \\(or\\ an\\ abandoned\\ SRD\\)\\ arrives\\ confirmed",
+        "`kind:\\ wrong`",
+        "then\\ file\\ at\\ once\\ —\\ no\\ grill,\\ no\\ phase\\ D",
+        "from\\ `srd:backlog`'s\\ sweep,\\ by\\ the\\ SRD's\\ `REJECTED`\\ Status"
+      ]
+    },
+    {
+      "id": "doc-id-is-identity",
+      "rule": "A gap's doc_id is the result's id, never its path",
+      "must": [
+        "the\\ `id`,\\ never\\ the\\ `path`,\\ even\\ when\\ they\\ differ"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "doc/(infraport|user_docs|devices)",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
       ]
     }
   ]

@@ -2,18 +2,24 @@
 set -euo pipefail
 cat > project-config.md <<'EOF_PC'
 ---
-mcp-server: srd-doc
+mcp-server: srd
 kb: kb
 initiatives: initiatives
 srd-standard: docs/guidelines_for_software_requirements_documents.md
 glossary: docs/glossary
+precedence:
+  - kb
+  - docs/concepts
+  - docs/api-gateway
+  - docs/operations
+  - docs/glossary
 ---
 
 # Project configuration (eval fixture)
 
 EVAL TEST DATA ONLY. Copy this file to the root of a scenario's workspace so
 the srd skills' gate finds a project; a scenario's `setup` overrides any key.
-In an eval run, `srd/evals/mocks/srd-doc/fixtures/srd-standard.md` stands in for the
+In an eval run, `srd/evals/mocks/srd/fixtures/srd-standard.md` stands in for the
 `get_doc` result of `srd-standard` — see `dev/eval/blind-runner-prompt.md`.
 EOF_PC
 mkdir -p specs kb
@@ -39,11 +45,11 @@ cat > specs/labeling.md <<'EOF_SRD'
 ## Introduction
 
 This document specifies how the platform stores
-[Labels](<../docs/glossary/machine_learning_glossary.md#Label>)
-on a [Sound File](<../docs/glossary/main_glossary.md#Sound-File-(SND)>).
+[Labels](<../docs/glossary/machine_learning_glossary.md#label>)
+on a [Sound File](<../docs/glossary/main_glossary.md#sound-file-snd>).
 The system will let a user assign Labels to a Sound File, remove them, and look
 them up. Each Label is kept as a
-[Tag](<../docs/glossary/main_glossary.md#Tag-(TAG)>), and every
+[Tag](<../docs/glossary/main_glossary.md#tag-tag>), and every
 assignment records who made it and when.
 
 ## Glossary
@@ -75,7 +81,7 @@ The association of one Label with one Sound File.
 ### General (GR)
 
 **GR-1:** The system MUST allow a user to assign a Label to a Sound File in a
-[Project](<../docs/glossary/main_glossary.md#Project-(PRJ)>) the
+[Project](<../docs/glossary/main_glossary.md#project-prj>) the
 user belongs to.
 
 **GR-2:** The system MUST store each Label as a Tag.
@@ -89,7 +95,7 @@ node names.
 **GR-5:** The system MUST allow a user to remove a Label Assignment.
 
 **GR-6:** The system MUST record the user and the
-[Date](<../docs/glossary/main_glossary.md#Date>) of each Label
+[Date](<../docs/glossary/main_glossary.md#date>) of each Label
 Assignment.
 
 **GR-7:** The system MUST answer a Tag lookup within 300 ms at the 95th

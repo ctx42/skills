@@ -77,12 +77,15 @@ source of truth.
 - `review` — read-only SRD review; findings go to `<srd>.review.md` beside the
   source.
 - `edit` — edits an existing SRD in place, one confirmed change at a time.
+- `doc-edit` — edits any other corpus page (glossary, synced doc, KB) in place,
+  one confirmed change at a time; files what nobody can confirm as gaps and
+  fills the gaps its edits answer.
 - `system-check` — build-readiness questions for an SRD; owns
   `<srd>.questions.md`. Banks platform facts through `kb`.
 - `report-doc-gap` — producer side of the doc-gap loop: captures gaps found
   during SRD work as server-side drafts, files them on confirmation.
 - `backlog` — one sitting over three lists: questions deferred during SRD work,
-  facts nobody has pinned down, and reported gaps in the user manual.
+  facts nobody has pinned down, and reported gaps it fills from the corpus.
 - `kb` — owns the knowledge base: writes facts attested during SRD interviews
   to its inbox, then files them into topic pages.
 

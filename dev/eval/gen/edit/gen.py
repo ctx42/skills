@@ -222,7 +222,7 @@ def write_case(name, tags, body, files, graders, answers=None, extra_prompt=None
         content = content.replace(r'(?:[^\"\\\\]|\\\\.)*', r'(?:[^"\\]|\\.)*')
         open(os.path.join(d, "graders", gname + ".md"), "w").write(content)
     for tool, content in (mocks or {}).items():
-        md = os.path.join(d, "mocks", "srd-doc")
+        md = os.path.join(d, "mocks", "srd")
         os.makedirs(md, exist_ok=True)
         open(os.path.join(md, tool + ".md"), "w").write(content)
 
@@ -279,14 +279,14 @@ AUTOFIX = REVIEW + DLOG + ["ref:edit/autofix", "ref:create/errata"]
 pair("autofix-bulk-applies-errata", AUTOFIX, "/srd:edit specs/login.md autofix",
      {"specs/login.md": s8, "specs/login.review.md": r8},
      {
-         "b2-no-glossary-call": g_never("mcp__srd-doc__glossary_terms"),
+         "b2-no-glossary-call": g_never("mcp__srd__glossary_terms"),
          "b3-lists-all-three": g_last(r"^(?=.*#4)(?=.*#7)(?=.*#9)", "s"),
          "b3-one-batch-confirmation": g_last(r"^[^\n]*\?[^\n]*$", "m", "count:1"),  # one question for the batch
      },
      {
          "b1-unlisted-spelling-kept": g_file("specs/login.md", r"authorises"),
          "b1-non-errata-finding-kept": g_file("specs/login.md", r"a short\s+while"),
-         "b2-no-glossary-call": g_never("mcp__srd-doc__glossary_terms"),
+         "b2-no-glossary-call": g_never("mcp__srd__glossary_terms"),
          "b2-no-gate-line": g_trace(r'"type":"text","text":"[^"]{0,200}(approval gate|Status (is )?`?(ACCEPTED|IN PROGRESS)|(is|it\'s) (approved|in progress|in-progress))', "i", "not_contains"),
          "b4-applied-gr1": g_file("specs/login.md", r"\*\*GR-1:\*\* The system MUST reject an unauthorized API request"),
          "b4-applied-gr3": g_file("specs/login.md", r"Login Token\s+cannot\s+be\s+verified"),
@@ -361,9 +361,9 @@ write_case("edit--corpus-grounded-edit-routes-the-unconfirmable",
            "/srd:edit specs/login.md GR-2",
            {"specs/login.md": s11},
            {
-               "b1-search-before-edit": g_order("mcp__srd-doc__search", None, "Edit", LOGIN_EDIT),
-               "b1-gap-names-queries": g_used("mcp__srd-doc__report_gap", '"search_terms":\\["', 1),
-               "b2-gap-is-draft": g_used("mcp__srd-doc__report_gap", '"draft":true', 1),
+               "b1-search-before-edit": g_order("mcp__srd__search", None, "Edit", LOGIN_EDIT),
+               "b1-gap-names-queries": g_used("mcp__srd__report_gap", '"search_terms":\\["', 1),
+               "b2-gap-is-draft": g_used("mcp__srd__report_gap", '"draft":true', 1),
                "b2-no-interruption": g_trace(r"User: \\?\"?The gateway retries(?:(?!User: )[\s\S])*?(gap|backlog|documentation)[^\"]{0,300}\?(?:(?!User: )[\s\S])*?User: \\?\"?YN", None, "not_contains"),
                "b3-fact-in-proposal": g_trace(TXT + r"(three|\b3\b)(?:[^\"\\\\]|\\\\.)*(Skip|\*\*S\*\*)[\s\S]*" + edit_old("retr")),
                "b4-no-bank-question": g_trace(r"\{\"type\":\"assistant\"[^\n]*\"type\":\"text\",\"text\":\"[^\n]*(\bbank\b|(add|record|save|write|capture|keep) (this|it|that|these)[^.?!\\]{0,60}(knowledge base|\bkb\b|inbox))[^.?!\\]*\?", "i", "not_contains"),
@@ -407,7 +407,7 @@ write_case("edit--feedback-without-a-review-file", REVIEW, "/srd:edit specs/logi
                "b3-no-edit": g_never("Edit"),
                "b3-no-write": g_never("Write"),
                "b3-no-decision-log": g_exists("specs/login.decisions.md", False),
-               "b4-no-draft-check": g_never("mcp__srd-doc__list_gaps"),
+               "b4-no-draft-check": g_never("mcp__srd__list_gaps"),
                "b4-no-start-report": g_last(r"IN PROGRESS|draft|Decision log|manifest", "i", "not_contains"),
                "b4-at-most-two-lines": g_last(r"(?:^(?!.*(?:policy|directive|approval))[^\n]*\S[^\n]*$[\s\S]*?){3}", "m", "not_contains"),
                "b5-no-menu": g_last(r"srd:review|\b(run|use|try)\s+`?/?(srd:)?review\b|paste|drop(ping)?\s+(the|`#)|without\s+(the\s+)?`?#|re-?run", "i", "not_contains"),

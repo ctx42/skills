@@ -27,9 +27,9 @@
       "name": "restructure-repairs-every-reference",
       "expected_behavior": [
         "Shows the proposed moves and waits for confirmation before touching a file",
-        "Moves the section with its attestation line and its inbox `## Provenance` row, and writes the index-only question's wording onto the new page",
+        "Moves the section with its attestation line, its inbox `## Provenance` row, and its `> Open: gap-0043.` warning line, without writing the question's wording onto the new page",
         "Repairs no SRD, and lists each SRD under the `initiatives` folder that cites an old id so the user can fix it",
-        "Reports each stale gap-store `doc_id` with the value it should take, rather than writing it — this skill holds read access there"
+        "Reports each stale gap-store `doc_id` (`gap-0042` and `gap-0043`) with the value it should take, rather than writing it — this skill holds read access there"
       ],
       "blind_only": [1]
     }

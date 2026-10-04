@@ -47,8 +47,8 @@ keeps every plugin/marketplace version in lockstep with `VER` (see
 List available skills. They are namespaced by plugin, e.g.:
 
 - `go`: `/go:style`, `/go:review`, `/go:cover`, `/go:doc`, `/go:reshape`
-- `srd`: `/srd:create`, `/srd:review`, `/srd:edit`, `/srd:system-check`,
-  `/srd:report-doc-gap`, `/srd:backlog`, `/srd:kb`
+- `srd`: `/srd:create`, `/srd:review`, `/srd:edit`, `/srd:doc-edit`,
+  `/srd:system-check`, `/srd:report-doc-gap`, `/srd:backlog`, `/srd:kb`
 - `craft`: `/craft:cm`, `/craft:grill-me`, `/craft:plan-smith`,
   `/craft:readme-smith`, `/craft:doc-smith`, `/craft:enhance-skills`
 
@@ -84,13 +84,15 @@ and others), not only the evals.
 The SRD skills keep nothing on the machine: everything lives in the project.
 Commit a `project-config.md` at the project root whose YAML front matter names:
 
-| Key            | Holds                                                              |
-|----------------|--------------------------------------------------------------------|
-| `mcp-server`   | the MCP server the skills call (`mcp__<name>__<tool>`)             |
-| `kb`           | the knowledge-base folder; confirmed facts land in its `_inbox.md` |
-| `initiatives`  | the SRD folder, one folder per SRD                                 |
-| `srd-standard` | the document id of the SRD guidelines page                         |
-| `glossary`     | the Company Glossary (a file or a folder)                          |
+| Key            | Holds                                                                |
+|----------------|----------------------------------------------------------------------|
+| `mcp-server`   | the MCP server the skills call (`mcp__<name>__<tool>`)               |
+| `kb`           | the knowledge-base folder; confirmed facts land in its `_inbox.md`   |
+| `initiatives`  | the SRD folder, one folder per SRD; the server ranks nothing there   |
+| `srd-standard` | the identity (`id` or path) of the SRD guidelines page               |
+| `glossary`     | the Company Glossary (a file or a folder)                            |
+| `gaps`         | optional; the server's gap folder, one file per gap                  |
+| `precedence`   | optional; folders by trust, most trusted first — the server's `rank` |
 
 Paths are relative to the project root; an absolute path is an error. Start the
 server, connect it with `/mcp`, and run any srd skill from inside the project:

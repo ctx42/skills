@@ -18,7 +18,7 @@
         "review",
         "report-doc-gap"
       ],
-      "setup": "`GW-2` states \"the gateway retries 3×\" and no corpus document states any retry count; `GW-5` names a timeout the corpus documents as a different value. A prior session left draft gaps for this SRD on the server; offered them at the start, the user keeps them as drafts for later.",
+      "setup": "`GW-2` states \"the gateway retries 3×\" and no corpus document states any retry count; `GW-5` names a timeout the corpus documents as a different value; `GW-6` names a 30-day error-log retention a KB section (`kb/api-gateway.md`, attested by another SRD) states as 90 days. A prior session left draft gaps for this SRD on the server; offered them at the start, the user keeps them as drafts for later.",
       "query": "/review specs/gateway.md",
       "files": []
     },

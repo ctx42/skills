@@ -2,18 +2,24 @@
 set -euo pipefail
 cat > project-config.md <<'EOF_PC'
 ---
-mcp-server: srd-doc
+mcp-server: srd
 kb: kb
 initiatives: initiatives
 srd-standard: docs/guidelines_for_software_requirements_documents.md
 glossary: docs/glossary
+precedence:
+  - kb
+  - docs/concepts
+  - docs/api-gateway
+  - docs/operations
+  - docs/glossary
 ---
 
 # Project configuration (eval fixture)
 
 EVAL TEST DATA ONLY. Copy this file to the root of a scenario's workspace so
 the srd skills' gate finds a project; a scenario's `setup` overrides any key.
-In an eval run, `srd/evals/mocks/srd-doc/fixtures/srd-standard.md` stands in for the
+In an eval run, `srd/evals/mocks/srd/fixtures/srd-standard.md` stands in for the
 `get_doc` result of `srd-standard` — see `dev/eval/blind-runner-prompt.md`.
 EOF_PC
 mkdir -p kb initiatives/gw-firmware
@@ -27,8 +33,10 @@ last_verified: 2026-10-01
 
 ## Gateway firmware updates run only at night
 
-> Not in the platform docs. Attested `initiatives/gw-firmware/srd.md` interview
+> Not in the platform docs. Attested gw-firmware interview
 > 2026-09-26 · `gap-0042`.
+
+> Open: gap-0043.
 
 EXAMPLE pushes a firmware update to an ALTECNO LoRa Gateway only between
 01:00 and 04:00 in the Project's time zone.
@@ -43,31 +51,11 @@ Feature flags are always set per Project, never per Customer.
 
 Where each section of this inbox comes from.
 
-| Section                                    | Source                                                          |
-|--------------------------------------------|-----------------------------------------------------------------|
-| Gateway firmware updates run only at night | `initiatives/gw-firmware/srd.md` interview 2026-09-26, gap-0042 |
-| Feature flags are set per Project          | Session 2026-10-01                                              |
+| Section                                    | Source                                     |
+|--------------------------------------------|--------------------------------------------|
+| Gateway firmware updates run only at night | gw-firmware interview 2026-09-26, gap-0042 |
+| Feature flags are set per Project          | Session 2026-10-01                         |
 EOF_INBOX
-cat > kb/_open-questions.md <<'EOF_OQ'
----
-title: Knowledge base open questions
----
-
-# Knowledge base open questions
-
-Every open question the knowledge base tracks, one row each.
-
-| Question                                                                                   | Kind     | Raised     | Hits | Lives in                                                          |
-|--------------------------------------------------------------------------------------------|----------|------------|------|-------------------------------------------------------------------|
-| Does the night-only firmware window also apply to emergency security updates for gateways? | deferred | 2026-09-26 | 1    | [_inbox.md](_inbox.md#gateway-firmware-updates-run-only-at-night) |
-
-## Closed
-
-Questions answered or found moot.
-
-| Question | Answer | Closed | Now stated in |
-|----------|--------|--------|---------------|
-EOF_OQ
 cat > initiatives/gw-firmware/srd.md <<'EOF_SRD'
 # Gateway Firmware Rollout
 
@@ -76,7 +64,7 @@ cat > initiatives/gw-firmware/srd.md <<'EOF_SRD'
 | **Objective**  | Let a user schedule firmware rollouts to LoRa Gateways.   |
 | **Initiative** | <TODO: link to the ticketing initiative — must link back> |
 | **Owners**     | <TODO: @primary-owner>, <TODO: @secondary-owner>          |
-| **Status**     | [[!IN PROGRESS\|color=blue;style=bold]]                   |
+| **Status**     | [[!IN PROGRESS\                                           |
 | **Designs**    | N/A                                                       |
 
 [[TOC]]

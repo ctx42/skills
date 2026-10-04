@@ -1,0 +1,137 @@
+{
+  "skill_name": "doc-edit",
+  "rules": [
+    {
+      "id": "gate-first",
+      "rule": "Run the project gate first, from the document's directory",
+      "must": [
+        "Run\\ the\\ gate,\\ walking\\ up\\ from\\ the\\ document's\\ directory"
+      ]
+    },
+    {
+      "id": "one-confirmed-change",
+      "rule": "Exactly one change per proposal, applied only on explicit approval, never batched",
+      "must": [
+        "Propose\\ exactly\\ one\\ change",
+        "Apply\\ only\\ on\\ explicit\\ approval",
+        "never\\ batch\\ unrelated\\ changes"
+      ]
+    },
+    {
+      "id": "lookup-before-proposal",
+      "rule": "Each fact the change writes or its section states is looked up before the proposal",
+      "must": [
+        "Look\\ up\\ before\\ proposing",
+        "each\\ the\\ section\\ it\\ touches\\ states"
+      ]
+    },
+    {
+      "id": "no-invented-fact",
+      "rule": "Write no fact neither the corpus nor the user gives; an unconfirmed one stays and becomes a gap",
+      "must": [
+        "Write\\ no\\ fact\\ neither\\ the\\ corpus\\ nor\\ the\\ user\\ gives",
+        "leave\\ the\\ text\\ unchanged\\ and\\ hand\\ the\\ gap\\ to\\ `srd:report\\-doc\\-gap`"
+      ]
+    },
+    {
+      "id": "gaps-via-report-doc-gap",
+      "rule": "Gaps are captured and filed only through srd:report-doc-gap, which dedups by list_gaps query and adds a hit on a repeat",
+      "must": [
+        "Never\\ capture\\ or\\ file\\ a\\ gap\\ yourself:\\ `srd:report\\-doc\\-gap`\\ does",
+        "It\\ dedups\\ by\\ `list_gaps`\\ `query`\\ and\\ takes\\ a\\ hit\\ on\\ a\\ repeat"
+      ]
+    },
+    {
+      "id": "gap-doc-id-identity",
+      "rule": "A gap about this document carries its identity as doc_id",
+      "must": [
+        "Pass\\ `doc_id`\\ the\\ identity\\ and\\ `heading_path`\\ the\\ section\\ when\\ the\\ gap\\ is\\ about\\ this\\ document"
+      ]
+    },
+    {
+      "id": "fill-from-corpus-section",
+      "rule": "Fill only from a corpus section outside initiatives; never a URL, _inbox.md, an SRD, or an unconfirmed fact",
+      "must": [
+        "Never\\ fill\\ from\\ a\\ URL,\\ `_inbox\\.md`,\\ a\\ document\\ under\\ `initiatives`,\\ or\\ an\\ unconfirmed\\ fact"
+      ]
+    },
+    {
+      "id": "fill-ref-identity",
+      "rule": "filled_by is <identity>#<heading-slug>, the id never the path",
+      "must": [
+        "`<identity>\\#<heading\\-slug>`\\ of\\ the\\ section\\ that\\ now\\ states\\ it",
+        "The\\ identity\\ is\\ the\\ `id`,\\ never\\ the\\ `path`"
+      ]
+    },
+    {
+      "id": "partial-fill",
+      "rule": "Part of the fact is a partial fill with remaining",
+      "must": [
+        "part:\\ `complete:\\ false`,\\ `remaining`\\ what\\ is\\ still\\ missing"
+      ]
+    },
+    {
+      "id": "kb-fill-topic-page-only",
+      "rule": "A fact homed in the KB fills only once srd:kb has it on a topic page; the inbox fills nothing",
+      "must": [
+        "only\\ once\\ it\\ sits\\ on\\ a\\ topic\\ page",
+        "In\\ `_inbox\\.md`:\\ no\\ fill;\\ the\\ gap\\ stays\\ open"
+      ]
+    },
+    {
+      "id": "kb-writes-via-kb",
+      "rule": "A KB page is written only by srd:kb",
+      "must": [
+        "A\\ page\\ under\\ `kb`:\\ propose\\ here,\\ write\\ nothing;\\ `srd:kb`\\ writes\\ it"
+      ]
+    },
+    {
+      "id": "srd-hands-off",
+      "rule": "A document under initiatives is handed to srd:edit",
+      "must": [
+        "A\\ document\\ under\\ `initiatives`\\ is\\ an\\ SRD:\\ invoke\\ `srd:edit`"
+      ]
+    },
+    {
+      "id": "no-front-matter",
+      "rule": "Never adds, removes, or changes front matter or a marker",
+      "must": [
+        "Never\\ add,\\ remove,\\ or\\ change\\ front\\ matter\\ or\\ a\\ marker"
+      ]
+    },
+    {
+      "id": "no-wontfix-reopen",
+      "rule": "Never wontfixes or reopens a gap; that is srd:backlog",
+      "must": [
+        "never\\ wontfix\\ or\\ reopen\\ one\\ \\(that\\ is\\ `srd:backlog`\\)"
+      ]
+    },
+    {
+      "id": "synced-upstream",
+      "rule": "A synced page edit reaches its source only when the user pushes it; no publish proposals",
+      "must": [
+        "reaches\\ its\\ source\\ only\\ when\\ the\\ user\\ pushes\\ it\\ upstream",
+        "Never\\ propose\\ publishing,\\ pushing,\\ or\\ syncing"
+      ]
+    },
+    {
+      "id": "trust-by-rank",
+      "rule": "Source conflicts settle by rank, never by folder name",
+      "must": [
+        "the\\ lower\\ `rank`\\ states\\ the\\ platform",
+        "Never\\ settle\\ by\\ folder\\ name"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order, folder name, or sync tool",
+      "must_not": [
+        "doc/(infraport|user_docs|devices)",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)",
+        "cfsync|confluence|atlassian|\\.obsidian|page_id|ignore-push"
+      ]
+    }
+  ]
+}

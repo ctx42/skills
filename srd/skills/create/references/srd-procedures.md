@@ -16,14 +16,15 @@ known-term set is exactly what `mcp__<mcp-server>__glossary_terms` returns.
    it, and hold the returned `terms` for the session; a later single-term
    lookup may pass a substring filter. The server keeps it current: never cache
    it across sessions, fingerprint it, or digest it.
-2. A term in the set (match `term`, `name`, or `abbreviation`) whose `doc_id`
+2. A term in the set (match `term`, `name`, or `abbreviation`) whose `path`
    lies under the `glossary` location needs no local entry; link it on first
-   use to `<doc_id>#<anchor>`, written relative to the SRD's own file
-   (GLO-4/5). A hit whose `doc_id` lies elsewhere is not the Company Glossary:
-   treat the term as not in the set.
+   use to `<path>#<anchor>` (the result's `anchor`: the term's heading slug),
+   written relative to the SRD's own file (GLO-4/5): a link navigates, so it
+   takes `path`, never `id`. A hit whose `path` lies elsewhere is not the
+   Company Glossary: treat the term as not in the set.
 3. A term not in the set needs a local Glossary entry, even when another corpus
    document explains it: `search` returns meaning, not coverage. Say so once
-   ("`X` is explained in `<doc_id>`, which is not the Company Glossary;
+   ("`X` is explained in `<path>`, which is not the Company Glossary;
    defining it locally").
 4. An empty `terms` list is a valid answer: every term is defined locally. A
    failed call stops the run like a gate failure.

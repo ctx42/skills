@@ -69,10 +69,11 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
 - `REQ` is a legitimate requirement prefix: the standard's own `STR-*`/`REQ-*`
   ids must not be pasted into an SRD, but the letter codes are not reserved.
   Never raise a prefix "collision" with the standard as a finding.
-- Template wiki macros are deliberate: the template's `[[TOC]]`, the
-  `[[!Status]]` macro, and the `[!INFO]` notice target the wiki the SRD is
-  exported to, not GFM — do not "fix" them to GitHub forms. `[[TOC]]` sitting
-  between the metadata block and the keyword notice does not break STR-8: the
+- Template macros are opaque house syntax: the template's `[[TOC]]`, the
+  `[[!Status]]` macro, and the `[!INFO]` notice are deliberate and valid
+  Obsidian Markdown — keep them verbatim; never "fix" them to GitHub forms.
+  `[[TOC]]` sitting between the metadata block and the keyword notice does not
+  break STR-8: the
   macro expands to a generated table of contents, not to document content, so
   the notice is still the first thing the SRD itself says below the metadata.
   Never raise that finding against a template-drafted SRD, and never move the

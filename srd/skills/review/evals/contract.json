@@ -91,6 +91,23 @@
         "The\\ offer\\ is\\ the\\ delegate's,\\ never\\ written\\ inline",
         "a\\ run\\ that\\ captured\\ none\\ invokes\\ nothing\\ here\\ either"
       ]
+    },
+    {
+      "id": "kb-contradiction-is-finding",
+      "rule": "An SRD/KB contradiction is a reference finding naming both claims and both fixes, never settled by rank",
+      "must": [
+        "A\\ KB\\ section\\ contradicting\\ the\\ SRD\\ is\\ a\\ `reference`\\ finding\\ too,\\ never\\ settled\\ by\\ `rank`\\ \\(an\\ SRD\\ has\\ none\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "doc/(infraport|user_docs|devices)",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
     }
   ]
 }

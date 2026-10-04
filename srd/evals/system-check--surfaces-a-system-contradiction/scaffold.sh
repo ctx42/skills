@@ -2,18 +2,24 @@
 set -euo pipefail
 cat > project-config.md <<'EOF_PC'
 ---
-mcp-server: srd-doc
+mcp-server: srd
 kb: kb
 initiatives: initiatives
 srd-standard: docs/guidelines_for_software_requirements_documents.md
 glossary: docs/glossary
+precedence:
+  - kb
+  - docs/concepts
+  - docs/api-gateway
+  - docs/operations
+  - docs/glossary
 ---
 
 # Project configuration (eval fixture)
 
 EVAL TEST DATA ONLY. Copy this file to the root of a scenario's workspace so
 the srd skills' gate finds a project; a scenario's `setup` overrides any key.
-In an eval run, `srd/evals/mocks/srd-doc/fixtures/srd-standard.md` stands in for the
+In an eval run, `srd/evals/mocks/srd/fixtures/srd-standard.md` stands in for the
 `get_doc` result of `srd-standard` — see `dev/eval/blind-runner-prompt.md`.
 EOF_PC
 mkdir -p specs kb
@@ -39,11 +45,11 @@ cat > specs/labeling.md <<'EOF_SRD'
 ## Introduction
 
 This document defines how API clients label a
-[Sound File](../docs/glossary/main_glossary.md#Sound-File-(SND))
-with existing [Tags](../docs/glossary/main_glossary.md#Tag-(TAG))
+[Sound File](../docs/glossary/main_glossary.md#sound-file-snd)
+with existing [Tags](../docs/glossary/main_glossary.md#tag-tag)
 and how they find Sound Files by Tag. The system will let an API client attach
 a Tag to a Sound File, remove it again, and look up the Sound Files of a
-[Project](../docs/glossary/main_glossary.md#Project-(PRJ)) that
+[Project](../docs/glossary/main_glossary.md#project-prj) that
 carry a given Tag.
 
 ## Scope

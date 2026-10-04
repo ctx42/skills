@@ -231,7 +231,7 @@ SRD_CREATE_BODY = """Authors a new Software Requirement Document (SRD) to the SR
 
 ## Steps
 
-1. Load the SRD standard from the srd-doc server (`get_doc`) and obey every
+1. Load the SRD standard from the srd server (`get_doc`) and obey every
    rule it states.
 2. Interview the user for the gaps.
 3. Write the SRD. Set the header `Status` to one of the standard's STA-1
@@ -449,12 +449,12 @@ ATTR_FILES = {
     "craft/skills/cm/SKILL.md": cm_md(),
     "srd/skills/create/SKILL.md": skill_md(
         "create", "Authors a new SRD to the SRD standard.", SRD_CREATE_BODY, "srd"),
-    "srd/evals/mocks/srd-doc/fixtures/srd-standard.md": SRD_STANDARD,
+    "srd/evals/mocks/srd/fixtures/srd-standard.md": SRD_STANDARD,
 }
 ATTR_WIRING = wiring("craft/skills/cm", "srd/skills/create") + (
-    "srd:create loads the SRD standard live from the srd-doc server, which this\n"
+    "srd:create loads the SRD standard live from the srd server, which this\n"
     "run does not have; the frozen copy at\n"
-    "./srd/evals/mocks/srd-doc/fixtures/srd-standard.md is identical to it.\n")
+    "./srd/evals/mocks/srd/fixtures/srd-standard.md is identical to it.\n")
 
 
 def case_attribution():

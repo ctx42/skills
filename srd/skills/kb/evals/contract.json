@@ -31,7 +31,7 @@
       "rule": "A question may deepen a subject the interview opened, never open a new one",
       "must": [
         "never open a new one",
-        "route it to `_open-questions\\.md` marked `deferred` and move on immediately\\. Never re-ask"
+        "hand it to `srd:report-doc-gap` as a gap with `answer: deferred` .{0,60}and move on immediately\\. Never re-ask"
       ]
     },
     {
@@ -43,11 +43,15 @@
       ]
     },
     {
-      "id": "sync-guard",
-      "rule": "Refuses to write into a kb folder a document sync manages",
+      "id": "kb-folder-hard-rule",
+      "rule": "Every write lands under the kb folder; no sync or editor config is read",
       "must": [
-        "must \\*\\*not\\*\\* be managed by a document sync",
-        "refuse to write and say why"
+        "every write lands under the `kb` folder",
+        "Read no sync, editor, or vault config",
+        "the gate's `kb` value is the only answer"
+      ],
+      "must_not": [
+        "\\.obsidian|cfsync|ignore-push|check any sync config|managed by a document sync"
       ]
     },
     {
@@ -77,10 +81,13 @@
       ]
     },
     {
-      "id": "unknown-not-a-gap",
-      "rule": "An unknown is never filed as a documentation gap",
+      "id": "questions-are-gaps",
+      "rule": "An open question is a gap with answer deferred/unknown, filed through srd:report-doc-gap; a repeat bumps hits; a page names only the gap id",
       "must": [
-        "An unknown is \\*\\*never\\*\\* filed as a documentation gap"
+        "A question SRD work leaves open is a gap in the server's store, never a KB write",
+        "File it through `srd:report-doc-gap` with `answer` set",
+        "a question already on file gets a hit",
+        "naming the filed gap's id — never the question's wording"
       ]
     },
     {
@@ -97,6 +104,35 @@
       "file": "../create/references/project-config.md",
       "must": [
         "an absolute path is invalid"
+      ]
+    },
+    {
+      "id": "confirmed-fact-rewrites-kb",
+      "rule": "A confirmed fact rewrites the KB section it contradicts at once; no trust order, no waiting",
+      "must": [
+        "rewrite\\ that\\ section\\ with\\ the\\ confirmed\\ fact\\ now,\\ in\\ place",
+        "the\\ KB\\ changes\\ on\\ confirmation,\\ not\\ when\\ other\\ SRDs\\ agree"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name; conflicts settle by rank",
+      "must": [
+        "settles\\ conflicting\\ sources\\ by\\ the\\ `rank`\\ on\\ each\\ result,\\ never\\ by\\ folder"
+      ],
+      "must_not": [
+        "doc/(infraport|user_docs|devices)",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "srd-ref-folder",
+      "file": "../create/references/project-config.md",
+      "rule": "An SRD reference is the SRD's folder name under initiatives, never a document identity",
+      "must": [
+        "SRD's\\ folder\\ name\\ under\\ `initiatives`"
       ]
     }
   ]

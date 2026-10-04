@@ -176,7 +176,7 @@ Without these rules, three consecutive `go:style` rounds passed every bullet,
 yet cost about a million tokens, because each runner's new ambiguity list was
 treated as the next round's work and nothing measured what those edits bought.
 
-**Live services and real stores.** The `srd-doc` server is production — the
+**Live services and real stores.** The `srd` server is production — the
 real documentation corpus and a gap store whose drafts are real records —
 and `$HOME/.agent-data/` holds the user's real lesson files. Tell every agent so
 explicitly: the server's read tools are the only safe calls, and every
@@ -188,7 +188,7 @@ once by a skill that reached a store only through another skill.
 **The SRD standard in evals.** At run time the srd skills read the standard
 live through the server (`get_doc` on the `srd-standard` id in the project's
 `project-config.md`); no copy ships. Evals grade against a fixed one instead:
-`srd/evals/mocks/srd-doc/fixtures/srd-standard.md`, test data only, which the
+`srd/evals/mocks/srd/fixtures/srd-standard.md`, test data only, which the
 native cases' `get_doc` mock serves, with `srd/evals/fixtures/project-config.md`
 for the gate. `dev/eval/blind-runner-prompt.md` tells the runner to substitute
 both. Cases that override `get_doc` carry copies of the standard, which

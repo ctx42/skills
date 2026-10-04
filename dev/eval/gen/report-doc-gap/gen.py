@@ -8,18 +8,24 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
 EV = os.path.join(ROOT, "srd/evals")
 
 PC = """---
-mcp-server: srd-doc
+mcp-server: srd
 kb: kb
 initiatives: initiatives
 srd-standard: docs/guidelines_for_software_requirements_documents.md
 glossary: docs/glossary
+precedence:
+  - kb
+  - docs/concepts
+  - docs/api-gateway
+  - docs/operations
+  - docs/glossary
 ---
 
 # Project configuration (eval fixture)
 
 EVAL TEST DATA ONLY. Copy this file to the root of a scenario's workspace so
 the srd skills' gate finds a project; a scenario's `setup` overrides any key.
-In an eval run, `srd/evals/mocks/srd-doc/fixtures/srd-standard.md` stands in for the
+In an eval run, `srd/evals/mocks/srd/fixtures/srd-standard.md` stands in for the
 `get_doc` result of `srd-standard` — see `dev/eval/blind-runner-prompt.md`.
 """
 
@@ -113,15 +119,17 @@ REVIEW_TAGS = [
     "ref:create/doc-corpus", "ref:create/authoring-guide", "ref:create/errata",
     "ref:create/srd-procedures",
 ]
-GAP_TOOLS = ["list_gaps", "report_gap", "update_gap", "submit_gap", "discard_gap"]
+GAP_TOOLS = ["list_gaps", "report_gap", "update_gap", "submit_gap", "discard_gap", "reopen_gap"]
 
 
 def gap(gid, topic, detail, demand, terms, kind="missing", doc_id="",
-        heading=None, url="", claim="", srd="specs/gateway.md"):
-    return {"id": gid, "status": "draft", "kind": kind, "topic": topic,
-            "doc_id": doc_id, "heading_path": heading, "source_url": url,
-            "demand": demand, "target_claim": claim, "detail": detail,
-            "search_terms": terms, "srd_ref": srd}
+        heading=None, claim="", srd="specs/gateway.md"):
+    slug = "-".join("".join(c if c.isalnum() else " " for c in topic.lower()).split())[:60]
+    return {"id": gid, "status": "draft", "kind": kind, "answer": "",
+            "srd_ref": srd, "doc_id": doc_id, "heading_path": heading,
+            "search_terms": terms, "hits": 1, "created": "2026-09-20T09:00:00Z",
+            "filled_by": [], "topic": topic, "demand": demand, "detail": detail,
+            "target_claim": claim, "file": f"{gid}-{slug}.md"}
 
 
 G_RETRY = gap("gap-0311", "API Gateway retry count for failed upstream calls",
@@ -151,27 +159,33 @@ def world(gaps):
     return f"""---
 type: agent
 ---
-The documentation-gap store of the srd-doc server. {held}
+The documentation-gap store of the srd server. {held}
 
 Every earlier gap call this run changes the store; always answer from the
 store as those calls left it.
 
 - report_gap records a new gap: status `draft` when `draft` is true, else
   `open`. It takes the next unused id in the series gap-0901, gap-0902,
-  gap-0903 (never one already issued) and answers
-  {{"id":"<new id>","status":"<status>"}}.
-- update_gap replaces the descriptive fields of the draft named by
-  `gap_id` with the ones given (a field left out becomes empty) and answers
-  {{"ok":true,"id":"<gap_id>"}}. A gap_id the store does not hold, or one not
-  in status `draft`, answers `ERROR: gap <gap_id> is not an editable draft`.
+  gap-0903 (never one already issued) and answers {{"gap_id":"<new id>"}}.
+- update_gap changes only the fields given on the draft or open gap named by
+  `gap_id` (a field left out keeps its value; `add_hit` true adds 1 to
+  `hits`) and answers {{"ok":true}}. A gap_id the store does not hold, or one
+  in status `filled` or `wontfix`, answers
+  `ERROR: gap <gap_id> is not an editable draft or open gap`.
 - submit_gap moves the draft named by `gap_id` to status `open` and answers
-  {{"ok":true,"id":"<gap_id>","status":"open"}}; same error rule as update_gap.
+  {{"ok":true}}; a gap_id that is not a draft answers
+  `ERROR: gap <gap_id> is not a draft`.
 - discard_gap deletes the draft named by `gap_id` and answers
-  {{"ok":true,"id":"<gap_id>"}}; same error rule as update_gap.
+  {{"ok":true}}; same error rule as submit_gap.
+- reopen_gap moves the filled gap named by `gap_id` to status `open`,
+  appending `reason` to its detail, and answers {{"ok":true}}; a gap_id that
+  is not filled answers `ERROR: gap <gap_id> is not filled`.
 - list_gaps answers {{"gaps":[...]}} with the full current record of every
   gap that matches the call's filters: `status` keeps only gaps in exactly
   that status, `srd_ref` keeps only gaps whose srd_ref contains that text; an
-  empty or missing filter keeps every gap. No match answers {{"gaps":[]}}.
+  empty or missing filter keeps every gap. A `query` keeps only gaps whose
+  topic, detail, or search_terms share a word with it, best match first,
+  each with a `score` field. No match answers {{"gaps":[]}}.
 """
 
 
@@ -248,7 +262,7 @@ def case(name, prompt, graders, tags=(), persona=None, mocks=None,
               f"{extra_yaml}context:\n  scaffold_script: scaffold.sh\n")
         write(os.path.join(d, "scaffold.sh"), scaffold_sh, 0o755)
     for fname, body in (mocks or {}).items():
-        write(os.path.join(d, "mocks/srd-doc", fname), body)
+        write(os.path.join(d, "mocks/srd", fname), body)
     for g in graders:
         write(os.path.join(d, "graders", g["name"] + ".md"), grader(g))
 
@@ -277,18 +291,21 @@ case(
     mocks=agent_mocks([]),
     max_turns=60,
     graders=[
+        {"name": "b1-dedup-query-first", "type": "tool_order",
+         "before": {"tool": "mcp__srd__list_gaps", "input_match": r'"query":"[^"]+'},
+         "after": {"tool": "mcp__srd__report_gap"}},
         {"name": "b1-light-draft-captured", "type": "regex", "target": "mock_calls",
          "flags": "m",
          "body": r'^(?=[^\n]*"tool":"[^"]*report_gap")(?=[^\n]*"draft":true)'
                  r'(?=[^\n]*"srd_ref":"specs/gateway\.md")(?=[^\n]*"search_terms":\["[^"]+")'
                  r'(?=[^\n]*"detail":"[^"]+")[^\n]*[Rr]etr'},
-        none_of("mcp__srd-doc__submit_gap", "b2-no-submit"),
-        none_of("mcp__srd-doc__update_gap", "b2-no-grill-update"),
+        none_of("mcp__srd__submit_gap", "b2-no-submit"),
+        none_of("mcp__srd__update_gap", "b2-no-grill-update"),
         none_of("Skill", "b2-no-grill-me", "grill"),
         {"name": "b3-pass-reaches-review-file", "type": "file_exists",
          "path": "specs/gateway.review.md", "exists": "true"},
         {"name": "b3-capture-before-review-file", "type": "tool_order",
-         "before": {"tool": "mcp__srd-doc__report_gap"},
+         "before": {"tool": "mcp__srd__report_gap"},
          "after": {"tool": "Write", "input_match": r"gateway\.review\.md"}},
         {"name": "b3-end-of-pass-offer", "type": "regex", "target": "last_message",
          # An offer: a question, or a choice that names filing (a menu has no "?").
@@ -307,9 +324,9 @@ case(
 """,
     graders=[
         {"name": "b3-retry-gap-filed", "type": "tool_used",
-         "tool": "mcp__srd-doc__submit_gap", "input_match": "gap-0311", "min": 1},
+         "tool": "mcp__srd__submit_gap", "input_match": "gap-0311", "min": 1},
         {"name": "b3-body-gap-filed", "type": "tool_used",
-         "tool": "mcp__srd-doc__submit_gap", "input_match": "gap-0312", "min": 1},
+         "tool": "mcp__srd__submit_gap", "input_match": "gap-0312", "min": 1},
         {"name": "b3-ids-named", "type": "regex", "target": "last_message",
          "flags": "s", "body": r"^(?=.*gap-0311)(?=.*gap-0312)"},
     ])
@@ -321,7 +338,7 @@ case(
     max_turns=30,
     graders=[
         {"name": "b1-list-gaps-draft-for-srd", "type": "tool_used",
-         "tool": "mcp__srd-doc__list_gaps",
+         "tool": "mcp__srd__list_gaps",
          "input_match": r'^(?=.*"status":"draft")(?=.*"srd_ref":"[^"]*specs/gateway\.md")', "min": 1},
         none_of("Read", "b1-no-local-gap-read",
                 r'"file_path":"(?![^"]*/(skills|lessons)/)[^"]*(gap|draft)'),
@@ -332,7 +349,7 @@ case(
         none_of("Glob", "b1-no-local-gap-glob", r'"pattern":"[^"]*(gap|draft)'),
         {"name": "b2-offers-to-work-it", "type": "regex", "target": "last_message",
          "flags": "is", "body": r"^(?=.*timeout)(?=.*\bwork\b)(?=.*\?)"},
-        none_of("mcp__srd-doc__report_gap", "b2-not-captured-again"),
+        none_of("mcp__srd__report_gap", "b2-not-captured-again"),
         none_of("Write", "b3-no-write"),
         none_of("Edit", "b3-no-edit"),
         {"name": "b3-no-file-created", "type": "file_exists", "path": "**",

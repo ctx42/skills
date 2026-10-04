@@ -47,13 +47,16 @@ standard fetched through the server (e.g. a defunct `MD-*`). A consistency-pass
 finding cites `(SRD:consistency)` and sits under the section where the conflict
 surfaces; a house-addition finding (US English, draft scaffolds, terminology
 drift) cites `(SRD:house)`. When both could fit — the consistency pass surfaced
-it, a house addition defines it — cite the house addition: the rule that defines
-the defect outranks the pass that spotted it, so terminology drift is always
-`(SRD:house)`. A `reference` finding cites its evidence in the same slot and the
-same shape — `(SRD:ref docs/formats/x.md#heading)` for a corpus
-contradiction, `(SRD:ref <the dead link>)` for a broken pointer — so every
-finding closes with a parenthesis a reader can act on, and none carries a rule
-namespace that does not exist.
+it, a house addition defines it — cite the house addition: the rule that
+defines the defect outranks the pass that spotted it, so terminology drift is
+always `(SRD:house)`. A `reference` finding cites its evidence in the same slot
+and the same shape, the document's `id` as identity —
+`(SRD:ref 1774485611#tag-names)` for a corpus contradiction,
+`(SRD:ref kb/x.md#heading)` for a KB one (its fix offers both ways out: align
+the SRD, or confirm the SRD's fact so the KB changes),
+`(SRD:ref <the dead link>)` for a broken pointer — so every finding closes with
+a parenthesis a reader can act on, and none carries a rule namespace that does
+not exist.
 
 ## Anchors and wrapping
 

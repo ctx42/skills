@@ -4,4 +4,4 @@ target: files
 match: not_contains
 flags: "m"
 ---
-(^|/)kb/(?!_inbox\.md$|_open-questions\.md$)\S+$
+(^|/)kb/(?!_inbox\.md$)\S+$

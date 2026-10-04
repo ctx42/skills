@@ -20,7 +20,8 @@
         "Runs the draft check first and, on the prior session's drafts, invokes `srd:report-doc-gap` to drain them before any corpus search",
         "Routes the unconfirmable `GW-2` retry count to `srd:report-doc-gap` as a draft gap and files no finding against it in `gateway.review.md` — an unconfirmable claim becomes a draft gap, never a review finding. Quoting the claim inside some other finding is not the test; where the gap went is",
         "Records the contradicted `GW-5` timeout as a `reference` finding in the review file",
-        "After the closing tally, offers to work the `GW-2` draft gap now or later, and never files it silently"
+        "After the closing tally, offers to work the `GW-2` draft gap now or later, and never files it silently",
+        "Records the KB-contradicted `GW-6` retention as a `reference` finding citing `kb/api-gateway.md` that names both figures and settles neither by trust or precedence — either the SRD or the KB may change"
       ]
     },
     {

@@ -32,6 +32,30 @@
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
       "class": "redundant"
+    },
+    {
+      "id": "cut-leaves-wrong-gap",
+      "rule": "cut-files-wrong-gap",
+      "context": [
+        "SKILL.md",
+        "references/corpus-edits.md"
+      ],
+      "prompt": "Situation: editing specs/gw.md (IN PROGRESS) in interactive mode. You are about to propose removing LCK-1 (\"The system MUST lock a user account after 5 consecutive failed sign-in attempts.\"). Your corpus search for its claim returned one hit: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/gw.md` interview 2026-08-02; `specs/sso.md` 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" The user will answer Y to the removal.\n\nQuestion: besides deleting LCK-1 from the SRD, what happens to that KB section on the user's Y? Answer on the first line with exactly one of: NOTHING, EDIT-KB-SECTION, FILE-WRONG-GAP-NOW, DRAFT-GAP-FOR-SESSION-END. Then one sentence why.",
+      "pass": "^\\W*FILE-WRONG-GAP-NOW",
+      "fail": "^\\W*(NOTHING|EDIT-KB|DRAFT-GAP)",
+      "class": "redundant"
+    },
+    {
+      "id": "kb-contradiction-changes-kb-on-y",
+      "rule": "kb-contradiction-no-trust-order",
+      "context": [
+        "SKILL.md",
+        "references/corpus-edits.md"
+      ],
+      "prompt": "Situation: editing specs/gw.md, the user asks to change LCK-1 to lock an account after 3 failed sign-in attempts. Your lookup before the proposal returned: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/gw.md` interview 2026-08-02; `specs/sso.md` 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" specs/sso.md is ACCEPTED and still relies on 5. Your proposal named the conflict and the user answered Y.\n\nQuestion: what happens to the KB section now? Answer on the first line with exactly one of: LEAVE-IT-UNTIL-SSO-IS-REVISED, FILE-A-DOC-GAP-AGAINST-IT, SRD-KB-REWRITES-IT-NOW. Then one sentence why.",
+      "pass": "^\\W*SRD-KB-REWRITES",
+      "fail": "^\\W*(LEAVE|FILE)",
+      "class": "redundant"
     }
   ]
 }

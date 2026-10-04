@@ -15,10 +15,10 @@
       "id": 3,
       "name": "reclassifies-rather-than-skipping",
       "expected_behavior": [
-        "Has `srd:kb` change the row's kind from `deferred` to `unknown` in place, and says so",
-        "Writes nothing under the `kb` folder itself, and the reply names `srd:kb` as the writer for each change",
-        "Does not treat it as a skip or leave the row mislabeled",
-        "Does not file it as a documentation gap: it says nothing about the user manual"
+        "Reclassifies the gap with `update_gap` `answer: unknown`, and says so",
+        "Writes nothing under the `kb` folder and hands nothing to `srd:kb`: a reclassification changes only the gap",
+        "Does not treat it as a skip or leave the gap marked deferred",
+        "Files no new gap and closes none: no `report_gap`, `fill_gap`, or `wontfix_gap`, and no talk of a documentation gap"
       ]
     },
     {
@@ -28,9 +28,31 @@
         "Clusters the two duplicates and surfaces the cluster size as priority",
         "Checks the corpus before drafting, separating content that is absent from content that is present but unranked",
         "Writes the draft outside every corpus source, the `kb` folder included",
-        "Publishes nothing itself; once given the published URL it resolves every gap in the cluster"
+        "Publishes nothing itself; given only the published URL it fills no gap and says the cluster stays open until the page is pulled into the corpus"
       ],
-      "blind_only": [1]
+      "blind_only": [
+        1
+      ]
+    },
+    {
+      "id": 5,
+      "name": "sweeps-a-rejected-srd",
+      "expected_behavior": [
+        "Before the counts, files exactly one `wrong` gap per uncovered section citing `wishlist-v2` — two `report_gap` calls, each submitted open without asking",
+        "The \"Wishlist visibility\" gap's `detail` names the co-attesting SRD folder `gift-cards`",
+        "Files nothing for \"Wishlist size limit\" and adds no hit to `gap-0040`",
+        "Reports the sweep in the opening counts line and edits no KB section"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "rechecks-stale-gaps",
+      "expected_behavior": [
+        "Refreshes `gap-0050` with `fill_gap`, the identical `filled_by`, and `complete: true`; does not reopen it",
+        "Reopens `gap-0051` with `reopen_gap` and a reason; never fills it",
+        "Re-points `gap-0052` with `fill_gap` at `1882030917#archive-tier`, `complete: true`; never passes the vanished ref",
+        "Lists stale gaps before any fill, and reports the re-check as a clause of the opening counts line"
+      ]
     }
   ]
 }

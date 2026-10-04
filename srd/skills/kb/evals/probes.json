@@ -5,7 +5,7 @@
       "id": "inference-stays-out",
       "rule": "attested-only",
       "prompt": "Situation: during an SRD interview the user explained how leak instances accumulate evidence. From that you inferred that evidence is kept for 90 days; the user never said so. You are now writing the section on leak-instance evidence.\n\nQuestion: does the 90-day retention period go into the section body? Answer on the first line YES or NO, then in one sentence say where, if anywhere, it is recorded instead.",
-      "pass": "^\\W*NO\\b.*open.questions",
+      "pass": "^\\W*NO\\b.*(gap|deferred)",
       "fail": "^\\W*YES",
       "class": "redundant"
     },
@@ -20,9 +20,9 @@
     {
       "id": "skip-routes-deferred",
       "rule": "no-new-subjects",
-      "prompt": "Situation: in an SRD interview about hydrophone sensor types, you asked whether the sensor-type field may be empty, to make a fact worth writing. The user answered: \"skip that for now\".\n\nQuestion: what happens to that question? Answer on the first line with exactly one of: ASK-AGAIN-LATER, DROP-IT, DEFER-TO-INDEX. Then one sentence naming where it goes, if anywhere.",
-      "pass": "^\\W*DEFER-TO-INDEX.*_open-questions",
-      "fail": "^\\W*ASK-AGAIN",
+      "prompt": "Situation: in an SRD interview about hydrophone sensor types, you asked whether the sensor-type field may be empty, to make a fact worth writing. The user answered: \"skip that for now\".\n\nQuestion: what happens to that question? Answer on the first line with exactly one of: ASK-AGAIN-LATER, DROP-IT, WRITE-TO-KB-PAGE, FILE-AS-GAP. Then one sentence naming where it goes and with which `answer` value, if any.",
+      "pass": "^\\W*FILE-AS-GAP.*\\bdeferred\\b",
+      "fail": "^\\W*(ASK-AGAIN|DROP|WRITE)",
       "class": "redundant"
     },
     {
@@ -32,6 +32,42 @@
       "pass": "Attested session 2026-09-11",
       "fail": "srd\\.md|gap-\\d",
       "class": "load-bearing"
+    },
+    {
+      "id": "repeat-question-bumps-hits",
+      "rule": "questions-are-gaps",
+      "prompt": "Situation: an SRD interview reaches a platform question the user cannot answer now: \"does a logger keep readings across a reboot?\". A `list_gaps` query shows it is already on file as open gap `gap-0051` with `answer: deferred`. The topic page kb/logger.md concerns it.\n\nQuestion: what do you do with the question? Answer on the first line with exactly one of: FILE-NEW-GAP, BUMP-HIT-ON-GAP-0051, ADD-QUESTION-TO-PAGE. Then one sentence on what, if anything, the topic page carries about it.",
+      "pass": "^\\W*BUMP-HIT-ON-GAP-0051.*gap-0051",
+      "fail": "^\\W*(FILE|ADD)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "contradicted-section-rewritten",
+      "rule": "confirmed-fact-rewrites-kb",
+      "prompt": "Situation: srd:edit hands you a fact the user just confirmed for specs/gw.md: \"A user account locks after 3 consecutive failed sign-in attempts.\" Your search before writing finds: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/gw.md` interview 2026-08-02; `specs/sso.md` 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" specs/sso.md is ACCEPTED and still says 5.\n\nQuestion: what do you write? Answer on the first line with exactly one of: REWRITE-THE-SECTION-NOW, LEAVE-THE-SECTION-UNTIL-SSO-IS-REVISED, ASK-THE-USER-TO-RECONCILE-FIRST, APPEND-NEW-FACT-TO-INBOX-BESIDE-IT. Then one sentence why.",
+      "pass": "^\\W*REWRITE-THE-SECTION-NOW",
+      "fail": "^\\W*(APPEND|LEAVE|ASK)",
+      "class": "redundant"
+    },
+    {
+      "id": "attestation-names-srd-folder",
+      "rule": "srd-ref-folder",
+      "context": [
+        "SKILL.md",
+        "../create/references/project-config.md"
+      ],
+      "prompt": "Situation: srd:create hands you a confirmed platform fact for the SRD at initiatives/int384-hydrophone/srd.md. That SRD's front matter has `id: 1774485505` and its title is \"INT-384 Hydrophone Sensors\". The fact goes to the inbox as a new section with its attestation line.\n\nQuestion: what exact token do you write right after `Attested` on that line? Answer on the first line with only that token, then one sentence why.",
+      "pass": "^\\W*int384-hydrophone\\b",
+      "fail": "1774485505|initiatives/|INT-384",
+      "class": "load-bearing"
+    },
+    {
+      "id": "no-sync-config-check",
+      "rule": "kb-folder-hard-rule",
+      "prompt": "Situation: the user just confirmed a platform fact during an SRD interview. project-config.md names `kb: kb`. This is your first write of the session, and the project root also holds a document-sync tool's settings file that lists folder mappings.\n\nQuestion: before writing the fact to kb/_inbox.md, do you open that settings file to check whether the kb folder is mapped? Answer on the first line YES or NO, then one sentence on what decides where you write.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
     }
   ]
 }

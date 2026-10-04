@@ -62,16 +62,19 @@ Ground every claim about the existing system in the corpus instead of guessing.
 `create` consults it at two points: in the interview, when the user states a
 fact about the existing system or uses a term no glossary defines, and in the
 self-check, for every requirement that asserts existing behavior. A lookup that
-cannot confirm the claim goes to `srd:report-doc-gap`; a fact the corpus lacks
-but the user confirms goes to `srd:kb`, which writes it to the inbox at once.
+cannot confirm the claim goes to `srd:report-doc-gap` on discovery, confirmed
+by the user or not; a fact the corpus lacks but the user confirms goes to
+`srd:kb` as well, which writes it to the inbox at once.
 Gaps are captured as server-side drafts on discovery and offered at step 5.
-When the first gap surfaces and no SRD path is agreed yet, fold a proposed path
+When the first gap surfaces and no SRD path is agreed yet, capture the draft at
+once with `srd_ref` empty — never wait for the path — and fold a proposed path
 (its own folder under `initiatives`) into that branch's restatement; once it is
-confirmed, hand it to `srd:report-doc-gap`, which sets the draft's `srd_ref` —
-a draft left without a path is invisible to every later draft check. A
-platform fact is confirmed through the branch restatement in step 1, never
-through a separate prompt, and reaches `srd:kb` only once that restatement is
-confirmed — the user's answer inside the branch is not the confirmation.
+confirmed, hand it to `srd:report-doc-gap`, which sets the `srd_ref` of every
+draft captured without one — a draft left without a path is invisible to every
+later draft check. A platform fact is confirmed through the branch restatement
+in step 1, never through a separate prompt, and reaches `srd:kb` only once that
+restatement is confirmed — the user's answer inside the branch is not the
+confirmation.
 
 ## Workflow
 
@@ -131,7 +134,9 @@ so confirming it confirms both the SRD and the knowledge base:
    for the measurable form (REQ-5, REQ-6). When the user states a fact about
    the existing system ("the system already does X", "the API returns Y"),
    `search` the corpus before accepting it; surface any contradiction at once
-   in interview voice, never silently accept or fix. Route the other outcomes
+   in interview voice, never silently accept or fix — a KB section's included,
+   which no `rank` settles: the fact the user confirms goes to `srd:kb`,
+   which rewrites the section at once. Route the other outcomes
    per [Documentation corpus](#documentation-corpus).
 6. Terms: resolve the glossary now if no term has yet forced it (step 0), then
    check each term that surfaces against its term set and mark it as already

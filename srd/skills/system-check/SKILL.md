@@ -111,6 +111,11 @@ input.
      or glossary term; redefines or conflicts with another SRD; uses a term
      undefined in the system; or cannot be built without knowing something the
      system does not pin down ("can't build X without knowing Y").
+   - A KB section contradicting the SRD: KB and SRDs both describe the target
+     system, so one of them must change, and no `rank` says which. Ask
+     which states what will be built, naming both; an answer for the SRD's
+     side is a confirmed fact for `srd:kb`, which rewrites the section at
+     once; one for the KB's side is the author's SRD fix.
    - Before raising any "is this defined or documented?" question, look it up
      first: `search` the corpus, then `get_doc` the promising hit. Ask only
      when it genuinely is not there or what you found is partial, and then say
@@ -124,13 +129,13 @@ input.
      disproved each and the command that retires them:
      `srd:review <srd> check #4,7`. Left unsaid, the finding stays open and the
      next run raises it again.
-   - Stale citation: when a knowledge-base page cites a document that no
-     `list_docs` id matches, raise it as a question too and hand the repair to
-     `srd:kb` — a citation repair, not a doc gap; only a fact the vanished page
-     carried that no document now states goes to `srd:report-doc-gap`. Match the
-     way the corpus reference says: a citation written as a checkout path
-     matches no id literally, and comparing the raw strings condemns every live
-     source on the page.
+   - Stale citation: when a knowledge-base page cites a document that matches
+     no `list_docs` `id` or `path`, raise it as a question too and hand the
+     repair to `srd:kb` — a citation repair, not a doc gap; only a fact the
+     vanished page carried that no document now states goes to
+     `srd:report-doc-gap`. Match the way the corpus reference says: a citation
+     written as a checkout path matches nothing literally, and comparing the
+     raw strings condemns every live source on the page.
 4. Write `<srd>.questions.md` next to the SRD (open questions only), per
    [Questions file](#questions-file).
 5. Walk one question at a time (see [Walk](#walk)), ordered: was-blocker
@@ -169,6 +174,9 @@ question, the interaction ends in one of:
   the transcript.
 - More context: the user explains. Restate the same way; the question may stay
   open, get refined, or resolve.
+- Not now: a platform question the user defers, or nobody knows, stays in the
+  file and goes to `srd:report-doc-gap` as a gap with `answer: deferred` or
+  `answer: unknown` — the file empties with the SRD, the gap outlives it.
 - Collaborate: together add, split, or refine questions in the file.
 
 Confirm each change to the questions file as you make it, one at a time. The
@@ -178,9 +186,11 @@ and resume later.
 **Stay on the current question until the user says to move on.** Do not advance
 on your own — the user may want several edits to the same item first. When the
 walk ends — no questions remain, or the user stops — invoke
-`srd:report-doc-gap` to offer the drafts this run captured, if any — the
-review layer's and the walk's together. With no questions left, the SRD is
-build-ready from the implementer's view.
+`srd:report-doc-gap` to offer the drafts this run captured, if any — the review
+layer's and the walk's together. A deferred or unknown question stays an open
+`Qn` in the file: handing it to `srd:report-doc-gap` does not answer it. Only
+with no `Qn` left is the SRD build-ready from the implementer's view; otherwise
+report it not build-ready, naming the open count.
 
 Close the walk by naming each delegate that ran and what it took —
 `srd:kb: 2 facts`, `srd:report-doc-gap: 1 gap offered` — and leave out the one

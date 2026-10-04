@@ -93,6 +93,35 @@
       "must": [
         "Run\\ the\\ project\\ gate\\ first"
       ]
+    },
+    {
+      "id": "cut-files-wrong-gap",
+      "file": "references/corpus-edits.md",
+      "rule": "A cut requirement files one confirmed wrong gap per KB section it introduced for this SRD; the KB section is never edited",
+      "must": [
+        "A\\ removal\\ \\(deletion,\\ or\\ the\\ STA\\-8\\ strike\\)\\ in\\ any\\ mode\\ that\\ reaches\\ it\\ gets\\ a\\ lookup\\ too",
+        "as\\ a\\ confirmed\\ `wrong`\\ gap",
+        "every\\ other\\ SRD\\ the\\ attestation\\ line\\ names",
+        "Never\\ edit\\ the\\ KB\\ section"
+      ]
+    },
+    {
+      "id": "kb-contradiction-no-trust-order",
+      "file": "references/corpus-edits.md",
+      "rule": "A KB section contradicting a change is a finding named in the proposal, never aligned by rank",
+      "must": [
+        "Never\\ align\\ the\\ SRD\\ to\\ the\\ KB,\\ or\\ the\\ KB\\ to\\ the\\ SRD,\\ by\\ `rank`:\\ an\\ SRD\\ has\\ none"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "doc/(infraport|user_docs|devices)",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
     }
   ]
 }

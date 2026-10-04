@@ -28,7 +28,7 @@
       "skills": [
         "kb"
       ],
-      "setup": "A `##` section moves out of `_inbox.md` into a new page. A gap record cites the inbox section's `doc_id`, and an SRD cites it too. `_open-questions.md` holds one index-only question linking to that section.",
+      "setup": "A `##` section moves out of `_inbox.md` into a new page. A gap record cites the inbox section's `doc_id`, and an SRD cites it too. A deferred question about that section is open gap `gap-0043`, also citing the inbox; the section carries its `> Open: gap-0043.` warning line.",
       "query": "/kb restructure",
       "files": []
     }

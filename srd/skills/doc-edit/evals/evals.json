@@ -1,0 +1,37 @@
+{
+  "skill_name": "doc-edit",
+  "evals": [
+    {
+      "id": 1,
+      "name": "glossary-entry-files-an-unconfirmable-fact",
+      "skills": [
+        "doc-edit",
+        "report-doc-gap"
+      ],
+      "setup": "`docs/glossary/main_glossary.md` (a local corpus file, identity = its path) defines Correlation as comparing two Loggers' recordings, \"taken between 02:00 and 04:00\". No corpus search hits any of it, and the gap store is empty. The user states the new fact in the request, cannot confirm the 02:00–04:00 window (the acoustics team would know), approves the proposal, and files the gap when offered.",
+      "query": "/doc-edit docs/glossary/main_glossary.md add to the Correlation entry that a correlation run needs two Loggers on the same water main",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "resolves-a-gap-in-the-edited-document",
+      "skills": [
+        "doc-edit"
+      ],
+      "setup": "`docs/operations/correlation.md` is a synced page: front-matter `id` `2215906431`, so `list_docs` lists `id` `2215906431` at that path. Open gap `gap-0410` (`doc_id` `2215906431`) says no corpus page states the minimum recording overlap a correlation run needs. No search hits it. The user supplies the fact in the request and answers the proposal `Y`.",
+      "query": "/doc-edit docs/operations/correlation.md add the minimum overlap: a correlation run needs at least 30 minutes of overlapping recording from both Loggers",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "hands-an-srd-to-edit",
+      "skills": [
+        "doc-edit",
+        "edit"
+      ],
+      "setup": "`initiatives/autoco/srd.md` is an SRD in progress whose AC-2 reads loosely. The user answers nothing.",
+      "query": "/doc-edit initiatives/autoco/srd.md tighten the wording of AC-2",
+      "files": []
+    }
+  ]
+}

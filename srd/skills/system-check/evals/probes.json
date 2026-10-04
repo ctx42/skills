@@ -40,6 +40,14 @@
       "pass": "^\\W*DEFAULT",
       "fail": "^\\W*(CHECK|ERRATA)",
       "class": "redundant"
+    },
+    {
+      "id": "kb-contradiction-question",
+      "rule": "kb-contradiction-asked",
+      "prompt": "Situation: system-checking specs/gw.md. LCK-1 says \"The system MUST lock a user account after 3 consecutive failed sign-in attempts.\" Your corpus search returned: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/gw.md` interview 2026-08-02; `specs/sso.md` 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" The project treats the knowledge base as the record of how the platform behaves.\n\nQuestion: what goes into the question list? Answer on the first line with exactly one of: ASK-AUTHOR-TO-CHANGE-LCK-1-TO-5, ASK-WHICH-STATES-WHAT-WILL-BE-BUILT, NOTHING-KB-WINS. Then one sentence why.",
+      "pass": "^\\W*ASK-WHICH",
+      "fail": "^\\W*(ASK-AUTHOR|NOTHING)",
+      "class": "redundant"
     }
   ]
 }

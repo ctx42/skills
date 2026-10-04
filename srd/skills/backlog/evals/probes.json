@@ -10,11 +10,11 @@
       "class": "redundant"
     },
     {
-      "id": "inbox-is-not-a-park-target",
-      "rule": "park-rules",
-      "prompt": "Situation: working `gaps`, the user decides the fact stays in the KB for now. srd:kb has just written the confirmed fact, and it sits only in kb/_inbox.md, not on any topic page.\n\nQuestion: what do you do with the gap? Answer on the first line with exactly one of: PARK-AGAINST-INBOX, LEAVE-OPEN-UNTIL-TOPIC-PAGE, RESOLVE. Then one sentence why.",
+      "id": "inbox-is-not-a-fill-target",
+      "rule": "fill-rules",
+      "prompt": "Situation: working `gaps`, the user decides the fact belongs in the KB. srd:kb has just written the confirmed fact, and it sits only in kb/_inbox.md, not on any topic page.\n\nQuestion: what do you do with the gap? Answer on the first line with exactly one of: FILL-FROM-INBOX, LEAVE-OPEN-UNTIL-TOPIC-PAGE, WONTFIX. Then one sentence why.",
       "pass": "^\\W*LEAVE-OPEN-UNTIL-TOPIC-PAGE",
-      "fail": "^\\W*(PARK|RESOLVE)",
+      "fail": "^\\W*(FILL|WONTFIX)",
       "class": "redundant"
     },
     {
@@ -24,6 +24,78 @@
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
       "class": "redundant"
+    },
+    {
+      "id": "published-url-is-not-a-fill",
+      "rule": "fill-from-corpus-only",
+      "prompt": "Situation: working `gaps`, you drafted the page for a two-gap cluster outside the corpus. The user says: \"Published it: https://docs.example.com/operations/sound-file-retention — the docs pull runs tonight.\"\n\nQuestion: what do you do with the two gaps now? Answer on the first line with exactly one of: FILL-WITH-URL, LEAVE-OPEN-UNTIL-PULLED, WONTFIX. Then one sentence why.",
+      "pass": "^\\W*LEAVE-OPEN-UNTIL-PULLED",
+      "fail": "^\\W*(FILL|WONTFIX)",
+      "class": "redundant"
+    },
+    {
+      "id": "no-answer-reclassifies",
+      "rule": "deferred-no-answer-is-unknown",
+      "prompt": "Situation: working `deferred`, you ask the question of open gap `gap-0042` (`answer: deferred`): \"what battery-low threshold does an ALTECNO logger use by default?\" The user says: \"Actually nobody knows that yet — no one has measured it.\"\n\nQuestion: what do you do with gap-0042? Answer on the first line with exactly one of: SKIP-IT, SET-ANSWER-UNKNOWN, HAND-TO-KB, FILE-NEW-GAP, WONTFIX. Then one sentence naming the call you make, if any.",
+      "pass": "^\\W*SET-ANSWER-UNKNOWN.*update_gap",
+      "fail": "^\\W*(SKIP|HAND|FILE|WONTFIX)",
+      "class": "redundant"
+    },
+    {
+      "id": "answered-deferred-waits-for-a-topic-page",
+      "rule": "deferred-answered",
+      "prompt": "Situation: working `deferred`, the user answers open gap `gap-0042` (`answer: deferred`): \"3.4 V\". You hand the fact to srd:kb, which writes it to kb/_inbox.md; no topic page states it yet.\n\nQuestion: what happens to gap-0042 now? Answer on the first line with exactly one of: FILL-FROM-INBOX, CLEAR-ANSWER-KEEP-OPEN, KEEP-DEFERRED, WONTFIX. Then one sentence why.",
+      "pass": "^\\W*CLEAR-ANSWER-KEEP-OPEN",
+      "fail": "^\\W*(FILL|KEEP-DEFERRED|WONTFIX)",
+      "class": "redundant"
+    },
+    {
+      "id": "filled-by-uses-id",
+      "rule": "filled-by-identity",
+      "prompt": "Situation: working a gaps cluster, the page now states the fact and get_doc returned {\"id\":\"1882030917\",\"path\":\"docs/operations/storage-housekeeping.md\",\"rank\":4,\"title\":\"Storage housekeeping\"}; the section stating it is the heading \"Cold storage\" (anchor cold-storage). The user confirmed the fact and wants the gap filled; people browse the corpus by file path.\n\nQuestion: what exact filled_by entry do you pass to fill_gap? Answer on the first line with only that entry, then one sentence why.",
+      "pass": "^\\W*1882030917#cold-storage\\b",
+      "fail": "^\\W*docs/",
+      "class": "load-bearing"
+    },
+    {
+      "id": "second-sweep-files-nothing",
+      "rule": "rejected-sweep",
+      "prompt": "Situation: running `/backlog`, the sweep found initiatives/wishlist-v2/srd.md with Status REJECTED. kb/wishlists.md, section \"Shared wishlist links\", opens with the attestation line \"> Not in the platform docs. Attested wishlist-v2 interview 2026-09-02.\" `list_gaps` with status open and srd_ref wishlist-v2 returns gap-0041: kind wrong, doc_id kb/wishlists.md, heading_path [\"Wishlists\", \"Shared wishlist links\"], filed by last week's sweep.\n\nQuestion: what do you do for that section now? Answer on the first line with exactly one of: SKIP, ADD-HIT, FILE-NEW-GAP. Then one sentence why.",
+      "pass": "^\\W*SKIP\\b",
+      "fail": "^\\W*(ADD-HIT|FILE)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "sweep-files-without-asking",
+      "rule": "rejected-sweep",
+      "prompt": "Situation: the user ran `/backlog deferred`. You found initiatives/wishlist-v2/srd.md with Status REJECTED. kb/wishlists.md, section \"Shared wishlist links\", opens with the attestation line \"> Not in the platform docs. Attested wishlist-v2 interview 2026-09-02.\" No open gap covers that section. The user has said nothing about wishlist-v2.\n\nQuestion: what do you do with that section? Answer on the first line with exactly one of: NOTHING-ONLY-DEFERRED-WAS-ASKED, ASK-USER-BEFORE-FILING, HAND-TO-REPORT-DOC-GAP-NOW, EDIT-KB-SECTION. Then one sentence why.",
+      "pass": "^\\W*HAND-TO-REPORT-DOC-GAP-NOW",
+      "fail": "^\\W*(NOTHING|ASK|EDIT)",
+      "class": "redundant"
+    },
+    {
+      "id": "recheck-runs-on-a-named-list",
+      "rule": "stale-recheck",
+      "prompt": "Situation: the user ran `/backlog deferred`. The REJECTED sweep found nothing. `list_gaps` with `stale: true` would return two filled gaps whose cited KB sections changed since they were filled. The user has said nothing about stale gaps.\n\nQuestion: before working `deferred`, do you re-check those two gaps? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "vanished-ref-fact-moved",
+      "rule": "stale-recheck",
+      "prompt": "Situation: the stale re-check lists `gap-0052`, status `filled`, `filled_by` `1882030917#cold-storage`, `stale_refs` that ref with reason `vanished`; its target_claim is \"Recordings older than 90 days move to the archive tier.\" `get_doc` on 1882030917 shows the heading \"Cold storage\" is gone; a new heading \"Archive tier\" states exactly that sentence.\n\nQuestion: what call do you make for gap-0052? Answer on the first line with exactly one of: REOPEN, REFRESH-SAME-REFS, FILL-NEW-REF, ASK-USER, NO-CALL. Then one sentence naming the call and its arguments.",
+      "pass": "^\\W*FILL-NEW-REF.*archive-tier",
+      "fail": "^\\W*(REOPEN|REFRESH|ASK|NO-CALL)",
+      "class": "redundant"
+    },
+    {
+      "id": "open-gap-with-no-ref-left",
+      "rule": "stale-recheck",
+      "prompt": "Situation: the stale re-check lists `gap-0062`, status `open`, partly filled by one section, `kb/billing.md#refund-fee`, stale with reason `changed`. `get_doc` shows the section now covers only shipping fees; nothing in the corpus states the refund fee any more. fill_gap requires a non-empty filled_by.\n\nQuestion: what do you do with gap-0062? Answer on the first line with exactly one of: FILL-EMPTY-LIST, REOPEN, WONTFIX, NO-CALL-REPORT-STILL-STALE, REFRESH-SAME-REFS. Then one sentence why.",
+      "pass": "^\\W*NO-CALL-REPORT-STILL-STALE",
+      "fail": "^\\W*(FILL|REOPEN|WONTFIX|REFRESH)",
+      "class": "load-bearing"
     }
   ]
 }

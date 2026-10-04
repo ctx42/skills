@@ -1,5 +1,5 @@
 ---
-tags: [case:backlog--reclassifies-rather-than-skipping, skill:backlog, sec:backlog:usage, sec:backlog:boundaries, sec:backlog:sources-of-truth, sec:backlog:backends, sec:backlog:workflow, ref:create/project-config, sec:kb:boundaries, sec:kb:the-kb-folder, sec:kb:invocation, sec:kb:workflow, sec:kb:page-anatomy, sec:kb:open-questions, sec:kb:output]
+tags: [case:backlog--reclassifies-rather-than-skipping, skill:backlog, sec:backlog:usage, sec:backlog:boundaries, sec:backlog:sources-of-truth, sec:backlog:backends, sec:backlog:workflow, ref:create/project-config]
 runs: 1
 max_turns: 50
 timeout_seconds: 300

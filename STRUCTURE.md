@@ -46,12 +46,13 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       └── reshape/             # Consumer-driven library API-change proposals
 ├── srd/                            # Plugin: SRD lifecycle
 │   ├── .claude-plugin/plugin.json
-│   ├── evals/                      # Native eval cases (<skill>--<scenario>/), srd-doc mocks
+│   ├── evals/                      # Native eval cases (<skill>--<scenario>/), srd mocks
 │   │                               #   with the frozen SRD standard, fixtures/project-config.md
 │   └── skills/
 │       ├── create/              # Author a new SRD to the SRD standard
 │       ├── review/              # Read-only review of an SRD
 │       ├── edit/                # Interactive in-place editing of an SRD
+│       ├── doc-edit/            # In-place editing of any other corpus page
 │       ├── system-check/        # Build-readiness review (system-knowledge)
 │       ├── report-doc-gap/      # Producer: capture and file doc gaps
 │       ├── backlog/             # Consumer: deferred, unknowns, and doc gaps
@@ -115,8 +116,8 @@ edit-test dev loop (`--plugin-dir` + `/reload-plugins`) is in
 Skills in the same plugin are copied together into the plugin cache, so they
 reference each other with relative paths from their own directory:
 
-- `review`, `edit`, `system-check`, `kb`, `report-doc-gap`, and `backlog` read
-  `../create/references/*`; every srd skill runs the gate in
+- `review`, `edit`, `doc-edit`, `system-check`, `kb`, `report-doc-gap`, and
+  `backlog` read `../create/references/*`; every srd skill runs the gate in
   `../create/references/project-config.md` first.
 - `backlog` reads `../kb/references/retrieval-authoring.md`, which `kb` owns.
 - `cover` and `doc` read `../style/SKILL.md`; `review` invokes `go:style`

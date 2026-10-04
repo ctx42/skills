@@ -40,6 +40,14 @@
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
       "class": "redundant"
+    },
+    {
+      "id": "kb-contradiction-both-sides",
+      "rule": "kb-contradiction-is-finding",
+      "prompt": "Situation: running a default review of specs/gw.md. LCK-1 says \"The system MUST lock a user account after 3 consecutive failed sign-in attempts.\" Your corpus search returned: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/gw.md` interview 2026-08-02; `specs/sso.md` 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" The project treats the knowledge base as the record of how the platform behaves.\n\nQuestion: what does the review file get? Answer on the first line with exactly one of: FINDING-LCK-1-WRONG-MATCH-KB, FINDING-NAMING-BOTH-EITHER-SIDE-CHANGES, DOC-GAP-ONLY, NOTHING. Then one sentence why.",
+      "pass": "^\\W*FINDING-NAMING-BOTH",
+      "fail": "^\\W*(FINDING-LCK-1-WRONG|DOC-GAP|NOTHING)",
+      "class": "load-bearing"
     }
   ]
 }

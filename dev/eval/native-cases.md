@@ -5,7 +5,7 @@ The audit tier: `claude plugin eval` cases a change selects
 check is `dev/eval-check.py` and `dev/eval-probe.py` (CONTRIBUTING.md,
 *Tiers*). Each case runs the real skill in a fresh `claude -p` session with
 only its plugin loaded. Each skill keeps three scenarios, chosen for
-what only a full run shows — writes to the srd-doc server, files written,
+what only a full run shows — writes to the srd server, files written,
 tool order; a rule a single answer can show belongs in a probe, not a case. `evals/evals.json` and
 `evals/expectations.json` stay the scenario spec; a case is that scenario made
 executable.
@@ -20,7 +20,7 @@ must reproduce the committed cases byte for byte; seed anything random.
 
 ```
 <group>/evals/
-├── mocks/<server>/<tool>.md       suite-wide MCP stand-ins (srd: srd-doc)
+├── mocks/<server>/<tool>.md       suite-wide MCP stand-ins (srd: server `srd`)
 └── <skill>--<scenario-name>/
     ├── prompt.md                  frontmatter + the user's query
     ├── case.yaml                  only when a scaffold is needed
@@ -121,17 +121,17 @@ case writes `project-config.md` (content of
 
 ## Server facts
 
-Never the real server. Suite mocks in `srd/evals/mocks/srd-doc/` answer by
+Never the real server. Suite mocks in `srd/evals/mocks/srd/` answer by
 default: `get_doc` serves the frozen standard, `search` no hits, `list_gaps`
 no gaps, `glossary_terms` a small glossary, write tools a canned success. A
 setup that states server facts (hits, drafts, glossary terms, a failing
-tool) overrides that one tool in `<case>/mocks/srd-doc/<tool>.md`: a bare body
+tool) overrides that one tool in `<case>/mocks/srd/<tool>.md`: a bare body
 is the canned result (`{{input.<field>}}` echoes an argument), `error: true`
 makes it fail, `type: agent` plus a prose world serves call-dependent answers.
 Leave a tool unmocked to make it absent. The suite's fixed `report_gap`
 always answers `gap-0901` and `list_gaps` stays empty: a case that captures
 two or more gaps, or reads back what it wrote, overrides each gap tool with
-its own `<case>/mocks/srd-doc/<tool>.md` carrying the same `type: agent` prose
+its own `<case>/mocks/srd/<tool>.md` carrying the same `type: agent` prose
 world (fresh ids, lists what was reported); a case `_server.md` does not
 override suite per-tool files. A server the case must lack: point the case's
 `project-config.md` `mcp-server` at a name with no mock. Every tool a setup
@@ -180,7 +180,7 @@ trailing org notice. Recipes:
   occurrences, one tool per side.
 - a payload in the reply's first fenced block →
   ``^(?:(?!```)[\s\S])*```[a-z]*\n(?:(?!```)[^\n]*\n)*?<what>`` (no `m`).
-- `mock_calls` lines are `{"tool":"mcp__srd-doc__<t>","input":{…},"output":"…"}`
+- `mock_calls` lines are `{"tool":"mcp__srd__<t>","input":{…},"output":"…"}`
   with JSON-escaped output; key-free lookaheads are safest.
 - one finding of a numbered report, in either order of its parts → lookaheads
   bounded by the next item: `(?=(?:(?!\n[ \t]*\**\d+\.)[\s\S])*?<part>)`.

@@ -67,7 +67,8 @@ is missing at run time, stop and tell the user.**
   the consistency pass) and the Bad→Good defect classes to fix toward.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md) and
   [references/corpus-edits.md](references/corpus-edits.md) (on-demand: the
-  first edit that asserts something about existing system behavior) — how to
+  first edit that asserts something about existing system behavior or removes
+  a requirement) — how to
   reach the corpus and where an unconfirmed fact goes, and when this skill
   looks, what it states in the proposal, and what the confirmation attests.
 - [../review/references/review-file.md](../review/references/review-file.md)
@@ -151,8 +152,11 @@ Every mode but `autofix` runs this loop per change:
    neither the SRD nor the user gives: the after text holds a placeholder
    (`<lockout minutes>`). A change asserting
    existing system behavior gets its corpus lookup here, before the proposal is
-   put, and the proposal states what it found
-   ([references/corpus-edits.md](references/corpus-edits.md)). Name the
+   put, and the proposal states what it found — a KB section it contradicts
+   included, as a finding no `rank` settles
+   ([references/corpus-edits.md](references/corpus-edits.md)). A removal gets
+   one too: each KB section only the cut requirement asserted for this SRD gets
+   a `wrong` gap on the cut's confirmation. Name the
    location the way the user can find it in the file — the requirement, scope,
    or glossary id, and for prose that has none the line number. Never an
    ordinal the user would have to count out ("paragraph three"); this holds for
@@ -299,7 +303,7 @@ walk. Scope:
 British → US spelling, identifier format/order (REQ-2/3/4, subject to the
 approval gate), keyword capitalization (LANG-4), valid Markdown, stray
 example/note text (REQ-7), spacing and punctuation. Never rewrite requirement
-meaning or restructure.
+meaning, restructure, or cut a requirement.
 
 ### targeted
 
@@ -324,10 +328,12 @@ free description ("the login timeout rule").
 2. Invoke `srd:report-doc-gap` to offer the draft gaps this session captured,
    only when there are any. The start check covers what a *prior* session
    left; this covers what *this* session produced. `srd:kb` already wrote each
-   attested fact at its confirmation.
+   attested fact, and every cut's `wrong` gaps were filed, at its
+   confirmation.
 3. Close with the manifest — approved edits, not a re-narration of diffs the
    user already saw:
-   - What changed: entry/id, one line each.
+   - What changed: entry/id, one line each; a cut carries the ids of the
+     `wrong` gaps it filed.
    - What was flagged and left (frozen-id conflicts, metadata gaps, anything
      the user declined).
    - Outstanding human follow-ups: placeholders, Status, and either draft

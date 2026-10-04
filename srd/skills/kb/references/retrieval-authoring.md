@@ -1,6 +1,6 @@
 # Authoring a page for retrieval
 
-<!-- MIRRORED FILE — these rules mirror the srd-mcp-doc README section
+<!-- MIRRORED FILE — these rules mirror the mcp-srd README section
      "Writing documents that search well", which documents the indexer that
      actually chunks and ranks these pages. Checked against commit 5f41353
      (2026-10-02). The copy is deliberate: the skills must work without the
@@ -11,7 +11,7 @@
      dropping (front-matter `url` already wins); the target_claim
      note and "Absent vs unfindable" are skill-side additions. -->
 
-Pages written for the `srd-doc` corpus — knowledge-base pages, and doc-gap
+Pages written for the `srd` corpus — knowledge-base pages, and doc-gap
 drafts — are retrieved by **BM25 keyword search over section chunks**, with no
 semantic matching. A page is found only by the words it contains and ranked by
 where those words sit. Apply these rules to everything written for the corpus so

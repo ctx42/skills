@@ -91,6 +91,23 @@
         "never\\ something\\ the\\ agent\\ inferred",
         "the\\ user's\\ confirmation\\ is\\ the\\ gate"
       ]
+    },
+    {
+      "id": "kb-contradiction-asked",
+      "rule": "An SRD/KB contradiction becomes a question asking which states the target system; no rank settles it",
+      "must": [
+        "A\\ KB\\ section\\ contradicting\\ the\\ SRD:\\ KB\\ and\\ SRDs\\ both\\ describe\\ the\\ target\\ system,\\ so\\ one\\ of\\ them\\ must\\ change,\\ and\\ no\\ `rank`\\ says\\ which"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "doc/(infraport|user_docs|devices)",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
     }
   ]
 }

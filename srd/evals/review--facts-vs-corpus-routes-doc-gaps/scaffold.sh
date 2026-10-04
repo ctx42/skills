@@ -2,18 +2,24 @@
 set -euo pipefail
 cat > project-config.md <<'EOF_PC'
 ---
-mcp-server: srd-doc
+mcp-server: srd
 kb: kb
 initiatives: initiatives
 srd-standard: docs/guidelines_for_software_requirements_documents.md
 glossary: docs/glossary
+precedence:
+  - kb
+  - docs/concepts
+  - docs/api-gateway
+  - docs/operations
+  - docs/glossary
 ---
 
 # Project configuration (eval fixture)
 
 EVAL TEST DATA ONLY. Copy this file to the root of a scenario's workspace so
 the srd skills' gate finds a project; a scenario's `setup` overrides any key.
-In an eval run, `srd/evals/mocks/srd-doc/fixtures/srd-standard.md` stands in for the
+In an eval run, `srd/evals/mocks/srd/fixtures/srd-standard.md` stands in for the
 `get_doc` result of `srd-standard` — see `dev/eval/blind-runner-prompt.md`.
 EOF_PC
 mkdir -p specs
@@ -77,4 +83,30 @@ each HTTP 502 answer.
 
 **GW-5:** The system MUST answer HTTP 504 when the upstream service does not
 answer within the API Gateway's upstream timeout of 10 seconds.
+
+**GW-6:** The system MUST keep the log entry of each failed upstream call for
+the API Gateway's error-log retention period of 30 days.
 EOF_F0
+mkdir -p kb
+cat > kb/api-gateway.md <<'EOF_KB'
+---
+title: API Gateway
+attested: 2026-08-14
+srd_ref: specs/audit.md
+last_verified: 2026-08-14
+---
+
+# API Gateway
+
+## Error log retention
+
+> Not in the platform docs. Attested `specs/audit.md` interview 2026-08-14.
+
+The API Gateway keeps each error log entry for 90 days, then deletes it.
+
+## Provenance
+
+| Section             | Source                                |
+|---------------------|---------------------------------------|
+| Error log retention | `specs/audit.md` interview 2026-08-14 |
+EOF_KB

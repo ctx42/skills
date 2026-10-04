@@ -13,9 +13,9 @@ append_system_prompt: |
   `.agent-data` at the root of this workspace, so
   `${AGENT_DATA_DIR:-$HOME/.agent-data}` resolves to ./.agent-data here; never
   touch the real home directory.
-  srd:create loads the SRD standard live from the srd-doc server, which this
+  srd:create loads the SRD standard live from the srd server, which this
   run does not have; the frozen copy at
-  ./srd/evals/mocks/srd-doc/fixtures/srd-standard.md is identical to it.
+  ./srd/evals/mocks/srd/fixtures/srd-standard.md is identical to it.
 
   Automated eval: the user is absent. Whenever the skill would stop and wait
   for the user, take the next scripted answer below as the reply and continue

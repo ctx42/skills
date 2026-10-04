@@ -5,7 +5,7 @@
       "id": 1,
       "name": "capture-does-not-interrupt",
       "expected_behavior": [
-        "Captures a light draft — `report_gap` with `draft: true`, carrying `detail`, `srd_ref`, and the `search_terms` from the failed lookups — and returns at once",
+        "Runs `list_gaps` with a `query` and no `status` filter, then captures a light draft — `report_gap` with `draft: true`, carrying `detail`, `srd_ref`, and the `search_terms` from the failed lookups — and returns at once",
         "Runs no grill and makes no `submit_gap` call at capture time",
         "Prompts the user for nothing at capture time: the caller's pass continues uninterrupted, and only the end-of-pass offer asks anything"
       ]

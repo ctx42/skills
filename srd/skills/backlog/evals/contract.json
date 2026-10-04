@@ -6,14 +6,15 @@
       "rule": "Writes nothing under the kb folder; every KB write is delegated to srd:kb",
       "must": [
         "write\\ any\\ file\\ under\\ the\\ `kb`\\ folder",
-        "every\\ knowledge\\-base\\ write,\\ row\\ move,\\ or\\ row\\ edit\\ is\\ delegated\\ there"
+        "every\\ knowledge\\-base\\ write\\ is\\ delegated\\ there"
       ]
     },
     {
       "id": "no-new-gaps-no-publish",
-      "rule": "Never publishes, authors SRDs, or files gaps",
+      "rule": "Never publishes, authors SRDs, or files gaps itself; the sweep's gaps go through srd:report-doc-gap",
       "must": [
-        "publish\\ anywhere;\\ author\\ or\\ edit\\ an\\ SRD;\\ file\\ new\\ gaps"
+        "publish\\ anywhere;\\ author\\ or\\ edit\\ an\\ SRD;\\ file\\ new\\ gaps",
+        "`srd:report\\-doc\\-gap`\\ owns\\ that,\\ the\\ sweep's\\ included"
       ]
     },
     {
@@ -21,6 +22,27 @@
       "rule": "Pass the project gate before anything else",
       "must": [
         "0\\.\\ Pass\\ the\\ gate\\.\\ Always,\\ before\\ anything\\ below"
+      ]
+    },
+    {
+      "id": "rejected-sweep",
+      "rule": "Every run sweeps REJECTED SRDs: one wrong gap per citing KB section through srd:report-doc-gap, filed at once, skipping a section an open revert gap covers",
+      "must": [
+        "1\\.\\ Sweep\\ `REJECTED`\\ SRDs\\.\\ Always,\\ any\\ list\\ named\\.",
+        "already\\ reverts\\ it\\ —\\ skip\\ the\\ section,\\ no\\ hit",
+        "`REJECTED`\\ Status\\ is\\ the\\ confirmation:\\ no\\ proposal,\\ no\\ grill",
+        "naming\\ the\\ rejected\\ SRD\\ and\\ every\\ other\\ SRD\\ the\\ attestation\\ line\\ names"
+      ]
+    },
+    {
+      "id": "stale-recheck",
+      "rule": "Every run re-checks stale gaps: refresh with the same refs only when the sections still state the fact, correct a moved ref, reopen a filled gap whose fact is gone, ask when unsure",
+      "must": [
+        "2\\.\\ Re\\-check\\ stale\\ gaps\\.\\ Always,\\ any\\ list\\ named\\.",
+        "`complete:\\ true`\\ refreshes\\ a\\ filled\\ gap,\\ `complete:\\ false`\\ re\\-hashes\\ an\\ open\\ one",
+        "else\\ `reopen_gap`,\\ `reason`\\ what\\ changed",
+        "none\\ hold:\\ no\\ call",
+        "Never\\ refresh\\ on\\ a\\ guess"
       ]
     },
     {
@@ -33,9 +55,9 @@
     },
     {
       "id": "never-close-by-guess",
-      "rule": "Never invent an answer to close a row",
+      "rule": "Never invent an answer to close a gap",
       "must": [
-        "Never\\ invent\\ an\\ answer\\ to\\ close\\ a\\ row",
+        "Never\\ invent\\ an\\ answer\\ to\\ close\\ a\\ gap",
         "closed\\ with\\ a\\ guess\\ is\\ a\\ fact\\ the\\ corpus\\ will\\ serve\\ as\\ truth"
       ]
     },
@@ -56,26 +78,44 @@
       ]
     },
     {
-      "id": "resolve-on-publish-only",
-      "rule": "Gaps resolved only once the human gives the published URL",
+      "id": "fill-from-corpus-only",
+      "rule": "Fill only from a corpus section get_doc shows; a URL or unpulled draft fills nothing",
       "must": [
-        "Resolve\\ once\\ the\\ human\\ gives\\ the\\ published\\ URL",
-        "resolve\\ nothing"
+        "Fill\\ once\\ a\\ corpus\\ section\\ states\\ the\\ fact\\ and\\ `get_doc`\\ shows\\ it",
+        "A\\ URL\\ never\\ fills\\ a\\ gap",
+        "fill\\ nothing"
       ]
     },
     {
-      "id": "park-rules",
-      "rule": "Park as kb only against a topic page section srd:kb wrote, never _inbox.md or an unconfirmed fact",
+      "id": "fill-rules",
+      "rule": "Never fill against _inbox.md or an unconfirmed fact; part of the fact is a partial fill",
       "must": [
-        "Never\\ park\\ against\\ `_inbox\\.md`",
-        "Never\\ park\\ against\\ an\\ unconfirmed\\ fact"
+        "Never\\ fill\\ against\\ `_inbox\\.md`",
+        "Never\\ fill\\ against\\ an\\ unconfirmed\\ fact",
+        "`complete:\\ false`\\ with\\ `remaining`\\ saying\\ what\\ is\\ still\\ missing"
+      ]
+    },
+    {
+      "id": "wontfix-user-decides",
+      "rule": "Wontfix only on the user's decision, never to clear the list",
+      "must": [
+        "Wontfix\\ only\\ on\\ the\\ user's\\ decision",
+        "Never\\ to\\ clear\\ the\\ list"
       ]
     },
     {
       "id": "deferred-no-answer-is-unknown",
-      "rule": "A deferred question with no answer becomes an unknown, not a skip",
+      "rule": "A deferred gap with no answer becomes an unknown via update_gap, not a skip",
       "must": [
-        "No\\ answer\\ exists:\\ it\\ is\\ an\\ unknown,\\ not\\ a\\ skip"
+        "No\\ answer\\ exists:\\ it\\ is\\ an\\ unknown,\\ not\\ a\\ skip\\ —\\ `update_gap`\\ with\\ `answer:\\ unknown`"
+      ]
+    },
+    {
+      "id": "deferred-answered",
+      "rule": "An answered deferred gap goes to srd:kb, loses its answer mark, and fills only once a topic page states it",
+      "must": [
+        "hand\\ the\\ fact\\ to\\ `srd:kb`\\ with\\ the\\ gap's\\ id,\\ then\\ `update_gap`\\ `answer:\\ \"\"`",
+        "`srd:kb`\\ writes\\ to\\ its\\ inbox,\\ never\\ a\\ fill\\ target"
       ]
     },
     {
@@ -90,7 +130,24 @@
       "id": "store-error-stops",
       "rule": "A store error stops gaps work; no retry",
       "must": [
-        "stop\\ working\\ `gaps`;\\ never\\ retry\\ it\\ or\\ work\\ around\\ it"
+        "report\\ it\\ with\\ its\\ message\\ and\\ stop;\\ never\\ retry\\ it\\ or\\ work\\ around\\ it"
+      ]
+    },
+    {
+      "id": "filled-by-identity",
+      "rule": "filled_by entries use the result's id copied as is, never its path",
+      "must": [
+        "the\\ identity\\ is\\ the\\ result's\\ `id`\\ from\\ `search`\\ or\\ `list_docs`,\\ copied\\ as\\ is,\\ never\\ its\\ `path`"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "doc/(infraport|user_docs|devices)",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
       ]
     }
   ]
