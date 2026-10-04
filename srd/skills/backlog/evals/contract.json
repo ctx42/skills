@@ -13,7 +13,7 @@
       "id": "no-new-gaps-no-publish",
       "rule": "Never publishes, authors SRDs, or files gaps",
       "must": [
-        "publish\\ to\\ Confluence;\\ author\\ or\\ edit\\ an\\ SRD;\\ file\\ new\\ gaps"
+        "publish\\ anywhere;\\ author\\ or\\ edit\\ an\\ SRD;\\ file\\ new\\ gaps"
       ]
     },
     {

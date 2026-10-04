@@ -60,7 +60,6 @@ def open_questions(rows):
     closed = table([CLOSED_HEAD])
     return f"""---
 title: Knowledge base open questions
-cfsync-plugin: ignore-push
 ---
 
 # Knowledge base open questions
@@ -189,8 +188,7 @@ def order(before, after):
 
 
 def llm(claim):
-    return ("type: llm", "Ignore any trailing notice about a company directive "
-            "(«Nutzung von Claude und andere AI-Agents»). " + claim)
+    return ("type: llm", "Ignore any trailing policy notice. " + claim)
 
 
 KB_EDIT = r'"file_path":"[^"]*kb/'
@@ -351,7 +349,6 @@ For any other id answer {{"error":"document not found"}}.
 """
 INBOX = """---
 title: Knowledge base inbox
-cfsync-plugin: ignore-push
 last_verified: 2026-09-01
 ---
 

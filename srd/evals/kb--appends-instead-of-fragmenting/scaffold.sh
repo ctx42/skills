@@ -20,7 +20,6 @@ mkdir -p kb
 cat > kb/_inbox.md <<'EOF_INBOX'
 ---
 title: Knowledge base inbox
-cfsync-plugin: ignore-push
 last_verified: 2026-09-29
 ---
 
@@ -47,7 +46,6 @@ EOF_INBOX
 cat > kb/_open-questions.md <<'EOF_OQ'
 ---
 title: Knowledge base open questions
-cfsync-plugin: ignore-push
 ---
 
 # Knowledge base open questions
@@ -69,7 +67,6 @@ cat > kb/correlation.md <<'EOF_CORR'
 ---
 title: Leak Noise Correlation
 aliases: [cross-correlation, correlator, AUTOCO correlation]
-cfsync-plugin: ignore-push
 attested: 2026-09-10
 srd_ref: initiatives/autoco/srd.md
 last_verified: 2026-09-20

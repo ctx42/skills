@@ -118,10 +118,6 @@ the Sound File's Project.
 **GR-12:** The system MUST keep the Label Audit Log reliable.
 EOF_SRD
 cat > specs/labeling.questions.md <<'EOF_Q'
----
-cfsync-plugin: ignore-push
----
-
 # SRD Questions — Sound File Labeling
 
 Source: `specs/labeling.md`
@@ -165,7 +161,6 @@ cat > specs/labeling.review.md <<'EOF_R'
 prepared: 2026-09-28 10:05
 updated: 2026-09-28 10:05
 source: specs/labeling.md
-cfsync-plugin: ignore-push
 ---
 
 # SRD Review — Sound File Labeling

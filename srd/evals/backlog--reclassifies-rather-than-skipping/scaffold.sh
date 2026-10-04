@@ -20,7 +20,6 @@ mkdir -p kb
 cat > kb/_open-questions.md <<'EOF_0'
 ---
 title: Knowledge base open questions
-cfsync-plugin: ignore-push
 ---
 
 # Knowledge base open questions

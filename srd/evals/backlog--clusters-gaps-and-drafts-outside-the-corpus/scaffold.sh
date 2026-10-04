@@ -20,7 +20,6 @@ mkdir -p kb
 cat > kb/_inbox.md <<'EOF_0'
 ---
 title: Knowledge base inbox
-cfsync-plugin: ignore-push
 last_verified: 2026-09-01
 ---
 
@@ -29,7 +28,6 @@ EOF_0
 cat > kb/_open-questions.md <<'EOF_1'
 ---
 title: Knowledge base open questions
-cfsync-plugin: ignore-push
 ---
 
 # Knowledge base open questions

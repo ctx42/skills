@@ -20,7 +20,6 @@ mkdir -p kb initiatives/gw-firmware
 cat > kb/_inbox.md <<'EOF_INBOX'
 ---
 title: Knowledge base inbox
-cfsync-plugin: ignore-push
 last_verified: 2026-10-01
 ---
 
@@ -52,7 +51,6 @@ EOF_INBOX
 cat > kb/_open-questions.md <<'EOF_OQ'
 ---
 title: Knowledge base open questions
-cfsync-plugin: ignore-push
 ---
 
 # Knowledge base open questions

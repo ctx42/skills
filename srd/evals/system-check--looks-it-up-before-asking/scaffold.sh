@@ -102,10 +102,6 @@ File.
 File's Project.
 EOF_SRD
 cat > specs/labeling.questions.md <<'EOF_Q'
----
-cfsync-plugin: ignore-push
----
-
 # SRD Questions — Sound File Labeling
 
 Source: `specs/labeling.md`
@@ -125,7 +121,6 @@ cat > specs/labeling.review.md <<'EOF_R'
 prepared: 2026-09-30 09:20
 updated: 2026-09-30 09:20
 source: specs/labeling.md
-cfsync-plugin: ignore-push
 ---
 
 # SRD Review — Sound File Labeling

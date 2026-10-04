@@ -43,7 +43,7 @@ memory.
 - Must not: run `git` — the agent writes the working tree, the user commits;
   write outside the `kb` folder, ever; file documentation gaps (that is
   `srd:report-doc-gap`); author or edit an SRD (`srd:create`, `srd:edit`);
-  publish anything to Confluence; write a fact the user has not confirmed;
+  publish anything outside the repo; write a fact the user has not confirmed;
   keep anything in per-machine state.
 - Depends on: the corpus read tools for dedup and coverage checks. The corpus
   indexes the KB under the `kb` folder's id prefix, and that index can lag the
@@ -72,11 +72,11 @@ the gate resolves it, so nothing is asked and nothing is remembered. Two files
 there are fixed: `_inbox.md`, where every confirmed fact lands first, and
 `_open-questions.md`, the open-questions index.
 
-The folder must **not** be managed by a Confluence sync: a sync pull clobbers
+The folder must **not** be managed by a document sync: a sync pull clobbers
 agent writes and the page silently reverts. Before the first write of a
-session, check the sync config (`.cfsync.yaml` or equivalent) at the project
-root: the `kb` folder must appear in no mapping. A folder that fails this is a
-data-loss bug, not a preference — refuse to write and say why.
+session, check any sync config at the project root: the `kb` folder must
+appear in no mapping. A folder that fails this is a data-loss bug, not a
+preference — refuse to write and say why.
 
 ## The corpus
 
@@ -196,7 +196,7 @@ For each confirmed fact, in order:
 2. Append it to `<kb>/_inbox.md` as its own `##` section: a subject-titled
    heading, the attestation line (see [Page anatomy](#page-anatomy)), the
    fact — and its row in the inbox's `## Provenance` table. The inbox's front
-   matter carries `title`, `cfsync-plugin: ignore-push`, and `last_verified`
+   matter carries `title` and `last_verified`
    (each write bumps it), never `srd_ref`: each section's attestation line
    names its source. Create the file that way when missing.
    Never to a topic page or a category invented at this moment: filing is
@@ -248,7 +248,6 @@ Front matter:
 ---
 title: Acoustic Leak Detection
 aliases: [AUTOCO, automated cross-correlation]
-cfsync-plugin: ignore-push
 attested: 2026-09-11
 srd_ref: initiatives/leak/srd.md, initiatives/autoco/srd.md
 last_verified: 2026-09-11

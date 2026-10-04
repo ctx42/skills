@@ -44,9 +44,9 @@
     },
     {
       "id": "sync-guard",
-      "rule": "Refuses to write into a kb folder a Confluence sync manages",
+      "rule": "Refuses to write into a kb folder a document sync manages",
       "must": [
-        "must \\*\\*not\\*\\* be managed by a Confluence sync",
+        "must \\*\\*not\\*\\* be managed by a document sync",
         "refuse to write and say why"
       ]
     },

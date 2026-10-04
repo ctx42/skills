@@ -43,17 +43,12 @@ author-facing account of what changed and why, which a diff cannot carry.
   manifest, which then says which were left and why.
 - Write for the SRD's author, not a reviewer: name the surface in the SRD's own
   words; cite a rule id only where the user did.
-- Create the file on the first write, frontmatter and title included;
-  `cfsync-plugin: ignore-push` keeps the Confluence sync from pushing it.
+- Create the file on the first write, title included.
 
 Example of the file after one session — the date, heading, ids, and prose are
 illustrative, not boilerplate to copy:
 
 ````
----
-cfsync-plugin: ignore-push
----
-
 # Changes — <Document Title>
 
 ## 2026-07-27

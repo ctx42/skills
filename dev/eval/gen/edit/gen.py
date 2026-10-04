@@ -93,7 +93,6 @@ def review(body, title="Login Token Validation"):
 prepared: 2026-09-28 10:00
 updated: 2026-09-28 10:00
 source: specs/login.md
-cfsync-plugin: ignore-push
 ---
 
 # SRD Review — {title}
@@ -410,7 +409,7 @@ write_case("edit--feedback-without-a-review-file", REVIEW, "/srd:edit specs/logi
                "b3-no-decision-log": g_exists("specs/login.decisions.md", False),
                "b4-no-draft-check": g_never("mcp__srd-doc__list_gaps"),
                "b4-no-start-report": g_last(r"IN PROGRESS|draft|Decision log|manifest", "i", "not_contains"),
-               "b4-at-most-two-lines": g_last(r"(?:^(?!.*(?:Weisung|AI-Agents|freigabe|directive))[^\n]*\S[^\n]*$[\s\S]*?){3}", "m", "not_contains"),
+               "b4-at-most-two-lines": g_last(r"(?:^(?!.*(?:policy|directive|approval))[^\n]*\S[^\n]*$[\s\S]*?){3}", "m", "not_contains"),
                "b5-no-menu": g_last(r"srd:review|\b(run|use|try)\s+`?/?(srd:)?review\b|paste|drop(ping)?\s+(the|`#)|without\s+(the\s+)?`?#|re-?run", "i", "not_contains"),
            },
            max_turns=20)

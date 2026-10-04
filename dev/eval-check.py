@@ -16,7 +16,7 @@ Checks, in order:
 Usage:
   ./dev/eval-check.py                  all checks
   ./dev/eval-check.py --only contracts (contracts|probes|generators|literals)
-  ./dev/eval-check.py --gone confluence/example/
+  ./dev/eval-check.py --gone old/path/
 Exit status is non-zero on any failure.
 """
 import argparse

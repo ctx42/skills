@@ -88,7 +88,6 @@ cat > specs/login.review.md <<'EOF_1'
 prepared: 2026-09-28 10:00
 updated: 2026-09-28 10:00
 source: specs/login.md
-cfsync-plugin: ignore-push
 ---
 
 # SRD Review — Login Token Validation

@@ -7,8 +7,8 @@
      server repo checked out. When the server's chunking or ranking changes,
      update this file and bump the commit above — otherwise every page written
      against it chunks or ranks wrongly, and silently. Deliberate departures:
-     the citation rule omits the Confluence body-link preference the
-     server is dropping (front-matter `url` already wins); the target_claim
+     the citation rule omits the body-link preference the server is
+     dropping (front-matter `url` already wins); the target_claim
      note and "Absent vs unfindable" are skill-side additions. -->
 
 Pages written for the `srd-doc` corpus — knowledge-base pages, and doc-gap

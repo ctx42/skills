@@ -123,16 +123,13 @@ carry a date and time. `updated:` moves only when something else in the file
 moved with it: a mode that resolves nothing, appends nothing, and re-sorts
 nothing writes no bytes at all, so a second run over an unchanged SRD leaves a
 file byte-identical to the first run's. This governs every mode that writes the
-file; none bumps the timestamp unconditionally. Include
-`cfsync-plugin: ignore-push` verbatim so the Confluence sync never pushes this
-generated artifact.
+file; none bumps the timestamp unconditionally.
 
 ```
 ---
 prepared: YYYY-MM-DD HH:MM
 updated: YYYY-MM-DD HH:MM
 source: path/to/srd.md
-cfsync-plugin: ignore-push
 ---
 
 # SRD Review — <Document Title>

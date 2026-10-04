@@ -41,8 +41,8 @@ system is.
 
 - Role: the consumer end of every backlog — list, triage, extract, close.
 - Must not: write any file under the `kb` folder (`srd:kb` owns it; every
-  knowledge-base write, row move, or row edit is delegated there); publish to
-  Confluence; author or edit an SRD; file new gaps (`srd:report-doc-gap` owns
+  knowledge-base write, row move, or row edit is delegated there); publish
+  anywhere; author or edit an SRD; file new gaps (`srd:report-doc-gap` owns
   that).
 - Depends on: `srd:kb` for the KB lists, the server's gap store for `gaps`.
 

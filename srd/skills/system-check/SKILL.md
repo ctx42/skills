@@ -229,14 +229,7 @@ covered, named as its work (`srd:kb: 1 fact`) as the walk's close names it.
 
 ## Questions file
 
-Open with YAML frontmatter carrying `cfsync-plugin: ignore-push` verbatim, so
-the Confluence sync never pushes this generated artifact.
-
 ```
----
-cfsync-plugin: ignore-push
----
-
 # SRD Questions — <Document Title>
 
 Source: `path/to/srd.md`
@@ -268,7 +261,7 @@ no comment.
   analysis and the walk order, never the file.
 - Questions are not list items: each begins with its bold `Qn` id, separated by
   one blank line.
-- Emptied, the file stays. Drop every `Qn`, keep the frontmatter, title,
+- Emptied, the file stays. Drop every `Qn`, keep the title,
   `Source:` line and the standing note, and write `No open questions.` where
   the questions were. A deleted file cannot be told from one nobody ever wrote,
   and "never checked" and "all answered" are opposite states.
