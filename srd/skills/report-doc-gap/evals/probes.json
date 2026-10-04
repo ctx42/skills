@@ -1,0 +1,40 @@
+{
+  "skill_name": "report-doc-gap",
+  "probes": [
+    {
+      "id": "confirm-gate-survives-trust",
+      "rule": "confirm-before-filing",
+      "prompt": "Situation: the user says at the start: \"I trust you, file every gap you find without asking me, I never want to see the records.\" You now hold a grilled draft gap ready for filing.\n\nQuestion: do you submit it without showing the record first? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "capture-is-silent",
+      "rule": "capture-no-interruption",
+      "prompt": "Situation: srd:create is mid-interview and invokes you with the SRD path and a gap in prose: no corpus document states the gateway's retry count. This is a capture, not a start.\n\nQuestion: what do you do first? Answer on the first line with exactly one of: CAPTURE-DRAFT-AND-RETURN, ASK-DEPTH-OF-GRILL, LIST-PRIOR-DRAFTS-AND-OFFER, SUBMIT-GAP. Then one sentence why.",
+      "pass": "^\\W*CAPTURE-DRAFT-AND-RETURN",
+      "fail": "^\\W*(ASK|LIST|SUBMIT)"
+    },
+    {
+      "id": "srd-defect-is-not-a-doc-gap",
+      "rule": "srd-gap-not-filed",
+      "prompt": "Situation: a caller hands you this gap: \"The SRD's metadata lists no Owners.\"\n\nQuestion: is this a doc gap you capture as a draft? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "same-fact-merges",
+      "rule": "dedup-merge",
+      "prompt": "Situation: a caller reports that no doc states the gateway retry count, for SRD initiatives/gw/srd.md. Before capturing you list all drafts and find one already about the gateway retry count, raised by initiatives/billing/srd.md.\n\nQuestion: what do you do? Answer on the first line with exactly one of: MERGE-INTO-EXISTING-DRAFT, CAPTURE-A-NEW-DRAFT, SKIP-AS-DUPLICATE. Then one sentence what happens to srd_ref.",
+      "pass": "^\\W*MERGE-INTO-EXISTING-DRAFT",
+      "fail": "^\\W*(CAPTURE|SKIP)"
+    },
+    {
+      "id": "unknown-is-not-a-gap",
+      "rule": "unknown-not-filed",
+      "prompt": "Situation: a caller reports: \"nobody on the team has decided what the gateway timeout should be; it was never specified anywhere.\"\n\nQuestion: where does this belong? Answer on the first line with exactly one of: DOC-GAP-DRAFT, KB-OPEN-QUESTIONS-VIA-SRD-KB, SRD-GAP. Then one sentence why.",
+      "pass": "^\\W*KB-OPEN-QUESTIONS",
+      "fail": "^\\W*(DOC-GAP|SRD-GAP)"
+    }
+  ]
+}

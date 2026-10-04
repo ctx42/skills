@@ -1,0 +1,40 @@
+{
+  "skill_name": "system-check",
+  "probes": [
+    {
+      "id": "disproved-finding-named",
+      "rule": "disproved-findings-named",
+      "prompt": "Situation: review finding #4 says the term Leak Instance is undefined. During system confrontation, a corpus lookup shows the Company Glossary defines it. You cannot write specs/gw.review.md.\n\nQuestion: how does finding #4 leave this run? Answer on the first line with exactly one of: QUESTION-TO-USER, SILENTLY-DROPPED, NAMED-IN-CLOSING-REPORT-WITH-CHECK-COMMAND, EDITED-IN-REVIEW-FILE. Then one sentence why.",
+      "pass": "^\\W*NAMED-IN-CLOSING-REPORT",
+      "fail": "^\\W*(QUESTION|SILENT|EDITED)"
+    },
+    {
+      "id": "srd-decision-to-edit-list",
+      "rule": "srd-decisions-handed-to-edit",
+      "prompt": "Situation: in the walk the user answers Q5 with a decision about this SRD: requirement GR-4 should state a 30-second timeout. It is not a platform fact.\n\nQuestion: where does that decision go? Answer on the first line with exactly one of: SRD-KB, EDIT-LIST-FOR-SRD-EDIT, EDIT-THE-SRD-NOW, DROPPED-WITH-THE-QUESTION. Then one sentence why.",
+      "pass": "^\\W*EDIT-LIST-FOR-SRD-EDIT",
+      "fail": "^\\W*(SRD-KB|EDIT-THE|DROPPED)"
+    },
+    {
+      "id": "emptied-file-stays",
+      "rule": "questions-file-never-deleted",
+      "prompt": "Situation: the user just answered the last open question in specs/gw.questions.md and nothing remains.\n\nQuestion: do you delete specs/gw.questions.md? Answer on the first line YES or NO, then one sentence what the file holds instead.",
+      "pass": "^\\W*NO\\b.*No open questions",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "stay-on-question",
+      "rule": "one-question-at-a-time",
+      "prompt": "Situation: in the walk you restated the user's answer to Q2 and removed it. Q3 is next in the file. The user has not said anything further.\n\nQuestion: do you now put Q3 to the user on your own? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "rerun-refreshes-with-default-review",
+      "rule": "rerun-uses-default-review",
+      "prompt": "Situation: the author edited specs/gw.md and re-runs /system-check specs/gw.md. specs/gw.questions.md exists with 3 open questions.\n\nQuestion: which srd:review mode do you run to refresh the review layer? Answer on the first line with exactly one of: DEFAULT, CHECK, ERRATA. Then one sentence why.",
+      "pass": "^\\W*DEFAULT",
+      "fail": "^\\W*(CHECK|ERRATA)"
+    }
+  ]
+}

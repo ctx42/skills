@@ -1,0 +1,93 @@
+{
+  "skill_name": "style",
+  "rules": [
+    {
+      "id": "rules-change-via-review",
+      "rule": "Rulebook changes go only through go:review, never hand-edited",
+      "must": [
+        "Change the rules only through `go:review`",
+        "never hand-edit them"
+      ]
+    },
+    {
+      "id": "reference-vs-pass",
+      "rule": "Reference mode applies Production to .go and Test to _test.go; Test inherits Production",
+      "must": [
+        "apply the Production section to `\\*\\.go` and the Test section to `\\*_test\\.go`",
+        "Test inherits Production unless a Test rule overrides it"
+      ]
+    },
+    {
+      "id": "errors-wrapped",
+      "rule": "Wrap errors with %w; never swallow",
+      "must": [
+        "Wrap errors with `%w` and add context; never swallow the error",
+        "never `==`"
+      ]
+    },
+    {
+      "id": "no-library-output",
+      "rule": "Library functions never write to stdout/stderr",
+      "must": [
+        "Never write output \\(errors included\\) to stdout/stderr from library"
+      ]
+    },
+    {
+      "id": "env-via-ring",
+      "rule": "Env vars via ring, never os.Getenv / t.Setenv",
+      "must": [
+        "reads it via `rng\\.EnvGet`/`EnvLookup`; never `os\\.Getenv`",
+        "Set an environment variable for code under test with `rng\\.EnvSet`, never `t\\.Setenv`"
+      ]
+    },
+    {
+      "id": "multiline-strings",
+      "rule": "Multi-line string literals are segmented with +, never raw backticks",
+      "must": [
+        "never use a raw backtick string for multi-line content",
+        "joined with `\\+`"
+      ]
+    },
+    {
+      "id": "test-markers",
+      "rule": "Tests use Given/When/Then markers; single action under When",
+      "must": [
+        "`--- Given ---` arranges, `--- When ---` performs the single action under test",
+        "never move the call under test out of `--- When ---`"
+      ]
+    },
+    {
+      "id": "test-naming",
+      "rule": "have/want never got; t.Context never context.Background",
+      "must": [
+        "Name the actual value `have` and the expected value `want`, never `got`",
+        "Use `t\\.Context\\(\\)`, never `context\\.Background\\(\\)`"
+      ]
+    },
+    {
+      "id": "no-coverage-chasing",
+      "rule": "Never add production overrides only for a test",
+      "must": [
+        "never add a production override \\(env var, hook, parameter\\) only so a test can reach a branch"
+      ]
+    },
+    {
+      "id": "pass-redirects-rule-edits",
+      "rule": "Rule edits redirect to go:review, unknown targets ask",
+      "file": "references/checking.md",
+      "must": [
+        "redirect to `go:review`",
+        "say so and ask, do not guess a target"
+      ]
+    },
+    {
+      "id": "plan-first-stops",
+      "rule": "plan_first proposes then stops; checks nothing",
+      "file": "references/checking.md",
+      "must": [
+        "propose the budget and the package list, then stop for the",
+        "checking nothing until it comes"
+      ]
+    }
+  ]
+}

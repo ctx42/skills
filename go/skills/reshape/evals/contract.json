@@ -1,0 +1,79 @@
+{
+  "skill_name": "reshape",
+  "rules": [
+    {
+      "id": "read-only",
+      "rule": "Reasons only; edits nothing",
+      "must": [
+        "It reasons only; it edits nothing"
+      ]
+    },
+    {
+      "id": "library-surface",
+      "rule": "Proposals change the library API, never only the call sites",
+      "must": [
+        "never propose refactoring only the call sites with the API left as-is"
+      ]
+    },
+    {
+      "id": "structural-option",
+      "rule": "Brainstorm forces at least one structural option",
+      "must": [
+        "force at least one structural option"
+      ]
+    },
+    {
+      "id": "external-no-diff",
+      "rule": "External library: API-shape level, no internals diff",
+      "must": [
+        "propose at the API-shape level and note you can't diff internals"
+      ]
+    },
+    {
+      "id": "lsp-mapping",
+      "rule": "Map usage with LSP; say when textual fallback",
+      "must": [
+        "say which, and that the mapping is textual"
+      ]
+    },
+    {
+      "id": "use-counting",
+      "rule": "N counts each syntactic use once; nested counts once",
+      "must": [
+        "is one use, since a single reshape changes it once",
+        "A use inside a loop counts once"
+      ]
+    },
+    {
+      "id": "before-single-site",
+      "rule": "Before excerpt is one real cited site, no composites or placeholders",
+      "must": [
+        "Never stitch lines from several files into one excerpt under a single citation",
+        "never write a placeholder where the before belongs"
+      ]
+    },
+    {
+      "id": "two-labels",
+      "rule": "Only High or Med; declined shapes are notes, not rows",
+      "must": [
+        "There is no third label",
+        "a named declined note"
+      ]
+    },
+    {
+      "id": "max-cap",
+      "rule": "max caps what is reported, not considered; displaced structural option noted",
+      "must": [
+        "`max=N` caps what is reported, never what is considered",
+        "say in one line that it was considered and what displaced it"
+      ]
+    },
+    {
+      "id": "empty-result",
+      "rule": "No proposals: say so, name what was looked for",
+      "must": [
+        "an empty table is a shrug with borders"
+      ]
+    }
+  ]
+}

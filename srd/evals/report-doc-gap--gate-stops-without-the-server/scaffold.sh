@@ -64,8 +64,8 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: doc-corpus
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
-glossary: confluence/example/glossary
+srd-standard: docs/guidelines_for_software_requirements_documents.md
+glossary: docs/glossary
 ---
 
 # Project configuration (eval fixture)

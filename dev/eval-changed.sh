@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-# eval-changed.sh — run the native eval cases a change reaches, in minutes.
+# eval-changed.sh — manual audit: run the agent-run native eval cases.
+#
+# Not the routine check. After a skill edit run ./dev/eval-check.py (free,
+# seconds) and ./dev/eval-probe.py (cents, under a minute). Each case here is
+# a full agent session ($0.25-0.80, up to minutes); run them only when asked.
+# Without --audit, --skill, --case, or --all the script only lists what a
+# change reaches and runs nothing.
 #
 # Maps the working-tree diff (or --base REF..) to tags and runs
 # `claude plugin eval` once per plugin group with those tags (tags OR):
@@ -16,7 +22,8 @@
 # Native cases live in <group>/evals/<case>/; see dev/eval/native-cases.md.
 #
 # Usage:
-#   ./dev/eval-changed.sh                 cases reached by uncommitted changes
+#   ./dev/eval-changed.sh                 list cases reached by uncommitted changes
+#   ./dev/eval-changed.sh --audit         ... and run them
 #   ./dev/eval-changed.sh --base HEAD~3   ... by changes since HEAD~3
 #   ./dev/eval-changed.sh --path srd/skills/edit   ... only changes under a path
 #   ./dev/eval-changed.sh --skill srd/edit [--skill go/review]   whole skills
@@ -26,8 +33,8 @@
 #   ./dev/eval-changed.sh --clean        delete leftover /tmp/claude-eval-* workspaces
 #   -j N   concurrent runs (1-8, default 2: more burns the 5-hour usage
 #          window faster); --dry-run prints, runs nothing
-#   --max-usd N  stop once this invocation has spent N dollars (default 5);
-#          a case costs $0.10-0.80, a fan-out case $3-9
+#   --max-usd N  stop once this invocation has spent N dollars (default: no
+#          ceiling); a case costs $0.10-0.80, a fan-out case $3-9
 #   --model M  run the cases on model M (e.g. sonnet for cheap calibration;
 #          confirm on the default model before relying on a pass)
 #   --keep keeps every run's workspace and trace (paths in the JSON); without
@@ -48,9 +55,10 @@ cd "$ROOT"
 
 base=""
 jobs=2
-max_usd=5
+max_usd=
 dry=0
 keep=0
+audit=0
 declare -a explicit_skills=() all_groups=() case_args=() paths=() model=()
 
 die() { echo "eval-changed: $*" >&2; exit 1; }
@@ -91,6 +99,7 @@ while [ $# -gt 0 ]; do
     --max-usd) max_usd="$2"; shift 2 ;;
     --model) model=(--model "$2"); shift 2 ;;
     --dry-run) dry=1; shift ;;
+    --audit) audit=1; shift ;;
     --keep) keep=1; shift ;;
     -h|--help) sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) die "unknown argument: $1 (see --help)" ;;
@@ -98,6 +107,12 @@ while [ $# -gt 0 ]; do
 done
 
 command -v claude >/dev/null || die "claude CLI not found"
+
+listed_only=0
+if [ "$audit" = 0 ] && [ ${#explicit_skills[@]} -eq 0 ] && [ ${#all_groups[@]} -eq 0 ] &&
+    [ ${#case_args[@]} -eq 0 ] && [ "$dry" = 0 ]; then
+    dry=1; listed_only=1
+fi
 
 # --- Preflight: the machine can run what the cases need. Checked every run,
 # since a sysctl set with -w is gone after a reboot and a case whose shell
@@ -237,21 +252,46 @@ for g in $groups; do
     else
         for t in $(printf '%s\n' ${tags[$g]} | sort -u); do sel+=(--tag "$t"); done
     fi
-    echo "== $g: ${sel[*]:-(all cases)}"
+    # Count the cases the selection reaches, for the progress line.
+    total=0
+    for pm in "$g"/evals/*/prompt.md; do
+        if [ ${#sel[@]} = 0 ]; then total=$((total + 1)); continue; fi
+        line=$(grep -m1 '^tags:' "$pm" || true)
+        for t in $(printf '%s\n' ${tags[$g]} | sort -u); do
+            case "$line" in *"[$t,"*|*" $t,"*|*" $t]"*|*"[$t]"*) total=$((total + 1)); break ;; esac
+        done
+    done
+    echo "== $g: $total case(s), ~\$$(python3 -c "print(round($total*0.25))")-$(python3 -c "print(round($total*0.8))"): ${sel[*]:-(all cases)}"
     [ "$dry" = 1 ] && continue
     json="$out/$g.json"
-    left=$(python3 -c "print(round($max_usd - ${spent:-0}, 2))")
-    if python3 -c "import sys; sys.exit(0 if $left <= 0 else 1)"; then
-        echo "   skipped: --max-usd $max_usd spent"; rc=1; continue
+    declare -a cap=()
+    if [ -n "$max_usd" ]; then
+        left=$(python3 -c "print(round($max_usd - ${spent:-0}, 2))")
+        if python3 -c "import sys; sys.exit(0 if $left <= 0 else 1)"; then
+            echo "   skipped: --max-usd $max_usd spent"; rc=1; continue
+        fi
+        cap=(--max-cost-usd "$left")
     fi
+    # Progress: the CLI prints one "kept" notice per finished run (--keep-temp).
+    : >"$out/$g.err"
+    (
+        last=-1
+        while sleep 15; do
+            n=$(grep -c '⚠ kept' "$out/$g.err" 2>/dev/null || true)
+            [ "$n" != "$last" ] && echo "   progress: ${n:-0}/$total done ($(date +%H:%M))"
+            last=$n
+        done
+    ) &
+    ticker=$!
     set +e
     claude plugin eval "./$g" "${sel[@]}" --runs 1 --ablation none --scaffold \
         --trust-plugin --no-publish -j "$jobs" --keep-temp "${model[@]}" \
-        --max-cost-usd "$left" \
+        "${cap[@]}" \
         --allow-tools Write Edit Bash LSP \
-        --output-dir "$out/$g" --json "$json" >/dev/null 2>"$out/$g.err"
+        --output-dir "$out/$g" --json "$json" >"$out/$g.out" 2>"$out/$g.err"
     r=$?
     set -e
+    kill "$ticker" 2>/dev/null; wait "$ticker" 2>/dev/null || true
     [ -s "$json" ] && spent=$(python3 -c "import json; print(${spent:-0} + json.load(open('$json')).get('costUsd', 0))")
     [ "$r" = 2 ] && echo "   stopped at the --max-usd $max_usd ceiling (partial results)"
     if [ ! -s "$json" ]; then
@@ -322,5 +362,10 @@ done
 # holds the runner's full system prompt, so it must not linger.
 git ls-files -o -i --exclude-standard -- '*/evals/*' |
     grep -E '/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\.jsonl$' | xargs -r rm -f || true
+if [ "$dry" = 1 ]; then
+    rmdir "$out" 2>/dev/null || true
+    [ "$listed_only" = 1 ] && echo "listed only: agent-run cases are a manual audit (--audit runs them). Routine check: ./dev/eval-check.py && ./dev/eval-probe.py"
+    exit 0
+fi
 echo "results: $out"
 exit "$rc"

@@ -1,0 +1,97 @@
+{
+  "skill_name": "report-doc-gap",
+  "rules": [
+    {
+      "id": "confirm-before-filing",
+      "rule": "Every record is confirmed before filing; never file silently",
+      "must": [
+        "Must\\ not:\\ file\\ silently\\ \\(every\\ record\\ is\\ confirmed\\ first",
+        "file\\ only\\ on\\ their\\ yes"
+      ]
+    },
+    {
+      "id": "three-way-offer",
+      "rule": "The confirm question offers file, change, or drop, not a bare File it?",
+      "must": [
+        "file\\ it,\\ change\\ something\\ first,\\ or\\ drop\\ it",
+        "rather\\ than\\ a\\ bare\\ \"File\\ it\\?\""
+      ]
+    },
+    {
+      "id": "drafts-only",
+      "rule": "Never report_gap without draft: true; only drafts editable or discardable",
+      "must": [
+        "`report_gap`\\ without\\ `draft:\\ true`\\ is\\ never\\ called",
+        "Only\\ a\\ draft\\ is\\ editable\\ or\\ discardable"
+      ]
+    },
+    {
+      "id": "capture-no-interruption",
+      "rule": "Capture is a light draft, no grill, no filing, no drain",
+      "must": [
+        "capture\\ a\\ light\\ draft,\\ no\\ interruption",
+        "no\\ user\\ interruption,\\ no\\ grill,\\ no\\ filing"
+      ]
+    },
+    {
+      "id": "srd-gap-not-filed",
+      "rule": "An SRD gap is never filed as a doc gap",
+      "must": [
+        "file\\ an\\ SRD\\ gap",
+        "An\\ SRD\\ gap\\ \\(unmet\\ `STR\\-\\*`/`STA\\-\\*`\\ rules"
+      ]
+    },
+    {
+      "id": "unknown-not-filed",
+      "rule": "An unknown belongs in open-questions via srd:kb, not a gap",
+      "must": [
+        "file\\ an\\ unknown,\\ a\\ fact\\ nobody\\ has\\ pinned\\ down",
+        "open\\-questions\\ list\\ through\\ `srd:kb`"
+      ]
+    },
+    {
+      "id": "store-error-stops",
+      "rule": "A store error is reported, never retried or worked around",
+      "must": [
+        "report\\ it,\\ never\\ retry\\ or\\ work\\ around\\ it"
+      ]
+    },
+    {
+      "id": "detail-floor",
+      "rule": "detail is the floor; never file without it",
+      "must": [
+        "never\\ file\\ without\\ it"
+      ]
+    },
+    {
+      "id": "dedup-merge",
+      "rule": "Check all drafts and merge a same-fact draft rather than duplicate",
+      "must": [
+        "merge\\ into\\ it\\ with\\ `update_gap`\\ rather\\ than\\ duplicate",
+        "keep\\ the\\ `doc_id`/`heading_path`/\\ `source_url`\\ already\\ set"
+      ]
+    },
+    {
+      "id": "discard-recorded",
+      "rule": "A discard is a decision; topic recorded in the caller's output",
+      "must": [
+        "A\\ discard\\ is\\ a\\ decision,\\ not\\ a\\ deletion",
+        "Nothing\\ durable\\ is\\ written\\ for\\ it"
+      ]
+    },
+    {
+      "id": "gate-first",
+      "rule": "Run the gate first",
+      "must": [
+        "Run\\ the\\ gate\\ first"
+      ]
+    },
+    {
+      "id": "filing-leaves-corpus",
+      "rule": "Filing only records the gap; corpus unchanged",
+      "must": [
+        "Filing\\ only\\ records\\ the\\ gap;\\ the\\ corpus\\ is\\ unchanged"
+      ]
+    }
+  ]
+}

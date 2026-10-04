@@ -4,10 +4,10 @@ type: agent
 The documentation corpus holds exactly two sections relevant to this SRD.
 
 Section A, the Main Glossary entry for Namespace:
-{"doc_id":"confluence/example/glossary/main_glossary.md","heading_path":["Main Glossary","Namespace (NS)"],"source_url":"https://confluence.example.com/example/glossary/main#Namespace-(NS)","score":0.88,"text":"Namespace (NS): A named grouping that scopes Tag Definitions within a Project. Each Namespace has a short code that prefixes the names of the Tags it holds."}
+{"doc_id":"docs/glossary/main_glossary.md","heading_path":["Main Glossary","Namespace (NS)"],"source_url":"https://docs.example.com/glossary/main#Namespace-(NS)","score":0.88,"text":"Namespace (NS): A named grouping that scopes Tag Definitions within a Project. Each Namespace has a short code that prefixes the names of the Tags it holds."}
 
 Section B, the Tags concept page:
-{"doc_id":"confluence/example/concepts/tags.md","heading_path":["Tags","Tag names"],"source_url":"https://confluence.example.com/example/concepts/tags#tag-names","score":0.84,"text":"Tag names represent a hierarchical structure expressed as a dot-separated series of Tag node names, for example `site.zone.pump`. Each Tag node name MUST start with a letter a-z. Every Tag Definition carries a Tag Kind besides its name: `string`, `number`, or `boolean`; a Tag cannot be created without one."}
+{"doc_id":"docs/concepts/tags.md","heading_path":["Tags","Tag names"],"source_url":"https://docs.example.com/concepts/tags#tag-names","score":0.84,"text":"Tag names represent a hierarchical structure expressed as a dot-separated series of Tag node names, for example `site.zone.pump`. Each Tag node name MUST start with a letter a-z. Every Tag Definition carries a Tag Kind besides its name: `string`, `number`, or `boolean`; a Tag cannot be created without one."}
 
 For a query about Namespace, namespaces, or Namespace codes, answer
 {"results":[<section A>]}. For a query about Tags, Tag names, Tag Kind, or

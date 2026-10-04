@@ -1,0 +1,40 @@
+{
+  "skill_name": "grill-me",
+  "probes": [
+    {
+      "id": "invoked-by-skill-no-offer",
+      "rule": "persist-offer",
+      "prompt": "Situation: another skill, srd:report-doc-gap, invoked you on a documentation gap as the subject. You interviewed the user, every branch is resolved, and you have just presented the structured summary.\n\nQuestion: do you now offer to save the summary as a plan file? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "conflict-no-self-reconcile",
+      "rule": "conflict-hold-both",
+      "prompt": "Situation: mid-interview, branch A was resolved as 'all exports are synchronous'. The user now says export of large accounts should run in the background. Both statements cannot hold. One of the two is clearly the more sensible, and you could merge them as 'small exports sync, large exports async'.\n\nQuestion: do you record the merged rule yourself and move on? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "opening-count-line",
+      "rule": "progress-count",
+      "prompt": "Situation: cold open. The user pasted a plan for a billing migration. You mapped the decision tree into exactly 5 branches; none is resolved yet.\n\nQuestion: write the exact progress count that your opening message must contain, in the skill's required format, on the first line and nothing else on that line. Then one sentence on what else the opening message contains.",
+      "pass": "^\\W*0 resolved, 5 open\\b",
+      "fail": "^\\W*(5 branches|5 open, 0 resolved)"
+    },
+    {
+      "id": "unowned-branch-summary",
+      "rule": "open-branch-owner",
+      "prompt": "Situation: all branches but one are resolved. The last needs the monthly peak request rate, a number nobody in this conversation has; the platform team owns it. The user says 'just assume 100 rps and wrap up'.\n\nQuestion: how does the summary treat that branch? Answer on the first line with exactly one of: ASSUME-100, WITHHOLD-SUMMARY, OPEN-WITH-OWNER. Then one sentence why.",
+      "pass": "^\\W*OPEN-WITH-OWNER",
+      "fail": "^\\W*(ASSUME-100|WITHHOLD-SUMMARY)"
+    },
+    {
+      "id": "sub-questions-split",
+      "rule": "one-question-per-turn",
+      "prompt": "Situation: opening turn. The user's plan is a nightly data sync. Your branch map is ready; the first topic is scheduling: who triggers it, at what time, in which timezone, and what happens on a failed run.\n\nQuestion: how many of these may you put to the user in this one turn? Answer on the first line with a single digit, then one sentence why.",
+      "pass": "^\\W*1\\b",
+      "fail": "^\\W*[2-9]"
+    }
+  ]
+}

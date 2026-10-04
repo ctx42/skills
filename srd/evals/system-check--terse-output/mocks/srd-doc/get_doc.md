@@ -3,18 +3,18 @@ type: agent
 ---
 Answer with the full text of the document whose id the call names.
 
-- `confluence/example/guidelines_for_software_requirements_documents.md`:
+- `docs/guidelines_for_software_requirements_documents.md`:
   answer with exactly the text between the BEGIN and END marker lines below,
   verbatim and complete, the marker lines themselves left out.
-- `confluence/example/concepts/tags.md`: answer with exactly this text:
+- `docs/concepts/tags.md`: answer with exactly this text:
   "# Tags
 
 ## Tag names
 
 Tag names represent a hierarchical structure of named nodes. Each Tag node name MUST start with a letter a-z."
-- `confluence/example/glossary/main_glossary.md`: answer with exactly the
+- `docs/glossary/main_glossary.md`: answer with exactly the
   text between the GLOSSARY-BEGIN and GLOSSARY-END marker lines below.
-- `confluence/example/formats/sound_file_documentation.md`: answer with
+- `docs/formats/sound_file_documentation.md`: answer with
   exactly this text: "# Sound File Documentation\n\n## meta chunk\n\nThe `meta` chunk carries the sub-type `tags`. Each tag is one sub-chunk of the `meta` chunk: the sub-chunk ID names the tag and its data holds the value."
 - Any other id: answer `{"error":"no document with id <the id>"}`.
 

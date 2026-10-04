@@ -1,0 +1,86 @@
+{
+  "skill_name": "plan-smith",
+  "rules": [
+    {
+      "id": "two-parts-only",
+      "rule": "The plan file is the summary table plus item sections only; no assumptions, open questions, risks",
+      "must": [
+        "Every plan is one Markdown file with two parts — and only those two",
+        "No assumptions preamble, no open-questions section, no risks or rollout matrix"
+      ]
+    },
+    {
+      "id": "no-unasked-items",
+      "rule": "Never add work the brief did not raise; name suggestions in the reply",
+      "must": [
+        "adding work nobody raised",
+        "is not, however sensible it looks",
+        "name them in the reply, one line each"
+      ]
+    },
+    {
+      "id": "settle-open-before-write",
+      "rule": "An open point that changes what an item does is asked before writing, not guessed or left as a leave-out",
+      "must": [
+        "Settle what the brief left open before writing, not inside the file",
+        "listing such a point as a leave-out and writing anyway is the guess this step forbids"
+      ]
+    },
+    {
+      "id": "y-needs-repo-evidence",
+      "rule": "Y only on repo evidence; a claim is not evidence; unverified stays N and is reported",
+      "must": [
+        "Evidence is what the repo shows",
+        "nothing is marked `Y` on someone's say-so",
+        "stays `N` and is named in the report as unverified"
+      ]
+    },
+    {
+      "id": "part-done-stays-n",
+      "rule": "Part-done is N; every acceptance criterion must settle for Y",
+      "must": [
+        "Part-done stays `N` — there is no half status",
+        "`Y` needs every criterion settled in the repo"
+      ]
+    },
+    {
+      "id": "never-renumber-or-drop",
+      "rule": "Update never renumbers or drops items; new work is appended with fresh numbers",
+      "must": [
+        "never renumber or drop items",
+        "Never renumber\\s+anything else to slot one into the middle"
+      ]
+    },
+    {
+      "id": "rejected-kept",
+      "rule": "A rejected item keeps its section, tagged X with a one-line reason; never deleted",
+      "must": [
+        "A rejected\\s+item keeps `\\[ \\]`, is tagged `X`, and states why in one line — never delete it"
+      ]
+    },
+    {
+      "id": "closing-item-ask-delete",
+      "rule": "Closing item last; deleting the plan file only after asking, never unasked",
+      "must": [
+        "The last item is always the closing one",
+        "ask the user whether to delete this file",
+        "never delete unasked"
+      ]
+    },
+    {
+      "id": "overwrite-asks",
+      "rule": "Existing file at the target path: say so and ask before overwriting",
+      "must": [
+        "If something is already there, say so and ask before overwriting"
+      ]
+    },
+    {
+      "id": "report-shape",
+      "rule": "After writing, report path plus counts in the fixed shape; never paste the plan back",
+      "must": [
+        "`wrote tmp/sso-plan\\.md — 0 Y / 5 N / 0 X`",
+        "never paste the plan back"
+      ]
+    }
+  ]
+}

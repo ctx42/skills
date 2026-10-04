@@ -1,0 +1,89 @@
+{
+  "skill_name": "readme-smith",
+  "rules": [
+    {
+      "id": "never-fabricate",
+      "rule": "Unverifiable claims, commands, versions, numbers are gaps: ask, then mark; never invented",
+      "must": [
+        "Never fabricate\\.",
+        "you cannot verify from\\s+the repo or the user is a gap: ask, and if still unknown mark it"
+      ]
+    },
+    {
+      "id": "unsupported-claim-deleted",
+      "rule": "A claim the README merely makes and cannot support is deleted, not TODO-marked",
+      "must": [
+        "is deleted, not marked",
+        "preserves the invention"
+      ]
+    },
+    {
+      "id": "repo-gap-reply-only",
+      "rule": "A gap in the repo (no license, CI, remote) goes in the reply, not the README",
+      "must": [
+        "goes in the reply and nowhere else"
+      ]
+    },
+    {
+      "id": "run-shipped-commands",
+      "rule": "Run every install and quickstart command shipped; never ship one not run",
+      "must": [
+        "Run every install and quickstart command you ship",
+        "never ship\\s+one you did not run"
+      ]
+    },
+    {
+      "id": "sandbox-failure-not-in-readme",
+      "rule": "A command this environment cannot run is reported in the reply; the README is not warned about the sandbox",
+      "must": [
+        "Say so in the reply and leave\\s+the README alone",
+        "never warn the reader about your sandbox"
+      ]
+    },
+    {
+      "id": "project-failure-note",
+      "rule": "A command failing for a project reason gets a visible NOTE for the reader, not an invisible TODO",
+      "must": [
+        "use a\\s+`> \\[!NOTE\\]` naming what has to happen first"
+      ]
+    },
+    {
+      "id": "re-measure-numbers",
+      "rule": "Numbers called measured are re-measured against the final file",
+      "must": [
+        "Re-measure anything you call measured",
+        "measured against what the file\\s+finally ships"
+      ]
+    },
+    {
+      "id": "go-source-own-yes",
+      "rule": "Writing Go Example files needs its own yes, asked before any .go file is written; a no is honoured",
+      "must": [
+        "it gets its own yes — the approval covering the README does not reach\\s+it",
+        "never write the file and\\s+mention it afterwards"
+      ]
+    },
+    {
+      "id": "improve-no-edits-before-approval",
+      "rule": "Improve mode reports findings only and edits nothing until approved",
+      "must": [
+        "No edits until the user approves the findings",
+        "Report only\\."
+      ]
+    },
+    {
+      "id": "create-ask-then-stop",
+      "rule": "Create mode asks the gaps in one batch and stops; drafts only after answers",
+      "must": [
+        "ask in one\\s+batched round, a numbered list, then stop: draft only once the user has\\s+answered"
+      ]
+    },
+    {
+      "id": "no-paste-readme",
+      "rule": "The README is written to file, not pasted into chat",
+      "must": [
+        "do not paste it back into chat"
+      ]
+    }
+  ]
+}

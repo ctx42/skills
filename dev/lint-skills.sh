@@ -362,6 +362,17 @@ else
     warn "skipping native-case checks (node not found)"
 fi
 
+# Free eval checks (no model): contracts, probe files, generators reproduce
+# their cases, grader literals are served (dev/eval-check.py).
+if command -v python3 >/dev/null; then
+    check_out="$("$SKILLS_SRC/dev/eval-check.py" || true)"
+    printf '%s\n' "$check_out" | grep '^ERR' | sed 's/^ERR  */ERROR  /' || true
+    ec="$(printf '%s\n' "$check_out" | tail -1 | sed -nE 's/.* ([0-9]+) error\(s\)$/\1/p')"
+    errors=$((errors + ${ec:-1}))
+else
+    warn "skipping eval checks (python3 not found)"
+fi
+
 echo "----"
 echo "$errors error(s), $warnings warning(s)."
 [ "$errors" -eq 0 ]

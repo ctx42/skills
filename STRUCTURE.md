@@ -20,7 +20,10 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │   ├── lint-cases.mjs              # Its native-case half (node: JS regexes)
 │   ├── version.sh                  # Syncs manifest versions with the VER file
 │   ├── token-report.sh             # Per-skill always-loaded token surface
-│   ├── eval-changed.sh             # Runs the native eval cases a diff reaches
+│   ├── eval-check.py               # Free eval checks: contracts, generators, literals
+│   ├── eval-probe.py               # Cached one-question probes per skill (cents)
+│   ├── eval-regrade.py             # Re-grades a saved agent-run trace offline
+│   ├── eval-changed.sh             # Manual audit: runs the agent-run cases
 │   └── eval/                       # Native-case guide; blind-runner and grader prompts
 │       └── gen/<skill>/            # Case generators: the source of a skill's cases
 ├── .claude/
@@ -72,9 +75,11 @@ Skills are grouped into **three plugins** (`go`, `srd`, `craft`); a fourth,
 Each skill plugin is a directory with a `.claude-plugin/plugin.json` manifest and
 a `skills/` folder holding one directory per skill. Each skill directory has a
 `SKILL.md` (the prompt, including its `## Usage` block), an `evals/evals.json`
-(its eval scenarios) and an `evals/expectations.json` (how each is graded, kept
-apart so a run can be handed a scenario without its rubric). Skills ship no
-`README.md` — the repo-level one orients humans.
+(its eval scenarios), an `evals/expectations.json` (how each is graded, kept
+apart so a run can be handed a scenario without its rubric), an
+`evals/contract.json` (its high-stakes rules as phrases its text must keep),
+and an `evals/probes.json` (one cheap question per rule likely to regress).
+Skills ship no `README.md` — the repo-level one orients humans.
 
 ---
 

@@ -1,0 +1,97 @@
+{
+  "skill_name": "backlog",
+  "rules": [
+    {
+      "id": "no-kb-writes",
+      "rule": "Writes nothing under the kb folder; every KB write is delegated to srd:kb",
+      "must": [
+        "write\\ any\\ file\\ under\\ the\\ `kb`\\ folder",
+        "every\\ knowledge\\-base\\ write,\\ row\\ move,\\ or\\ row\\ edit\\ is\\ delegated\\ there"
+      ]
+    },
+    {
+      "id": "no-new-gaps-no-publish",
+      "rule": "Never publishes, authors SRDs, or files gaps",
+      "must": [
+        "publish\\ to\\ Confluence;\\ author\\ or\\ edit\\ an\\ SRD;\\ file\\ new\\ gaps"
+      ]
+    },
+    {
+      "id": "gate-first",
+      "rule": "Pass the project gate before anything else",
+      "must": [
+        "0\\.\\ Pass\\ the\\ gate\\.\\ Always,\\ before\\ anything\\ below"
+      ]
+    },
+    {
+      "id": "unknowns-user-closes",
+      "rule": "Only the user closes an unknown; a corpus hit is evidence, never closure",
+      "must": [
+        "Only\\ the\\ user\\ closes\\ an\\ unknown",
+        "a\\ hit\\ is\\ evidence\\ to\\ put\\ in\\ front\\ of\\ them,\\ never\\ a\\ closure"
+      ]
+    },
+    {
+      "id": "never-close-by-guess",
+      "rule": "Never invent an answer to close a row",
+      "must": [
+        "Never\\ invent\\ an\\ answer\\ to\\ close\\ a\\ row",
+        "closed\\ with\\ a\\ guess\\ is\\ a\\ fact\\ the\\ corpus\\ will\\ serve\\ as\\ truth"
+      ]
+    },
+    {
+      "id": "draft-not-guessed",
+      "rule": "Every sentence of a draft is user-confirmed or corpus-stated",
+      "must": [
+        "Do\\ not\\ draft\\ from\\ guesses",
+        "every\\ sentence\\ of\\ the\\ draft\\ is\\ something\\ the\\ user\\ confirmed\\ or\\ the\\ corpus\\ states"
+      ]
+    },
+    {
+      "id": "draft-outside-sources",
+      "rule": "Drafts go outside every corpus source, kb included",
+      "must": [
+        "outside\\ every\\ corpus\\ source",
+        "a\\ draft\\ inside\\ a\\ source\\ is\\ clobbered\\ by\\ the\\ next\\ sync"
+      ]
+    },
+    {
+      "id": "resolve-on-publish-only",
+      "rule": "Gaps resolved only once the human gives the published URL",
+      "must": [
+        "Resolve\\ once\\ the\\ human\\ gives\\ the\\ published\\ URL",
+        "resolve\\ nothing"
+      ]
+    },
+    {
+      "id": "park-rules",
+      "rule": "Park as kb only against a topic page section srd:kb wrote, never _inbox.md or an unconfirmed fact",
+      "must": [
+        "Never\\ park\\ against\\ `_inbox\\.md`",
+        "Never\\ park\\ against\\ an\\ unconfirmed\\ fact"
+      ]
+    },
+    {
+      "id": "deferred-no-answer-is-unknown",
+      "rule": "A deferred question with no answer becomes an unknown, not a skip",
+      "must": [
+        "No\\ answer\\ exists:\\ it\\ is\\ an\\ unknown,\\ not\\ a\\ skip"
+      ]
+    },
+    {
+      "id": "report-shape",
+      "rule": "Report names delegates by count and never states the answers",
+      "must": [
+        "Never\\ say\\ what\\ the\\ answers\\ were\\ or\\ where\\ they\\ landed",
+        "`srd:kb:\\ 2\\ answers`"
+      ]
+    },
+    {
+      "id": "store-error-stops",
+      "rule": "A store error stops gaps work; no retry",
+      "must": [
+        "stop\\ working\\ `gaps`;\\ never\\ retry\\ it\\ or\\ work\\ around\\ it"
+      ]
+    }
+  ]
+}

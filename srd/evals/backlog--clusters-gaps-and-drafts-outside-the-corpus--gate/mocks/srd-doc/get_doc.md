@@ -1,7 +1,7 @@
 ---
 type: agent
 ---
-For the id `confluence/example/operations/storage-housekeeping.md` answer with this document:
+For the id `docs/operations/storage-housekeeping.md` answer with this document:
 
 # Storage housekeeping
 

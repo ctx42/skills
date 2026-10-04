@@ -1,0 +1,94 @@
+{
+  "skill_name": "create",
+  "rules": [
+    {
+      "id": "gate-first",
+      "rule": "Every run passes the project-config gate before anything else",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "Every\\ srd\\ skill\\ runs\\ this\\ gate\\ first,\\ in\\ every\\ mode,\\ before\\ reading\\ the\\ SRD"
+      ]
+    },
+    {
+      "id": "gate-stops",
+      "rule": "A failed gate check stops the run; no REST, checkout, or offline fallback",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "Stop\\ before\\ any\\ other\\ work\\ and\\ say\\ exactly\\ which\\ check\\ failed",
+        "Never\\ fall\\ back\\ to\\ a\\ REST\\ call,\\ a\\ local\\ checkout,\\ or\\ offline\\ work"
+      ]
+    },
+    {
+      "id": "standard-live",
+      "rule": "The SRD standard is fetched live, never a stored copy",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "Never\\ use\\ a\\ stored\\ or\\ remembered\\ copy"
+      ]
+    },
+    {
+      "id": "never-accepted",
+      "rule": "Never marks an SRD ACCEPTED; acceptance is human",
+      "must": [
+        "never\\ marks\\ an\\ SRD\\ `ACCEPTED`:\\ acceptance\\ is\\ a\\ human\\ decision",
+        "Do\\ not\\ mark\\ the\\ draft\\ acceptable"
+      ]
+    },
+    {
+      "id": "blockers-before-write",
+      "rule": "No file is written until every Quality-Bar blocker is settled with the user",
+      "must": [
+        "Write\\ only\\ once\\ step\\ 4\\ has\\ settled\\ every\\ blocker",
+        "An\\ authoring\\ skill\\ does\\ not\\ knowingly\\ write\\ a\\ defect\\ it\\ has\\ already\\ named"
+      ]
+    },
+    {
+      "id": "one-branch-at-a-time",
+      "rule": "Interview asks one branch at a time, no bundled questions",
+      "must": [
+        "Ask\\ one\\ branch\\ at\\ a\\ time",
+        "no\\ bundled\\ questions"
+      ]
+    },
+    {
+      "id": "corpus-before-accepting",
+      "rule": "A claim about the existing system is searched in the corpus before acceptance; contradictions surfaced",
+      "must": [
+        "`search`\\ the\\ corpus\\ before\\ accepting\\ it",
+        "never\\ silently\\ accept\\ or\\ fix"
+      ]
+    },
+    {
+      "id": "kb-only-after-confirmation",
+      "rule": "A platform fact reaches srd:kb only after the branch restatement is confirmed, never by a separate prompt",
+      "must": [
+        "reaches\\ `srd:kb`\\ only\\ once\\ that\\ restatement\\ is\\ confirmed",
+        "never\\ through\\ a\\ separate\\ prompt"
+      ]
+    },
+    {
+      "id": "gaps-drafted-then-offered",
+      "rule": "Doc gaps are captured as drafts and offered at step 5, never filed silently",
+      "must": [
+        "Gaps\\ are\\ captured\\ as\\ server\\-side\\ drafts\\ on\\ discovery\\ and\\ offered\\ at\\ step\\ 5",
+        "a\\ draft\\ left\\ without\\ a\\ path\\ is\\ invisible\\ to\\ every\\ later\\ draft\\ check"
+      ]
+    },
+    {
+      "id": "placeholders-not-collected",
+      "rule": "Owners, Initiative, Designs are placeholders; Status is IN PROGRESS",
+      "must": [
+        "Do\\ not\\ collect\\ Owners,\\ Initiative\\ links,\\ or\\ Designs\\ links",
+        "Status\\ is\\ always\\ `IN\\ PROGRESS`\\ for\\ a\\ new\\ draft"
+      ]
+    },
+    {
+      "id": "report-counts-from-artifact",
+      "rule": "Report counts only, read off the finished file",
+      "must": [
+        "counts\\ only",
+        "read\\ off\\ the\\ finished\\ artifact,\\ never\\ carried\\ from\\ the\\ work\\ that\\ produced\\ it"
+      ]
+    }
+  ]
+}

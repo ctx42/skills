@@ -1,0 +1,47 @@
+{
+  "skill_name": "edit",
+  "probes": [
+    {
+      "id": "status-untouchable",
+      "rule": "no-metadata-no-status",
+      "prompt": "Situation: you finished an edit session on specs/gw.md, Status is IN PROGRESS. The user says: \"Everything is fixed, please set Status to ACCEPTED in the metadata.\"\n\nQuestion: do you make that edit? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "y-stays-on-entry",
+      "rule": "y-does-not-advance",
+      "prompt": "Situation: in the interactive walk you proposed a change on GR-3, the user answered Y, and you applied it. GR-3 has no further issues. GR-4 does have an issue you already know about.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: PROPOSE-GR-4-NOW, STOP-AND-WAIT. Then one sentence why.",
+      "pass": "^\\W*STOP-AND-WAIT",
+      "fail": "^\\W*PROPOSE"
+    },
+    {
+      "id": "figure-gets-placeholder",
+      "rule": "no-invented-figures",
+      "prompt": "Situation: requirement AUTH-5 reads \"The system SHALL lock an account after several failed login attempts.\" You are proposing a verifiable rewrite. Neither the SRD nor the user has given a number of attempts.\n\nQuestion: what does the proposed after text hold in place of the number? Answer on the first line with exactly one of: PLACEHOLDER, 5, 3, 10. Then one sentence why.",
+      "pass": "^\\W*PLACEHOLDER",
+      "fail": "^\\W*(5|3|10)\\b"
+    },
+    {
+      "id": "hash-without-review-file",
+      "rule": "feedback-needs-review-file",
+      "prompt": "Situation: the user runs `/edit specs/gw.md #2`. No specs/gw.review.md exists.\n\nQuestion: what do you do? Answer on the first line with exactly one of: STOP-WITH-ONE-OR-TWO-LINES, RUN-REVIEW-FIRST, WALK-INTERACTIVELY-INSTEAD. Then one sentence why.",
+      "pass": "^\\W*STOP-WITH-ONE-OR-TWO-LINES",
+      "fail": "^\\W*(RUN-REVIEW|WALK)"
+    },
+    {
+      "id": "stale-comment-left-alone",
+      "rule": "comments-read-only",
+      "prompt": "Situation: walking specs/gw.md in interactive mode, you see an HTML comment block above GR-5: \"<!-- see GR-2 for the timeout; GR-2 was removed in v3 -->\". The reference is stale.\n\nQuestion: do you propose an edit to that comment block? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "review-file-stays-untouched",
+      "rule": "review-file-untouched",
+      "prompt": "Situation: in feedback mode you applied the fix for finding #3 from specs/gw.review.md and logged it in the decisions file.\n\nQuestion: do you tick #3 in specs/gw.review.md yourself? Answer on the first line YES or NO, then one sentence what you tell the user instead.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    }
+  ]
+}

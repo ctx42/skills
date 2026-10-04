@@ -6,9 +6,11 @@ This repository is a collection of reusable skills for Claude. Skills ship as
 **Claude Code plugins**, grouped into `go`, `srd`, and `craft`. A fourth
 plugin, `notify`, ships desktop-attention hooks and no skills. Each skill is a
 directory under a group's `skills/` folder with a `SKILL.md` (the prompt,
-including its `## Usage` block), an `evals/evals.json` (its eval scenarios) and
-an `evals/expectations.json` (how each is graded — separate so a run can be
-given a scenario without its rubric).
+including its `## Usage` block), an `evals/evals.json` (its eval scenarios), an
+`evals/expectations.json` (how each is graded — separate so a run can be
+given a scenario without its rubric), an `evals/contract.json` (its high-stakes
+rules as phrases the text must keep) and an `evals/probes.json` (one cached
+question per rule likely to regress).
 Skills ship no `README.md`; the repo-level one orients humans.
 
 ## Golden Rules
@@ -28,8 +30,10 @@ Skills ship no `README.md`; the repo-level one orients humans.
 5. **Lint before committing.** Run `./dev/lint-skills.sh` after editing any skill; it
    checks the mechanical parts of the authoring standard and the marketplace
    wiring, and exits non-zero on any error.
-6. **Confirm a behaviour change with `./dev/eval-changed.sh`.** It runs the
-   native eval cases the diff reaches (`dev/eval/native-cases.md`) in minutes;
+6. **Confirm a behaviour change with `./dev/eval-probe.py`.** Lint already ran
+   the free contract checks (`./dev/eval-check.py`); probes ask the changed
+   skill one cached question per high-stakes rule, for cents, in seconds.
+   Agent-run cases (`./dev/eval-changed.sh --audit`) are a manual audit only;
    a blind round is a release audit, not the gate on a change.
 
 ## Dev loop

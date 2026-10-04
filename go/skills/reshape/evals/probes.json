@@ -1,0 +1,40 @@
+{
+  "skill_name": "reshape",
+  "probes": [
+    {
+      "id": "apply-proposal",
+      "rule": "read-only",
+      "prompt": "Situation: after /reshape ranks its proposals for the `must` library (which is vendored locally in this repo), the user says nothing more. Applying the top proposal to the library source would be easy.\n\nQuestion: do you edit any file? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "callsite-only",
+      "rule": "library-surface",
+      "prompt": "Situation: a consumer repeats a 4-line setup sequence at 9 sites of a library. You could propose just a local helper in the consumer code, leaving the library alone.\n\nQuestion: is that a valid proposal for this skill's report? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "use-count",
+      "rule": "use-counting",
+      "prompt": "Situation: the consumer has one line `c := must.NewClient(must.Options{Retries: 3})` and no other uses of the library.\n\nQuestion: how many uses does that line count toward N? Answer on the first line with the integer only, then one sentence why.",
+      "pass": "^\\W*1\\b",
+      "fail": "^\\W*2"
+    },
+    {
+      "id": "third-tier",
+      "rule": "two-labels",
+      "prompt": "Situation: you find a shape worth knowing about the library but not worth doing.\n\nQuestion: where does it go? Answer on the first line with exactly one of: LOW-ROW, DECLINED-NOTE. Then one sentence why.",
+      "pass": "^\\W*DECLINED-NOTE",
+      "fail": "^\\W*LOW-ROW"
+    },
+    {
+      "id": "composite-before",
+      "rule": "before-single-site",
+      "prompt": "Situation: no single call site shows the payoff for a proposal, but you can combine three lines from three different files into one convincing before excerpt cited as one site.\n\nQuestion: do you present that composite as the before? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    }
+  ]
+}

@@ -21,7 +21,7 @@ append_system_prompt: |
   3. To a question about whether the platform still imports `meta` tags as
      Tags, or about the vanished document: "Yes, that still holds: every meta
      tag comes in as a Tag under `snd`, same name. The page it pointed at was
-     deleted in a Confluence clean-up."
+     deleted in a documentation clean-up."
   4. To your restatement or any confirmation: "Yes, correct."
   5. After each answered question: "next"
   6. To any other question: "Leave it as written; next."

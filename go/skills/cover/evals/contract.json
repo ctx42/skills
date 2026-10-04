@@ -1,0 +1,83 @@
+{
+  "skill_name": "cover",
+  "rules": [
+    {
+      "id": "per-function-direct",
+      "rule": "Coverage judged per function from its own Test_Foo family only",
+      "must": [
+        "coverage is per-function, from direct tests only",
+        "Coverage it picks up from other functions' tests, `-coverpkg`, or a whole-suite run does not count"
+      ]
+    },
+    {
+      "id": "write-scope",
+      "rule": "Writes limited to *_test.go; never add a production seam",
+      "must": [
+        "`\\*_test\\.go`, which is the whole of this skill's write scope",
+        "Adding one is an API change, not a test"
+      ]
+    },
+    {
+      "id": "sequential-functions",
+      "rule": "Never start function B before A is complete and verified",
+      "must": [
+        "Never start function B until function A's loop is complete and verified"
+      ]
+    },
+    {
+      "id": "isolated-measure",
+      "rule": "Measure with go test -run isolated family into per-function profiles",
+      "must": [
+        "go test -run '\\^Test_Foo\\(\\$\\|_\\)'",
+        "Keep each function's profiles rather than overwriting one scratch file"
+      ]
+    },
+    {
+      "id": "plan-gates",
+      "rule": "File/package/module plan-first and wait for approval; func/line run straight",
+      "must": [
+        "Run straight \\(no plan gate\\), then report",
+        "Wait for approval, then run steps 3\u20134 function by function"
+      ]
+    },
+    {
+      "id": "max-tests-cap",
+      "rule": "max_tests is a hard cap counted per row/subtest",
+      "must": [
+        "`max_tests=N` \u2014 hard cap on cases added this run"
+      ]
+    },
+    {
+      "id": "classification",
+      "rule": "Complex deferred, un-coverable never attempted; documented panic is easy",
+      "must": [
+        "un-coverable \u2014 one of the categories below. Never attempt",
+        "A \\*documented\\* panic is a contract"
+      ]
+    },
+    {
+      "id": "verify-gate",
+      "rule": "End of run: gofmt -l and go test -v -race on edited packages",
+      "must": [
+        "Run `gofmt -l` on every edited `\\*_test\\.go` file",
+        "Run `go test -v -race` over every package this run edited"
+      ]
+    },
+    {
+      "id": "test-style",
+      "rule": "Tests obey go:style Test and inherited Production rules",
+      "must": [
+        "obey it in every test written",
+        "Test does not replace Production, it adds to it"
+      ]
+    },
+    {
+      "id": "never-skip-silently",
+      "rule": "Report counts and every skipped line; never skip silently",
+      "must": [
+        "Never skip a line silently",
+        "Report the count on every run, capped or not"
+      ]
+    }
+  ]
+}

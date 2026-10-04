@@ -1,0 +1,98 @@
+{
+  "skill_name": "edit",
+  "rules": [
+    {
+      "id": "one-confirmed-edit",
+      "rule": "Exactly one change per proposal, applied only on explicit approval",
+      "must": [
+        "Propose\\ exactly\\ one\\ change",
+        "apply\\ only\\ on\\ explicit\\ approval",
+        "never\\ edit\\ without\\ confirmation"
+      ]
+    },
+    {
+      "id": "no-invented-figures",
+      "rule": "Never invents a figure; placeholder in the after text",
+      "must": [
+        "Never\\ invent\\ a\\ figure\\ neither\\ the\\ SRD\\ nor\\ the\\ user\\ gives",
+        "`<lockout\\ minutes>`"
+      ]
+    },
+    {
+      "id": "no-metadata-no-status",
+      "rule": "Never edits metadata or Status, never proposes a Status transition",
+      "must": [
+        "never\\ edits\\ metadata\\ \\(Owners,\\ Initiative,\\ Designs\\),\\ sets\\ back\\-links,\\ or\\ changes\\ `Status`",
+        "never\\ proposes\\ a\\ Status\\ transition"
+      ]
+    },
+    {
+      "id": "review-file-untouched",
+      "rule": "Never writes <srd>.review.md; hands off to review check",
+      "must": [
+        "It\\ never\\ writes\\ `<srd>\\.review\\.md`",
+        "hands\\ off\\ to\\ `review\\ <srd>\\ check`"
+      ]
+    },
+    {
+      "id": "frozen-ids",
+      "rule": "Approved SRD ids frozen; any id change stated and approved in the loop",
+      "must": [
+        "on\\ an\\ approved\\ SRD\\ ids\\ are\\ frozen",
+        "any\\ id\\ change\\ is\\ stated\\ and\\ approved\\ in\\ the\\ loop's\\ confirmation,\\ never\\ applied\\ quietly"
+      ]
+    },
+    {
+      "id": "y-does-not-advance",
+      "rule": "Y, S and E never advance the walk; only YN or explicit ask",
+      "must": [
+        "Advance\\ to\\ the\\ next\\ entry\\ only\\ on\\ `YN`\\ or\\ an\\ explicit\\ ask"
+      ]
+    },
+    {
+      "id": "comments-read-only",
+      "rule": "Comment blocks are read-only",
+      "must": [
+        "Comment\\ blocks\\ are\\ read\\-only"
+      ]
+    },
+    {
+      "id": "no-publish-proposals",
+      "rule": "Never proposes pushing, publishing, syncing, or accepting",
+      "must": [
+        "never\\ proposes\\ pushing,\\ publishing,\\ or\\ syncing\\ the\\ SRD\\ as\\ a\\ follow\\-up",
+        "Acceptance\\ is\\ a\\ human\\ decision"
+      ]
+    },
+    {
+      "id": "decision-log-per-edit",
+      "rule": "Every applied edit logged in <srd>.decisions.md before the next proposal",
+      "must": [
+        "Log\\ the\\ change\\ in\\ `<srd>\\.decisions\\.md`\\ before\\ proposing\\ the\\ next\\ one"
+      ]
+    },
+    {
+      "id": "feedback-needs-review-file",
+      "rule": "#n with no review file says so and stops",
+      "must": [
+        "if\\ absent,\\ say\\ so\\ and\\ stop",
+        "those\\ report\\ a\\ run\\ that\\ happened,\\ and\\ this\\ one\\ did\\ not"
+      ]
+    },
+    {
+      "id": "scaffolds-not-removed",
+      "rule": "Draft scaffolds never removed silently; In Scope derivation never self-triggered",
+      "must": [
+        "never\\ remove\\ either\\ silently",
+        "Never\\ trigger\\ the\\ In\\ Scope\\ derivation\\ on\\ your\\ own"
+      ]
+    },
+    {
+      "id": "gate-first",
+      "rule": "Run the project gate first, before any other work",
+      "must": [
+        "Run\\ the\\ project\\ gate\\ first"
+      ]
+    }
+  ]
+}

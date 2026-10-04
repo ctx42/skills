@@ -1,8 +1,10 @@
 # Native eval cases
 
-The fast tier: `claude plugin eval` cases a change selects and runs in minutes
-(`dev/eval-changed.sh`). Each case runs the real skill in a fresh `claude -p`
-session with only its plugin loaded. `evals/evals.json` and
+The audit tier: `claude plugin eval` cases a change selects
+(`dev/eval-changed.sh --audit`), run only when the user asks — the routine
+check is `dev/eval-check.py` and `dev/eval-probe.py` (CONTRIBUTING.md,
+*Tiers*). Each case runs the real skill in a fresh `claude -p` session with
+only its plugin loaded. `evals/evals.json` and
 `evals/expectations.json` stay the scenario spec; a case is that scenario made
 executable.
 
@@ -210,18 +212,19 @@ Pitfalls, each seen failing a correct run:
 ## Calibrate
 
 `./dev/lint-skills.sh` first: it checks every case (scenario coverage, tags,
-the English line, limits, JavaScript patterns). Then run
+the English line, limits, JavaScript patterns). Then, when the user asks for an audit, run
 `./dev/eval-changed.sh --case <group> '<skill>--*' -j 1` (repeat `--case` for
 several globs). A failure prints its last message and keeps its trace in
 `<results>/<group>/failed/<case>.trace.jsonl`, so diagnose from those before
 re-running; `--keep` keeps every workspace, `--clean` deletes leftover ones,
 and a run the account's usage limit cut off prints `LIMIT` — re-run it, never
-triage it. Test a changed grader offline against the failed trace before
-paying for a re-run. Typical cost per run (Opus): $0.10–0.30 for a craft
+triage it. Test a changed grader offline with `./dev/eval-regrade.py <trace>`
+instead of paying for a re-run. Typical cost per run (Opus): $0.10–0.30 for a craft
 case, $0.25–0.80 for a go or srd case, $3–9 for a fan-out case; a full group
-is $15–45. Runs draw on the user's own 5-hour usage window: every invocation
-stops at `--max-usd` (default 5) and runs `-j 2`; raise either only with the
-user's go-ahead. Re-run only the failing cases, never whole skills or groups,
-and calibrate on `--model sonnet` before confirming on Opus.
+is $15–45. An invocation has no cost ceiling unless `--max-usd N` sets one:
+a ceiling cuts graders off mid-case and leaves cases unrun. Runs draw on the
+user's own 5-hour usage window: keep `-j 2`, never run a whole skill or group
+unasked, re-run only failing or cut-off cases, and calibrate on
+`--model sonnet` before confirming on Opus.
 A failure is a case defect (fix the case) or a skill defect (record it; a
 conversion never edits a skill).

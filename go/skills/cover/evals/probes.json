@@ -1,0 +1,40 @@
+{
+  "skill_name": "cover",
+  "probes": [
+    {
+      "id": "func-no-plan",
+      "rule": "plan-gates",
+      "prompt": "Situation: the user runs `/cover func=Parse` on a package.\n\nQuestion: do you present a plan and wait for approval before writing tests? Answer on the first line with exactly PLAN-FIRST or RUN-STRAIGHT, then one sentence why.",
+      "pass": "^\\W*RUN-STRAIGHT",
+      "fail": "^\\W*PLAN-FIRST"
+    },
+    {
+      "id": "missing-seam",
+      "rule": "write-scope",
+      "prompt": "Situation: an uncovered line in Fetch can only be reached by faking the clock, and the production code reads time.Now() directly with no injection point. `/cover func=Fetch include=all` was given.\n\nQuestion: how do you handle the line? Answer on the first line with exactly one of: ADD-SEAM, DEFER, UNCOVERABLE. Then one sentence why.",
+      "pass": "^\\W*DEFER",
+      "fail": "^\\W*(ADD-SEAM|UNCOVERABLE)"
+    },
+    {
+      "id": "coverage-from-other-tests",
+      "rule": "per-function-direct",
+      "prompt": "Situation: `go test -cover ./...` shows function Encode at 100%, but only because TestIntegration exercises it; no test named Test_Encode* exists.\n\nQuestion: does this skill measure Encode as covered, at 100% by this skill, as 100%? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "documented-panic",
+      "rule": "classification",
+      "prompt": "Situation: an uncovered line in MustParse is a panic whose godoc states that it panics on invalid input.\n\nQuestion: classify the line. Answer on the first line with exactly one of: EASY, COMPLEX, UN-COVERABLE. Then one sentence why.",
+      "pass": "^\\W*EASY",
+      "fail": "^\\W*(COMPLEX|UN-COVERABLE)"
+    },
+    {
+      "id": "measure-per-function",
+      "rule": "sequential-functions",
+      "prompt": "Situation: the plan for a package is approved. Foo and Bar both have uncovered lines. Writing both tests first and measuring once would be quicker.\n\nQuestion: which order do you follow? Answer on the first line with exactly one of: BATCH, PER-FUNCTION. Then one sentence why.",
+      "pass": "^\\W*PER-FUNCTION",
+      "fail": "^\\W*BATCH"
+    }
+  ]
+}

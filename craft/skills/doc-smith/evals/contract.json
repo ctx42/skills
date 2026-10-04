@@ -1,0 +1,97 @@
+{
+  "skill_name": "doc-smith",
+  "rules": [
+    {
+      "id": "audit-edits-nothing",
+      "rule": "Audit reports only; edits nothing until approved, nothing applied on silence",
+      "must": [
+        "Report only\\.",
+        "nothing is applied on silence",
+        "audit \\(default\\): report findings by severity, edit nothing until approved"
+      ]
+    },
+    {
+      "id": "default-mode-audit",
+      "rule": "When the request does not settle the mode, default to audit because it edits nothing",
+      "must": [
+        "default to\\s+audit \\(it edits nothing\\)"
+      ]
+    },
+    {
+      "id": "flag-dont-fix-claims",
+      "rule": "Real-world technical claims are flagged as questions, never silently rewritten",
+      "must": [
+        "Internal consistency you resolve; real-world technical accuracy you flag",
+        "never silently\\s+rewritten or \"corrected\" with a fact you cannot ground"
+      ]
+    },
+    {
+      "id": "no-todo-in-file",
+      "rule": "Create: an unsettled fact stays out of the text and goes on the reply's open list, never a TODO in the file",
+      "must": [
+        "goes on the reply's open list, never a `TODO` in the file"
+      ]
+    },
+    {
+      "id": "never-paste-document",
+      "rule": "State path and what changed; never paste the document back into chat",
+      "must": [
+        "never paste the document back into chat"
+      ]
+    },
+    {
+      "id": "coherence-check",
+      "rule": "After any edit, re-check against the ledger for contradiction, drift, orphan, duplicate",
+      "must": [
+        "Coherence check — after any edit, re-check it against the ledger",
+        "contradict a distant claim, drift the terminology, orphan a\\s+reference, or duplicate a point"
+      ]
+    },
+    {
+      "id": "proof-flags-ambiguity",
+      "rule": "Proof fixes only what has one right answer; ambiguous contradictions are flagged as questions",
+      "must": [
+        "Reserve edits for what has one right answer; flag the rest",
+        "Fix a contradiction only when the intended meaning is\\s+unambiguous"
+      ]
+    },
+    {
+      "id": "create-self-review",
+      "rule": "Create is not reported finished until the whole-document pass on the written file has run and fixes are in",
+      "must": [
+        "Nothing is reported as finished until\\s+the pass has run and its fixes are in"
+      ]
+    },
+    {
+      "id": "audit-report-shape",
+      "rule": "Audit findings grouped by severity, numbered 1..n across groups, with both locations for contradictions, verdict and counts",
+      "must": [
+        "numbered in\\s+one run across the groups — 1\\.\\.n, not restarting at each heading",
+        "a contradiction cites both locations",
+        "End with a verdict"
+      ]
+    },
+    {
+      "id": "scope-one-document",
+      "rule": "Scope is the named files; an out-of-scope contradiction is flagged, not dropped or edited",
+      "must": [
+        "Flag a\\s+contradiction the pass surfaces in a file outside that scope rather than drop\\s+it"
+      ]
+    },
+    {
+      "id": "proof-flat-report",
+      "rule": "Proof reports a flat list of edit classes with counts plus open questions, not severity groups",
+      "must": [
+        "Proof reports as a flat list, not audit's numbered severity groups"
+      ]
+    },
+    {
+      "id": "audit-scope-line",
+      "rule": "An audit opens with a scope line naming the files read; it is not preamble",
+      "must": [
+        "The scope line an audit opens with is exempt",
+        "it is the first fact, not\\s+preamble"
+      ]
+    }
+  ]
+}

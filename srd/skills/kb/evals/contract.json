@@ -1,0 +1,103 @@
+{
+  "skill_name": "kb",
+  "rules": [
+    {
+      "id": "attested-only",
+      "rule": "The body states only what the user attested; an unconfirmed inference is an open question",
+      "must": [
+        "The body states attested facts only",
+        "concluded but the user did not confirm never enters it",
+        "A guess of your own that the user never confirmed is `deferred`"
+      ]
+    },
+    {
+      "id": "write-after-confirmation",
+      "rule": "Nothing is written before the caller's confirmation; no separate bank-this prompt",
+      "must": [
+        "On discovery: note the candidate in the conversation; no write",
+        "never a separate step, a separate question, or a \"bank this\\?\" prompt",
+        "On confirmation: write each confirmed fact to `<kb>/_inbox\\.md`"
+      ]
+    },
+    {
+      "id": "inbox-first",
+      "rule": "A confirmed fact lands in the inbox, never straight on a topic page",
+      "must": [
+        "Never to a topic page or a category invented at this moment"
+      ]
+    },
+    {
+      "id": "no-new-subjects",
+      "rule": "A question may deepen a subject the interview opened, never open a new one",
+      "must": [
+        "never open a new one",
+        "route it to `_open-questions\\.md` marked `deferred` and move on immediately\\. Never re-ask"
+      ]
+    },
+    {
+      "id": "kb-only-writes",
+      "rule": "Writes nowhere outside the kb folder and never runs git",
+      "must": [
+        "Must not: run `git`",
+        "write outside the `kb` folder, ever"
+      ]
+    },
+    {
+      "id": "sync-guard",
+      "rule": "Refuses to write into a kb folder a Confluence sync manages",
+      "must": [
+        "must \\*\\*not\\*\\* be managed by a Confluence sync",
+        "refuse to write and say why"
+      ]
+    },
+    {
+      "id": "append-not-split",
+      "rule": "Filing appends to the existing page; never splits a page for size; one fact never earns a page",
+      "must": [
+        "Append by default",
+        "Never split a page to fix its size",
+        "A single fact never earns a page"
+      ]
+    },
+    {
+      "id": "confirm-moves",
+      "rule": "File and restructure show the moves and wait for confirmation before touching a file",
+      "must": [
+        "get confirmation before touching anything",
+        "confirm it first, then repair every reference"
+      ]
+    },
+    {
+      "id": "session-provenance",
+      "rule": "A bare capture attests to the session, never an inferred SRD id; no invented gap id",
+      "must": [
+        "do not infer an id from the conversation to fill the slot",
+        "`Attested session",
+        "omit the segment rather than inventing a number"
+      ]
+    },
+    {
+      "id": "unknown-not-a-gap",
+      "rule": "An unknown is never filed as a documentation gap",
+      "must": [
+        "An unknown is \\*\\*never\\*\\* filed as a documentation gap"
+      ]
+    },
+    {
+      "id": "terse-pointer-report",
+      "rule": "Report one pointer line per page with its count, never the facts",
+      "must": [
+        "One pointer line per page touched, with its count",
+        "Never what the facts say"
+      ]
+    },
+    {
+      "id": "relative-kb-path",
+      "rule": "The gate rejects an absolute kb path",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "an absolute path is invalid"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "skill_name": "doc",
+  "rules": [
+    {
+      "id": "scope-comments-only",
+      "rule": "Edits only in-source comments; never write Example or README",
+      "must": [
+        "never write an `Example\\*` function or a package `README` overview"
+      ]
+    },
+    {
+      "id": "leave-passing",
+      "rule": "A comment that passes the checklist is left alone",
+      "must": [
+        "a comment changes only when it fails the checklist",
+        "A comment that passes is left alone, however short"
+      ]
+    },
+    {
+      "id": "no-unverified-facts",
+      "rule": "Never write a fact the code does not establish; flag instead",
+      "must": [
+        "Never write a fact you cannot confirm from the code; flag it in the report",
+        "A type with no synchronization is not thereby documented"
+      ]
+    },
+    {
+      "id": "never-touch",
+      "rule": "Never edit directives, generated files, or unconfirmable comments",
+      "must": [
+        "magic directive comments",
+        "generated files marked `DO NOT EDIT`",
+        "a comment whose intent the code cannot confirm"
+      ]
+    },
+    {
+      "id": "nolint-kept",
+      "rule": "//nolint is never deleted; unremarkable method keeps one-line implements",
+      "must": [
+        "A `//nolint` directive on the method is never deleted: keep it verbatim",
+        "`// implements \\[Iface\\]\\.`"
+      ]
+    },
+    {
+      "id": "interface-godoc",
+      "rule": "Unremarkable interface-method godoc removed; never add",
+      "must": [
+        "Never add godoc to an unremarkable one"
+      ]
+    },
+    {
+      "id": "package-comment-file",
+      "rule": "Package comment in the package-named file; never create doc.go",
+      "must": [
+        "never create a `doc\\.go` for it"
+      ]
+    },
+    {
+      "id": "plan-gate",
+      "rule": "File/package/module plan then wait for approval",
+      "must": [
+        "Wait for approval, then run the per-item loop and Verify",
+        "Run straight \\(no plan gate\\), then report"
+      ]
+    },
+    {
+      "id": "verify-gate",
+      "rule": "gofmt -l, go build per edited package, line limit",
+      "must": [
+        "Run `gofmt -l` on every edited file",
+        "Run `go build \\./<pkg>` on every edited package"
+      ]
+    },
+    {
+      "id": "fanout-reread",
+      "rule": "Parent re-reads workers' edits against the checklist and reverts unsupported",
+      "must": [
+        "Merging is not accepting",
+        "Revert what the code does not carry"
+      ]
+    },
+    {
+      "id": "output-shape",
+      "rule": "Report shape and Verify result line",
+      "must": [
+        "`file:Symbol \u2014 <checklist item #>: <what changed>`",
+        "A gate whose outcome never reaches the reply"
+      ]
+    }
+  ]
+}

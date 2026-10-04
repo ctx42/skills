@@ -20,7 +20,7 @@ append_system_prompt: |
   5. To which cluster to work: "That one."
   6. To any question about the gap's fact: "The target claim is right: raw Sound Files are deleted 400 days after upload, archived or not. Nothing to add."
   7. To where the draft goes: "Put it at `drafts/sound-file-retention.md`."
-  8. Once the draft is ready: "Published: https://confluence.example.com/example/operations/sound-file-retention"
+  8. Once the draft is ready: "Published: https://docs.example.com/operations/sound-file-retention"
   9. To anything else: "That's all for today."
 ---
 

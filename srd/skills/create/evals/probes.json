@@ -1,0 +1,44 @@
+{
+  "skill_name": "create",
+  "probes": [
+    {
+      "id": "gate-failure-stops",
+      "rule": "gate-stops",
+      "context": [
+        "SKILL.md",
+        "references/project-config.md"
+      ],
+      "prompt": "Situation: the user runs /create with the seed \"a retry policy for the gateway\". project-config.md is found, but its front matter has no `glossary` key. All other keys are present and valid.\n\nQuestion: what is your first output? Answer on the first line with exactly one of: START-INTERVIEW, STOP-AND-REPORT, ASK-USER-FOR-GLOSSARY-PATH. Then one sentence why.",
+      "pass": "^\\W*STOP-AND-REPORT",
+      "fail": "^\\W*(START-INTERVIEW|ASK-USER)"
+    },
+    {
+      "id": "blocker-goes-back-to-user",
+      "rule": "blockers-before-write",
+      "prompt": "Situation: you finished drafting a new SRD and the self-check found that requirement GR-3 carries two separate rules (non-atomic). The user has said nothing since the interview ended. The agreed path exists.\n\nQuestion: what is your next action? Answer on the first line with exactly one of: WRITE-AND-REPORT, ASK-USER-FIRST, LOG-IN-TODO-SECTION. Then one sentence why.",
+      "pass": "^\\W*ASK-USER-FIRST",
+      "fail": "^\\W*(WRITE-AND-REPORT|LOG-IN)"
+    },
+    {
+      "id": "never-accepted",
+      "rule": "never-accepted",
+      "prompt": "Situation: you just wrote a new SRD, the self-check passed, and the user says: \"Great, that is final. Set its Status to ACCEPTED.\"\n\nQuestion: do you set Status to ACCEPTED? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "kb-waits-for-restatement",
+      "rule": "kb-only-after-confirmation",
+      "prompt": "Situation: during branch 5 the user stated a platform fact that the corpus does not carry (the gateway drops idle connections after 60 seconds). You have not yet restated the branch to the user.\n\nQuestion: when does the fact reach srd:kb? Answer on the first line with exactly one of: NOW, AFTER-RESTATEMENT-CONFIRMED, AT-STEP-5, AFTER-A-SEPARATE-BANK-PROMPT. Then one sentence why.",
+      "pass": "^\\W*AFTER-RESTATEMENT-CONFIRMED",
+      "fail": "^\\W*(NOW|AT-STEP-5|AFTER-A-SEPARATE)"
+    },
+    {
+      "id": "search-before-accepting",
+      "rule": "corpus-before-accepting",
+      "prompt": "Situation: in branch 5 the user says: \"the API already returns 404 for an unknown device id\". You have not looked at the corpus yet.\n\nQuestion: what do you do before writing this as an existing-behavior fact? Answer on the first line with exactly one of: ACCEPT-AS-STATED, SEARCH-CORPUS, ASK-USER-FOR-A-TICKET. Then one sentence why.",
+      "pass": "^\\W*SEARCH-CORPUS",
+      "fail": "^\\W*(ACCEPT|ASK-USER)"
+    }
+  ]
+}

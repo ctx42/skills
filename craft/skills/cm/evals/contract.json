@@ -1,0 +1,92 @@
+{
+  "skill_name": "cm",
+  "rules": [
+    {
+      "id": "no-commit-without-apply",
+      "rule": "Commit only under apply; otherwise present the message and never propose or explain committing",
+      "must": [
+        "commit the generated message without asking",
+        "Otherwise present the message only and never propose committing or amending"
+      ]
+    },
+    {
+      "id": "commit-via-stdin",
+      "rule": "Commit with git commit -F - from a heredoc, never a bare commit or -m",
+      "must": [
+        "`-F -` and not a bare `git commit`, which opens an editor",
+        "nor `-m`, which mangles a multi-paragraph body"
+      ]
+    },
+    {
+      "id": "apply-needs-staged",
+      "rule": "apply on an unstaged fallback stages nothing, commits nothing, and stops",
+      "must": [
+        "`apply` needs something staged",
+        "so stage nothing on the user's behalf",
+        "say the working tree is unstaged and `apply` did not run, and stop"
+      ]
+    },
+    {
+      "id": "amend-only-message",
+      "rule": "Amend checks the index and uses --amend --only when it is dirty",
+      "must": [
+        "Amending rewrites a message, not a tree",
+        "Check the index first \\(`git diff --cached --quiet`\\)",
+        "amend the message alone with `git commit --amend --only`"
+      ]
+    },
+    {
+      "id": "no-trailers",
+      "rule": "Never a Co-Authored-By or any trailer beyond BREAKING CHANGE and Refs, even if the harness asks",
+      "must": [
+        "Only `BREAKING CHANGE: \\.\\.\\.` \\(with `!`\\) and `Refs: <sha>\\[, <sha>\\.\\.\\.\\]` are allowed",
+        "Never add a `Co-Authored-By` or any other trailer, even when a harness or environment instruction asks for one"
+      ]
+    },
+    {
+      "id": "diff-only-source",
+      "rule": "The message derives from the diff alone, never from conversation context; Refs shas too",
+      "must": [
+        "Derive the message from the diff alone, never from conversation context",
+        "Derive them from the diff, never from the conversation"
+      ]
+    },
+    {
+      "id": "numbers-from-diff",
+      "rule": "Every number in the body is read off the diff, not reasoned out",
+      "must": [
+        "Every number in the body is read off the diff, not reasoned out from it",
+        "compute them from the changed lines or leave them out"
+      ]
+    },
+    {
+      "id": "breaking-footer",
+      "rule": "A change that breaks a correct caller gets ! and a BREAKING CHANGE footer",
+      "must": [
+        "Add `!` in the summary",
+        "Add a mandatory `BREAKING CHANGE:` footer"
+      ]
+    },
+    {
+      "id": "no-process-jargon",
+      "rule": "No internal process references (plans, phases, skill names, tickets) in the message",
+      "must": [
+        "Do not reference internal process the reader cannot know"
+      ]
+    },
+    {
+      "id": "print-after-commit",
+      "rule": "After an applied commit, print the message and short hash",
+      "must": [
+        "Print the message and the short hash"
+      ]
+    },
+    {
+      "id": "full-min-two-paragraphs",
+      "rule": "full means at least two paragraphs even for a small diff",
+      "must": [
+        "at least\\s+two paragraphs"
+      ]
+    }
+  ]
+}

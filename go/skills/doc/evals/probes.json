@@ -1,0 +1,40 @@
+{
+  "skill_name": "doc",
+  "probes": [
+    {
+      "id": "concurrency-claim",
+      "rule": "no-unverified-facts",
+      "prompt": "Situation: you are documenting `type Cache struct { m map[string]int }`, which has no mutex or other synchronization. Its godoc is otherwise fine and says nothing about concurrency.\n\nQuestion: do you add \"not safe for concurrent use\" to the godoc? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "example-request",
+      "rule": "scope-comments-only",
+      "prompt": "Situation: while documenting package parser, you see that a non-trivial exported function would be much clearer with a runnable Example function.\n\nQuestion: do you write an Example function? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "short-passing-comment",
+      "rule": "leave-passing",
+      "prompt": "Situation: the godoc `// Name returns the user name.` on `func (u *User) Name() string` starts with the symbol name, is a full sentence, matches the code, and the signature expresses everything non-obvious. It strikes you as dry.\n\nQuestion: do you rewrite it? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "nolint-method",
+      "rule": "nolint-kept",
+      "prompt": "Situation: method `func (r *Reader) Close() error //nolint:revive` implements io.Closer, which the type is pinned to by `var _ io.Closer = (*Reader)(nil)`. It carries a three-line godoc restating Close's contract; it does nothing surprising.\n\nQuestion: what do you do with the godoc? Answer on the first line with exactly one of: DELETE-ALL, REPLACE-ONE-LINE, KEEP. Then one sentence why.",
+      "pass": "^\\W*REPLACE-ONE-LINE",
+      "fail": "^\\W*(DELETE-ALL|KEEP)"
+    },
+    {
+      "id": "package-comment-home",
+      "rule": "package-comment-file",
+      "prompt": "Situation: package `foo` has no package comment and the directory has foo.go and helpers.go.\n\nQuestion: which file receives the new package comment? Answer on the first line with the file name only, then one sentence why.",
+      "pass": "^\\W*`?foo\\.go",
+      "fail": "^\\W*`?(doc|helpers)\\.go"
+    }
+  ]
+}

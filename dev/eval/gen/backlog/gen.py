@@ -11,8 +11,8 @@ PROJECT_CONFIG = """---
 mcp-server: srd-doc
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
-glossary: confluence/example/glossary
+srd-standard: docs/guidelines_for_software_requirements_documents.md
+glossary: docs/glossary
 ---
 
 # Project configuration (eval fixture)
@@ -285,13 +285,13 @@ Where each section of this page comes from.
 """
 OQ_2 = open_questions([[UNK_LABEL, "unknown", "2026-08-19", "4",
                         "[correlation.md](correlation.md#open-questions)"]])
-LEAK_DOC = ("confluence/example/concepts/leak-correlation.md")
+LEAK_DOC = ("docs/concepts/leak-correlation.md")
 SEARCH_2 = f"""---
 type: agent
 ---
 The documentation corpus holds exactly one section relevant here:
 
-{{"doc_id":"{LEAK_DOC}","heading_path":["Leak correlation","Propagation speed"],"source_url":"https://confluence.example.com/example/concepts/leak-correlation#propagation-speed","score":0.81,"text":"Leak correlation computes the position of a leak from the difference in arrival time of its noise at two Sensors. It uses a propagation speed of 1,250 m/s by default."}}
+{{"doc_id":"{LEAK_DOC}","heading_path":["Leak correlation","Propagation speed"],"source_url":"https://docs.example.com/concepts/leak-correlation#propagation-speed","score":0.81,"text":"Leak correlation computes the position of a leak from the difference in arrival time of its noise at two Sensors. It uses a propagation speed of 1,250 m/s by default."}}
 
 For a query about propagation speed, sound speed, leak correlation, or sensor
 types, answer {{"results":[<that section>]}}. For every other query answer
@@ -409,13 +409,13 @@ write_case(
 
 # --- 4. clusters-gaps-and-drafts-outside-the-corpus -----------------------
 
-HK_DOC = "confluence/example/operations/storage-housekeeping.md"
+HK_DOC = "docs/operations/storage-housekeeping.md"
 GAPS_4 = [
     gap("gap-0021", "How long raw Sound Files are kept", "initiatives/sound-export/srd.md",
         ["sound file retention", "how long are sound files kept", "delete sound files"],
         "The docs do not say how long a raw Sound File is kept before it is deleted, nor who can change that period.",
         doc_id=HK_DOC, heading=["Storage housekeeping", "Cold storage"],
-        url="https://confluence.example.com/example/operations/storage-housekeeping#cold-storage",
+        url="https://docs.example.com/operations/storage-housekeeping#cold-storage",
         created="2026-09-08T10:12:00Z"),
     gap("gap-0027", "Infobar for a Device without a location", "initiatives/device-map/srd.md",
         ["infobar device without location"], "The docs do not say what the Infobar shows for a Device with no location.",
@@ -425,10 +425,10 @@ GAPS_4 = [
         "Nowhere states when recorded Sound Files are deleted.", created="2026-09-22T09:05:00Z"),
 ]
 LIST_DOCS_4 = json.dumps({"docs": [
-    {"id": "confluence/example/guidelines_for_software_requirements_documents.md",
+    {"id": "docs/guidelines_for_software_requirements_documents.md",
      "title": "Guidelines for Software Requirements Documents"},
-    {"id": "confluence/example/glossary/main_glossary.md", "title": "Main Glossary"},
-    {"id": "confluence/example/glossary/user_interface_glossary.md", "title": "User Interface Glossary"},
+    {"id": "docs/glossary/main_glossary.md", "title": "Main Glossary"},
+    {"id": "docs/glossary/user_interface_glossary.md", "title": "User Interface Glossary"},
     {"id": HK_DOC, "title": "Storage housekeeping"},
     {"id": "kb/_inbox.md", "title": "Knowledge base inbox"},
 ]}, separators=(",", ":"))
@@ -480,13 +480,13 @@ write_case(
     },
     **case4_common,
 )
-URL_4 = "https://confluence.example.com/example/operations/storage-housekeeping"
+URL_4 = "https://docs.example.com/operations/storage-housekeeping"
 DRAFT_4 = r'"file_path":"[^"]*drafts/sound-file-retention\.md"'
-CORPUS_WRITE = r'"file_path":"[^"]*/(kb|confluence)/(?!_inbox|_open-questions)'
+CORPUS_WRITE = r'"file_path":"[^"]*/(kb|docs)/(?!_inbox|_open-questions)'
 
 
 def resolved(g):
-    return rx(rf'resolve_gap(?=[^\n]*{g})(?=[^\n]*https://confluence\.example\.com/)',
+    return rx(rf'resolve_gap(?=[^\n]*{g})(?=[^\n]*https://docs\.example\.com/)',
               target="mock_calls")
 
 
@@ -605,7 +605,7 @@ write_case(
              '400 days after upload, archived or not. Nothing to add."',
              'To where the draft goes: "Put it at `drafts/sound-file-retention.md`."',
              'Once the draft is ready: "Published: '
-             'https://confluence.example.com/example/operations/sound-file-retention"',
+             'https://docs.example.com/operations/sound-file-retention"',
              'To anything else: "That\'s all for today."'],
     files={"kb/_open-questions.md": OQ_6, "kb/altecno-logger.md": LOGGER_PAGE, "kb/_inbox.md": INBOX},
     mocks={"list_gaps": gaps_world(GAPS_6)},

@@ -1,0 +1,99 @@
+{
+  "skill_name": "enhance-skills",
+  "rules": [
+    {
+      "id": "confirm-before-write",
+      "rule": "Propose per skill and wait for confirmation before writing anything",
+      "must": [
+        "Wait for confirmation before writing",
+        "Write: on approval"
+      ]
+    },
+    {
+      "id": "no-write-plugin-cache",
+      "rule": "Never write under plugins/cache, even if writable; write only to the writable store",
+      "must": [
+        "Never write under `\\.\\.\\./plugins/cache/` even if the OS\\s+says it is writable",
+        "write only to the writable\\s+one"
+      ]
+    },
+    {
+      "id": "lessons-not-inline",
+      "rule": "Lessons never live inline in a SKILL.md body",
+      "must": [
+        "Lessons never live inline in a `SKILL\\.md` body"
+      ]
+    },
+    {
+      "id": "only-used-skills",
+      "rule": "Harvest covers skills actually invoked; skills only mentioned are ignored",
+      "must": [
+        "every skill actually invoked in this conversation",
+        "Ignore skills only mentioned"
+      ]
+    },
+    {
+      "id": "already-carried-not-a-lesson",
+      "rule": "A rule the skill already carries is not a lesson; point at the line and offer a skill edit",
+      "must": [
+        "A rule the skill already carries",
+        "Point at the line",
+        "a skill edit, not a lesson"
+      ]
+    },
+    {
+      "id": "overrule-body-handoff",
+      "rule": "A rule that overrules the body is a skill edit: file nothing, name the contradicted line, hand to user",
+      "must": [
+        "A rule that overrules the body is a skill edit, not a lesson: file nothing",
+        "name the line it contradicts, and hand it to the user"
+      ]
+    },
+    {
+      "id": "name-unfiled-corrections",
+      "rule": "Name each mined correction not filed and why; no silent drops",
+      "must": [
+        "Name in one line each\\s+correction you mined and did not file, and why"
+      ]
+    },
+    {
+      "id": "retrofit-in-place-only",
+      "rule": "Retrofit edits SKILL.md so needs an in-place checkout; on read-only report and stop",
+      "must": [
+        "it needs an in-place checkout — on a\\s+read-only install, report that and stop"
+      ]
+    },
+    {
+      "id": "retrofit-block-verbatim",
+      "rule": "Retrofit copies the Self-learning block word for word as the last section; skip if present",
+      "must": [
+        "Copy the block below word for word",
+        "as its\\s+last `## ` section",
+        "Skip when the block already exists"
+      ]
+    },
+    {
+      "id": "empty-run-short",
+      "rule": "A run that files nothing is a line or two: what was mined and that nothing qualified; no retrofit or store-path accounting",
+      "must": [
+        "A run that files nothing is a line or two",
+        "Do not account for the retrofit check, name the store\\s+path a lesson would have taken"
+      ]
+    },
+    {
+      "id": "merge-external-offer",
+      "rule": "When a writable sibling LESSONS.md and a stranded external file both exist, offer to merge and delete the external file",
+      "must": [
+        "offer to merge the\\s+external lessons into `LESSONS\\.md`",
+        "and delete the external file"
+      ]
+    },
+    {
+      "id": "one-correction-one-rule",
+      "rule": "One correction yields one rule; a second rule from the same correction is usually a restatement",
+      "must": [
+        "One correction yields one rule"
+      ]
+    }
+  ]
+}

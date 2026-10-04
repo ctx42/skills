@@ -5,8 +5,8 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd-doc
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
-glossary: confluence/example/glossary
+srd-standard: docs/guidelines_for_software_requirements_documents.md
+glossary: docs/glossary
 ---
 
 # Project configuration (eval fixture)
@@ -39,11 +39,11 @@ cat > specs/labeling.md <<'EOF_SRD'
 ## Introduction
 
 This document specifies how the platform stores
-[Labels](<../confluence/example/glossary/machine_learning_glossary.md#Label>)
-on a [Sound File](<../confluence/example/glossary/main_glossary.md#Sound-File-(SND)>).
+[Labels](<../docs/glossary/machine_learning_glossary.md#Label>)
+on a [Sound File](<../docs/glossary/main_glossary.md#Sound-File-(SND)>).
 The system will let a user assign Labels to a Sound File, remove them, and look
 them up. Each Label is kept as a
-[Tag](<../confluence/example/glossary/main_glossary.md#Tag-(TAG)>), and every
+[Tag](<../docs/glossary/main_glossary.md#Tag-(TAG)>), and every
 assignment records who made it and when.
 
 ## Glossary
@@ -75,7 +75,7 @@ The association of one Label with one Sound File.
 ### General (GR)
 
 **GR-1:** The system MUST allow a user to assign a Label to a Sound File in a
-[Project](<../confluence/example/glossary/main_glossary.md#Project-(PRJ)>) the
+[Project](<../docs/glossary/main_glossary.md#Project-(PRJ)>) the
 user belongs to.
 
 **GR-2:** The system MUST store each Label as a Tag.
@@ -89,7 +89,7 @@ node names.
 **GR-5:** The system MUST allow a user to remove a Label Assignment.
 
 **GR-6:** The system MUST record the user and the
-[Date](<../confluence/example/glossary/main_glossary.md#Date>) of each Label
+[Date](<../docs/glossary/main_glossary.md#Date>) of each Label
 Assignment.
 
 **GR-7:** The system MUST answer a Tag lookup within 300 ms at the 95th

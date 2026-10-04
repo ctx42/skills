@@ -1,0 +1,95 @@
+{
+  "skill_name": "review",
+  "rules": [
+    {
+      "id": "read-only-check",
+      "rule": "Check mode never changes code unless asked",
+      "must": [
+        "Do not change code unless asked"
+      ]
+    },
+    {
+      "id": "no-tools-while-reviewing",
+      "rule": "Review judges by reading; no gofmt/vet/lint/test",
+      "must": [
+        "do not run gofmt, go vet, golangci-lint, or go test",
+        "a shell width measure"
+      ]
+    },
+    {
+      "id": "style-delegated",
+      "rule": "Style dimension delegated to go:style, not re-derived",
+      "must": [
+        "do not re-derive style rules here",
+        "report offenses only"
+      ]
+    },
+    {
+      "id": "plan-first-stops",
+      "rule": "plan_first proposes then stops; broad targets default to plan-first",
+      "must": [
+        "propose the budget and the package list, then stop for the user's answer",
+        "Default to plan-first: if the target is broad"
+      ]
+    },
+    {
+      "id": "state-target",
+      "rule": "State resolved target; empty diff falls back to the branch diff against base",
+      "must": [
+        "State the resolved target and the exact package/file set before reviewing",
+        "diff it against the base branch"
+      ]
+    },
+    {
+      "id": "fanout-cap-at-merge",
+      "rule": "Fan-out workers get no cap share; cap applied once at the merge",
+      "must": [
+        "Workers get no share of the cap",
+        "the cap is applied once at the merge"
+      ]
+    },
+    {
+      "id": "dedupe-style-correctness",
+      "rule": "A defect that is both is reported once, under correctness",
+      "must": [
+        "Report it once, under correctness, with the higher of its two grades"
+      ]
+    },
+    {
+      "id": "mandated-forms",
+      "rule": "Never flag mandated style forms (segmented strings) as defects",
+      "must": [
+        "never propose a backtick raw string for it"
+      ]
+    },
+    {
+      "id": "grading",
+      "rule": "Correctness findings graded by a named input",
+      "must": [
+        "one you cannot tie to an input is at most Should-fix"
+      ]
+    },
+    {
+      "id": "lsp-verify",
+      "rule": "Cross-boundary claims verified with LSP, not asserted",
+      "must": [
+        "confirm it with the `LSP` tool"
+      ]
+    },
+    {
+      "id": "report-commands-run",
+      "rule": "Report names every command the pass ran",
+      "must": [
+        "one line naming every command this pass ran"
+      ]
+    },
+    {
+      "id": "fix-gate",
+      "rule": "Applying fixes requires the fixing.md test gate; rule edits need confirmation",
+      "must": [
+        "applying findings requires the test gate in `references/fixing.md`",
+        "never write a rule without confirmation"
+      ]
+    }
+  ]
+}

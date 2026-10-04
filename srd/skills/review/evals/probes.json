@@ -1,0 +1,47 @@
+{
+  "skill_name": "review",
+  "probes": [
+    {
+      "id": "unconfirmed-claim-is-doc-gap",
+      "rule": "gap-not-a-finding",
+      "prompt": "Situation: running a default review, requirement GW-4 says \"the gateway retries a failed call 3 times\". You searched the corpus and no document states a retry count.\n\nQuestion: where does this go? Answer on the first line with exactly one of: REVIEW-FINDING, DOC-GAP, IGNORE. Then one sentence why.",
+      "pass": "^\\W*DOC-GAP",
+      "fail": "^\\W*(REVIEW-FINDING|IGNORE)"
+    },
+    {
+      "id": "check-hunts-nothing-new",
+      "rule": "check-no-new-defects",
+      "prompt": "Situation: you are running `/review specs/gw.md check`. While re-verifying finding #2 you notice a new defect: a term used in GW-7 is undefined. It is not in the review file.\n\nQuestion: do you add it to the review file? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "feedback-writes-nothing",
+      "rule": "feedback-no-write",
+      "prompt": "Situation: the user runs `/review specs/gw.md feedback`. specs/gw.review.md exists and holds 5 open findings and 2 resolved ones.\n\nQuestion: do you write or modify any file? Answer on the first line YES or NO, then one sentence what you output instead.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "reply-is-a-task-line",
+      "rule": "reply-never-lists-findings",
+      "prompt": "Situation: a default review of specs/gw.md has just written specs/gw.review.md with 9 new findings: 2 blocker, 4 major, 3 minor.\n\nQuestion: what shape does your reply take? Answer on the first line with exactly one of: FINDINGS-TABLE, TASK-LINE-WITH-COUNTS, FINDINGS-ONE-PER-LINE. Then one sentence why.",
+      "pass": "^\\W*TASK-LINE-WITH-COUNTS",
+      "fail": "^\\W*FINDINGS"
+    },
+    {
+      "id": "default-never-withdraws",
+      "rule": "check-no-new-defects",
+      "prompt": "Situation: you are running a default review (no mode word) of specs/gw.md. specs/gw.review.md exists. Re-verifying open finding #3, you conclude it is invalid: the author justified the text and the rule it cites does not apply.\n\nQuestion: do you move #3 to ## Withdrawn in this run? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    },
+    {
+      "id": "back-links-not-flagged",
+      "rule": "no-back-link-finding",
+      "prompt": "Situation: reviewing an SRD whose Initiative field links to ticket PLAT-212. The SRD itself cannot show whether PLAT-212 links back to the SRD. The Designs field is N/A, no UI change.\n\nQuestion: do you raise a finding that the ticket lacks a back-link to the SRD? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES"
+    }
+  ]
+}

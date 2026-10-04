@@ -1,0 +1,96 @@
+{
+  "skill_name": "system-check",
+  "rules": [
+    {
+      "id": "no-source-edits",
+      "rule": "Never rewrites the SRD; produces questions only",
+      "must": [
+        "Produce\\ questions\\ for\\ the\\ SRD\\ author;\\ never\\ rewrite\\ the\\ document"
+      ]
+    },
+    {
+      "id": "review-file-not-written",
+      "rule": "Never writes <srd>.review.md",
+      "must": [
+        "Must\\ not:\\ write\\ or\\ edit\\ `<srd>\\.review\\.md`"
+      ]
+    },
+    {
+      "id": "no-kb-writes",
+      "rule": "Never writes a knowledge-base file; facts go to srd:kb",
+      "must": [
+        "write\\ a\\ knowledge\\-base\\ file\\ \\(owned\\ by\\ `srd:kb`\\)",
+        "This\\ skill\\ reads\\ platform\\ knowledge\\ and\\ stores\\ none"
+      ]
+    },
+    {
+      "id": "lookup-before-asking",
+      "rule": "Corpus lookup before any is-this-documented question",
+      "must": [
+        "look\\ it\\ up\\ first:\\ `search`\\ the\\ corpus,\\ then\\ `get_doc`\\ the\\ promising\\ hit",
+        "a\\ competent\\ engineer\\ does\\ not\\ ask\\ what\\ they\\ could\\ have\\ looked\\ up"
+      ]
+    },
+    {
+      "id": "disproved-findings-named",
+      "rule": "A finding the lookup disproves is not a question and is not dropped; closing report names the numbers and the check command",
+      "must": [
+        "name\\ the\\ numbers\\ in\\ the\\ closing\\ report",
+        "`srd:review\\ <srd>\\ check\\ \\#4,7`"
+      ]
+    },
+    {
+      "id": "one-question-at-a-time",
+      "rule": "Walk is one question at a time; stay until the user moves on",
+      "must": [
+        "Go\\ through\\ the\\ questions\\ file\\ \\*\\*one\\ item\\ at\\ a\\ time\\*\\*\\.\\ Never\\ batch",
+        "Stay\\ on\\ the\\ current\\ question\\ until\\ the\\ user\\ says\\ to\\ move\\ on"
+      ]
+    },
+    {
+      "id": "no-bank-prompt",
+      "rule": "Durable platform facts ride on the walk restatement; no separate bank prompt",
+      "must": [
+        "never\\ a\\ separate\\ \"bank\\ this\\?\"\\ prompt",
+        "confirmation\\ rides\\ on\\ this\\ skill's\\ own\\ restatement"
+      ]
+    },
+    {
+      "id": "srd-decisions-handed-to-edit",
+      "rule": "SRD-specific answers are listed as edits for srd:edit",
+      "must": [
+        "close\\ the\\ run\\ by\\ listing\\ them\\ as\\ edits\\ for\\ `srd:edit`\\ to\\ apply"
+      ]
+    },
+    {
+      "id": "questions-file-never-deleted",
+      "rule": "Emptied questions file stays with No open questions.",
+      "must": [
+        "Emptied,\\ the\\ file\\ stays",
+        "write\\ `No\\ open\\ questions\\.`"
+      ]
+    },
+    {
+      "id": "rerun-uses-default-review",
+      "rule": "Re-run refreshes via review default mode, not check",
+      "must": [
+        "Not\\ `check`:\\ that\\ mode\\ re\\-verifies\\ only\\ and\\ hunts\\ no\\ new\\ defects"
+      ]
+    },
+    {
+      "id": "no-tags-in-questions",
+      "rule": "Questions carry no severity tags or rule ids",
+      "must": [
+        "No\\ tags:\\ no\\ severity,\\ no\\ rule\\ ids"
+      ]
+    },
+    {
+      "id": "learn-confirmed-only",
+      "rule": "learn banks only user-confirmed facts, never inferred",
+      "must": [
+        "never\\ something\\ the\\ agent\\ inferred",
+        "the\\ user's\\ confirmation\\ is\\ the\\ gate"
+      ]
+    }
+  ]
+}

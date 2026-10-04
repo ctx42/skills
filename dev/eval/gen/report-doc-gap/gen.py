@@ -11,8 +11,8 @@ PC = """---
 mcp-server: srd-doc
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
-glossary: confluence/example/glossary
+srd-standard: docs/guidelines_for_software_requirements_documents.md
+glossary: docs/glossary
 ---
 
 # Project configuration (eval fixture)
@@ -156,9 +156,9 @@ G_RETRY_PTR = gap(
     "it retries a failed upstream call or how long it waits between tries.",
     "GW-2 needs the retry count",
     ["gateway retry count", "upstream retries"],
-    doc_id="confluence/example/api-gateway/overview.md",
+    doc_id="docs/api-gateway/overview.md",
     heading=["API Gateway", "Upstream calls"],
-    url="https://confluence.example.com/example/api-gateway/overview#upstream-calls")
+    url="https://docs.example.com/api-gateway/overview#upstream-calls")
 G_RATE = gap("gap-0331", "API Gateway rate-limit response headers",
              "No corpus page names the headers the gateway sends with an "
              "HTTP 429 answer.",
@@ -434,8 +434,8 @@ case(
         none_of("mcp__srd-doc__report_gap", "b1-no-twin-captured"),
         {"name": "b1-pointers-survive", "type": "regex", "target": "mock_calls",
          "flags": "m", "match": "not_contains",
-         "body": "^" + UPD + r'(?![^\n]*"doc_id":"confluence/example/api-gateway/overview\.md"[^\n]*)|^'
-                 + UPD + r'(?![^\n]*"source_url":"https://confluence\.example\.com/example/api-gateway/overview#upstream-calls")|^'
+         "body": "^" + UPD + r'(?![^\n]*"doc_id":"docs/api-gateway/overview\.md"[^\n]*)|^'
+                 + UPD + r'(?![^\n]*"source_url":"https://docs\.example\.com/api-gateway/overview#upstream-calls")|^'
                  + UPD + r'(?![^\n]*"heading_path":\["API Gateway","Upstream calls"\])'},
         {"name": "b1-detail-and-kind-survive", "type": "regex", "target": "mock_calls",
          "flags": "m", "match": "not_contains",

@@ -1,0 +1,96 @@
+{
+  "skill_name": "review",
+  "rules": [
+    {
+      "id": "read-only",
+      "rule": "Never edits the source SRD",
+      "must": [
+        "Must\\ not:\\ edit\\ the\\ source\\ SRD\\ or\\ fix\\ anything"
+      ]
+    },
+    {
+      "id": "todo-scaffold-blocks",
+      "rule": "An unresolved In Scope TODO marker or non-empty ## TODO section is a blocker",
+      "must": [
+        "an\\ unresolved\\ draft\\ scaffold\\ —\\ the\\ In\\ Scope\\ `\\-\\-\\-\\ TODO\\ \\-\\-\\-`\\ marker\\ or\\ a\\ non\\-empty\\ `\\#\\#\\ TODO`\\ section"
+      ]
+    },
+    {
+      "id": "gate-first",
+      "rule": "Every mode runs the project-config gate first",
+      "must": [
+        "Every\\ mode\\ runs\\ the\\ gate\\ in",
+        "first"
+      ]
+    },
+    {
+      "id": "gap-not-a-finding",
+      "rule": "A corpus-unconfirmed claim is a doc gap for report-doc-gap, never a review finding; kb not invoked",
+      "must": [
+        "one\\ it\\ cannot\\ confirm\\ is\\ a\\ doc\\ gap\\ for\\ `srd:report\\-doc\\-gap`,\\ never\\ a\\ finding\\ in\\ `<srd>\\.review\\.md`",
+        "`srd:kb`\\ is\\ not\\ invoked"
+      ]
+    },
+    {
+      "id": "existing-file-not-rewritten",
+      "rule": "An existing review file is never rewritten; resolve then append with fresh numbers",
+      "must": [
+        "If\\ it\\ exists,\\ do\\ not\\ rewrite\\ it",
+        "append\\ newly\\ found\\ defects\\ with\\ fresh\\ numbers"
+      ]
+    },
+    {
+      "id": "check-no-new-defects",
+      "rule": "check re-verifies only and hunts no new defects; withdrawal is check-only",
+      "must": [
+        "Re\\-verify\\ only\\ —\\ hunt\\ no\\ new\\ defects",
+        "Withdrawal\\ is\\ check\\-only"
+      ]
+    },
+    {
+      "id": "idle-pass-writes-nothing",
+      "rule": "A pass that resolves nothing and appends nothing writes nothing",
+      "must": [
+        "a\\ pass\\ that\\ resolves\\ nothing\\ and\\ appends\\ nothing\\ writes\\ nothing"
+      ]
+    },
+    {
+      "id": "walk-confirmed-only",
+      "rule": "walk records only findings the user confirms",
+      "must": [
+        "record\\ only\\ findings\\ the\\ user\\ confirms",
+        "Append\\ only\\ confirmed\\ findings\\ to\\ the\\ review\\ file"
+      ]
+    },
+    {
+      "id": "feedback-no-write",
+      "rule": "feedback writes no file",
+      "must": [
+        "Emit\\ plain\\ text\\ for\\ an\\ email\\ or\\ ticket\\ —\\ no\\ file\\ write"
+      ]
+    },
+    {
+      "id": "reply-never-lists-findings",
+      "rule": "Reply carries a task line and counts, never the findings",
+      "must": [
+        "the\\ reply\\ never\\ lists\\ them",
+        "Count\\ those\\ from\\ the\\ finished\\ file,\\ not\\ from\\ memory"
+      ]
+    },
+    {
+      "id": "no-back-link-finding",
+      "rule": "Back-links STR-4/6 never raise a finding",
+      "must": [
+        "never\\ raise\\ a\\ back\\-link\\ finding"
+      ]
+    },
+    {
+      "id": "closing-offer-delegated",
+      "rule": "Draft offer is made by report-doc-gap, never inline, and only when this run captured drafts",
+      "must": [
+        "The\\ offer\\ is\\ the\\ delegate's,\\ never\\ written\\ inline",
+        "a\\ run\\ that\\ captured\\ none\\ invokes\\ nothing\\ here\\ either"
+      ]
+    }
+  ]
+}

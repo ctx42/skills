@@ -5,8 +5,8 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd-doc
 kb: kb
 initiatives: initiatives
-srd-standard: confluence/example/guidelines_for_software_requirements_documents.md
-glossary: confluence/example/glossary
+srd-standard: docs/guidelines_for_software_requirements_documents.md
+glossary: docs/glossary
 ---
 
 # Project configuration (eval fixture)
@@ -39,11 +39,11 @@ cat > specs/labeling.md <<'EOF_SRD'
 ## Introduction
 
 This document specifies how the platform stores
-[Labels](<../confluence/example/glossary/machine_learning_glossary.md#Label>)
-on a [Sound File](<../confluence/example/glossary/main_glossary.md#Sound-File-(SND)>).
+[Labels](<../docs/glossary/machine_learning_glossary.md#Label>)
+on a [Sound File](<../docs/glossary/main_glossary.md#Sound-File-(SND)>).
 The system will let a user assign Labels to a Sound File, remove them, and look
 them up. Each Label is kept as a
-[Tag](<../confluence/example/glossary/main_glossary.md#Tag-(TAG)>), and every
+[Tag](<../docs/glossary/main_glossary.md#Tag-(TAG)>), and every
 assignment is written to the Label Audit Log.
 
 ## Glossary
@@ -83,7 +83,7 @@ The Labels a Project allows its users to assign.
 ### General (GR)
 
 **GR-1:** The system MUST allow a user to assign a Label to a Sound File in a
-[Project](<../confluence/example/glossary/main_glossary.md#Project-(PRJ)>) the
+[Project](<../docs/glossary/main_glossary.md#Project-(PRJ)>) the
 user belongs to.
 
 **GR-2:** The system MUST store each Label as a Tag.
@@ -195,7 +195,7 @@ cfsync-plugin: ignore-push
 - [ ] #4 [major, reference] GR-4: requires Tag names written as a
   slash-separated path, but the Tags concept document states Tag names are a
   comma-separated series of named nodes — align GR-4 with the platform format.
-  (SRD:ref confluence/example/concepts/tags.md)
+  (SRD:ref docs/concepts/tags.md)
 
 - [ ] #5 [blocker, logical] GR-5 and GR-6: deleting a Tag must delete its
   Label Assignments, but an assignment older than 30 days must never be

@@ -100,17 +100,29 @@ that count off the finished artifact rather than carry it from the work, and a
 scenario that grades the count against the file. It is the one number nobody
 re-derives, which is exactly why it is worth grading.
 
-**Three tiers.** A skill change is confirmed in minutes, not in a round:
+**Tiers.** The routine check after any edit is free and takes seconds; the
+only paid routine check costs cents and finishes in under a minute:
 
-1. *Lint* (`./dev/lint-skills.sh`, seconds). A wording or clarification edit
-   stops here, after a re-read.
-2. *Native cases* (`./dev/eval-changed.sh`, a few minutes). A behaviour change
-   runs the cases its diff reaches: each one invokes the real skill through
-   `claude plugin eval`, on a scripted fixture with mocked MCP servers, graded
-   mostly by deterministic checks. Authoring rules: `dev/eval/native-cases.md`.
-   A scenario edited in `evals.json` or `expectations.json` gets its case
-   updated in the same change. Run it without asking; it costs cents per case.
-3. *Blind round* (the runner and grader prompts above). An audit before a
+1. *Lint and contracts* (`./dev/lint-skills.sh`, which runs
+   `./dev/eval-check.py`; free, seconds). Each skill's `evals/contract.json`
+   lists its high-stakes rules as phrases its text must keep; an edit that
+   deletes, weakens, or contradicts one fails here, named. The same check
+   re-runs the case generators and catches a fixture or mock rename that
+   missed one side. Mechanical edits (fixtures, mocks, ids, generators) stop
+   here: they never need a model run.
+2. *Probes* (`./dev/eval-probe.py`; cents, under a minute). Each skill's
+   `evals/probes.json` asks one question per rule most likely to regress —
+   the skill text as system prompt, a prepared situation, a short answer
+   graded by regex, on haiku. Answers are cached by input, so only probes
+   whose skill text or prompt changed cost anything. Run after any behaviour
+   change, without asking. A new high-stakes rule gets a contract rule and a
+   probe in the same change; check a new probe fails with its rule deleted.
+3. *Agent-run cases* (`./dev/eval-changed.sh --audit`; $0.25–0.80 and up to
+   minutes per case). Full sessions on scripted fixtures with mocked MCP
+   servers (`dev/eval/native-cases.md`). A manual audit only, when the user
+   asks; never the gate on a change. Verify a grader fix offline with
+   `./dev/eval-regrade.py <trace>`, never by a paid re-run.
+4. *Blind round* (the runner and grader prompts above). An audit before a
    release or after a large refactor, never the gate on an ordinary change.
 
 **The eval loop.** A blind round costs hundreds of thousands of tokens, and a
@@ -123,7 +135,9 @@ rules:
   to `tmp/eval-backlog.md` and triggers no re-run.
 - Before any blind round, state its scope and rough cost and get the user's
   go-ahead.
-- A behaviour change re-runs only the scenarios it reaches, never the suite.
+- A behaviour change runs the probes, never the agent-run suite; tiers 3–4
+  run only on the user's request, and only the failing or cut-off cases are
+  re-run.
 - One fix-and-re-run per FAIL; a bullet that fails again after its fix goes to
   the user as a design question, not another rewording.
 - At most two rounds per change unless the user raises it; a round with every
