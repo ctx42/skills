@@ -8,7 +8,8 @@
         "Leaves both directive comments byte-for-byte unchanged and lists them as never-touch items in the plan",
         "Plans the `Read` godoc for removal as unremarkable — it would be kept, naming the surprise, only if `Read` broke or exceeded the `io.Reader` contract",
         "Writes nothing before approval: the plan is the run's only output on that turn, and every `.go` file's mtime is unchanged until the approval turn — check the files, not the promise"
-      ]
+      ],
+      "blind_only": [3]
     },
     {
       "id": 5,

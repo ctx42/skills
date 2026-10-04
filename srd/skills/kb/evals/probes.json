@@ -6,41 +6,32 @@
       "rule": "attested-only",
       "prompt": "Situation: during an SRD interview the user explained how leak instances accumulate evidence. From that you inferred that evidence is kept for 90 days; the user never said so. You are now writing the section on leak-instance evidence.\n\nQuestion: does the 90-day retention period go into the section body? Answer on the first line YES or NO, then in one sentence say where, if anywhere, it is recorded instead.",
       "pass": "^\\W*NO\\b.*open.questions",
-      "fail": "^\\W*YES"
-    },
-    {
-      "id": "no-bank-this-prompt",
-      "rule": "write-after-confirmation",
-      "prompt": "Situation: srd:create is interviewing the user about specs/gateway.md. The user just mentioned that the gateway retries a failed upstream call three times. The platform docs do not say this. The interview has not yet reached its next restatement for the user to confirm.\n\nQuestion: what do you do with this fact right now? Answer on the first line with exactly one of: WRITE-NOW, ASK-TO-BANK, NOTE-AND-WAIT. Then one sentence why.",
-      "pass": "^\\W*NOTE-AND-WAIT"
+      "fail": "^\\W*YES",
+      "class": "redundant"
     },
     {
       "id": "confirmed-fact-to-inbox",
       "rule": "inbox-first",
       "prompt": "Situation: the user just confirmed a restatement that includes a new platform fact: Sound Files are compressed with FLAC before archiving. The corpus does not state it, and the knowledge base already has a page kb/sound-files.md on a related subject.\n\nQuestion: which single file do you write the fact to now? Answer on the first line with the file path only, then one sentence why.",
       "pass": "^\\W*`?(kb/)?_inbox\\.md",
-      "fail": "^\\W*`?(kb/)?sound-files\\.md"
+      "fail": "^\\W*`?(kb/)?sound-files\\.md",
+      "class": "redundant"
     },
     {
       "id": "skip-routes-deferred",
       "rule": "no-new-subjects",
       "prompt": "Situation: in an SRD interview about hydrophone sensor types, you asked whether the sensor-type field may be empty, to make a fact worth writing. The user answered: \"skip that for now\".\n\nQuestion: what happens to that question? Answer on the first line with exactly one of: ASK-AGAIN-LATER, DROP-IT, DEFER-TO-INDEX. Then one sentence naming where it goes, if anywhere.",
       "pass": "^\\W*DEFER-TO-INDEX.*_open-questions",
-      "fail": "^\\W*ASK-AGAIN"
-    },
-    {
-      "id": "one-fact-no-page",
-      "rule": "append-not-split",
-      "prompt": "Situation: running /kb file. The inbox holds exactly one fact about valve maintenance intervals. No topic page covers valves.\n\nQuestion: do you create a new valves page for it? Answer on the first line YES or NO, then one sentence why.",
-      "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "fail": "^\\W*ASK-AGAIN",
+      "class": "redundant"
     },
     {
       "id": "bare-capture-provenance",
       "rule": "session-provenance",
       "prompt": "Situation: the user ran /kb with no arguments. No SRD is named anywhere in the conversation and no other skill is driving. The user confirmed one platform fact. No documentation gap was filed for it.\n\nQuestion: write the exact attestation line that opens the fact's section (use the date 2026-09-11). Output only that line.",
       "pass": "Attested session 2026-09-11",
-      "fail": "srd\\.md|gap-\\d"
+      "fail": "srd\\.md|gap-\\d",
+      "class": "load-bearing"
     }
   ]
 }

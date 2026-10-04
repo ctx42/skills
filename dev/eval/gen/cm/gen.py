@@ -290,11 +290,10 @@ case(
         "b1-no-cookie-or-session-store": g_regex(
             r"cookie|session store|sessions table|redis|csrf|rotation",
             flags="i", match="not_contains"),
-        "b1-only-what-the-diff-shows": g_llm(
-            "The commit message describes only what the diff adds (a POST /login "
-            "handler `Login`, a JWT-issuing `token.Issue`, the route wired into the "
-            "router) and mentions no alternative design that was considered, "
-            "compared, or dropped."),
+        "b1-only-what-the-diff-shows": g_regex(
+            r"server-side|stateless|instead of|rather than|"
+            r"without (?:a |any )?(?:server|session|state)",
+            flags="i", match="not_contains"),
         "b2-summary-shape": g_regex(
             r"^```[a-z]*\n(?=[^\n]{1,56}\n)feat(\([a-z0-9/_.-]+\))?: "
             r"(?![a-z]+(?:ed|ing|s)\b)[a-z][^\n]*[^.\n]\n", flags="m"),

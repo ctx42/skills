@@ -30,11 +30,15 @@ Skills ship no `README.md`; the repo-level one orients humans.
 5. **Lint before committing.** Run `./dev/lint-skills.sh` after editing any skill; it
    checks the mechanical parts of the authoring standard and the marketplace
    wiring, and exits non-zero on any error.
-6. **Confirm a behaviour change with `./dev/eval-probe.py`.** Lint already ran
-   the free contract checks (`./dev/eval-check.py`); probes ask the changed
-   skill one cached question per high-stakes rule, for cents, in seconds.
-   Agent-run cases (`./dev/eval-changed.sh --audit`) are a manual audit only;
-   a blind round is a release audit, not the gate on a change.
+6. **Confirm a behaviour change with `./dev/eval-routine.sh`** (it runs
+   `./dev/eval-probe.py`, `./dev/eval-hunt.py`, and `./dev/eval-triggers.py`
+   in parallel after lint). Lint already ran the free contract checks
+   (`./dev/eval-check.py`); probes ask the changed skill one cached question
+   per high-stakes rule, the hunt measures what the diff made ambiguous, the
+   trigger test re-routes requests when a description changed — cents, a
+   minute or two. Agent-run cases (`./dev/eval-changed.sh --audit`) are a
+   manual audit only; a blind round is a release audit, not the gate on a
+   change.
 
 ## Dev loop
 

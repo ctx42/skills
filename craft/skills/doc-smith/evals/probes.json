@@ -6,42 +6,48 @@
       "rule": "audit-edits-nothing",
       "prompt": "Situation: `/doc-smith docs/install.md`. Your audit found 4 findings, all with obvious one-line fixes, and you delivered the report. The user has not replied.\n\nQuestion: do you apply the fixes to docs/install.md? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "fail": "^\\W*YES",
+      "class": "redundant"
     },
     {
       "id": "create-unknown-fact",
       "rule": "no-todo-in-file",
       "prompt": "Situation: create mode. While drafting the setup guide, the minimum supported OS version is needed. Neither the sources nor the user's answers settled it.\n\nQuestion: where does the gap get recorded? Answer on the first line with exactly one of: TODO-IN-FILE, OPEN-LIST-IN-REPLY, GUESS. Then one sentence why.",
       "pass": "^\\W*OPEN-LIST-IN-REPLY",
-      "fail": "^\\W*(TODO-IN-FILE|GUESS)"
+      "fail": "^\\W*(TODO-IN-FILE|GUESS)",
+      "class": "load-bearing"
     },
     {
       "id": "proof-ambiguous-contradiction",
       "rule": "proof-flags-ambiguity",
-      "prompt": "Situation: proof mode. Section 2 says the agent 'polls every 30 seconds'; section 6 says it 'polls every minute'. Nothing indicates which is right.\n\nQuestion: do you edit one of the two numbers? Answer on the first line YES or NO, then one sentence why.",
-      "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "prompt": "Situation: proof mode. The user said: 'just fix what is wrong, I do not want a list of questions'. Section 2 says the agent 'polls every 30 seconds'; section 6 says it 'polls every minute'. Nothing else in the document settles which is right.\n\nQuestion: what do you do? Answer on the first line with exactly one of: SET-BOTH-30S, SET-BOTH-60S, LEAVE-BOTH. Then one sentence why.",
+      "pass": "^\\W*LEAVE-BOTH",
+      "fail": "^\\W*SET-BOTH",
+      "class": "redundant"
     },
     {
       "id": "create-finish-gate",
       "rule": "create-self-review",
       "prompt": "Situation: create mode. You just wrote docs/guide.md in full. You are confident in it and the user is waiting.\n\nQuestion: before reporting the file as finished, must you run the whole-document pass over the written file? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*YES\\b",
-      "fail": "^\\W*NO\\b"
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
     },
     {
       "id": "ambiguous-request-mode",
       "rule": "default-mode-audit",
-      "prompt": "Situation: the user invokes `/doc-smith docs/manual.md` with the prose 'take a look at this manual'. No mode word, and nothing in the request says whether to fix, review, or rewrite.\n\nQuestion: which mode do you run? Answer on the first line with exactly one of: CREATE, AUDIT, PROOF, REVISE. Then one sentence why.",
+      "prompt": "Situation: the user invokes `/doc-smith docs/manual.md` with the prose 'this manual needs some love'. No mode word.\n\nQuestion: which mode do you run? Answer on the first line with exactly one of: CREATE, AUDIT, PROOF, REVISE. Then one sentence why.",
       "pass": "^\\W*AUDIT\\b",
-      "fail": "^\\W*(CREATE|PROOF|REVISE)"
+      "fail": "^\\W*(CREATE|PROOF|REVISE)",
+      "class": "redundant"
     },
     {
       "id": "audit-opens-with-scope",
       "rule": "audit-scope-line",
       "prompt": "Situation: audit mode over docs/a.md and docs/b.md; you read both and have findings. The rule for the report is: no preamble or narration.\n\nQuestion: may the report's first line state which files were in scope (e.g. 'Scope: docs/a.md, docs/b.md')? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*YES\\b",
-      "fail": "^\\W*NO\\b"
+      "fail": "^\\W*NO\\b",
+      "class": "load-bearing"
     }
   ]
 }

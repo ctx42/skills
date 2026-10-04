@@ -5,7 +5,7 @@ description: >
   rulebook to read before writing or editing any .go file, and a runnable
   style-only pass that lists style offenses across a diff, package, or module
   and proposes fixes to apply. Use before touching Go, or to check or fix Go
-  style.
+  style; adding or changing a rule belongs to go:review.
 license: MIT
 argument-hint: "[TARGET] [packages=a,b] [max_issues=N]
   [depth=light|standard*|full] [plan_first] [fix]"

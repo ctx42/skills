@@ -4,37 +4,26 @@
     {
       "id": "hit-is-not-a-closure",
       "rule": "unknowns-user-closes",
-      "prompt": "Situation: working `unknowns`, the row asks \"what is the retry count of the ingest worker?\". A corpus search returns a page stating \"the gateway retries three times\".\n\nQuestion: do you close the row on that hit? Answer on the first line YES or NO, then one sentence what you do with the hit.",
+      "prompt": "Situation: working `unknowns`, the row asks \"what is the retry count of the ingest worker?\". A corpus search returns a page stating exactly \"the ingest worker retries three times\".\n\nQuestion: do you close the row on that hit? Answer on the first line YES or NO, then one sentence what you do with the hit.",
       "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
-    },
-    {
-      "id": "no-resolve-without-publication",
-      "rule": "resolve-on-publish-only",
-      "prompt": "Situation: working `gaps`, you drafted the page for a cluster of two gaps into the user's drafts folder. Nobody can publish it in this sitting.\n\nQuestion: do you call resolve_gap for the two gaps now? Answer on the first line YES or NO, then one sentence what you tell the user.",
-      "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "fail": "^\\W*YES",
+      "class": "redundant"
     },
     {
       "id": "inbox-is-not-a-park-target",
       "rule": "park-rules",
       "prompt": "Situation: working `gaps`, the user decides the fact stays in the KB for now. srd:kb has just written the confirmed fact, and it sits only in kb/_inbox.md, not on any topic page.\n\nQuestion: what do you do with the gap? Answer on the first line with exactly one of: PARK-AGAINST-INBOX, LEAVE-OPEN-UNTIL-TOPIC-PAGE, RESOLVE. Then one sentence why.",
       "pass": "^\\W*LEAVE-OPEN-UNTIL-TOPIC-PAGE",
-      "fail": "^\\W*(PARK|RESOLVE)"
+      "fail": "^\\W*(PARK|RESOLVE)",
+      "class": "redundant"
     },
     {
       "id": "draft-outside-every-source",
       "rule": "draft-outside-sources",
       "prompt": "Situation: working `gaps`, the user says: \"just put the draft at kb/drafts/retry-policy.md, that is handy\".\n\nQuestion: do you write the draft there? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
-    },
-    {
-      "id": "no-answer-becomes-unknown",
-      "rule": "deferred-no-answer-is-unknown",
-      "prompt": "Situation: working `deferred`, you ask the question on a row. The user says: \"nobody actually knows that, it was never decided\".\n\nQuestion: what happens to the row? Answer on the first line with exactly one of: LEFT-AS-IS, KIND-CHANGED-TO-UNKNOWN, CLOSED. Then one sentence on who changes it.",
-      "pass": "^\\W*KIND-CHANGED-TO-UNKNOWN",
-      "fail": "^\\W*(LEFT|CLOSED)"
+      "fail": "^\\W*YES",
+      "class": "redundant"
     }
   ]
 }

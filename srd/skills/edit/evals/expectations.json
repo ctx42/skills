@@ -11,7 +11,8 @@
         "Verifies each `old` at its anchor, applies the two that match exactly once, and reports the third as stale rather than guessing where it belongs",
         "Writes no review file and invokes no `review` run; prints the exact hand-off command `review specs/login.md check #n #n`, scoped to the two applied errata, for the user to run",
         "Closes with a manifest naming what was applied, what was skipped and why, and the findings handed to `check` — not what `check` later did with them"
-      ]
+      ],
+      "blind_only": [3]
     },
     {
       "id": 11,

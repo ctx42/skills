@@ -20,11 +20,15 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │   ├── lint-cases.mjs              # Its native-case half (node: JS regexes)
 │   ├── version.sh                  # Syncs manifest versions with the VER file
 │   ├── token-report.sh             # Per-skill always-loaded token surface
-│   ├── eval-check.py               # Free eval checks: contracts, generators, literals
-│   ├── eval-probe.py               # Cached one-question probes per skill (cents)
+│   ├── eval-routine.sh             # Routine check: lint, then probes/hunt/triggers
+│   ├── eval-check.py               # Free eval checks: contracts, probes, triggers
+│   ├── eval-probe.py               # Batched, cached probes per skill (cents)
+│   ├── eval-hunt.py                # Measures what a diff made ambiguous (cents)
+│   ├── eval-triggers.py            # Routes requests against all skill descriptions
 │   ├── eval-regrade.py             # Re-grades a saved agent-run trace offline
 │   ├── eval-changed.sh             # Manual audit: runs the agent-run cases
-│   └── eval/                       # Native-case guide; blind-runner and grader prompts
+│   ├── eval-ledger.py              # Its pass ledger: skips cases passed on same inputs
+│   └── eval/                       # Native-case guide, prompts, triggers.json
 │       └── gen/<skill>/            # Case generators: the source of a skill's cases
 ├── .claude/
 │   └── hooks/skill-guard.sh        # Reminds an edit in a skill of the authoring conventions

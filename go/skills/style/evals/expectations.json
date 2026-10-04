@@ -30,7 +30,8 @@
         "Flags no offense at the correct blank line before the second action in `--- Then ---` present in every package",
         "Every fix opens with its verb, so the direction at each site reads without parsing prose",
         "Edits no file before the pick step; if fixes are picked, the four missing packages gain exactly one blank line and the four surplus packages lose exactly one, and nothing else in any file changes"
-      ]
+      ],
+      "blind_only": [1, 2, 3, 4, 5, 6]
     }
   ]
 }

@@ -6,7 +6,8 @@
       "rule": "Rulebook changes go only through go:review, never hand-edited",
       "must": [
         "Change the rules only through `go:review`",
-        "never hand-edit them"
+        "never hand-edit them",
+        "adding or changing a rule belongs to go:review"
       ]
     },
     {

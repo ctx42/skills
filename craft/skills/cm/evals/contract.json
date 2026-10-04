@@ -21,7 +21,7 @@
       "id": "apply-needs-staged",
       "rule": "apply on an unstaged fallback stages nothing, commits nothing, and stops",
       "must": [
-        "`apply` needs something staged",
+        "`apply` without a hash needs something staged",
         "so stage nothing on the user's behalf",
         "say the working tree is unstaged and `apply` did not run, and stop"
       ]
@@ -86,6 +86,38 @@
       "rule": "full means at least two paragraphs even for a small diff",
       "must": [
         "at least\\s+two paragraphs"
+      ]
+    },
+    {
+      "id": "amend-head-only",
+      "rule": "A hash apply needs nothing staged but amends only HEAD; any other commit stops with apply not run",
+      "must": [
+        "A hash invocation needs nothing staged",
+        "amends only when the hash resolves to `HEAD`",
+        "only `HEAD` can\\s+be amended",
+        "with no\\s+commit-ish token is the hash invocation `HEAD`"
+      ]
+    },
+    {
+      "id": "mixed-diff-split",
+      "rule": "A mixed diff is named in the body and the user is asked to split it, with or without apply",
+      "must": [
+        "ask the user to split it into separate commits",
+        "Asking to split is about the change, not a proposal\\s+to commit"
+      ]
+    },
+    {
+      "id": "full-always-has-body",
+      "rule": "full always carries two body paragraphs; the optional-body rule yields to it",
+      "must": [
+        "except under `full`, which always carries its two\\s+paragraphs"
+      ]
+    },
+    {
+      "id": "no-design-contrast",
+      "rule": "The message says what the diff does, never contrasts it with a design it does not contain",
+      "must": [
+        "Say what the diff does, never what it avoids"
       ]
     }
   ]

@@ -37,21 +37,21 @@
       "rule": "File/package/module plan-first and wait for approval; func/line run straight",
       "must": [
         "Run straight \\(no plan gate\\), then report",
-        "Wait for approval, then run steps 3\u20134 function by function"
+        "Wait for approval, then run steps 3–4 function by function"
       ]
     },
     {
       "id": "max-tests-cap",
       "rule": "max_tests is a hard cap counted per row/subtest",
       "must": [
-        "`max_tests=N` \u2014 hard cap on cases added this run"
+        "`max_tests=N` — hard cap on cases added this run"
       ]
     },
     {
       "id": "classification",
       "rule": "Complex deferred, un-coverable never attempted; documented panic is easy",
       "must": [
-        "un-coverable \u2014 one of the categories below. Never attempt",
+        "un-coverable — one of the categories below. Never attempt",
         "A \\*documented\\* panic is a contract"
       ]
     },
@@ -77,6 +77,23 @@
       "must": [
         "Never skip a line silently",
         "Report the count on every run, capped or not"
+      ]
+    },
+    {
+      "id": "fanout-cap-wins",
+      "rule": "Under fanout the max_tests cap is divided before dispatch and never exceeded; a zero share gets no worker",
+      "must": [
+        "The cap wins over coverage",
+        "a package whose share is 0 gets no\\s+worker",
+        "any share left unused goes, in one\\s+follow-up dispatch, to packages that still have easy lines"
+      ]
+    },
+    {
+      "id": "cap-ends-loop",
+      "rule": "The per-function loop ends at max_tests; a fixed case replaces the one it fixes",
+      "must": [
+        "or `max_tests` is reached",
+        "A fixed case replaces the one\\s+it fixes and does not count again"
       ]
     }
   ]

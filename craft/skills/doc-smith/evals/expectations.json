@@ -19,7 +19,8 @@
         "Uses one term per concept from the first line and a task-oriented structure (overview → prerequisites → tasks → reference → troubleshooting), omitting empty sections",
         "Writes the file, states the path, and does not paste the manual back",
         "Names, in the reply, what the whole-document pass changed — the pass leaves no other trace, so an unreported one cannot be told from one that never ran"
-      ]
+      ],
+      "blind_only": [1]
     },
     {
       "id": 6,

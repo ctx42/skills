@@ -218,15 +218,20 @@ the English line, limits, JavaScript patterns). Then, when the user asks for an 
 `./dev/eval-changed.sh --case <group> '<skill>--*' -j 1` (repeat `--case` for
 several globs). A failure prints its last message and keeps its trace in
 `<results>/<group>/failed/<case>.trace.jsonl`, so diagnose from those before
-re-running; `--keep` keeps every workspace, `--clean` deletes leftover ones,
-and a run the account's usage limit cut off prints `LIMIT` — re-run it, never
-triage it. Test a changed grader offline with `./dev/eval-regrade.py <trace>`
+re-running; `--keep` keeps every workspace, `--clean` deletes leftover ones.
+Cases run in chunks of 2 x `-j`; each pass goes to `tmp/eval-ledger.json`
+under a key of everything the case depends on, and a case whose key still
+holds a pass is skipped (`--fresh` runs it anyway). The first run the usage
+limit cuts off stops the invocation with exit 3 and prints `LIMIT` — re-run
+the same command after the reset, never triage it. Test a changed grader offline with `./dev/eval-regrade.py <trace>`
 instead of paying for a re-run. Typical cost per run (Opus): $0.10–0.30 for a craft
 case, $0.25–0.80 for a go or srd case, $3–9 for a fan-out case; a full group
 is $5–20. An invocation has no cost ceiling unless `--max-usd N` sets one:
 a ceiling cuts graders off mid-case and leaves cases unrun. Runs draw on the
 user's own 5-hour usage window: keep `-j 2`, never run a whole skill or group
-unasked, re-run only failing or cut-off cases, and calibrate on
-`--model sonnet` before confirming on Opus.
+unasked, and re-run only failing or cut-off cases. Runs default to sonnet
+(about half the cost; it matched the default model's verdict on all 6 cases
+measured) and re-run only sonnet's FAILs on the default model, whose verdict
+stands; `--model default` skips the sonnet pass.
 A failure is a case defect (fix the case) or a skill defect (record it; a
 conversion never edits a skill).

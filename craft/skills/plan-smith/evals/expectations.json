@@ -23,7 +23,8 @@
         "Does not pad the plan with work the user never raised, such as rewriting the export in a different language or adding a scheduler",
         "Gives each item acceptance criteria that a reader could check",
         "Where one item cannot start until another finishes, says so in that item's section — the order alone proves nothing when it matches the order the user happened to speak in"
-      ]
+      ],
+      "blind_only": [2]
     },
     {
       "id": 3,

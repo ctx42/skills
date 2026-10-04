@@ -49,7 +49,8 @@ Tokens combine (e.g. `micro apply`). Verbosity, mutually exclusive:
   without one rather than padding to fill the shape.
 - `full`: full-length kernel-style body per the sections below — at least
   two paragraphs (what changed and why, then its effect on callers or
-  behavior), even for a small diff: the user asked for the long form.
+  behavior), even for a small diff: the user asked for the long form, and
+  that outranks every omit-the-body rule below.
 
 Commit control:
 
@@ -64,10 +65,16 @@ Commit control:
   committing or amending, nor say how to ("run `/cm HEAD apply`", "ask me to
   amend"): naming a commit is not asking to rewrite it, and the user decides
   when.
-- `apply` needs something staged. When the diff came from the unstaged
-  fallback there is nothing to commit, and `git commit` would either fail or
-  make an empty commit — so stage nothing on the user's behalf: report the
-  message, say the working tree is unstaged and `apply` did not run, and stop.
+- `apply` without a hash needs something staged. When the diff came from the
+  unstaged fallback there is nothing to commit, and `git commit` would either
+  fail or make an empty commit — so stage nothing on the user's behalf: report
+  the message, say the working tree is unstaged and `apply` did not run, and
+  stop. A hash invocation needs nothing staged (an amend rewrites the
+  message), but amends only when the hash resolves to `HEAD`; for any other
+  commit, report the message, say `apply` did not run because only `HEAD` can
+  be amended, and stop. Prose asking to amend ("and amend it") with no
+  commit-ish token is the hash invocation `HEAD`: derive the message from
+  `git show HEAD` and amend it.
 - Amending rewrites a message, not a tree. `git commit --amend` folds whatever
   is staged into the commit, so anything in the index that the message was not
   derived from would ride along unannounced — the same content this skill just
@@ -94,9 +101,14 @@ review; they see only the diff and the message.
   summary, not a per-edit account. When a commit mixes both, lead with the
   user-facing change and fold the cleanup into one closing sentence.
 
-- A body is optional. If the summary line already conveys the change and
-  there is nothing user-facing to explain, omit the body rather than
-  manufacturing detail.
+- A body is optional, except under `full`, which always carries its two
+  paragraphs. If the summary line already conveys the change and there is
+  nothing user-facing to explain, omit the body rather than manufacturing
+  detail.
+
+- Say what the diff does, never what it avoids: no contrast with a design
+  it does not contain ("instead of sessions", "without server-side state").
+  The why is the change's own effect, not a comparison nobody can see.
 
 - Do not reference internal process the reader cannot know — remediation
   phases, review plans, skill names, "as discussed", ticket/session context,
@@ -115,7 +127,9 @@ review; they see only the diff and the message.
   message that was otherwise right.
 
 - If the diff mixes unrelated edits (e.g. IDE config + library fix), say so
-  in the body or ask to split commits — still without process jargon.
+  in the body and ask the user to split it into separate commits — still
+  without process jargon. Asking to split is about the change, not a proposal
+  to commit, so it holds with or without `apply`.
 
 ## Structure
 

@@ -4,44 +4,50 @@
     {
       "id": "no-test-run",
       "rule": "no-tools-while-reviewing",
-      "prompt": "Situation: the user runs `/review ./pkg/foo` on a small package. You are unsure whether a function is correct and could confirm by running `go test ./pkg/foo`.\n\nQuestion: do you run go test during the review? Answer YES or NO on the first line, then one sentence why.",
+      "prompt": "Situation: the user runs `/review ./pkg/foo` on a small package and says 'be thorough'. You are unsure whether a function is correct; `go test ./pkg/foo` takes two seconds.\n\nQuestion: do you run go test during the review? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "fail": "^\\W*YES",
+      "class": "redundant"
     },
     {
       "id": "plan-first-flag",
       "rule": "plan-first-stops",
       "prompt": "Situation: the user runs `/review ./... plan_first` on a module of 3 small packages.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: REVIEW-THEN-PRESENT, PROPOSE-AND-STOP. Then one sentence why.",
       "pass": "^\\W*PROPOSE-AND-STOP",
-      "fail": "^\\W*REVIEW-THEN-PRESENT"
+      "fail": "^\\W*REVIEW-THEN-PRESENT",
+      "class": "redundant"
     },
     {
       "id": "double-finding",
       "rule": "dedupe-style-correctness",
       "prompt": "Situation: go:style reports a `%v` error wrap at store.go:40 as a style offense. During correctness review you see the same line breaks an error chain that a caller unwraps with errors.Is.\n\nQuestion: how many findings do you report for that line? Answer on the first line with exactly ONE or TWO, then one sentence saying under which dimension.",
       "pass": "^\\W*ONE\\b.*correctness",
-      "fail": "^\\W*TWO"
+      "fail": "^\\W*TWO",
+      "class": "redundant"
     },
     {
       "id": "worker-cap",
       "rule": "fanout-cap-at-merge",
       "prompt": "Situation: `/review ./... max_issues=10` on a large module; you fan out one subagent per package, 12 packages.\n\nQuestion: what cap do you give each worker? Answer on the first line with exactly one of: NONE, ONE-TENTH, TEN. Then one sentence why.",
       "pass": "^\\W*NONE\\b",
-      "fail": "^\\W*(TEN|ONE-TENTH)"
+      "fail": "^\\W*(TEN|ONE-TENTH)",
+      "class": "redundant"
     },
     {
       "id": "ungrounded-grade",
       "rule": "grading",
       "prompt": "Situation: during review you find a function that looks fragile, but you cannot name any reachable input that gives a wrong result, panic, or data loss.\n\nQuestion: what is the highest severity you may give it? Answer on the first line with exactly one of: BLOCKER, SHOULD-FIX, NIT. Then one sentence why.",
       "pass": "^\\W*SHOULD-FIX",
-      "fail": "^\\W*BLOCKER"
+      "fail": "^\\W*BLOCKER",
+      "class": "redundant"
     },
     {
       "id": "empty-diff",
       "rule": "state-target",
-      "prompt": "Situation: the user runs `/review` with no target. `git diff HEAD` is empty (nothing uncommitted), but the feature branch has three commits ahead of main.\n\nQuestion: what do you review? Answer on the first line with exactly one of: NOTHING, BRANCH-DIFF. Then one sentence on what you tell the user.",
+      "prompt": "Situation: the user runs `/review` with no target. `git diff HEAD` is empty (nothing uncommitted), and the feature branch has three commits ahead of main.\n\nQuestion: what do you review? Answer on the first line with exactly one of: NOTHING, LAST-COMMIT, BRANCH-DIFF, ASK-USER. Then one sentence on what you tell the user.",
       "pass": "^\\W*BRANCH-DIFF",
-      "fail": "^\\W*NOTHING"
+      "fail": "^\\W*(NOTHING|LAST-COMMIT|ASK-USER)",
+      "class": "load-bearing"
     }
   ]
 }

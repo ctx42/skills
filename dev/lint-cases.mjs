@@ -196,6 +196,55 @@ for (const group of fs.readdirSync(ROOT).sort()) {
   for (const [key, src] of scen) {
     if (!covered.has(key)) err(`${src}: scenario ${key.split("--")[1]} has no native case ${group}/evals/${key}`);
   }
+  lintTraceability(group, cases);
+}
+
+// Every expectations bullet is checked by something, or says it is not:
+// a grader b<N>-* in one of the scenario's cases (gate/stop variants count),
+// a probe listing "<scenario-slug>#b<N>" in its `bullets`, or the scenario's
+// `blind_only` list (graded only in a blind round).
+function lintTraceability(group, cases) {
+  const skillsDir = path.join(ROOT, group, "skills");
+  for (const s of fs.readdirSync(skillsDir)) {
+    const ef = path.join(skillsDir, s, "evals", "expectations.json");
+    if (!fs.existsSync(ef)) continue;
+    const rel = path.relative(ROOT, ef);
+    const pf = path.join(skillsDir, s, "evals", "probes.json");
+    const probed = new Set();
+    const exps = JSON.parse(fs.readFileSync(ef, "utf8")).expectations;
+    const names = new Map(exps.map((e) => [slug(e.name), e.expected_behavior.length]));
+    if (fs.existsSync(pf)) {
+      for (const p of JSON.parse(fs.readFileSync(pf, "utf8")).probes) {
+        for (const b of p.bullets || []) {
+          const m = b.match(/^([a-z0-9-]+)#b(\d+)$/);
+          if (!m || !names.has(m[1]) || +m[2] < 1 || +m[2] > names.get(m[1])) {
+            err(`${path.relative(ROOT, pf)}: probe ${p.id}: bullet "${b}" names no expectations bullet`);
+          } else probed.add(b);
+        }
+      }
+    }
+    for (const e of exps) {
+      const sl = slug(e.name);
+      const graded = new Set();
+      for (const dir of cases.filter((d) => d === `${s}--${sl}` || d.startsWith(`${s}--${sl}--`))) {
+        const gd = path.join(ROOT, group, "evals", dir, "graders");
+        if (!isDir(gd)) continue;
+        for (const g of fs.readdirSync(gd)) {
+          const m = g.match(/^b(\d+)-/);
+          if (m) graded.add(+m[1]);
+        }
+      }
+      const blind = new Set(e.blind_only || []);
+      for (let i = 1; i <= e.expected_behavior.length; i++) {
+        const n = [graded.has(i), probed.has(`${sl}#b${i}`), blind.has(i)].filter(Boolean).length;
+        if (n === 0) err(`${rel}: ${e.name} b${i} has no grader, probe, or blind_only entry`);
+        if (blind.has(i) && n > 1) err(`${rel}: ${e.name} b${i} is blind_only but is also checked — drop it from blind_only`);
+      }
+      for (const i of blind) {
+        if (!(i >= 1 && i <= e.expected_behavior.length)) err(`${rel}: ${e.name}: blind_only ${i} names no bullet`);
+      }
+    }
+  }
 }
 
 console.log(`cases: ${errors} error(s), ${warnings} warning(s)`);

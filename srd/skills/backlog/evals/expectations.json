@@ -29,7 +29,8 @@
         "Checks the corpus before drafting, separating content that is absent from content that is present but unranked",
         "Writes the draft outside every corpus source, the `kb` folder included",
         "Publishes nothing itself; once given the published URL it resolves every gap in the cluster"
-      ]
+      ],
+      "blind_only": [1]
     }
   ]
 }

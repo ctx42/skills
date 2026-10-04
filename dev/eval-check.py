@@ -5,21 +5,25 @@ Checks, in order:
   contracts   every <group>/skills/<skill>/evals/contract.json rule still
               holds: each `must` regex matches its file, no `must_not` does
   probes      every evals/probes.json is well-formed: context files exist,
-              regexes compile, `rule` names a contract rule
+              regexes compile, `rule` names a contract rule, and a
+              --baseline class is recorded that is not `prior`
   generators  every dev/eval/gen/*/gen.py reproduces its cases byte for byte
   literals    every doc id or URL a native-case regex grader names is served
               by that case's prompt, mocks, scaffold, or the group's shared
               mocks/fixtures (catches a rename that missed one side)
+  triggers    dev/eval/triggers.json names only real skills, distractors, or
+              none; every skill has >= 3 cases and there are >= 5 `none`
   gone        with --gone STR (repeatable): STR appears nowhere under the
               skill and eval trees
 
 Usage:
   ./dev/eval-check.py                  all checks
-  ./dev/eval-check.py --only contracts (contracts|probes|generators|literals)
+  ./dev/eval-check.py --only contracts (contracts|probes|generators|literals|triggers)
   ./dev/eval-check.py --gone old/path/
 Exit status is non-zero on any failure.
 """
 import argparse
+import fcntl
 import glob
 import hashlib
 import json
@@ -30,6 +34,8 @@ import sys
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 GROUPS = ("go", "srd", "craft")
+# eval-probe.py --baseline classes; `prior` probes test the model, not the skill.
+CLASSES = ("load-bearing", "redundant", "unmutated", "prior")
 
 
 def norm(text):
@@ -130,6 +136,14 @@ def check_probes(errs):
             for k in ("id", "prompt", "pass"):
                 if not pr.get(k):
                     errs.append(f"{rel(path)}: probe {pid}: missing '{k}'")
+            cls = pr.get("class")
+            if cls not in CLASSES:
+                errs.append(f"{rel(path)}: probe {pid}: no class — run "
+                            "./dev/eval-probe.py --baseline --write")
+            elif cls == "prior":
+                errs.append(f"{rel(path)}: probe {pid}: passes with no skill text "
+                            "(class prior) — rewrite it so the skill and the "
+                            "default disagree, or delete it")
             if pr.get("rule") and pr["rule"] not in rules:
                 errs.append(f"{rel(path)}: probe {pid}: rule '{pr['rule']}' "
                             "is not in contract.json")
@@ -145,6 +159,30 @@ def check_probes(errs):
     return f"probes: {n} well-formed check(s)"
 
 
+def check_triggers(errs):
+    path = os.path.join(ROOT, "dev", "eval", "triggers.json")
+    data = load_json(path, errs)
+    if data is None:
+        return "triggers: unreadable"
+    names = {f"{g}:{os.path.basename(d)}" for g, d in skill_dirs()}
+    known = names | set(data.get("distractors", {})) | {"none"}
+    per = {n: 0 for n in names}
+    for c in data.get("cases", []):
+        w = c.get("want")
+        if not c.get("say") or w not in known:
+            errs.append(f"{rel(path)}: case {c.get('say')!r}: want {w!r} is no skill, "
+                        "distractor, or none")
+        elif w in per:
+            per[w] += 1
+    for n, k in sorted(per.items()):
+        if k < 3:
+            errs.append(f"{rel(path)}: {n} has {k} case(s); every skill needs >= 3")
+    nones = sum(c.get("want") == "none" for c in data.get("cases", []))
+    if nones < 5:
+        errs.append(f"{rel(path)}: {nones} `none` case(s); needs >= 5")
+    return f"triggers: {len(data.get('cases', []))} case(s)"
+
+
 def tree_hash(paths):
     h = {}
     for top in paths:
@@ -157,6 +195,15 @@ def tree_hash(paths):
 
 
 def check_generators(errs):
+    # Generators rewrite cases in place; two lints at once (the routine and an
+    # audit) would hash each other's half-written files. Serialize them.
+    os.makedirs(os.path.join(ROOT, "tmp"), exist_ok=True)
+    with open(os.path.join(ROOT, "tmp", ".generators.lock"), "w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        return _check_generators(errs)
+
+
+def _check_generators(errs):
     gens = sorted(glob.glob(os.path.join(ROOT, "dev/eval/gen/*/gen.py")))
     tops = [os.path.join(ROOT, g, "evals") for g in GROUPS]
     before = tree_hash(tops)
@@ -240,7 +287,8 @@ def check_gone(strings, errs):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--only", choices=["contracts", "probes", "generators", "literals"])
+    ap.add_argument("--only", choices=["contracts", "probes", "generators", "literals",
+                                       "triggers"])
     ap.add_argument("--gone", action="append", default=[])
     a = ap.parse_args()
     checks = {
@@ -248,6 +296,7 @@ def main():
         "probes": check_probes,
         "generators": check_generators,
         "literals": check_literals,
+        "triggers": check_triggers,
     }
     errs, summary = [], []
     for name, fn in checks.items():

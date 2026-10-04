@@ -10,7 +10,8 @@
         "Writes `specs/labeling.questions.md` holding at least two questions — the `GR-4` contradiction with `docs/concepts/tags.md` and `GR-7`'s unmeasurable \"fast\" reframed from the review — and no question carries a severity tag, a rule id, or a finding number",
         "Asks the contradiction once, not twice in two voices, even though the review layer's own facts-vs-corpus pass found it too — the link back to the review finding lives in the question's `<!-- review: #n -->` bookkeeping comment, never in its text",
         "Walks one question at a time: puts the first question and stops, with the second nowhere in that turn, and does not advance until the user moves on"
-      ]
+      ],
+      "blind_only": [1, 2, 3, 4]
     },
     {
       "id": 2,

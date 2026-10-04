@@ -343,11 +343,17 @@ fi
 
 # Every tracked JSON file parses — settings.json, manifests, and eval specs.
 # (A stray shell redirect once left a bare `2` in .claude/settings.json.)
+# One node process parses them all (one per file cost ~5 s); untracked files
+# that are not ignored count too, so a new spec is checked before it is added.
 if command -v node >/dev/null; then
     while IFS= read -r f; do
-        node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$f" 2>/dev/null ||
-            err "${f#"$SKILLS_SRC"/}: not valid JSON"
-    done < <(git -C "$SKILLS_SRC" ls-files '*.json' | sed "s#^#$SKILLS_SRC/#")
+        err "$f: not valid JSON"
+    done < <(git -C "$SKILLS_SRC" ls-files -co --exclude-standard '*.json' |
+        (cd "$SKILLS_SRC" && node -e '
+            const fs = require("fs");
+            for (const f of fs.readFileSync(0, "utf8").split("\n").filter(Boolean)) {
+                try { JSON.parse(fs.readFileSync(f, "utf8")); } catch { console.log(f); }
+            }'))
 fi
 
 # Native eval cases: patterns must compile as JavaScript, so this half runs in

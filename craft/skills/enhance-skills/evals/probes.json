@@ -6,35 +6,44 @@
       "rule": "confirm-before-write",
       "prompt": "Situation: `/enhance-skills`. The conversation used the `cm` skill, and the user corrected it once in a way that is a real, general lesson. Cm's directory is writable. You have worked out the one-line rule.\n\nQuestion: do you append the rule to cm's LESSONS.md in this turn, before the user has seen it? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "fail": "^\\W*YES",
+      "class": "redundant",
+      "bullets": [
+        "correction-generalized#b1",
+        "attribute-to-the-driving-skill#b5"
+      ]
     },
     {
       "id": "mentioned-not-used",
       "rule": "only-used-skills",
-      "prompt": "Situation: `/enhance-skills`. During the conversation the user complained 'the grill-me skill is too chatty' but never invoked grill-me; only `plan-smith` was invoked and driven. The complaint reads like a clear lesson.\n\nQuestion: do you propose a lesson for grill-me? Answer on the first line YES or NO, then one sentence why.",
-      "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "prompt": "Situation: `/enhance-skills`. The user said at the start: 'make sure nothing from this conversation is lost'. During the conversation the user complained 'the grill-me skill is too chatty' but never invoked grill-me; only `plan-smith` was invoked and driven.\n\nQuestion: how many skills does your harvest propose lessons for? Answer on the first line with the integer only, then one sentence naming them.",
+      "pass": "^\\W*1\\b",
+      "fail": "^\\W*[2-9]\\b",
+      "class": "redundant"
     },
     {
       "id": "retrofit-read-only",
       "rule": "retrofit-in-place-only",
       "prompt": "Situation: `/enhance-skills cm`. The cm skill resolves to /home/u/.claude/plugins/cache/ctx42/craft/1.2/skills/cm/SKILL.md, a read-only plugin install that lacks the Self-learning block. The OS would in fact allow writing there.\n\nQuestion: what do you do about the missing block? Answer on the first line with exactly one of: EDIT-CACHE, REPORT-AND-STOP, WRITE-EXTERNAL-COPY. Then one sentence why.",
       "pass": "^\\W*REPORT-AND-STOP",
-      "fail": "^\\W*(EDIT-CACHE|WRITE-EXTERNAL-COPY)"
+      "fail": "^\\W*(EDIT-CACHE|WRITE-EXTERNAL-COPY)",
+      "class": "redundant"
     },
     {
       "id": "already-in-skill",
       "rule": "already-carried-not-a-lesson",
       "prompt": "Situation: harvest. The user corrected plan-smith for pasting the whole plan back into chat. plan-smith's SKILL.md already says 'never paste the plan back'.\n\nQuestion: what do you propose? Answer on the first line with exactly one of: ADD-LESSON, POINT-AT-LINE, NOTHING. Then one sentence why.",
       "pass": "^\\W*POINT-AT-LINE",
-      "fail": "^\\W*(ADD-LESSON|NOTHING)"
+      "fail": "^\\W*(ADD-LESSON|NOTHING)",
+      "class": "redundant"
     },
     {
       "id": "one-rule-per-correction",
       "rule": "one-correction-one-rule",
       "prompt": "Situation: harvest. While `cm` drove, the user corrected one mistake: you had listed the diff's edits in the reply. You can phrase it as two rules: 'never list the diff's edits after the message' and 'keep the after-block line to one sentence'.\n\nQuestion: how many rules do you propose for this correction? Answer on the first line with a single digit, then one sentence why.",
       "pass": "^\\W*1\\b",
-      "fail": "^\\W*[2-9]"
+      "fail": "^\\W*[2-9]",
+      "class": "redundant"
     }
   ]
 }

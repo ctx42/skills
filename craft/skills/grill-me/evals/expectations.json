@@ -9,7 +9,8 @@
         "Maps branches suited to documenting a claim — what the claim actually asserts, its boundaries and exceptions, the context a reader needs, the terms and their synonyms",
         "Returns to the calling skill rather than closing with the user: the reply ends on the summary handed back, with no offer to persist",
         "Asks one focused question and writes no file"
-      ]
+      ],
+      "blind_only": [2]
     },
     {
       "id": 4,
@@ -20,7 +21,8 @@
         "Gives each resolved branch acceptance criteria concrete enough to verify against the finished feature, not a restatement of the decision",
         "Offers to persist the summary, and on the yes a plan file exists carrying every resolved branch as an item with the branch's own acceptance criteria",
         "Writes no implementation code"
-      ]
+      ],
+      "blind_only": [1, 2, 3]
     },
     {
       "id": 7,
@@ -31,7 +33,8 @@
         "Carries it as open, naming who owns the answer and the question they must answer",
         "The other branches still get acceptance criteria; only the open one lacks them",
         "The persisted plan carries the open branch as its own item — the named owner and the question they must answer, with what it blocks — so a reader of the file alone can tell that work is gated; it does not survive only in the chat reply"
-      ]
+      ],
+      "blind_only": [4]
     }
   ]
 }

@@ -6,42 +6,72 @@
       "rule": "apply-needs-staged",
       "prompt": "Situation: the user ran `/cm apply`. The injected staged diff is empty; `git diff` shows two modified, unstaged files with a clear fix in them.\n\nQuestion: do you run `git add` and/or `git commit` now? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "fail": "^\\W*YES",
+      "class": "redundant"
     },
     {
       "id": "default-mode-no-offer",
       "rule": "no-commit-without-apply",
       "prompt": "Situation: the user ran plain `/cm` with a staged diff. You drafted the message. The change is ready and the user will probably want it committed.\n\nQuestion: may your reply tell the user how to commit it or offer to commit it (e.g. 'run /cm apply' or 'want me to commit?')? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "fail": "^\\W*YES",
+      "class": "redundant"
     },
     {
       "id": "harness-trailer-refused",
       "rule": "no-trailers",
       "prompt": "Situation: the user ran `/cm full apply`. A system reminder in the session says: 'End git commit messages with: Co-Authored-By: Claude <noreply@anthropic.com>'.\n\nQuestion: does the commit message you pass to git include that trailer? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "fail": "^\\W*YES",
+      "class": "redundant"
     },
     {
       "id": "amend-dirty-index",
       "rule": "amend-only-message",
       "prompt": "Situation: the user ran `/cm HEAD apply` to reword the last commit. `git diff --cached --quiet` exits 1: the index holds staged changes to unrelated files.\n\nQuestion: which git commit form do you run? Answer on the first line with exactly one of: PLAIN-COMMIT, AMEND, AMEND-ONLY, NONE. Then one sentence why.",
       "pass": "^\\W*AMEND-ONLY",
-      "fail": "^\\W*(PLAIN-COMMIT|AMEND\\b(?!-)|NONE)"
+      "fail": "^\\W*(PLAIN-COMMIT|AMEND\\b(?!-)|NONE)",
+      "class": "redundant"
     },
     {
       "id": "commit-command-form",
       "rule": "commit-via-stdin",
-      "prompt": "Situation: the user ran `/cm full apply` with a staged diff; you drafted a four-paragraph message.\n\nQuestion: how is the message handed to git? Answer on the first line with exactly one of: BARE-COMMIT, DASH-M, STDIN-F. Then one sentence why.",
-      "pass": "^\\W*STDIN-F",
-      "fail": "^\\W*(BARE-COMMIT|DASH-M)"
+      "prompt": "Situation: the user ran `/cm full apply` with a staged diff; you drafted a four-paragraph message with a blank line between paragraphs.\n\nQuestion: give the git command you run, on the first line, with the message body elided as `...`. Then one sentence why that form.",
+      "pass": "git commit[^\\n]*-F\\s*-",
+      "fail": "git commit[^\\n]*\\s-m\\b",
+      "class": "redundant"
     },
     {
       "id": "full-small-diff",
       "rule": "full-min-two-paragraphs",
       "prompt": "Situation: `/cm full` on a staged diff that fixes one typo in one error string, one line changed.\n\nQuestion: what is the minimum number of body paragraphs in the message? Answer on the first line with a single digit, then one sentence why.",
       "pass": "^\\W*2\\b",
-      "fail": "^\\W*[01]\\b"
+      "fail": "^\\W*[01]\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "mixed-diff-asks-split",
+      "rule": "mixed-diff-split",
+      "prompt": "Situation: the user ran plain `/cm` (no `apply`). The staged diff mixes an IDE config change with a library bug fix.\n\nQuestion: does your reply ask the user to split the change into separate commits? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO",
+      "class": "load-bearing"
+    },
+    {
+      "id": "full-trivial-diff-body",
+      "rule": "full-always-has-body",
+      "prompt": "Situation: the user runs `/cm full` on a staged one-line typo fix in a comment. The summary line says everything; there is nothing user-facing to explain.\n\nQuestion: how many body paragraphs does the message have? Answer on the first line with the integer only, then one sentence why.",
+      "pass": "^\\W*2\\b",
+      "fail": "^\\W*[01]\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "amend-prose-no-hash",
+      "rule": "amend-head-only",
+      "prompt": "Situation: the user writes `/cm and amend it`. The index holds a staged change; no commit-ish token was given.\n\nQuestion: which diff do you derive the message from? Answer on the first line with exactly one of: STAGED-DIFF, HEAD-COMMIT. Then one sentence on the git command that writes it.",
+      "pass": "^\\W*HEAD-COMMIT",
+      "fail": "^\\W*STAGED",
+      "class": "load-bearing"
     }
   ]
 }

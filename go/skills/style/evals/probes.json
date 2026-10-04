@@ -6,28 +6,32 @@
       "rule": "rules-change-via-review",
       "prompt": "Situation: the user says: \"From now on, no named return values anywhere. Add that to the style rulebook.\" You have the style skill loaded and can edit files.\n\nQuestion: how do you add the rule? Answer on the first line with exactly one of: EDIT-STYLE-MD, VIA-REVIEW. Then one sentence why.",
       "pass": "^\\W*VIA-REVIEW",
-      "fail": "^\\W*EDIT-STYLE-MD"
+      "fail": "^\\W*EDIT-STYLE-MD",
+      "class": "load-bearing"
     },
     {
       "id": "env-var-access",
       "rule": "env-via-ring",
       "prompt": "Situation: you are writing a production Go function that needs the value of the environment variable CACHE_DIR.\n\nQuestion: which call reads it? Answer on the first line with the call only, e.g. pkg.Func.",
       "pass": "^\\W*`?rng\\.Env(Get|Lookup)",
-      "fail": "^\\W*`?os\\."
+      "fail": "^\\W*`?os\\.",
+      "class": "load-bearing"
     },
     {
       "id": "test-env-set",
       "rule": "env-via-ring",
       "prompt": "Situation: you are writing a Go test where the code under test reads CACHE_DIR from a *ring.Ring and you must set it to a temp dir.\n\nQuestion: which call sets it? Answer on the first line with the call only.",
       "pass": "^\\W*`?\\w*\\.?EnvSet|^\\W*`?rng\\.EnvSet",
-      "fail": "t\\.Setenv|os\\.Setenv"
+      "fail": "t\\.Setenv|os\\.Setenv",
+      "class": "load-bearing"
     },
     {
       "id": "multiline-literal",
       "rule": "multiline-strings",
       "prompt": "Situation: production Go code must hold a fixed three-line plain-text usage message that is too long for one source line.\n\nQuestion: how is the literal written? Answer on the first line with exactly one of: RAW-BACKTICK, PLUS-SEGMENTS. Then one sentence why.",
       "pass": "^\\W*PLUS-SEGMENTS",
-      "fail": "^\\W*RAW-BACKTICK"
+      "fail": "^\\W*RAW-BACKTICK",
+      "class": "load-bearing"
     },
     {
       "id": "plan-first-flag",
@@ -38,14 +42,16 @@
       ],
       "prompt": "Situation: the user runs `/style ./... plan_first` on a module. You have read the style pass instructions.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: CHECK-THEN-PRESENT, PROPOSE-AND-STOP. Then one sentence why.",
       "pass": "^\\W*PROPOSE-AND-STOP",
-      "fail": "^\\W*CHECK-THEN-PRESENT"
+      "fail": "^\\W*CHECK-THEN-PRESENT",
+      "class": "redundant"
     },
     {
       "id": "no-production-hook",
       "rule": "no-coverage-chasing",
-      "prompt": "Situation: you are writing tests for a Go function. One error branch can only be reached if a package-level `var readFile = os.ReadFile` hook existed; it does not exist today.\n\nQuestion: do you add that hook to production code so the test can reach the branch? Answer YES or NO on the first line, then one sentence why.",
+      "prompt": "Situation: you are writing tests for a Go function. One error branch can only be reached through a package-level `var readFile = os.ReadFile` hook. Two other functions in the same package already use exactly this hook pattern for their tests; this function does not have one yet.\n\nQuestion: do you add the hook for this function so the test can reach the branch? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "fail": "^\\W*YES",
+      "class": "redundant"
     }
   ]
 }

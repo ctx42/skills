@@ -10,7 +10,8 @@
         "Drafts to the blueprint order — header/logo, overview, features, install, usage, configuration — using the repo's real module path, flag names, and commands",
         "Builds and runs the install and quickstart commands it ships, fixing them until they pass, or names the blocking prerequisite",
         "Wraps prose at the repo's own 100-column `max_line_length`, not a hardcoded 80"
-      ]
+      ],
+      "blind_only": [2]
     },
     {
       "id": 3,
@@ -20,7 +21,8 @@
         "Each finding names the template section it comes from — Badges, Nav, Quickstart, License — so the reader can look the rule up without being told it",
         "Groups findings Blocker / Should-fix / Nit with a one-line fix each, ends with a one-line verdict, and edits nothing before the user confirms",
         "Applies the approved findings on confirmation, then re-runs Verify and states what changed"
-      ]
+      ],
+      "blind_only": [1, 2, 3]
     },
     {
       "id": 4,
@@ -32,7 +34,8 @@
         "Marks each spot with a `<!-- gmmce:<relpath>/<FuncName> -->` comment above an empty `go` fence and runs `gomake :doc:mce` to fill them",
         "Names each injected key in the reply, taken from the target's `Found <key>` lines — the exit status and the `Writing` line are 0 and present either way",
         "Hand-edits no injected fence; a change to an example goes back through its `Example…` function and a re-run of the target"
-      ]
+      ],
+      "blind_only": [1]
     }
   ]
 }

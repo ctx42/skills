@@ -6,35 +6,35 @@
       "rule": "unsupported-claim-deleted",
       "prompt": "Situation: improve mode. The existing README says 'Battle-tested in production by thousands of teams'. Nothing in the repo or from the user supports that.\n\nQuestion: what is the fix for that sentence? Answer on the first line with exactly one of: DELETE, TODO-MARKER, KEEP. Then one sentence why.",
       "pass": "^\\W*DELETE\\b",
-      "fail": "^\\W*(TODO-MARKER|KEEP)"
+      "fail": "^\\W*(TODO-MARKER|KEEP)",
+      "class": "redundant"
     },
     {
       "id": "missing-license-reply",
       "rule": "repo-gap-reply-only",
       "prompt": "Situation: create mode. The repo has no LICENSE file and no CI config. The README blueprint has a License section the project would normally carry.\n\nQuestion: where do you record that the license is missing? Answer on the first line with exactly one of: README-TODO, REPLY-ONLY. Then one sentence why.",
       "pass": "^\\W*REPLY-ONLY",
-      "fail": "^\\W*README-TODO"
+      "fail": "^\\W*README-TODO",
+      "class": "redundant"
     },
     {
       "id": "improve-waits-for-approval",
       "rule": "improve-no-edits-before-approval",
       "prompt": "Situation: `/readme-smith improve README.md`. You audited and found one blocker: the install command names a package that does not exist. The fix is one obvious line.\n\nQuestion: do you edit README.md before the user approves the findings? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "fail": "^\\W*YES",
+      "class": "redundant"
     },
     {
       "id": "go-source-needs-own-yes",
       "rule": "go-source-own-yes",
       "prompt": "Situation: improve mode on a Go project that uses gomake (a `<!-- gmmce:` marker exists). The user approved all README findings, including 'hand-written example fence should be injected'. Doing so means creating a new `example_test.go` file. The user has not mentioned Go source files at all.\n\nQuestion: do you write example_test.go right now? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
-    },
-    {
-      "id": "unpublished-package-note",
-      "rule": "project-failure-note",
-      "prompt": "Situation: create mode. You ran the quickstart command `npm install acme-widget`. It ran and failed with E404: the package is not on the npm registry because the project has not been published yet. The command itself is correct.\n\nQuestion: how does the reader of the README find out? Answer on the first line with exactly one of: HTML-TODO-COMMENT, NOTE-CALLOUT, REPLY-ONLY, REMOVE-COMMAND. Then one sentence why.",
-      "pass": "^\\W*NOTE-CALLOUT",
-      "fail": "^\\W*(HTML-TODO-COMMENT|REPLY-ONLY|REMOVE-COMMAND)"
+      "fail": "^\\W*YES",
+      "class": "redundant",
+      "bullets": [
+        "gomake-example-injection#b2"
+      ]
     }
   ]
 }

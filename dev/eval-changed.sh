@@ -35,10 +35,19 @@
 #          window faster); --dry-run prints, runs nothing
 #   --max-usd N  stop once this invocation has spent N dollars (default: no
 #          ceiling); a case costs $0.10-0.80, a fan-out case $3-9
-#   --model M  run the cases on model M (e.g. sonnet for cheap calibration;
-#          confirm on the default model before relying on a pass)
+#   --model M  run the cases on model M (default sonnet; `default` = the CLI's
+#          default model). A sonnet run re-runs only its FAILs on the default
+#          model, which has the final say: sonnet matched it on 6/6 measured
+#          cases at ~half the cost (tmp/eval-loop-log.md, 2026-10-04)
 #   --keep keeps every run's workspace and trace (paths in the JSON); without
 #          it the workspaces are deleted after the run
+#   --fresh  ignore the pass ledger: a case whose inputs (case dir, the skills
+#          it tags, the group's mocks and fixtures, the model) are unchanged
+#          since it last passed is otherwise skipped (tmp/eval-ledger.json)
+#
+# Cases run in chunks of 2 x -j, one `claude plugin eval` call each; passes
+# reach the ledger after every chunk. The first usage-limit cut-off stops the
+# run with exit 3: re-run the same command after the reset to resume.
 #
 # Each failed case leaves its trace in <results>/<group>/failed/<case>.trace.jsonl
 # and its last message is printed, so a failure needs no re-run to diagnose.
@@ -46,7 +55,8 @@
 # Every run first checks the machine (git, node, go, gofmt; on Linux a bwrap
 # sandbox that can start a shell) and stops with the fix if one is missing.
 #
-# Exit: 0 all selected cases pass, 1 a case failed or nothing could run.
+# Exit: 0 all selected cases pass, 1 a case failed or nothing could run,
+# 3 the usage limit stopped the run.
 
 set -euo pipefail
 
@@ -59,7 +69,9 @@ max_usd=
 dry=0
 keep=0
 audit=0
-declare -a explicit_skills=() all_groups=() case_args=() paths=() model=()
+fresh=0
+declare -a explicit_skills=() all_groups=() case_args=() paths=() model=(--model sonnet)
+declare -a failed=()
 
 die() { echo "eval-changed: $*" >&2; exit 1; }
 
@@ -97,10 +109,11 @@ while [ $# -gt 0 ]; do
         exit 0 ;;
     -j) jobs="$2"; shift 2 ;;
     --max-usd) max_usd="$2"; shift 2 ;;
-    --model) model=(--model "$2"); shift 2 ;;
+    --model) if [ "$2" = default ]; then model=(); else model=(--model "$2"); fi; shift 2 ;;
     --dry-run) dry=1; shift ;;
     --audit) audit=1; shift ;;
     --keep) keep=1; shift ;;
+    --fresh) fresh=1; shift ;;
     -h|--help) sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) die "unknown argument: $1 (see --help)" ;;
     esac
@@ -241,64 +254,63 @@ done
 groups="$(printf '%s\n' "${!tags[@]}" "${!whole[@]}" | sed '/^$/d' | sort -u)"
 [ -n "$groups" ] || { echo "eval-changed: no skill change found; lint is clean."; exit 0; }
 
-# --- Run each group. ---
+# --- Run each group, in chunks. ---
+# A chunk is one `claude plugin eval` call over 2 x -j cases, picked by their
+# case: tags. Passes go to the ledger after every chunk, so a run cut off by
+# the usage limit keeps what it earned, and the first limit stops the run
+# (exit 3) instead of failing every case left in a second each.
 rc=0
 out="$ROOT/tmp/eval-changed/$(date +%Y%m%dT%H%M%S)-$$"
 mkdir -p "$out"
+model_name="${model[1]:-default}"
 for g in $groups; do
     [ -d "$g/evals" ] || { echo "== $g: no native cases (lint only)"; continue; }
-    declare -a sel=()
-    if [ -n "${whole[$g]:-}" ]; then sel=()
-    else
-        for t in $(printf '%s\n' ${tags[$g]} | sort -u); do sel+=(--tag "$t"); done
-    fi
-    # Count the cases the selection reaches, for the progress line.
-    total=0
+    declare -a sel_cases=()
     for pm in "$g"/evals/*/prompt.md; do
-        if [ ${#sel[@]} = 0 ]; then total=$((total + 1)); continue; fi
+        c="$(basename "$(dirname "$pm")")"
+        if [ -n "${whole[$g]:-}" ]; then sel_cases+=("$c"); continue; fi
         line=$(grep -m1 '^tags:' "$pm" || true)
         for t in $(printf '%s\n' ${tags[$g]} | sort -u); do
-            case "$line" in *"[$t,"*|*" $t,"*|*" $t]"*|*"[$t]"*) total=$((total + 1)); break ;; esac
+            case "$line" in *"[$t,"*|*" $t,"*|*" $t]"*|*"[$t]"*) sel_cases+=("$c"); break ;; esac
         done
     done
-    echo "== $g: $total case(s), ~\$$(python3 -c "print(round($total*0.25))")-$(python3 -c "print(round($total*0.8))"): ${sel[*]:-(all cases)}"
-    [ "$dry" = 1 ] && continue
-    json="$out/$g.json"
-    declare -a cap=()
-    if [ -n "$max_usd" ]; then
-        left=$(python3 -c "print(round($max_usd - ${spent:-0}, 2))")
-        if python3 -c "import sys; sys.exit(0 if $left <= 0 else 1)"; then
-            echo "   skipped: --max-usd $max_usd spent"; rc=1; continue
+    total=${#sel_cases[@]}
+    declare -a todo=()
+    if [ "$fresh" = 1 ] || [ "$total" = 0 ]; then todo=("${sel_cases[@]}")
+    else mapfile -t todo < <(python3 "$ROOT/dev/eval-ledger.py" pending "$g" "$model_name" "${sel_cases[@]}")
+    fi
+    n=${#todo[@]}
+    echo "== $g: $total case(s), $((total - n)) PASS in the ledger, $n to run, ~\$$(python3 -c "print(round($n*0.25))")-$(python3 -c "print(round($n*0.8))")"
+    [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${todo[@]}"; continue; }
+    chunk=$((jobs * 2))
+    for ((k = 0; k < n; k += chunk)); do
+        declare -a part=("${todo[@]:k:chunk}") sel=()
+        for c in "${part[@]}"; do sel+=(--tag "case:$c"); done
+        json="$out/$g-$k.json"
+        declare -a cap=()
+        if [ -n "$max_usd" ]; then
+            left=$(python3 -c "print(round($max_usd - ${spent:-0}, 2))")
+            if python3 -c "import sys; sys.exit(0 if $left <= 0 else 1)"; then
+                echo "   skipped: --max-usd $max_usd spent"; rc=1; break
+            fi
+            cap=(--max-cost-usd "$left")
         fi
-        cap=(--max-cost-usd "$left")
-    fi
-    # Progress: the CLI prints one "kept" notice per finished run (--keep-temp).
-    : >"$out/$g.err"
-    (
-        last=-1
-        while sleep 15; do
-            n=$(grep -c '⚠ kept' "$out/$g.err" 2>/dev/null || true)
-            [ "$n" != "$last" ] && echo "   progress: ${n:-0}/$total done ($(date +%H:%M))"
-            last=$n
-        done
-    ) &
-    ticker=$!
-    set +e
-    claude plugin eval "./$g" "${sel[@]}" --runs 1 --ablation none --scaffold \
-        --trust-plugin --no-publish -j "$jobs" --keep-temp "${model[@]}" \
-        "${cap[@]}" \
-        --allow-tools Write Edit Bash LSP \
-        --output-dir "$out/$g" --json "$json" >"$out/$g.out" 2>"$out/$g.err"
-    r=$?
-    set -e
-    kill "$ticker" 2>/dev/null; wait "$ticker" 2>/dev/null || true
-    [ -s "$json" ] && spent=$(python3 -c "import json; print(${spent:-0} + json.load(open('$json')).get('costUsd', 0))")
-    [ "$r" = 2 ] && echo "   stopped at the --max-usd $max_usd ceiling (partial results)"
-    if [ ! -s "$json" ]; then
-        grep -v '^Note:' "$out/$g.err" | head -5
-        echo "   no cases ran (see $out/$g.err)"; rc=1; continue
-    fi
-    python3 - "$json" "$out/$g/failed" "$keep" <<'PY' || rc=1
+        echo "   chunk $((k / chunk + 1))/$(((n + chunk - 1) / chunk)): ${part[*]} ($(date +%H:%M))"
+        set +e
+        claude plugin eval "./$g" "${sel[@]}" --runs 1 --ablation none --scaffold \
+            --trust-plugin --no-publish -j "$jobs" --keep-temp "${model[@]}" \
+            "${cap[@]}" \
+            --allow-tools Write Edit Bash LSP \
+            --output-dir "$out/$g/$k" --json "$json" >>"$out/$g.out" 2>>"$out/$g.err"
+        r=$?
+        set -e
+        [ -s "$json" ] && spent=$(python3 -c "import json; print(${spent:-0} + json.load(open('$json')).get('costUsd', 0))")
+        [ "$r" = 2 ] && echo "   stopped at the --max-usd $max_usd ceiling (partial results)"
+        if [ ! -s "$json" ]; then
+            grep -v '^Note:' "$out/$g.err" | tail -5
+            echo "   no cases ran (see $out/$g.err)"; rc=1; continue
+        fi
+        python3 - "$json" "$out/$g/failed" "$keep" <<'PY' || rc=1
 import json, os, shutil, subprocess, sys
 d = json.load(open(sys.argv[1]))
 failed_dir, keep = sys.argv[2], sys.argv[3] == "1"
@@ -356,7 +368,18 @@ print(f"   {a['casesPassed']}/{a['casesTotal']} passed, "
       f"{d['durationSeconds']}s, ${d['costUsd']:.2f}")
 sys.exit(1 if bad else 0)
 PY
-    [ "$r" = 0 ] || rc=1
+        [ "$r" = 0 ] || rc=1
+        rec=$(python3 "$ROOT/dev/eval-ledger.py" record "$g" "$model_name" "$json")
+        lim=$(printf '%s\n' "$rec" | grep '^LIMIT' || true)
+        while read -r _ c; do [ -n "$c" ] && failed+=("$g" "$c"); done < <(printf '%s\n' "$rec" | grep '^FAIL' || true)
+        if [ -n "$lim" ]; then
+            left=$((n - k - ${#part[@]}))
+            echo "   LIMIT: the usage limit cut off ${lim#LIMIT } run(s); $left case(s) not started."
+            echo "   Passes are in the ledger: re-run the same command after the reset."
+            echo "results: $out"
+            exit 3
+        fi
+    done
 done
 # A history_file run leaves a session file (UUID name) beside the history; it
 # holds the runner's full system prompt, so it must not linger.
@@ -368,4 +391,15 @@ if [ "$dry" = 1 ]; then
     exit 0
 fi
 echo "results: $out"
+# Sonnet runs first (half the cost, verdicts matched the default model on
+# every case measured); only its FAILs are re-run on the default model, which
+# has the final say.
+if [ ${#failed[@]} -gt 0 ] && [ "$model_name" = sonnet ]; then
+    declare -a again=()
+    for ((i = 0; i < ${#failed[@]}; i += 2)); do again+=(--case "${failed[i]}" "${failed[i+1]}"); done
+    echo "== confirming $((${#failed[@]} / 2)) sonnet FAIL(s) on the default model"
+    declare -a pass_on=()
+    [ "$keep" = 1 ] && pass_on+=(--keep)
+    exec "$0" --model default -j "$jobs" "${again[@]}" "${pass_on[@]}"
+fi
 exit "$rc"

@@ -5,35 +5,32 @@
       "id": "report-line-shape",
       "rule": "report-shape",
       "prompt": "Situation: `/plan-smith write` for a billing migration. You wrote tmp/billing-plan.md with 3 work items plus the closing 'Remove this plan' item (4 table rows); every row is `N`.\n\nQuestion: write the exact one-line report you give after writing, and nothing else on the first line. Then one sentence on what else the reply may contain.",
-      "pass": "^\\W*`?wrote tmp/billing-plan\\.md — 0 Y / 4 N / 0 X"
+      "pass": "^\\W*`?wrote tmp/billing-plan\\.md — 0 Y / 4 N / 0 X",
+      "class": "load-bearing"
     },
     {
       "id": "no-unasked-tests-item",
       "rule": "no-unasked-items",
-      "prompt": "Situation: `/plan-smith write` with the brief: 'Plan: 1) add CSV export endpoint, 2) add export button to the UI.' Both items are fully specified. A test suite for the endpoint would obviously be sensible.\n\nQuestion: does the plan file get a third item for tests? Answer on the first line YES or NO, then one sentence on where the tests idea goes.",
-      "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "prompt": "Situation: `/plan-smith write` with the brief: 'Plan: 1) add CSV export endpoint, 2) add export button to the UI.' Both items are fully specified. A test suite for the endpoint would obviously be sensible.\n\nQuestion: how many numbered item sections does the plan file have? Answer on the first line with the integer only, then one sentence listing them.",
+      "pass": "^\\W*3\\b",
+      "fail": "^\\W*[24]\\b",
+      "class": "redundant"
     },
     {
       "id": "finished-plan-delete",
       "rule": "closing-item-ask-delete",
       "prompt": "Situation: `/plan-smith update tmp/x-plan.md`. After your evidence check, every item but the closing 'Remove this plan' item is now `Y` or `X`. The plan file is clutter once finished.\n\nQuestion: what do you do about the file? Answer on the first line with exactly one of: DELETE, ASK, LEAVE. Then one sentence why.",
       "pass": "^\\W*ASK\\b",
-      "fail": "^\\W*(DELETE|LEAVE)"
+      "fail": "^\\W*(DELETE|LEAVE)",
+      "class": "redundant"
     },
     {
       "id": "partial-criteria-n",
       "rule": "part-done-stays-n",
       "prompt": "Situation: update mode. Item 2 is 'Throttle login' with acceptance criteria: 'returns 429 AND a Retry-After header'. The repo now returns 429 after 5 attempts, with a passing test, but no Retry-After header anywhere.\n\nQuestion: what status does item 2 get? Answer on the first line with exactly one of: Y, N, PARTIAL. Then one sentence why.",
       "pass": "^\\W*N\\b",
-      "fail": "^\\W*(Y|PARTIAL)\\b"
-    },
-    {
-      "id": "open-output-target-asks",
-      "rule": "settle-open-before-write",
-      "prompt": "Situation: `/plan-smith write` with the brief: 'Plan the nightly report job: generate the report, deliver it, add a failure alert.' Nobody has said where the report is delivered (email, S3 bucket, or Slack), and the delivery item's content depends on it. Nothing else is open.\n\nQuestion: do you write the plan file in this turn? Answer on the first line YES or NO, then one sentence why.",
-      "pass": "^\\W*NO\\b",
-      "fail": "^\\W*YES"
+      "fail": "^\\W*(Y|PARTIAL)\\b",
+      "class": "redundant"
     }
   ]
 }

@@ -87,10 +87,14 @@ what it meant.
   one that was already there: the cap bounds new coverage, and re-shaping a
   case that already ran adds none. Under
   `fanout` the cap cannot be enforced live across workers, so divide it before
-  dispatch: give each worker `N / packages` rounded down (minimum 1), name
-  each worker's share in the plan, and report the total actually added against
-  `N`. Hand the remainder out one at a time, most-uncovered package first,
-  until it is gone.
+  dispatch: give each worker `N / packages` rounded down, name each worker's
+  share in the plan, and report the total actually added against `N`. Hand
+  the remainder out one at a time, most-uncovered package first, until it is
+  gone. The cap wins over coverage: a package whose share is 0 gets no
+  worker — with more packages than `N`, only the `N` most-uncovered run, one
+  case each. Once the workers report, any share left unused goes, in one
+  follow-up dispatch, to packages that still have easy lines, most-uncovered
+  first; the total still never passes `N`.
 - `packages=a,b` — module mode: restrict to these packages.
 - `include=all` — also attempt complex lines (build the fakes/scaffolding) in
   `*_test.go`, which is the whole of this skill's write scope. A line reachable
@@ -98,8 +102,9 @@ what it meant.
   under this flag: report what the seam would be and leave it to the author.
   Adding one is an API change, not a test;
   un-coverable lines stay reported, never attempted.
-- `fanout` — module mode: dispatch one subagent per package (each gets the
-  style Test rules and this per-function loop for its package) and merge the
+- `fanout` — module mode: dispatch one subagent per package (under
+  `max_tests`, per package whose share is above 0; each gets the style Test
+  rules and this per-function loop for its package) and merge the
   per-package reports. Use on large modules to keep the main context lean;
   packages are independent, so ordering is preserved per package.
 
@@ -154,7 +159,9 @@ does not.
    expected cost — do not re-measure per case added. If a target line did not
    rise, that is the exception: bisect it — narrow to the case meant to cover
    it, fix or drop it — and re-measure, until every coverable line of Foo is
-   hit or deferred.
+   hit or deferred, or `max_tests` is reached. A fixed case replaces the one
+   it fixes and does not count again; a dropped case is not added, so it
+   frees its slot.
 
 ## Classify each uncovered line
 

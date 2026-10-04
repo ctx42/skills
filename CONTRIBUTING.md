@@ -101,29 +101,51 @@ scenario that grades the count against the file. It is the one number nobody
 re-derives, which is exactly why it is worth grading.
 
 **Tiers.** The routine check after any edit is free and takes seconds; the
-only paid routine check costs cents and finishes in under a minute:
+paid routine checks cost cents and finish in a minute or two.
+`./dev/eval-routine.sh` runs tiers 1–4 in one go — lint, then probes,
+triggers, and the hunt in parallel — for ~$0.15 and ~2 min per changed skill:
 
 1. *Lint and contracts* (`./dev/lint-skills.sh`, which runs
    `./dev/eval-check.py`; free, seconds). Each skill's `evals/contract.json`
    lists its high-stakes rules as phrases its text must keep; an edit that
    deletes, weakens, or contradicts one fails here, named. The same check
-   re-runs the case generators and catches a fixture or mock rename that
-   missed one side. Mechanical edits (fixtures, mocks, ids, generators) stop
-   here: they never need a model run.
-2. *Probes* (`./dev/eval-probe.py`; cents, under a minute). Each skill's
-   `evals/probes.json` asks one question per rule most likely to regress —
-   the skill text as system prompt, a prepared situation, a short answer
-   graded by regex, on haiku. Answers are cached by input, so only probes
-   whose skill text or prompt changed cost anything. Run after any behaviour
-   change, without asking. A new high-stakes rule gets a contract rule and a
-   probe in the same change; check a new probe fails with its rule deleted.
-3. *Agent-run cases* (`./dev/eval-changed.sh --audit`; $0.25–0.80 and up to
-   minutes per case). Full sessions on scripted fixtures with mocked MCP
+   re-runs the case generators, catches a fixture or mock rename that missed
+   one side, checks `dev/eval/triggers.json`, and fails an expectations bullet
+   that no grader, probe (`"bullets": ["<scenario>#b<N>"]`), or `blind_only`
+   entry accounts for. Mechanical edits (fixtures, mocks, ids, generators)
+   stop here: they never need a model run.
+2. *Probes* (`./dev/eval-probe.py`; ~$0.02 and ~20 s per changed skill). Each
+   skill's `evals/probes.json` asks one question per rule most likely to
+   regress — the skill text as system prompt, a prepared situation, a short
+   answer graded by regex, on haiku. A skill's probes go in one batched call
+   without thinking; a miss is re-asked alone three times with thinking, so
+   only FAIL (0/3) and SPLIT survive. Answers are cached by input. Run after
+   any behaviour change, without asking. A new high-stakes rule gets a
+   contract rule and a probe in the same change. Every probe carries a class
+   from `--baseline --write`: a `prior` probe (it passes with no skill text)
+   tests the model, not the skill, and fails lint — make the skill and the
+   default disagree, or delete it. A probe for a fix must FAIL at the pre-fix
+   ref (`--against <ref>`) and pass now.
+3. *Hunt* (`./dev/eval-hunt.py`; ~$0.10 and ~2 min per changed skill). Sonnet
+   proposes situations the diff's added lines let an agent read two ways,
+   quotes checked verbatim; each is asked three times on haiku and only a
+   SPLIT is reported, as a draft probe. Run after a behaviour change.
+4. *Triggers* (`./dev/eval-triggers.py`; ~$0.04, ~20 s). Routes every request
+   in `dev/eval/triggers.json` against all skill descriptions plus real
+   distractors. Run after a description changes.
+5. *Agent-run cases* (`./dev/eval-changed.sh --audit`; ~$0.10–0.15 a case on
+   sonnet, up to minutes). Full sessions on scripted fixtures with mocked MCP
    servers (`dev/eval/native-cases.md`). A manual audit only, when the user
-   asks; never the gate on a change. Verify a grader fix offline with
-   `./dev/eval-regrade.py <trace>`, never by a paid re-run.
-4. *Blind round* (the runner and grader prompts above). An audit before a
-   release or after a large refactor, never the gate on an ordinary change.
+   asks; never the gate on a change. Cases run on sonnet and only its FAILs
+   re-run on the default model, which has the final say. A pass is recorded
+   in a ledger keyed by everything the case depends on, and the run stops at
+   the first usage-limit cut-off (exit 3) — re-run the same command after the
+   reset. Verify a grader fix offline with `./dev/eval-regrade.py <trace>`,
+   never by a paid re-run.
+6. *Blind round* (the runner and grader prompts above). An audit before a
+   release or after a large refactor, never the gate on an ordinary change;
+   the release audit also runs `./dev/eval-probe.py --compare
+   haiku,sonnet,opus` (~$1–2) and triages the probes the models disagree on.
 
 **The eval loop.** A blind round costs hundreds of thousands of tokens, and a
 runner always finds something new to doubt, so the loop ends only on these
@@ -135,11 +157,15 @@ rules:
   to `tmp/eval-backlog.md` and triggers no re-run.
 - Before any blind round, state its scope and rough cost and get the user's
   go-ahead.
-- A behaviour change runs the probes, never the agent-run suite; tiers 3–4
-  run only on the user's request, and only the failing or cut-off cases are
-  re-run.
+- A behaviour change runs the probes and the hunt, never the agent-run suite;
+  tiers 5–6 run only on the user's request, and only the failing or cut-off
+  cases are re-run.
 - One fix-and-re-run per FAIL; a bullet that fails again after its fix goes to
   the user as a design question, not another rewording.
+- A hunt split may drive one fix; a split the next hunt finds on lines that
+  fix added goes to `tmp/eval-backlog.md`, not another edit — each fix gives
+  the hunter new text to doubt, and chasing it never ends. A split with no
+  clear intended answer goes there too, as a question.
 - At most two rounds per change unless the user raises it; a round with every
   gradable bullet PASS and no measured split ends the loop — no confirmation
   round, no new scenario for a guard that has never fired.

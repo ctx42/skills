@@ -24,7 +24,8 @@
         "Detects a duplicate or conflicting rule and waits for confirmation before writing to `../style/SKILL.md`, showing the before/after of the rule text",
         "Rewrites the existing receiver-naming line in place for the `change` instead of adding a second rule",
         "For the `remove`, deletes the `../style/SKILL.md` line, plus its keyed `../style/rules.md` entry and Contents row where it has one — a rule carrying no keyed entry is removed from `SKILL.md` alone"
-      ]
+      ],
+      "blind_only": [3]
     },
     {
       "id": 4,
@@ -35,7 +36,8 @@
         "Drops the project-specific rename",
         "Reports the `context.Context` correction as already covered rather than proposing it again — deduping against `../style/SKILL.md` happens before presenting, not after",
         "Waits for the user to pick before writing; on confirmation writes the `../style/SKILL.md` line, plus its keyed `../style/rules.md` entry where the rule needs one, and shows the diff"
-      ]
+      ],
+      "blind_only": [1, 2, 3, 4]
     }
   ]
 }
