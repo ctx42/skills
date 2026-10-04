@@ -202,8 +202,8 @@ Pitfalls, each seen failing a correct run:
   "all packages", a prior turn quoted in `last_message`.
 - `{source: file}` takes an exact path; only `file_exists` globs.
 - Account-level org instructions still reach runs: replies may end with a
-  policy notice. Text graders exclude it (`Weisung`, `AI-Agents`), and judges
-  are told to ignore it.
+  policy notice. Text graders exclude its lines (`policy`, `directive`,
+  `approval`), and judges are told to ignore it.
 - A case loads only its own plugin: a delegate in another plugin (srd →
   `craft:grill-me`) cannot load, so grade the attempted `Skill` call, never
   what the delegate would do.
