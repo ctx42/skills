@@ -16,16 +16,6 @@
       ]
     },
     {
-      "id": 2,
-      "name": "broad-target-auto-plan-first",
-      "expected_behavior": [
-        "Detects the broad target and switches to plan-first on its own",
-        "Proposes the defaults it would use — `max_issues=25`, `depth=standard`, the package list — and stops there, checking nothing until the user answers",
-        "Given that approval in a following turn, fans out one subagent per package and merges into one ranked report capped at `max_issues`",
-        "Leaves each worker's report on disk, or attributes merged lines to the worker that produced them, so the fan-out is visible in the artifacts rather than only asserted"
-      ]
-    },
-    {
       "id": 3,
       "name": "rule-edit-add-change-remove",
       "expected_behavior": [
@@ -45,36 +35,6 @@
         "Drops the project-specific rename",
         "Reports the `context.Context` correction as already covered rather than proposing it again — deduping against `../style/SKILL.md` happens before presenting, not after",
         "Waits for the user to pick before writing; on confirmation writes the `../style/SKILL.md` line, plus its keyed `../style/rules.md` entry where the rule needs one, and shows the diff"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "broad-fix-job-plans-and-pauses",
-      "expected_behavior": [
-        "Detects the broad scope and writes an ordered plan to `tmp/review-fix-plan.md` — one chunk per package, findings listed, status boxes — and gets a go-ahead before editing",
-        "Splits the large package into file-level chunks",
-        "Proves each bug red then green with a test named to `have`/`want`",
-        "Runs `go test ./... -race` per chunk so each chunk ends green, ticking the plan boxes as it goes",
-        "Pauses after each changed chunk for a go-ahead and never proceeds past an unmade decision",
-        "Never runs `git commit` — each chunk lands as a separately committable change"
-      ]
-    },
-    {
-      "id": 6,
-      "name": "terse-output",
-      "expected_behavior": [
-        "Opens with the findings — no preamble, no narration of reading the rules",
-        "States each finding once and reports budget usage"
-      ]
-    },
-    {
-      "id": 7,
-      "name": "learn-finds-nothing-new",
-      "expected_behavior": [
-        "Says in a line that every correction is already a rule, and names which ones",
-        "Writes nothing and proposes nothing",
-        "Does not restate an existing rule as a new candidate to have something to show",
-        "Treats it as a finding worth reporting: the rules exist but are not reaching the work"
       ]
     }
   ]

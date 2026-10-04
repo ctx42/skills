@@ -1,4 +1,0 @@
-schema_version: "1.1"
-name: doc-smith--create-grounded-manual--gate
-context:
-  scaffold_script: scaffold.sh

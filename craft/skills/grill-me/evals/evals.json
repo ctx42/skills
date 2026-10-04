@@ -2,16 +2,6 @@
   "skill_name": "grill-me",
   "evals": [
     {
-      "id": 1,
-      "name": "vague-plan",
-      "skills": [
-        "grill-me"
-      ],
-      "setup": "Cold open. No prior conversation — this is the user's first message.",
-      "query": "/grill-me I want to add caching to the API.",
-      "files": []
-    },
-    {
       "id": 2,
       "name": "caller-supplied-subject",
       "skills": [
@@ -22,16 +12,6 @@
       "files": []
     },
     {
-      "id": 3,
-      "name": "contradiction-across-branches",
-      "skills": [
-        "grill-me"
-      ],
-      "setup": "Four branches into an interview about a field-service mobile app.\n\nBranch 1 (data model) — resolved. The user said: \"Technicians are often in basements and rural sites with no signal, so the app must work fully offline. Everything is stored locally first.\"\n\nBranch 2 (auth) — resolved. Token cached for 30 days.\n\nBranch 3 (job assignment) — resolved. Dispatcher assigns, technician accepts.\n\nBranch 4 (sync) is now open. The interviewer has just asked how the app should handle a technician editing a job report.",
-      "query": "Every save syncs to the server immediately so the dispatcher sees progress in real time.",
-      "files": []
-    },
-    {
       "id": 4,
       "name": "alignment-reached",
       "skills": [
@@ -39,26 +19,6 @@
       ],
       "setup": "An interview about adding CSV export to a reporting tool. Five branches, all now resolved:\n\n1. Scope — exports the currently filtered view, not the whole dataset.\n2. Size limit — refuses over 100k rows and tells the user to narrow the filter.\n3. Format — RFC 4180, UTF-8 with BOM so Excel opens it correctly.\n4. Delivery — synchronous download; no email, no background job.\n5. Permissions — anyone who can see the report can export it.\n\nThe interviewer asked the last open question — whether exports should be recorded in the audit log — and the user has just answered it. No branches remain open.",
       "query": "Yes, log every export with the user, the timestamp, and the row count.",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "terse-output",
-      "skills": [
-        "grill-me"
-      ],
-      "setup": "Mid-interview about a rate limiter. Two of five branches are resolved (algorithm: token bucket; scope: per API key). The interviewer has just asked where the counters should live, and the user has answered.",
-      "query": "Redis, we already run a cluster for sessions.",
-      "files": []
-    },
-    {
-      "id": 6,
-      "name": "false-alignment",
-      "skills": [
-        "grill-me"
-      ],
-      "setup": "An interview about adding CSV export to a reporting tool. Four branches are genuinely resolved:\n\n1. Scope — exports the currently filtered view, not the whole dataset.\n2. Format — RFC 4180, UTF-8 with BOM so Excel opens it correctly.\n3. Delivery — synchronous download; no email, no background job.\n4. Permissions — anyone who can see the report can export it.\n\nA fifth, the size limit, was raised earlier and never settled — asked how many rows are too many, the user said \"something sensible, we'll pin the number down later\" and moved on. You have just asked the last question, whether exports should be recorded in the audit log.",
-      "query": "Yes, log every export with the user, the timestamp, and the row count. I think that's everything — write it up.",
       "files": []
     },
     {

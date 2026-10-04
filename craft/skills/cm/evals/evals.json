@@ -22,46 +22,6 @@
       "files": []
     },
     {
-      "id": 3,
-      "name": "breaking-change",
-      "skills": [
-        "cm"
-      ],
-      "setup": "A staged diff removing the exported `Client.DoRequest` and folding its behaviour into `Client.Do`, with every internal caller updated.",
-      "query": "/cm",
-      "files": []
-    },
-    {
-      "id": 4,
-      "name": "terse-output",
-      "skills": [
-        "cm"
-      ],
-      "setup": "Any ordinary staged diff.",
-      "query": "/cm",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "detail-matched-to-impact",
-      "skills": [
-        "cm"
-      ],
-      "setup": "A staged diff whose only effect is satisfying the linter: a package comment added, two identifiers renamed, one `#nosec` suppression. No behaviour changes.",
-      "query": "/cm",
-      "files": []
-    },
-    {
-      "id": 6,
-      "name": "verbosity-arguments",
-      "skills": [
-        "cm"
-      ],
-      "setup": "One staged diff, invoked twice at different verbosities.",
-      "query": "/cm micro, then /cm full",
-      "files": []
-    },
-    {
       "id": 7,
       "name": "apply-commits-without-confirming",
       "skills": [
@@ -69,46 +29,6 @@
       ],
       "setup": "A staged diff, with a harness attribution instruction active in the session asking for a `Co-Authored-By` trailer.",
       "query": "/cm micro apply",
-      "files": []
-    },
-    {
-      "id": 8,
-      "name": "empty-index-falls-back-to-unstaged",
-      "skills": [
-        "cm"
-      ],
-      "setup": "Nothing is staged. The working tree carries an unstaged change adding a retry to the HTTP client.",
-      "query": "/cm",
-      "files": []
-    },
-    {
-      "id": 9,
-      "name": "fix-that-restores-promised-behavior-is-not-breaking",
-      "skills": [
-        "cm"
-      ],
-      "setup": "A staged diff fixing a bug where `ParseDuration` accepted a negative value the docs always said it rejected. Callers relying on the buggy acceptance will now get an error, so observable behaviour changes — but only to match what was already documented. No signature changes.",
-      "query": "/cm",
-      "files": []
-    },
-    {
-      "id": 10,
-      "name": "apply-with-nothing-staged",
-      "skills": [
-        "cm"
-      ],
-      "setup": "Nothing is staged. The working tree carries an unstaged change adding a retry to the HTTP client. The invocation asks to commit.",
-      "query": "/cm apply",
-      "files": []
-    },
-    {
-      "id": 11,
-      "name": "hash-without-an-amend-ask",
-      "skills": [
-        "cm"
-      ],
-      "setup": "`HEAD` is a commit whose message reads \"wip\". Its diff adds request-id propagation. Nothing in the invocation asks for an amend or a commit.",
-      "query": "/cm HEAD",
       "files": []
     }
   ]

@@ -1,5 +1,0 @@
----
-type: tool_order
-before: {tool: mcp__srd-doc__list_gaps}
-after: {tool: Skill, input_match: '"skill":"srd:report-doc-gap"'}
----

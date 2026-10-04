@@ -4,7 +4,9 @@ The audit tier: `claude plugin eval` cases a change selects
 (`dev/eval-changed.sh --audit`), run only when the user asks — the routine
 check is `dev/eval-check.py` and `dev/eval-probe.py` (CONTRIBUTING.md,
 *Tiers*). Each case runs the real skill in a fresh `claude -p` session with
-only its plugin loaded. `evals/evals.json` and
+only its plugin loaded. Each skill keeps three scenarios, chosen for
+what only a full run shows — writes to the srd-doc server, files written,
+tool order; a rule a single answer can show belongs in a probe, not a case. `evals/evals.json` and
 `evals/expectations.json` stay the scenario spec; a case is that scenario made
 executable.
 
@@ -221,7 +223,7 @@ and a run the account's usage limit cut off prints `LIMIT` — re-run it, never
 triage it. Test a changed grader offline with `./dev/eval-regrade.py <trace>`
 instead of paying for a re-run. Typical cost per run (Opus): $0.10–0.30 for a craft
 case, $0.25–0.80 for a go or srd case, $3–9 for a fan-out case; a full group
-is $15–45. An invocation has no cost ceiling unless `--max-usd N` sets one:
+is $5–20. An invocation has no cost ceiling unless `--max-usd N` sets one:
 a ceiling cuts graders off mid-case and leaves cases unrun. Runs draw on the
 user's own 5-hour usage window: keep `-j 2`, never run a whole skill or group
 unasked, re-run only failing or cut-off cases, and calibrate on

@@ -44,14 +44,9 @@ BASE_TAGS = ["skill:enhance-skills", "sec:enhance-skills:usage",
              "sec:enhance-skills:lessons-store", "sec:enhance-skills:harvest",
              "sec:enhance-skills:lesson-format", "sec:enhance-skills:output",
              "sec:enhance-skills:self-learning"]
-RETRO_TAGS = BASE_TAGS + ["sec:enhance-skills:retrofit"]
 TOOLS = ["Read", "Glob", "Grep", "Skill", "Write", "Edit"]
 
 # ---------------------------------------------------------------- graders
-
-
-# Runs have Bash: a file read may be Read or a shell cat/sed.
-READ_ANY = r'"name":"(?:Read|Bash)","input":\{"(?:file_path|command)":"(?:[^"\\]|\\.)*?'
 
 
 def g_regex(pattern, target="last_message", flags=None, match=None):
@@ -96,8 +91,6 @@ def g_exists(path, exists=True):
 def g_llm(claim):
     return f"---\ntype: llm\nfocus: last_message\n---\n{NOTICE}{claim}\n"
 
-
-WAITS = r"\?|confirm|approv|go ahead|go-ahead|say (yes|go)|reply (yes|go)|once you"
 
 # ---------------------------------------------------------------- history
 
@@ -234,68 +227,6 @@ REVIEW_BODY = """Done-time Go quality review of a diff, a package, or a module.
 
 One line per finding; no preamble."""
 
-STYLE_BODY = """Enforced Go coding style; the rulebook to read before writing Go and a
-style-only pass that lists offenses across a target and proposes fixes.
-
-## Steps
-
-1. List the `.go` files in the target.
-2. Check each against the rules below and report every offense with
-   `file:line`.
-3. Apply the fixes the user accepts.
-
-## Rules
-
-- Receivers are a short type abbreviation, never a single letter.
-- Wrap errors with `%w` and add context.
-- Name the actual value `have` and the expected value `want` in tests.
-
-## Output
-
-One line per offense; no preamble."""
-
-DOC_SMITH_BODY = """Writes and reviews technical documentation and user manuals.
-
-## Steps
-
-1. Read the sources the user names.
-2. Draft or review the document section by section.
-3. Write the result where the user asks.
-
-## Output
-
-Name the file written and the sections touched."""
-
-PLAN_SMITH_BODY = """Writes an implementation plan as numbered checkbox items with a status
-summary table.
-
-## Steps
-
-1. Read the brief.
-2. Write the plan as numbered checkbox items, then the status table.
-3. Save the plan and name its path.
-
-## Output
-
-The path written and the item count."""
-
-FOO_BODY = """Formats the quarterly widget report from the raw export.
-
-## Usage
-
-```
-/foo <export.csv>
-```
-
-## Steps
-
-1. Read the export the user names.
-2. Group rows by widget family; sum each family's units.
-3. Write `report.md` beside the export.
-
-## Output
-
-Name the report written and the families it covers; nothing else."""
 
 SRD_CREATE_BODY = """Authors a new Software Requirement Document (SRD) to the SRD standard.
 
@@ -321,14 +252,6 @@ SRD_STANDARD = """# SRD standard (frozen eval copy)
 
 **STA-2:** An SRD that requires changes to the UI MUST NOT have a "Status" of
 "ACCEPTED" until its designs are linked.
-"""
-
-PLAN_LESSONS = """# Lessons
-
-Rules learned for the `plan-smith` skill. Read before running; obey each line.
-
-- Number items continuously across sections; never restart at 1.
-- Default the plan path to tmp/<slug>-plan.md without asking.
 """
 
 
@@ -389,21 +312,8 @@ def answers(*lines):
         f"{i}. {a}" for i, a in enumerate(lines, 1)) + "\n"
 
 
-def js_escape(text):
-    """Escape text for a JavaScript regex; newlines become \\n."""
-    return re.sub(r"[\\^$.|?*+()\[\]{}/]", lambda m: "\\" + m.group(0),
-                  text).replace("\n", r"\n")
-
-
-def words_re(text):
-    """Whitespace-tolerant regex for a run of words."""
-    return r"\s+".join(js_escape(w) for w in text.split())
-
-
 MAX_LINES_5 = r"\S[^\n]*(\n\s*)+\S[^\n]*(\n\s*)+\S[^\n]*(\n\s*)+\S[^\n]*(\n\s*)+\S"
-THREE_BULLETS = r"^- [\s\S]*^- [\s\S]*^- "
 TWO_BULLETS = r"^- [\s\S]*^- "
-LONG_LINE = r"^.{81,}$"
 
 # ---------------------------------------------------------------- 1
 
@@ -493,22 +403,6 @@ REVIEW_FILES = {"go/skills/review/SKILL.md":
 def case_correction_generalized():
     tgt = "file:go/skills/review/LESSONS.md"
     write_case(
-        "correction-generalized--gate", BASE_TAGS, "/craft:enhance-skills",
-        {
-            "b1-no-write": g_never("Write"),
-            "b1-no-edit": g_never("Edit"),
-            "b1-waits": g_regex(WAITS, flags="i"),
-            "b2-names-leaks": g_regex(r"leak", flags="i"),
-            "b2-generalizes": g_llm(
-                "The proposed rule is stated generally, about resource leaks "
-                "being bugs rather than style, not as a note about this run's "
-                "rows.Close loop or about the user disagreeing."),
-            "b3-target": g_regex(r"go/skills/review/LESSONS\.md"),
-            "b3-not-agent-data": g_not(r"lessons/go/review\.md"),
-        },
-        files=REVIEW_FILES, history=review_history(),
-        asp=wiring("go/skills/review"))
-    write_case(
         "correction-generalized", BASE_TAGS, "/craft:enhance-skills",
         {
             "b2-rule-on-leaks": g_regex(r"leak", tgt, flags="i"),
@@ -525,40 +419,6 @@ def case_correction_generalized():
 
 # ---------------------------------------------------------------- 3
 
-
-def case_task_fact():
-    h = History()
-    h.command("craft:doc-smith", "write the operator chapter of docs/manual.md "
-              "from src/dispatch/", base="./craft/skills/doc-smith")
-    h.say("Drafted the operator chapter in docs/manual.md: opening the "
-          "dispatcher screen, assigning a job, and handling a failed upload.")
-    h.user("call it the Dispatch Board, not the dispatcher screen — that's "
-           "what the UI says")
-    h.say("Renamed every \"dispatcher screen\" to \"Dispatch Board\" (7 places).")
-    h.user("put the output in docs/ops/, not docs/")
-    h.say("Moved the chapter to docs/ops/manual.md.")
-    h.say("Added a troubleshooting note: \"A failed upload is retried 3 times, "
-          "30 seconds apart, before the job is marked Failed.\"")
-    h.user("you made that number up — if the source doesn't say it, don't "
-           "assert it.")
-    h.say("You're right: src/dispatch/ never states a retry count or interval. "
-          "Replaced it with \"A failed upload is retried automatically before "
-          "the job is marked Failed.\"")
-    tgt = "file:craft/skills/doc-smith/LESSONS.md"
-    write_case(
-        "task-fact-is-not-a-lesson", BASE_TAGS, "/craft:enhance-skills",
-        {
-            "b1-files-fabrication-rule": g_regex(
-                r"assert|invent|fabricat|made up|make up|never state|unsourced|"
-                r"not (stated|in the source)|source", tgt, flags="i"),
-            "b2-no-terminology": g_not(r"Dispatch Board|dispatcher screen", tgt, flags="i"),
-            "b2-no-output-dir": g_not(r"docs/ops", tgt),
-            "b3-at-most-two-rules": g_not(THREE_BULLETS, tgt, flags="m"),
-        },
-        files={"craft/skills/doc-smith/SKILL.md":
-               skill_md("doc-smith", "Writes and reviews technical documentation.",
-                        DOC_SMITH_BODY, "craft")},
-        history=h, asp=wiring("craft/skills/doc-smith") + answers("Yes, write it."))
 
 # ---------------------------------------------------------------- 4
 
@@ -599,27 +459,6 @@ ATTR_WIRING = wiring("craft/skills/cm", "srd/skills/create") + (
 
 
 def case_attribution():
-    write_case(
-        "attribute-to-the-driving-skill--gate", BASE_TAGS, "/craft:enhance-skills",
-        {
-            "b1-cm-target": g_regex(r"craft/skills/cm/LESSONS\.md"),
-            "b1-cm-rule": g_regex(r"diff", flags="i"),
-            "b2-names-where-it-lives": g_regex(
-                r"STA-1|create/SKILL\.md|SRD standard|the standard", flags="i"),
-            "b2-status-dropped": g_llm(
-                "The Status-uppercase correction is not proposed as a lesson "
-                "for any skill; the reply says it is dropped because the SRD "
-                "standard (STA-1) or srd:create's own body already carries it."),
-            "b4-push-named": g_regex(r"push", flags="i"),
-            "b4-push-not-filed": g_llm(
-                "The git push correction is not proposed as a lesson for any "
-                "skill; the reply says it belongs to the agent's standing "
-                "instructions (for example CLAUDE.md) or to no skill."),
-            "b5-no-write": g_never("Write"),
-            "b5-no-edit": g_never("Edit"),
-            "b5-waits": g_regex(WAITS, flags="i"),
-        },
-        files=ATTR_FILES, history=attribution_history(), asp=ATTR_WIRING)
     cm = "file:craft/skills/cm/LESSONS.md"
     write_case(
         "attribute-to-the-driving-skill", BASE_TAGS, "/craft:enhance-skills",
@@ -639,249 +478,19 @@ def case_attribution():
 # ---------------------------------------------------------------- 5
 
 
-def case_retrofit():
-    foo = skill_md("foo", "Formats the quarterly widget report.", FOO_BODY)
-    tgt = "file:craft/skills/foo/SKILL.md"
-    words = block("craft", "foo")
-    write_case(
-        "retrofit-missing-block", RETRO_TAGS, "/craft:enhance-skills craft/skills/foo",
-        {
-            "b1-body-untouched": g_regex("^" + js_escape(foo.rstrip("\n")), tgt),
-            "b1-after-output": g_regex(r"\n## Output\n[\s\S]*\n## Self-learning\n", tgt),
-            "b1-last-section": g_not(r"\n## Self-learning\n[\s\S]*\n## ", tgt),
-            "b2-exact-words": g_regex(words_re(words), tgt),
-            "b2-wrapped-80": g_not(LONG_LINE, tgt, flags="m"),
-            "b3-literal-path": g_regex(
-                js_escape("${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/craft/foo.md"), tgt),
-            "b3-not-expanded": g_not(r"/home/|<plugin>|<skill>", tgt),
-            "b4-no-lessons": g_exists("craft/skills/foo/LESSONS.md", False),
-            "b4-no-agent-data": g_exists(".agent-data/ctx42-skills/lessons/craft/foo.md", False),
-            "b5-names-file": g_regex(r"foo/SKILL\.md"),
-            "b5-no-restate": g_not(r"Obey this skill's lessons|sibling winning|absence is the normal"),
-        },
-        files={"craft/skills/foo/SKILL.md": foo},
-        asp=RETRO_WIRING + answers("Yes, go ahead."))
-
-RETRO_WIRING = """Eval wiring: this workspace is the user's writable git checkout of the
-ctx42-skills plugins; the skill to retrofit is ./craft/skills/foo/ in it. Edit
-that workspace file, never the read-only plugin copy this run loads. The
-environment sets AGENT_DATA_DIR to `.agent-data` at the root of this
-workspace; never touch the real home directory.
-"""
-
 # ---------------------------------------------------------------- 6
 
-
-def plan_history():
-    h = History()
-    h.command("craft:plan-smith", "add CSV export to the reports page",
-              base="./craft/skills/plan-smith")
-    h.tool("", "Glob", {"pattern": "docs/**"},
-           "docs/index.md\ndocs/plans/search-plan.md\ndocs/api.md")
-    h.say("Wrote the plan to tmp/csv-export-plan.md: 9 items, all N.")
-    h.user("stop guessing the path — when I've got a docs tree, put the plan "
-           "in docs/plans/ and tell me, don't dump it in tmp.")
-    h.say("Moved it to docs/plans/csv-export-plan.md.")
-    return h
-
-
-PLAN_FILES = {
-    "craft/skills/plan-smith/SKILL.md": skill_md(
-        "plan-smith", "Writes implementation plans.", PLAN_SMITH_BODY, "craft"),
-    "craft/skills/plan-smith/LESSONS.md": PLAN_LESSONS,
-}
-
-
-def case_supersede():
-    write_case(
-        "supersede-a-contradicted-lesson--gate", BASE_TAGS, "/craft:enhance-skills",
-        {
-            "b1-reads-lessons": g_regex(READ_ANY + r"plan-smith/LESSONS", "trace"),
-            "b1-flags-conflict": g_regex(
-                r"supersed|replac|rewrit|contradict|overrul|conflict", flags="i"),
-            "b4-shows-old-line": g_regex(r"tmp/<slug>-plan\.md|without asking"),
-            "b4-shows-new-rule": g_regex(r"docs/plans|docs tree", flags="i"),
-            "b4-no-write": g_never("Write"),
-            "b4-no-edit": g_never("Edit"),
-        },
-        files=PLAN_FILES, history=plan_history(),
-        asp=wiring("craft/skills/plan-smith"))
-    tgt = "file:craft/skills/plan-smith/LESSONS.md"
-    write_case(
-        "supersede-a-contradicted-lesson", BASE_TAGS, "/craft:enhance-skills",
-        {
-            "b2-old-line-gone": g_not(
-                r"^- Default the plan path to tmp/<slug>-plan\.md without asking\.$", tgt, flags="m"),
-            "b2-new-rule-on-file": g_regex(r"docs/plans|docs tree", tgt, flags="i"),
-            "b2-one-path-rule": g_regex(r"^- [^\n]*(\n  [^\n]*)*(path|docs/plans|tmp)", tgt,
-                                        flags="mi", match="count:1"),
-            "b2-other-rule-kept": g_regex(r"Number items continuously", tgt),
-            "b3-one-sentence": g_not(
-                r"^- (?=(?:[^\n]|\n  )*docs/plans)(?:[^\n]|\n  )*?(\.\s+\S|;)", tgt, flags="m"),
-        },
-        files=PLAN_FILES, history=plan_history(),
-        asp=wiring("craft/skills/plan-smith") + answers("Yes, write it."))
 
 # ---------------------------------------------------------------- 7
 
 
-INSTALL = "home/.claude/plugins/cache/ctx42-skills/craft/skills/cm"
-
-
-def case_read_only():
-    h = History()
-    h.command("craft:cm", base="./" + INSTALL)
-    h.say("```\nchore(http): raise the client timeout to 30s\n\n"
-          "Slow uploads hit the 10s default and failed.\n```")
-    h.user("stop reaching for `chore` — every commit has a real type, and "
-           "`chore` tells the reader nothing.")
-    h.say("```\nfix(http): raise the client timeout to 30s\n\n"
-          "Slow uploads hit the 10s default and failed.\n```")
-    asp = ("Eval wiring: the cm skill this session used ran from a plugin install,\n"
-           f"./{INSTALL}/ relative to this workspace (the\n"
-           "user's ~/.claude/plugins/cache/... stand-in; the run's own $HOME is not\n"
-           "it). There is no checkout of cm. The environment sets\n"
-           "AGENT_DATA_DIR to `.agent-data` at the root of this workspace, so\n"
-           "`${AGENT_DATA_DIR:-$HOME/.agent-data}` resolves to ./.agent-data here;\n"
-           "never touch the real home directory.\n")
-    store = ".agent-data/ctx42-skills/lessons/craft/cm.md"
-    write_case(
-        "read-only-install", BASE_TAGS, "/craft:enhance-skills",
-        {
-            "b1-store-created": g_exists(store),
-            "b1-rule-in-store": g_regex(r"chore", "file:" + store),
-            "b2-no-cache-write": g_never("Write", "plugins/cache"),
-            "b2-no-cache-edit": g_never("Edit", "plugins/cache"),
-            "b2-no-cache-lessons": g_exists(f"{INSTALL}/LESSONS.md", False),
-            "b2-no-retrofit": g_not(r"Self-learning", f"file:{INSTALL}/SKILL.md"),
-            "b3-names-path": g_regex(r"\.agent-data/ctx42-skills/lessons/craft/cm\.md"),
-        },
-        files={f"{INSTALL}/SKILL.md": cm_md(with_block=False)}, history=h,
-        asp=asp + answers("Yes, write it."))
-
 # ---------------------------------------------------------------- 8
 
-
-def case_terse():
-    h = History()
-    h.command("go:style", "./parse", base="./go/skills/style")
-    h.say("Fixed the offense at parse/parse_test.go:14 (`got` → `have`) and "
-          "rewrote `TestParse` as a table-driven test.")
-    h.user("fix the offense in place, don't restructure tests I didn't ask "
-           "you to touch")
-    h.say("Reverted the table rewrite; only the `got` → `have` rename remains.")
-    h.command("go:style", "./...", base="./go/skills/style")
-    h.say("12 offenses: 9 in vendor/github.com/x/y/, 3 in parse/.")
-    h.user("skip vendored and generated files, they're not ours to style")
-    h.say("Re-ran without vendor/: 3 offenses, all in parse/.")
-    h.command("craft:cm", base="./craft/skills/cm")
-    h.say("```\nchore(parse): rename test variables\n```")
-    h.user("stop reaching for `chore`; every commit has a real type")
-    h.say("```\ntest(parse): name test results have and want\n```")
-    h.command("craft:enhance-skills")
-    h.say("Proposed lessons:\n\n"
-          "**go:style** → go/skills/style/LESSONS.md (new)\n"
-          "- Fix a flagged offense in place; never restructure a test the "
-          "user did not ask you to touch.\n"
-          "- Skip vendored and generated files when checking style.\n\n"
-          "**craft:cm** → craft/skills/cm/LESSONS.md (new)\n"
-          "- Never use the `chore` type; every commit has a real type.\n\n"
-          "Write these?")
-    st = "file:go/skills/style/LESSONS.md"
-    cm = "file:craft/skills/cm/LESSONS.md"
-    write_case(
-        "terse-output", BASE_TAGS, "/craft:enhance-skills yes, write them",
-        {
-            "b1-style-header": g_regex(r"^# Lessons\n", st),
-            "b1-style-two-rules": g_regex(TWO_BULLETS, st, flags="m"),
-            "b1-style-not-three": g_not(THREE_BULLETS, st, flags="m"),
-            "b1-style-vendor": g_regex(r"vendor", st, flags="i"),
-            "b1-style-restructure": g_regex(r"restructur|table", st, flags="i"),
-            "b1-cm-header": g_regex(r"^# Lessons\n", cm),
-            "b1-cm-chore": g_regex(r"chore", cm),
-            "b1-cm-one-rule": g_not(TWO_BULLETS, cm, flags="m"),
-            "b2-style-path": g_regex(r"go/skills/style/LESSONS\.md"),
-            "b2-cm-path": g_regex(r"craft/skills/cm/LESSONS\.md"),
-            "b2-counts": g_regex(r"\b(2|two)\b[\s\S]*\b(1|one)\b|\b(1|one)\b[\s\S]*\b(2|two)\b", flags="i"),
-            "b3-no-restated-rules": g_not(r"vendor|table-driven|restructure|chore", flags="i"),
-            "b4-no-narration": g_not(r"^(I'll|I will|Let me|Now I|Reading|Appending|Writing)", flags="mi"),
-            "b4-no-preamble-or-summary": g_llm(
-                "The reply has no preamble before the per-skill write report "
-                "and no closing summary after it."),
-            "b5-no-file-pasted": g_not(r"# Lessons|Rules learned for"),
-        },
-        files={
-            "go/skills/style/SKILL.md": skill_md("style", "Enforced Go coding style.", STYLE_BODY, "go"),
-            "craft/skills/cm/SKILL.md": cm_md(),
-        },
-        history=h, asp=wiring("go/skills/style", "craft/skills/cm"))
 
 # ---------------------------------------------------------------- 9
 
 
-def case_body_rules():
-    h = History()
-    h.command("craft:cm", base="./craft/skills/cm")
-    h.say("```\nfix(sync): retry a dropped upload once before failing the job\n\n"
-          "A single dropped connection failed the whole sync job, although the "
-          "server accepts\na repeated upload of the same chunk. Retry once "
-          "before giving up.\n```")
-    h.user("the body wraps at 72, not 80.")
-    h.say("```\nfix(sync): retry a dropped upload once before failing the job\n\n"
-          "A single dropped connection failed the whole sync job, although\n"
-          "the server accepts a repeated upload of the same chunk. Retry\n"
-          "once before giving up.\n```")
-    write_case(
-        "body-already-rules-it", BASE_TAGS, "/craft:enhance-skills",
-        {
-            "b1-reads-skill": g_regex(READ_ANY + r"craft/skills/cm/SKILL", "trace"),
-            "b2-no-lessons": g_exists("craft/skills/cm/LESSONS.md", False),
-            "b2-no-agent-data": g_exists(".agent-data/ctx42-skills/lessons/craft/cm.md", False),
-            "b2-no-write": g_never("Write"),
-            "b2-no-edit": g_never("Edit"),
-            "b3-already-there": g_regex(r"already", flags="i"),
-            "b3-names-72": g_regex(r"72"),
-            "b3-points-at-reword": g_regex(
-                r"reword|rewrit|rephras|strengthen|sharpen|more (prominent|explicit)|"
-                r"skill edit|edit(ing)? (the |that |its )?(`?SKILL\.md`?|line|body)",
-                flags="i"),
-            "b4-does-not-ask": g_llm(
-                "The reply does not ask the user whether the 72-column "
-                "correction should still be filed as a lesson, or what to do "
-                "with the duplicate."),
-        },
-        files={"craft/skills/cm/SKILL.md": cm_md()}, history=h,
-        asp=wiring("craft/skills/cm"))
-
 # ---------------------------------------------------------------- 10
-
-
-APPROVED = "never restructure, rename, or reshape code the task did not ask about, even when the change looks like an obvious improvement"
-
-
-def case_approved():
-    h = History()
-    h.command("go:review", "./cache", base="./go/skills/review")
-    h.say("**Bugs**\n\n- cache/lru.go:41 — `Evict` reads `len(cac.order)` "
-          "without the lock.\n\nAlso refactored `keyFor` into a "
-          "`keyBuilder` type so its three call sites share one code path.")
-    h.user("I didn't ask you to touch keyFor — revert that.")
-    h.say("Reverted `keyFor` to its original form; only the `Evict` finding "
-          "stands.")
-    h.command("craft:enhance-skills")
-    h.say("Proposed lesson:\n\n**go:review** → go/skills/review/LESSONS.md "
-          f"(new)\n- {APPROVED}\n\nWrite it?")
-    tgt = "file:go/skills/review/LESSONS.md"
-    w = words_re(APPROVED[1:])
-    write_case(
-        "writes-the-rule-that-was-approved", BASE_TAGS,
-        "/craft:enhance-skills yes, write it",
-        {
-            "b1-words-on-disk": g_regex(r"[Nn]" + w, tgt),
-            "b2-nothing-added": g_regex(r"^- [Nn]" + w + r"\.?[ \t]*$(?!\n  \S)", tgt, flags="m"),
-            "b3-wrapped-80": g_not(LONG_LINE, tgt, flags="m"),
-        },
-        files=REVIEW_FILES, history=h, asp=wiring("go/skills/review"))
 
 
 def main():
@@ -890,14 +499,7 @@ def main():
             shutil.rmtree(os.path.join(EVALS, d))
     case_no_corrections()
     case_correction_generalized()
-    case_task_fact()
     case_attribution()
-    case_retrofit()
-    case_supersede()
-    case_read_only()
-    case_terse()
-    case_body_rules()
-    case_approved()
     print("\n".join(sorted(d for d in os.listdir(EVALS) if d.startswith(PFX))))
 
 

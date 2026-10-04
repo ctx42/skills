@@ -10,28 +10,6 @@
       ]
     },
     {
-      "id": 2,
-      "name": "test-rules-inherit-production",
-      "expected_behavior": [
-        "Applies the Test section on top of Production, not instead of it",
-        "Names tests `Test_Func` / `Test_Type_Method`, suffixes the table test `_tabular`, and uses `t.Run` subtests",
-        "Calls `t.Helper()` in helpers and reaches for `tester.Spy` when testing a helper",
-        "Keeps subtest names inside the `[a-zA-Z0-9 _-]` charset, flat, with no `/`"
-      ]
-    },
-    {
-      "id": 3,
-      "name": "pass-lists-offenses-then-asks",
-      "expected_behavior": [
-        "Resolves the target, the line limit and tab width, and lists the files in scope on the report's first line; reads `references/checking.md`",
-        "Reasons only for detection — runs no gofmt, vet, or linter",
-        "Opens only the `rules.md` entries for the rules it flags — the file is never read whole, which is visible in the commands the run issued.",
-        "Reports style offenses only: the off-by-one is left to `go:review`, not reported here",
-        "Groups findings Blocker / Should-fix / Nit with `file:line`, the rule id, and a minimal fix; ends with a clean / fix-first verdict and per-severity counts",
-        "Asks which offenses to apply rather than editing unprompted"
-      ]
-    },
-    {
       "id": 4,
       "name": "fix-applies-everything-behind-a-green-gate",
       "expected_behavior": [
@@ -39,79 +17,6 @@
         "Applies every listed fix, then re-runs the gate",
         "Reports each fix as one `file:sym — what changed` line plus the gate result",
         "Prints no diffs and never commits"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "delegated-by-review",
-      "expected_behavior": [
-        "Runs the pass through the offense list and stops — no pick step and no edits",
-        "Returns the grouped offense list for `review` to merge with its correctness findings"
-      ]
-    },
-    {
-      "id": 6,
-      "name": "rules-change-only-through-review",
-      "expected_behavior": [
-        "Routes the request to `go:review` rule-edit mode instead of hand-editing `SKILL.md` or `rules.md`",
-        "The redirect names the rule-edit command to run (`/review add …`) with the user's rule carried in it, and `style` writes nothing itself — `SKILL.md`, `rules.md`, and every other file stay unchanged"
-      ]
-    },
-    {
-      "id": 7,
-      "name": "broad-target-auto-plan-first",
-      "expected_behavior": [
-        "Switches to plan-first on its own: the target is broad and the invocation carries no budget, so it proposes rather than checking",
-        "The proposal names the `max_issues` and `depth` defaults it would use and the packages in scope",
-        "Stops there and waits: no package is checked, no offense list or finding is presented alongside the proposal, no file is edited — plan-first is propose-then-stop, not check-everything-then-present"
-      ]
-    },
-    {
-      "id": 8,
-      "name": "terse-output",
-      "expected_behavior": [
-        "Opens with the target/file-set line and then the offenses — that line is the first fact, not preamble",
-        "No narration of reading the rules, and no restating of the invocation",
-        "States each offense once",
-        "No closing summary re-listing offenses the user can already see"
-      ]
-    },
-    {
-      "id": 9,
-      "name": "incidental-interface-satisfaction",
-      "expected_behavior": [
-        "Flags `(*Conn).Close`, whose assertion declares it is written to the interface",
-        "Leaves `(*Buffer).Close` alone: incidentally matching an interface is not writing to one, and `goToImplementation` matching is not the test",
-        "Does not strip godoc from ordinary `Close`/`String`/`Error` methods on the strength of a signature match"
-      ]
-    },
-    {
-      "id": 10,
-      "name": "severity-and-ids-are-stable",
-      "expected_behavior": [
-        "Gives the same offense the same severity in all three packages",
-        "Gives the same offense the same rule id in all three packages — the `rules.md` key, never a coined one",
-        "Puts the missing exported godoc at Blocker and the receiver naming at Should-fix, per the rubric"
-      ]
-    },
-    {
-      "id": 11,
-      "name": "fanout-folds-then-caps",
-      "expected_behavior": [
-        "Does not stop for a plan: the invocation already carries `max_issues=N`, so the budget needs no proposing and the run proceeds to check",
-        "Fans out one subagent per package, each checking the same pinned rule set",
-        "Gives workers no share of `max_issues` — they report everything and the cap applies once at the merge",
-        "Folds by rule id before cutting: the godoc rule broken in all eight packages is one finding listing eight, not eight findings",
-        "Cuts nothing: the ten folded findings fit under the cap of 25, so the report carries all ten and says no offense went unreported — a cap applied before folding would have dropped 13 of the 38",
-        "The merged report carries each rule under exactly one id and one severity across all eight packages — no rule appearing in two spellings or two tiers, and no note reconciling id or severity spellings at the end",
-        "Reports the raw total as the sum of the worker reports plus any adjustment the merge made, each adjustment itemised — add the eight figures and the itemised adjustments up and the reported total equals them, rather than being carried from the plan or from the planted count",
-        "Still runs the pick step: a budget supplied on the invocation agreed the budget, not the fixes, so the run asks which offenses to apply and edits no file until told which",
-        "Derives ids by the documented steps: the four rules broken in every package come back as `wrap-errors-w`, `receivers-three-letter-type`, `every-exported-symbol`, and `separate-distinct-topics`; a negation survives (`No work in init()` gives `no-work-init`, never `work-init`); a dotted identifier contributes only the part before its dot",
-        "The final report grades identical code identically: across the packages that differ only in their package name, every rule it reports on one it reports on all, with no rule reported in a minority of them — the missing blank line between two `--- Given ---` topic groups among them. Graded on the report the user sees, not on the worker reports",
-        "Resolves a split before reporting it: every rule flagged in some packages but not all — including the six offenses each held by a single package — gets a re-check of the packages that did not flag it, shown (what it searched for and what it found) in the reply or in a file it saved before the reply, and the report carries the reconciled count rather than the raw spread. FAIL when no such re-check is shown",
-        "No folded finding prescribes inserting what another of its own sites prescribes deleting",
-        "Flags no blank-line offense for an `assert.NoError` sitting next to the `assert.Equal` that checks the same call's result: one `--- When ---` call's returns are one subject",
-        "Every offense quotes the source text that triggered it, so a reader can tell a located offense from a pattern-matched one"
       ]
     },
     {

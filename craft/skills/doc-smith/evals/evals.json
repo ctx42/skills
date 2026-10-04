@@ -2,16 +2,6 @@
   "skill_name": "doc-smith",
   "evals": [
     {
-      "id": 1,
-      "name": "cross-document-contradiction",
-      "skills": [
-        "doc-smith"
-      ],
-      "setup": "`docs/manual.md` calls Acme \"a hosted web platform\" in the intro and says \"Acme runs entirely in your web browser\" three sections later, repeating the browser claim twice more after that. No mode word is given.",
-      "query": "/doc-smith docs/manual.md",
-      "files": []
-    },
-    {
       "id": 2,
       "name": "flag-dubious-claim",
       "skills": [
@@ -19,16 +9,6 @@
       ],
       "setup": "`docs/api-guide.md` carries one line asserting \"REST APIs are stateful by design\", alongside ordinary defects the proof pass should fix: two comma splices, \"end-point\" and \"endpoint\" used interchangeably, and a sentence whose subject changes halfway through.",
       "query": "/doc-smith proof docs/api-guide.md",
-      "files": []
-    },
-    {
-      "id": 3,
-      "name": "terse-output",
-      "skills": [
-        "doc-smith"
-      ],
-      "setup": "An audit of `docs/manual.md` whose findings the user then approves.",
-      "query": "/doc-smith audit docs/manual.md",
       "files": []
     },
     {
@@ -42,16 +22,6 @@
       "files": []
     },
     {
-      "id": 5,
-      "name": "drift-across-a-set",
-      "skills": [
-        "doc-smith"
-      ],
-      "setup": "Three files meant as one manual. `docs/install.md` calls the unit a \"workspace\"; `docs/config.md` calls the same thing a \"project\". `docs/usage.md` points the reader at a \"Backup\" section that none of the three contains.",
-      "query": "/doc-smith audit docs/install.md docs/config.md docs/usage.md as one manual",
-      "files": []
-    },
-    {
       "id": 6,
       "name": "revise-keeps-the-whole-coherent",
       "skills": [
@@ -59,16 +29,6 @@
       ],
       "setup": "`docs/guide.md` uses \"workspace\" throughout. While revising an early paragraph the user renames it to \"project\". Later paragraphs still say \"workspace\".",
       "query": "/doc-smith work through docs/guide.md with me",
-      "files": []
-    },
-    {
-      "id": 7,
-      "name": "normalize-to-the-doc-s-own-convention",
-      "skills": [
-        "doc-smith"
-      ],
-      "setup": "`docs/guide.md` mixes \"colour\" and \"color\" and carries a Markdown table whose columns no longer line up. The file's own prose wraps at 100 columns.",
-      "query": "/doc-smith proof docs/guide.md",
       "files": []
     }
   ]

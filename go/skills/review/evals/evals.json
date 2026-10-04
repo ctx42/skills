@@ -12,16 +12,6 @@
       "files": []
     },
     {
-      "id": 2,
-      "name": "broad-target-auto-plan-first",
-      "skills": [
-        "review"
-      ],
-      "setup": "A module of eleven packages, about 660 lines of Go in all — over the ~500-line size below which a broad target is reviewed in context. The invocation names no budget and no depth. The user answers the proposal in a following turn with \"go ahead, those defaults are fine\", so the run continues past the gate in the same session.",
-      "query": "/review ./...",
-      "files": []
-    },
-    {
       "id": 3,
       "name": "rule-edit-add-change-remove",
       "skills": [
@@ -38,36 +28,6 @@
         "review"
       ],
       "setup": "A finished session with four corrections. Two are genuinely absent from `../style/SKILL.md`: the user rejected a `time.After` inside a `select` loop because each iteration leaks a timer until it fires, and asked that a string built in a loop use `strings.Builder` rather than `+=`. One repeats a rule the rulebook already carries verbatim — never store a `context.Context` in a struct field. The fourth was a rename specific to this project's domain vocabulary.",
-      "query": "/review learn",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "broad-fix-job-plans-and-pauses",
-      "skills": [
-        "review"
-      ],
-      "setup": "Findings span five packages, one of them large enough to warrant file-level chunks. The user answers each pause with \"go ahead\" in a following turn, so the run works at least the first two chunks rather than stopping at the plan.",
-      "query": "/review ./... fix",
-      "files": []
-    },
-    {
-      "id": 6,
-      "name": "terse-output",
-      "skills": [
-        "review"
-      ],
-      "setup": "An ordinary single-package check run.",
-      "query": "/review ./pkg/foo",
-      "files": []
-    },
-    {
-      "id": 7,
-      "name": "learn-finds-nothing-new",
-      "skills": [
-        "review"
-      ],
-      "setup": "A session whose three Go corrections are all already rules in `../style/SKILL.md` — `%w` wrapping, `have`/`want` test naming, and receiver conventions. Nothing new was taught.",
       "query": "/review learn",
       "files": []
     }

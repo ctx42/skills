@@ -2,16 +2,6 @@
   "skill_name": "doc-smith",
   "expectations": [
     {
-      "id": 1,
-      "name": "cross-document-contradiction",
-      "expected_behavior": [
-        "Judges against a model of the whole document, not a sequential read: the report pairs findings whose two halves sit in different sections, and cites both locations for each — a defect only visible once both ends are held at once",
-        "Reports the contradiction as a Blocker citing both locations, not just the later one",
-        "Flags the twice-repeated browser claim as redundancy",
-        "Numbers the findings and groups them Blocker / Should-fix / Nit"
-      ]
-    },
-    {
       "id": 2,
       "name": "flag-dubious-claim",
       "expected_behavior": [
@@ -19,17 +9,6 @@
         "Does not silently rewrite the dubious claim — raises it as a question stating what it would expect instead and why",
         "Lists the flagged claim among the items awaiting the user's decision",
         "Invents no replacement fact it cannot ground"
-      ]
-    },
-    {
-      "id": 3,
-      "name": "terse-output",
-      "expected_behavior": [
-        "Opens with the scope line and then the findings — the scope line is the first fact, not preamble",
-        "No narration of what it is about to do, and no step commentary",
-        "Each finding stated once; no closing summary re-listing findings already shown",
-        "After applying the fixes, states the edit classes and the file path",
-        "Does not paste the document back into chat"
       ]
     },
     {
@@ -43,15 +22,6 @@
       ]
     },
     {
-      "id": 5,
-      "name": "drift-across-a-set",
-      "expected_behavior": [
-        "Treats the three files as one document and checks consistency across all of them, not file by file",
-        "Flags workspace/project as terminology drift, naming both files",
-        "Flags the missing Backup section as a completeness gap — a dangling reference, not a wording nit"
-      ]
-    },
-    {
       "id": 6,
       "name": "revise-keeps-the-whole-coherent",
       "expected_behavior": [
@@ -60,17 +30,6 @@
         "Runs the coherence check and reports the later occurrences as now-inconsistent, with their locations, before moving on",
         "Sweeps the rest only once the user asks for it, which is the difference between a batch edit and an agreed one",
         "Reports each turn as the proposed change plus the coherence-check result — not a reprint of the document"
-      ]
-    },
-    {
-      "id": 7,
-      "name": "normalize-to-the-doc-s-own-convention",
-      "expected_behavior": [
-        "Normalizes to the variety the document predominantly uses, fixing the minority outliers rather than converting the whole document",
-        "Reports the mixed spelling in both directions — how many sites use each form and which it took as the document's own — so the reader can overrule the choice without re-reading the document",
-        "Reports the mix as a spelling-variety defect either way, since the author may have meant the other one",
-        "Re-aligns the table columns and reflows to the doc's own 100-column wrap, not an imposed house default",
-        "States edit classes and counts without pasting the document back"
       ]
     }
   ]

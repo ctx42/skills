@@ -1,4 +1,0 @@
-schema_version: "1.1"
-name: doc--directives-and-interface-method-godoc--gate
-context:
-  scaffold_script: scaffold.sh

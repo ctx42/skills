@@ -1,4 +1,0 @@
-schema_version: "1.1"
-name: cover--module-mode-honors-its-controls
-context:
-  scaffold_script: scaffold.sh

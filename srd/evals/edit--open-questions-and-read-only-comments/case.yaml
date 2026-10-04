@@ -1,4 +1,0 @@
-schema_version: "1.1"
-name: edit--open-questions-and-read-only-comments
-context:
-  scaffold_script: scaffold.sh

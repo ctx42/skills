@@ -12,36 +12,6 @@
       "files": []
     },
     {
-      "id": 2,
-      "name": "writes-only-what-was-attested",
-      "skills": [
-        "kb"
-      ],
-      "setup": "The user explains how leak instances accumulate evidence. The agent infers a retention period from that explanation which the user never stated.",
-      "query": "/kb capture",
-      "files": []
-    },
-    {
-      "id": 3,
-      "name": "stays-inside-the-interview",
-      "skills": [
-        "kb"
-      ],
-      "setup": "The SRD concerns hydrophone sensor types. Valve maintenance intervals would round out the asset model, but nothing in this SRD touches valves. The sensor-type field's allowed values did come up. When the interview asks whether the field may be empty, the user says \"skip that for now\".",
-      "query": "/kb capture",
-      "files": []
-    },
-    {
-      "id": 4,
-      "name": "gate-rejects-an-absolute-kb-path",
-      "skills": [
-        "kb"
-      ],
-      "setup": "`project-config.md` sets `kb: /srv/vault/kb`, an absolute path.",
-      "query": "/kb",
-      "files": []
-    },
-    {
       "id": 5,
       "name": "writes-to-the-inbox-at-confirmation",
       "skills": [
@@ -60,26 +30,6 @@
       ],
       "setup": "A `##` section moves out of `_inbox.md` into a new page. A gap record cites the inbox section's `doc_id`, and an SRD cites it too. `_open-questions.md` holds one index-only question linking to that section.",
       "query": "/kb restructure",
-      "files": []
-    },
-    {
-      "id": 7,
-      "name": "terse-output",
-      "skills": [
-        "kb"
-      ],
-      "setup": "A `file` run that moves two inbox sections onto two pages.",
-      "query": "/kb file",
-      "files": []
-    },
-    {
-      "id": 8,
-      "name": "bare-capture-with-no-srd",
-      "skills": [
-        "kb"
-      ],
-      "setup": "A conversation with no SRD in play taught a durable platform fact, confirmed by the user. Nothing supplies an SRD id or path.",
-      "query": "/kb",
       "files": []
     }
   ]

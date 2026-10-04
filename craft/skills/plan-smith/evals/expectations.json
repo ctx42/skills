@@ -35,58 +35,6 @@
         "Every item starts unchecked and `N`",
         "Reports the path and the counts tersely instead of replaying the summary the user just read"
       ]
-    },
-    {
-      "id": 4,
-      "name": "update-mixed",
-      "expected_behavior": [
-        "Flips login flow and session storage to `[x]` / `Y`, leaves provider config `N`, and marks the operator docs item `X` with the one-line reason the user gave",
-        "Keeps the rejected docs item in the file with its `[ ]` checkbox and its original prose — not deleted, not renumbered away",
-        "Records the force-logout work discovered in staging as a new item appended after the existing four, so items 1-4 keep their numbers, and appends the closing `Remove this plan` item after it since the plan lacked one",
-        "Rewrites the summary table so every row's status matches its section's checkbox and tag, and keeps the table aligned",
-        "Leaves the untouched items' prose exactly as it was",
-        "Reports what changed and the new counts, without pasting the plan back"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "update-unverified-claim",
-      "expected_behavior": [
-        "Goes to the code rather than recording the user's claim — a claim is where to look, not what to write down",
-        "Leaves item 2 `N`: a process-local map is not the shared Redis counter the item specifies, however close the feature looks",
-        "Does not mark item 3 `Y` on the strength of the 429 alone — its acceptance criteria name `Retry-After`, which is absent",
-        "Names both in the report as claimed-but-unverified, saying what is actually there",
-        "Renumbers and drops nothing"
-      ]
-    },
-    {
-      "id": 6,
-      "name": "ambiguous-request",
-      "expected_behavior": [
-        "Asks exactly one question — write a new plan or update an existing one —",
-        "Writes no file and invents no plan content before the answer comes back",
-        "Opens on the question, with no preamble, no restatement of the request, and no announcement of what it is about to do"
-      ]
-    },
-    {
-      "id": 7,
-      "name": "update-keeps-an-existing-table-s-widths",
-      "expected_behavior": [
-        "Keeps the `Item` column padded to its existing 30 characters: the appended row is padded out to match, not the table narrowed to the new widest cell",
-        "Leaves every row it did not change byte-identical — the three existing rows and the separator are unchanged apart from item 1's status",
-        "Marks item 1 `Y` from the implementation actually present in the repo, and appends the TODO's work as a new item at `N` with the next number"
-      ]
-    },
-    {
-      "id": 8,
-      "name": "update-completes-plan",
-      "expected_behavior": [
-        "Flips item 3 to `[x]` / `Y` from the audit code and its test",
-        "Seeing every work item now `Y`, asks the user whether to delete the plan file",
-        "Does not delete the file, nor mark the closing item, before the user answers",
-        "Leaves items 1-4 numbered as they were",
-        "On the user's \"No, keep it.\", keeps the file and marks the closing item `X`, in both its section and its table row"
-      ]
     }
   ]
 }

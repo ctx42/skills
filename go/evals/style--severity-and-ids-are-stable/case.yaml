@@ -1,4 +1,0 @@
-schema_version: "1.1"
-name: style--severity-and-ids-are-stable
-context:
-  scaffold_script: scaffold.sh

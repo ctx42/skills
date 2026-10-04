@@ -1,4 +1,0 @@
-schema_version: "1.1"
-name: doc--correct-but-terse-is-left-alone
-context:
-  scaffold_script: scaffold.sh

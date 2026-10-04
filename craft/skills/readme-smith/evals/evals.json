@@ -12,16 +12,6 @@
       "files": []
     },
     {
-      "id": 2,
-      "name": "no-fabrication",
-      "skills": [
-        "readme-smith"
-      ],
-      "setup": "The same Go repo, still unpublished: no tagged release, no package on any registry, no benchmark suite, no `LICENSE` file. The user answers the positioning questions but says nothing about performance or distribution.",
-      "query": "/readme-smith create a README",
-      "files": []
-    },
-    {
       "id": 3,
       "name": "improve-member-readme",
       "skills": [
@@ -39,66 +29,6 @@
       ],
       "setup": "A Go library repo that uses gomake: its CI workflow runs a gomake step and `gomake --list` lists the built-in `:doc:mce` target. No README yet. The package has exported `New`, `(*Client).Do`, and `Parse`, and no `_test.go` files carrying `Example…` functions.",
       "query": "/readme-smith write a README",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "terse-output",
-      "skills": [
-        "readme-smith"
-      ],
-      "setup": "An existing root README with an emoji on every heading, a row of nine badges (three of which 404), a `<div align=\"center\">` header block, and a `<details>` section. The user has already approved the findings; this is the fix turn.",
-      "query": "/readme-smith improve README.md",
-      "files": []
-    },
-    {
-      "id": 6,
-      "name": "one-nav-aid-and-module-paths",
-      "skills": [
-        "readme-smith"
-      ],
-      "setup": "A Go module whose `go.mod` declares `bitbucket.org/acme/foo` and whose only package lives at `pkg/foo`. `git remote -v` points at the same Bitbucket host. The project is large enough that the README runs past two screens.",
-      "query": "/readme-smith create a README",
-      "files": []
-    },
-    {
-      "id": 7,
-      "name": "no-wide-code-fences",
-      "skills": [
-        "readme-smith"
-      ],
-      "setup": "A Go project that uses gomake (a gomake step in CI) whose natural example prints a raw HTTP exchange in one call — `fmt.Printf(\"%q\\n\", wire)` — producing a single ~300-character output line.",
-      "query": "/readme-smith write a README",
-      "files": []
-    },
-    {
-      "id": 8,
-      "name": "gomake-installed-but-project-does-not-use-it",
-      "skills": [
-        "readme-smith"
-      ],
-      "setup": "A Go CLI repo with no gomake config, no gomake step in CI, and no `<!-- gmmce:… -->` marker anywhere. gomake happens to be installed on this machine, so `gomake --list` lists the built-in `:doc:mce` target like it does in any directory.",
-      "query": "/readme-smith write a README",
-      "files": []
-    },
-    {
-      "id": 9,
-      "name": "unrunnable-command-vs-unpublished-package",
-      "skills": [
-        "readme-smith"
-      ],
-      "setup": "Two commands the README must ship. The quickstart needs a toolchain this sandbox does not have, so it cannot be run here at all. The install command runs fine and fails for a project reason: the module is not published yet, so it will fail for a reader too.",
-      "query": "/readme-smith write a README",
-      "files": []
-    },
-    {
-      "id": 10,
-      "name": "declined-go-source-gate",
-      "skills": [
-        "readme-smith"
-      ],
-      "setup": "A gomake project whose `pkg/store/README.md` carries a hand-written `go` snippet that does not compile. The audit findings are approved, but when asked separately about creating `pkg/store/example_test.go` the user says no.",
-      "query": "/readme-smith improve pkg/store/README.md",
       "files": []
     }
   ]

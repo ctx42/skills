@@ -75,10 +75,6 @@ def llm(claim):
 
 
 NO_WRITE = "---\ntype: tool_used\ntool: Write\nmin: 0\nmax: 0\narm: both\n---\n"
-NO_EDIT = "---\ntype: tool_used\ntool: Edit\nmin: 0\nmax: 0\narm: both\n---\n"
-# One line with a "?": options and the question that picks between them may
-# share a paragraph ("what does it do? Is it held, cancelled, or rerouted?").
-ONE_Q = last(r"^[^\n]*\?[^\n]*$", match="count:1", flags="m")
 
 
 def case(name, query, graders, *, hist=None, answers=None, extra_tags=(),
@@ -111,34 +107,6 @@ def case(name, query, graders, *, hist=None, answers=None, extra_tags=(),
 for old in glob.glob(os.path.join(EVALS, "grill-me--*")):
     shutil.rmtree(old)
 
-# 1. vague-plan: cold open, the whole scenario is the first turn.
-case("grill-me--vague-plan", "/craft:grill-me I want to add caching to the API.", {
-    "b1-branches-mapped": last(
-        r"^(?=.*invalidat)(?=.*\b(stor(e|age)|where|redis|memcached|in-memory|cdn)\b)"
-        r"(?=.*\bkeys?\b)(?=.*\b(what|which)\b[^\n]{0,40}(cach|endpoint|data|response))",
-        flags="is"),
-    "b2-one-question": ONE_Q,
-    "b2-constraining-branch": llm(
-        "The one question the reply asks is about a foundational branch whose answer "
-        "constrains the other caching decisions (for example what gets cached, the "
-        "staleness tolerated, or the problem caching should solve), not a peripheral "
-        "detail such as metrics, naming, or a specific TTL value."),
-    "b3-branch-count": last(
-        r"^(?=.*(\b\d+\b|\bno\b|\bnone\b|\bzero\b)[^\n]{0,30}\bresolved\b|.*\bresolved\W{0,5}\d)"
-        r"(?=.*\b\d+\b[^\n]{0,30}\b(open|branch(es)?|remain\w*)\b|.*\bopen\W{0,5}\d)"
-        # "8 branches, all open" states zero resolved.
-        r"|^(?=.*\b\d+\b[^\n]{0,40}\b(all (still )?open|open branch(es)?)\b)",
-        flags="is"),
-    "b4-no-greeting-or-announcement": last(
-        r"^[#*_>\s]*(hi\b|hello|great|sure|okay|ok\b|got it|alright|let'?s|"
-        r"let me|i'?ll|i will|i'?m going|you want|you'?re|so you|here'?s|here is|"
-        r"before (we|i)|good|nice|caching (is|can))", match="not_contains", flags="i"),
-    "b4-no-restatement": llm(
-        "The reply's first sentence is a branch map, a count of branches, or a "
-        "question; it does not restate the user's request (adding caching to the API) "
-        "or announce what the assistant is about to do."),
-})
-
 # 2. caller-supplied-subject: report-doc-gap drives; history about a Go rename.
 GAP = "the docs don't say what happens to an in-flight order when a station goes offline"
 H2 = [
@@ -152,20 +120,6 @@ H2 = [
                   "to craft:grill-me; it returns its summary here and I file the gap "
                   "from that summary."),
 ]
-CALLER_TAGS = ()
-case("grill-me--caller-supplied-subject--gate", "/craft:grill-me " + GAP, {
-    "b1-gap-is-the-subject": last(r"^(?=.*\border)(?=.*\bstation)", flags="is"),
-    "b1-not-the-rename": last(r"\brenam\w*|\bstrutil\b|\bpackage\b|\bimports?\b",
-                              match="not_contains", flags="i"),
-    "b2-documentation-branches": llm(
-        "The branches the reply maps (or, if it lists none, the question it asks) are "
-        "about documenting a claim — what happens to the order, its boundaries or "
-        "exceptions, who reads it and what context they need, or which terms are used "
-        "— rather than about designing or implementing a feature."),
-    "b4-one-question": ONE_Q,
-    "b4-no-write": NO_WRITE,
-    "b4-no-edit": NO_EDIT,
-}, hist=H2)
 case("grill-me--caller-supplied-subject", "/craft:grill-me " + GAP, {
     "b1-gap-is-the-subject": last(r"^(?=.*\border)(?=.*\bstation)", flags="is"),
     "b3-no-offer-to-persist": last(
@@ -188,50 +142,6 @@ case("grill-me--caller-supplied-subject", "/craft:grill-me " + GAP, {
     "the station but not yet acknowledged.",
     "That is everything I know; nothing else is open.",
 ], max_turns=40, timeout=300)
-
-# 3. contradiction-across-branches: later turn via history.
-H3 = [
-    ("user", "/craft:grill-me the field-service mobile app for our technicians"),
-    ("assistant", "7 branches open, 0 resolved: data model, auth, job assignment, "
-                  "sync, notifications, photo attachments, deployment.\n\nData model "
-                  "first: where does job data live while a technician works on it?"),
-    ("user", "Technicians are often in basements and rural sites with no signal, so "
-             "the app must work fully offline. Everything is stored locally first."),
-    ("assistant", "Data model: offline-first, all job data stored locally first. "
-                  "1 of 7 resolved, 6 open.\n\nAuth: how long may a technician stay "
-                  "signed in without reaching the server?"),
-    ("user", "Cache the token for 30 days."),
-    ("assistant", "Auth: token cached for 30 days. 2 of 7 resolved, 5 open.\n\nJob "
-                  "assignment: who puts a job on a technician's list, and who "
-                  "confirms it?"),
-    ("user", "The dispatcher assigns, the technician accepts."),
-    ("assistant", "Job assignment: dispatcher assigns, technician accepts. 3 of 7 "
-                  "resolved, 4 open.\n\nSync: when a technician edits a job report, "
-                  "how should that edit reach the server?"),
-]
-case("grill-me--contradiction-across-branches",
-     "/craft:grill-me Every save syncs to the server immediately so the dispatcher "
-     "sees progress in real time.", {
-         "b1-names-another-branch": llm(
-             "Besides the data-model and sync branches, the reply names at least one "
-             "other already-resolved branch (auth with its 30-day cached token, or job "
-             "assignment with offline acceptance) as also put in doubt, affected, or "
-             "reopened by the conflict. Only listing it among the resolved branches, "
-             "or in a branch count, does not count."),
-         "b2-reconciliation-is-an-option": llm(
-             "The reply does not settle the conflict itself: any reconciliation it "
-             "mentions (a sync queue, eventual consistency, syncing only some fields) "
-             "is offered as an option for the user to choose, not stated as the "
-             "decision."),
-         "b3-earlier-branch-reopened": last(
-             r"reopen\w*[\s\S]{0,80}?(data[- ]model|offline|branch 1)|"
-             r"(data[- ]model|offline[- ]first|branch 1)[^\n]{0,60}"
-             r"(reopen\w*|open again|back (to )?open|unresolved|not resolved|no longer resolved)",
-             flags="i"),
-         "b3-asks-the-user": last(r"\?"),
-         "b4-no-recap": last(r"dispatcher assigns", match="not_contains", flags="i"),
-         "b4-one-question": ONE_Q,
-     }, hist=H3)
 
 # 4. alignment-reached: summary + offer (gate), then the plan file (full).
 H4 = [
@@ -261,23 +171,6 @@ Q4 = ("/craft:grill-me Yes, log every export with the user, the timestamp, and t
 SIX = (r"^(?=.*filter)(?=.*100[,. ]?000|.*100k)(?=.*(4180|BOM))"
        r"(?=.*(synchronous|download))(?=.*(can see|view access|permission))"
        r"(?=.*audit)")
-case("grill-me--alignment-reached--gate", Q4, {
-    "b1-stops-asking": llm(
-        "The reply asks no further interview question about the CSV export feature; "
-        "the only question it may contain is an offer to save or persist the summary."),
-    "b2-all-six-decisions": last(SIX, flags="is"),
-    "b3-verifiable-criteria": llm(
-        "Each decision in the summary carries an acceptance criterion phrased as a "
-        "concrete pass/fail check against the finished feature (for example: an "
-        "export of 100,001 rows is refused), not a restatement of the decision."),
-    "b4-offers-to-persist": last(
-        r"plan-smith|persist|save|write (it|this) (up|to)|plan file|tracked plan",
-        flags="i"),
-    "b5-no-write": NO_WRITE,
-    "b5-no-edit": NO_EDIT,
-    "b5-no-code": last(r"```(go|python|py|js|javascript|ts|typescript|sql|java)\b",
-                       match="not_contains", flags="i"),
-}, hist=H4)
 case("grill-me--alignment-reached", Q4, {
     "b4-plan-file-exists": grader("file_exists", "", path="plans/csv-export.md",
                                   exists="true"),
@@ -289,79 +182,6 @@ case("grill-me--alignment-reached", Q4, {
 }, hist=H4, answers=["Yes, save it as a plan at plans/csv-export.md."],
     extra_tags=("skill:plan-smith",),
     tools=("Read", "Glob", "Grep", "Skill", "Write", "Edit"), max_turns=40, timeout=300)
-
-# 5. terse-output: one later turn.
-H5 = [
-    ("user", "/craft:grill-me rate limiter for the public API"),
-    ("assistant", "5 branches open, 0 resolved: algorithm, scope, counter storage, "
-                  "limits per plan, over-limit response.\n\nAlgorithm: fixed window, "
-                  "sliding window, or token bucket?"),
-    ("user", "Token bucket."),
-    ("assistant", "Algorithm: token bucket. 1 of 5 resolved, 4 open.\n\nScope: is "
-                  "the limit per API key, per IP, or per account?"),
-    ("user", "Per API key."),
-    ("assistant", "Scope: per API key. 2 of 5 resolved, 3 open.\n\nCounter storage: "
-                  "where should the counters live?"),
-]
-case("grill-me--terse-output",
-     "/craft:grill-me Redis, we already run a cluster for sessions.", {
-         "b1-no-acknowledgement": last(
-             r"^[#*_>\s]*(great|good|perfect|nice|makes sense|got it|ok\b|"
-             r"okay|sure|thanks|understood|noted|alright|excellent|sounds|that works|"
-             r"smart|solid|let me|i'?ll|next,? i|moving on|now)", match="not_contains",
-             flags="i"),
-         "b2-confirmed-once": last(r"^[^\n?]*\bRedis\b[^\n?]*$", match="count:1",
-                                   flags="m"),
-         "b3-no-replay": last(r"token[- ]bucket", match="not_contains", flags="i"),
-         "b4-progress-counts": last(
-             r"\b\d\s*(of|/)\s*5\s+resolved\W{1,3}\d\s+(open|remain\w*|left)\b",
-             flags="i"),
-         "b4-one-question": ONE_Q,
-     }, hist=H5)
-
-# 6. false-alignment: the user calls it done with one branch unsettled.
-H6 = [
-    ("user", "/craft:grill-me CSV export for the reporting tool"),
-    ("assistant", "6 branches open, 0 resolved: scope, size limit, format, delivery, "
-                  "permissions, audit.\n\nScope: does an export cover the filtered "
-                  "view or the whole dataset?"),
-    ("user", "The currently filtered view only."),
-    ("assistant", "Scope: the filtered view, not the whole dataset. 1 of 6 resolved, "
-                  "5 open.\n\nSize limit: how many rows are too many for one export?"),
-    ("user", "Something sensible, we'll pin the number down later."),
-    ("assistant", "Size limit parked for now. 1 of 6 resolved, 5 open.\n\nFormat: "
-                  "which CSV dialect and encoding?"),
-    ("user", "RFC 4180, UTF-8 with a BOM so Excel opens it correctly."),
-    ("assistant", "Format: RFC 4180, UTF-8 with BOM. 2 of 6 resolved, 4 open.\n\n"
-                  "Delivery: a download in the request, or a background job?"),
-    ("user", "Synchronous download. No email, no background job."),
-    ("assistant", "Delivery: synchronous download only. 3 of 6 resolved, 3 open.\n\n"
-                  "Permissions: who may export a report?"),
-    ("user", "Anyone who can see the report can export it."),
-    ("assistant", "Permissions: export follows view access. 4 of 6 resolved, 2 open."
-                  "\n\nAudit: should exports be recorded in the audit log?"),
-]
-case("grill-me--false-alignment",
-     "/craft:grill-me Yes, log every export with the user, the timestamp, and the "
-     "row count. I think that's everything — write it up.", {
-         "b1-not-complete": llm(
-             "The reply does not treat the interview as finished: it says at least "
-             "one branch is still open instead of writing up the final result."),
-         "b2-size-limit-open": last(r"\b(size|row)", flags="i"),
-         "b2-why-not-a-decision": llm(
-             "The reply explains that \"something sensible\" is not a decision because "
-             "without a concrete number there is nothing to build or test against."),
-         "b3-no-handoff": last(r"plan-smith|persist", match="not_contains", flags="i"),
-         "b3-no-skill-call": "---\ntype: tool_used\ntool: Skill\ninput_match: "
-                             "plan-smith\nmin: 0\nmax: 0\narm: both\n---\n",
-         "b3-no-write": NO_WRITE,
-         "b4-one-question": ONE_Q,
-         "b5-counts": last(
-             r"\b(5|five)\s*(of|/)\s*6\b|"
-             r"^(?=.*\b(5|five)\b[^\n]{0,20}resolved)"
-             r"(?=.*\b(1|one)\b[^\n]{0,20}(open|remain\w*|left|outstanding))",
-             flags="is"),
-     }, hist=H6)
 
 # 7. branch-nobody-present-can-resolve: summary with an owned open branch.
 H7 = [
@@ -392,23 +212,6 @@ H7 = [
 ]
 Q7 = ("/craft:grill-me I don't know, and I can't find out today — the platform team "
       "owns that number. Let's wrap up.")
-case("grill-me--branch-nobody-present-can-resolve--gate", Q7, {
-    "b1-summary-produced": last(
-        r"^(?=.*(internal|pilot))(?=.*tenant_id)(?=.*2\s?%)(?=.*p95)", flags="is"),
-    "b2-no-invented-ceiling": last(
-        r"(ceiling|concurrency|\bcap\b)[^\n.]{0,40}\b\d+\s*(concurrent|jobs?|workers?|"
-        r"requests?|slots?|tasks?)\b", match="not_contains", flags="i"),
-    "b3-open-with-owner": last(
-        r"^(?=.*platform team)(?=.*(concurrency|ceiling))(?=.*\bopen\b)", flags="is"),
-    # Each resolved branch is followed, before the next one, by a criterion.
-    # Regex, not a judge: Haiku failed a summary that gave all four.
-    "b4-criteria-for-resolved": last(
-        "^" + "".join(rf"(?=[\s\S]*{b}(?:(?!{nxt})[\s\S])*?(acceptance|criteri|pass(es)?\b|verif))"
-                      for b, nxt in [("[Tt]enant order", "[Ii]solation"), ("[Ii]solation", "[Rr]ollback"),
-                                     ("[Rr]ollback", "[Mm]onitoring"), ("[Mm]onitoring", "[Cc]oncurrency")]),
-        flags="i"),
-    "b4-no-write": NO_WRITE,
-}, hist=H7)
 case("grill-me--branch-nobody-present-can-resolve", Q7, {
     "b5-plan-file-exists": grader("file_exists", "", path="plans/rollout.md",
                                   exists="true"),

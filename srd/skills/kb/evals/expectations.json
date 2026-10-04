@@ -12,35 +12,6 @@
       ]
     },
     {
-      "id": 2,
-      "name": "writes-only-what-was-attested",
-      "expected_behavior": [
-        "Writes the attested behaviour to the page body",
-        "Keeps the inferred retention period out of the body entirely",
-        "Records it as an open question: in the page's `## Open questions` with a row in `_open-questions.md`, or — when the fact sits in the inbox — as an index row alone carrying the full wording",
-        "Opens the section carrying undocumented content with its attestation line",
-        "Adds nothing the attestation does not carry: every clause in the written section traces to something the user said, and a section marked as absent from the platform docs enumerates no specifics of its own"
-      ]
-    },
-    {
-      "id": 3,
-      "name": "stays-inside-the-interview",
-      "expected_behavior": [
-        "Asks nothing about valves — an adjacent subject the interview never opened",
-        "Any question it asks stays on the sensor-type field, the subject the interview already opened",
-        "On \"skip that for now\", routes the question to `_open-questions.md` marked deferred and moves on without re-asking"
-      ]
-    },
-    {
-      "id": 4,
-      "name": "gate-rejects-an-absolute-kb-path",
-      "expected_behavior": [
-        "Stops before any other work and says `kb` is absolute, naming the value",
-        "Says paths are relative to the project root",
-        "Writes no page anywhere and asks no question about where the knowledge base lives"
-      ]
-    },
-    {
       "id": 5,
       "name": "writes-to-the-inbox-at-confirmation",
       "expected_behavior": [
@@ -58,25 +29,6 @@
         "Moves the section with its attestation line and its inbox `## Provenance` row, and writes the index-only question's wording onto the new page",
         "Repairs no SRD, and lists each SRD under the `initiatives` folder that cites an old id so the user can fix it",
         "Reports each stale gap-store `doc_id` with the value it should take, rather than writing it — this skill holds read access there"
-      ]
-    },
-    {
-      "id": 7,
-      "name": "terse-output",
-      "expected_behavior": [
-        "No preamble and no narration of the search or the file writes",
-        "States each page and the number of sections moved to it, once",
-        "No closing summary restating the sections, and no page contents echoed back"
-      ]
-    },
-    {
-      "id": 8,
-      "name": "bare-capture-with-no-srd",
-      "expected_behavior": [
-        "Defaults to capture and writes the fact to `kb/_inbox.md` without asking which SRD it belongs to — a bare capture has none",
-        "Names the session as the source in the attestation line rather than inventing an SRD reference or leaving the slot blank",
-        "Writes no SRD id or path anywhere — no section, front-matter key, or provenance row names one",
-        "Omits the `· gap-NNNN` segment, since no gap was filed"
       ]
     }
   ]

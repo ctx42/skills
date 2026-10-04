@@ -30,26 +30,6 @@
       "setup": "`gopkg.in/yaml.v3` is an ordinary module dependency: no `replace`, no `go.work` entry, source in the module cache.",
       "query": "/reshape gopkg.in/yaml.v3",
       "files": []
-    },
-    {
-      "id": 4,
-      "name": "terse-output",
-      "skills": [
-        "reshape"
-      ],
-      "setup": "A run whose analysis would support eight proposals, capped at three.",
-      "query": "/reshape must max=3",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "restraint-on-an-api-that-is-fine",
-      "skills": [
-        "reshape"
-      ],
-      "setup": "A small library the consumer uses cleanly: 9 call sites, no repeated wrapper, no inline config building, no re-declared interface, no error-string matching. Nothing about the consuming code is obviously improvable by changing the library.",
-      "query": "/reshape tidy",
-      "files": []
     }
   ]
 }

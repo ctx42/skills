@@ -12,15 +12,6 @@
       ]
     },
     {
-      "id": 2,
-      "name": "never-closes-an-unknown-by-guessing",
-      "expected_behavior": [
-        "Leaves the row under `## Open` with its kind and hit count unchanged, and puts the corpus hit in front of the user naming what it does and does not settle",
-        "Establishes the row's state from the user, not from the corpus",
-        "Confirms it is still open and moves on, closing it only if the user reports that a decision was actually taken"
-      ]
-    },
-    {
       "id": 3,
       "name": "reclassifies-rather-than-skipping",
       "expected_behavior": [
@@ -38,24 +29,6 @@
         "Checks the corpus before drafting, separating content that is absent from content that is present but unranked",
         "Writes the draft outside every corpus source, the `kb` folder included",
         "Publishes nothing itself; once given the published URL it resolves every gap in the cluster"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "gate-stops-when-the-server-fails",
-      "expected_behavior": [
-        "Stops before any list is opened or counted, naming the failed `search` call and its error",
-        "Tells the user to start the `srd-doc` server and run `/mcp` to connect, then re-run",
-        "Does not work `deferred` or `unknowns` around the failure — the reply carries no counts or list and `_open-questions.md` is unchanged — and neither retries nor offers or describes a REST fallback"
-      ]
-    },
-    {
-      "id": 6,
-      "name": "terse-output",
-      "expected_behavior": [
-        "No narration of the list calls or the row moves",
-        "States what closed exactly once in the whole sitting, in the closing line — not again as each list finishes, and not restated in a second shape in the same turn. A per-delegate line counting `srd:kb`'s writes is not a restatement",
-        "No closing summary repeating the rows, and no drafted page echoed back into chat"
       ]
     }
   ]

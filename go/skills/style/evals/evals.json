@@ -12,26 +12,6 @@
       "files": []
     },
     {
-      "id": 2,
-      "name": "test-rules-inherit-production",
-      "skills": [
-        "style"
-      ],
-      "setup": "The same agent then writes `service_test.go`, including a table test and a helper.",
-      "query": "Write tests for Service.Close in service_test.go",
-      "files": []
-    },
-    {
-      "id": 3,
-      "name": "pass-lists-offenses-then-asks",
-      "skills": [
-        "style"
-      ],
-      "setup": "`./pkg/foo` has a single-letter receiver and a godoc on an interface-implementing method. It also has an off-by-one in a loop bound — a correctness bug, not a style offense.",
-      "query": "/style ./pkg/foo",
-      "files": []
-    },
-    {
       "id": 4,
       "name": "fix-applies-everything-behind-a-green-gate",
       "skills": [
@@ -39,77 +19,6 @@
       ],
       "setup": "`./pkg/foo` has six offenses. The module test suite is green before the run.",
       "query": "/style ./pkg/foo fix",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "delegated-by-review",
-      "skills": [
-        "style",
-        "review"
-      ],
-      "setup": "`go:review` is running a check on the current diff and invokes `style` for the style dimension.",
-      "query": "/review",
-      "files": []
-    },
-    {
-      "id": 6,
-      "name": "rules-change-only-through-review",
-      "skills": [
-        "style"
-      ],
-      "setup": "The user asks `style` directly to add a new rule.",
-      "query": "/style add a rule that test helpers never return errors",
-      "files": []
-    },
-    {
-      "id": 7,
-      "name": "broad-target-auto-plan-first",
-      "skills": [
-        "style"
-      ],
-      "setup": "An 8-package module. Every package holds the same four offenses — a `%v` error wrap, a single-letter receiver, missing godoc on an exported symbol, and a missing blank line between test topic groups. Invoked with no budget controls at all, so the run has to propose one. Nothing else in the module breaks any rule.",
-      "query": "/style ./...",
-      "files": []
-    },
-    {
-      "id": 8,
-      "name": "terse-output",
-      "skills": [
-        "style"
-      ],
-      "setup": "An ordinary single-package pass.",
-      "query": "/style ./pkg/foo",
-      "files": []
-    },
-    {
-      "id": 9,
-      "name": "incidental-interface-satisfaction",
-      "skills": [
-        "style"
-      ],
-      "setup": "A package where `(*Conn).Close` is pinned by `var _ io.Closer = (*Conn)(nil)` and carries a full godoc restating the contract, and `(*Buffer).Close` is simply this type's own cleanup — no assertion, no interface named in its docs — but `goToImplementation` reports it as satisfying `io.Closer` all the same. Both have godoc.",
-      "query": "/style ./pkg/net",
-      "files": []
-    },
-    {
-      "id": 10,
-      "name": "severity-and-ids-are-stable",
-      "skills": [
-        "style"
-      ],
-      "setup": "Three packages carrying the same two offenses each: a single-letter receiver and an exported symbol with no godoc. Small enough to check in one context, so nothing merges — the point is whether one run is self-consistent across packages.",
-      "query": "/style ./...",
-      "files": []
-    },
-    {
-      "id": 11,
-      "name": "fanout-folds-then-caps",
-      "skills": [
-        "style"
-      ],
-      "setup": "The same 8-package module, and this time the offenses are counted: every package holds the same four — a `%v` error wrap, a single-letter receiver, missing godoc on an exported symbol, and a missing blank line between two `--- Given ---` topic groups — so 32 offenses fold to 4 findings. Two packages hold three further offenses each that no other package has, giving 38 in all and 10 findings after folding. Nothing else in the module breaks any rule — check every package against the full rule set, not only the planted ones, so 38 is the true count. Locals of the receiver's type already use the three-letter name the receiver should have, so the single-letter receiver is the only naming offense. One package also has an `assert.NoError` sitting next to the `assert.Equal` that checks the same call's result. The cap is supplied as 25, so it binds on the unfolded list and does not bind on the folded one — the difference the run has to get right.",
-      "query": "/style ./... max_issues=25 depth=standard",
       "files": []
     },
     {

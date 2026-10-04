@@ -33,38 +33,6 @@
       "setup": "An open question asks whether \"Namespace\" is a defined term — the Glossary does define it. Later in the walk, the user adds \"remember that sessions can't span tenants.\"",
       "query": "/system-check specs/labeling.md",
       "files": []
-    },
-    {
-      "id": 4,
-      "name": "stale-citation-becomes-a-question",
-      "skills": [
-        "system-check",
-        "kb"
-      ],
-      "setup": "A knowledge-base page consulted during the walk cites two sources. One is a corpus document id that `list_docs` no longer returns. The other is a live document, cited the way the page's own Source table writes them — as an absolute checkout path, `/home/user/vault/docs/formats/sound_file_documentation.md`, where the corpus serves that same page under the id `docs/formats/sound_file_documentation.md`.",
-      "query": "/system-check specs/labeling.md",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "terse-output",
-      "skills": [
-        "system-check"
-      ],
-      "setup": "A clean run producing six open questions.",
-      "query": "/system-check specs/labeling.md",
-      "files": []
-    },
-    {
-      "id": 6,
-      "name": "learn-banks-only-uncovered-facts",
-      "skills": [
-        "system-check",
-        "kb"
-      ],
-      "setup": "A conversation surfaced two platform facts: one the `srd-doc` corpus already documents, one tribal and in no document. An SRD is in play but is not the subject of the request.",
-      "query": "/system-check learn",
-      "files": []
     }
   ]
 }

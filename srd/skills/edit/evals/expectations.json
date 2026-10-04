@@ -2,76 +2,6 @@
   "skill_name": "edit",
   "expectations": [
     {
-      "id": 1,
-      "name": "interactive-non-atomic-on-approved-srd",
-      "expected_behavior": [
-        "States the approval gate in one clause from `Status: ACCEPTED` and starts editing — never asks the user to confirm or override it, and asks no glossary question before a proposal touches a term",
-        "Names STA-4 in the proposal and makes clear that approving it means the authority has agreed, not merely that the user wants the edit — folded into the one confirmation, not asked as a second question",
-        "Front-loads a grouped issue summary, then walks entry by entry",
-        "Proposes the split with location, before/after, and a one-line rationale",
-        "Proposes the split as an add-only change — a new `GR-3c` rather than a renumber",
-        "Applies nothing: the SRD is byte-identical after the run and no decision log exists, because the authority never agreed"
-      ]
-    },
-    {
-      "id": 2,
-      "name": "apply-a-review-file",
-      "expected_behavior": [
-        "Parses the findings and works them blocker → major → minor",
-        "Fixes each finding through the edit loop — one change, confirm, re-validate — referring to findings by number, and says after each applied change what its re-validation found",
-        "Leaves `login.review.md` untouched: `review` owns that file",
-        "Closes by pointing at `review specs/login.md check` to tick off what landed, plus the manifest of what changed and what was left flagged"
-      ]
-    },
-    {
-      "id": 3,
-      "name": "targeted-edit-by-description",
-      "expected_behavior": [
-        "Locates the matching requirement and confirms the match before editing anything",
-        "Proposes a verifiable replacement — a measurable threshold — per REQ-5/6, with before/after; the figure comes from the user or stands as a named placeholder, never one the run made up",
-        "Re-validates that entry and its cross-references after applying, and reports whether anything new broke"
-      ]
-    },
-    {
-      "id": 4,
-      "name": "polish-leaves-metadata-and-meaning",
-      "expected_behavior": [
-        "Confirms each mechanical fix — British → US spelling, keyword caps, stray example text — and applies none silently",
-        "Rewrites no requirement meaning and restructures nothing",
-        "Fills no Owners, Initiative, or Designs field and does not touch `Status`; flags those gaps instead",
-        "Closes with the manifest of the mechanical changes made"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "terse-output",
-      "expected_behavior": [
-        "Opens each proposal with the change itself — location, before/after, rule id — with no preamble, restatement of the request, or narration of what it is about to do. The front-loaded issue summary is required and is not preamble",
-        "The closing manifest lists approved edits one line each, rather than re-narrating diffs the user already saw",
-        "Points at `specs/login.decisions.md` — the SRD path with `.md` replaced, not `login.md.decisions.md` — instead of re-printing its contents"
-      ]
-    },
-    {
-      "id": 6,
-      "name": "generate-in-scope-on-signal",
-      "expected_behavior": [
-        "Before the signal, never flags SCO-2 against the marker and never fabricates scope items",
-        "On the signal, derives candidates from the requirement groups and gives none of them an `SC-n`; a positional label (\"candidate 3\") is fine. `SC-1…n` are assigned only as the confirmed set replaces the marker, so a dropped or merged candidate renumbers nothing",
-        "Walks the candidates point by point for the user to keep, reword, merge, split, or drop",
-        "Replaces the marker with the confirmed items and re-runs the SCO-2/3 coverage check"
-      ]
-    },
-    {
-      "id": 7,
-      "name": "add-to-todo-on-demand",
-      "expected_behavior": [
-        "Appends to the existing `## TODO` section as the next numbered item, renumbering nothing above it",
-        "Skips the propose-and-confirm loop — the instruction is the confirmation",
-        "Renumbers nothing else and reports only the single line added",
-        "At session end, flags the non-empty `## TODO` as a follow-up blocking `ACCEPTED`"
-      ]
-    },
-    {
       "id": 8,
       "name": "autofix-bulk-applies-errata",
       "expected_behavior": [
@@ -84,25 +14,6 @@
       ]
     },
     {
-      "id": 9,
-      "name": "interactive-from-a-line-number",
-      "expected_behavior": [
-        "Runs session start, then resolves line 210 to the entry at or nearest it instead of front-loading a whole-document summary",
-        "Begins the entry-by-entry walk there and continues in document order to the end",
-        "Still runs the closing consistency pass over the whole document, not just the walked tail"
-      ]
-    },
-    {
-      "id": 10,
-      "name": "feedback-from-a-finding-number",
-      "expected_behavior": [
-        "Enters at finding #2 rather than at the top of severity order",
-        "After each finding resolves or is skipped, defaults to the next by number",
-        "Jumps to any number the user names out of order, resumes the ascending walk from there, and after the highest number returns to the lowest one still open",
-        "Leaves the review file untouched and closes by pointing at `review specs/login.md check`"
-      ]
-    },
-    {
       "id": 11,
       "name": "corpus-grounded-edit-routes-the-unconfirmable",
       "expected_behavior": [
@@ -111,76 +22,6 @@
         "States the retry count as a fact inside the proposal, so the user's `YN` attests it and `srd:kb` receives it — the fact is in front of the user when the key is pressed, not looked up afterwards",
         "Asks no separate \"bank this?\" question",
         "Hands the unconfirmable claim to `srd:report-doc-gap` and the attested fact to `srd:kb`, and neither interrupts the edit in progress"
-      ]
-    },
-    {
-      "id": 12,
-      "name": "session-start-drains-prior-drafts",
-      "expected_behavior": [
-        "Runs the draft check, finds the two drafts, and invokes `srd:report-doc-gap` to surface their count and topics before any edit",
-        "Offers to work them now",
-        "On a defer, proceeds into the normal interactive run — issue summary, then the walk — and leaves both drafts on the server for the next start"
-      ]
-    },
-    {
-      "id": 13,
-      "name": "decision-log-written-per-edit",
-      "expected_behavior": [
-        "Appends the applied change to `specs/login.decisions.md` before proposing the next one: the entry is in the file by the turn that puts the next proposal, so nothing is lost if the session dies mid-flow",
-        "Creates the file with `cfsync-plugin: ignore-push` front matter on the first write",
-        "Records the entry, the change in prose, and the user's reason quoted verbatim — never paraphrased, never a diff, and never a rationale neither the user nor the proposal stated",
-        "Does not log the skipped proposal",
-        "The closing manifest points at the file's newest session block as the author's summary"
-      ]
-    },
-    {
-      "id": 14,
-      "name": "removal-on-an-approved-srd",
-      "expected_behavior": [
-        "Does not delete `GR-6`: on an approved SRD a removal strikes the text through and keeps the identifier (STA-8)",
-        "Leaves the number in place and renumbers nothing after it (STA-7)",
-        "Records the removal in `<srd>.decisions.md` like any other applied edit"
-      ]
-    },
-    {
-      "id": 15,
-      "name": "finding-outside-the-mandate",
-      "expected_behavior": [
-        "Enters at `#2`, recognizes it is outside the mandate, and says so rather than opening a proposal it cannot apply",
-        "Names it as the author's to fix and advances to the next finding by number",
-        "Leaves the review file untouched",
-        "Carries it into the closing manifest as flagged and left"
-      ]
-    },
-    {
-      "id": 16,
-      "name": "autofix-writes-the-decision-log",
-      "expected_behavior": [
-        "Writes one decision-log entry per applied substitution — the batch path logs like every other applied edit",
-        "Creates `specs/login.decisions.md` with its `cfsync-plugin: ignore-push` front matter on the first write",
-        "Refuses the third erratum because its `old` occurs twice in the anchor — not uniquely located — applies the other two, and names the reason it refused",
-        "Each log entry is prose naming the entry and what changed, under a dated `##` session block — never a diff"
-      ]
-    },
-    {
-      "id": 17,
-      "name": "open-questions-and-read-only-comments",
-      "expected_behavior": [
-        "Leaves the comment block byte-for-byte unchanged — comment text is verbatim history, never edited, answered, or rewritten",
-        "Does not treat the `GR-9` reference as a broken cross-reference to repair, and does not renumber anything to make it resolve",
-        "Carries the unanswerable question in a numbered `## Open questions` list kept in the terminal reply, and the closing manifest reproduces that numbered list rather than a bare count — never written into the SRD as a section",
-        "Does not trail the proposal with it as an aside, and does not make answering it a precondition for the rest of the run — a skip on that entry is not the same as blocking"
-      ]
-    },
-    {
-      "id": 18,
-      "name": "no-drafts-skip-the-delegates",
-      "expected_behavior": [
-        "The closing manifest's start clause reports that the draft check found none and that neither `srd:report-doc-gap` nor `srd:kb` ran",
-        "Asks no approval-gate question: reads `IN PROGRESS`, says so in one clause, and proceeds",
-        "Asks no glossary question and calls no `glossary_terms`: the target names no term, and the run must not spend a call on one it never reaches. The fix's figure is not made up: with none in the SRD or from the user, the proposal carries a named placeholder",
-        "Re-validates `GR-2`'s cross-references after applying, and the closing re-check covers the whole document",
-        "Reaches the first proposal in its first or second turn, with no setup question and no narrated startup sequence"
       ]
     },
     {

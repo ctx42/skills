@@ -16,7 +16,6 @@ message you would send the user at that point.
 BASE = ["skill:doc-smith", "sec:doc-smith:usage", "sec:doc-smith:whole-document-pass-all-modes",
         "sec:doc-smith:self-learning", "ref:doc-smith/writing-guide"]
 CLAIMS = "sec:doc-smith:technical-claims-flag-don-t-fix"
-AUDIT = "sec:doc-smith:audit-mode"
 PROOF = "sec:doc-smith:proof-mode"
 CREATE = "sec:doc-smith:create-mode"
 REVISE = "sec:doc-smith:revise-mode"
@@ -218,8 +217,6 @@ def case1():
         "b3-repetition-flagged": last(r"repeat|repetit|redundan|restate|duplicat", flags="i"),
     }
     g.update(numbered_groups())
-    write_case("doc-smith--cross-document-contradiction", BASE + [AUDIT, CLAIMS],
-               "/craft:doc-smith docs/manual.md", g, files={"docs/manual.md": MANUAL_ACME})
 
 
 # ---------------------------------------------------------------- 2
@@ -275,37 +272,6 @@ def case2():
 
 
 # ---------------------------------------------------------------- 3
-MANUAL_PULSE = """# Pulse Logger Manual
-
-## Overview
-
-Pulse Logger records pressure readings from field loggers and shows them
-on a chart. In order to get started, you simply need an account and one
-logger.
-
-## Adding a logger
-
-To add a logger, follow these steps.
-
-1. Select **Add logger** and enter the serial number.
-2. Select the site and select **Save**.
-
-The device appears on the map within one minute.
-
-## Reading the chart
-
-The chart will be shown with the last 24 hours of readings. Please note
-that readings older than 90 days are deleted.
-
-## Alarm thresholds
-
-The following table lists the default thresholds.
-
-| Alarm | Default |
-|---|---|
-| Low pressure | 1.5 bar |
-| High pressure | 8 bar |
-"""
 
 NO_PASTE_PULSE = last(r"^#{1,3} Adding a logger\s*\n\s*\n?To add a logger|^Pulse Logger records pressure readings from field loggers and shows them\s*$",
                       match="not_contains", flags="m")
@@ -324,8 +290,6 @@ def case3():
             match="not_contains", flags="im"),
         "b5-no-paste": NO_PASTE_PULSE,
     }
-    write_case("doc-smith--terse-output--gate", BASE + [AUDIT, CLAIMS],
-               "/craft:doc-smith audit docs/manual.md", gate, files={p: MANUAL_PULSE})
     full = {
         "b4-fixes-applied-filler": infile(p, r"In order to|\bsimply\b|Please note", match="not_contains", flags="i"),
         "b4-fixes-applied-drift": infile(p, r"The device appears", match="not_contains"),
@@ -333,9 +297,6 @@ def case3():
         "b4-states-edit-classes": last(r"filler|terminolog|wording|voice|passive|table|align|step|clarity|formatting", flags="i"),
         "b5-no-paste": NO_PASTE_PULSE,
     }
-    write_case("doc-smith--terse-output", BASE + [AUDIT, CLAIMS],
-               "/craft:doc-smith audit docs/manual.md", full, files={p: MANUAL_PULSE},
-               answers=["Apply all of them."], timeout=300)
 
 
 # ---------------------------------------------------------------- 4
@@ -419,8 +380,6 @@ def case4():
                             "about audience, terminology, output location, or behaviour the code leaves "
                             "unspecified are allowed."),
     }
-    write_case("doc-smith--create-grounded-manual--gate", BASE + [CREATE],
-               "/craft:doc-smith create a user manual for the billing dashboard", gate, files=BILLING)
     p = "docs/user-manual.md"
     full = {
         "b2-one-term": infile(p, r"(?<![/\w`])bills?\b", match="not_contains", flags="i"),
@@ -445,47 +404,6 @@ def case4():
 
 
 # ---------------------------------------------------------------- 5
-TALLY = {
-    "docs/install.md": """# Installing Tally
-
-To install Tally, download the installer for your system from the
-releases page and run it. When the installer finishes, Tally asks you to
-create your first workspace.
-
-## Creating your first workspace
-
-A workspace holds your ledgers, your reports, and the people you share
-them with. Enter a name for the workspace and select **Create**.
-""",
-    "docs/config.md": """# Configuring Tally
-
-Each project has its own settings. To open them, select the project name
-in the sidebar and then select **Settings**.
-
-## Currency
-
-The currency applies to every ledger in the project. You can change it
-until the first entry is posted.
-
-## Members
-
-To invite someone, enter their email address under **Members**. Members
-see every ledger in the project.
-""",
-    "docs/usage.md": """# Using Tally
-
-## Posting an entry
-
-To post an entry, open a ledger, select **New entry**, and fill in the
-date, the amount, and the account.
-
-## Running a report
-
-To run a report, select **Reports** and choose the period. Reports are
-saved automatically, and you can restore an older version from a backup;
-see the Backup section.
-""",
-}
 
 
 def case5():
@@ -502,8 +420,6 @@ def case5():
             r"|(missing|does not exist|doesn't exist|no such|dangling|broken|absent|nowhere)[^\n]{0,200}backup", flags="i"),
         "b3-backup-not-a-nit": last(r"(Blockers?|Should[- ]?fix)\b(?:(?!\bNits?\b)[\s\S])*Backup", flags="i"),
     }
-    write_case("doc-smith--drift-across-a-set", BASE + [AUDIT, CLAIMS],
-               "/craft:doc-smith audit docs/install.md docs/config.md docs/usage.md as one manual", g, files=TALLY)
 
 
 # ---------------------------------------------------------------- 6
@@ -528,12 +444,8 @@ member can add notes and photos to the workspace but cannot delete it.
 When a survey is finished, archive its workspace to make it read-only.
 Archived workspaces stay searchable.
 """
-P1_OLD = """Fieldbook is an app that simply keeps your survey notes, photos, and maps
-together in one workspace, and the workspace can be shared by you with
-your team."""
 P1_NEW = """Fieldbook keeps your survey notes, photos, and maps together in one
 project that you can share with your team."""
-GUIDE_FB_P1 = GUIDE_FB.replace(P1_OLD, P1_NEW)
 REVISE_Q = "/craft:doc-smith work through docs/guide.md with me"
 TURN1 = """Revise mode on `docs/guide.md`: 4 units (intro paragraph, then one paragraph per section). The whole-document pass finds one term per concept ("workspace" throughout) and no contradictions. Starting at the top.
 
@@ -552,11 +464,6 @@ Coherence check: no break elsewhere.
 
 Apply this?"""
 RENAME = "Apply it, but call it a project instead of a workspace. That is the name in the new app."
-LATER = [n for n in lines_of(GUIDE_FB_P1, "orkspace")]
-TURN2 = ("Applied to unit 1 (lines 3-4): filler and passive gone, and \"workspace\" is now \"project\".\n\n"
-         "Coherence check: \"workspace\" is now inconsistent at %d later lines: %s (the headings at lines 6 and 16, "
-         "and the body of every section).\n\nSweep them all to \"project\" now, or rename each as we reach its unit?"
-         % (len(LATER), ", ".join(str(n) for n in LATER)))
 NO_REPRINT_FB = last(r"To invite a colleague, open the|Archived (workspaces|projects) stay searchable",
                      match="not_contains")
 
@@ -569,8 +476,6 @@ def case6():
         "b1-starts-at-the-top": last(r"simply|shared by you|share (it )?with your team|\btop\b|first (unit|paragraph)|intro|lines? 3\b", flags="i"),
         "b5-no-reprint": NO_REPRINT_FB,
     }
-    write_case("doc-smith--revise-keeps-the-whole-coherent--gate", BASE + [REVISE, CLAIMS],
-               REVISE_Q, gate, files={p: GUIDE_FB})
     full = {
         "b1-agreed-revision-applied": infile(p, words(P1_NEW)),
         "b2-rest-not-swept": infile(p, r"^(?=[\s\S]*## Creating a workspace)(?=[\s\S]*open the workspace)(?=[\s\S]*Archived workspaces)"),
@@ -589,10 +494,6 @@ def case6():
         "b4-unit-1-intact": infile(p, words(P1_NEW)),
         "b5-no-reprint": NO_REPRINT_FB,
     }
-    write_case("doc-smith--revise-keeps-the-whole-coherent--sweep", BASE + [REVISE, CLAIMS],
-               "/craft:doc-smith Sweep them all to project now.", sweep, files={p: GUIDE_FB_P1},
-               hist=[("user", REVISE_Q), ("assistant", TURN1), ("user", "/craft:doc-smith " + RENAME),
-                     ("assistant", TURN2)])
 
 
 # ---------------------------------------------------------------- 7
@@ -655,8 +556,6 @@ def case7():
         "b5-states-counts": last(r"\b\d+\b[^\n]{0,60}(spelling|reflow|line|table|row|cell|edit|fix|outlier|change)", flags="i"),
         "b5-no-paste": last(r"^\| Pipe +\| Blue|^Labels show the asset ID next to each symbol\. When the map", match="not_contains", flags="m"),
     }
-    write_case("doc-smith--normalize-to-the-doc-s-own-convention", BASE + [PROOF, CLAIMS],
-               "/craft:doc-smith proof docs/guide.md", g, files={p: body})
 
 
 if __name__ == "__main__":

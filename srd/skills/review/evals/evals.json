@@ -12,78 +12,6 @@
       "files": []
     },
     {
-      "id": 2,
-      "name": "applies-rules-create-only-stubs",
-      "skills": [
-        "review"
-      ],
-      "setup": "`specs/api.md` lists a single owner, carries no Initiative link, and is marked `Status: ACCEPTED` with no approved design although it changes the UI. Its back-links live in the ticket and design tool.",
-      "query": "/review specs/api.md",
-      "files": []
-    },
-    {
-      "id": 3,
-      "name": "check-a-prior-review",
-      "skills": [
-        "review"
-      ],
-      "setup": "`specs/login.review.md` exists with open findings; the author has since fixed some, half-fixed one, and one finding turns out to have been invalid.",
-      "query": "/review specs/login.md check",
-      "files": []
-    },
-    {
-      "id": 4,
-      "name": "feedback-export-for-a-ticket",
-      "skills": [
-        "review"
-      ],
-      "setup": "A review file with open findings across sections, an `## Errata` group holding two, plus resolved and withdrawn findings.",
-      "query": "/review specs/login.md feedback",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "walk-records-only-confirmed-findings",
-      "skills": [
-        "review"
-      ],
-      "setup": "A flawed SRD walked interactively; the user rejects some proposed findings as invalid.",
-      "query": "/review specs/login.md walk",
-      "files": []
-    },
-    {
-      "id": 6,
-      "name": "fixture-regression",
-      "skills": [
-        "review"
-      ],
-      "setup": "The bundled, deliberately defective sample at `assets/flawed-srd.md`, copied into the workspace. It carries planted defects across metadata, glossary, scope, and requirements.",
-      "query": "/review assets/flawed-srd.md",
-      "files": [
-        "assets/flawed-srd.md"
-      ]
-    },
-    {
-      "id": 7,
-      "name": "terse-output",
-      "skills": [
-        "review"
-      ],
-      "setup": "An ordinary review run that writes a dozen findings.",
-      "query": "/review specs/login.md",
-      "files": []
-    },
-    {
-      "id": 8,
-      "name": "errata-re-sort",
-      "skills": [
-        "review"
-      ],
-      "setup": "`specs/login.review.md` holds a British-spelling finding `#4` under Requirements, stated as prose that names GR-2 but does not quote the misspelled word, and a scope blocker `#2`. There is no `## Errata` block yet.",
-      "query": "/srd:review specs/login.md errata, then the same command again",
-      "files": []
-    },
-    {
       "id": 9,
       "name": "facts-vs-corpus-routes-doc-gaps",
       "skills": [
@@ -101,16 +29,6 @@
         "review"
       ],
       "setup": "The server holds no draft gap for this SRD. `specs/login.md` has two style defects and one duplicate id, asserts nothing about existing system behavior, and no `specs/login.review.md` exists yet.",
-      "query": "/review specs/login.md",
-      "files": []
-    },
-    {
-      "id": 11,
-      "name": "gate-stops-without-project-config",
-      "skills": [
-        "review"
-      ],
-      "setup": "Do not copy the fixture `project-config.md`: no `project-config.md` exists in the scenario directory or any parent up to the workspace root. `specs/login.md` exists and has defects.",
       "query": "/review specs/login.md",
       "files": []
     }

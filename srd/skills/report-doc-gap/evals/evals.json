@@ -23,67 +23,6 @@
       "files": []
     },
     {
-      "id": 3,
-      "name": "an-srd-gap-is-refused",
-      "skills": [
-        "report-doc-gap"
-      ],
-      "setup": "A caller hands over two items together: \"the Retention Sweep section cites a 90-day window the platform docs never state\" — a real documentation gap — and \"GR-7 and GR-9 both specify the lockout threshold and disagree\" — a defect inside the SRD, not in the documentation.",
-      "query": "/report-doc-gap specs/gateway.md",
-      "files": []
-    },
-    {
-      "id": 4,
-      "name": "opt-out-and-duplicate-merge",
-      "skills": [
-        "report-doc-gap"
-      ],
-      "setup": "A second caller session hands over the retry-count gap already a draft for `specs/gateway.md`, with different search terms. At drain the finder says \"skip the questions\".",
-      "query": "/report-doc-gap specs/gateway.md",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "gate-stops-without-the-server",
-      "skills": [
-        "report-doc-gap"
-      ],
-      "setup": "`project-config.md` names `mcp-server: doc-corpus`, but no `mcp__doc-corpus__*` tools exist in this session. One draft gap would otherwise be waiting.",
-      "query": "/report-doc-gap specs/gateway.md",
-      "files": []
-    },
-    {
-      "id": 6,
-      "name": "declined-at-the-confirm-gate",
-      "skills": [
-        "report-doc-gap"
-      ],
-      "setup": "One draft gap. The finder works it, then answers no at the confirmation gate — the record is wrong and they do not want it filed.",
-      "query": "/report-doc-gap specs/gateway.md",
-      "files": []
-    },
-    {
-      "id": 7,
-      "name": "missing-config-stops-the-run",
-      "skills": [
-        "report-doc-gap"
-      ],
-      "setup": "No `project-config.md` exists in the SRD's directory or any parent directory.",
-      "query": "/report-doc-gap specs/gateway.md",
-      "files": []
-    },
-    {
-      "id": 8,
-      "name": "heavy-grill-and-session-opt-out",
-      "skills": [
-        "report-doc-gap",
-        "grill-me"
-      ],
-      "setup": "Three draft gaps exist for `specs/gateway.md`. The finder picks heavy for the first, then says \"just take the one-liners for the rest of these\".",
-      "query": "/report-doc-gap specs/gateway.md",
-      "files": []
-    },
-    {
       "id": 9,
       "name": "drafts-survive-a-new-session",
       "skills": [

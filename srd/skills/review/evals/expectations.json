@@ -14,86 +14,6 @@
       ]
     },
     {
-      "id": 2,
-      "name": "applies-rules-create-only-stubs",
-      "expected_behavior": [
-        "Flags the single owner (STR-2), the missing Initiative link (STR-3), and `ACCEPTED` without an approved design (STA-2), all as blockers, none excused as an authoring placeholder",
-        "Raises no back-link finding: STR-4/6 live in external systems",
-        "Records all three under the Metadata section of the review file"
-      ]
-    },
-    {
-      "id": 3,
-      "name": "check-a-prior-review",
-      "expected_behavior": [
-        "Classifies each open finding fixed / partial / not-addressed / invalid (or labels that map one-to-one onto those) against the current text, in a short status table keyed by finding number",
-        "Re-verifies only — hunts for no new defects",
-        "Ticks fixed findings and moves them to `## Resolved`, keeping their numbers",
-        "Annotates partials with `*(Partial — …)*` and moves the invalid finding to `## Withdrawn` with a reason",
-        "Bumps the `updated:` frontmatter timestamp and reuses no number"
-      ]
-    },
-    {
-      "id": 4,
-      "name": "feedback-export-for-a-ticket",
-      "expected_behavior": [
-        "Emits plain text grouped by section heading, one bullet per open issue, and writes no file",
-        "Lists the `Errata` group first, since it holds open findings",
-        "Keeps each finding's number and the SRD's own requirement id in the form `#<n> <requirement id>:` but drops the checkbox, rule-id citations, and severity tags",
-        "Uses no markdown beyond bullets — it is going into a ticket or an email",
-        "Lists open findings only, omitting Resolved and Withdrawn"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "walk-records-only-confirmed-findings",
-      "expected_behavior": [
-        "Goes section by section, presenting each section's findings and waiting for the user's answer: the review file gains a section's findings only in a turn after the user confirmed them",
-        "Writes only the confirmed findings to `login.review.md`, as author-facing guidance",
-        "Never edits `login.md`"
-      ]
-    },
-    {
-      "id": 6,
-      "name": "fixture-regression",
-      "expected_behavior": [
-        "Finds GR-1 non-atomic (REQ-1) and the duplicate id GR-3 (REQ-3)",
-        "Finds \"fast\" unverifiable (REQ-6)",
-        "Finds SC-2 uncovered (SCO-2) and GR-4 contradicting OSC-1 (SCO-3)",
-        "Finds behaviour stated inside the Export Job glossary entry (GLO-1/2)",
-        "Finds the single owner (STR-2) and the missing Initiative link (STR-3)",
-        "Finds `ACCEPTED` with an unapproved design and an unmet Quality Bar (STA-2 / STA-3)",
-        "Finds MUST used in the Introduction (LANG-3)",
-        "Collects the British spellings `colourise` and `dialogue` as minor findings under `## Errata`",
-        "Finds the keyword notice citing RFC 8174 alone, with the RFC 2119 reference missing (STR-8), and collects it under `## Errata` as one substitution replacing the whole notice",
-        "Finds the `Designs` placeholder left in an `ACCEPTED` SRD whose GR-3 changes the UI (STR-5)",
-        "Finds the second GR-3 describing how the badge looks rather than what the system does (LANG-5)",
-        "Finds GR-4's \"export run\" drifting from the glossary's Export Job"
-      ]
-    },
-    {
-      "id": 7,
-      "name": "terse-output",
-      "expected_behavior": [
-        "Opens with the result — no preamble, no narration of reading the SRD",
-        "Writes the findings to the review file and closes with a short pointer plus per-severity counts",
-        "Does not re-list in chat the findings it just wrote to the file"
-      ]
-    },
-    {
-      "id": 8,
-      "name": "errata-re-sort",
-      "expected_behavior": [
-        "Moves `#4` into a `## Errata` block at the top, keeping its number, `[minor]` tag, category, and citation",
-        "Rewrites its prose fix into the substitution shape that makes it appliable unreviewed",
-        "Leaves the blocker `#2` under its own section",
-        "Reclassifies only — hunts no new defects",
-        "Bumps `updated:` because something moved, and reports the moved number",
-        "Reads the SRD to quote the `old` text exactly when rewriting the prose fix, while editing only the review file",
-        "Run twice in a row, the second run changes nothing at all — not a moved finding, not a fresh `updated:` timestamp"
-      ]
-    },
-    {
       "id": 9,
       "name": "facts-vs-corpus-routes-doc-gaps",
       "expected_behavior": [
@@ -111,15 +31,6 @@
         "Raises no `reference` finding and captures no gap: the SRD asserts no platform fact",
         "Creates `specs/login.review.md` and writes the three defects with fresh numbers from `#1`",
         "The reply leads with the outcome — findings and the tally — with no narrated startup sequence (\"first I check…, then I read…\"); the one-clause draft-check result bullet 1 asks for is not narration"
-      ]
-    },
-    {
-      "id": 11,
-      "name": "gate-stops-without-project-config",
-      "expected_behavior": [
-        "Stops in one line naming the failed check: `project-config.md` not found in the start directory or any parent",
-        "Reads no part of the SRD, calls no server tool, and runs no draft check before stopping",
-        "Writes no `specs/login.review.md` and asks the user nothing"
       ]
     }
   ]

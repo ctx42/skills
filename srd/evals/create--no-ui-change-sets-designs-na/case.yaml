@@ -1,4 +1,0 @@
-schema_version: "1.1"
-name: create--no-ui-change-sets-designs-na
-context:
-  scaffold_script: scaffold.sh

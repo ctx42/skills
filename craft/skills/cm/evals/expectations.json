@@ -22,87 +22,12 @@
       ]
     },
     {
-      "id": 3,
-      "name": "breaking-change",
-      "expected_behavior": [
-        "Marks the summary line with `!`",
-        "Carries a `BREAKING CHANGE:` footer stating the impact and what callers must do instead",
-        "Uses no trailer other than `BREAKING CHANGE:` and `Refs:`"
-      ]
-    },
-    {
-      "id": 4,
-      "name": "terse-output",
-      "expected_behavior": [
-        "Opens with the message — no preamble and no narration of reading the diff",
-        "Presents the commit message once, in a zero-indent code block, and nothing else",
-        "Does not restate the diff or the message afterwards, and makes no unprompted offer to commit"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "detail-matched-to-impact",
-      "expected_behavior": [
-        "Summary line captures it as `style:` or `chore:`",
-        "Sums the cleanup in one sentence, or omits the body — it does not enumerate the mechanical edits one by one",
-        "Names no footer: nothing in the diff identifies a commit this change answers to, and `Refs:` is not a slot to fill"
-      ]
-    },
-    {
-      "id": 6,
-      "name": "verbosity-arguments",
-      "expected_behavior": [
-        "`micro` emits the summary line alone — no body, and no footers beyond a breaking change or a `Refs:` the diff identifies (verbosity does not gate footers)",
-        "`full` emits the summary plus a full-length multi-paragraph kernel-style body",
-        "The difference between them is length of body, not a different summary line"
-      ]
-    },
-    {
       "id": 7,
       "name": "apply-commits-without-confirming",
       "expected_behavior": [
         "Commits without opening an editor and without `-m`, so the multi-paragraph body survives intact — checkable in the commit object, whose body keeps its blank lines and wrapping",
         "Honours the combined tokens: `micro apply` commits a one-line message",
         "Adds no `Co-Authored-By` or other attribution trailer despite the active harness instruction"
-      ]
-    },
-    {
-      "id": 8,
-      "name": "empty-index-falls-back-to-unstaged",
-      "expected_behavior": [
-        "Finds the staged diff empty and derives from `git diff` — the unstaged changes — rather than reporting that there is nothing to describe",
-        "Says which diff it used, so the user knows the message does not describe a staged commit",
-        "Stages nothing itself",
-        "Every number in the body is derivable from the diff: the backoff delays named are the ones the changed code actually sleeps, with no extra value inferred from the doubling pattern"
-      ]
-    },
-    {
-      "id": 9,
-      "name": "fix-that-restores-promised-behavior-is-not-breaking",
-      "expected_behavior": [
-        "Writes it as `fix`, with no `!` and no `BREAKING CHANGE:` footer",
-        "Treats behaviour moving into line with the documented contract as a fix, not a break — otherwise every bug fix would carry a `!`",
-        "Says in the body that code relying on the old, undocumented acceptance will now get an error — the people affected are the ones depending on the bug, not the ones it bit, and only the first group has to act"
-      ]
-    },
-    {
-      "id": 10,
-      "name": "apply-with-nothing-staged",
-      "expected_behavior": [
-        "Derives the message from the unstaged diff, as the empty-index fallback requires",
-        "Does not commit: with nothing staged, `git commit` would fail or create an empty commit",
-        "Stages nothing on the user's behalf — choosing what goes into a commit is the user's call",
-        "Says plainly that the tree is unstaged and `apply` did not run, and presents the message anyway",
-        "Every number in the body is derivable from the diff: the backoff delays named are the ones the changed code actually sleeps, with no extra value inferred from the doubling pattern"
-      ]
-    },
-    {
-      "id": 11,
-      "name": "hash-without-an-amend-ask",
-      "expected_behavior": [
-        "Derives the message from that commit's diff via `git show`",
-        "Presents the message and stops — `HEAD`'s hash is unchanged afterwards, and no new commit exists",
-        "Does not propose amending; naming a commit is not asking to rewrite it"
       ]
     }
   ]

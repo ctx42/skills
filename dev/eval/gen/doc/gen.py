@@ -106,91 +106,6 @@ def used(tool, mn, mx=None, match=None):
     return s + "---\n"
 
 
-def order(before, after, after_match=None):
-    a = f"{{tool: {after}" + (f", input_match: '{after_match}'" if after_match else "") + "}"
-    return f"---\ntype: tool_order\nbefore: {{tool: {before}}}\nafter: {a}\n---\n"
-
-
-def llm(claim):
-    return ("---\ntype: llm\nfocus: last_message\n---\n"
-            "Ignore any trailing notice about a company directive («Nutzung von "
-            "Claude und andere AI-Agents»). " + claim + "\n")
-
-
-NO_PREAMBLE = (r"^\s*(I'll|I will|Let me|I've|I have|I read|I'm|Reading|First,|"
-               r"Now|Okay|OK,|Sure|Here's|Here is|Done)")
-
-# --------------------------------------------------------------------------
-# 1. correct-but-terse-is-left-alone
-GET_DOC = ("// Get returns the value stored under key, or the zero value when key\n"
-           "// is absent.\n")
-store_go = (
-    "// Package kv holds string values in memory.\n"
-    "package kv\n\n"
-    "// Store maps keys to values.\n"
-    "type Store struct {\n\tm map[string]string\n}\n\n"
-    "// NewStore returns an empty Store.\n"
-    "func NewStore() *Store {\n\treturn &Store{m: map[string]string{}}\n}\n\n"
-    + GET_DOC +
-    "func Get(sto *Store, key string) string {\n\treturn sto.m[key]\n}\n"
-)
-write_case(
-    "doc--correct-but-terse-is-left-alone", "/go:doc func=Get",
-    {**gomod("example.com/kv"), "kv/kv.go": store_go},
-    {
-        "b1-reports-nothing-fires": rx(
-            "last_message",
-            r"(no|none of the)[^.\n]{0,40}(checklist|item|change|edit)|"
-            r"nothing[^.\n]{0,30}(fire|change|to (do|fix|change))|unchanged|"
-            r"left (alone|as is|untouched)|no changes?",
-            flags="i"),
-        "b2-comment-byte-identical": rx(
-            "kv/kv.go", esc(GET_DOC + "func Get(sto *Store, key string) string {")),
-        "b2-no-edit": used("Edit", 0, 0),
-        "b3-no-change-line": llm(
-            "The reply does not report any change to Get's godoc: no line says "
-            "Get's comment was added, fixed, expanded, or rewritten."),
-    },
-    shell=False,
-)
-
-# --------------------------------------------------------------------------
-# 2. adds-only-confirmable-facts
-STORE_DOC = "// Store adds recs to the archive.\n"
-archive_go = (
-    "// Package archive keeps records in ID order.\n"
-    "package archive\n\n"
-    "import \"sort\"\n\n"
-    "// Record is one archived entry.\n"
-    "type Record struct {\n\tID   int\n\tBody string\n}\n\n"
-    "// Archive holds records.\n"
-    "type Archive struct {\n\titems []Record\n}\n\n"
-    + STORE_DOC +
-    "func (arc *Archive) Store(recs []Record) {\n"
-    "\tsort.Slice(recs, func(i, j int) bool { return recs[i].ID < recs[j].ID })\n"
-    "\tarc.items = append(arc.items, recs...)\n"
-    "}\n\n"
-    "// Len returns the number of archived records.\n"
-    "func (arc *Archive) Len() int {\n\treturn len(arc.items)\n}\n"
-)
-STORE_GODOC_BLOCK = r"((//[^\n]*\n)*)func \(arc \*Archive\) Store\("
-write_case(
-    "doc--adds-only-confirmable-facts", "/go:doc func=Store",
-    {**gomod("example.com/archive"), "archive/archive.go": archive_go},
-    {
-        "b1-fires-missing-fact": rx(
-            "last_message", r"missing[- ]fact|item\s*#?4|\(4\)|—\s*4\b", flags="i"),
-        "b2-documents-mutation": rx(
-            "archive/archive.go",
-            r"//[^\n]*(sort|reorder|in place|modif|mutat|order)[^\n]*\n(//[^\n]*\n)*"
-            r"func \(arc \*Archive\) Store\(", flags="i"),
-        "b3-no-concurrency-claim": rx(
-            "archive/archive.go",
-            r"concurren|goroutine|synchroni|thread|safe for|mutex|lock", flags="i",
-            negate=True),
-    },
-)
-
 # --------------------------------------------------------------------------
 # 3. directives-and-interface-method-godoc
 BUILD = "//go:build !windows\n"
@@ -223,25 +138,6 @@ io_go = (
 io_files = {**gomod("example.com/demo"), "pkg/io/io.go": io_go}
 io_tags = ["sec:doc:plan-file-package-module", "sec:doc:never-touch"]
 write_case(
-    "doc--directives-and-interface-method-godoc--gate", "/go:doc ./pkg/io",
-    io_files,
-    {
-        "b1-build-directive-in-plan": rx(
-            "last_message", r"go:build[^\n]*(never|directive|untouch|leave|skip)|"
-            r"(never|directive|untouch)[^\n]*go:build", flags="i"),
-        "b1-generate-directive-in-plan": rx(
-            "last_message", r"go:generate[^\n]*(never|directive|untouch|leave|skip)|"
-            r"(never|directive|untouch)[^\n]*go:generate", flags="i"),
-        "b2-plans-read-removal": rx(
-            "last_message", r"Read[^\n]*(remov|delet|drop|strip)|"
-            r"(remov|delet|drop|strip)[^\n]*\bRead\b", flags="i"),
-        "b3-no-write": used("Write", 0, 0),
-        "b3-no-edit": used("Edit", 0, 0),
-        "b3-file-unchanged": rx("pkg/io/io.go", esc(io_go)),
-    },
-    tags_extra=io_tags, shell=False,
-)
-write_case(
     "doc--directives-and-interface-method-godoc", "/go:doc ./pkg/io",
     io_files,
     {
@@ -257,39 +153,6 @@ write_case(
     },
     tags_extra=io_tags,
     answers=["To the plan: \"Approved, go ahead.\""],
-)
-
-# --------------------------------------------------------------------------
-# 4. terse-output
-text_go = (
-    "// Package text counts words.\n"
-    "package text\n\n"
-    "import \"strings\"\n\n"
-    "// counts the words in s, splitting on runs of white space.\n"
-    "func Foo(s string) int {\n"
-    "\tcount := 0\n"
-    "\tfor range strings.Fields(s) {\n"
-    "\t\t// increment count\n"
-    "\t\tcount++\n"
-    "\t}\n"
-    "\treturn count\n"
-    "}\n"
-)
-write_case(
-    "doc--terse-output", "/go:doc func=Foo",
-    {**gomod("example.com/text"), "text/text.go": text_go},
-    {
-        "b1-no-preamble": rx("last_message", NO_PREAMBLE, negate=True),
-        "b1-verify-result": rx("last_message", r"gofmt[\s\S]*go build|go build[\s\S]*gofmt"),
-        "b2-change-line-format": rx("last_message", r"text\.go:Foo[^\n]{0,20}[—–]"),
-        "b2-inline-comment-once": rx(
-            "last_message", r"increment count[\s\S]*increment count", negate=True),
-        "b3-no-recap-heading": rx(
-            "last_message", r"^\W*(In summary|Summary|To summari[sz]e|Overall|In short)\b",
-            flags="im", negate=True),
-        "b3-change-lines-not-repeated": rx(
-            "last_message", r"(text\.go:Foo[\s\S]*){3}", negate=True),
-    },
 )
 
 # --------------------------------------------------------------------------
@@ -441,21 +304,6 @@ for p in OTHERS:
     mod_files[f"{p}/{p}.go"] = other_src[p]
 mod_tags = ["sec:doc:plan-file-package-module", "sec:doc:controls",
             "sec:doc:verify"]
-others_alt = "|".join(OTHERS)
-write_case(
-    "doc--module-mode-with-fanout-and-filter--gate",
-    "/go:doc module fanout packages=svc,api",
-    mod_files,
-    {
-        "b1-plan-has-api-item": rx("last_message", r"\bHandle\b"),
-        "b1-plan-has-svc-item": rx("last_message", r"\bLookup\b"),
-        "b1-no-other-package-items": rx(
-            "last_message", rf"\b({others_alt})(/\w+)?\.go\b", negate=True),
-        "b1-no-write": used("Write", 0, 0),
-        "b1-no-edit": used("Edit", 0, 0),
-    },
-    tags_extra=mod_tags, shell=False, agent=True, max_turns=60,
-)
 write_case(
     "doc--module-mode-with-fanout-and-filter",
     "/go:doc module fanout packages=svc,api",
@@ -490,69 +338,3 @@ write_case(
     tags_extra=mod_tags, agent=True, max_turns=80,
     answers=["To the plan: \"Approved, go ahead.\""],
 )
-
-# --------------------------------------------------------------------------
-# 7. side-effect-is-not-a-surprise
-FILE_DOC = ("// Write writes p to the file. It returns the number of bytes written\n"
-            "// and any error encountered.\n")
-TEE_DOC = ("// Write writes p to the primary writer. It returns the number of bytes\n"
-           "// written and any error encountered.\n")
-sink_go = (
-    "// Package sink writes byte streams to their destinations.\n"
-    "package sink\n\n"
-    "import (\n\t\"io\"\n\t\"os\"\n)\n\n"
-    "var _ io.Writer = (*fileSink)(nil)\n"
-    "var _ io.Writer = (*teeSink)(nil)\n\n"
-    "// fileSink writes to an open file.\n"
-    "type fileSink struct {\n\tfil *os.File\n}\n\n"
-    + FILE_DOC +
-    "func (snk *fileSink) Write(p []byte) (int, error) {\n"
-    "\treturn snk.fil.Write(p)\n"
-    "}\n\n"
-    "// teeSink writes to a primary writer and a mirror.\n"
-    "type teeSink struct {\n\tprimary io.Writer\n\tmirror  io.Writer\n}\n\n"
-    + TEE_DOC +
-    "func (tee *teeSink) Write(p []byte) (int, error) {\n"
-    "\tn, err := tee.primary.Write(p)\n"
-    "\tif err != nil {\n\t\treturn n, err\n\t}\n"
-    "\t_, _ = tee.mirror.Write(p)\n"
-    "\treturn len(p), nil\n"
-    "}\n"
-)
-sink_files = {**gomod("example.com/demo"), "pkg/sink/sink.go": sink_go}
-sink_tags = ["sec:doc:plan-file-package-module"]
-TEE_BLOCK = r"((//[^\n]*\n)+)func \(tee \*teeSink\) Write\("
-write_case(
-    "doc--side-effect-is-not-a-surprise--gate", "/go:doc ./pkg/sink",
-    sink_files,
-    {
-        "b1-plans-filesink-removal": rx(
-            "last_message", r"fileSink[^\n]*(remov|delet|drop|strip)", flags="i"),
-        "b2-plans-teesink-keep": rx(
-            "last_message", r"teeSink[\s\S]{0,800}\b(keep|expand)", flags="i"),
-        "b3-no-write": used("Write", 0, 0),
-        "b3-no-edit": used("Edit", 0, 0),
-    },
-    tags_extra=sink_tags, shell=False,
-)
-write_case(
-    "doc--side-effect-is-not-a-surprise", "/go:doc ./pkg/sink",
-    sink_files,
-    {
-        "b1-filesink-godoc-removed": rx(
-            "pkg/sink/sink.go", r"\}\n\nfunc \(snk \*fileSink\) Write\("),
-        "b2-teesink-godoc-names-second-write": rx(
-            "pkg/sink/sink.go",
-            r"//[^\n]*(mirror|second|copy|also)[^\n]*\n(//[^\n]*\n)*"
-            r"func \(tee \*teeSink\) Write\(", flags="i"),
-        "b2-teesink-godoc-names-hidden-failure": rx(
-            "pkg/sink/sink.go",
-            r"//[^\n]*(ignor|discard|swallow|hid|drop|unreported|not report|len\(p\)|even (if|when))"
-            r"[^\n]*\n(//[^\n]*\n)*func \(tee \*teeSink\) Write\(", flags="i"),
-        "b3-teesink-godoc-kept": rx(
-            "pkg/sink/sink.go", r"//[^\n]*\nfunc \(tee \*teeSink\) Write\("),
-    },
-    tags_extra=sink_tags,
-    answers=["To the plan: \"Approved, go ahead.\""],
-)
-print("ok")

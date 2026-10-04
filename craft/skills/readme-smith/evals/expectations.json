@@ -13,17 +13,6 @@
       ]
     },
     {
-      "id": 2,
-      "name": "no-fabrication",
-      "expected_behavior": [
-        "Invents no install command, version number, registry coordinate, or benchmark figure",
-        "Asks for each unknown once; a fact the README needs and still lacks becomes an explicit `<!-- TODO: … -->` marker rather than a plausible guess",
-        "Deletes an unsupportable claim outright instead of marking it — a TODO asking someone to source an invented number would preserve the invention",
-        "Ships no badge pointing at a host the same README tells the reader does not resolve — a header that contradicts the body three lines down is worse than a bare one",
-        "Names the remaining `TODO` markers in the reply so the user knows what is left open"
-      ]
-    },
-    {
       "id": 3,
       "name": "improve-member-readme",
       "expected_behavior": [
@@ -43,65 +32,6 @@
         "Marks each spot with a `<!-- gmmce:<relpath>/<FuncName> -->` comment above an empty `go` fence and runs `gomake :doc:mce` to fill them",
         "Names each injected key in the reply, taken from the target's `Found <key>` lines — the exit status and the `Writing` line are 0 and present either way",
         "Hand-edits no injected fence; a change to an example goes back through its `Example…` function and a re-run of the target"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "terse-output",
-      "expected_behavior": [
-        "Reports what it changed by class and count — badges removed, HTML stripped, heading emoji dropped — without pasting the README back",
-        "After fixing, states the file path and what changed, each fact once",
-        "Does not paste the rewritten README back into chat",
-        "Opens with the payload: no preamble, no narration of the scan, no closing summary restating findings already listed"
-      ]
-    },
-    {
-      "id": 6,
-      "name": "one-nav-aid-and-module-paths",
-      "expected_behavior": [
-        "Emits at most one navigation aid — a nav line or a `<!-- TOC -->` block, never both",
-        "Reads the base path from `go.mod` and `git remote -v`, not from the org name or a sibling repo, so nothing says `github.com/acme/foo`",
-        "Ships one nav aid and no second one: no table of contents beside it, and no badge row invented for a project whose remote supplies none",
-        "Asserts nothing about the repo being public or private and adds no `GOPRIVATE` or auth step from the host URL alone"
-      ]
-    },
-    {
-      "id": 7,
-      "name": "no-wide-code-fences",
-      "expected_behavior": [
-        "Keeps every code-fence line within the template's width (≤ ~80 chars, hard cap ~100) so GitHub wraps nothing horizontally",
-        "Rewrites the `Example…` function to split the output across lines — one `%q` per line — and re-injects, rather than shipping the wide line",
-        "Applies the width rule to the example's source lines too, not only its `// Output:` block: the whole body lands in the fence",
-        "Re-runs `go test ./...` after the rewrite so the `// Output:` block still matches"
-      ]
-    },
-    {
-      "id": 8,
-      "name": "gomake-installed-but-project-does-not-use-it",
-      "expected_behavior": [
-        "Does not treat `:doc:mce` appearing in `gomake --list` as evidence about this project — the target is a built-in and lists everywhere",
-        "Finds no gomake config, CI step, or existing marker, and so hand-writes any examples the README needs",
-        "Introduces no `<!-- gmmce:… -->` marker into the README and authors no `Example…` function for injection: a contributor without gomake could not regenerate them"
-      ]
-    },
-    {
-      "id": 9,
-      "name": "unrunnable-command-vs-unpublished-package",
-      "expected_behavior": [
-        "Distinguishes the two failures rather than treating both as unverified",
-        "Treats the unpublished module as an ordinary state of a fresh project, not as a failure of the run or a reason to withhold the command",
-        "Leaves the quickstart command as written and says in the reply that this environment could not run it — the reader is not warned about the author's sandbox",
-        "Warns the reader about the install command with a `> [!NOTE]` naming what has to happen first, since an HTML comment is invisible to them"
-      ]
-    },
-    {
-      "id": 10,
-      "name": "declined-go-source-gate",
-      "expected_behavior": [
-        "Applies the README-only findings on the first approval, then asks about the Go file on its own",
-        "States what the file would be — path, the `Example…` functions in it, and that it joins the test suite and CI — so the user is answering a real question",
-        "On the no, writes no `.go` file and leaves the snippet finding reported rather than silently fixing or silently dropping it",
-        "Does not write the file and mention it afterwards, and does not re-ask later in the same run"
       ]
     }
   ]

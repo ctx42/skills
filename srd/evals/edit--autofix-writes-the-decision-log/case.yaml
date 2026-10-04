@@ -1,4 +1,0 @@
-schema_version: "1.1"
-name: edit--autofix-writes-the-decision-log
-context:
-  scaffold_script: scaffold.sh

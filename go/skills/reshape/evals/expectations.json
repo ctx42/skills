@@ -30,25 +30,6 @@
         "Frames every proposal at the public-API level and notes it cannot diff internals",
         "Offers a local wrapper as the fallback for changes that cannot land upstream"
       ]
-    },
-    {
-      "id": 4,
-      "name": "terse-output",
-      "expected_behavior": [
-        "No narration: the reply opens on the headline line and the table. A one-line note that call sites were mapped by grep rather than a language server is a fact, not narration",
-        "Says in one line that the forced structural option was considered and what displaced it, if the cap evicted it — the cap hides nothing silently",
-        "States each proposal once, with no closing summary re-listing the table already shown"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "restraint-on-an-api-that-is-fine",
-      "expected_behavior": [
-        "Says the API fits its consumer and prints no ranked table, rather than an empty one",
-        "Names what it looked for and found absent, so a reader can tell a clean API from a shallow pass",
-        "Declines any reach-1 shape by name instead of padding the table with a `Low` row",
-        "Still reports the header line with the real call-site count"
-      ]
     }
   ]
 }

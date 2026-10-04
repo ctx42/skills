@@ -2,39 +2,12 @@
   "skill_name": "doc",
   "expectations": [
     {
-      "id": 1,
-      "name": "correct-but-terse-is-left-alone",
-      "expected_behavior": [
-        "Runs the checklist and finds that no item fires",
-        "Leaves the comment byte-for-byte unchanged — no padding, no restating the signature",
-        "Reports no change line for it; shortness alone is not a defect"
-      ]
-    },
-    {
-      "id": 2,
-      "name": "adds-only-confirmable-facts",
-      "expected_behavior": [
-        "Fires the missing-fact checklist item for the slice mutation, which the body proves",
-        "Documents that mutation, naming what the caller must not assume about the slice afterwards",
-        "Writes nothing about concurrency: the absence of a mutex is not evidence of a guarantee either way, and \"not safe for concurrent use\" would be a conclusion about code nobody wrote"
-      ]
-    },
-    {
       "id": 3,
       "name": "directives-and-interface-method-godoc",
       "expected_behavior": [
         "Leaves both directive comments byte-for-byte unchanged and lists them as never-touch items in the plan",
         "Plans the `Read` godoc for removal as unremarkable — it would be kept, naming the surprise, only if `Read` broke or exceeded the `io.Reader` contract",
         "Writes nothing before approval: the plan is the run's only output on that turn, and every `.go` file's mtime is unchanged until the approval turn — check the files, not the promise"
-      ]
-    },
-    {
-      "id": 4,
-      "name": "terse-output",
-      "expected_behavior": [
-        "No narration: the reply is the changes made, the Verify result, and the verdict. A one-line note that no language server was available is a fact, not narration",
-        "Lists changes made as `file:Symbol — item`, plus flagged and never-touched items, each stated once",
-        "No closing restatement of the edits it just listed"
       ]
     },
     {
@@ -56,15 +29,6 @@
         "No comment anywhere claims `Router` is or is not safe for concurrent use — the absence of a mutex is not evidence either way",
         "The parent re-checks each worker's added or changed comment against the checklist before merging, and reverts any fact the code does not establish, saying so in the report",
         "Reports the Verify result in the reply — which packages were gate-checked and that `gofmt -l` and `go build` passed"
-      ]
-    },
-    {
-      "id": 7,
-      "name": "side-effect-is-not-a-surprise",
-      "expected_behavior": [
-        "Removes `(*fileSink).Write`'s godoc as unremarkable: performing its own contract is not a surprise, however many side effects it takes",
-        "Keeps `(*teeSink).Write`'s godoc and expands it to name the surprise — the second write, and the success return that hides its failure",
-        "Does not treat \"has a side effect\" as sufficient on its own to keep a comment, or both would be kept"
       ]
     }
   ]

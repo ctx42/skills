@@ -14,50 +14,6 @@
       ]
     },
     {
-      "id": 2,
-      "name": "reuse-the-company-glossary",
-      "expected_behavior": [
-        "Adds no local Glossary entry for the known term (GLO-3 / STR-10). The SRD may use the term bare — the Company Glossary is what defines it — and the reply says which terms were recognised, so the author can see the lookup happened",
-        "Defines Retention Period locally, because the Company Glossary does not carry it, and does not redefine Audit Log, which it does",
-        "The Retention Period entry defines the term and nothing else — no behaviour, no rules inside the entry (GLO-1)"
-      ]
-    },
-    {
-      "id": 3,
-      "name": "self-check-catches-violations",
-      "expected_behavior": [
-        "Auto-fixes the mechanical issues: capitalizes the normative keyword (LANG-4) and strips the `Example:` annotation (REQ-7)",
-        "Reports the judgment issues with rule ids: the non-atomic requirement to split (REQ-1) and the uncovered `In Scope` item needing a requirement (SCO-2)",
-        "Does not declare the SRD acceptable or set its Status to `ACCEPTED` — acceptance is a human call (STA-3)"
-      ]
-    },
-    {
-      "id": 4,
-      "name": "no-ui-change-sets-designs-na",
-      "expected_behavior": [
-        "Sets the `Designs` metadata field to `N/A` rather than a placeholder link (STR-7)",
-        "Asks for no design-tool link",
-        "Still leaves Owners and Initiative as TODO placeholders — only Designs is settled by the answer"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "house-extensions",
-      "expected_behavior": [
-        "Rewrites the British spellings to US English — \"color\", \"standardize\"",
-        "Flags the duplicate pair and the term used inconsistently across sections — the recompute trigger, which one section states as new evidence arriving and another as a measurement being added",
-        "Uses one-letter sub-numbering under the group's prefix (for example `GR-1a`, `GR-1b`, `GR-1c`) for the tight cluster while keeping flat numbers elsewhere"
-      ]
-    },
-    {
-      "id": 6,
-      "name": "terse-output",
-      "expected_behavior": [
-        "One report after writing and nothing before it: the file path, the requirement groups with their counts, the outstanding human follow-ups, and any blocker the user chose to leave standing",
-        "Quotes nothing back that the user can already see — not the drafted SRD, not requirement text beyond a proposed rewording, not a finding already shown in the interview. Naming the standing blocker in the report, as bullet 1 requires, is not quoting it"
-      ]
-    },
-    {
       "id": 7,
       "name": "undocumented-platform-fact",
       "expected_behavior": [

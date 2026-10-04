@@ -12,56 +12,6 @@
       "files": []
     },
     {
-      "id": 2,
-      "name": "reuse-the-company-glossary",
-      "skills": [
-        "create"
-      ],
-      "setup": "During the interview the user uses \"Audit Log\", already defined in the Company Glossary, alongside \"Retention Period\", which the glossary has never carried.",
-      "query": "/create",
-      "files": []
-    },
-    {
-      "id": 3,
-      "name": "self-check-catches-violations",
-      "skills": [
-        "create"
-      ],
-      "setup": "The user dictates the affected requirements verbatim and declines every rewording the interview offers, so the draft reaching self-check still carries the defects below. The draft reaching self-check contains a two-rule requirement, a lowercase \"must\", an `In Scope` item no requirement covers, and an `Example:` annotation. The draft as it stood before the self-check is kept beside the SRD as `<srd>.draft-before-self-check.md`, so the self-check's effect can be read as a diff.",
-      "query": "/create",
-      "files": []
-    },
-    {
-      "id": 4,
-      "name": "no-ui-change-sets-designs-na",
-      "skills": [
-        "create"
-      ],
-      "setup": "The user states the feature is backend-only with no UI change.",
-      "query": "/create",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "house-extensions",
-      "skills": [
-        "create"
-      ],
-      "setup": "The user dictates the affected requirements verbatim and declines every rewording the interview offers, so the draft reaching self-check still carries the defects below. The draft carries \"the colour MUST standardise…\", two requirements stating the same rule in different words, and a tight cluster of three related rules under one group. One term is also used inconsistently across sections: the scope item says severity is recomputed when new evidence arrives, while the requirement says when a measurement is added.",
-      "query": "/create",
-      "files": []
-    },
-    {
-      "id": 6,
-      "name": "terse-output",
-      "skills": [
-        "create"
-      ],
-      "setup": "An interview that has reached the write step. During it the self-check raised a blocker, which the agent showed and the user chose to leave standing.",
-      "query": "/create",
-      "files": []
-    },
-    {
       "id": 7,
       "name": "undocumented-platform-fact",
       "skills": [

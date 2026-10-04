@@ -2,76 +2,6 @@
   "skill_name": "edit",
   "evals": [
     {
-      "id": 1,
-      "name": "interactive-non-atomic-on-approved-srd",
-      "skills": [
-        "edit"
-      ],
-      "setup": "`specs/login.md` carries `Status: ACCEPTED`. `GR-3a` reads \"The system SHALL validate the token and log the attempt\" — two rules in one requirement — and `GR-3b` already exists beside it. The approving authority has not been consulted. The user answers the split's proposal with `S`: the authority has not agreed.",
-      "query": "/edit specs/login.md",
-      "files": []
-    },
-    {
-      "id": 2,
-      "name": "apply-a-review-file",
-      "skills": [
-        "edit"
-      ],
-      "setup": "`specs/login.review.md` holds findings across all three severities.",
-      "query": "/edit specs/login.md specs/login.review.md",
-      "files": []
-    },
-    {
-      "id": 3,
-      "name": "targeted-edit-by-description",
-      "skills": [
-        "edit"
-      ],
-      "setup": "One requirement says the response must be \"fast\". The user names it by description rather than by id.",
-      "query": "/edit specs/login.md fix the vague \"fast\" requirement",
-      "files": []
-    },
-    {
-      "id": 4,
-      "name": "polish-leaves-metadata-and-meaning",
-      "skills": [
-        "edit"
-      ],
-      "setup": "An in-progress draft with British spellings, a lowercase normative keyword, stray example text, and empty Owners/Initiative/Designs fields.",
-      "query": "/edit specs/login.md polish",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "terse-output",
-      "skills": [
-        "edit"
-      ],
-      "setup": "An ordinary interactive session with several applied edits.",
-      "query": "/edit specs/login.md",
-      "files": []
-    },
-    {
-      "id": 6,
-      "name": "generate-in-scope-on-signal",
-      "skills": [
-        "edit"
-      ],
-      "setup": "`### In Scope` holds only the `--- TODO ---` marker. Partway through the session the user says the requirements are final and asks for In Scope to be filled. The user rewords one candidate and asks to merge two others.",
-      "query": "/edit specs/login.md",
-      "files": []
-    },
-    {
-      "id": 7,
-      "name": "add-to-todo-on-demand",
-      "skills": [
-        "edit"
-      ],
-      "setup": "Mid-session; the SRD already carries a `## TODO` section with two items.",
-      "query": "Add: confirm the lockout threshold with security to TODO — then close the session",
-      "files": []
-    },
-    {
       "id": 8,
       "name": "autofix-bulk-applies-errata",
       "skills": [
@@ -79,26 +9,6 @@
       ],
       "setup": "`specs/login.review.md` has an `## Errata` block of three findings. Two anchors still match their quoted `old` text exactly once; the third entry has since been reworded, so its anchor no longer contains the quoted text. The SRD also carries one British spelling the `## Errata` block does not list.",
       "query": "/edit specs/login.md autofix",
-      "files": []
-    },
-    {
-      "id": 9,
-      "name": "interactive-from-a-line-number",
-      "skills": [
-        "edit"
-      ],
-      "setup": "Line 210 of `specs/login.md` falls inside `GR-4b`.",
-      "query": "/edit specs/login.md 210",
-      "files": []
-    },
-    {
-      "id": 10,
-      "name": "feedback-from-a-finding-number",
-      "skills": [
-        "edit"
-      ],
-      "setup": "`specs/login.review.md` exists and holds numbered findings. Partway through the walk the user names a finding number out of order (\"do #6 next\") before letting the run continue. Finding #2 is a substantive requirement finding the skill may fix — not a metadata gap, which scenario 15 covers.",
-      "query": "/edit specs/login.md #2",
       "files": []
     },
     {
@@ -110,77 +20,6 @@
         "kb"
       ],
       "setup": "The user wants `GR-2` to say the gateway retries a failed token check three times; the retry count appears in no document. The user approves the proposal with `YN`.",
-      "query": "/edit specs/login.md GR-2",
-      "files": []
-    },
-    {
-      "id": 12,
-      "name": "session-start-drains-prior-drafts",
-      "skills": [
-        "edit",
-        "report-doc-gap"
-      ],
-      "setup": "A previous session for this SRD ended with two doc gaps still drafts on the server (`srd_ref` `specs/login.md`). The user defers when offered, asking to get on with the edit.",
-      "query": "/edit specs/login.md",
-      "files": []
-    },
-    {
-      "id": 13,
-      "name": "decision-log-written-per-edit",
-      "skills": [
-        "edit"
-      ],
-      "setup": "No `specs/login.decisions.md` exists yet. The user answers `Y` to one proposal with the reason \"retention isn't ours, drop it\", then `S` to the next.",
-      "query": "/edit specs/login.md",
-      "files": []
-    },
-    {
-      "id": 14,
-      "name": "removal-on-an-approved-srd",
-      "skills": [
-        "edit"
-      ],
-      "setup": "`specs/login.md` is `ACCEPTED`. A review finding says `GR-6` duplicates `GR-2` and should be removed; `GR-7` follows `GR-6` in the same group. The approving authority has agreed to the removal.",
-      "query": "/edit specs/login.md specs/login.review.md",
-      "files": []
-    },
-    {
-      "id": 15,
-      "name": "finding-outside-the-mandate",
-      "skills": [
-        "edit"
-      ],
-      "setup": "`specs/login.review.md` finding `#2` is a metadata gap — no Initiative link (STR-3) — which `edit` may not fix. The run is asked to enter at that finding.",
-      "query": "/edit specs/login.md #2",
-      "files": []
-    },
-    {
-      "id": 16,
-      "name": "autofix-writes-the-decision-log",
-      "skills": [
-        "edit"
-      ],
-      "setup": "`specs/login.review.md` has an `## Errata` block of three findings. Two anchors still match their quoted `old` text exactly once. The third quotes an `old` string that occurs TWICE inside its anchor, so the substitution is not uniquely located.",
-      "query": "/edit specs/login.md autofix",
-      "files": []
-    },
-    {
-      "id": 17,
-      "name": "open-questions-and-read-only-comments",
-      "skills": [
-        "edit"
-      ],
-      "setup": "`specs/login.md` carries an HTML comment block from a prior reviewer that names `GR-9`, a requirement that never existed. During the walk a proposal raises a question the user cannot answer yet.",
-      "query": "/edit specs/login.md",
-      "files": []
-    },
-    {
-      "id": 18,
-      "name": "no-drafts-skip-the-delegates",
-      "skills": [
-        "edit"
-      ],
-      "setup": "The server holds no draft gap for this SRD, and `Status` reads `IN PROGRESS`. The target requirement is vague and names no glossary term. The requirement asserts no fact about existing system behavior, so nothing in the run calls for a corpus lookup.",
       "query": "/edit specs/login.md GR-2",
       "files": []
     },

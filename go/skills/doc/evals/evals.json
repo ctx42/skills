@@ -2,26 +2,6 @@
   "skill_name": "doc",
   "evals": [
     {
-      "id": 1,
-      "name": "correct-but-terse-is-left-alone",
-      "skills": [
-        "doc"
-      ],
-      "setup": "`Get`'s godoc is a single accurate sentence that already states the one thing the signature cannot — that a miss returns the zero value rather than an error.",
-      "query": "/doc func=Get",
-      "files": []
-    },
-    {
-      "id": 2,
-      "name": "adds-only-confirmable-facts",
-      "skills": [
-        "doc"
-      ],
-      "setup": "`Store` mutates the slice it is passed — the body proves it. It has no mutex and no synchronization of any kind, so whether it is safe for concurrent use is simply open: the code neither establishes nor rules it out. Its godoc states neither fact.",
-      "query": "/doc func=Store",
-      "files": []
-    },
-    {
       "id": 3,
       "name": "directives-and-interface-method-godoc",
       "skills": [
@@ -29,16 +9,6 @@
       ],
       "setup": "`./pkg/io` carries a `//go:build` line, a `//go:generate` directive, and a `Read` method implementing `io.Reader` whose godoc restates the interface contract and nothing more.",
       "query": "/doc ./pkg/io",
-      "files": []
-    },
-    {
-      "id": 4,
-      "name": "terse-output",
-      "skills": [
-        "doc"
-      ],
-      "setup": "An ordinary single-function run that changes one godoc and deletes one inline comment.",
-      "query": "/doc func=Foo",
       "files": []
     },
     {
@@ -59,16 +29,6 @@
       ],
       "setup": "A module of eleven packages, two of them `svc` and `api`. `api` holds a `Router` — a map-backed struct with no mutex and no synchronization of any kind, whose godoc says nothing about concurrency. Whether it is safe for concurrent use is simply open: the code neither establishes nor rules it out.",
       "query": "/doc module fanout packages=svc,api",
-      "files": []
-    },
-    {
-      "id": 7,
-      "name": "side-effect-is-not-a-surprise",
-      "skills": [
-        "doc"
-      ],
-      "setup": "Two `io.Writer` implementations, both pinned by `var _ io.Writer = (*T)(nil)` and both carrying godoc. `(*fileSink).Write` writes the bytes to a file and nothing else — the job the method exists to do, side effects and all. `(*teeSink).Write` also writes a copy to a second sink the interface knows nothing about, and returns `len(p)` even when that second write fails.",
-      "query": "/doc ./pkg/sink",
       "files": []
     }
   ]

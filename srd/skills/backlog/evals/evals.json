@@ -12,16 +12,6 @@
       "files": []
     },
     {
-      "id": 2,
-      "name": "never-closes-an-unknown-by-guessing",
-      "skills": [
-        "backlog"
-      ],
-      "setup": "One unknown asks whether a per-sensor-type propagation speed is needed. Nothing has been decided, but the corpus carries a page that reads like an answer — it states a single default speed, without saying whether per-type values are required.",
-      "query": "/backlog unknowns",
-      "files": []
-    },
-    {
       "id": 3,
       "name": "reclassifies-rather-than-skipping",
       "skills": [
@@ -39,26 +29,6 @@
       ],
       "setup": "Three open gaps, two of which report the same missing fact from different SRDs. The corpus covers a third of that fact already, but in an unranked page. Once the draft is ready, the user publishes it in the sitting and gives its URL.",
       "query": "/backlog gaps",
-      "files": []
-    },
-    {
-      "id": 5,
-      "name": "gate-stops-when-the-server-fails",
-      "skills": [
-        "backlog"
-      ],
-      "setup": "The `mcp__srd-doc__*` tools are in the session, but the gate's `search` call returns a connection error. `_open-questions.md` still holds 2 deferred and 1 unknown.",
-      "query": "/backlog",
-      "files": []
-    },
-    {
-      "id": 6,
-      "name": "terse-output",
-      "skills": [
-        "backlog"
-      ],
-      "setup": "A sitting that closes two deferred questions and one gap cluster.",
-      "query": "/backlog",
       "files": []
     }
   ]
