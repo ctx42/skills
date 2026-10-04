@@ -39,6 +39,7 @@ import sys
 import time
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.dont_write_bytecode = True  # loading eval-probe.py must not leave dev/__pycache__
 SPEC = importlib.util.spec_from_file_location("eval_probe", os.path.join(ROOT, "dev", "eval-probe.py"))
 ep = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(ep)

@@ -38,7 +38,7 @@
 #   --model M  run the cases on model M (default sonnet; `default` = the CLI's
 #          default model). A sonnet run re-runs only its FAILs on the default
 #          model, which has the final say: sonnet matched it on 6/6 measured
-#          cases at ~half the cost (tmp/eval-loop-log.md, 2026-10-04)
+#          cases at ~half the cost (measured 2026-10-04)
 #   --keep keeps every run's workspace and trace (paths in the JSON); without
 #          it the workspaces are deleted after the run
 #   --fresh  ignore the pass ledger: a case whose inputs (case dir, the skills
