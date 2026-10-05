@@ -66,8 +66,10 @@ Per change:
    and each the section it touches states; `get_doc` a hit when its context
    matters.
 2. Propose exactly one change: the heading it sits under, before and after
-   text, a one-line rationale, what the lookup found (`<identity>#<slug>`,
-   `rank`), and any gap it fills or leaves.
+   text, a one-line rationale, what the lookup found as a source line per
+   result the change rests on or contradicts
+   ([Citing a source](../create/references/doc-corpus.md#citing-a-source)),
+   and any gap it fills or leaves.
 3. Close with `Y` (apply) / `S` (skip) / `E` (apply the user's text), plus `K`
    (the KB instead) when the change writes a fact the user supplied. Apply
    only on explicit approval; one question per turn; never batch unrelated
@@ -80,7 +82,7 @@ Per change:
 
 Each lookup ends in one of:
 
-- The corpus states it: cite it in the proposal.
+- The corpus states it: cite it in the proposal with its source line.
 - Two sources disagree: the lower `rank` states the platform; the other is a
   `wrong` gap unless this change corrects it. Equal or no ranks: put both to
   the user. Never settle by folder name.

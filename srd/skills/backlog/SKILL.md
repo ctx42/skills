@@ -243,7 +243,11 @@ Get each gap's fact into a corpus section, then record the section on the gap.
    never re-asking what it answers. Do not draft from guesses: every sentence
    of the draft is something the user confirmed or the corpus states — a
    gap's own claim is the reporter's word until the user confirms it, and a
-   draft states no consequence or summary neither source gave.
+   draft states no consequence or summary neither source gave. A sentence
+   the corpus states is shown to the user with its source line
+   ([Citing a source](../create/references/doc-corpus.md#citing-a-source))
+   before the draft or the `srd:kb` hand-off; a section that fills a gap, in
+   the question that asks the user to confirm the fill.
 5. Write the fix where the user picks:
    - KB: hand the confirmed fact to `srd:kb`, which writes it to its inbox; it
      fills only once `srd:kb` files it into a topic page.

@@ -61,6 +61,10 @@ skill consults it in system confrontation and before any "is this defined or
 documented?" question (step 3); a fact the walk confirms goes to `srd:kb` (see
 [Platform knowledge](#platform-knowledge)) and is written at its
 confirmation. Draft gaps are checked at step 1 and captured on discovery.
+A question or proposed answer resting on a corpus result carries its source
+line ([Citing a source](../create/references/doc-corpus.md#citing-a-source)),
+in the walk and in the question's visible text in `<srd>.questions.md`, never
+only in its bookkeeping comment.
 
 ## Invocation
 
