@@ -55,6 +55,11 @@ Nothing outside this list is errata.
   re-authenticate`). If more than one insertion works, it is not errata.
 - Heading case matched to the document's own convention:
   `## In scope → ## In Scope` when every sibling heading is title-cased.
+- A required section under a variant name, renamed to the one the standard
+  fixes (Introduction, Glossary, Scope, In Scope, Out of Scope, Requirements):
+  `# System requirements → # Requirements`. Errata only when no heading already
+  carries the canonical name and the variant is the only candidate for it;
+  heading level stays as found.
 - Boilerplate the standard fixes verbatim: the STR-8 keyword notice. This is
   the one entry that cannot meet the 40-character rule above — the notice is a
   multi-line block with two URLs — so it is quoted as the whole block and
