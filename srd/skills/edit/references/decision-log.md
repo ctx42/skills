@@ -36,6 +36,11 @@ author-facing account of what changed and why, which a diff cannot carry.
   reason logged — an `autofix` entry has no proposal, so it logs the user's
   words or nothing, never the review finding's text. A reason that holds a
   double quote is wrapped in single quotes.
+- An entry ends with every source line its proposal carried, verbatim, one
+  per line — a KB section the change contradicts included: the user approved
+  the text knowing where it came from, and the log is where that stays
+  traceable. A cut's entry carries none, not even for the KB sections its
+  proposal named: those are gaps, listed in the manifest.
 - Every applied edit, loop or not: `autofix` logs one entry per substitution,
   Add-to-TODO logs its line. Same changes, same log.
 - Skipped and flagged-but-unfixed issues are not logged: they stay in the
@@ -61,6 +66,7 @@ reassignment".
 
 DET-9 now names the sample rate in hertz instead of "high resolution".
 Reason: "Names a measurable value in place of an untestable adjective."
+Source: Telemetry › Sampling (rank 2, 1 = most trusted) — https://example.atlassian.net/wiki/spaces/IFP/pages/1774485611
 
 ### General
 

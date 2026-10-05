@@ -12,8 +12,12 @@ The corpus itself — backends, trust, and where a lookup's outcome goes — is 
 
 When a new or changed requirement asserts something about existing system
 behavior, `search` the corpus **before the proposal is put** (loop step 1) and
-state what it found in the proposal: attestation works on the first reading, so
-the fact the user's key attests has to be in front of them when they press it.
+state what it found in the proposal, each result it rests on as a source line
+([Citing a source](../../create/references/doc-corpus.md#citing-a-source)) —
+a lookup that only confirms the text included; one that found nothing says
+so and gives none, nor does its log entry: attestation works on the first
+reading, so the fact and where it came from have to be in front of the user
+when they press the key.
 Step 3 re-validates only what the edit touched and never returns to the corpus
 for a claim the proposal already carried.
 

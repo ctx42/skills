@@ -153,8 +153,8 @@ Every mode but `autofix` runs this loop per change:
    (`[TBD: lockout minutes]` — never `<…>`, which Obsidian renders as an HTML
    tag). A change asserting
    existing system behavior gets its corpus lookup here, before the proposal is
-   put, and the proposal states what it found — a KB section it contradicts
-   included, as a finding no `rank` settles
+   put, and the proposal states what it found with its source line — a KB
+   section it contradicts included, as a finding no `rank` settles
    ([references/corpus-edits.md](references/corpus-edits.md)). A removal gets
    one too: each KB section only the cut requirement asserted for this SRD gets
    a `wrong` gap on the cut's confirmation. Name the

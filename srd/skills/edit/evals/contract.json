@@ -122,6 +122,23 @@
         "\\bleads on\\b",
         "trust order (settles|says)"
       ]
+    },
+    {
+      "id": "proposal-cites-source",
+      "file": "references/corpus-edits.md",
+      "rule": "A proposal resting on a corpus result carries its source line, a confirm-only lookup included",
+      "must": [
+        "each\\ result\\ it\\ rests\\ on\\ as\\ a\\ source\\ line",
+        "a\\ lookup\\ that\\ only\\ confirms\\ the\\ text\\ included"
+      ]
+    },
+    {
+      "id": "decision-log-keeps-source",
+      "file": "references/decision-log.md",
+      "rule": "The decision-log entry for a corpus-backed change keeps the proposal's source lines verbatim",
+      "must": [
+        "ends\\ with\\ every\\ source\\ line\\ its\\ proposal\\ carried"
+      ]
     }
   ]
 }
