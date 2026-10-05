@@ -49,11 +49,15 @@ Glossary. Each entry defines the term and nothing else — no behavior, no rules
 
 ## Requirements
 
+---
+
 ### <Group Name>
 
 **<PFX>-1:** The system MUST <single, verifiable rule>.
 
 **<PFX>-2:** The system MUST <single, verifiable rule>.
+
+---
 
 ## TODO
 

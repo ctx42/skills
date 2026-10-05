@@ -194,7 +194,8 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
 1. Auto-fix the mechanical checks (no judgment): section order (STR-13),
    keyword notice placement (STR-8), identifier format/uniqueness/order
    (REQ-2/3/4), keyword capitalization (LANG-4), stray example or note text
-   (REQ-7), valid Markdown, Status defaulting to `IN PROGRESS`, Designs `N/A`
+   (REQ-7), valid Markdown, requirement-group dividers (authoring guide),
+   Status defaulting to `IN PROGRESS`, Designs `N/A`
    when the user said no UI change, British → US spelling. These apply even
    where the user declined a rewording in the interview: a refusal there is
    about meaning, and a keyword's case or a stray example carries none.

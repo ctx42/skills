@@ -43,6 +43,10 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   (product or module names, external tools, device models) are not concepts
   and are not GLO-3 gaps.
 - Plain headings: never bold a heading (`### **X**`); de-bold existing ones.
+- Requirement-group dividers: under Requirements, put a `---` line before every
+  group heading and one after the last group, a blank line on each side (else
+  the line above turns into a heading); use `---` nowhere else in the body.
+  A missing divider is a finding (`SRD:house`).
 - Link, do not restate: when a requirement would repeat rules an authoritative
   platform document defines, link that document and state only the SRD-level
   constraint.
@@ -109,6 +113,8 @@ and confirm:
   only the `--- TODO ---` marker, skip the coverage check — confirm instead that
   the marker still stands alone (In Scope is knowingly pending).
 - Numbering is still unique and in order, with no collisions or large gaps.
+- Every requirement group is fenced by `---` dividers (the house addition
+  above).
 - Each term is used consistently (the terminology-consistency house addition
   above; a drift finding cites that, not the pass) and is still defined —
   locally or in the Company Glossary. Check every glossary heading against

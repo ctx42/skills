@@ -301,8 +301,8 @@ Mechanical-only cleanup through the loop, confirming each change, in document
 order with no summary first; metadata gaps go to the closing manifest, not the
 walk. Scope:
 British → US spelling, identifier format/order (REQ-2/3/4, subject to the
-approval gate), keyword capitalization (LANG-4), valid Markdown, stray
-example/note text (REQ-7), spacing and punctuation. Never rewrite requirement
+approval gate), keyword capitalization (LANG-4), valid Markdown, requirement-group
+dividers (authoring guide), stray example/note text (REQ-7), spacing and punctuation. Never rewrite requirement
 meaning, restructure, or cut a requirement.
 
 ### targeted
