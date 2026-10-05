@@ -10,3 +10,6 @@
 - Before putting any proposal that changes a requirement's meaning — including one the user dictates mid-walk — search the corpus and grep `kb/` (inbox included) for the fact it changes; a KB section stating the old fact must be named in the proposal, not found after the `Y`.
 - Write a requirement placeholder as `[TBD: name]`, never `<name>`: Obsidian renders angle brackets as an HTML tag and the text breaks.
 - Pad every Markdown table in a proposal to aligned columns, before-and-after tables included; check each row's width before sending.
+- Before merging two names for one thing (heading "Water detection" vs list "Water Level"), check they mean the same; when they differ in meaning, do not pick one — put the question to the user (Who would know).
+- Decision-log reasons are verbatim: keep the proposal's own case and wording ("one rule per", not "One rule per"); compare against the proposal before writing.
+- Removing a requirement that carries a Confluence comment: name the comment id in the proposal and say Yes also settles it; delete callout and `[^cf-…]` anchor together.
