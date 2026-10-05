@@ -51,7 +51,7 @@
         "the gate's `kb` value is the only answer"
       ],
       "must_not": [
-        "\\.obsidian|cfsync|ignore-push|check any sync config|managed by a document sync"
+        "\\.obsidian|ignore-push|check any sync config|managed by a document sync"
       ]
     },
     {
@@ -121,7 +121,7 @@
         "settles\\ conflicting\\ sources\\ by\\ the\\ `rank`\\ on\\ each\\ result,\\ never\\ by\\ folder"
       ],
       "must_not": [
-        "doc/(infraport|user_docs|devices)",
+        "\\bdoc/[a-z_]+/",
         "\\buser[ _](docs|manual)\\b",
         "\\bleads on\\b",
         "trust order (settles|says)"

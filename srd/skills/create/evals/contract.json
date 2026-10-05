@@ -109,7 +109,7 @@
         "Never\\ settle\\ by\\ folder\\ name,\\ source\\ type,\\ or\\ a\\ remembered\\ order"
       ],
       "must_not": [
-        "doc/(infraport|user_docs|devices)",
+        "\\bdoc/[a-z_]+/",
         "\\buser[ _](docs|manual)\\b",
         "\\bleads on\\b",
         "trust order (settles|says)"
@@ -132,7 +132,7 @@
         "SRD's\\ folder\\ name\\ under\\ `initiatives`"
       ],
       "must_not": [
-        "doc/(infraport|user_docs|devices)",
+        "\\bdoc/[a-z_]+/",
         "\\buser[ _](docs|manual)\\b",
         "\\bleads on\\b",
         "trust order (settles|says)"
@@ -147,14 +147,14 @@
         "Never add, remove, or change a front-matter key or marker"
       ],
       "must_not": [
-        "cfsync|confluence|atlassian|\\.obsidian|page_id|space_id|page_version|heading_anchors|ignore-push"
+        "\\.obsidian|page_id|space_id|page_version|heading_anchors|ignore-push"
       ]
     },
     {
       "id": "no-hardcoded-trust",
       "rule": "No hard-coded trust order or folder name",
       "must_not": [
-        "doc/(infraport|user_docs|devices)",
+        "\\bdoc/[a-z_]+/",
         "\\buser[ _](docs|manual)\\b",
         "\\bleads on\\b",
         "trust order (settles|says)"

@@ -137,7 +137,7 @@
       "id": "no-hardcoded-trust",
       "rule": "No hard-coded trust order or folder name",
       "must_not": [
-        "doc/(infraport|user_docs|devices)",
+        "\\bdoc/[a-z_]+/",
         "\\buser[ _](docs|manual)\\b",
         "\\bleads on\\b",
         "trust order (settles|says)"
