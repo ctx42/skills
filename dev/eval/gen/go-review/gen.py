@@ -107,6 +107,9 @@ def write_case(name, tags, prompt, graders, scaffold_sh=None, history=None,
     # lint allows over 300 s only on a fan-out- or long-tagged case
     if timeout > 300 and "long" not in tags:
         tags = tags + ["fan-out"]
+    # eval-changed.sh grants Bash only to needs-shell cases
+    if any(t.startswith("Bash") for t in allowed) and "needs-shell" not in tags:
+        tags = tags + ["needs-shell"]
     fm = [f"tags: [case:{name}, {', '.join(tags)}]", "runs: 1",
           f"max_turns: {max_turns}", f"timeout_seconds: {timeout}",
           f"allowed_tools: [{', '.join(allowed)}]"]

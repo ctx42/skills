@@ -1,5 +1,5 @@
 ---
-tags: [case:review--rule-edit-add-change-remove, skill:review, sec:review:usage, sec:review:working-diff-injected, sec:review:rule-edit-and-learn-modes, ref:review/rule-editing]
+tags: [case:review--rule-edit-add-change-remove, skill:review, sec:review:usage, sec:review:working-diff-injected, sec:review:rule-edit-and-learn-modes, ref:review/rule-editing, needs-shell]
 runs: 1
 max_turns: 60
 timeout_seconds: 300
