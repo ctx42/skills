@@ -16,7 +16,7 @@ license: MIT
 ```
 /edit <srd>                  interactive (default): front-load issues, then walk entry by entry
 /edit <srd> 123              interactive from line 123: resolve to the nearest entry, walk from there
-/edit <srd> <srd>.review.md  feedback: apply a review file or pasted feedback, blocker → major → minor
+/edit <srd> <srd>.review.md  feedback: apply a review file or pasted feedback, Scope last, blocker → major → minor
 /edit <srd> #2               feedback from finding #2, then next by number or jump to any number
 /edit <srd> autofix          bulk-apply the review's ## Errata block behind one confirmation
 /edit <srd> polish           mechanical-only cleanup (spelling, numbering, keywords), confirm each
@@ -255,7 +255,8 @@ with a confirmation and expects no review file.
    its rule id. Edit nothing yet; the first proposal may follow in the same
    turn.
 2. Walk entry by entry in document order — each requirement (`PFX-n`), glossary
-   term, scope item — running the loop for every fix the user approves.
+   term, scope item — running the loop for every fix the user approves; Scope
+   goes last, after Requirements, since it derives from them.
    Move on only on `YN` or an explicit ask, and never before the current entry
    is resolved or skipped. An entry with no finding resolves on sight: say so
    and move on — nothing was proposed, so no key is owed.
@@ -273,7 +274,9 @@ outcome.
 
 1. Input is a `<srd>.review.md` path or feedback pasted inline (email, ticket,
    chat); parse the findings from either.
-2. Work findings in severity order — blocker → major → minor — using the
+2. Work findings in two passes: every section but Scope, then Scope, which
+   derives from the settled requirements (SCO-2/3).
+   Within each pass, severity order — blocker → major → minor — using the
    review's tags and numbers; judge untagged pasted feedback from the rule.
 3. Run the loop per finding; reference findings by number in the closing
    manifest.
@@ -285,8 +288,8 @@ path with `.md` replaced: `specs/login.md` → `specs/login.review.md`); if
 absent, say so and stop — one or two lines naming the missing file, nothing
 more. No approval-gate line, draft check, manifest, or way in — not even "run
 `srd:review` first": those report a run that happened, and this one did not.
-Enter at finding `#n` instead of severity order; after each finding, default to
-the next by number or jump to any number the user names.
+Enter at finding `#n` instead of the passes and severity order; after each
+finding, default to the next by number or jump to any number the user names.
 
 ### autofix
 
