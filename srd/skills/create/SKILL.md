@@ -64,7 +64,8 @@ fact about the existing system or uses a term no glossary defines, and in the
 self-check, for every requirement that asserts existing behavior. A lookup that
 cannot confirm the claim goes to `srd:report-doc-gap` on discovery, confirmed
 by the user or not; a fact the corpus lacks but the user confirms goes to
-`srd:kb` as well, which writes it to the inbox at once.
+`srd:kb` as well, which writes it to the inbox at once. A user who does not
+know an answer: [Who would know](references/doc-corpus.md#who-would-know).
 Gaps are captured as server-side drafts on discovery and offered at step 5.
 When the first gap surfaces and no SRD path is agreed yet, capture the draft at
 once with `srd_ref` empty — never wait for the path — and fold a proposed path

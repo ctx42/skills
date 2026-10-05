@@ -125,7 +125,7 @@ GAP_TOOLS = ["list_gaps", "report_gap", "update_gap", "submit_gap", "discard_gap
 def gap(gid, topic, detail, demand, terms, kind="missing", doc_id="",
         heading=None, claim="", srd="specs/gateway.md"):
     slug = "-".join("".join(c if c.isalnum() else " " for c in topic.lower()).split())[:60]
-    return {"id": gid, "status": "draft", "kind": kind, "answer": "",
+    return {"id": gid, "status": "draft", "kind": kind, "answer": "", "ask": [], "asked": "",
             "srd_ref": srd, "doc_id": doc_id, "heading_path": heading,
             "search_terms": terms, "hits": 1, "created": "2026-09-20T09:00:00Z",
             "filled_by": [], "topic": topic, "demand": demand, "detail": detail,

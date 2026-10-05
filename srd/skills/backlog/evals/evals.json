@@ -51,6 +51,16 @@
       "setup": "The store holds one plain open gap and three `filled` gaps `list_gaps` flags stale. `gap-0050` cites KB section `kb/gift-cards.md#refund-window` (`changed`): reworded, it still states the 14-day refund window. `gap-0051` cites `kb/gift-cards.md#gift-card-expiry` (`changed`): its claim says a gift card never expires; the section now says it expires after 24 months. `gap-0052` cites `1882030917#cold-storage` (`vanished`): that heading is now \"Archive tier\" and states the same 90-day fact. No SRD is `REJECTED`.",
       "query": "/backlog",
       "files": []
+    },
+    {
+      "id": 7,
+      "name": "ask-writes-one-message-per-person",
+      "skills": [
+        "backlog"
+      ],
+      "setup": "Three open deferred gaps: `gap-0061` names two people in `ask` (Anna M, Piotr K) and was never asked; `gap-0062` names Anna M and was asked on 2026-09-28; `gap-0063` names nobody. Once the blocks are printed, the user confirms both were sent.",
+      "query": "/backlog ask",
+      "files": []
     }
   ]
 }

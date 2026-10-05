@@ -80,6 +80,14 @@
       "pass": "^\\W*1774485611\\b",
       "fail": "docs/concepts/tags\\.md\\W*$|^\\W*docs/",
       "class": "load-bearing"
+    },
+    {
+      "id": "merge-ask-on-open-match",
+      "rule": "ask-merge",
+      "prompt": "Situation: a caller hands over a capture: question \"does a shared wishlist link expire?\", `answer: deferred`, `ask: [\"Piotr K\"]`. The dedup `list_gaps` query matches open gap gap-0061 on the same fact, which holds `answer: deferred`, `ask: [\"Anna M\"]`, `asked: \"2026-09-28\"`.\n\nQuestion: which `ask` and `asked` do you pass to update_gap on gap-0061? Answer on the first line exactly as `ask=<JSON list> asked=<value or KEEP>`, then one sentence why.",
+      "pass": "^\\W*ask\\W*\\[\\s*\"Anna M\"\\s*,\\s*\"Piotr K\"\\s*\\]\\W+asked\\W*(\"\"|empty|clear)",
+      "fail": "^\\W*ask\\W*\\[\\s*\"Piotr K\"\\s*\\]|asked\\W*(KEEP|\"?2026)",
+      "class": "load-bearing"
     }
   ]
 }

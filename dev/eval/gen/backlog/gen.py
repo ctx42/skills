@@ -80,9 +80,10 @@ filter, return every gap above.
 
 
 def gap(id_, topic, srd, terms, detail, claim="", doc_id="", heading=None, created="2026-09-08T10:12:00Z",
-        answer="", hits=1):
+        answer="", hits=1, ask=(), asked=""):
     slug = "-".join("".join(c if c.isalnum() else " " for c in topic.lower()).split())[:60]
-    return {"id": id_, "status": "open", "kind": "missing", "answer": answer, "srd_ref": srd,
+    return {"id": id_, "status": "open", "kind": "missing", "answer": answer, "ask": list(ask),
+            "asked": asked, "srd_ref": srd,
             "doc_id": doc_id, "heading_path": heading or [], "search_terms": terms, "hits": hits,
             "created": created, "filled_by": [], "topic": topic,
             "demand": f"Blocks the requirements of {srd} that depend on this fact.",
@@ -731,4 +732,86 @@ write_case(
         "b4-clause-in-counts": rx(r"stale[^\n]{0,80}(reopen|refresh)|(reopen|refresh)[^\n]{0,80}stale",
                                   flags="i"),
     },
+)
+
+# --- 7. ask-writes-one-message-per-person ----------------------------------
+
+GAPS_7 = [
+    gap("gap-0061", "Shared wishlist link expiry", "wishlist-sharing", ["wishlist link expiry"],
+        "Does a shared wishlist link expire, and after how long?", answer="deferred",
+        created="2026-09-20T10:00:00Z", ask=["Anna M", "Piotr K"]),
+    gap("gap-0062", "Gift card refund window", "gift-cards", ["gift card refund"],
+        "How many days after purchase can a gift card still be refunded?", answer="deferred",
+        created="2026-09-21T10:00:00Z", ask=["Anna M"], asked="2026-09-28"),
+    gap("gap-0063", "Wishlist size limit", "wishlist-sharing", ["wishlist size limit"],
+        "How many titles can one wishlist hold?", answer="deferred", created="2026-09-22T10:00:00Z"),
+]
+WORLD_7 = f"""---
+type: agent
+---
+The documentation-gap store of the srd server. At the start of this run
+the store holds exactly these gaps:
+
+{chr(10).join(json.dumps(g, separators=(",", ":")) for g in GAPS_7)}
+
+Every earlier gap call this run changes the store; always answer from the
+store as those calls left it.
+
+- list_gaps answers {{"gaps":[...],"invalid":[]}} with the full current record
+  of every gap that matches all of the call's filters: `status` keeps only
+  gaps in exactly that status (no gap above is a `draft`), `srd_ref` keeps
+  only gaps whose srd_ref contains that text, `stale: true` keeps only gaps
+  whose record has `stale: true` (none above), `ask` keeps only gaps with a
+  name in `ask` containing that text ignoring case, `asked: true` keeps only
+  gaps whose `asked` is non-empty and `asked: false` only those whose `asked`
+  is empty; an empty or missing filter keeps every gap. A `query` keeps only
+  gaps whose topic, detail, or search_terms share a word with it, best match
+  first, each with a `score` field.
+- update_gap changes only the fields given on the draft or open gap named by
+  `gap_id` (`ask` replaces the list; `asked` must be a YYYY-MM-DD date or
+  empty, else answer `ERROR: invalid: asked must be YYYY-MM-DD`) and answers
+  {{"ok":true}}.
+"""
+UG = "mcp__srd__update_gap"
+
+
+def in_block(pat):
+    """Some fenced block of the reply contains pat (fence pairs skipped from the start)."""
+    skip = r"(?:[^`]|`(?!``))*"
+    return rf"^{skip}(?:```[a-z]*\n(?:(?!```)[\s\S])*```{skip})*?```[a-z]*\n(?:(?!```)[\s\S])*?{pat}"
+
+
+case7_common = dict(
+    prompt="/srd:backlog ask",
+    tags=BASE_TAGS + CORPUS_TAGS,
+    max_turns=30,
+    mocks={"list_gaps": WORLD_7, "update_gap": WORLD_7},
+)
+write_case(
+    "backlog--ask-writes-one-message-per-person--gate",
+    graders={
+        "b1-anna-block": rx(in_block(r"Anna M(?:(?!```)[\s\S])*?expir")),
+        "b1-piotr-block": rx(in_block(r"Piotr K(?:(?!```)[\s\S])*?expir")),
+        "b1-two-blocks": rx("```", match="count:4"),
+        "b2-no-refund-question": rx(in_block("refund"), flags="i", match="not_contains"),
+        "b2-no-size-question": rx(in_block(r"how many titles|size limit"), flags="i", match="not_contains"),
+        "b2-counts-asked": rx(r"already (been )?(asked|sent)|(\b1\b|\bone\b)[^\n]{0,60}\b(asked|sent)\b|\b(asked|sent)\b[^\n]{0,60}(\b1\b|\bone\b)",
+                              flags="i"),
+        "b2-offers-reminders": rx(r"ask reminders", flags="i"),
+        "b3-no-gap-id-in-block": rx(in_block(r"gap-\d"), match="not_contains"),
+        "b3-no-mention-in-block": rx(in_block(r"@\w"), match="not_contains"),
+        "b4-no-asked-before-confirmation": never(UG),
+    },
+    **case7_common,
+)
+write_case(
+    "backlog--ask-writes-one-message-per-person",
+    answers=['To which messages were sent: "Sent both of them."',
+             'To any offer of another list or more work: "No, that\'s all for today."'],
+    graders={
+        "b4-asked-on-gap-0061": used(UG, r'^(?=.*"gap_id":"gap-0061")(?=.*"asked":"\d{4}-\d{2}-\d{2}")', 1, 1),
+        "b4-no-update-on-asked-gap": never(UG, "gap-0062"),
+        "b4-no-update-on-unnamed-gap": never(UG, "gap-0063"),
+    },
+    **case7_common,
 )

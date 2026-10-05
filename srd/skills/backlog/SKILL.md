@@ -6,7 +6,7 @@ description: >
   and reported gaps, facts the corpus does not supply reliably. Use when asked
   to work the backlog, clear open questions, answer what was deferred, or write
   up and fill reported documentation gaps.
-argument-hint: "[all*|deferred|unknowns|gaps]"
+argument-hint: "[all*|deferred|unknowns|gaps|ask [reminders]]"
 license: MIT
 ---
 
@@ -15,10 +15,12 @@ license: MIT
 ## Usage
 
 ```
-/backlog           all three lists, cheap wins first (default)
-/backlog deferred  questions someone knows the answer to; closed by asking
-/backlog unknowns  things nobody has pinned down; triage, not answering
-/backlog gaps      reported corpus gaps; drafts the fix, fills from the corpus
+/backlog                all three lists, cheap wins first (default)
+/backlog deferred       questions someone knows the answer to; closed by asking
+/backlog unknowns       things nobody has pinned down; triage, not answering
+/backlog gaps           reported gaps; drafts the fix, fills from the corpus
+/backlog ask            one paste-ready message per person a deferred gap names
+/backlog ask reminders  the same for questions already sent
 ```
 
 One sitting over the three lists the SRD skills fill as a byproduct, cheap wins
@@ -64,17 +66,19 @@ fact nobody has given.
 ## Backends
 
 The lists use the server's gap tools on `mcp__<mcp-server>__`: `list_gaps`
-(optional `status`, `srd_ref`, `stale`, ranked `query`), `update_gap` (`gap_id`,
-`answer`), `fill_gap` (`gap_id`, `filled_by`, `complete`, optional
-`remaining`), `reopen_gap` and `wontfix_gap` (`gap_id`, `reason`); the read
-tools `search`, `get_doc`, `list_docs` come from the same server. One
+(optional `status`, `srd_ref`, `stale`, `ask`, `asked`, ranked `query`),
+`update_gap` (`gap_id` and only the fields that change), `fill_gap`
+(`gap_id`, `filled_by`, `complete`, optional `remaining`), `reopen_gap` and
+`wontfix_gap` (`gap_id`, `reason`); the read tools `search`, `get_doc`,
+`list_docs` come from the same server. One
 `list_gaps` with `status: open` feeds all three lists, split by `answer`. An
 error from a call is a store that exists and is unwell: report it with its
 message and stop; never retry it or work around it. Stop means the sitting
 ends there, sweep and re-check included: no later step or list runs.
 
 A gap record carries `id`, `status`, `kind`
-(missing/wrong/incomplete/ambiguous), `answer` (deferred/unknown/empty),
+(missing/wrong/incomplete/ambiguous), `answer` (deferred/unknown/empty), `ask`
+(who can answer, as typed), `asked` (`YYYY-MM-DD` the questions went out),
 `topic`, `demand`, `detail`, `target_claim`, `doc_id`, `heading_path`,
 `search_terms`, `srd_ref`, `hits` (encounters in SRD work), `created`, and
 `filled_by` (`ref`, `hash`); a stale one adds `stale: true` and `stale_refs`
@@ -86,8 +90,8 @@ never in this backlog.
 
 ## Workflow
 
-The first token names one list, or `all` (default). Copy this checklist and
-tick it off:
+The first token names one list, or `all` (default); `ask` runs the gate and
+step 7 only. Copy this checklist and tick it off:
 
 - [ ] 0. Pass the gate. Always, before anything below.
 - [ ] 1. Sweep `REJECTED` SRDs. Always, any list named.
@@ -99,6 +103,8 @@ tick it off:
 - [ ] 5. `unknowns`: triage, never answer.
 - [ ] 6. `gaps`: cluster, check the corpus, grill, write the fix, fill or
       wontfix.
+- [ ] 7. `ask`: one message per person; `asked` only on confirmed sends.
+- [ ] 8. Answers pasted, any sitting: map, route, fill.
 
 Work one list at a time; a pick names one list, and when it is done offer the
 next non-empty one in a line naming only that list — what closed waits for the
@@ -181,6 +187,10 @@ its `detail` words.
   joins `gaps`. `srd:kb` writes to its inbox, never a fill target: offer
   `/kb file`, and fill as step 6 of `gaps` says once a topic page states it.
 - "Still not now": leave it; do not re-ask it this sitting.
+- The user does not know:
+  [Who would know](../create/references/doc-corpus.md#who-would-know); names
+  merge into `ask` as `srd:report-doc-gap` merges them (a new name clears
+  `asked`), with `update_gap`.
 - No answer exists: it is an unknown, not a skip — `update_gap` with
   `answer: unknown`, and say so.
 
@@ -269,6 +279,59 @@ Get each gap's fact into a corpus section, then record the section on the gap.
 A platform fact the grill surfaces also goes to `srd:kb`, unless this sitting
 publishes a page that states it: the KB holds only what the docs do not. Once
 `srd:kb` files it into a topic page, that section fills the gap.
+
+### 7. ask
+
+Turns the deferred gaps that name someone into one message per person for the
+user to send. No sweep, no re-check, no counts line.
+
+1. `list_gaps` `status: open`, `asked: false`; keep `answer: deferred` gaps
+   with a non-empty `ask`. `ask reminders`: `asked: true` instead. Count the
+   other kind too, and drafts naming someone (`status: draft`): a draft is
+   never asked; it is filed first (`/report-doc-gap <srd>`).
+2. Group by person, each name as typed (case-only variants are one person,
+   first spelling). A gap naming two people sits in both groups.
+3. Per person: the name, then one fenced `text` block ready to paste into a
+   chat:
+   - One greeting line: `Hi <name>, a few questions for our documentation —
+     could you answer when you have a moment?` A reminder says it follows up;
+     each of its questions ends with the date it went out (`asked`).
+   - A numbered list, oldest `created` first: per gap one self-contained
+     plain-language question built from `topic`, `detail`, and
+     `target_claim`, then one indented line of context from `demand`.
+   - No gap ids, SRD folders, tool or field names in the block; the plain
+     name, never an @-mention.
+
+   Under the block, outside it, one mapping line: `1 gap-0042 · 2 gap-0047`.
+4. One closing line: the other kind's count (already asked, oldest `asked`
+   date, and `/backlog ask reminders`; or not yet asked and `/backlog ask`),
+   plus the draft count when non-zero. Nothing to send: say so in that line.
+5. Ask which blocks went out. Only on the user's confirmation: `update_gap`
+   `asked` today's date on every gap whose blocks all went out, one call per
+   gap. Never before, never for a person not confirmed, never on "will send
+   later". A gap also in an unsent block stays unasked, so the next `/backlog
+   ask` still carries it; say so. A confirmed reminder moves `asked` to today
+   as well: it holds the last send.
+
+### 8. Answers back
+
+Replies the user pastes, in any sitting:
+
+1. Map each reply to its gap: by the mapping line when this sitting printed
+   it, else `list_gaps` `status: open`, `ask` the sender's name, by content.
+   Show the mapping (`Anna M 1 → gap-0042`) and act on the user's yes. A
+   reply matching no gap is asked about, never guessed.
+2. One outcome per gap; `ask` and `asked` stay as history:
+   - Answered: as an answered deferred gap (step 4) — the fact goes to
+     `srd:kb`, or through `srd:doc-edit` when the user wants it on a doc page;
+     fill as step 6 of `gaps` says once a section states it.
+   - Partly answered: the answered part goes the same way; `update_gap`
+     `detail` to what is still owed, `answer` stays `deferred`. Once a section
+     states the part: `fill_gap` `complete: false`, `remaining` what is still
+     owed.
+   - "Don't know, ask Y": `update_gap` `ask` the existing names plus Y,
+     `asked: ""`.
+   - Nobody knows: `update_gap` `answer: unknown`.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. Counts and what closed are enough — never

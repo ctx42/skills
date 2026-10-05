@@ -149,6 +149,46 @@
         "\\bleads on\\b",
         "trust order (settles|says)"
       ]
+    },
+    {
+      "id": "ask-confirmed-only",
+      "rule": "ask mode sets asked only on the user's confirmation, on gaps whose blocks all went out",
+      "must": [
+        "Only\\ on\\ the\\ user's\\ confirmation:\\ `update_gap`\\ `asked`\\ today's\\ date\\ on\\ every\\ gap\\ whose\\ blocks\\ all\\ went\\ out",
+        "Never\\ before,\\ never\\ for\\ a\\ person\\ not\\ confirmed,\\ never\\ on\\ \"will\\ send\\ later\""
+      ]
+    },
+    {
+      "id": "ask-block-shape",
+      "rule": "One paste-ready block per person; a gap naming two people sits in both; no gap ids or @-mentions in a block",
+      "must": [
+        "A\\ gap\\ naming\\ two\\ people\\ sits\\ in\\ both\\ groups",
+        "No\\ gap\\ ids,\\ SRD\\ folders,\\ tool\\ or\\ field\\ names\\ in\\ the\\ block;\\ the\\ plain\\ name,\\ never\\ an\\ @\\-mention"
+      ]
+    },
+    {
+      "id": "answers-back",
+      "rule": "Pasted replies are mapped and confirmed; a redirect adds the new name and clears asked; ask and asked stay as history",
+      "must": [
+        "Show\\ the\\ mapping\\ \\(`Anna\\ M\\ 1\\ →\\ gap\\-0042`\\)\\ and\\ act\\ on\\ the\\ user's\\ yes",
+        "\"Don't\\ know,\\ ask\\ Y\":\\ `update_gap`\\ `ask`\\ the\\ existing\\ names\\ plus\\ Y,\\ `asked:\\ \"\"`",
+        "`ask`\\ and\\ `asked`\\ stay\\ as\\ history"
+      ]
+    },
+    {
+      "id": "deferred-who-would-know",
+      "rule": "A user who does not know a deferred gap's answer gets Who would know; names merge into ask",
+      "must": [
+        "The\\ user\\ does\\ not\\ know:\\ \\[Who\\ would\\ know\\]\\(\\.\\./create/references/doc\\-corpus\\.md\\#who\\-would\\-know\\);\\ names\\ merge\\ into\\ `ask`"
+      ]
+    },
+    {
+      "id": "ask-selects",
+      "rule": "ask mode compiles only open deferred gaps that name someone; a draft is never asked",
+      "must": [
+        "keep\\ `answer:\\ deferred`\\ gaps\\ with\\ a\\ non\\-empty\\ `ask`",
+        "a\\ draft\\ is\\ never\\ asked"
+      ]
     }
   ]
 }

@@ -174,9 +174,11 @@ question, the interaction ends in one of:
   the transcript.
 - More context: the user explains. Restate the same way; the question may stay
   open, get refined, or resolve.
-- Not now: a platform question the user defers, or nobody knows, stays in the
-  file and goes to `srd:report-doc-gap` as a gap with `answer: deferred` or
-  `answer: unknown` — the file empties with the SRD, the gap outlives it.
+- Not now: a platform question the user defers, or does not know — then
+  [Who would know](../create/references/doc-corpus.md#who-would-know) first
+  — stays in the file and goes to `srd:report-doc-gap` as a gap with `answer:
+  deferred` or `answer: unknown` — the file empties with the SRD, the gap
+  outlives it.
 - Collaborate: together add, split, or refine questions in the file.
 
 Confirm each change to the questions file as you make it, one at a time. The

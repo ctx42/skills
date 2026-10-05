@@ -33,7 +33,11 @@ fact and `S` withholds it — an attested fact goes to `srd:kb` at once, which
 writes it to the inbox; `srd:kb` may only sharpen a fact the edit already
 put in play. A deferred platform question goes to `srd:report-doc-gap` as a
 gap with `answer: deferred`, not to `edit`'s own `## Open questions`, which
-tracks questions about this SRD and empties with the session.
+tracks questions about this SRD and empties with the session. A user who does
+not know a fact the proposal rests on answers it as `S`: nothing applies,
+nothing goes to `srd:kb`, and
+[Who would know](../../create/references/doc-corpus.md#who-would-know) sets
+the gap's `answer`.
 
 ## A KB section contradicts the change
 

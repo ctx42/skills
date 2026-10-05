@@ -331,6 +331,9 @@ the agent's inference on the same footing as a fact nobody in the organization
 has. State it as the question it answers ("does evidence expire, and after how
 long?"), never as the inference wearing a question mark.
 
+A user who does not know the answer:
+[Who would know](../create/references/doc-corpus.md#who-would-know).
+
 File it through `srd:report-doc-gap` with `answer` set; it dedups with
 `list_gaps` `query`, and a question already on file gets a hit
 (`update_gap` `add_hit: true`), never a second record. Repeats are a priority

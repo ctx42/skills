@@ -3,7 +3,7 @@ type: agent
 ---
 The gap store holds exactly these gaps, one JSON record per line:
 
-{"id":"gap-0042","status":"open","kind":"missing","answer":"deferred","srd_ref":"session 2026-09-12","doc_id":"kb/logger-battery.md","heading_path":["Logger battery","Battery reporting"],"search_terms":["altecno battery low threshold"],"hits":1,"created":"2026-09-12T15:30:00Z","filled_by":[],"topic":"ALTECNO logger default battery-low threshold","demand":"Blocks the requirements of session 2026-09-12 that depend on this fact.","detail":"What battery-low threshold does an ALTECNO logger use by default?","target_claim":"","file":"gap-0042-altecno-logger-default-battery-low-threshold.md"}
+{"id":"gap-0042","status":"open","kind":"missing","answer":"deferred","ask":[],"asked":"","srd_ref":"session 2026-09-12","doc_id":"kb/logger-battery.md","heading_path":["Logger battery","Battery reporting"],"search_terms":["altecno battery low threshold"],"hits":1,"created":"2026-09-12T15:30:00Z","filled_by":[],"topic":"ALTECNO logger default battery-low threshold","demand":"Blocks the requirements of session 2026-09-12 that depend on this fact.","detail":"What battery-low threshold does an ALTECNO logger use by default?","target_claim":"","file":"gap-0042-altecno-logger-default-battery-low-threshold.md"}
 
 Answer with {"gaps":[...]} holding every gap that matches the call's filters:
 a `status` filter keeps only gaps with that status (so `status: filled` or

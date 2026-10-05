@@ -53,6 +53,16 @@
         "Re-points `gap-0052` with `fill_gap` at `1882030917#archive-tier`, `complete: true`; never passes the vanished ref",
         "Lists stale gaps before any fill, and reports the re-check as a clause of the opening counts line"
       ]
+    },
+    {
+      "id": 7,
+      "name": "ask-writes-one-message-per-person",
+      "expected_behavior": [
+        "Prints one paste-ready block per person, Anna M and Piotr K, each holding the shared-link expiry question",
+        "Leaves the already-asked gap and the gap naming nobody out of every block; counts the already-asked one and offers `ask reminders`",
+        "Keeps gap ids and @-mentions out of the blocks",
+        "Sets `asked` only after the user confirms the sends: no `update_gap` before, then one with a date on `gap-0061` and none on the other two"
+      ]
     }
   ]
 }

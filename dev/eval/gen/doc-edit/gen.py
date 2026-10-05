@@ -95,6 +95,7 @@ other, more or less.
 
 GAP_0410 = {
     "id": "gap-0410", "status": "open", "kind": "missing", "answer": "",
+    "ask": [], "asked": "",
     "srd_ref": "autoco", "doc_id": "2215906431", "heading_path": ["Correlation"],
     "search_terms": ["correlation minimum overlap"], "hits": 2,
     "created": "2026-09-20T09:00:00Z", "filled_by": [],

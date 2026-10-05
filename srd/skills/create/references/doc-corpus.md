@@ -26,8 +26,9 @@ All corpus and gap-store calls go to `mcp__<mcp-server>__<tool>`, with
   `list_docs` (no args), `glossary_terms` (optional substring filter).
 - Gaps: `report_gap` (optional `draft: true`), `update_gap` (only the fields
   given change; `add_hit` counts a repeat encounter), `submit_gap`,
-  `discard_gap`, `list_gaps` (filters `status`, `srd_ref`, `stale`; ranked
-  `query`, each result scored), `fill_gap`, `reopen_gap`, `wontfix_gap`.
+  `discard_gap`, `list_gaps` (filters `status`, `srd_ref`, `stale`, `ask`,
+  `asked`; ranked `query`, each result scored), `fill_gap`, `reopen_gap`,
+  `wontfix_gap`.
   `srd:report-doc-gap` and `srd:backlog` own which may be called and when;
   `srd:doc-edit` also fills the gaps its own edits resolve.
 
@@ -85,7 +86,9 @@ ambiguous. Only a corpus section fills it: a KB topic page or a pulled doc
 page, cited `<identity>#<slug>`; a URL or an unpulled draft never does. A gap
 with `answer` set records a platform question: `deferred` (someone knows, not
 asked yet) or `unknown` (nobody has pinned it down). It is captured, offered,
-and filed like any other gap.
+and filed like any other gap. `ask` lists the people who can answer it, as the
+user typed them; `asked` is the date (`YYYY-MM-DD`) the questions went out,
+set only by `srd:backlog`.
 
 | Status    | Means                                              | Leaves by                          |
 |-----------|----------------------------------------------------|------------------------------------|
@@ -113,6 +116,8 @@ have an owner; the calling skill only spots them and delegates:
   `answer: deferred` or `answer: unknown`. Hand it to `srd:report-doc-gap`,
   whose dedup decides what a match gets (a repeat never files twice); never
   write it to the KB.
+  A user who does not know the answer gets [Who would know](#who-would-know)
+  first.
 - A KB section contradicts the SRD: a finding (see [Trust](#trust)). The user
   either fixes the SRD or confirms its fact, which `srd:kb` writes over the
   section at once.
@@ -140,3 +145,23 @@ Confirmation of a platform fact rides on the calling skill's own confirmation
 step, and `srd:kb` may ask only to deepen a subject that step already opened,
 never to open a new one. An SRD reference is the SRD's folder name
 ([project-config.md](project-config.md#4-use-what-it-names)); never invent one.
+
+### Who would know
+
+The user says they do not know a platform answer: ask exactly one follow-up,
+"Who would know?", then move on. It belongs to the same exchange, not a second
+track.
+
+- Names: `answer: deferred`, `ask` each person's name exactly as typed, the
+  name alone (`piotr k`, not `piotr k from billing`) — no @, no completion,
+  no correction.
+- "Nobody", "not sure", or no name: `answer: unknown`, no `ask`.
+- Names volunteered unprompted ("Piotr knows"): recorded the same way; skip
+  the question.
+- The user knows but defers ("not now"): `answer: deferred`, no `ask`, no
+  question.
+
+Hand the outcome to `srd:report-doc-gap`: in the capture when the gap is not
+captured yet, else as an update to the draft already captured; its dedup
+merges names into a matching gap's `ask`. Never ask it twice for one question
+in a session.

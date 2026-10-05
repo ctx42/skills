@@ -97,7 +97,7 @@
     },
     {
       "name": "list_gaps",
-      "description": "List recorded gaps, each with its front-matter fields, topic, demand, detail, target claim, and file name, optionally filtered by status (draft, open, filled, wontfix) and by a substring of the SRD reference. With query the matching gaps are ranked by relevance, best first, each with a score; use it to find an existing gap before reporting a new one. A filled or open gap is stale when a filled_by section changed since it was hashed, no longer resolves, or was never hashed: it carries stale true and stale_refs naming each such entry with reason changed, vanished, or unhashed; its status is unchanged. stale true lists only stale gaps. invalid lists every gap file that fails to parse or breaks the gap format, whatever the filter, each with file and reason; its gap is left out of gaps, every operation on it is refused until the file is fixed, and the server never rewrites or deletes it. Gaps never appear in search.",
+      "description": "List recorded gaps, each with its front-matter fields, topic, demand, detail, target claim, and file (its path in the gaps folder, under closed/ for filled and wontfix gaps), optionally filtered by status (draft, open, filled, wontfix), by a substring of the SRD reference, by a substring of a name in ask (the people who can answer, case ignored), and by asked (true: the questions were sent; false: not yet). With query the matching gaps are ranked by relevance, best first, each with a score; use it to find an existing gap before reporting a new one. A filled or open gap is stale when a filled_by section changed since it was hashed, no longer resolves, or was never hashed: it carries stale true and stale_refs naming each such entry with reason changed, vanished, or unhashed; its status is unchanged. stale true lists only stale gaps. invalid lists every gap file that fails to parse or breaks the gap format, whatever the filter, each with file and reason; its gap is left out of gaps, every operation on it is refused until the file is fixed, and the server never rewrites or deletes it. Gaps never appear in search.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -116,6 +116,17 @@
           "stale": {
             "type": "boolean",
             "description": "true keeps only stale gaps: filled or open gaps with a filled_by section changed, vanished, or unhashed"
+          },
+          "ask": {
+            "type": "string",
+            "description": "keep only gaps with a name in ask containing this text, case ignored"
+          },
+          "asked": {
+            "type": [
+              "null",
+              "boolean"
+            ],
+            "description": "true keeps only gaps whose questions were sent (asked set), false only those not yet sent; omit for all"
           }
         },
         "additionalProperties": false
@@ -145,7 +156,7 @@
     },
     {
       "name": "report_gap",
-      "description": "Record a gap: a fact SRD work needs that the corpus documents outside the initiatives folder do not supply reliably because it is missing, wrong, incomplete, or ambiguous; or a question SRD work deferred (answer deferred) or nobody could answer (answer unknown). A gap closes only when the fact appears in a corpus document outside the initiatives folder, never in an SRD and never on a bare URL. doc_id, when given, names any corpus document by id or path and is stored as its id. Returns the new gap ID. With draft set the gap is recorded unconfirmed, to be edited with update_gap and then confirmed with submit_gap or dropped with discard_gap.",
+      "description": "Record a gap: a fact SRD work needs that the corpus documents outside the initiatives folder do not supply reliably because it is missing, wrong, incomplete, or ambiguous; or a question SRD work deferred (answer deferred) or nobody could answer (answer unknown). A gap closes only when the fact appears in a corpus document outside the initiatives folder, never in an SRD and never on a bare URL. doc_id, when given, names any corpus document by id or path and is stored as its id. ask names the people who can answer the gap's question, as you would type them; asked is the date (YYYY-MM-DD) the questions were sent to them, set only once the user confirms they went out. Returns the new gap ID. With draft set the gap is recorded unconfirmed, to be edited with update_gap and then confirmed with submit_gap or dropped with discard_gap.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -201,6 +212,20 @@
             "type": "string",
             "description": "deferred when someone knows but was not asked yet, unknown when nobody has pinned it down; omit otherwise"
           },
+          "ask": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "names of the people who can answer the gap's question, as the user types them"
+          },
+          "asked": {
+            "type": "string",
+            "description": "date (YYYY-MM-DD) the questions were sent to the people in ask; set only once the user confirms they were sent"
+          },
           "draft": {
             "type": "boolean",
             "description": "record the gap unconfirmed, in draft status; omit to record it open"
@@ -255,7 +280,7 @@
     },
     {
       "name": "update_gap",
-      "description": "Change fields of a draft or open gap. Only the fields given change, so edits made to the gap file by hand survive; add_hit counts one more encounter of the gap in SRD work. Filled and wontfix gaps cannot be edited.",
+      "description": "Change fields of a draft or open gap. Only the fields given change, so edits made to the gap file by hand survive; add_hit counts one more encounter of the gap in SRD work. ask replaces the names of the people who can answer; asked records the date (YYYY-MM-DD) the questions were sent, an empty string clears it. Filled and wontfix gaps cannot be edited; they keep ask and asked as history.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -338,6 +363,23 @@
               "string"
             ],
             "description": "deferred, unknown, or empty"
+          },
+          "ask": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "names of the people who can answer the gap's question; replaces the list, empty clears it"
+          },
+          "asked": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "date (YYYY-MM-DD) the questions were sent, once the user confirms; empty clears it"
           },
           "add_hit": {
             "type": "boolean",

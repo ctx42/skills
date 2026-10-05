@@ -3,7 +3,7 @@ type: agent
 ---
 The documentation-gap store of the srd server. At the start of this run the store holds exactly these gaps:
 
-{"id":"gap-0410","status":"open","kind":"missing","answer":"","srd_ref":"autoco","doc_id":"2215906431","heading_path":["Correlation"],"search_terms":["correlation minimum overlap"],"hits":2,"created":"2026-09-20T09:00:00Z","filled_by":[],"topic":"Minimum recording overlap for a correlation run","demand":"AC-1 needs the overlap a nightly run must schedule","detail":"No corpus page states how many minutes two Loggers' recordings must overlap for a correlation run.","target_claim":"","file":"gap-0410-minimum-recording-overlap-for-a-correlation-run.md"}
+{"id":"gap-0410","status":"open","kind":"missing","answer":"","ask":[],"asked":"","srd_ref":"autoco","doc_id":"2215906431","heading_path":["Correlation"],"search_terms":["correlation minimum overlap"],"hits":2,"created":"2026-09-20T09:00:00Z","filled_by":[],"topic":"Minimum recording overlap for a correlation run","demand":"AC-1 needs the overlap a nightly run must schedule","detail":"No corpus page states how many minutes two Loggers' recordings must overlap for a correlation run.","target_claim":"","file":"gap-0410-minimum-recording-overlap-for-a-correlation-run.md"}
 
 Every earlier gap call this run changes the store; always answer from the
 store as those calls left it.

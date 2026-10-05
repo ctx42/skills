@@ -60,6 +60,42 @@
       "pass": "^\\W*COMMAS-FROM-A",
       "fail": "^\\W*(DOTS|NEITHER)",
       "class": "redundant"
+    },
+    {
+      "id": "dont-know-asks-who-would-know",
+      "rule": "who-would-know",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: interviewing for a new SRD on wishlist sharing, you ask how long a shared wishlist link stays valid; no corpus page states it. The user says: \"No idea, honestly.\"\n\nQuestion: what is your very next message to the user? Answer on the first line with exactly one of: ASK-WHO-WOULD-KNOW, FILE-UNKNOWN-AND-MOVE-ON, FILE-DEFERRED-AND-MOVE-ON, PROPOSE-A-DEFAULT. Then one sentence why.",
+      "pass": "^\\W*ASK-WHO-WOULD-KNOW",
+      "fail": "^\\W*(FILE|PROPOSE)",
+      "class": "redundant"
+    },
+    {
+      "id": "named-person-is-deferred-with-ask",
+      "rule": "who-would-know",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: interviewing for a new SRD on wishlist sharing, the user did not know how long a shared wishlist link stays valid. You asked \"Who would know?\" and the user says: \"anna m on the platform team.\"\n\nQuestion: with which `answer` and `ask` values is the gap captured? Answer on the first line exactly as `answer=<value> ask=<JSON list>`, then one sentence why.",
+      "pass": "^\\W*answer\\W*deferred\\W+ask\\W*\\[\\s*\"(?-i:anna m)\"\\s*\\]",
+      "fail": "^\\W*answer\\W*unknown",
+      "class": "load-bearing"
+    },
+    {
+      "id": "nobody-is-unknown",
+      "rule": "who-would-know",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: interviewing for a new SRD on wishlist sharing, the user did not know how long a shared wishlist link stays valid. You asked \"Who would know?\" and the user says: \"Not sure anyone does, it was never decided.\"\n\nQuestion: with which `answer` value is the gap captured, and do you ask anything more about it? Answer on the first line exactly as `answer=<value> follow-up=<YES|NO>`, then one sentence why.",
+      "pass": "^\\W*answer\\W*unknown\\W+follow-up\\W*NO",
+      "fail": "^\\W*answer\\W*deferred|follow-up\\W*YES",
+      "class": "redundant"
     }
   ]
 }

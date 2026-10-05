@@ -142,6 +142,15 @@
         "\\bleads on\\b",
         "trust order (settles|says)"
       ]
+    },
+    {
+      "id": "ask-merge",
+      "rule": "A dedup match merges ask: existing names first, new ones appended ignoring case, none dropped; a new name makes the gap deferred and clears asked",
+      "must": [
+        "pass\\ the\\ existing\\ names\\ followed\\ by\\ each\\ new\\ one\\ not\\ already\\ there,\\ ignoring\\ case;\\ never\\ drop\\ a\\ name",
+        "A\\ name\\ the\\ gap\\ lacked\\ also\\ sets\\ `answer:\\ deferred`\\ when\\ the\\ gap\\ is\\ `unknown`\\ or\\ plain,\\ and\\ clears\\ `asked`\\ \\(`asked:\\ \"\"`\\)",
+        "`asked`\\ —\\ never\\ set\\ to\\ a\\ date\\ here,\\ only\\ cleared\\ by\\ an\\ `ask`\\ merge"
+      ]
     }
   ]
 }

@@ -75,7 +75,9 @@ both — invoked directly, this skill hands a fact the grill confirmed to
 A platform question SRD work leaves open is a gap too, marked by `answer`:
 `deferred` when someone knows but was not asked (the user waved it off, or it
 is the agent's own unconfirmed guess), `unknown` when nobody has pinned it
-down. Both are filed here, never written to the KB.
+down. Both are filed here, never written to the KB. Who decides between them,
+and whose names go to `ask`:
+[Who would know](../create/references/doc-corpus.md#who-would-know).
 
 ## The gap tools
 
@@ -108,6 +110,11 @@ write the corpus section without this session:
   [The boundary](#the-doc-gap-vs-srd-gap-boundary)), its wording in `detail`;
   omitted for a plain doc gap. A repeat that learns the `answer` was wrong
   changes it with `update_gap`.
+- `ask` — the people who can answer the gap's question, as the user typed
+  them. A name makes an open question `deferred`, whatever `answer` the caller
+  passed; once answered the names stay as history.
+- `asked` — never set to a date here, only cleared by an `ask` merge;
+  `srd:backlog` sets it once the questions went out.
 - `topic` — short label for the missing knowledge.
 - `demand` — why the gap blocks the SRD work at hand, including the SRD section
   that raised it. The capturing skill fills this at capture, from what it was
@@ -182,7 +189,8 @@ no grill, no filing. Fill only what is free now: `detail` (the caller's one-line
 lookups that exposed the gap). `demand` belongs here because the caller knows it
 now — it is what they were doing when the gap surfaced — and nobody can
 reconstruct it later; that is what makes it survive an opt-out. Leave the rest
-empty. Keep the returned draft `id` for the session.
+empty. A question the caller hands over carries its `answer` and any `ask`
+names. Keep the returned draft `id` for the session.
 
 One record per distinct missing fact. Same fact means the same thing is missing
 from the documentation — same `topic`, and a `detail` that would be closed by
@@ -205,13 +213,14 @@ the top-scored results by the same-fact test; the score only ranks. On a match:
   no sentence of its own — keep the existing `kind` unless the new capture is
   strictly more specific (`missing` yielding to `wrong` or `ambiguous`, never
   the reverse — the second finder saw the same absence, not a different one),
-  append to `srd_ref` comma-separated since one gap can block two SRDs, and
-  keep the `doc_id`/`heading_path` already set — a later capture that found
-  nothing must not blank a pointer an earlier one recorded.
+  append to `srd_ref` comma-separated since one gap can block two SRDs,
+  merge `ask` as below, and keep the `doc_id`/`heading_path` already set — a
+  later capture that found nothing must not blank a pointer an earlier one
+  recorded.
 - `open`: `update_gap` with `add_hit: true`, appending this SRD to `srd_ref`
   and new queries to `search_terms`, `kind` changing only as a draft's would;
-  tell the caller the gap's id. A partly filled one counts too: its `detail`
-  says what remains.
+  merging `ask` as below; tell the caller the gap's id. A partly filled one
+  counts too: its `detail` says what remains.
 - `filled`: `get_doc` its `filled_by` sections. Stating the fact, there is no
   gap: hand the caller the citation. Not stating it, capture a draft whose
   `detail` opens `Reopens gap-NNNN:` and says what the sections lack; phase D
@@ -219,6 +228,12 @@ the top-scored results by the same-fact test; the score only ranks. On a match:
 - `wontfix`: the corpus will not carry it by decision; tell the caller the id
   and the reason in its `detail`. A fact the user confirms still goes to
   `srd:kb` through the caller.
+
+Merging `ask`: `update_gap` replaces the list whole, so pass the existing
+names followed by each new one not already there, ignoring case; never drop a
+name. A name the gap lacked also sets `answer: deferred` when the gap is `unknown`
+or plain, and clears `asked` (`asked: ""`) so the next `/backlog ask` reaches
+it.
 
 Repeats are a priority signal the reviewer reads, not new gaps.
 
@@ -248,9 +263,11 @@ theirs per gap: some gaps deserve a full extraction, others a one-liner.
   needs, terms and synonyms) and fold it into `detail` and `target_claim` as
   prose; the schema does not change.
 
-An `answer` draft gets no grill: show it in phase D, and an answer the finder
-gives now is a fact for `srd:kb`, not a gap — hand it there and `discard_gap`
-the draft.
+An `answer` draft gets no grill and no question: show it in phase D. An
+answer the finder gives there is a fact for `srd:kb`, not a gap — hand it
+there and `discard_gap` the draft. A finder who says there they do not know
+it gets [Who would know](../create/references/doc-corpus.md#who-would-know)
+unless the draft already names someone; write the result with `update_gap`.
 
 Write what the grill yields to the draft with `update_gap` before phase D, so a
 session that clears mid-flow loses nothing. This grill is a head start for

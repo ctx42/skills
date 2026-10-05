@@ -92,7 +92,9 @@ Each lookup ends in one of:
   as a capture with the document's path, then go on. It dedups by `list_gaps`
   `query` and takes a hit on a repeat. Pass `doc_id` the identity and
   `heading_path` the section when the gap is about this document; `answer:
-  deferred` when the user defers it, `unknown` when nobody can answer.
+  deferred` when the user defers it, `unknown` when nobody can answer. A user
+  who does not know it:
+  [Who would know](../create/references/doc-corpus.md#who-would-know).
 
 ## Resolving a gap
 

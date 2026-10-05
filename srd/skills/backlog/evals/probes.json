@@ -96,6 +96,42 @@
       "pass": "^\\W*NO-CALL-REPORT-STILL-STALE",
       "fail": "^\\W*(FILL|REOPEN|WONTFIX|REFRESH)",
       "class": "load-bearing"
+    },
+    {
+      "id": "asked-only-for-confirmed-person",
+      "rule": "ask-confirmed-only",
+      "prompt": "Situation: `/backlog ask` printed two per-person blocks: Anna M (questions for gap-0061 and gap-0064) and Piotr K (question for gap-0065). The user says: \"Sent Anna's. Piotr is on leave, holding his.\"\n\nQuestion: which gaps get `asked` set to today? Answer on the first line with only the gap ids, comma-separated, then one sentence why.",
+      "pass": "^\\W*gap-0061\\W+gap-0064\\b(?!\\W*,\\W*gap-0065)",
+      "fail": "^\\W*(gap-\\d+\\W*,\\W*)*gap-0065",
+      "class": "load-bearing"
+    },
+    {
+      "id": "redirect-adds-name-clears-asked",
+      "rule": "answers-back",
+      "prompt": "Situation: in a backlog sitting the user pastes Anna M's reply to the question of open gap gap-0061 (`answer: deferred`, `ask: [\"Anna M\"]`, `asked: \"2026-09-28\"`): \"No clue, ask Lena W, she built it.\" The user confirmed the mapping.\n\nQuestion: which `ask` and `asked` do you pass to update_gap? Answer on the first line exactly as `ask=<JSON list> asked=<value>`, then one sentence why.",
+      "pass": "^\\W*ask\\W*\\[\\s*\"Anna M\"\\s*,\\s*\"Lena W\"\\s*\\]\\W+asked\\W*(\"\"|empty|clear)",
+      "fail": "^\\W*ask\\W*\\[\\s*\"Lena W\"\\s*\\]|asked\\W*\"?2026",
+      "class": "load-bearing"
+    },
+    {
+      "id": "answered-gap-is-not-asked",
+      "rule": "ask-selects",
+      "prompt": "Situation: `/backlog ask`. list_gaps (`status: open`, `asked: false`) returns gap-0061 (`answer: deferred`, `ask: [\"Anna M\"]`, question \"does a shared wishlist link expire?\") and gap-0058 (`answer: \"\"`, `ask: [\"Anna M\"]`, `asked: \"\"`, question \"which formats can an e-book be downloaded in?\"); the user answered gap-0058 in an earlier sitting and srd:kb holds the fact in its inbox.\n\nQuestion: which gaps' questions go into Anna M's block? Answer on the first line with only the gap ids, comma-separated, then one sentence why.",
+      "pass": "^\\W*gap-0061\\b(?!\\W*,\\W*gap-0058)",
+      "fail": "^\\W*(gap-0061\\W*,\\W*)?gap-0058",
+      "class": "redundant"
+    },
+    {
+      "id": "one-follow-up-only",
+      "rule": "deferred-who-would-know",
+      "context": [
+        "SKILL.md",
+        "../create/references/doc-corpus.md"
+      ],
+      "prompt": "Situation: working `deferred`, the user did not know the answer to open gap gap-0042 (`answer: deferred`, no `ask`): \"what battery-low threshold does an ALTECNO logger use by default?\" You asked \"Who would know?\". The user says: \"Hmm, maybe someone in hardware? Not sure.\"\n\nQuestion: what do you do next? Answer on the first line with exactly one of: ASK-WHO-IN-HARDWARE, SET-ANSWER-UNKNOWN, ADD-HARDWARE-TO-ASK. Then one sentence why.",
+      "pass": "^\\W*SET-ANSWER-UNKNOWN",
+      "fail": "^\\W*(ASK-WHO|ADD)",
+      "class": "redundant"
     }
   ]
 }
