@@ -7,3 +7,4 @@
 - When the user rewords a requirement to generalize it, confirm what the generalization means (e.g. "the existing view gains support", not "a new structure") before proposing to remove siblings it seems to make redundant.
 - Comment blocks stay read-only unless the user explicitly asks to resolve one: then remove its `> [!comment]` callout and its `[^…]` footnote reference from the requirement, and log the removal.
 - Glossary definitions stay general: never name UI surfaces, labels or where a term is shown — those change; put them in UI requirements.
+- Before putting any proposal that changes a requirement's meaning — including one the user dictates mid-walk — search the corpus and grep `kb/` (inbox included) for the fact it changes; a KB section stating the old fact must be named in the proposal, not found after the `Y`.
