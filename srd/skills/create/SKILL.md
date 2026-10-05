@@ -35,9 +35,10 @@ edits an existing SRD as a service (that is `edit`), and never marks an SRD
   anything) — the gate every run passes first, and the project paths, the
   standard, and the server it names.
 - [references/doc-corpus.md](references/doc-corpus.md) (on-demand: the first
-  claim about the existing system, in the interview or the self-check) — how to
-  reach the platform documentation corpus, how its sources rank, and where an
-  unconfirmed or undocumented fact goes (`srd:report-doc-gap`, `srd:kb`).
+  corpus lookup, in the interview or the self-check) — how to reach the
+  platform documentation corpus, how its sources rank, how a corpus-backed
+  question cites its source, and where an unconfirmed or undocumented fact
+  goes (`srd:report-doc-gap`, `srd:kb`).
 - The SRD standard (on-demand: steps 3–4) — the rule set (`STR`, `STA`,
   `LANG`, `REQ`, `GLO`, `SCO`, Quality Bar), fetched live through the server
   per [references/project-config.md](references/project-config.md). Fetch it
@@ -76,6 +77,14 @@ later draft check. A platform fact is confirmed through the branch restatement
 in step 1, never through a separate prompt, and reaches `srd:kb` only once that
 restatement is confirmed — the user's answer inside the branch is not the
 confirmation.
+
+Corpus content enters the draft only through the interview: each fact a
+lookup supplies, rewords, or confirms is put to the user with its source line
+([Citing a source](references/doc-corpus.md#citing-a-source)) before it can
+be drafted. A self-check lookup whose result would add to, reword, or
+contradict the text goes back as one more interview question (step 4), never
+only reported; one that found nothing leaves an unconfirmed claim (reported). The step-5 report lists every
+corpus-sourced statement in the file with its source line.
 
 ## Workflow
 
@@ -230,7 +239,7 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    the step-5 report as an accepted gap, not as something the self-check
    missed, and to no `## TODO` entry. Everything else from step 3 —
    placeholders, style, intro gaps, terminology drift, an unconfirmed platform
-   claim — is reported, never walked.
+   claim (the lookup found nothing) — is reported, never walked.
 
 Do not mark the draft acceptable: a new SRD is `IN PROGRESS` and acceptance
 (STA-3, Quality Bar) is a human decision.
@@ -243,8 +252,9 @@ neither exists, propose one in its own folder under `initiatives` and ask. When
 this session captured drafts, invoke `srd:report-doc-gap` to offer them. Then
 report once: the file path, the requirement groups with their counts (counts
 only — the requirement text is in the file, never quoted back), the judgment
-findings and human follow-ups collected in step 4, and any blocker the
-user chose to leave standing.
+findings and human follow-ups collected in step 4, any blocker the
+user chose to leave standing, and the corpus-sourced statements with their
+source lines.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see.

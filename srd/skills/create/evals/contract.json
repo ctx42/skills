@@ -170,6 +170,24 @@
         "\"Nobody\",\\ \"not\\ sure\",\\ or\\ no\\ name:\\ `answer:\\ unknown`,\\ no\\ `ask`",
         "Names\\ volunteered\\ unprompted\\ \\(\"Piotr\\ knows\"\\):\\ recorded\\ the\\ same\\ way;\\ skip\\ the\\ question"
       ]
+    },
+    {
+      "id": "cite-corpus-source",
+      "file": "references/doc-corpus.md",
+      "rule": "Corpus-backed text names each source page in a fixed source line; no quote, no caution line, no rank total",
+      "must": [
+        "`Source:\\ <title>\\ ›\\ <heading>\\ \\(rank\\ <n>,\\ 1\\ =\\ most\\ trusted\\)\\ —\\ <source_url>`",
+        "corpus\\ content\\ never\\ reaches\\ SRD\\ or\\ corpus\\-page\\ text\\ unseen",
+        "Never\\ a\\ quote,\\ a\\ summary\\ of\\ the\\ page,\\ a\\ caution\\ line,\\ or\\ a\\ rank\\ total"
+      ]
+    },
+    {
+      "id": "corpus-fact-through-interview",
+      "rule": "A corpus fact reaches the draft only through an interview question with its source line; the report lists every corpus-sourced statement",
+      "must": [
+        "Corpus\\ content\\ enters\\ the\\ draft\\ only\\ through\\ the\\ interview",
+        "lists\\ every corpus\\-sourced\\ statement\\ in\\ the\\ file\\ with\\ its\\ source\\ line"
+      ]
     }
   ]
 }

@@ -14,6 +14,7 @@ file rules out.
 - Tools
 - Identity
 - Trust
+- Citing a source
 - Gaps
 - Where a lookup's outcome goes
 
@@ -77,6 +78,30 @@ will be — and must never contradict. An SRD carries no `rank`, so no rank
 settles an SRD claim a KB section contradicts: it is a finding; surface both
 sides. Only the user's confirmation settles it, and a confirmed fact changes
 the KB at once (`srd:kb`) — never when other SRDs agree, never at acceptance.
+
+## Citing a source
+
+Much of the corpus is stale or wrong, and only the user can judge a page, so
+corpus content never reaches SRD or corpus-page text unseen. Every proposal,
+interview question, restatement, or suggested fix whose text rests on a
+corpus result names each result it rests on, one line per source:
+
+`Source: <title> › <heading> (rank <n>, 1 = most trusted) — <source_url>`
+
+- Rests on: the text adds what the result states, was reworded because of
+  it, or keeps a claim the result only confirmed. Figures and rules (a
+  value, a limit, a MUST) above all.
+- `<heading>`: the result's `heading_path` joined with ` › `; a hit with none
+  names the page alone. No `rank`: `unranked`. A KB section or an SRD (no
+  `source_url`): `Source: <path> › <heading>`.
+- Never a quote, a summary of the page, a caution line, or a rank total: the
+  source line is the warning, and the `precedence` scale is not readable.
+- A lookup that found nothing gives no line; the proposal says it found
+  nothing.
+- Ask before the content lands: the user's confirmation of the proposal is
+  the ask, so the line sits in it. Nothing the user stated and no lookup
+  touched carries one; errata (formatting, a GLO-4 link) add no content and
+  carry none.
 
 ## Gaps
 

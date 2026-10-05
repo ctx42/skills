@@ -96,6 +96,18 @@
       "pass": "^\\W*answer\\W*unknown\\W+follow-up\\W*NO",
       "fail": "^\\W*answer\\W*deferred|follow-up\\W*YES",
       "class": "redundant"
+    },
+    {
+      "id": "corpus-figure-asked-with-source",
+      "rule": "corpus-fact-through-interview",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: mid-interview on a new SRD for tag import. The user said tag names must be validated. A corpus `search` returned the page \"Tags\", heading_path [\"Tag Node Name\"], rank 2, source_url https://x.atlassian.net/wiki/spaces/IFP/pages/1549467650, stating a node name MUST be at least 2 characters long. The user never mentioned a length.\n\nQuestion: what do you do with the 2-character minimum? Answer on the first line with exactly one of: DRAFT-IT-SILENTLY, ASK-WITH-SOURCE, ASK-WITHOUT-SOURCE. On the second line write the exact source line you would show, or NONE.",
+      "pass": "ASK-WITH-SOURCE[\\s\\S]*Source: Tags › Tag Node Name \\(rank 2, 1 = most trusted\\)",
+      "fail": "^\\W*(DRAFT-IT-SILENTLY|ASK-WITHOUT-SOURCE)",
+      "class": "redundant"
     }
   ]
 }
