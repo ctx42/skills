@@ -52,8 +52,10 @@
 # Each failed case leaves its trace in <results>/<group>/failed/<case>.trace.jsonl
 # and its last message is printed, so a failure needs no re-run to diagnose.
 #
-# Every run first checks the machine (git, node, go, gofmt; on Linux a bwrap
-# sandbox that can start a shell) and stops with the fix if one is missing.
+# Every run first checks the machine (git, node, go, gofmt) and stops with the
+# fix if one is missing. Only cases tagged needs-shell get Bash; they run
+# through dev/eval-shell.mjs (plain `claude -p`, no OS sandbox), the rest
+# through `claude plugin eval`.
 #
 # Exit: 0 all selected cases pass, 1 a case failed or nothing could run,
 # 3 the usage limit stopped the run.
@@ -127,9 +129,8 @@ if [ "$audit" = 0 ] && [ ${#explicit_skills[@]} -eq 0 ] && [ ${#all_groups[@]} -
     dry=1; listed_only=1
 fi
 
-# --- Preflight: the machine can run what the cases need. Checked every run,
-# since a sysctl set with -w is gone after a reboot and a case whose shell
-# fails can still pass on what it reads, hiding the gap. ---
+# --- Preflight: the machine can run what the cases need. Checked every run:
+# a case whose tools fail can still pass on what it reads, hiding the gap. ---
 preflight() {
     local missing=()
     for t in git node go gofmt; do
@@ -148,28 +149,6 @@ preflight() {
         "$ROOT"/*/evals/*/scaffold.sh 2>/dev/null | awk '{print $1, $2}' | sort -u)
     [ ${#absent[@]} -eq 0 ] ||
         die "preflight: modules missing from $cache (fixtures need them; runs have no network): go mod download ${absent[*]}"
-    [ "$(uname -s)" = Linux ] || return 0
-    command -v bwrap >/dev/null || die "preflight: bwrap not found (the eval sandbox needs it; apt install bubblewrap)"
-    # The sandbox runs each command through apply-seccomp, which opens a user
-    # namespace nested inside bwrap's and needs a capability there. Ubuntu
-    # blocks it two ways: the userns sysctl, and the bwrap-userns-restrict
-    # AppArmor profile (children of bwrap get `deny capability`). Replay that
-    # nesting; when it fails, every in-run shell command fails the same way.
-    if ! bwrap --ro-bind / / --unshare-user --dev /dev --proc /proc \
-        unshare --user --map-root-user true 2>/dev/null; then
-        cat >&2 <<'EOF'
-eval-changed: preflight: the eval sandbox cannot start a shell.
-  A user namespace nested inside bwrap gets no capabilities, so every Bash call
-  inside a case fails (apply-seccomp: write /proc/self/setgroups ...). Fix
-  (see ONBOARDING.md, "Eval runs"):
-    sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-    echo 'kernel.apparmor_restrict_unprivileged_userns=0' |
-        sudo tee /etc/sysctl.d/60-userns.conf
-    sudo ln -sf /etc/apparmor.d/bwrap-userns-restrict /etc/apparmor.d/disable/
-    sudo apparmor_parser -R /etc/apparmor.d/bwrap-userns-restrict
-EOF
-        exit 1
-    fi
 }
 preflight
 
@@ -279,38 +258,58 @@ for g in $groups; do
     if [ "$fresh" = 1 ] || [ "$total" = 0 ]; then todo=("${sel_cases[@]}")
     else mapfile -t todo < <(python3 "$ROOT/dev/eval-ledger.py" pending "$g" "$model_name" "${sel_cases[@]}")
     fi
-    n=${#todo[@]}
-    echo "== $g: $total case(s), $((total - n)) PASS in the ledger, $n to run, ~\$$(python3 -c "print(round($n*0.25))")-$(python3 -c "print(round($n*0.8))")"
-    [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${todo[@]}"; continue; }
+    # needs-shell cases run through dev/eval-shell.mjs: `claude plugin eval`
+    # wraps each in-run command in a sandbox that nests a user namespace inside
+    # bwrap's, which stock Ubuntu refuses, so every Bash call there fails.
+    # Never lift the host restriction instead (disabling bwrap-userns-restrict
+    # broke gdm). Every other case runs in `claude plugin eval` without Bash.
+    declare -a plain=() shell=()
+    for c in "${todo[@]}"; do
+        if grep -qE '^tags:.*[[ ,]needs-shell[],]' "$g/evals/$c/prompt.md"; then shell+=("$c")
+        else plain+=("$c"); fi
+    done
+    n=$((${#plain[@]} + ${#shell[@]}))
+    echo "== $g: $total case(s), $((total - ${#todo[@]})) PASS in the ledger, $n to run, ~\$$(python3 -c "print(round($n*0.25))")-$(python3 -c "print(round($n*0.8))")"
+    [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${plain[@]}" "${shell[@]}"; continue; }
     chunk=$((jobs * 2))
-    for ((k = 0; k < n; k += chunk)); do
-        declare -a part=("${todo[@]:k:chunk}") sel=()
-        for c in "${part[@]}"; do sel+=(--tag "case:$c"); done
-        json="$out/$g-$k.json"
-        declare -a cap=()
-        if [ -n "$max_usd" ]; then
-            left=$(python3 -c "print(round($max_usd - ${spent:-0}, 2))")
-            if python3 -c "import sys; sys.exit(0 if $left <= 0 else 1)"; then
-                echo "   skipped: --max-usd $max_usd spent"; rc=1; break
+    done_n=0
+    for kind in plain shell; do
+        declare -n batch="$kind"
+        nb=${#batch[@]}
+        for ((k = 0; k < nb; k += chunk)); do
+            declare -a part=("${batch[@]:k:chunk}") sel=()
+            for c in "${part[@]}"; do sel+=(--tag "case:$c"); done
+            json="$out/$g-$kind-$k.json"
+            declare -a cap=()
+            if [ -n "$max_usd" ]; then
+                left=$(python3 -c "print(round($max_usd - ${spent:-0}, 2))")
+                if python3 -c "import sys; sys.exit(0 if $left <= 0 else 1)"; then
+                    echo "   skipped: --max-usd $max_usd spent"; rc=1; break
+                fi
+                cap=(--max-cost-usd "$left")
             fi
-            cap=(--max-cost-usd "$left")
-        fi
-        echo "   chunk $((k / chunk + 1))/$(((n + chunk - 1) / chunk)): ${part[*]} ($(date +%H:%M))"
-        set +e
-        claude plugin eval "./$g" "${sel[@]}" --runs 1 --ablation none --scaffold \
-            --trust-plugin --no-publish -j "$jobs" --keep-temp "${model[@]}" \
-            "${cap[@]}" \
-            --allow-tools Write Edit Bash LSP \
-            --output-dir "$out/$g/$k" --json "$json" >>"$out/$g.out" 2>>"$out/$g.err"
-        r=$?
-        set -e
-        [ -s "$json" ] && spent=$(python3 -c "import json; print(${spent:-0} + json.load(open('$json')).get('costUsd', 0))")
-        [ "$r" = 2 ] && echo "   stopped at the --max-usd $max_usd ceiling (partial results)"
-        if [ ! -s "$json" ]; then
-            grep -v '^Note:' "$out/$g.err" | tail -5
-            echo "   no cases ran (see $out/$g.err)"; rc=1; continue
-        fi
-        python3 - "$json" "$out/$g/failed" "$keep" <<'PY' || rc=1
+            echo "   $kind chunk $((k / chunk + 1))/$(((nb + chunk - 1) / chunk)): ${part[*]} ($(date +%H:%M))"
+            set +e
+            if [ "$kind" = shell ]; then
+                node "$ROOT/dev/eval-shell.mjs" "$g" "${part[@]}" --model "$model_name" \
+                    -j "$jobs" --keep "${cap[@]}" --json "$json" >>"$out/$g.out" 2>>"$out/$g.err"
+            else
+                claude plugin eval "./$g" "${sel[@]}" --runs 1 --ablation none --scaffold \
+                    --trust-plugin --no-publish -j "$jobs" --keep-temp "${model[@]}" \
+                    "${cap[@]}" \
+                    --allow-tools Write Edit LSP \
+                    --output-dir "$out/$g/$kind-$k" --json "$json" >>"$out/$g.out" 2>>"$out/$g.err"
+            fi
+            r=$?
+            set -e
+            [ -s "$json" ] && spent=$(python3 -c "import json; print(${spent:-0} + json.load(open('$json')).get('costUsd', 0))")
+            [ "$r" = 2 ] && echo "   stopped at the --max-usd $max_usd ceiling (partial results)"
+            if [ ! -s "$json" ]; then
+                grep -v '^Note:' "$out/$g.err" | tail -5
+                echo "   no cases ran (see $out/$g.err)"; rc=1; done_n=$((done_n + ${#part[@]})); continue
+            fi
+            done_n=$((done_n + ${#part[@]}))
+            python3 - "$json" "$out/$g/failed" "$keep" <<'PY' || rc=1
 import json, os, shutil, subprocess, sys
 d = json.load(open(sys.argv[1]))
 failed_dir, keep = sys.argv[2], sys.argv[3] == "1"
@@ -368,17 +367,19 @@ print(f"   {a['casesPassed']}/{a['casesTotal']} passed, "
       f"{d['durationSeconds']}s, ${d['costUsd']:.2f}")
 sys.exit(1 if bad else 0)
 PY
-        [ "$r" = 0 ] || rc=1
-        rec=$(python3 "$ROOT/dev/eval-ledger.py" record "$g" "$model_name" "$json")
-        lim=$(printf '%s\n' "$rec" | grep '^LIMIT' || true)
-        while read -r _ c; do [ -n "$c" ] && failed+=("$g" "$c"); done < <(printf '%s\n' "$rec" | grep '^FAIL' || true)
-        if [ -n "$lim" ]; then
-            left=$((n - k - ${#part[@]}))
-            echo "   LIMIT: the usage limit cut off ${lim#LIMIT } run(s); $left case(s) not started."
-            echo "   Passes are in the ledger: re-run the same command after the reset."
-            echo "results: $out"
-            exit 3
-        fi
+            [ "$r" = 0 ] || rc=1
+            rec=$(python3 "$ROOT/dev/eval-ledger.py" record "$g" "$model_name" "$json")
+            lim=$(printf '%s\n' "$rec" | grep '^LIMIT' || true)
+            while read -r _ c; do [ -n "$c" ] && failed+=("$g" "$c"); done < <(printf '%s\n' "$rec" | grep '^FAIL' || true)
+            if [ -n "$lim" ]; then
+                left=$((n - done_n))
+                echo "   LIMIT: the usage limit cut off ${lim#LIMIT } run(s); $left case(s) not started."
+                echo "   Passes are in the ledger: re-run the same command after the reset."
+                echo "results: $out"
+                exit 3
+            fi
+        done
+        unset -n batch
     done
 done
 # A history_file run leaves a session file (UUID name) beside the history; it

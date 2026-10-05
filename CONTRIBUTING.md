@@ -135,7 +135,8 @@ triggers, and the hunt in parallel — for ~$0.15 and ~2 min per changed skill:
    distractors. Run after a description changes.
 5. *Agent-run cases* (`./dev/eval-changed.sh --audit`; ~$0.10–0.15 a case on
    sonnet, up to minutes). Full sessions on scripted fixtures with mocked MCP
-   servers (`dev/eval/native-cases.md`). A manual audit only, when the user
+   servers (`dev/eval/native-cases.md`); `needs-shell` cases run through
+   `dev/eval-shell.mjs` instead. A manual audit only, when the user
    asks; never the gate on a change. Cases run on sonnet and only its FAILs
    re-run on the default model, which has the final say. A pass is recorded
    in a ledger keyed by everything the case depends on, and the run stops at

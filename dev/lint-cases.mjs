@@ -11,6 +11,10 @@
 //   - prompt.md tags: `case:<dir>` present; each skill:/sec:/ref: tag names a
 //     real skill, `## ` section, or reference; any other tag is a known free
 //     tag (FREE_TAGS),
+//   - needs-shell is tagged exactly when allowed_tools grants Bash, and
+//     always when a tagged skill injects shell output (!`…`); a needs-shell
+//     case (run by dev/eval-shell.mjs) has no mocks/ and only the grader
+//     types that runner supports,
 //   - append_system_prompt exists and opens with the English line,
 //   - max_turns <= 80; timeout_seconds <= 300, or <= 600 with the fan-out or
 //     long tag,
@@ -26,6 +30,7 @@ import path from "node:path";
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const ENGLISH = "The user writes English; reply in English.";
 const FREE_TAGS = new Set(["needs-shell", "fan-out", "long"]);
+const SHELL_GRADERS = new Set(["regex", "tool_used", "tool_order", "file_exists"]);
 const MAX_TURNS = 80, TIMEOUT = 300, TIMEOUT_FANOUT = 600;
 
 let errors = 0, warnings = 0;
@@ -151,6 +156,20 @@ function lintCase(group, dir, known) {
     }
   }
 
+  // eval-changed.sh grants Bash only to needs-shell cases.
+  const shell = tags.includes("needs-shell");
+  const am = fm.match(/^allowed_tools:\s*\[([^\]]*)\]/m);
+  const bash = am && /(^|[\s,])Bash\b/.test(am[1]);
+  if (bash && !shell) err(`${rel}/prompt.md: allowed_tools has Bash but tags lack needs-shell`);
+  if (shell && !bash) err(`${rel}/prompt.md: tagged needs-shell but allowed_tools has no Bash(<cmd>:*)`);
+  for (const t of tags) {
+    const s = t.match(/^skill:(.+)$/)?.[1];
+    const md = s && path.join(ROOT, group, "skills", s, "SKILL.md");
+    if (md && !shell && fs.existsSync(md) && fs.readFileSync(md, "utf8").includes("!`")) {
+      err(`${rel}/prompt.md: skill ${s} injects shell output (!\`…\`) but tags lack needs-shell`);
+    }
+  }
+
   const asp = fm.match(/^append_system_prompt:\s*\|[-+]?\n[ \t]+(.*)$/m);
   if (!asp) err(`${rel}/prompt.md: no append_system_prompt (it opens with the English line)`);
   else if (asp[1].trim() !== ENGLISH) err(`${rel}/prompt.md: append_system_prompt does not open with "${ENGLISH}"`);
@@ -163,6 +182,7 @@ function lintCase(group, dir, known) {
   if (!(timeout > 0)) err(`${rel}/prompt.md: timeout_seconds missing`);
   else if (timeout > cap) err(`${rel}/prompt.md: timeout_seconds ${timeout} > ${cap}${cap === TIMEOUT ? " (fan-out cases tag fan-out, other long runs long, for 600)" : ""}`);
 
+  if (shell && isDir(path.join(ROOT, rel, "mocks"))) err(`${rel}: needs-shell cases run through dev/eval-shell.mjs, which serves no mocks`);
   const graders = path.join(ROOT, rel, "graders");
   if (!isDir(graders)) { err(`${rel}: no graders/`); return; }
   for (const g of fs.readdirSync(graders).filter((f) => f.endsWith(".md"))) {
@@ -171,6 +191,8 @@ function lintCase(group, dir, known) {
     const type = scalar(gfm, "type");
     if (!type) { err(`${where}: no type`); continue; }
     for (const im of inputMatches(gfm)) compiles(`${where} input_match`, im);
+    if (shell && !SHELL_GRADERS.has(type)) err(`${where}: needs-shell cases run through dev/eval-shell.mjs, which grades only ${[...SHELL_GRADERS].join(", ")}`);
+    if (shell && /^target:\s*mock_calls/m.test(gfm)) err(`${where}: needs-shell cases run without mocks; no mock_calls target`);
     if (type === "regex") {
       const pattern = body.replace(/\n$/, "");
       if (!pattern) err(`${where}: empty pattern`);

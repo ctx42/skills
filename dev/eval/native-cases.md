@@ -60,7 +60,13 @@ append_system_prompt: |
   `long`; never tag a skill of another plugin (no change there reaches
   this group).
 - `allowed_tools`: the minimum. Mocked MCP tools are allowed automatically.
-  A case needing a shell adds `Bash(<cmd>:*)` and the tag `needs-shell`.
+  A case needing a shell adds `Bash(<cmd>:*)` and the tag `needs-shell`
+  (lint enforces the pair, and the tag on every case of a skill that injects
+  `!`…`` output). Only `needs-shell` cases get Bash, and they run through
+  `dev/eval-shell.mjs` (plain `claude -p` in a throwaway workspace, no OS
+  sandbox), since `claude plugin eval`'s sandbox fails every in-run command
+  on stock Ubuntu. It grades `regex`, `tool_used`, `tool_order` and
+  `file_exists`; give a `needs-shell` case no `llm` or `mock_calls` grader.
 - Interactive skills: `append_system_prompt` carries the persona's replies
   for the bullets graded after them —
   "Automated eval: the user is absent. Whenever the skill would stop and wait
@@ -187,8 +193,8 @@ trailing org notice. Recipes:
 
 Pitfalls, each seen failing a correct run:
 
-- Runs have Bash, granted to every case: a file read is Read *or* `cat`/`sed`,
-  and a file write may come from `cp` or a heredoc. Grade reads with
+- `needs-shell` runs have Bash: a file read is Read *or* `cat`/`sed`, and a
+  file write may come from `cp` or a heredoc. Grade reads with
   `"name":"(?:Read|Bash)","input":\{"(?:file_path|command)":"…<path>`, and
   writes by the file's content, not by `tool_used` Write.
 - Trace and tool input are JSON: a command on a later script line reads

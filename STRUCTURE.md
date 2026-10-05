@@ -27,6 +27,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │   ├── eval-triggers.py            # Routes requests against all skill descriptions
 │   ├── eval-regrade.py             # Re-grades a saved agent-run trace offline
 │   ├── eval-changed.sh             # Manual audit: runs the agent-run cases
+│   ├── eval-shell.mjs              # Runs its needs-shell cases via plain claude -p
 │   ├── eval-ledger.py              # Its pass ledger: skips cases passed on same inputs
 │   └── eval/                       # Native-case guide, prompts, triggers.json
 │       └── gen/<skill>/            # Case generators: the source of a skill's cases
