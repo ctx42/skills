@@ -48,6 +48,18 @@
       "pass": "^\\W*FINDING-NAMING-BOTH",
       "fail": "^\\W*(FINDING-LCK-1-WRONG|DOC-GAP|NOTHING)",
       "class": "load-bearing"
+    },
+    {
+      "id": "corpus-fix-has-source",
+      "rule": "fix-cites-source",
+      "context": [
+        "SKILL.md",
+        "../create/references/doc-corpus.md"
+      ],
+      "prompt": "Situation: reviewing specs/gw.md, GR-4 says tag node names may be 1 character. A corpus `search` returned page \"Tags\", heading_path [\"Tag Node Name\"], rank 2, source_url https://x.atlassian.net/wiki/spaces/IFP/pages/1549467650, stating at least 2 characters. You write the `reference` finding with the fix \"raise the minimum to 2\".\n\nQuestion: besides the `(SRD:ref …)` citation, does the finding carry any other line? Answer on the first line with exactly one of: NO-OTHER-LINE, SOURCE-LINE. On the second line write that line, or NONE.",
+      "pass": "SOURCE-LINE[\\s\\S]*Source: Tags › Tag Node Name \\(rank 2, 1 = most trusted\\)",
+      "fail": "^\\W*NO-OTHER-LINE",
+      "class": "redundant"
     }
   ]
 }

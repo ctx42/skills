@@ -108,6 +108,13 @@
         "\\bleads on\\b",
         "trust order (settles|says)"
       ]
+    },
+    {
+      "id": "fix-cites-source",
+      "rule": "A finding resting on a corpus result carries its source line",
+      "must": [
+        "A\\ finding\\ resting\\ on\\ a\\ corpus\\ result\\ carries\\ its\\ source\\ line"
+      ]
     }
   ]
 }

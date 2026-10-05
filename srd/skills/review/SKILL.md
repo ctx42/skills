@@ -84,8 +84,12 @@ cannot confirm is a doc gap for `srd:report-doc-gap`, never a finding in
 `<srd>.review.md`. A KB section contradicting the SRD is a `reference` finding
 too, never settled by `rank` (an SRD has none): it names both claims and both
 fixes — align the SRD, or confirm its fact through `srd:edit` so `srd:kb`
-rewrites the section — and calls neither side wrong. `srd:kb` is not invoked: a
-review confirms no platform facts with the user.
+rewrites the section — and calls neither side wrong. A finding resting on a
+corpus result carries its source line
+([Citing a source](../create/references/doc-corpus.md#citing-a-source)) on a
+continuation line, whatever fixes it offers: it is the user's notice of the
+source, so `fix-all` asks no second time about it.
+`srd:kb` is not invoked: a review confirms no platform facts with the user.
 
 ## Severity
 
@@ -330,7 +334,8 @@ Emit plain text for an email or ticket — no file write:
   candidate. `#2 Metadata (Owners): only one owner is listed; add a secondary
   owner.` `#5 Introduction ("the system handles all remaining cases"): states a
   rule outside Requirements; move it or drop it.` Drop the checkbox, the
-  severity tag, the category tag, and the rule-id citation. No bold. One
+  severity tag, the category tag, and the rule-id citation; keep a source
+  line, as the bullet's last sentence. No bold. One
   bullet is one paragraph — it wraps like any prose, and "no multi-line
   bullets" means no sub-bullets and no blank line inside a bullet, not a
   bullet that fits on one physical line.
