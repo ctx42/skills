@@ -5,3 +5,5 @@
 - ctx42 `assert.ErrorIs` ends the subtest when it fails, so later assertions run only once it passes; prove a later assertion can fail with the earlier one disabled.
 - On the fix path, re-measure line widths of every line a rename touched; lengthening a receiver (`m` to `met`) pushed a signature past the limit unnoticed.
 - On the fix path, run `gofmt -l` on touched files before every commit, not only `go vet`/`go test`; a block cut by a script left a double blank line that vet and tests passed.
+- On the fix path, gate each commit on the suite's exit status (`go test ./... -race >out || exit 1` before `git commit`), never on `go test | grep` output; a piped test run let a failing test ride into a commit.
+- On the fix path, run the `awk` width measure inside the same command that commits and abort on any output; a separately printed width check was ignored and an 83-column line was committed.

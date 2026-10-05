@@ -13,3 +13,7 @@
 - Before merging two names for one thing (heading "Water detection" vs list "Water Level"), check they mean the same; when they differ in meaning, do not pick one — put the question to the user (Who would know).
 - Decision-log reasons are verbatim: keep the proposal's own case and wording ("one rule per", not "One rule per"); compare against the proposal before writing.
 - Removing a requirement that carries a Confluence comment: name the comment id in the proposal and say Yes also settles it; delete callout and `[^cf-…]` anchor together.
+- Never propose a link from an SRD to a doc/user_docs page (house: link, do not restate covers glossary entries only); when a fix would need one, propose stating the rule or cutting the requirement instead.
+- Write time units lowercase (minutes, hours, days) even as selectable values; keep Title Case for UI component names only — the user overrides the AGENTS.md "enumerated values keep capitals" rule here.
+- Before claiming a term is "already linked", check the link sits on its first use in document order — a new requirement placed earlier takes over the first use (GLO-4).
+- Fix only what the finding names, with the smallest wording change that makes the rule logical, consistent and well formed; never add a fact, condition, permission or platform detail the SRD does not already carry unless the user asks.

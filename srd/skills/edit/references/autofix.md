@@ -52,6 +52,10 @@ touches ids.
    nothing to count in an anchor: count keyword notices in the whole SRD.
    Zero → insert `new` directly below the metadata block, after a TOC macro or
    block that follows the table; one or more → stale, as above.
+   A GLO-4 link finding is verified by its term: it must occur unlinked in the
+   anchor, nowhere earlier in the document, and linked nowhere later; then
+   wrap that one occurrence in the link `glossary_terms` gives. Otherwise
+   stale.
    A multi-site finding is verified per site and applies only where it
    matches; report each site that did not. Never substitute by whole-document
    search-and-replace; never widen beyond the quoted `old`.

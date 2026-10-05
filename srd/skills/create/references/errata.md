@@ -73,11 +73,19 @@ Nothing outside this list is errata.
   this document"); the one in the SRD standard describes the standard itself
   and is never the replacement. Its anchor is the notice block itself, which
   appears once; cite `Metadata` as the location.
-- A missing STR-8 notice: the one insertion the class admits, since its text
+- A missing STR-8 notice: an insertion the class admits, since its text
   and place are both fixed. `old` is `(missing)`, `new` the template notice
   quoted in full; it goes directly below the metadata block, after a TOC macro
   or block that follows the table. Errata only when no keyword notice appears
   anywhere in the SRD; a misplaced one is a move, not errata. Cite `Metadata`.
+- A missing GLO-4 first-use link: the one coded fix outside whitespace and
+  glyph, since a link target cannot meet the 40-character rule but
+  `glossary_terms` fixes it. State it as "link *term* to its Company Glossary
+  entry" plus the anchor id holding the first use; `edit` derives the link, and
+  the text and its case stay as found. Errata only when the term occurs nowhere
+  before that anchor in any sense, linked or not, no later use carries the
+  link, the site means the defined term beyond doubt, and the term is no proper
+  name (GLO-6); otherwise an ordinary finding. Cite `(SRD:GLO-4)`.
 
 ## Exclusions
 

@@ -112,7 +112,7 @@ Otherwise three steps, no questions of its own.
    the user to confirm it: every id change the gate governs is confirmed again
    in the loop.
 
-`autofix` runs only steps 1–2: errata never touches ids or terms.
+`autofix` runs only steps 1–2: errata never touches ids or term wording.
 
 ### Glossary (on the first term)
 
@@ -123,8 +123,8 @@ waits for the first thing that needs a term settled and lands before it: the
 first proposal that introduces, renames or rests on a possibly company-defined
 term, or in `interactive` the step-1 summary, which promises every issue found
 and so owes GLO-3 too. A term put to the user against an unloaded term set is a
-GLO-3 miss. Hold the set for the session; `polish` and `autofix` never reach it.
-This skill asks no setup question.
+GLO-3 miss. Hold the set for the session; `polish` and `autofix` reach it
+only for a GLO-4 first-use link. This skill asks no setup question.
 
 ## Id rules
 
@@ -201,6 +201,14 @@ Every mode but `autofix` runs this loop per change:
    ([references/corpus-edits.md](references/corpus-edits.md)).
 4. Log the change in `<srd>.decisions.md` before proposing the next one (see
    [Decision log](#decision-log)).
+
+A GLO-4 first-use link skips the loop (`autofix` takes it only as errata):
+when an edit, a finding, or the session-end check finds a Company Glossary
+term unlinked at its first use in document order, link that use per
+srd-procedures step 2, unlink a later use that carried the link, log it,
+report it in one line, and go on — never ask. A proper name (GLO-6) or a use
+that may mean the generic sense goes through the loop instead. Text, case,
+and comment blocks stay as found.
 
 Write every edit to the LANG and REQ rules and the authoring guide (US English,
 one term per concept); a restructuring edit follows the template's order.
