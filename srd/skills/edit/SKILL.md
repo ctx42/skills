@@ -262,7 +262,8 @@ with a confirmation and expects no review file.
    and move on — nothing was proposed, so no key is owed.
 
 Start point (path + line): resolve the line to the entry or paragraph at or
-nearest it, skip step 1, and begin step 2 there, continuing to the end. The
+nearest it, skip step 1, and begin step 2 there, continuing to the end; Scope
+entries at or after the start still go last, those before it are skipped. The
 walk is still one entry at a time and still never looks ahead — step 1's
 summary is what would have told you which later entry has a finding, and
 skipping it means learning that entry by entry, never by scanning forward.
