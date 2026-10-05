@@ -49,7 +49,8 @@ def table(rows):
 
 def srd(status="IN PROGRESS", initiative="[INT-512](https://tickets.example.com/browse/INT-512)",
         owners="@anna.keller, @marco.rossi", designs="N/A", intro=INTRO, glossary=GLOSSARY,
-        inscope=INSCOPE, osc=OSC, groups=None, tail="", title="Login Token Validation"):
+        inscope=INSCOPE, osc=OSC, groups=None, tail="", title="Login Token Validation",
+        notice="top"):
     if groups is None:
         groups = [("Gateway Rules", GR), ("Account Lockout", LCK)]
     color = {"ACCEPTED": "green"}.get(status, "blue")
@@ -58,7 +59,8 @@ def srd(status="IN PROGRESS", initiative="[INT-512](https://tickets.example.com/
             ("**Owners**", owners),
             ("**Status**", f"[[!{status}\\|color={color};style=bold]]"),
             ("**Designs**", designs)]
-    p = [f"# {title}", table(rows), "[[TOC]]", NOTICE, "## Introduction", wrap(intro)]
+    p = [f"# {title}", table(rows), "[[TOC]]"] + ([NOTICE] if notice == "top" else [])
+    p += ["## Introduction", wrap(intro)] + ([NOTICE] if notice == "intro" else [])
     if glossary:
         p.append("## Glossary")
         for t, d in glossary:
@@ -413,4 +415,45 @@ write_case("edit--feedback-without-a-review-file", REVIEW, "/srd:edit specs/logi
                "b5-no-menu": g_last(r"srd:review|\b(run|use|try)\s+`?/?(srd:)?review\b|paste|drop(ping)?\s+(the|`#)|without\s+(the\s+)?`?#|re-?run", "i", "not_contains"),
            },
            max_turns=20)
+# ---------------------------------------------------------------- 20, 21
+GR1_UK = ("GR-1", "The system MUST reject an unauthorised API request with HTTP status 401.")
+NOTICE_GROUPS = [("Gateway Rules", [GR1_UK, GR[1], GR[2]]), ("Account Lockout", LCK)]
+r_notice = review("""## Errata
+
+- [ ] #4 [minor, linguistic] GR-1 uses British spelling: `unauthorised` →
+  `unauthorized`. (SRD:house)
+
+- [ ] #10 [minor, structure] Metadata: the STR-8 keyword notice is missing:
+  `(missing)` →
+
+""" + "\n".join("  " + l for l in NOTICE.splitlines()) + """
+
+  (SRD:STR-8)""")
+NOTICE_RE = r'The keywords "MUST"'
+AFTER_TOC = r"\[\[TOC\]\]\s*\n> \[!INFO\]"
+
+write_case("edit--autofix-inserts-missing-notice", AUTOFIX, "/srd:edit specs/login.md autofix",
+           {"specs/login.md": srd(groups=NOTICE_GROUPS, notice="none"), "specs/login.review.md": r_notice},
+           {
+               "b1-inserted-after-toc": g_regex("{source: file, path: specs/login.md}",
+                                                AFTER_TOC + r"\n> The keywords \"MUST\".{0,600}?shown here\.\s*\n## Introduction", "s"),
+               "b1-exactly-once": g_regex("{source: file, path: specs/login.md}",
+                                          NOTICE_RE + ".*" + NOTICE_RE, "s", "not_contains"),
+               "b2-applied-gr1": g_file("specs/login.md", r"\*\*GR-1:\*\* The system MUST reject an unauthorized API request"),
+               "b3-handoff-command": g_last(r"review specs/login\.md check (#4 #10|#10 #4)(?! #)"),
+           },
+           ["To the batch confirmation: \"Yes\"."])
+
+write_case("edit--autofix-misplaced-notice-is-stale", AUTOFIX, "/srd:edit specs/login.md autofix",
+           {"specs/login.md": srd(groups=NOTICE_GROUPS, notice="intro"), "specs/login.review.md": r_notice},
+           {
+               "b1-no-second-notice": g_regex("{source: file, path: specs/login.md}",
+                                              NOTICE_RE + ".*" + NOTICE_RE, "s", "not_contains"),
+               "b1-not-inserted-after-toc": g_regex("{source: file, path: specs/login.md}", AFTER_TOC, None, "not_contains"),
+               "b2-reported-stale": g_last(r"#10.{0,300}(stale|already|present|exists|misplaced|not (inserted|applied)|skipp)", "is"),
+               "b3-applied-gr1": g_file("specs/login.md", r"\*\*GR-1:\*\* The system MUST reject an unauthorized API request"),
+               "b3-handoff-command": g_last(r"review specs/login\.md check #4(?! #)"),
+           },
+           ["To the batch confirmation: \"Yes\"."])
+
 print("done")

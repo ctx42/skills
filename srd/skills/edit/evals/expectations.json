@@ -35,6 +35,24 @@
         "Says it in one or two lines naming the missing file, and reports nothing about its own start — no approval-gate line, no draft-check result, no closing manifest",
         "Offers no menu of other ways in (run `review`, paste findings, drop the argument): the user asked for a finding number, and the answer is that there are none"
       ]
+    },
+    {
+      "id": 20,
+      "name": "autofix-inserts-missing-notice",
+      "expected_behavior": [
+        "Inserts the template notice exactly once, directly below the metadata block and after the `[[TOC]]` macro that follows it, ahead of `## Introduction`",
+        "Applies the ordinary substitution in the same batch",
+        "Hands the insertion to `check` with the other applied finding: `review specs/login.md check #4 #10`"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "autofix-misplaced-notice-is-stale",
+      "expected_behavior": [
+        "Inserts no second notice: the SRD still holds exactly one keyword notice, and none is added below the metadata block",
+        "Reports `#10` as stale — a notice already exists, and moving a misplaced one is not errata",
+        "Applies `#4` and hands only it to `check`: `review specs/login.md check #4`"
+      ]
     }
   ]
 }

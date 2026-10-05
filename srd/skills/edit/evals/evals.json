@@ -32,6 +32,26 @@
       "setup": "`specs/login.md` exists and has real defects, but no `specs/login.review.md` beside it — the user asks for a finding number anyway.",
       "query": "/edit specs/login.md #2",
       "files": []
+    },
+    {
+      "id": 20,
+      "name": "autofix-inserts-missing-notice",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`specs/login.md` carries no STR-8 keyword notice anywhere. The `## Errata` block of `specs/login.review.md` lists it as `(missing)` → the template notice, beside one ordinary spelling substitution.",
+      "query": "/edit specs/login.md autofix",
+      "files": []
+    },
+    {
+      "id": 21,
+      "name": "autofix-misplaced-notice-is-stale",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`specs/login.md` carries the STR-8 keyword notice, but at the end of the Introduction instead of below the metadata block. The `## Errata` block of `specs/login.review.md` still lists the notice as `(missing)` → the template notice, beside one ordinary spelling substitution.",
+      "query": "/edit specs/login.md autofix",
+      "files": []
     }
   ]
 }
