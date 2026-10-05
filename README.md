@@ -30,18 +30,18 @@ skills — it ships only desktop-notification hooks:
 │   └── skills/{create,review,edit,doc-edit,system-check,report-doc-gap,backlog,kb}/
 ├── craft/
 │   ├── .claude-plugin/plugin.json
-│   └── skills/{cm,grill-me,plan-smith,readme-smith,doc-smith,enhance-skills}/
+│   └── skills/{cm,grill-me,plan-smith,readme-smith,doc-smith,enhance-skills,fix-all}/
 └── notify/                              # hooks only — no skills/ folder
     ├── .claude-plugin/plugin.json
     └── hooks/{hooks.json,notify-project.sh,notify-monitors.py}
 ```
 
-| Plugin   | Skills                                                                                    | Purpose                                                                                 |
-|----------|-------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| `go`     | `style`, `review`, `cover`, `doc`, `reshape`                                              | Go style (write + check), done-time review, test coverage, doc fixing, API proposals    |
-| `srd`    | `create`, `review`, `edit`, `doc-edit`, `system-check`, `report-doc-gap`, `backlog`, `kb` | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base       |
-| `craft`  | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `enhance-skills`             | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning |
-| `notify` | — (hooks only)                                                                            | Sound and an on-screen card on every monitor when Claude stops or needs input           |
+| Plugin   | Skills                                                                                    | Purpose                                                                                                    |
+|----------|-------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| `go`     | `style`, `review`, `cover`, `doc`, `reshape`                                              | Go style (write + check), done-time review, test coverage, doc fixing, API proposals                       |
+| `srd`    | `create`, `review`, `edit`, `doc-edit`, `system-check`, `report-doc-gap`, `backlog`, `kb` | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base                          |
+| `craft`  | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `enhance-skills`, `fix-all`  | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning, unattended fixing |
+| `notify` | — (hooks only)                                                                            | Sound and an on-screen card on every monitor when Claude stops or needs input                              |
 
 Plugin skills are **namespaced** by their plugin (e.g. `/srd:review`),
 so they never silently shadow a personal or project skill of the same name.

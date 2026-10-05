@@ -1,0 +1,21 @@
+{
+  "skill_name": "fix-all",
+  "probes": [
+    {
+      "id": "dirty-tree-asked-up-front",
+      "rule": "ask-only-up-front",
+      "prompt": "Situation: `/fix-all` triage, before any edit. Finding #3's fix touches `store.go`, which already holds uncommitted edits the findings did not make. No other question is open.\n\nQuestion: when do you raise `store.go` with the user? Answer on the first line with exactly one of: NOW, AT-COMMIT, NEVER. Then one sentence why.",
+      "pass": "^\\W*NOW\\b",
+      "fail": "^\\W*(AT-COMMIT|NEVER)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "report-first-line",
+      "rule": "report-shape",
+      "prompt": "Situation: `/fix-all` finished. `git log` shows 4 commits made by the run, covering findings #1-#5 (#2 and #3 shared a root cause and one commit); #6 and #7 were deferred.\n\nQuestion: write the report's first line exactly, and nothing else on that line.",
+      "pass": "^\\W*fixed 5 of 7 in 4 commits\\b",
+      "fail": "^\\W*(?!fixed 5 of 7)",
+      "class": "load-bearing"
+    }
+  ]
+}

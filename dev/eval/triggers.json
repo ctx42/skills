@@ -8,6 +8,9 @@
     "claude-md-management:revise-claude-md": "Update CLAUDE.md with learnings from this session."
   },
   "cases": [
+    {"say": "fix all of them and commit each one separately", "want": "craft:fix-all"},
+    {"say": "ok, work through every finding above unattended and commit as you go", "want": "craft:fix-all"},
+    {"say": "clear the review findings, ask me anything you need first", "want": "craft:fix-all"},
     {"say": "can you write the commit message for what's staged", "want": "craft:cm"},
     {"say": "amend the last commit message", "want": "craft:cm"},
     {"say": "summarize my staged changes for the git log", "want": "craft:cm"},

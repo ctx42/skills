@@ -1,0 +1,38 @@
+{
+  "skill_name": "fix-all",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "all-auto-commits-separately",
+      "expected_behavior": [
+        "Asks no question and fixes in the same turn: it has nothing to ask",
+        "Makes three commits, one per finding, staging files by path rather than with `git add -A` or `git add .`",
+        "Runs `go test` or `go vet` in the same command that commits",
+        "Commit messages follow Conventional Commits and carry no Co-Authored-By trailer",
+        "The tree ends fixed: `resp.Body.Close()` is deferred before the status check, `recieve` is gone, `trimAll` is gone",
+        "Ends with a terse report saying 3 of 3 were fixed, with no Deferred section"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "contract-asked-up-front",
+      "expected_behavior": [
+        "Before editing anything, asks one round naming #1 (the `Do` signature) and #3 (the `MaxRetries` default)",
+        "Does not put #2, a plain bug fix, in the question round",
+        "Edits no file and makes no commit before the round is answered"
+      ],
+      "blind_only": [
+        2
+      ]
+    },
+    {
+      "id": 3,
+      "name": "answered-round-then-unattended",
+      "expected_behavior": [
+        "Commits the #1 rename, and only it",
+        "Leaves `Options.Legacy` in `options.go` as the user asked",
+        "The report names #2 as not fixed, with the user's decision as the reason"
+      ]
+    }
+  ]
+}

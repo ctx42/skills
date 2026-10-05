@@ -67,7 +67,8 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       ├── plan-smith/             # Write and track implementation plans
 │       ├── readme-smith/           # Author and improve project READMEs
 │       ├── doc-smith/              # Write, revise, audit, proof docs & manuals
-│       └── enhance-skills/         # Record lessons into skills; self-learning
+│       ├── enhance-skills/         # Record lessons into skills; self-learning
+│       └── fix-all/                # Fix all findings unattended, one commit each
 └── notify/                         # Plugin: desktop attention hooks (no skills)
     ├── .claude-plugin/plugin.json
     └── hooks/

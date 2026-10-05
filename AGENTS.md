@@ -103,6 +103,8 @@ source of truth.
   contradictions, drift, and gaps, and re-checks each edit against the rest.
 - `enhance-skills` — harvests session corrections into per-skill lessons;
   retrofits the `## Self-learning` block.
+- `fix-all` — fixes every finding in the conversation, one commit each, after
+  one up-front question round for contract and compatibility changes.
 
 ### notify
 

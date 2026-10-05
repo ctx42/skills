@@ -1,0 +1,67 @@
+{
+  "skill_name": "fix-all",
+  "rules": [
+    {
+      "id": "ask-only-up-front",
+      "rule": "Questions go in one round before any edit; never ask afterwards",
+      "must": [
+        "Ask the round: one message",
+        "From here on, never ask"
+      ]
+    },
+    {
+      "id": "what-to-ask",
+      "rule": "Only contract, compat, and needs-user findings are asked",
+      "must": [
+        "\\*\\*contract\\*\\* — the fix changes an API contract",
+        "\\*\\*compat\\*\\* — the fix breaks backward compatibility"
+      ]
+    },
+    {
+      "id": "surprise-defers",
+      "rule": "An unforeseen contract or compat change is deferred, not applied or asked",
+      "must": [
+        "nobody foresaw is not applied",
+        "defer it with the\\s+reason"
+      ]
+    },
+    {
+      "id": "gate-on-exit",
+      "rule": "Commit gated on the checks' exit status in the same command",
+      "must": [
+        "gated on exit status in the same command that\\s+commits",
+        "never on piped or filtered\\s+output"
+      ]
+    },
+    {
+      "id": "one-fix-per-commit",
+      "rule": "One logical fix per commit, staged by path",
+      "must": [
+        "One commit holds one\\s+logical fix",
+        "Stage only the fix's files by path"
+      ]
+    },
+    {
+      "id": "conversation-only",
+      "rule": "Fix only the conversation's findings; never re-review",
+      "must": [
+        "Never re-review the code to add findings"
+      ]
+    },
+    {
+      "id": "no-history-rewrite",
+      "rule": "Never push, amend, or rebase",
+      "must": [
+        "Never push, amend, rebase"
+      ]
+    },
+    {
+      "id": "report-shape",
+      "rule": "Report opens with the fixed/total/commits line read off git log",
+      "must": [
+        "fixed 5 of 7 in 4 commits",
+        "Read every count and hash off `git log`"
+      ]
+    }
+  ]
+}

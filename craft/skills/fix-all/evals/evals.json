@@ -1,0 +1,35 @@
+{
+  "skill_name": "fix-all",
+  "evals": [
+    {
+      "id": 1,
+      "name": "all-auto-commits-separately",
+      "skills": [
+        "fix-all"
+      ],
+      "setup": "A Go module `example.com/fetch` with a clean working tree; `go test ./...` and `go vet ./...` pass. Earlier in the conversation a review listed three numbered findings: #1 `Fetch` in `fetch.go` returns on a non-200 status before deferring `resp.Body.Close()`, leaking the body; #2 a comment in `fetch.go` misspells `receive` as `recieve`; #3 the unexported helper `trimAll` in `util.go` is dead code. None changes an exported symbol or behavior.",
+      "query": "/fix-all",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "contract-asked-up-front",
+      "skills": [
+        "fix-all"
+      ],
+      "setup": "A Go library module `example.com/client` with a clean working tree and passing tests. Earlier in the conversation a review listed: #1 the exported `Client.Do(req)` should take a `context.Context` first; #2 `Do` leaks a response body when it retries; #3 the `MaxRetries` default of 0 should be 3, though the README documents 0.",
+      "query": "/fix-all",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "answered-round-then-unattended",
+      "skills": [
+        "fix-all"
+      ],
+      "setup": "A Go module `example.com/app` with a clean tree and passing tests. Earlier in the conversation a review listed: #1 the unexported field `config.tmo` in `config.go` should be named `timeout`; #2 drop the unused exported field `Options.Legacy` in `options.go`, which `examples/main.go` still sets. Asked about #2 up front, the user answers: leave #2 as it is.",
+      "query": "/fix-all",
+      "files": []
+    }
+  ]
+}
