@@ -48,6 +48,10 @@ touches ids.
    Verify those by the class: find the neighbouring word inside the anchor,
    confirm the named defect is present beside it exactly once, and apply the
    canonical fix for that class. Absent or ambiguous behaves as above.
+   A missing-notice finding (`old` is `(missing)`, per `errata.md`) has
+   nothing to count in an anchor: count keyword notices in the whole SRD.
+   Zero → insert `new` directly below the metadata block, after a TOC macro or
+   block that follows the table; one or more → stale, as above.
    A multi-site finding is verified per site and applies only where it
    matches; report each site that did not. Never substitute by whole-document
    search-and-replace; never widen beyond the quoted `old`.

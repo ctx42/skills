@@ -68,6 +68,11 @@ Nothing outside this list is errata.
   this document"); the one in the SRD standard describes the standard itself
   and is never the replacement. Its anchor is the notice block itself, which
   appears once; cite `Metadata` as the location.
+- A missing STR-8 notice: the one insertion the class admits, since its text
+  and place are both fixed. `old` is `(missing)`, `new` the template notice
+  quoted in full; it goes directly below the metadata block, after a TOC macro
+  or block that follows the table. Errata only when no keyword notice appears
+  anywhere in the SRD; a misplaced one is a move, not errata. Cite `Metadata`.
 
 ## Exclusions
 

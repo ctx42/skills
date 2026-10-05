@@ -91,9 +91,10 @@ In order:
    would drop out of the count that gates the Quality Bar. Each states its fix
    as the exact substitution the class requires — literal `` `old` → `new` ``,
    or for whitespace and glyph classes the class plus a neighboring word
-   (`autofix` derives the fix) — and a substitution repeated across sites lists
-   every site so `autofix` can verify the count. Two different substitutions are
-   two findings. Omit the section when empty.
+   (`autofix` derives the fix), or for a missing STR-8 notice
+   `` `(missing)` → `` the full notice — and a substitution repeated across
+   sites lists every site so `autofix` can verify the count. Two different
+   substitutions are two findings. Omit the section when empty.
 2. Open findings, grouped by document section: Metadata, Introduction,
    Glossary, Scope, Requirements. Omit a section with no open findings. An
    errata finding lives in `## Errata`, never also under its document section.
