@@ -15,7 +15,7 @@
       "rule": "Never invents a figure; placeholder in the after text",
       "must": [
         "Never\\ invent\\ a\\ figure\\ neither\\ the\\ SRD\\ nor\\ the\\ user\\ gives",
-        "`<lockout\\ minutes>`"
+        "`\\[TBD:\\ lockout\\ minutes\\]`"
       ]
     },
     {

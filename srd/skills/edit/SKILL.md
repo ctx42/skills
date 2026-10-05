@@ -150,7 +150,8 @@ Every mode but `autofix` runs this loop per change:
 1. Propose exactly one change: its location, the problem (cite the rule id),
    the before and after text, and a one-line rationale. Never invent a figure
    neither the SRD nor the user gives: the after text holds a placeholder
-   (`<lockout minutes>`). A change asserting
+   (`[TBD: lockout minutes]` — never `<…>`, which Obsidian renders as an HTML
+   tag). A change asserting
    existing system behavior gets its corpus lookup here, before the proposal is
    put, and the proposal states what it found — a KB section it contradicts
    included, as a finding no `rank` settles
