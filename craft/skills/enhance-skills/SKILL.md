@@ -122,8 +122,9 @@ Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
 the sibling winning a conflict — a read-only install writes the second, and what
 it learned there stays true once the checkout is writable again. Most runs have
 none; absence is the normal case and needs no comment. On a correction or
-self-caught mistake, append a one-line rule to the sibling when this directory
-is writable, else to the fallback, creating it, and report where.
+self-caught mistake, append a one-line rule — general, naming nothing from
+the project at hand (its files, tests, tickets) — to the sibling when this
+directory is writable, else to the fallback, creating it, and report where.
 ```
 
 ## Lesson format
@@ -180,5 +181,6 @@ Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
 the sibling winning a conflict — a read-only install writes the second, and what
 it learned there stays true once the checkout is writable again. Most runs have
 none; absence is the normal case and needs no comment. On a correction or
-self-caught mistake, append a one-line rule to the sibling when this directory
-is writable, else to the fallback, creating it, and report where.
+self-caught mistake, append a one-line rule — general, naming nothing from
+the project at hand (its files, tests, tickets) — to the sibling when this
+directory is writable, else to the fallback, creating it, and report where.
