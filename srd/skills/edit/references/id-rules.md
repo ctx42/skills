@@ -40,6 +40,14 @@ The gate then decides what may happen to requirement, scope, and glossary ids:
   impossible, present the conflict and the trade-off and leave it flagged
   unless the user explicitly approves the id change.
 
+## Removal and comment blocks
+
+Removing a requirement that carries a comment block names the comment in the
+proposal and says `Y` settles it too; on apply, delete the `> [!comment]`
+callout and its `[^…]` footnote anchor together.
+
+## Any id change
+
 Whenever any id must change, state the change and get explicit approval as part
 of the loop's confirmation. A renumbering pass excludes every comment block from
 the substitution (comment text is verbatim history and may name an id that

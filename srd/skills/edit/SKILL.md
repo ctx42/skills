@@ -41,7 +41,8 @@ way. It never proposes a Status
 transition (flag only a malformed `STA-*` value) and never proposes pushing,
 publishing, or syncing the SRD as a follow-up. Comment blocks are read-only:
 a source of information about the SRD, never edited, answered, or rewritten,
-even when they hold stale references. Back-links (STR-4/6) are
+even when they hold stale references, unless the user explicitly asks to
+resolve one. Back-links (STR-4/6) are
 external: check that the forward Initiative and Designs links are present and
 never flag a back-link gap. Acceptance is a human decision. It maintains the
 two [draft scaffolds](#draft-scaffolds) and resolves them only on the user's
@@ -67,10 +68,14 @@ is missing at run time, stop and tell the user.**
   the consistency pass) and the Bad→Good defect classes to fix toward.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md) and
   [references/corpus-edits.md](references/corpus-edits.md) (on-demand: the
-  first edit that asserts something about existing system behavior or removes
-  a requirement) — how to
+  first edit that changes a requirement's meaning or removes one) — how to
   reach the corpus and where an unconfirmed fact goes, and when this skill
   looks, what it states in the proposal, and what the confirmation attests.
+- [references/proposals.md](references/proposals.md) (on-demand: the
+  interactive summary or first proposal) — what counts as a finding and how a
+  fix is worded.
+- [references/modes.md](references/modes.md) (on-demand: `polish`,
+  `targeted`, an interactive start line) — those procedures.
 - [../review/references/review-file.md](../review/references/review-file.md)
   (on-demand: feedback, autofix) — how `<srd>.review.md` is numbered, cited and
   laid out. Never infer the shape.
@@ -138,30 +143,29 @@ proposal on an approved SRD or any proposal touching an id.
 ## Edit discipline
 
 When listing the issues found before the loop, keep only findings that survive
-scrutiny — a real rule violation, not a preference. Requirements that read as
-overlapping are often independently testable (a disabled control vs a grayed
-one; a length cap vs its truncation format); a scope item covering one
-capability across many surfaces is atomic; a compound term whose parts are in
-the Company Glossary needs no entry. A finding withdrawn mid-session costs the
-user's trust in the whole list.
+scrutiny — a real rule violation, not a preference
+([references/proposals.md](references/proposals.md)). A finding withdrawn
+mid-session costs the user's trust in the whole list.
 
 Every mode but `autofix` runs this loop per change:
 
-1. Propose exactly one change: its location, the problem (cite the rule id),
-   the before and after text, and a one-line rationale. Never invent a figure
+1. Propose exactly one change: its location, the problem (cite the rule id), the
+   before and after text, and a one-line rationale. Never invent a figure
    neither the SRD nor the user gives: the after text holds a placeholder
-   (`[TBD: lockout minutes]` — never `<…>`, which Obsidian renders as an HTML
-   tag). A change asserting
-   existing system behavior gets its corpus lookup here, before the proposal is
-   put, and the proposal states what it found with its source line — a KB
-   section it contradicts included, as a finding no `rank` settles
+   (`[TBD: lockout minutes]` — never `<…>`, which Markdown renderers read as an
+   HTML tag). Fix only what the finding names, with the smallest wording change
+   that settles it; never add a fact, condition, permission, or platform detail
+   the SRD lacks unless the user asks. A change to a requirement's meaning — one
+   the user dictates mid-walk included — gets its corpus lookup here, before the
+   proposal is put, and the proposal states what it found with its source line —
+   a KB section it contradicts included, as a finding no `rank` settles
    ([references/corpus-edits.md](references/corpus-edits.md)). A removal gets
    one too: each KB section only the cut requirement asserted for this SRD gets
-   a `wrong` gap on the cut's confirmation. Name the
-   location the way the user can find it in the file — the requirement, scope,
-   or glossary id, and for prose that has none the line number. Never an
-   ordinal the user would have to count out ("paragraph three"); this holds for
-   what comes next as much as for the proposal itself.
+   a `wrong` gap on the cut's confirmation. Name the location the way the user
+   can find it in the file — the requirement, scope, or glossary id, and for
+   prose that has none the line number. Never an ordinal the user would have to
+   count out ("paragraph three"); this holds for what comes next as much as for
+   the proposal itself.
 2. Close the proposal with the choices (Yes / Yes Next / Skip / Edit) — the
    capital letter is the key — and apply only on explicit approval:
    - `Y` (Yes): apply, then stay on the current entry and propose its next
@@ -202,13 +206,13 @@ Every mode but `autofix` runs this loop per change:
 4. Log the change in `<srd>.decisions.md` before proposing the next one (see
    [Decision log](#decision-log)).
 
-A GLO-4 first-use link skips the loop (`autofix` takes it only as errata):
-when an edit, a finding, or the session-end check finds a Company Glossary
-term unlinked at its first use in document order, link that use per
-srd-procedures step 2, unlink a later use that carried the link, log it,
-report it in one line, and go on — never ask. A proper name (GLO-6) or a use
-that may mean the generic sense goes through the loop instead. Text, case,
-and comment blocks stay as found.
+A GLO-4 first-use link skips the loop (`autofix` takes it only as errata): when
+an edit, a finding, or the session-end check finds a Company Glossary term
+unlinked at its first use in document order (an entry added earlier takes that
+use over), link that use per srd-procedures step 2, unlink a later use that
+carried the link, log it, report it in one line, and go on — never ask. A
+proper name (GLO-6) or a use that may mean the generic sense goes through the
+loop instead. Text, case, and comment blocks stay as found.
 
 Write every edit to the LANG and REQ rules and the authoring guide (US English,
 one term per concept); a restructuring edit follows the template's order.
@@ -270,12 +274,7 @@ with a confirmation and expects no review file.
    is resolved or skipped. An entry with no finding resolves on sight: say so
    and move on — nothing was proposed, so no key is owed.
 
-Start point (path + line): resolve the line to the entry or paragraph at or
-nearest it, skip step 1, and begin step 2 there, continuing to the end; Scope
-entries at or after the start still go last, those before it are skipped. The
-walk is still one entry at a time and still never looks ahead — step 1's
-summary is what would have told you which later entry has a finding, and
-skipping it means learning that entry by entry, never by scanning forward.
+Start point (path + line): see [references/modes.md](references/modes.md).
 
 ### feedback
 
@@ -308,29 +307,10 @@ confirmation — never the edit loop, never a re-scan of the SRD. The full
 procedure is in [references/autofix.md](references/autofix.md) *(on-demand:
 this mode only)*: read it before applying anything.
 
-### polish
+### polish, targeted
 
-Mechanical-only cleanup through the loop, confirming each change, in document
-order with no summary first; metadata gaps go to the closing manifest, not the
-walk. Scope:
-British → US spelling, identifier format/order (REQ-2/3/4, subject to the
-approval gate), keyword capitalization (LANG-4), valid Markdown, requirement-group
-dividers (authoring guide), stray example/note text (REQ-7), spacing and punctuation. Never rewrite requirement
-meaning, restructure, or cut a requirement.
-
-### targeted
-
-Edit one entry the user points to by requirement id (`GR-3a`), quoted text, or
-free description ("the login timeout rule").
-
-1. Locate the target; for quoted text or a description, confirm the match
-   before editing, inside the proposal: it is the loop's one question, so say
-   the match outright ("taking 'fast' to be GR-4"), and `E` corrects it. With
-   nothing to fix on it, say so and ask what they want changed rather than
-   manufacturing a finding.
-2. Run the loop on that entry; its resolution ends the run (Session end).
-3. Report the re-validation result explicitly: whether the edit introduced any
-   inconsistency in the entry or its cross-refs.
+Mechanical-only cleanup, or one entry the user points to: read
+[references/modes.md](references/modes.md) before the first proposal.
 
 ## Session end (every mode)
 

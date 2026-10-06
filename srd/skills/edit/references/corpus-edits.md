@@ -1,23 +1,24 @@
 # Corpus-grounded edits
 
 When and how `edit` consults the documentation corpus, and what a confirmation
-attests. Read before the first proposal that asserts anything about existing
-system behavior or removes a requirement; a run that does neither needs none
-of it.
+attests. Read before the first proposal that changes a requirement's meaning
+or removes a requirement; a run that does neither needs none of it.
 
 The corpus itself — backends, trust, and where a lookup's outcome goes — is in
 [../../create/references/doc-corpus.md](../../create/references/doc-corpus.md).
 
 ## The lookup lands before the proposal
 
-When a new or changed requirement asserts something about existing system
-behavior, `search` the corpus **before the proposal is put** (loop step 1) and
-state what it found in the proposal, each result it rests on as a source line
-([Citing a source](../../create/references/doc-corpus.md#citing-a-source)) —
-a lookup that only confirms the text included; one that found nothing says
-so and gives none, nor does its log entry: attestation works on the first
-reading, so the fact and where it came from have to be in front of the user
-when they press the key.
+When a new or changed requirement changes what the SRD means — one the user
+dictates mid-walk included — `search` the corpus and grep the knowledge base,
+`<kb>/_inbox.md` included, for the fact it changes **before the proposal is
+put** (loop step 1); a KB section stating the old fact is named in the proposal,
+never found after the `Y`. State what the lookup found in the proposal, each
+result it rests on as a source line ([Citing a
+source](../../create/references/doc-corpus.md#citing-a-source)) — a lookup that
+only confirms the text included; one that found nothing says so and gives none,
+nor does its log entry: attestation works on the first reading, so the fact and
+where it came from have to be in front of the user when they press the key.
 Step 3 re-validates only what the edit touched and never returns to the corpus
 for a claim the proposal already carried.
 

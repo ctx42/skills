@@ -28,7 +28,9 @@ author-facing account of what changed and why, which a diff cannot carry.
 - Record the entry/id, the change in prose (not a diff), and the reason,
   quoted verbatim: the user's words when they gave a reason, else the
   proposal's one-line rationale when it stood unamended (a bare `Y`). Quote,
-  never paraphrase — a paraphrase is where invented reasons got in. Trim only
+  never paraphrase — a paraphrase is where invented reasons got in. Keep the
+  source's own case and wording ("one rule per", never "One rule per"):
+  compare against it before writing. Trim only
   the conversational frame around the quote (`yes, because`) and the
   interaction text a rationale carries — keystroke hints (`` `E` to give a
   different limit ``) and process notes (`so no corpus lookup`, `read as a
@@ -66,7 +68,7 @@ reassignment".
 
 DET-9 now names the sample rate in hertz instead of "high resolution".
 Reason: "Names a measurable value in place of an untestable adjective."
-Source: Telemetry › Sampling (rank 2, 1 = most trusted) — https://example.atlassian.net/wiki/spaces/IFP/pages/1774485611
+Source: Telemetry › Sampling (rank 2, 1 = most trusted) — https://example.atlassian.net/wiki/spaces/DOC/pages/123456
 
 ### General
 
