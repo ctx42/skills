@@ -81,6 +81,16 @@ Commit control:
   ignored when reading the diff. Check the index first (`git diff --cached
   --quiet`); when it is dirty, amend the message alone with
   `git commit --amend --only`, and say in the reply what stayed staged.
+- The change decides the commit boundary, not the staging split: when `apply`
+  commits a staged diff whose atomic change continues in unstaged files, stage
+  the rest and commit it whole, amending when a partial commit already landed.
+  With nothing staged, the stage-nothing rule above holds.
+- Check the index in the same command as a commit that takes it (not
+  `--amend --only`): compare
+  `git diff --cached --name-only | LC_ALL=C sort` with the files the message
+  was drafted from and abort on mismatch (`LC_ALL=C` keeps locale collation
+  from faking one). A printed stat is not a check — files staged earlier or in
+  between ride into a commit whose message never names them.
 
 ## Workflow
 
@@ -115,8 +125,13 @@ review; they see only the diff and the message.
   project milestones ("phase 1"), or `tmp/*-plan.md` paths — unless the diff
   itself only touches those files.
 
-- Prefer concrete symbols and files: `` `TargetNameFromContext` ``,
-  `` `Prepare` ``, not umbrella slogans that hide the actual edits.
+- State only what the changed lines show. No guessed history ("a rename of X
+  to Y also replaced …") and no conversation facts, even true ones (what
+  another package lacks): if the diff does not show it, the message does not
+  say it.
+
+- Prefer concrete symbols and files: `` `ParseConfig` ``, `` `Server.Close` ``,
+  not umbrella slogans that hide the actual edits.
 
 - Every number in the body is read off the diff, not reasoned out from it. A
   message describing `1<<attempt * 100ms` over `maxAttempts = 3` as backing off
@@ -170,8 +185,8 @@ callers — not the ones the bug bit — are the ones with something to do:
 - Wrap at 72 columns.
 - Imperative mood.
 - Explain why the change was made; the diff shows what.
-- Use backticks for symbol references: `` `xrr.FieldErrors` ``,
-  `` `WithCause` ``.
+- Use backticks for symbol references: `` `http.Client` ``,
+  `` `WithTimeout` ``.
 - When referencing prior commits: `Commit <short-sha> ("summary") ...`
 - Write the smallest body that fully explains the user-facing change and its
   motivation, with godoc-level precision.

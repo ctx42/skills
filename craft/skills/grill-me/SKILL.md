@@ -90,7 +90,10 @@ branch by branch, until you both share one understanding of the subject.
   what happens to it afterwards" is four, and you will get the first answered
   and the rest dropped. Ask the one whose answer most changes what you ask
   next. This binds hardest on the opening turn, where having the whole map in
-  front of you makes everything look equally askable. Never use
+  front of you makes everything look equally askable. Never tack a second
+  question on with "And …?", and never offer options that hide a second axis
+  (whether to split a commit, and then by file or by hunk) — ask the other
+  next turn. Never use
   `AskUserQuestion` multiple-choice unless the user asks for it.
 
 - Push back. If a decision seems risky or contradictory, say so. When two

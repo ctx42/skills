@@ -66,7 +66,9 @@ spans two unless its parts stand alone.
 
 For each fix:
 
-1. Make the smallest change that resolves the finding as stated.
+1. Make the smallest change that resolves the finding as stated. An edit
+   script spanning several files validates every replacement before writing
+   any file, so a failed assertion never leaves a fix half-applied.
 2. Check before committing. A fix that turns out to need a contract or compat
    change nobody foresaw is not applied: restore its files, defer it with the
    reason, and go on.
@@ -74,6 +76,8 @@ For each fix:
    commits (`make test >out 2>&1 || exit 1`), never on piped or filtered
    output. A failure the baseline did not have: repair it once; still red,
    restore the fix's files and defer it with the failing check named.
+   Per-file checks (formatter, line width) skip the fix's deleted paths;
+   staging still includes them.
 4. Stage only the fix's files by path (`git add -- <paths>`), compare
    `git diff --cached --name-only` with that list in the same command, and
    commit with a message written per [../cm/SKILL.md](../cm/SKILL.md) at

@@ -85,8 +85,8 @@ Typical order; include only what the product needs, omit empty sections:
   but the domain rules out.
 - Materially different parallel items get no symmetric statement that is true
   for only one; state the asymmetry.
-- "Noise" is unwanted interference only; call the signal of interest "signal"
-  even where the domain colloquially says "noise".
+- Use a technical term in its exact sense only, even where colloquial usage
+  differs ("noise" is unwanted interference, never the signal of interest).
 - Headings are specific and parallel in grammar ("Installing X", "Configuring X",
   not "Installation" then "How to configure").
 
