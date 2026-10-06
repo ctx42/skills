@@ -4,6 +4,12 @@ Read when asked to apply findings, fix, or refactor. Every behavioral code
 change ships with tests in the same change — new behavior gets new tests,
 changed behavior gets updated tests — written to `go:style`'s Test rules
 (`have`/`want`, never `got`). Pure no-ops (renames, comment edits) are exempt.
+A value moved from Given under a When that returns only `err` keeps its
+descriptive name (not `have`), and its Then assertion gets its own blank-line
+group after the `err` check.
+
+Command text can turn a backslash-u escape into its rune, even in a quoted
+heredoc: build it from `chr(92)`, then grep the file for non-ASCII bytes.
 
 ## Never print diffs of applied fixes
 
@@ -35,6 +41,10 @@ touching the fix:
 2. Apply the fix and show the same test/benchmark now passes.
 3. Report both states — the bug was real and the fix resolves it.
 
+An assertion that ends the subtest on failure (ctx42 `assert.ErrorIs`) hides
+the ones after it: prove a later assertion can fail with the earlier one
+disabled.
+
 A bug is always reported, whether or not it can be proven. If it genuinely
 cannot be reproduced by a test or benchmark (unreachable branch, untestable
 side effect, disproportionate scaffolding), do not apply the fix: report the
@@ -54,6 +64,12 @@ Run the whole-module suite, not just the changed package:
 - After editing, run `go test ./... -race` again. The job is not done until it
   passes for the whole module; a failing or unrun suite means not done — never
   report success without it.
+- Gate on exit status, never on piped output (`go test | grep` hides a
+  failure). Before a chunk is reported ready — and inside the same command as
+  any commit the user asked for, aborting on any output or failure — run
+  `gofmt -l` on the touched files and the width measure over every line the
+  fix touched, renames included (a longer receiver pushes a signature past the
+  limit); vet and tests pass a double blank line or an over-width line.
 
 ## Big fix jobs: plan, chunk, consult
 

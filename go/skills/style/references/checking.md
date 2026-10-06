@@ -105,7 +105,11 @@ no single line spells out.
    server, or one answering empty for a symbol the code visibly uses (an
    unindexed nested module) → fall back to grep and note reduced confidence.
 4. Reason only for detection: do not run gofmt, goimports, vet, or linters —
-   judge by reading. `LSP` is allowed (read-only navigation).
+   judge by reading. `LSP` is allowed (read-only navigation). The exception is
+   `lines-fit-limit`, wherever the depth checks it: measure every line by
+   script, read-only, in characters (not bytes — `awk length` counts a
+   multi-byte rune as several) with tabs expanded to the tab width; a
+   read-through misses over-width lines.
 5. List the offenses (below), then fix per Fixing.
 
 ## Offense list
@@ -265,6 +269,9 @@ behavioral fix, with its red/green test, a separate change.
   against the limit before applying it; a fix that overflows is itself an
   offense. Where the approved wording cannot fit, say so and give the wording
   applied.
+- A hoisted call with a side-effecting statement between declaration and use
+  (`t.Setenv`, a `chdir`) is not an inlining offense: never list or inline it —
+  moving it changes what the call returns.
 - For a rename or signature change, enumerate call sites with `LSP`
   (`findReferences`, `goToImplementation`) before editing so definition and
   dependents change together.

@@ -119,6 +119,8 @@ delegated coherently. A module of three small packages is `./...` and still not 
    - Correctness: bugs, wrong logic, nil/bounds, ignored errors, data races.
    - Edge cases: empty/large/concurrent inputs and every error path.
    - Error handling & API: wrapping, sentinels, boundaries, easy misuse.
+   - Leaks: search for every acquisition (container, file, goroutine) with no
+     release at all, not only for releases done wrong.
    - Never report a form the style rules require as a defect: the `"" +`
      segmented multi-line string is the mandated style (raw strings break
      indentation); never propose a backtick raw string for it.
@@ -182,7 +184,10 @@ Each finding:
   offense keeps the bare id `go:style` derived it under, unprefixed, so a
   finding merged from there is still the same string; one finding that is
   both names both (`correctness`, `wrap-errors-w`), never a paraphrase.
-- A minimal suggested fix.
+- A minimal suggested fix, checked to do what it claims: read how a helper
+  reports failure (`t.Error` is not fatal) before prescribing a fatal or panic
+  assertion; a tool that does not perform the edit (`go mod tidy` never merges
+  single-line `require` statements) gets a manual fix instead.
 
 End with a one-line verdict (ship / fix-first) and the per-severity counts. For
 a module, give the verdict per package plus an overall summary. Report budget

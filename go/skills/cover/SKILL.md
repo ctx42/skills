@@ -141,7 +141,9 @@ does not.
    profile's rows are `file:startLine.col,endLine.col stmts count` — one row
    per basic block, not per line, and `stmts` is how many statements that
    block holds.
-   Select the rows whose range falls inside Foo, treat `count > 0` as covered,
+   Select the rows whose start line lies inside Foo's range and sum `stmts` by
+   script, never by eye from a grep window — a hand tally picks up a
+   neighbouring function's block. Treat `count > 0` as covered,
    and report coverage as covered statements over total, which is what the
    percentages elsewhere count; a rolled-up
    percentage from `go tool cover -func` is per function but is computed from
