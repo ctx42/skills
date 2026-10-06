@@ -39,7 +39,8 @@ Read these from `$ARGUMENTS` (any order, after the target):
 - `packages=a,b` — restrict to these packages within the target.
 - `max_issues=N` — cap on offenses reported (default 25).
 - `depth=light|standard|full` — default `standard`. `light` reports only
-  high-impact offenses; `full` checks every rule exhaustively.
+  high-impact offenses and skips `lines-fit-limit`, saying so in one line;
+  `full` checks every rule exhaustively.
 - `plan_first` — propose the budget and the package list, then stop for the
   user's answer, checking nothing until it comes. Not "list the offenses and
   stop before applying": the default pick step already asks before applying, so
@@ -106,7 +107,7 @@ no single line spells out.
    unindexed nested module) → fall back to grep and note reduced confidence.
 4. Reason only for detection: do not run gofmt, goimports, vet, or linters —
    judge by reading. `LSP` is allowed (read-only navigation). The exception is
-   `lines-fit-limit`, wherever the depth checks it: measure every line by
+   `lines-fit-limit`, skipped at `depth=light`: otherwise measure every line by
    script, read-only, in characters (not bytes — `awk length` counts a
    multi-byte rune as several) with tabs expanded to the tab width; a
    read-through misses over-width lines.
@@ -265,10 +266,10 @@ behavioral fix, with its red/green test, a separate change.
   only after the user has answered the plan, and that answer agreed the budget,
   not the fixes: the pick step still runs. Before the answer there is no offense
   list to apply at all, because nothing has been checked yet.
-- Measure every line a fix writes — a reworded comment as much as code —
-  against the limit before applying it; a fix that overflows is itself an
-  offense. Where the approved wording cannot fit, say so and give the wording
-  applied.
+- Measure every line a fix writes — a reworded comment as much as code — at
+  every depth, against the limit before applying it; a fix that overflows is
+  itself an offense. Where the approved wording cannot fit, say so and give the
+  wording applied.
 - A hoisted call with a side-effecting statement between declaration and use
   (`t.Setenv`, a `chdir`) is not an inlining offense: never list or inline it —
   moving it changes what the call returns.
