@@ -180,7 +180,8 @@ say the backlog is clear and stop.
 ### 4. deferred
 
 Take the deferred gaps one at a time, oldest `created` first. Ask the question
-its `detail` words.
+its `detail` words. Ask one closed question per turn, never an either/or a bare
+"yes" cannot answer; ask the second half next turn.
 
 - Answered: hand the fact to `srd:kb` with the gap's id, then `update_gap`
   `answer: ""` — asked and answered, it owes only a corpus section now and

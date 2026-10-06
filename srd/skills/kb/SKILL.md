@@ -314,7 +314,8 @@ Body rules:
   that has moved on. A citation repair updates the row of the fact it
   repairs; it adds none. A page with no `## Provenance` yet gets one on the
   first write that touches it. The inbox keeps one too, and a section filed
-  out of it carries its row along.
+  out of it carries its row along. When it holds more than one table, address
+  the target by its header row, never every `|` line after the heading.
 - A page states no open question: what its subject leaves unanswered is a gap.
   See [Open questions](#open-questions) below.
 

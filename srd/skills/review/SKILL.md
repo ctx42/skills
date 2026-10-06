@@ -147,9 +147,12 @@ entry leads and the lower becomes the second tag:
   inside a rule, a rule stating appearance instead of behavior (REQ-1, REQ-7,
   LANG-5, SCO-1).
 - `terminology` — one concept under many names, an undefined term, casing that
-  drifts from the glossary (GLO-3). A rule *hidden* in a glossary entry is
+  drifts from the glossary (GLO-3), a local Glossary entry for a term the
+  Company Glossary defines (link its first use instead, GLO-4): check every
+  local entry against that term set. A rule *hidden* in a glossary entry is
   `coverage`, not this: the defect is a requirement in the wrong place, not a
-  word in the wrong form.
+  word in the wrong form. Two names that may differ in meaning are `logical`,
+  asking which is meant, never drift asking to "use one name".
 - `linguistic` — grammar, spelling, a missing word, the wrong subject or
   voice, a misplaced or lowercase normative keyword (LANG-1, LANG-2, LANG-3,
   LANG-4, LANG-6).
