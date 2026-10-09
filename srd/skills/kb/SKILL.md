@@ -96,8 +96,11 @@ result, never by folder. Three consequences for KB writes:
 - A conflict is a finding, never a silent tie-break. When an attested fact
   contradicts a platform document (not a KB section — see below), either the
   document is stale or the KB is wrong. Surface it; hand a stale document to
-  `srd:report-doc-gap`. A fact the user confirmed against it is written without
-  a further question, its attestation line opening
+  `srd:report-doc-gap`. Before surfacing a UI observation as a conflict,
+  check a second record with different data, or ask the user to: a field shown
+  or hidden can depend on the record (an address present or absent). Once the
+  conflict stands, a fact the user confirmed against the document is written
+  without a further question, its attestation line opening
   ``> Contradicts `<identity>`.`` (the document's `id`) in place of
   `> Not in the platform docs.` — whether the conflict was known at
   confirmation or turned up after it, at write time: a fact written while a

@@ -183,10 +183,13 @@ Take the deferred gaps one at a time, oldest `created` first. Ask the question
 its `detail` words. Ask one closed question per turn, never an either/or a bare
 "yes" cannot answer; ask the second half next turn.
 
-- Answered: hand the fact to `srd:kb` with the gap's id, then `update_gap`
-  `answer: ""` — asked and answered, it owes only a corpus section now and
-  joins `gaps`. `srd:kb` writes to its inbox, never a fill target: offer
-  `/kb file`, and fill as step 6 of `gaps` says once a topic page states it.
+- Answered: a numeric rule (threshold, tolerance, its base) first gets asked
+  whether code implements it, and that code read — a "yes" to a leading
+  question can confirm a wrong base. Hand the fact to `srd:kb` with the
+  gap's id, then `update_gap` `answer: ""` — asked and answered, it owes only a
+  corpus section now and joins `gaps`. `srd:kb` writes to its inbox, never a
+  fill target: offer `/kb file`, and fill as step 6 of `gaps` says once a topic
+  page states it.
 - "Still not now": leave it; do not re-ask it this sitting.
 - The user does not know:
   [Who would know](../create/references/doc-corpus.md#who-would-know); names
