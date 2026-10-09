@@ -82,6 +82,11 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   the notice is still the first thing the SRD itself says below the metadata.
   Never raise that finding against a template-drafted SRD, and never move the
   macro to answer it.
+- Scope items stand alone: an In Scope or Out of Scope item is a high-level
+  overview readable on its own; it never cites a requirement id, of this SRD or
+  another, nor rests on another SRD's content ("changes covered by INT-491").
+  Name the change itself; a related initiative's link goes in Related Materials.
+  A violation is a finding (`SRD:house`).
 - In Scope MAY be deferred: In Scope items derive from the requirements
   (SCO-2), so an SRD MAY leave `### In Scope` holding a single `--- TODO ---`
   marker line while the requirements are still in flux. While the marker stands,
