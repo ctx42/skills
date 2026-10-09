@@ -75,7 +75,7 @@ is missing at run time, stop and tell the user.**
   interactive summary or first proposal) — what counts as a finding and how a
   fix is worded.
 - [references/modes.md](references/modes.md) (on-demand: `polish`,
-  `targeted`, an interactive start line) — those procedures.
+  `targeted`, a start line or `#n`) — those procedures.
 - [../review/references/review-file.md](../review/references/review-file.md)
   (on-demand: feedback, autofix) — how `<srd>.review.md` is numbered, cited and
   laid out. Never infer the shape.
@@ -206,13 +206,17 @@ Every mode but `autofix` runs this loop per change:
 4. Log the change in `<srd>.decisions.md` before proposing the next one (see
    [Decision log](#decision-log)).
 
-A GLO-4 first-use link skips the loop (`autofix` takes it only as errata): when
-an edit, a finding, or the session-end check finds a Company Glossary term
-unlinked at its first use in document order (an entry added earlier takes that
-use over), link that use per srd-procedures step 2, unlink a later use that
-carried the link, log it, report it in one line, and go on — never ask. A
-proper name (GLO-6) or a use that may mean the generic sense goes through the
-loop instead. Text, case, and comment blocks stay as found.
+Two fixes skip the loop in every mode (`autofix` takes them only as errata):
+apply, log, report in one line, and go on — never ask.
+
+- A GLO-4 first-use link: when an edit, a finding, or the session-end check
+  finds a Company Glossary term unlinked at its first use in document order (an
+  entry added earlier takes that use over), link that use per srd-procedures
+  step 2 and unlink a later use that carried the link. A proper name (GLO-6) or
+  a use that may mean the generic sense goes through the loop instead. Text,
+  case, and comment blocks stay as found.
+- A heading off its siblings' title case, the case fix the errata allowlist
+  covers.
 
 Write every edit to the LANG and REQ rules and the authoring guide (US English,
 one term per concept); a restructuring edit follows the template's order.
@@ -292,13 +296,7 @@ outcome.
 4. Close by pointing the user to `review <srd> check` to reclassify what
    landed.
 
-Start point (path + `#n`): requires an existing `<srd>.review.md` (the SRD's
-path with `.md` replaced: `specs/login.md` → `specs/login.review.md`); if
-absent, say so and stop — one or two lines naming the missing file, nothing
-more. No approval-gate line, draft check, manifest, or way in — not even "run
-`srd:review` first": those report a run that happened, and this one did not.
-Enter at finding `#n` instead of the passes and severity order; after each
-finding, default to the next by number or jump to any number the user names.
+Start point (path + `#n`): see [references/modes.md](references/modes.md).
 
 ### autofix
 

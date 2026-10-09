@@ -1,8 +1,9 @@
 # Mode procedures
 
-The procedures for `polish`, `targeted`, and an interactive start line. Read
-when the run is one of those; the default interactive walk and `feedback` are
-in `SKILL.md`, and `autofix` is in [autofix.md](autofix.md).
+The procedures for `polish`, `targeted`, and the start points (an interactive
+start line, a feedback `#n`). Read when the run is one of those; the default
+interactive walk and `feedback` are in `SKILL.md`, and `autofix` is in
+[autofix.md](autofix.md).
 
 ## interactive start point (path + line)
 
@@ -12,6 +13,16 @@ still go last, those before it are skipped. The walk is still one entry at a
 time and still never looks ahead — step 1's summary is what would have told
 you which later entry has a finding, and skipping it means learning that entry
 by entry, never by scanning forward.
+
+## feedback start point (path + `#n`)
+
+Requires an existing `<srd>.review.md` (the SRD's path with `.md` replaced:
+`specs/login.md` → `specs/login.review.md`); if absent, say so and stop — one
+or two lines naming the missing file, nothing more. No approval-gate line,
+draft check, manifest, or way in — not even "run `srd:review` first": those
+report a run that happened, and this one did not. Enter at finding `#n`
+instead of the passes and severity order; after each finding, default to the
+next by number or jump to any number the user names.
 
 ## polish
 

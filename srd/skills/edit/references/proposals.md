@@ -37,6 +37,9 @@ never needs it.
 - A bulk rename (a case change across defined terms, say) checks each term
   against the glossary that defines it first: a UI component name keeps its
   form.
+- When a fix loosens an exhaustive rule ("exactly", "only") to admit an
+  exception, keep its exclusion half and state the exception inside it; then
+  re-validate what the rule no longer forbids.
 - Pad every Markdown table in a proposal to aligned columns, before-and-after
   tables included; check each row's width before sending.
 

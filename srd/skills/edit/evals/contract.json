@@ -77,7 +77,8 @@
       "must": [
         "if\\ absent,\\ say\\ so\\ and\\ stop",
         "those\\ report\\ a\\ run\\ that\\ happened,\\ and\\ this\\ one\\ did\\ not"
-      ]
+      ],
+      "file": "references/modes.md"
     },
     {
       "id": "scaffolds-not-removed",

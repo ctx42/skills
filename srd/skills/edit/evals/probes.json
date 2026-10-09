@@ -23,7 +23,11 @@
       "prompt": "Situation: the user runs `/edit specs/gw.md #2`. No specs/gw.review.md exists.\n\nQuestion: what do you do? Answer on the first line with exactly one of: STOP-WITH-ONE-OR-TWO-LINES, RUN-REVIEW-FIRST, WALK-INTERACTIVELY-INSTEAD. Then one sentence why.",
       "pass": "^\\W*STOP-WITH-ONE-OR-TWO-LINES",
       "fail": "^\\W*(RUN-REVIEW|WALK)",
-      "class": "redundant"
+      "class": "redundant",
+      "context": [
+        "SKILL.md",
+        "references/modes.md"
+      ]
     },
     {
       "id": "stale-comment-left-alone",
