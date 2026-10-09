@@ -42,8 +42,8 @@ to the file, state its path, and do not paste it back into chat.
   the repo or the user is a gap: ask, and if still unknown mark it. Where it
   gets marked depends on who needs to know:
   - A fact the README *needs* and lacks, where the reader is the one left
-    stuck (the minimum runtime, the published install command) gets a
-    `<!-- TODO: … -->` marker in the file.
+    stuck (the minimum runtime, an install command the repo does not
+    reveal) gets a `<!-- TODO: … -->` marker in the file.
   - A gap in the *repo* rather than the README — no license file, no CI, no
     remote — goes in the reply and nowhere else. A heading whose only body is a
     marker is worse than no heading; `references/template.md` says which
@@ -141,13 +141,12 @@ No edits until the user approves the findings.
 3. Report only. Group findings Blocker / Should-fix / Nit; each names the
    location, the problem in one line, the `references/template.md` rule it
    breaks, and a minimal fix. A gap only the user can close (the minimum
-   runtime, whether the package is published, which remote is real) is a
-   finding like any other, asked in its own line — improve mode has no separate
-   question round. The Go-source gate is the exception, and it is not a
-   question about the README: it comes after approval, immediately before any
-   `.go` file is written, because until the fixes are approved there may be no
-   example to write. End with a one-line verdict; the verdict is the ask, so add
-   no "shall I apply these?" after it.
+   runtime, which remote is real) is a finding like any other, asked in its
+   own line — improve mode has no separate question round. The Go-source gate
+   is the exception, and it is not a question about the README: it comes after
+   approval, immediately before any `.go` file is written, because until the
+   fixes are approved there may be no example to write. End with a one-line
+   verdict; the verdict is the ask, so add no "shall I apply these?" after it.
 
 4. Fix on confirmation. Apply approved findings, then Verify. State what
    changed.
@@ -175,21 +174,13 @@ Dynamic:
       one you did not run. Expect at least one that cannot pass yet — an
       unpublished module, a private host, a package not on a registry. On a
       fresh or private project that is the ordinary case, not a failed run:
-      the command is right and the project has not caught up to it. Which of
-      the two kinds it is decides what happens:
-      - *This environment cannot run it* (toolchain missing, permission denied,
-        no network): the reader is unaffected. Say so in the reply and leave
-        the README alone — never warn the reader about your sandbox.
-      - *It runs and fails for a project reason* (module unpublished, package
-        not on the registry): it will fail for the reader too, so the reader
-        must be told. A `<!-- TODO: … -->` is invisible to them; use a
-        `> [!NOTE]` naming what has to happen first, and a TODO only for the
-        fact you are missing.
-      - *The failure does not say which* — a private host answering "you may
-        not have access, or it no longer exists" is both readings at once.
-        Treat it as the project kind, since a note the reader does not need
-        costs them a sentence and a missing one costs them the install, and
-        say in the reply that the cause was not distinguishable from here.
+      the command is right and the project has not caught up to it, whether
+      it fails for a project reason (module unpublished, package not on the
+      registry) or because this environment cannot run it (toolchain missing,
+      no network). Ship it as if the package were published. Say so in the
+      reply and leave the README alone: no "not published" note, which
+      outlives the release it waits for, and never warn the reader about your
+      sandbox.
 
 ## Self-application
 

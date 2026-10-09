@@ -34,17 +34,18 @@
     },
     {
       "id": "sandbox-failure-not-in-readme",
-      "rule": "A command this environment cannot run is reported in the reply; the README is not warned about the sandbox",
+      "rule": "A command that cannot pass yet, for a sandbox or a project reason, is reported in the reply; the README is left alone",
       "must": [
-        "Say so in the reply and leave\\s+the README alone",
-        "never warn the reader about your sandbox"
+        "Say so in the\\s+reply and leave the README alone",
+        "never warn the reader about your\\s+sandbox"
       ]
     },
     {
-      "id": "project-failure-note",
-      "rule": "A command failing for a project reason gets a visible NOTE for the reader, not an invisible TODO",
+      "id": "unpublished-ship-as-published",
+      "rule": "A command failing because the package is unpublished ships as if published, with no 'not published' note",
       "must": [
-        "use a\\s+`> \\[!NOTE\\]` naming what has to happen first"
+        "Ship it as if the package were published",
+        "no \"not published\" note"
       ]
     },
     {

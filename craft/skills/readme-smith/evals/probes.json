@@ -35,6 +35,14 @@
       "bullets": [
         "gomake-example-injection#b2"
       ]
+    },
+    {
+      "id": "unpublished-install-command",
+      "rule": "unpublished-ship-as-published",
+      "prompt": "Situation: create mode on a Go library whose module path the user confirmed as `github.com/acme/foo`. You ran the install command `go get github.com/acme/foo@latest` and it fails: the module has no tag and is not published yet.\n\nQuestion: what does the README's Installation section ship? Answer on the first line with exactly one of: COMMAND-ONLY, COMMAND-WITH-NOTE, TODO-MARKER. Then one sentence why.",
+      "pass": "^\\W*COMMAND-ONLY\\b",
+      "fail": "^\\W*(COMMAND-WITH-NOTE|TODO-MARKER)",
+      "class": "load-bearing"
     }
   ]
 }

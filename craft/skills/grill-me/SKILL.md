@@ -127,7 +127,8 @@ branch by branch, until you both share one understanding of the subject.
   the shape of what is coming; picking up an interview already under way, it
   is what remains, and the count is owed on that first turn too even though
   the interview did not start there. Then say how much is left as each branch
-  closes.
+  closes, recounting the tally from the branch map every turn — never add to
+  the last count, which drifts once a branch reopens.
 
 - Re-audit on collapse. When an answer overturns an assumption an earlier
   branch was resolved on, that branch reopens — and so does every other one

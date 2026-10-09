@@ -32,7 +32,9 @@ never from conversation context:
   `git rev-parse --verify <tok>^{commit}` and treat any token that resolves as
   the selector. A token that does not resolve is prose, not a failed hash.
 - Otherwise use the staged diff injected below. When it is empty, run
-  `git diff` and derive from the unstaged changes instead.
+  `git diff` and derive from the unstaged changes instead. Confirm the index
+  is empty with `git diff --cached --quiet` before saying nothing is staged:
+  the injected stats carry no label telling index from working tree.
 
 !`git diff --cached --stat; echo; git diff --stat`
 

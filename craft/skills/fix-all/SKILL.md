@@ -68,7 +68,10 @@ For each fix:
 
 1. Make the smallest change that resolves the finding as stated. An edit
    script spanning several files validates every replacement before writing
-   any file, so a failed assertion never leaves a fix half-applied.
+   any file, so a failed assertion never leaves a fix half-applied. Before
+   proving a new test red on the old code, read what the old code does with
+   that input: a test that shells out from the package directory (a runner
+   invoking `go test ./...`) can recurse, so run it in a temp dir.
 2. Check before committing. A fix that turns out to need a contract or compat
    change nobody foresaw is not applied: restore its files, defer it with the
    reason, and go on.
