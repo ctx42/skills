@@ -1,5 +1,14 @@
 # review fix path
 
+## Contents
+
+- Never print diffs of applied fixes
+- Refactors: enumerate before editing
+- Logical bugs: prove before fixing
+- Test gate
+- Big fix jobs: plan, chunk, consult
+- Committing
+
 Read when asked to apply findings, fix, or refactor. Every behavioral code
 change ships with tests in the same change — new behavior gets new tests,
 changed behavior gets updated tests — written to `go:style`'s Test rules
@@ -60,7 +69,14 @@ untested, and say why.
 Run the whole-module suite, not just the changed package:
 
 - Before editing, run `go test ./... -race` for a green baseline. If it is
-  already red, stop and report the pre-existing failures; do not edit.
+  already red, check `git status` first: with any uncommitted change (an
+  edited `go.mod`/`go.sum` is the usual culprit), rerun the baseline on `HEAD`
+  in a clean worktree. Red there, or on a clean tree: stop and report the
+  pre-existing failures; do not edit. Green there: the uncommitted change
+  broke it — say so and proceed: apply the fixes in the working tree as
+  usual, and run every later test gate in that worktree with only the fixes
+  copied in; a commit the user asks for carries only changes that pass
+  there.
 - After editing, run `go test ./... -race` again. The job is not done until it
   passes for the whole module; a failing or unrun suite means not done — never
   report success without it.

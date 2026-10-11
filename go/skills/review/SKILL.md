@@ -156,10 +156,16 @@ delegated coherently. A module of three small packages is `./...` and still not 
   fewer): fan out one review subagent per package, never several packages to
   one worker (each invokes `go:style` on its package for the style offenses
   and reviews correctness itself, with the `depth`), then synthesize one
-  merged report, re-ranking findings to the global `max_issues` cap. Workers
-  get no share of the cap — they report everything they find, and the cap is
-  applied once at the merge, or a package full of nits evicts another
-  package's blocker while the global budget still has room.
+  merged report, re-ranking findings to the global `max_issues` cap. Before
+  dispatch, derive the `go:style` rule-id and tier list once (per
+  `../style/references/checking.md`) and put it in every worker brief; the
+  worker's `go:style` run uses that list, never ids or tiers of its own, which
+  the merge cannot fold. Workers get no share of the cap — they report
+  everything they find, and the cap is applied once at the merge, or a package
+  full of nits evicts another package's blocker while the global budget still
+  has room. At the merge, regrade every correctness Blocker a worker reports
+  against Output's rubric: workers inflate it with a missing test for correct
+  code, cosmetic output, and unreached misuse.
 - If the target is too large, do the highest-risk packages first and name the
   skipped ones in the report; never silently truncate.
 
@@ -186,8 +192,12 @@ Each finding:
   both names both (`correctness`, `wrap-errors-w`), never a paraphrase.
 - A minimal suggested fix, checked to do what it claims: read how a helper
   reports failure (`t.Error` is not fatal) before prescribing a fatal or panic
-  assertion; a tool that does not perform the edit (`go mod tidy` never merges
-  single-line `require` statements) gets a manual fix instead.
+  assertion, and its defaults (environment, working directory, streams)
+  before prescribing it as isolation — a test helper can inherit the same
+  process state; a tool that does not perform the edit (`go mod tidy` never
+  merges single-line `require` statements) gets a manual fix instead. A fix
+  making an operation idempotent covers every write it performs, not only the
+  one that failed loudly.
 
 End with a one-line verdict (ship / fix-first) and the per-severity counts. For
 a module, give the verdict per package plus an overall summary. Report budget

@@ -90,6 +90,24 @@
         "applying findings requires the test gate in `references/fixing.md`",
         "never write a rule without confirmation"
       ]
+    },
+    {
+      "id": "merge-regrade-blocker",
+      "rule": "Fan-out: one rule-id/tier list in every brief; every worker Blocker regraded at the merge",
+      "must": [
+        "derive\\ the\\ `go:style`\\ rule\\-id\\ and\\ tier\\ list\\ once",
+        "regrade\\ every\\ correctness\\ Blocker\\ a\\ worker\\ reports\\ against\\ Output's\\ rubric"
+      ]
+    },
+    {
+      "id": "dirty-manifest-baseline",
+      "file": "references/fixing.md",
+      "rule": "A red baseline with uncommitted go.mod/go.sum is rerun on HEAD in a clean worktree before being called pre-existing",
+      "must": [
+        "with\\ any\\ uncommitted\\ change",
+        "rerun\\ the\\ baseline\\ on\\ `HEAD`\\ in\\ a\\ clean\\ worktree",
+        "apply\\ the\\ fixes\\ in\\ the\\ working\\ tree\\ as\\ usual,\\ and\\ run\\ every\\ later\\ test\\ gate\\ in\\ that\\ worktree"
+      ]
     }
   ]
 }

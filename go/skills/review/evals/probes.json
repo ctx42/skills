@@ -48,6 +48,26 @@
       "pass": "^\\W*BRANCH-DIFF",
       "fail": "^\\W*(NOTHING|LAST-COMMIT|ASK-USER)",
       "class": "load-bearing"
+    },
+    {
+      "id": "merge-regrade-blocker",
+      "rule": "merge-regrade-blocker",
+      "prompt": "Situation: `/review ./...` fanned out over 9 packages, one worker each. All workers have returned, each with its findings already graded Blocker / Should-fix / Nit; together they report 14 correctness Blockers. You are writing the merged report.\n\nQuestion: what do you do with the workers' Blocker grades? Answer on the first line with exactly one of: KEEP-WORKER-GRADES, REGRADE-EACH-BLOCKER. Then one sentence why.",
+      "pass": "^\\W*REGRADE-EACH-BLOCKER",
+      "fail": "^\\W*KEEP-WORKER-GRADES",
+      "class": "load-bearing"
+    },
+    {
+      "id": "dirty-manifest-baseline",
+      "rule": "dirty-manifest-baseline",
+      "context": [
+        "SKILL.md",
+        "references/fixing.md"
+      ],
+      "prompt": "Situation: the user runs `/review ./pkg/foo fix`. Before editing, `go test ./... -race` fails in ./pkg/bar with a missing-module error. `git status` shows go.mod and go.sum modified and uncommitted.\n\nQuestion: what is your next step? Answer on the first line with exactly one of: REPORT-PREEXISTING-AND-STOP, RERUN-HEAD-CLEAN-WORKTREE. Then one sentence why.",
+      "pass": "^\\W*RERUN-HEAD-CLEAN-WORKTREE",
+      "fail": "^\\W*REPORT-PREEXISTING",
+      "class": "load-bearing"
     }
   ]
 }
