@@ -83,7 +83,9 @@ branch by branch, until you both share one understanding of the subject.
 
 ## Rules
 
-- Never assume. If something is ambiguous, ask.
+- Never assume. If something is ambiguous, ask. A count or total you state
+  comes from a command run over the data, never tallied by eye from earlier
+  output.
 
 - One question per turn, in plain prose — not one topic. Sub-questions of the
   same topic are still separate questions: "who writes it, when, on what, and
@@ -102,6 +104,8 @@ branch by branch, until you both share one understanding of the subject.
   would record a choice they never made, so give the options, not a verdict.
   Options and the question that picks between them are one question, not
   several — laying out three readings and asking which holds is a single turn.
+  Before offering an option as the safe alternative, verify in the code that
+  it does not share the risk the question is closing.
 
 - No implementation. Planning only; don't write code.
 

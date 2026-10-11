@@ -132,6 +132,9 @@ review; they see only the diff and the message.
   another package lacks): if the diff does not show it, the message does not
   say it.
 
+- Paraphrase only to the exact meaning: "leave X alone" is not "unset X".
+  Where a synonym would shift what the change does, reuse the diff's wording.
+
 - Prefer concrete symbols and files: `` `ParseConfig` ``, `` `Server.Close` ``,
   not umbrella slogans that hide the actual edits.
 
