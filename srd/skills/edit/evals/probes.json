@@ -60,6 +60,18 @@
       "pass": "^\\W*SRD-KB-REWRITES",
       "fail": "^\\W*(LEAVE|FILE)",
       "class": "redundant"
+    },
+    {
+      "id": "casing-only-declined",
+      "rule": "casing-only-declined",
+      "context": [
+        "SKILL.md",
+        "references/proposals.md"
+      ],
+      "prompt": "Situation: `/edit specs/gw.md feedback`. The next finding in specs/gw.review.md says: \"GR-7 writes 'tag node'; capitalize to the glossary heading 'Tag Node'.\" The use means the defined term.\n\nQuestion: do you propose the capitalization as this finding's edit now? Answer on the first line with exactly one of: PROPOSE-CAPITALIZE, NOT-YET. Then one sentence why.",
+      "pass": "^\\W*NOT-YET",
+      "fail": "^\\W*PROPOSE-CAPITALIZE",
+      "class": "load-bearing"
     }
   ]
 }

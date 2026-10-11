@@ -140,6 +140,16 @@
       "must": [
         "ends\\ with\\ every\\ source\\ line\\ its\\ proposal\\ carried"
       ]
+    },
+    {
+      "id": "casing-only-declined",
+      "file": "references/proposals.md",
+      "rule": "No casing-only change to match a glossary heading when the project's casing rules allow lowercase",
+      "must": [
+        "Never\\ propose\\ a\\ casing\\-only\\ change\\ to\\ make\\ running\\ text\\ match\\ a\\ glossary\\ heading,\\ self\\-found\\ or\\ from\\ a\\ review",
+        "silent\\ or\\ missing\\ rules\\ included\\ —\\ drop\\ it",
+        "skips\\ the\\ loop\\ with\\ no\\ proposal\\ and\\ goes\\ in\\ the\\ manifest\\ as\\ declined"
+      ]
     }
   ]
 }

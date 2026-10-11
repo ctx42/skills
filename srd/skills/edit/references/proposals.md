@@ -37,6 +37,11 @@ never needs it.
 - A bulk rename (a case change across defined terms, say) checks each term
   against the glossary that defines it first: a UI component name keeps its
   form.
+- Never propose a casing-only change to make running text match a glossary
+  heading, self-found or from a review, before checking the project's casing
+  rules. Unless they require the glossary's casing in running text — silent
+  or missing rules included — drop it; a review finding asking for it skips
+  the loop with no proposal and goes in the manifest as declined.
 - When a fix loosens an exhaustive rule ("exactly", "only") to admit an
   exception, keep its exclusion half and state the exception inside it; then
   re-validate what the rule no longer forbids.

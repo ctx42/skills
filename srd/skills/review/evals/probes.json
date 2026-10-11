@@ -60,6 +60,14 @@
       "pass": "SOURCE-LINE[\\s\\S]*Source: Tags › Tag Node Name \\(rank 2, 1 = most trusted\\)",
       "fail": "^\\W*NO-OTHER-LINE",
       "class": "redundant"
+    },
+    {
+      "id": "casing-only-no-finding",
+      "rule": "casing-free-no-finding",
+      "prompt": "Situation: the user asks for a strict terminology pass over specs/gw.md. The SRD's Glossary defines \"Tag Node\" (Title Case heading); GR-7 says \"the tag node MUST be unique\" in lowercase, meaning the defined term. Nothing else about GR-7 is wrong.\n\nQuestion: is GR-7's lowercase \"tag node\" a terminology finding? Answer on the first line with exactly one of: FINDING, NO-FINDING, DEPENDS. Then one sentence on what it depends on, or why.",
+      "pass": "^\\W*(DEPENDS|NO-FINDING)\\b",
+      "fail": "^\\W*FINDING",
+      "class": "load-bearing"
     }
   ]
 }
