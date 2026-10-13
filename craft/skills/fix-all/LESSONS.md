@@ -1,0 +1,2 @@
+- Ask the triage round as one AskUserQuestion call per question, in order, not as one batched text message.
+- In a scripted text edit, assert each replacement changed the text; a pattern spanning a line break that a rewrap moved matches nothing and fails silently.
