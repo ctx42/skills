@@ -92,7 +92,8 @@ source of truth.
 ### craft
 
 - `cm` — Conventional Commit messages with kernel-style bodies, from the diff
-  only.
+  only; `apply` splits the working tree into logical commits, `asis` commits
+  it whole.
 - `grill-me` — relentless planning interview until shared understanding.
 - `plan-smith` — writes and tracks an implementation plan (checkbox items,
   Y/N/X status table).

@@ -2,9 +2,11 @@
 name: cm
 description: >
   Writes and amends git commit messages using Conventional Commits with a Linux
-  kernel-style body. Use when asked to write, amend, or commit a commit
-  message, or to describe or summarize staged changes for the git log.
-argument-hint: "[micro|mini*|full] [apply] [<hash>]"
+  kernel-style body, and commits the working tree as a series of logical
+  commits. Use when asked to write, amend, or commit a commit message, to split
+  changes into logical commits, or to describe or summarize staged changes for
+  the git log.
+argument-hint: "[micro|mini*|full] [apply|asis] [<hash>]"
 license: MIT
 ---
 
@@ -16,8 +18,9 @@ license: MIT
 /cm         mini message from the staged diff (default): summary + one why paragraph, not committed
 /cm micro   summary line only, no body
 /cm full    full multi-paragraph kernel-style body
-/cm apply   generate the message then commit directly, no confirm (combines, e.g. micro apply)
-/cm <hash>  derive the message from that commit's diff instead of the staged diff
+/cm apply   stage the whole working tree, split it into logical commits, commit each, no confirm (combines, e.g. micro apply)
+/cm asis    stage the whole working tree and commit it as one commit, no confirm
+/cm <hash>  derive the message from that commit's diff instead of the staged diff (with apply: amend HEAD's message)
 ```
 
 ## Input
@@ -31,6 +34,8 @@ never from conversation context:
   a tag, and a branch name all name a commit — resolve with
   `git rev-parse --verify <tok>^{commit}` and treat any token that resolves as
   the selector. A token that does not resolve is prose, not a failed hash.
+- `apply` or `asis` without a commit-ish reads the whole working tree, per
+  Commit control below.
 - Otherwise use the staged diff injected below. When it is empty, run
   `git diff` and derive from the unstaged changes instead. Confirm the index
   is empty with `git diff --cached --quiet` before saying nothing is staged:
@@ -56,22 +61,43 @@ Tokens combine (e.g. `micro apply`). Verbosity, mutually exclusive:
 
 Commit control:
 
-- `apply`, or prose such as "and amend it": commit the generated message
-  without asking — `git commit -F -` reading the message on stdin from a
-  heredoc, or `git commit --amend -F -` for a hash invocation — `--only` as
-  well whenever the index is dirty, per Amending below. `-F -` and not
-  a bare `git commit`, which opens an editor and hangs, nor `-m`, which
-  mangles a multi-paragraph body. Print the message and the short hash
-  afterwards: the commit is the payload, and a commit the user cannot see is
-  worse than no commit. Otherwise present the message only and never propose
-  committing or amending, nor say how to ("run `/cm HEAD apply`", "ask me to
-  amend"): naming a commit is not asking to rewrite it, and the user decides
-  when.
-- `apply` without a hash needs something staged. When the diff came from the
-  unstaged fallback there is nothing to commit, and `git commit` would either
-  fail or make an empty commit — so stage nothing on the user's behalf: report
-  the message, say the working tree is unstaged and `apply` did not run, and
-  stop. A hash invocation needs nothing staged (an amend rewrites the
+- `apply` without a commit-ish or amend prose commits the working tree as a
+  series of logical commits, without asking:
+  1. Stage everything with `git add -A` — edits, deletions, untracked files;
+     ignored files stay out — and read it with `git diff --cached`. What was
+     staged before is no hint: regroup from scratch. Nothing to stage: say so,
+     commit nothing, and stop.
+  2. Group by concern: one fix, feature, rename, or config change per commit.
+     Split a file at hunk or line level when it carries more than one.
+  3. Order so every commit compiles on its own, production and test code: a
+     symbol lands with or before its first use, a test with or after the code
+     it calls. Judge it from the diff; never run a build or tests — the user's
+     checks already passed. Merge two groups only when each needs the other.
+     With nothing to compile, group by meaning alone.
+  4. Empty the index (`git reset -q`; `git rm -r -q --cached .` before the
+     first commit), then per group: stage it — whole files with
+     `git add -- <paths>`, part of a file by piping its hunks to
+     `git apply --cached -` — and commit it with a message drafted from that
+     group's staged diff alone, at the chosen verbosity.
+  5. When a commit fails (a hook rejects it), stop: keep the landed commits,
+     leave the failed group staged and the rest unstaged, and report the
+     error, the landed commits, and what remains.
+  6. After the last commit, `git status --porcelain` is empty.
+- `asis` stages everything as `apply` step 1 does and commits it as one
+  commit, without asking and without asking to split it. It takes no
+  commit-ish: given one, say `asis` takes no commit, commit nothing, and stop.
+- Commit with `git commit -F -` reading the message on stdin from a heredoc,
+  or `git commit --amend -F -` for an amend — `--only` as well whenever the
+  index is dirty, per Amending below. `-F -` and not a bare `git commit`,
+  which opens an editor and hangs, nor `-m`, which mangles a multi-paragraph
+  body. Print each message and its short hash afterwards, in commit order: the
+  commit is the payload, and a commit the user cannot see is worse than no
+  commit. Without `apply` or `asis`, present the message only and never
+  propose committing or amending, nor say how to ("run `/cm HEAD apply`", "ask
+  me to amend"): naming a commit is not asking to rewrite it, and the user
+  decides when.
+- `apply` with a commit-ish, or prose such as "and amend it", amends a
+  message without asking. It needs nothing staged (an amend rewrites the
   message), but amends only when the hash resolves to `HEAD`; for any other
   commit, report the message, say `apply` did not run because only `HEAD` can
   be amended, and stop. Prose asking to amend ("and amend it") with no
@@ -83,10 +109,6 @@ Commit control:
   ignored when reading the diff. Check the index first (`git diff --cached
   --quiet`); when it is dirty, amend the message alone with
   `git commit --amend --only`, and say in the reply what stayed staged.
-- The change decides the commit boundary, not the staging split: when `apply`
-  commits a staged diff whose atomic change continues in unstaged files, stage
-  the rest and commit it whole, amending when a partial commit already landed.
-  With nothing staged, the stage-nothing rule above holds.
 - Check the index in the same command as a commit that takes it (not
   `--amend --only`): compare
   `git diff --cached --name-only | LC_ALL=C sort` with the files the message
@@ -100,7 +122,7 @@ Commit control:
 2. Draft the message per the sections below.
 3. Check: summary ≤ 72 chars, body wrapped at 72, no process jargon, no
    trailer beyond the two allowed. Fix and re-check before presenting.
-4. Present it per Output; commit only under `apply`.
+4. Present it per Output; commit only under `apply` or `asis`.
 
 ## Describe changes only
 
@@ -149,7 +171,8 @@ review; they see only the diff and the message.
 - If the diff mixes unrelated edits (e.g. IDE config + library fix), say so
   in the body and ask the user to split it into separate commits — still
   without process jargon. Asking to split is about the change, not a proposal
-  to commit, so it holds with or without `apply`.
+  to commit, so it holds for a staged diff and an amend alike; `apply` splits
+  the diff itself instead, and `asis` commits it whole.
 
 ## Structure
 
@@ -213,10 +236,13 @@ to name, omit the footer; it is not a slot to fill.
 ## Output
 
 Present the full message in a fenced code block with zero leading whitespace
-on every line. Report tersely: no preamble or narration; state each fact once;
+on every line; a series gets one block per commit, each headed by its short
+hash. Report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see. After the block, at most one
 line — why the body was left out, or what to check — never a list of the
-diff's edits: the user has the diff.
+diff's edits: the user has the diff. A series stopped by a failed commit
+adds its report (Commit control, step 5) in full: the error and the files
+that remain, staged and unstaged.
 
 ## Self-learning
 

@@ -3,10 +3,10 @@
   "rules": [
     {
       "id": "no-commit-without-apply",
-      "rule": "Commit only under apply; otherwise present the message and never propose or explain committing",
+      "rule": "Commit only under apply or asis; otherwise present the message and never propose or explain committing",
       "must": [
-        "commit the generated message without asking",
-        "Otherwise present the message only and never propose committing or amending"
+        "commits, without asking",
+        "Without `apply` or `asis`, present the message only and never\\s+propose committing or amending"
       ]
     },
     {
@@ -18,12 +18,39 @@
       ]
     },
     {
-      "id": "apply-needs-staged",
-      "rule": "apply on an unstaged fallback stages nothing, commits nothing, and stops",
+      "id": "apply-stages-all-regroups",
+      "rule": "apply stages the whole working tree, untracked included, and regroups from scratch ignoring prior staging",
       "must": [
-        "`apply` without a hash needs something staged",
-        "so stage nothing on the user's behalf",
-        "say the working tree is unstaged and `apply` did not run, and stop"
+        "Stage everything with `git add -A`",
+        "untracked files",
+        "regroup from scratch"
+      ]
+    },
+    {
+      "id": "split-compiles-no-build",
+      "rule": "Every commit of a split compiles alone, judged from the diff without running a build; dependencies first, merge only on mutual need",
+      "must": [
+        "Order so every commit compiles on its own, production and test code",
+        "never run a build or tests",
+        "Merge two groups only when each needs the other"
+      ]
+    },
+    {
+      "id": "apply-failure-stops",
+      "rule": "A failed commit stops the series, keeps landed commits, leaves the failed group staged",
+      "must": [
+        "keep the landed commits",
+        "leave the failed group staged and the rest unstaged"
+      ]
+    },
+    {
+      "id": "asis-one-commit",
+      "rule": "asis stages everything and makes one commit; with a commit-ish it commits nothing",
+      "must": [
+        "commits it as one\\s+commit",
+        "without asking to split it",
+        "It takes no\\s+commit-ish",
+        "commit nothing, and stop"
       ]
     },
     {
@@ -76,9 +103,9 @@
     },
     {
       "id": "print-after-commit",
-      "rule": "After an applied commit, print the message and short hash",
+      "rule": "After applied commits, print each message and short hash in commit order",
       "must": [
-        "Print the message and the short hash"
+        "Print each message and its short hash afterwards, in commit order"
       ]
     },
     {
@@ -92,7 +119,7 @@
       "id": "amend-head-only",
       "rule": "A hash apply needs nothing staged but amends only HEAD; any other commit stops with apply not run",
       "must": [
-        "A hash invocation needs nothing staged",
+        "It needs nothing staged \\(an amend rewrites the\\s+message\\)",
         "amends only when the hash resolves to `HEAD`",
         "only `HEAD` can\\s+be amended",
         "with no\\s+commit-ish token is the hash invocation `HEAD`"

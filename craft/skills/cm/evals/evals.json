@@ -23,11 +23,11 @@
     },
     {
       "id": 7,
-      "name": "apply-commits-without-confirming",
+      "name": "apply-splits-working-tree",
       "skills": [
         "cm"
       ],
-      "setup": "A staged diff, with a harness attribution instruction active in the session asking for a `Co-Authored-By` trailer.",
+      "setup": "A Go module whose working tree holds three unrelated concerns: in `fetch/fetch.go`, a fix making `Get` reject a non-200 response and, in a separate hunk, a new exported `Head`; a new untracked `cmd/size/main.go` that calls `fetch.Head`; and a typo fix in `README.md`. `README.md` and `fetch/fetch.go` were staged together beforehand. The tree compiles. A harness attribution instruction active in the session asks for a `Co-Authored-By` trailer.",
       "query": "/cm micro apply",
       "files": []
     }

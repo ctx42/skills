@@ -14,6 +14,7 @@
     {"say": "can you write the commit message for what's staged", "want": "craft:cm"},
     {"say": "amend the last commit message", "want": "craft:cm"},
     {"say": "summarize my staged changes for the git log", "want": "craft:cm"},
+    {"say": "split my working tree changes into logical commits", "want": "craft:cm"},
     {"say": "our user manual has contradictions, go through it", "want": "craft:doc-smith"},
     {"say": "proofread docs/install.md", "want": "craft:doc-smith"},
     {"say": "write an operator guide for the ingest service", "want": "craft:doc-smith"},

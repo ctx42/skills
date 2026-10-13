@@ -1,8 +1,8 @@
 ---
-tags: [case:cm--apply-commits-without-confirming, skill:cm, needs-shell, sec:cm:usage, sec:cm:input, sec:cm:arguments, sec:cm:workflow, sec:cm:describe-changes-only, sec:cm:structure, sec:cm:summary-line, sec:cm:body-kernel-style, sec:cm:footers, sec:cm:output]
+tags: [case:cm--apply-splits-working-tree, skill:cm, needs-shell, sec:cm:usage, sec:cm:input, sec:cm:arguments, sec:cm:workflow, sec:cm:describe-changes-only, sec:cm:structure, sec:cm:summary-line, sec:cm:body-kernel-style, sec:cm:footers, sec:cm:output]
 runs: 1
-max_turns: 30
-timeout_seconds: 240
+max_turns: 40
+timeout_seconds: 300
 allowed_tools: [Read, Glob, Grep, Skill, Bash(git:*)]
 append_system_prompt: |
   The user writes English; reply in English.

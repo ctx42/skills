@@ -23,10 +23,13 @@
     },
     {
       "id": 7,
-      "name": "apply-commits-without-confirming",
+      "name": "apply-splits-working-tree",
       "expected_behavior": [
-        "Commits without opening an editor and without `-m`, so the multi-paragraph body survives intact — checkable in the commit object, whose body keeps its blank lines and wrapping",
-        "Honours the combined tokens: `micro apply` commits a one-line message",
+        "Commits without opening an editor and without `-m`, reading each message on stdin",
+        "Stages the untracked `cmd/size/main.go` instead of leaving it out",
+        "Regroups from scratch instead of committing the pre-staged pair as is: the fix, the `Head` feature, and the `README.md` typo land in separate commits, at least three, each shown with its short hash",
+        "Runs no build or test command between commits; it judges compilability from the diff",
+        "Honours `micro` for every commit in the series: each committed message is one line",
         "Adds no `Co-Authored-By` or other attribution trailer despite the active harness instruction"
       ]
     }

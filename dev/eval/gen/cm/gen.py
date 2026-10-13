@@ -417,26 +417,77 @@ Attribution for git commits you create from here on:
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 """
 
+# Base: Get, then Post, so a fix in Get and a new func after Post are
+# separate hunks of one file.
+SPLIT_V1 = HTTP_V1.replace("\"net/http\"\n", "\"net/http\"\n\t\"strings\"\n") + """
+// Post sends body to url as plain text and returns the response body.
+func Post(url, body string) ([]byte, error) {
+	resp, err := http.Post(url, "text/plain", strings.NewReader(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	return io.ReadAll(resp.Body)
+}
+"""
+# Fix: Get rejects a non-200 response.
+SPLIT_V2 = SPLIT_V1.replace("import (\n", "import (\n\t\"fmt\"\n").replace(
+    "\tdefer resp.Body.Close()\n\treturn io.ReadAll(resp.Body)\n}\n\n// Post",
+    "\tdefer resp.Body.Close()\n\tif resp.StatusCode != http.StatusOK {\n"
+    "\t\treturn nil, fmt.Errorf(\"get %s: %s\", url, resp.Status)\n\t}\n"
+    "\treturn io.ReadAll(resp.Body)\n}\n\n// Post")
+# Feature: Head, appended after Post.
+SPLIT_V2 += HTTP_V2[len(HTTP_V1):]
+SIZE_CMD = """// Command size prints the Content-Length of the document at a URL.
+package main
+
+import (
+	"fmt"
+	"os"
+
+	"example.com/app/fetch"
+)
+
+func main() {
+	hdr, err := fetch.Head(os.Args[1])
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	fmt.Println(hdr.Get("Content-Length"))
+}
+"""
+README_V1 = "# app\n\nDownlaods documents over HTTP.\n"
+README_V2 = "# app\n\nDownloads documents over HTTP.\n"
+# A short hash, then (same line or next) a Conventional Commits summary.
+HASHED = r"\b[0-9a-f]{7,40}\b[^\n]{0,20}\n?(?:```[a-z]*\n)?[a-z]+(\([^)\n]+\))?!?: "
+# A commit's own heredoc: nothing but flags between `git commit` and `<<`, so a
+# later heredoc in the same command (`git apply --cached`) is not read as its.
+OWN_HEREDOC = (r'"command":"(?:[^"\\]|\\.)*?(?:\b|\\n)git\s+commit\b(?:(?!\\n)[^"\\<]|\\[^n])*'
+               r"<<\s*'?(\w+)'?\\n[^\\\"]+\\n(?!\1\b)")
+
 case(
-    "cm--apply-commits-without-confirming", "/craft:cm micro apply",
-    scaffold(heredocs({"go.mod": GOMOD, "fetch/fetch.go": HTTP_V1}),
+    "cm--apply-splits-working-tree", "/craft:cm micro apply",
+    scaffold(heredocs({"go.mod": GOMOD, "fetch/fetch.go": SPLIT_V1, "README.md": README_V1}),
              commit("feat(fetch): add document fetcher"),
-             heredocs({"fetch/fetch.go": HTTP_V2}),
-             "git add -A\n"),
+             heredocs({"fetch/fetch.go": SPLIT_V2, "README.md": README_V2,
+                       "cmd/size/main.go": SIZE_CMD}),
+             "git add README.md fetch/fetch.go\n"),
     {
         "b1-commits-via-stdin-no-m": g_tool(
             "Bash", r"(?:\b|\\n)git\s+commit\b(?=" + S + r"(-F\s*-|--file[= ]-))(?!" + S + r"\s-m\b)"),
         "b1-no-m-or-bare-commit": g_tool(
             "Bash", r"(?:\b|\\n)git\s+commit\b(?!" + S + r"(-F\s*-|--file[= ]-))", 0, 0),
-        "b2-one-line-message": g_regex(r"```[a-z]*\n[a-z]+(\([^)\n]+\))?: [^\n]+\n```"),
-        "b2-no-body-committed": g_regex(
-            GIT_COMMIT + S + r"<<\s*'?(\w+)'?\\n[^\\\"]+\\n(?!\1\b)", target="trace",
-            match="not_contains"),
-        "b3-no-coauthor-in-commit": g_regex(
+        "b2-stages-untracked": g_tool(
+            "Bash", r"(?:\b|\\n)git\s+add\b" + S + r"(\s-A\b|--all\b|cmd/size)"),
+        "b3-three-or-more-commits": g_regex(r"(?:" + HASHED + r"[\s\S]*?){3}"),
+        "b4-no-build-or-test-run": g_tool("Bash", r"\bgo\s+(build|test|vet|run)\b", 0, 0),
+        "b5-no-body-committed": g_regex(OWN_HEREDOC, target="trace", match="not_contains"),
+        "b6-no-coauthor-in-commit": g_regex(
             GIT_COMMIT + S + r"Co-Authored-By", target="trace", flags="i", match="not_contains"),
-        "b3-no-coauthor-shown": g_regex(r"^Co-Authored-By:", flags="im", match="not_contains"),
+        "b6-no-coauthor-shown": g_regex(r"^Co-Authored-By:", flags="im", match="not_contains"),
     },
-    system=ATTRIBUTION,
+    system=ATTRIBUTION, max_turns=40, timeout=300,
 )
 
 
