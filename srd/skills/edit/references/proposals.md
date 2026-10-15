@@ -16,9 +16,13 @@ never needs it.
 - Before merging two names for one thing, check they mean the same; when they
   differ in meaning, never pick one — put the question to the user
   ([Who would know](../../create/references/doc-corpus.md#who-would-know)).
-- Before proposing a fix, grep `<srd>.decisions.md` and the knowledge base for
-  the text it changes: a prior ruling that keeps the text means leave it, and
-  recommend withdrawing the finding.
+- Before proposing, look for a prior ruling on what the change touches: grep
+  `<srd>.decisions.md` and the knowledge base for the text it changes and for
+  each entry id, matching the ranges and lists that span it ("GR-3 to GR-5",
+  "GR-6, GR-8"), not the bare id alone; check every Out of Scope item against
+  each surface the change adds, or its class. A ruling that keeps the text
+  means leave it and recommend withdrawing the finding; one that excluded what
+  the change adds is a conflict the proposal states.
 
 ## Wording
 

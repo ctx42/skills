@@ -150,7 +150,8 @@ mid-session costs the user's trust in the whole list.
 Every mode but `autofix` runs this loop per change:
 
 1. Propose exactly one change: its location, the problem (cite the rule id), the
-   before and after text, and a one-line rationale. Never invent a figure
+   before text quoted verbatim from the file, the after text built from that
+   quote, and a one-line rationale. Never invent a figure
    neither the SRD nor the user gives: the after text holds a placeholder
    (`[TBD: lockout minutes]` — never `<…>`, which Markdown renderers read as an
    HTML tag). Fix only what the finding names, with the smallest wording change

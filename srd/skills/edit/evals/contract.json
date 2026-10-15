@@ -160,12 +160,29 @@
       ]
     },
     {
+      "id": "before-text-verbatim",
+      "rule": "A proposal's before text is a verbatim quote and the after text is built from it",
+      "must": [
+        "before\\ text\\ quoted\\ verbatim\\ from\\ the\\ file,\\ the\\ after\\ text\\ built\\ from\\ that\\ quote"
+      ]
+    },
+    {
       "id": "bare-id-walks",
       "file": "references/modes.md",
       "rule": "A bare requirement or scope id starts the interactive walk; a bare glossary term and an id with a change run targeted",
       "must": [
         "A\\ bare\\ requirement\\ or\\ scope\\ id\\ is\\ an\\ interactive\\ start\\ point\\ instead",
         "a\\ bare\\ glossary\\ term\\ stays\\ targeted"
+      ]
+    },
+    {
+      "id": "prior-ruling-check",
+      "file": "references/proposals.md",
+      "rule": "Before proposing, grep the decision log and KB for the text and ids including spanning ranges, and check Out of Scope",
+      "must": [
+        "matching\\ the\\ ranges\\ and\\ lists\\ that\\ span\\ it",
+        "check\\ every\\ Out\\ of\\ Scope\\ item\\ against\\ each\\ surface\\ the\\ change\\ adds",
+        "one\\ that\\ excluded\\ what\\ the\\ change\\ adds\\ is\\ a\\ conflict\\ the\\ proposal\\ states"
       ]
     },
     {
