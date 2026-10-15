@@ -104,6 +104,14 @@
       "pass": "^\\W*HEAD-COMMIT",
       "fail": "^\\W*STAGED",
       "class": "load-bearing"
+    },
+    {
+      "id": "partial-stage-keeps-context",
+      "rule": "no-zero-context-hunks",
+      "prompt": "Situation: the user ran `/cm apply`. `src/server.go` carries two concerns: a timeout fix in its first hunk and an unrelated rename in its third; the second hunk is a pure insertion belonging to the rename. You will commit the timeout fix first.\n\nQuestion: how do you build what you stage for that first commit? Answer on the first line with exactly one of: U0-HUNKS-VIA-UNIDIFF-ZERO, CONTEXT-HUNKS-OR-WRITTEN-BLOB, WHOLE-FILE. Then one sentence why.",
+      "pass": "^\\W*CONTEXT-HUNKS",
+      "fail": "^\\W*(U0|WHOLE)",
+      "class": "load-bearing"
     }
   ]
 }

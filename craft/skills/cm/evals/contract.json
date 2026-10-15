@@ -146,6 +146,27 @@
       "must": [
         "Say what the diff does, never what it avoids"
       ]
+    },
+    {
+      "id": "no-zero-context-hunks",
+      "rule": "Partial staging uses hunks with context or a written blob, never zero-context hunks",
+      "must": [
+        "never\\ zero\\-context\\ hunks\\ \\(`\\-U0`,\\ `\\-\\-unidiff\\-zero`\\)"
+      ]
+    },
+    {
+      "id": "expected-list-before-staging",
+      "rule": "The expected path list for the index check is fixed before staging",
+      "must": [
+        "Fix\\ that\\ expected\\ list\\ before\\ staging"
+      ]
+    },
+    {
+      "id": "universal-claim-scope",
+      "rule": "Universal or negative claims are scoped to what the code does after the change, unchanged paths included",
+      "must": [
+        "Scope\\ every\\ universal\\ or\\ negative\\ claim"
+      ]
     }
   ]
 }

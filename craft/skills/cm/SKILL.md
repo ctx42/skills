@@ -76,8 +76,11 @@ Commit control:
      With nothing to compile, group by meaning alone.
   4. Empty the index (`git reset -q`; `git rm -r -q --cached .` before the
      first commit), then per group: stage it — whole files with
-     `git add -- <paths>`, part of a file by piping its hunks to
-     `git apply --cached -` — and commit it with a message drafted from that
+     `git add -- <paths>`, part of a file by piping hunks that carry context
+     to `git apply --cached -` or by writing the intended blob
+     (`git hash-object -w`, `git update-index --cacheinfo`); never zero-context
+     hunks (`-U0`, `--unidiff-zero`), which land on the wrong line once an
+     earlier hunk is skipped — and commit it with a message drafted from that
      group's staged diff alone, at the chosen verbosity.
   5. When a commit fails (a hook rejects it), stop: keep the landed commits,
      leave the failed group staged and the rest unstaged, and report the
@@ -113,8 +116,10 @@ Commit control:
   `--amend --only`): compare
   `git diff --cached --name-only | LC_ALL=C sort` with the files the message
   was drafted from and abort on mismatch (`LC_ALL=C` keeps locale collation
-  from faking one). A printed stat is not a check — files staged earlier or in
-  between ride into a commit whose message never names them.
+  from faking one). Fix that expected list before staging: a
+  working-tree-versus-index query run after `git add` comes back empty. A
+  printed stat is not a check — files staged earlier or in between ride into a
+  commit whose message never names them.
 
 ## Workflow
 
@@ -153,6 +158,12 @@ review; they see only the diff and the message.
   to Y also replaced …") and no conversation facts, even true ones (what
   another package lacks): if the diff does not show it, the message does not
   say it.
+
+- Scope every universal or negative claim ("any X", "no longer Y") to what
+  the code does after the change, not to the changed lines alone: read the
+  unchanged paths around them — earlier cases of the same switch, other inputs
+  that still supply the property — and narrow the claim to what they leave
+  true.
 
 - Paraphrase only to the exact meaning: "leave X alone" is not "unset X".
   Where a synonym would shift what the change does, reuse the diff's wording.
