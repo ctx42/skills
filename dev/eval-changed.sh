@@ -196,7 +196,7 @@ changed_lines() { # file -> changed line numbers in the current version
 map_skill_md() { # group skill file
     local g="$1" s="$2" f="$3" n heading
     while read -r n; do
-        heading="$(head -n "$n" "$f" | grep -E '^## ' | tail -1 | sed 's/^## //')"
+        heading="$(head -n "$n" "$f" | { grep -E '^## ' || true; } | tail -1 | sed 's/^## //')"
         if [ -z "$heading" ]; then add "$g" "skill:$s"
         else add "$g" "sec:$s:$(printf '%s' "$heading" | slug)"; fi
     done < <(changed_lines "$f")
