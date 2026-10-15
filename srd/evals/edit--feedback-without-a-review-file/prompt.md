@@ -1,5 +1,5 @@
 ---
-tags: [case:edit--feedback-without-a-review-file, skill:edit, sec:edit:usage, sec:edit:boundaries, sec:edit:sources-of-truth, sec:edit:session-start-every-mode, sec:edit:edit-discipline, sec:edit:modes, sec:edit:session-end-every-mode, sec:edit:self-learning, ref:create/project-config, ref:create/doc-corpus, ref:create/authoring-guide, ref:review/review-file]
+tags: [case:edit--feedback-without-a-review-file, skill:edit, sec:edit:usage, sec:edit:boundaries, sec:edit:sources-of-truth, sec:edit:session-start-every-mode, sec:edit:edit-discipline, sec:edit:modes, sec:edit:session-end-every-mode, sec:edit:self-learning, ref:create/project-config, ref:create/doc-corpus, ref:create/authoring-guide, ref:review/review-file, ref:edit/modes]
 runs: 1
 max_turns: 20
 timeout_seconds: 300

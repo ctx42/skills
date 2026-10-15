@@ -19,8 +19,8 @@
         "report-doc-gap",
         "kb"
       ],
-      "setup": "The user wants `GR-2` to say the gateway retries a failed token check three times; the retry count appears in no document. The user approves the proposal with `YN`.",
-      "query": "/edit specs/login.md GR-2",
+      "setup": "The user asks for `GR-2` to say the gateway retries a failed token check three times; the retry count appears in no document. The user approves the proposal with `YN`.",
+      "query": "/edit specs/login.md GR-2 the gateway retries a failed token check three times, that is what it does today; make GR-2 say so",
       "files": []
     },
     {

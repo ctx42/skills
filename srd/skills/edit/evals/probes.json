@@ -72,6 +72,26 @@
       "pass": "^\\W*NOT-YET",
       "fail": "^\\W*PROPOSE-CAPITALIZE",
       "class": "load-bearing"
+    },
+    {
+      "id": "path-only-loads-and-waits",
+      "rule": "load-default",
+      "prompt": "Situation: the user runs `/edit specs/gw.md` with nothing after the path. specs/gw.md is IN PROGRESS; reading it you noticed GR-4 says the gateway answers \"fast\", an untestable adjective. No review file exists.\n\nQuestion: what does your reply contain? Answer on the first line with exactly one of: ONE-LINE-STATUS-THEN-WAIT, ISSUE-SUMMARY, PROPOSAL-FOR-GR-4, ASK-WHICH-MODE. Then one sentence why.",
+      "pass": "^\\W*ONE-LINE-STATUS",
+      "fail": "^\\W*(ISSUE|PROPOSAL|ASK)",
+      "class": "redundant"
+    },
+    {
+      "id": "bare-id-starts-walk",
+      "rule": "bare-id-walks",
+      "context": [
+        "SKILL.md",
+        "references/modes.md"
+      ],
+      "prompt": "Situation: the user runs `/edit specs/gw.md GR-4` and nothing else. specs/gw.md is IN PROGRESS and has GR-1 to GR-9, and GR-6 has an issue.\n\nQuestion: once GR-4 is resolved, does the run go on to GR-5 and later entries? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "load-bearing"
     }
   ]
 }

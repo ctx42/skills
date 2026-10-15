@@ -358,23 +358,32 @@ s11 = srd(groups=[("Gateway Rules", [
     ("GR-2", "The API Gateway retries a failed token check against the identity service before it rejects the API request."),
     GR[2]]),
     ("Account Lockout", LCK)])
-write_case("edit--corpus-grounded-edit-routes-the-unconfirmable",
-           DLOG + ["sec:edit:documentation-corpus", "ref:edit/corpus-edits", "skill:report-doc-gap", "skill:kb"],
-           "/srd:edit specs/login.md GR-2",
+# The proposal is a pause, which scripted runs answer silently: the gate ends
+# there and grades it; the full case grades what follows the user's YN.
+CG_TAGS = DLOG + ["ref:edit/modes", "sec:edit:documentation-corpus", "ref:edit/corpus-edits",
+                  "skill:report-doc-gap", "skill:kb"]
+CG_QUERY = ("/srd:edit specs/login.md GR-2 the gateway retries a failed token check three "
+            "times, that is what it does today; make GR-2 say so")
+write_case("edit--corpus-grounded-edit-routes-the-unconfirmable--gate", CG_TAGS, CG_QUERY,
+           {"specs/login.md": s11},
+           {
+               "b1-search-before-proposal": g_used("mcp__srd__search", None, 1),
+               "b1-no-edit-before-key": g_never("Edit", LOGIN_EDIT),
+               "b2-no-gap-question": g_last(r"(gap|backlog|documentation)[^.?!]{0,200}\?", "i", "not_contains"),
+               "b3-fact-in-proposal": g_last(r"(three|\b3\b)[\s\S]*(Skip|\*\*S\*\*)"),
+               "b4-no-bank-question": g_last(r"(\bbank\b|(add|record|save|write|capture|keep) (this|it|that|these)[^.?!]{0,60}(knowledge base|\bkb\b|inbox))[^.?!]*\?", "i", "not_contains"),
+           }, max_turns=30)
+write_case("edit--corpus-grounded-edit-routes-the-unconfirmable", CG_TAGS, CG_QUERY,
            {"specs/login.md": s11},
            {
                "b1-search-before-edit": g_order("mcp__srd__search", None, "Edit", LOGIN_EDIT),
                "b1-gap-names-queries": g_used("mcp__srd__report_gap", '"search_terms":\\["', 1),
                "b2-gap-is-draft": g_used("mcp__srd__report_gap", '"draft":true', 1),
-               "b2-no-interruption": g_trace(r"User: \\?\"?The gateway retries(?:(?!User: )[\s\S])*?(gap|backlog|documentation)[^\"]{0,300}\?(?:(?!User: )[\s\S])*?User: \\?\"?YN", None, "not_contains"),
-               "b3-fact-in-proposal": g_trace(TXT + r"(three|\b3\b)(?:[^\"\\\\]|\\\\.)*(Skip|\*\*S\*\*)[\s\S]*" + edit_old("retr")),
-               "b4-no-bank-question": g_trace(r"\{\"type\":\"assistant\"[^\n]*\"type\":\"text\",\"text\":\"[^\n]*(\bbank\b|(add|record|save|write|capture|keep) (this|it|that|these)[^.?!\\]{0,60}(knowledge base|\bkb\b|inbox))[^.?!\\]*\?", "i", "not_contains"),
                "b5-kb-invoked": g_used("Skill", '"skill":"srd:kb"', 1),
                "b5-gap-skill-invoked": g_used("Skill", '"skill":"srd:report-doc-gap"', 1),
                "b5-fact-in-kb": g_file("kb/_inbox.md", r"(three|\b3\b)[\s\S]{0,80}retr|retr[\s\S]{0,80}(three|\b3\b)", "i"),
            },
-           ["If the skill asks what to change in GR-2, or proposes GR-2 with a placeholder for the retry count: \"The gateway retries a failed token check three times — that is what it does today. Make GR-2 say so.\"",
-            "To a proposal for GR-2 that states three retries: \"YN\".",
+           ["To a proposal for GR-2 that states three retries: \"YN\".",
             "To an offer to file or work documentation gaps: \"File it.\"",
             "Anything else: \"That's all — close the session.\""])
 
@@ -401,7 +410,7 @@ s19 = srd(groups=[("Gateway Rules", [
     ("GR-2", "The system MUST validate the Login Token quickly."),
     ("GR-3", "The system must reject an API request whose Login Token signature is invalid with HTTP status 401.")]),
     ("Account Lockout", LCK)])
-write_case("edit--feedback-without-a-review-file", REVIEW, "/srd:edit specs/login.md #2",
+write_case("edit--feedback-without-a-review-file", REVIEW + ["ref:edit/modes"], "/srd:edit specs/login.md #2",
            {"specs/login.md": s19},
            {
                "b1-names-missing-file": g_last(r"login\.review\.md"),

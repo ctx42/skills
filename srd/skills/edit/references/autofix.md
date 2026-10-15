@@ -68,6 +68,9 @@ touches ids.
    leaves other findings untouched. Hand off by naming that exact command for
    the user to run: `edit` never invokes `review`, which owns the review file.
    Skip the hand-off if nothing landed.
-8. The closing manifest names the findings handed to `check` — not what `check`
-   then did with them, which happens after this run ends — and every finding
-   skipped as stale, ambiguous, or malformed.
+8. Session end (`SKILL.md`) runs without its step 1 (surface-only fixes) and
+   invokes no delegate in its step 2 (autofix attests no fact and captures no
+   gap; a prior session's drafts were checked at session start). Its step 3
+   manifest is owed like every mode's, and also names the findings handed to
+   `check` — not what `check` then did with them, which happens after this run
+   ends — and every finding skipped as stale, ambiguous, or malformed.

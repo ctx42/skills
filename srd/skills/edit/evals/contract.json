@@ -150,6 +150,32 @@
         "silent\\ or\\ missing\\ rules\\ included\\ —\\ drop\\ it",
         "skips\\ the\\ loop\\ with\\ no\\ proposal\\ and\\ goes\\ in\\ the\\ manifest\\ as\\ declined"
       ]
+    },
+    {
+      "id": "load-default",
+      "rule": "The path alone loads the SRD and waits for prompts; it finds and proposes nothing",
+      "must": [
+        "the\\ SRD\\ path\\ only\\ →\\ load",
+        "find\\ and\\ propose\\ nothing"
+      ]
+    },
+    {
+      "id": "bare-id-walks",
+      "file": "references/modes.md",
+      "rule": "A bare requirement or scope id starts the interactive walk; a bare glossary term and an id with a change run targeted",
+      "must": [
+        "A\\ bare\\ requirement\\ or\\ scope\\ id\\ is\\ an\\ interactive\\ start\\ point\\ instead",
+        "a\\ bare\\ glossary\\ term\\ stays\\ targeted"
+      ]
+    },
+    {
+      "id": "targeted-proposes-first",
+      "file": "references/modes.md",
+      "rule": "A targeted change the user named is written out as a proposal and the turn ends before anything is applied",
+      "must": [
+        "write\\ it\\ out\\ in\\ full\\ with\\ its\\ keys\\ and\\ end\\ the\\ turn\\ there",
+        "naming\\ a\\ change\\ is\\ not\\ approving\\ its\\ wording"
+      ]
     }
   ]
 }

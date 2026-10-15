@@ -3,9 +3,9 @@ name: edit
 description: >
   Improves an existing Software Requirement Document (SRD) by editing it in
   place against the SRD standard. Use when asked to edit, improve, fix,
-  revise, or clean up an SRD, or to apply findings from a review file or
-  pasted feedback.
-argument-hint: "<path to SRD> [<review-file> | #n | <line> | autofix | polish | <target>]"
+  revise, or clean up an SRD, to open one for editing, or to apply findings
+  from a review file or pasted feedback.
+argument-hint: "<path to SRD> [walk | <line> | <id> | <review-file> | #n | autofix | polish | <target>]"
 license: MIT
 ---
 
@@ -14,13 +14,15 @@ license: MIT
 ## Usage
 
 ```
-/edit <srd>                  interactive (default): front-load issues, then walk entry by entry
+/edit <srd>                  load (default): read the SRD, its decision log and review, then wait for edit prompts
+/edit <srd> walk             interactive: front-load issues, then walk entry by entry
 /edit <srd> 123              interactive from line 123: resolve to the nearest entry, walk from there
+/edit <srd> MAP-5            interactive from MAP-5: walk from that requirement or scope entry
 /edit <srd> <srd>.review.md  feedback: apply a review file or pasted feedback, Scope last, blocker → major → minor
 /edit <srd> #2               feedback from finding #2, then next by number or jump to any number
 /edit <srd> autofix          bulk-apply the review's ## Errata block behind one confirmation
 /edit <srd> polish           mechanical-only cleanup (spelling, numbering, keywords), confirm each
-/edit <srd> GR-3a            targeted: edit one entry by id, quoted text, or description
+/edit <srd> GR-3a <change>   targeted: edit one entry by id plus the change, quoted text, or description
 ```
 
 Drive an existing SRD toward the SRD standard by editing the source in place.
@@ -34,12 +36,9 @@ never edits metadata (Owners, Initiative, Designs), sets back-links, or changes
 `Status`; it flags those gaps (STR-2/3/5/7, STA-*). A finding outside that
 mandate is reported as the author's to fix, not looped — even when the run
 entered at it: a feedback run starting at a metadata `#2` says so and advances
-to `#3`. An explicit `#n`
-sets the order for the rest of the run: walk ascending from `n` to the end,
-then come back for the lowest still open; a jump re-anchors the walk the same
-way. It never proposes a Status
-transition (flag only a malformed `STA-*` value) and never proposes pushing,
-publishing, or syncing the SRD as a follow-up. Comment blocks are read-only:
+to `#3`. It never proposes a Status transition (flag only a malformed `STA-*`
+value) and never proposes pushing, publishing, or syncing the SRD as a
+follow-up. Comment blocks are read-only:
 a source of information about the SRD, never edited, answered, or rewritten,
 even when they hold stale references, unless the user explicitly asks to
 resolve one. Back-links (STR-4/6) are
@@ -74,8 +73,8 @@ is missing at run time, stop and tell the user.**
 - [references/proposals.md](references/proposals.md) (on-demand: the
   interactive summary or first proposal) — what counts as a finding and how a
   fix is worded.
-- [references/modes.md](references/modes.md) (on-demand: `polish`,
-  `targeted`, a start line or `#n`) — those procedures.
+- [references/modes.md](references/modes.md) (on-demand: `feedback`,
+  `polish`, `targeted`, a start line or id) — those procedures.
 - [../review/references/review-file.md](../review/references/review-file.md)
   (on-demand: feedback, autofix) — how `<srd>.review.md` is numbered, cited and
   laid out. Never infer the shape.
@@ -103,7 +102,8 @@ proposal. Run the project gate first
 ([../create/references/project-config.md](../create/references/project-config.md)),
 then resolve the mode ([Modes](#modes)): one that cannot run — `#n` or
 `autofix` with no `<srd>.review.md` — says so and stops before step 1: a run
-that will do nothing has nothing to read or check.
+that will do nothing has nothing to read or check. `load` runs the gate and
+its own reads ([load](#load-default)), nothing below.
 Otherwise three steps, no questions of its own.
 
 1. Read the whole SRD top to bottom — every mode, however narrow the target: a
@@ -249,23 +249,44 @@ on your own.
 
 ## Modes
 
-The first token is the SRD path; the next selects the mode, interactive when
-omitted. With no arguments, ask which SRD to edit.
+The first token is the SRD path; the next selects the mode, load when omitted.
+With no arguments, ask which SRD to edit.
 
 Prose after the path is feedback when it is a list of findings, targeted when
 it names one entry and what to do to it ("fix the vague 'fast' requirement").
 A single pasted finding is both: take it as targeted, which walks one entry
 with a confirmation and expects no review file.
 
-- the SRD path only → interactive.
+- the SRD path only → load.
+- path + `walk` → interactive.
 - path + a bare integer → interactive from that line.
+- path + a bare requirement or scope id, no change named → interactive from
+  that entry: a walk to the end, not a one-entry edit.
 - path + a `.review.md` path, or pasted feedback → feedback.
 - path + `#n` → feedback from finding `#n`.
 - path + `autofix` → autofix.
 - path + `polish` → polish.
-- path + anything else (id, quoted text, description) → targeted.
+- path + anything else (an id plus a change, a glossary term, quoted
+  text, description) → targeted.
 
-### interactive (default)
+### load (default)
+
+Open the SRD for the user's own edit prompts; find and propose nothing.
+
+1. Read the whole SRD, `<srd>.decisions.md` and `<srd>.review.md`, each when
+   present — nothing else: no draft check, standard, glossary, reference file,
+   or corpus lookup.
+2. Reply in one line — the SRD, its `Status` (approved or in-progress), the
+   open review findings by number, the open comment blocks by entry id — then
+   wait. No issue summary, finding, or proposal.
+3. Run each later prompt as the mode it would select after the path (an entry
+   and a change → targeted, a list of findings → feedback, `walk` →
+   interactive), reusing these reads; session-start steps not yet run land
+   before its first proposal.
+4. Session end runs once, when the user says they are done — never after each
+   prompt, targeted included.
+
+### interactive (`walk`)
 
 1. Front-load a grouped issue summary — every issue found, grouped by document
    section (Metadata, Introduction, Glossary, Scope, Requirements), each citing
@@ -278,25 +299,8 @@ with a confirmation and expects no review file.
    is resolved or skipped. An entry with no finding resolves on sight: say so
    and move on — nothing was proposed, so no key is owed.
 
-Start point (path + line): see [references/modes.md](references/modes.md).
-
-### feedback
-
-Apply findings from a review; the review file stays untouched regardless of
-outcome.
-
-1. Input is a `<srd>.review.md` path or feedback pasted inline (email, ticket,
-   chat); parse the findings from either.
-2. Work findings in two passes: every section but Scope, then Scope, which
-   derives from the settled requirements (SCO-2/3).
-   Within each pass, severity order — blocker → major → minor — using the
-   review's tags and numbers; judge untagged pasted feedback from the rule.
-3. Run the loop per finding; reference findings by number in the closing
-   manifest.
-4. Close by pointing the user to `review <srd> check` to reclassify what
-   landed.
-
-Start point (path + `#n`): see [references/modes.md](references/modes.md).
+Start point (path + line or id): see
+[references/modes.md](references/modes.md).
 
 ### autofix
 
@@ -305,10 +309,11 @@ confirmation — never the edit loop, never a re-scan of the SRD. The full
 procedure is in [references/autofix.md](references/autofix.md) *(on-demand:
 this mode only)*: read it before applying anything.
 
-### polish, targeted
+### feedback, polish, targeted
 
-Mechanical-only cleanup, or one entry the user points to: read
-[references/modes.md](references/modes.md) before the first proposal.
+Findings from a review or pasted feedback, mechanical-only cleanup, or one
+entry the user points to with the change wanted: read [references/modes.md](references/modes.md)
+before the first proposal.
 
 ## Session end (every mode)
 
@@ -338,11 +343,8 @@ Mechanical-only cleanup, or one entry the user points to: read
      whether the glossary resolved — a check that found nothing otherwise looks
      like one that never ran.
 
-`autofix`'s exceptions are listed here and nowhere else: it skips step 1
-(surface-only fixes) and invokes no delegate in step 2 (it attests no fact and
-captures no gap; a prior session's drafts were checked at session start). It
-owes step 3's manifest like every mode, plus what
-[references/autofix.md](references/autofix.md) step 8 adds.
+`autofix` owes this section only as
+[references/autofix.md](references/autofix.md) step 8 states.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. Every count in the manifest — requirements
