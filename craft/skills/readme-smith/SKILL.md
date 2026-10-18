@@ -165,7 +165,8 @@ Navigation, Style rules, Excluded sections), then:
 - [ ] Every gap the README needs is a `<!-- TODO: … -->` marker, not a guessed
       command, version, or number; every claim it cannot support is gone.
 - [ ] Prose is wrapped and tables padded to the repo's `[*.md] max_line_length`
-      (80 when unset), counted in characters, not bytes: an em dash is one
+      (80 when unset), every padded table row within it too (size cells
+      before writing), counted in characters, not bytes: an em dash is one
       column, so byte-based length checks over-report.
 
 Dynamic:

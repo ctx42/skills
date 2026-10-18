@@ -49,12 +49,13 @@ something no finding names. No findings in the conversation: say so and stop.
 4. Note the working tree. A fix whose files hold uncommitted changes the
    findings did not make is a question too: commit them in with the fix, or
    skip the fix — a file is staged whole, never by hunk.
-5. Ask the round: one message, every contract, compat, and needs-user finding
-   plus any baseline or dirty-tree question, numbered, each with the
-   situation, the options, and your recommendation in plain terms. Nothing
-   to ask: say "no questions; working unattended" and go on in the same turn.
-   Wait for the answers. Unanswered takes the safe side: the finding is
-   skipped, a baseline failure counts as known.
+5. Ask the round: every contract, compat, and needs-user finding plus any
+   baseline or dirty-tree question, in order, one question per question-tool
+   call (one numbered message without such a tool), each with the situation,
+   the options, and your recommendation in plain terms. Nothing to ask: say
+   "no questions; working unattended" and go on in the same turn. Ask every
+   one and wait for the answers. Each left unanswered takes the safe side: the
+   finding is skipped, a baseline failure counts as known.
 
 From here on, never ask: not to confirm a fix, not to commit, not to continue.
 
@@ -67,9 +68,11 @@ spans two unless its parts stand alone.
 For each fix:
 
 1. Make the smallest change that resolves the finding as stated. An edit
-   script spanning several files validates every replacement before writing
-   any file and holds its intermediate text in memory, never in a temp file
-   beside the sources, so a failed assertion leaves the tree untouched. An
+   script asserts every replacement changed the text — a pattern that
+   matches nothing fails silently — and, spanning several files, validates
+   every replacement before writing any file and holds its intermediate text
+   in memory, never in a temp file beside the sources, so a failed assertion
+   leaves the tree untouched. An
    edit to hard-wrapped Markdown rewraps the whole paragraph it touches,
    never splitting an inline code span across lines. Before proving a new
    test red on the old code, read what the old code does with that input: a

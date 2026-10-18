@@ -167,6 +167,22 @@
       "must": [
         "Scope\\ every\\ universal\\ or\\ negative\\ claim"
       ]
+    },
+    {
+      "id": "check-before-commit",
+      "rule": "Measure widths and reread every sentence before any commit runs",
+      "must": [
+        "before presenting it and before its commit runs",
+        "measured, not eyeballed",
+        "sentence parsing on one read"
+      ]
+    },
+    {
+      "id": "heredoc-commit-alone",
+      "rule": "Each heredoc-fed commit is its own shell command",
+      "must": [
+        "each commit its own shell command with nothing chained after the heredoc opener"
+      ]
     }
   ]
 }

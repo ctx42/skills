@@ -28,7 +28,9 @@ branch by branch, until you both share one understanding of the subject.
    topic another skill hands over, such as a documentation gap), else the plan
    the user has described in the conversation so far.
 
-2. Map the decision tree — every branch. For a build plan: architecture, data
+2. Map the decision tree — every branch the requested change touches;
+   behavior it leaves alone stays off the map unless the change forces it.
+   For a build plan: architecture, data
    model, UX, edge cases, deployment, external deps. For a topic to document:
    the claim itself, its boundaries and exceptions, the context a reader needs,
    terms and synonyms. Those are two worked examples, not the two cases: for

@@ -77,6 +77,13 @@
         "Offer to persist — on yes, invoke `craft:plan-smith` in write mode",
         "When another skill invoked this one on a subject, skip the offer"
       ]
+    },
+    {
+      "id": "map-requested-change-only",
+      "rule": "The branch map covers only what the requested change touches",
+      "must": [
+        "every branch the requested change touches"
+      ]
     }
   ]
 }

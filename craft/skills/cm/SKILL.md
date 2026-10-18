@@ -81,7 +81,8 @@ Commit control:
      (`git hash-object -w`, `git update-index --cacheinfo`); never zero-context
      hunks (`-U0`, `--unidiff-zero`), which land on the wrong line once an
      earlier hunk is skipped — and commit it with a message drafted from that
-     group's staged diff alone, at the chosen verbosity.
+     group's staged diff alone, at the chosen verbosity, its body never
+     describing what another commit in the series carries.
   5. When a commit fails (a hook rejects it), stop: keep the landed commits,
      leave the failed group staged and the rest unstaged, and report the
      error, the landed commits, and what remains.
@@ -90,8 +91,9 @@ Commit control:
   commit, without asking and without asking to split it. It takes no
   commit-ish: given one, say `asis` takes no commit, commit nothing, and stop.
 - Commit with `git commit -F -` reading the message on stdin from a heredoc,
-  or `git commit --amend -F -` for an amend — `--only` as well whenever the
-  index is dirty, per Amending below. `-F -` and not a bare `git commit`,
+  each commit its own shell command with nothing chained after the heredoc
+  opener, or `git commit --amend -F -` for an amend — `--only` as well
+  whenever the index is dirty, per Amending below. `-F -` and not a bare `git commit`,
   which opens an editor and hangs, nor `-m`, which mangles a multi-paragraph
   body. Print each message and its short hash afterwards, in commit order: the
   commit is the payload, and a commit the user cannot see is worse than no
@@ -125,8 +127,11 @@ Commit control:
 
 1. Pick the diff source and verbosity from Input and Arguments.
 2. Draft the message per the sections below.
-3. Check: summary ≤ 72 chars, body wrapped at 72, no process jargon, no
-   trailer beyond the two allowed. Fix and re-check before presenting.
+3. Check each message before presenting it and before its commit runs:
+   summary ≤ 72 chars, body wrapped at 72 (measured, not eyeballed), every
+   sentence parsing on one read — no dangling opener, no clause stranded on a
+   preposition — no process jargon, no trailer beyond the two allowed. Fix and
+   re-check.
 4. Present it per Output; commit only under `apply` or `asis`.
 
 ## Describe changes only
