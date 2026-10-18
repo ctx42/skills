@@ -20,8 +20,9 @@ touches ids.
    in
    [../../create/references/errata.md](../../create/references/errata.md)
    states as an exact substitution — literal (`` `old` → `new` ``) or coded (a
-   whitespace/glyph class plus a neighboring word; derive the canonical fix
-   from the class). A finding with neither shape is not appliable: exclude it,
+   whitespace/glyph class plus a neighboring word, or a divider's heading plus
+   `(missing)` → `---` or `---` → `(none)`; derive the canonical fix from the
+   class). A finding with neither shape is not appliable: exclude it,
    report it as malformed, and tell the user to re-run `review <srd> errata`.
    A finding's number is the review file's global `#n`, kept when `review`
    moved it under `## Errata` — never its position in that block, so `#7` stays
@@ -48,7 +49,8 @@ touches ids.
    Verify those by the class: find the neighbouring word inside the anchor,
    confirm the named defect is present beside it exactly once, and apply the
    canonical fix for that class. Absent or ambiguous behaves as above.
-   A missing-notice finding (`old` is `(missing)`, per `errata.md`) has
+   A missing-notice finding (`old` is `(missing)` and `new` the notice, per
+   `errata.md`) has
    nothing to count in an anchor: count keyword notices in the whole SRD.
    Zero → insert `new` directly below the metadata block, after a TOC macro or
    block that follows the table; one or more → stale, as above.
@@ -56,6 +58,11 @@ touches ids.
    anchor, nowhere earlier in the document, and linked nowhere later; then
    wrap that one occurrence in the link `glossary_terms` gives. Otherwise
    stale.
+   A divider finding (`new` or `old` is `---`) is verified just above its
+   heading, outside the heading's range (or at the document's end for
+   `(end of document)`): blank lines aside, an insertion needs no `---` line
+   there, a removal exactly one; insert or delete that one line, adding a blank
+   line on any side that lacks one. Otherwise stale.
    A multi-site finding is verified per site and applies only where it
    matches; report each site that did not. Never substitute by whole-document
    search-and-replace; never widen beyond the quoted `old`.

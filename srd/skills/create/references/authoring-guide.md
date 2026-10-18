@@ -17,6 +17,12 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
 
 ## House additions to the rules
 
+The fetched standard outranks this list: where it states a rule a house
+addition also states, apply its wording and cite its id (`SRD:STR-15`), never
+`SRD:house`; the house addition supplies only what the standard leaves out, and
+every `SRD:house` below applies only when the standard has no such rule. Casing
+rules the standard states count as the project's casing rules.
+
 - Write SRDs in US English: `color`, `behavior`, `standardize`,
   `analyze`, `center` — not `colour`, `behaviour`, `standardise`. The self-check
   flags British spellings. (This governs the SRD artifact only.)
@@ -34,7 +40,8 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   synonyms for the same thing (e.g. `MFA` / `2FA` / `two-factor`); pick one and
   define it once. This is the one definition of terminology drift — the
   consistency pass and the defect class below both spot it, neither redefines
-  it, and a finding against it cites this house addition (`SRD:house`).
+  it, and a finding against it cites the standard's one-term rule, else this
+  house addition (`SRD:house`).
   Qualify overloaded terms ("tag", "metadata", "header", "channel") with what
   they belong to ("a sound file's `sen.kind` metadata tag"); terseness never
   excuses a term that resolves differently in another document.
@@ -46,7 +53,7 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
 - Requirement-group dividers: under Requirements, put a `---` line before every
   group heading and one after the last group, a blank line on each side (else
   the line above turns into a heading); use `---` nowhere else in the body.
-  A missing divider is a finding (`SRD:house`).
+  A missing divider is a finding.
 - Link, do not restate: when a requirement would repeat rules an authoritative
   platform document defines, link that document and state only the SRD-level
   constraint.
@@ -86,7 +93,7 @@ authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
   overview readable on its own; it never cites a requirement id, of this SRD or
   another, nor rests on another SRD's content ("changes covered by INT-491").
   Name the change itself; a related initiative's link goes in Related Materials.
-  A violation is a finding (`SRD:house`).
+  A violation is a finding.
 - In Scope MAY be deferred: In Scope items derive from the requirements
   (SCO-2), so an SRD MAY leave `### In Scope` holding a single `--- TODO ---`
   marker line while the requirements are still in flux. While the marker stands,

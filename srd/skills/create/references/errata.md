@@ -7,6 +7,12 @@ Because nobody reviews the fixes individually, the class is drawn to make a
 false positive impossible rather than unlikely. Classify against the gate,
 the allowlist, and the exclusions below, never by feel.
 
+## Contents
+
+- The gate
+- Allowlist
+- Exclusions
+
 ## The gate
 
 A finding is errata **only if** its fix can be stated as an exact literal
@@ -40,7 +46,8 @@ Nothing outside this list is errata.
   `standardised → standardized`, `cancelled → canceled`, and `dialogue →
   dialog` for a UI element.
 - Whitespace: trailing spaces; two consecutive spaces where one belongs; a
-  space trapped inside a bold identifier.
+  space trapped inside a bold identifier; a space directly inside an opening or
+  closing quotation mark.
 - Glyph: a curly quote closing with the wrong direction; a hyphen where a
   parenthetical dash belongs; a stray backslash or other leftover markup glyph.
 - Emphasis markers: unbalanced or stray `**`; bold leaking into the middle of a
@@ -83,24 +90,56 @@ Nothing outside this list is errata.
   `glossary_terms` fixes it. State it as "link *term* to its Company Glossary
   entry" plus the anchor id holding the first use; `edit` derives the link, and
   the text and its case stay as found. Errata only when the term occurs nowhere
-  before that anchor in any sense, linked or not, no later use carries the
-  link, the site means the defined term beyond doubt, and the term is no proper
-  name (GLO-6); otherwise an ordinary finding. Cite `(SRD:GLO-4)`.
+  before that anchor in any sense or form (plural, case), linked or not, no
+  later use carries the link, the site means the defined term beyond doubt,
+  and the term is no proper name (GLO-6); otherwise an ordinary finding. Cite
+  `(SRD:GLO-4)`. A finding anchored past the term's first use qualifies once
+  re-anchored there: the same defect, its site corrected.
+- A dead same-document anchor: a link whose `#anchor` matches no heading of the
+  document, when exactly one heading is its evident target — it shares the
+  anchor's distinctive words and no other heading does. `#old` → that
+  heading's anchor, in the form the document's working links use; every site
+  named. It keeps its `[major, reference]` tag and its `(SRD:ref …)` citation.
+- A requirement-group divider (authoring guide): a missing `---` before a
+  group heading under Requirements or after the last group, or a stray `---`
+  elsewhere in the body. Coded: `(missing)` → `---` or `---` → `(none)`, a
+  blank line kept on each side, anchored to the verbatim heading directly
+  below the line (blank lines aside), or `(end of document)` when no heading
+  follows the last group; a stray `---` with no heading directly below it is
+  an ordinary finding. Never a front-matter fence or a line inside a code
+  block or callout. One finding per direction, each heading one of its sites,
+  as the gate's repeated-fix rule allows. Cite the standard's divider rule,
+  else `(SRD:house)`.
+- Running-text casing the project's casing rules fix: a term those rules write
+  lowercase in running text, capitalized mid-sentence (`Project` → `project`).
+  Errata only when the rules lowercase it whatever its sense, so no site needs
+  judgment; never at a sentence start, in a heading, glossary entry heading,
+  quoted UI string, code span, or anchor. Every site named with its count.
+  Cite the standard's casing rule, else `(SRD:house)`.
+
+The GLO-4 link and casing entries are `[minor]` and `terminology`: a missing
+link or a case slip is cosmetic, never the terminology drift `major` covers. A
+divider is `[minor, format]`: markup, not a missing part, even when the
+standard files its rule under `STR`.
 
 ## Exclusions
 
 These stay out of `## Errata` even when a literal substitution exists:
 
 - Text inside a code span, a URL, a quoted UI string, or a product, device, or
-  proper name. The "misspelling" may be the real spelling.
+  proper name. The "misspelling" may be the real spelling. A space directly
+  inside a quotation mark is not inside the string: the Whitespace entry
+  admits it. A same-document `#anchor` is not a URL: the dead-anchor entry
+  admits it.
 - Inserting or deleting a content word (noun, verb, adjective) or any normative
   keyword.
 - Any change to a requirement identifier: its spelling, number, prefix, or
   order.
 - Subject, voice, or mood: passive → active, or "the user interface MUST" →
   "the system MUST" (LANG-1). These are rewrites, not surface form.
-- Capitalizing a term to its glossary form. Whether the site means the defined
-  term or the generic sense is author judgment, not surface form.
+- Capitalizing a term to its glossary form, or lowercasing one the project's
+  casing rules do not lowercase in every sense. Whether the site means the
+  defined term or the generic sense is author judgment, not surface form.
 - Line wrapping or reflow.
 - Any case with two plausible corrections, or where the intended word is
   genuinely in doubt. Classify conservatively: when in doubt, not errata.

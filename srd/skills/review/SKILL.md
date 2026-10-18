@@ -165,11 +165,12 @@ entry leads and the lower becomes the second tag:
 `reference` covers a wrong pointer or fact, `terminology` a diverging word
 choice: an SRD that renames an existing platform concept is `terminology`.
 Category is orthogonal to `## Errata`: an errata finding is `format` or
-`linguistic` — or `structure` for the STR-8 notice, the one boilerplate the
-allowlist admits — but not every `format` or `linguistic` finding is errata. A
-normative keyword in the Introduction is `coverage` when its sentence states a
-rule, `linguistic` (LANG-3) when it does not. A duplicate id's fix in an
-`ACCEPTED` SRD gives the later item a fresh id and renumbers nothing (STA-7).
+`linguistic` — `structure` for the STR-8 notice, `terminology` for a GLO-4 link
+or casing fix, `reference` for a dead anchor — yet not every such finding is
+errata. A normative keyword in the Introduction is `coverage` when its sentence
+states a rule, `linguistic` (LANG-3) when it does not. A duplicate id's fix in
+an `ACCEPTED` SRD gives the later item a fresh id and renumbers nothing
+(STA-7).
 
 ## Modes
 
@@ -306,7 +307,7 @@ It still edits only the review file.
 1. Test each open finding against the gate and allowlist in
    [../create/references/errata.md](../create/references/errata.md). One that
    qualifies and is not yet under `## Errata` moves there keeping its number,
-   `[minor]` tag, category, and citation; create the section at the top if
+   severity, category, and citation; create the section at the top if
    absent. Classify conservatively: leave ambiguous findings where they are. A
    qualifying finding written as prose ("fix the spelling") is rewritten into
    the substitution shape as it moves. One finding naming several different

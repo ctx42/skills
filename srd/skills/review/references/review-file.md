@@ -46,11 +46,13 @@ Close each finding with its rule-id citation namespaced `SRD:` — `(SRD:REQ-1)`
 standard fetched through the server (e.g. a defunct `MD-*`). A consistency-pass
 finding cites `(SRD:consistency)` and sits under the section where the conflict
 surfaces; a house-addition finding (US English, draft scaffolds, terminology
-drift) cites `(SRD:house)`. When both could fit — the consistency pass surfaced
-it, a house addition defines it — cite the house addition: the rule that
-defines the defect outranks the pass that spotted it, so terminology drift is
-always `(SRD:house)`. A `reference` finding cites its evidence in the same slot
-and the same shape, the document's `id` as identity —
+drift) cites the fetched standard's id when the standard states that rule —
+check it before citing — else `(SRD:house)` (authoring guide). When both could
+fit — the consistency pass surfaced it, a house addition defines it — cite the
+house addition's citation: the rule that defines the defect outranks the pass
+that spotted it, so terminology drift never cites `(SRD:consistency)`. A
+`reference` finding cites its evidence in the same slot and the same shape, the
+document's `id` as identity —
 `(SRD:ref 1774485611#tag-names)` for a corpus contradiction,
 `(SRD:ref kb/x.md#heading)` for a KB one (its fix offers both ways out: align
 the SRD, or confirm the SRD's fact so the KB changes),
@@ -85,16 +87,21 @@ In order:
    literal heading `## Errata` is the anchor `edit autofix` locates; never
    rename it. Errata findings keep their global number, category, and citation,
    and carry the severity the rule gives them — usually `[minor]`, but the
-   allowlist admits the STR-8 keyword notice, whose severity is blocker. The
+   allowlist admits the STR-8 keyword notice, whose severity is blocker, and a
+   dead anchor, which stays `major` like every `reference` finding. The
    class decides whether a finding can be bulk-applied; it does not decide how
    bad the finding is, and a blocker filed as `[minor]` because of where it sits
    would drop out of the count that gates the Quality Bar. Each states its fix
    as the exact substitution the class requires — literal `` `old` → `new` ``,
    or for whitespace and glyph classes the class plus a neighboring word
    (`autofix` derives the fix), or for a missing STR-8 notice
-   `` `(missing)` → `` the full notice — and a substitution repeated across
-   sites lists every site so `autofix` can verify the count. Two different
-   substitutions are two findings. Omit the section when empty.
+   `` `(missing)` → `` the full notice, or for a requirement-group divider
+   (`[minor, format]`, never `structure`: markup, even under an `STR` rule)
+   the heading plus
+   `` `(missing)` → `---` `` or `` `---` → `(none)` `` — and a
+   substitution repeated across sites lists every site so `autofix` can verify
+   the count. Two different substitutions are two findings. Omit the section
+   when empty.
 2. Open findings, grouped by document section: Metadata, Introduction,
    Glossary, Scope, Requirements. Omit a section with no open findings. An
    errata finding lives in `## Errata`, never also under its document section.
