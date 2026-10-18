@@ -112,6 +112,14 @@
       "pass": "^\\W*CONTEXT-HUNKS",
       "fail": "^\\W*(U0|WHOLE)",
       "class": "load-bearing"
+    },
+    {
+      "id": "index-check-literal",
+      "rule": "permission-readable-commands",
+      "prompt": "Situation: the user ran `/cm apply`. The next group is the whole of `api.go` and `api_test.go`; its message is drafted and the index is empty.\n\nQuestion: which command stages, checks, and commits it? Answer on the first line with exactly one of: SUBSTITUTION-TEST (`test \"$(git diff --cached --name-only | sort)\" = ...`), PATHSPEC-CHECK (`git add -- api.go api_test.go && git diff --cached --quiet -- . ':!api.go' ':!api_test.go' && git commit -F -`), TEMPFILE-DIFF (write the expected list to a file under `/tmp` and `diff` it). Then one sentence why.",
+      "pass": "^\\W*PATHSPEC",
+      "fail": "^\\W*(SUBST|TEMP)",
+      "class": "load-bearing"
     }
   ]
 }

@@ -183,6 +183,16 @@
       "must": [
         "each commit its own shell command with nothing chained after the heredoc opener"
       ]
+    },
+    {
+      "id": "permission-readable-commands",
+      "rule": "Commands are literal: no shell variables, substitutions, or temp files",
+      "must": [
+        "Write every command so the permission check can read it",
+        "no shell variables, no `\\$\\(…\\)` or `<\\(…\\)`, no `\\{ … \\}` group",
+        "no\\s+heredoc but the commit message",
+        "feed\\s+content on stdin instead"
+      ]
     }
   ]
 }

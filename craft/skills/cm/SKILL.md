@@ -75,14 +75,21 @@ Commit control:
      checks already passed. Merge two groups only when each needs the other.
      With nothing to compile, group by meaning alone.
   4. Empty the index (`git reset -q`; `git rm -r -q --cached .` before the
-     first commit), then per group: stage it — whole files with
-     `git add -- <paths>`, part of a file by piping hunks that carry context
-     to `git apply --cached -` or by writing the intended blob
-     (`git hash-object -w`, `git update-index --cacheinfo`); never zero-context
-     hunks (`-U0`, `--unidiff-zero`), which land on the wrong line once an
-     earlier hunk is skipped — and commit it with a message drafted from that
-     group's staged diff alone, at the chosen verbosity, its body never
-     describing what another commit in the series carries.
+     first commit), then per group stage, check, and commit in one command;
+     a part of a file is staged in its own command just before. Stage whole
+     files with `git add -- <paths>`; part of a file with
+     `printf 'y\nn\n' | git add -p -- <path>`, one answer per hunk of
+     `git diff -- <path>` in order, or, when two concerns share a hunk or the
+     file is new (`git add -p` offers it no hunks), by piping the intended
+     content (`sed -n '1,32p' <path>`) to `git hash-object -w --stdin` and
+     passing the printed sha to
+     `git update-index --add --cacheinfo <mode>,<sha>,<path>` (mode from
+     `git ls-files -s`, `100644` for a new file) in the next command; never
+     zero-context hunks (`-U0`, `--unidiff-zero`), which land on the wrong
+     line once an earlier hunk is skipped. Draft the message from that group's
+     diff alone — the hunks step 1 read, never re-read in full — at the chosen
+     verbosity, its body never describing what another commit in the series
+     carries.
   5. When a commit fails (a hook rejects it), stop: keep the landed commits,
      leave the failed group staged and the rest unstaged, and report the
      error, the landed commits, and what remains.
@@ -92,15 +99,15 @@ Commit control:
   commit-ish: given one, say `asis` takes no commit, commit nothing, and stop.
 - Commit with `git commit -F -` reading the message on stdin from a heredoc,
   each commit its own shell command with nothing chained after the heredoc
-  opener, or `git commit --amend -F -` for an amend — `--only` as well
-  whenever the index is dirty, per Amending below. `-F -` and not a bare `git commit`,
+  opener, or `git commit --amend -F -` for an amend — `--only` as well whenever
+  the index is dirty, per Amending below. `-F -` and not a bare `git commit`,
   which opens an editor and hangs, nor `-m`, which mangles a multi-paragraph
   body. Print each message and its short hash afterwards, in commit order: the
   commit is the payload, and a commit the user cannot see is worse than no
-  commit. Without `apply` or `asis`, present the message only and never
-  propose committing or amending, nor say how to ("run `/cm HEAD apply`", "ask
-  me to amend"): naming a commit is not asking to rewrite it, and the user
-  decides when.
+  commit. Without `apply` or `asis`, present the message only and never propose
+  committing or amending, nor say how to ("run `/cm HEAD apply`", "ask me to
+  amend"): naming a commit is not asking to rewrite it, and the user decides
+  when.
 - `apply` with a commit-ish, or prose such as "and amend it", amends a
   message without asking. It needs nothing staged (an amend rewrites the
   message), but amends only when the hash resolves to `HEAD`; for any other
@@ -115,13 +122,26 @@ Commit control:
   --quiet`); when it is dirty, amend the message alone with
   `git commit --amend --only`, and say in the reply what stayed staged.
 - Check the index in the same command as a commit that takes it (not
-  `--amend --only`): compare
-  `git diff --cached --name-only | LC_ALL=C sort` with the files the message
-  was drafted from and abort on mismatch (`LC_ALL=C` keeps locale collation
-  from faking one). Fix that expected list before staging: a
-  working-tree-versus-index query run after `git add` comes back empty. A
-  printed stat is not a check — files staged earlier or in between ride into a
-  commit whose message never names them.
+  `--amend --only`): the commit runs only when nothing is staged outside the
+  files the message was drafted from — each one excluded by pathspec:
+
+  ```bash
+  git add -- a b && git diff --cached --quiet -- . ':!a' ':!b' && git commit -F - <<'EOF'
+  ```
+
+  The `git add` names only the group's whole files, and is dropped when it
+  has none; the exclusions name every file of the group, a partly staged one
+  included.
+
+  Fix that expected list before staging: a working-tree-versus-index query
+  run after `git add` comes back empty. A printed stat is not a check — files
+  staged earlier or in between ride into a commit whose message never names
+  them.
+- Write every command so the permission check can read it: literal
+  arguments, no shell variables, no `$(…)` or `<(…)`, no `{ … }` group, no
+  heredoc but the commit message (code in one trips the check), and no temp
+  files — outside the working tree or under `.git/` they are refused; feed
+  content on stdin instead. A refused command costs a turn and a retry.
 
 ## Workflow
 
