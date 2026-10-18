@@ -123,6 +123,13 @@
         "Casing\\ drift\\ is\\ a\\ finding\\ only\\ where\\ the\\ project's\\ casing\\ rules\\ fix\\ running\\-text\\ casing",
         "a\\ casing\\-only\\ difference\\ is\\ no\\ finding"
       ]
+    },
+    {
+      "id": "one-by-one-to-edit",
+      "rule": "Acting on findings one by one hands off to srd:edit feedback mode",
+      "must": [
+        "one by one through `srd:edit` feedback mode — never a loop improvised here"
+      ]
     }
   ]
 }

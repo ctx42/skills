@@ -51,6 +51,8 @@ never needs it.
   re-validate what the rule no longer forbids.
 - Pad every Markdown table in a proposal to aligned columns, before-and-after
   tables included; check each row's width before sending.
+- Proposals asked for to paste elsewhere carry only the before and after text:
+  no rationale, headers, framing, or follow-up notes.
 
 ## Resolving a comment block
 

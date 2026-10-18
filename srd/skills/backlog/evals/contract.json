@@ -189,6 +189,15 @@
         "keep\\ `answer:\\ deferred`\\ gaps\\ with\\ a\\ non\\-empty\\ `ask`",
         "a\\ draft\\ is\\ never\\ asked"
       ]
+    },
+    {
+      "id": "question-context-first",
+      "rule": "Each question on a gap opens with its context; text for others stands alone",
+      "must": [
+        "Each question to the user on a gap opens with its context",
+        "earlier answers verbatim with who gave them",
+        "stands alone: plain terms, an example, nothing they cannot open"
+      ]
     }
   ]
 }

@@ -193,6 +193,14 @@
         "write\\ it\\ out\\ in\\ full\\ with\\ its\\ keys\\ and\\ end\\ the\\ turn\\ there",
         "naming\\ a\\ change\\ is\\ not\\ approving\\ its\\ wording"
       ]
+    },
+    {
+      "id": "paste-only-proposals",
+      "file": "references/proposals.md",
+      "rule": "Proposals for pasting carry only before and after text",
+      "must": [
+        "Proposals asked for to paste elsewhere carry only the before and after text"
+      ]
     }
   ]
 }

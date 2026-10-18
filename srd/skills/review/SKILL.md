@@ -28,7 +28,8 @@ without editing it.
 ## Boundaries
 
 - Role: the read-only reviewer of an SRD written by someone else. Produce
-  findings; the author acts on them.
+  findings; the author acts on them, one by one through `srd:edit` feedback
+  mode — never a loop improvised here.
 - Owns: the `<srd>.review.md` file beside the source — its creation,
   structure, numbering, and lifecycle — in every mode. No other skill writes
   it; `edit` never touches it.
@@ -202,8 +203,7 @@ line says what the re-sort did, not what the file now holds, and the two answer
 different questions.
 
 Count those from the finished file, not from memory of writing it: a wrong
-tally sends the author to the wrong findings, and it is the one number nobody
-re-derives.
+tally sends the author to the wrong findings.
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
 
@@ -212,7 +212,7 @@ don't restate output the user can already see.
 The layout, the global numbering, the citation form, and the section order
 live in [references/review-file.md](references/review-file.md) — read it
 before writing or updating a review file. Every mode that writes one needs it
-in full, so it is not summarized here.
+in full.
 
 ## review (default)
 

@@ -41,6 +41,11 @@ The lists are not interchangeable: a deferred gap closes by asking, an unknown
 by a decision or a finding, a plain gap by authorship. Never draft a page for a
 fact nobody has given.
 
+Each question to the user on a gap opens with its context: what the SRD needs,
+what the corpus says, earlier answers verbatim with who gave them. Text for
+others — a draft, a message, a note — stands alone: plain terms, an example,
+nothing they cannot open.
+
 ## Boundaries
 
 - Role: the consumer end of every backlog — list, triage, extract, close.
@@ -204,8 +209,7 @@ Only the user closes an unknown. You may read the corpus — an unknown that
 turns out to be documented is worth knowing — but a hit is evidence to put in
 front of them, never a closure. It is either about a different question, or the
 very thing that should have closed this gap long ago, and only they can say
-which. Reading one as the answer is how an unknown gets closed with a guess
-wearing a source. Bring the hit, name what it does and does not settle, and let
+which. Bring the hit, name what it does and does not settle, and let
 them decide.
 
 For each unknown gap:
@@ -240,9 +244,8 @@ Get each gap's fact into a corpus section, then record the section on the gap.
    cluster now (step 6), with no draft.
 4. Extract what the section must state. A record says what is missing, not what
    is true — but some were grilled at depth when filed and already carry
-   knowledge in `detail` and `target_claim` (`srd:report-doc-gap` calls that a
-   heavy grill). Spot them by a populated `target_claim`, read those first as a
-   starting point, not gospel.
+   knowledge in `detail` and `target_claim`. Spot them by a populated
+   `target_claim`, read those first as a starting point, not gospel.
    Run `craft:grill-me` on the cluster to fill what the record leaves open,
    never re-asking what it answers. Do not draft from guesses: every sentence
    of the draft is something the user confirmed or the corpus states — a
@@ -345,13 +348,11 @@ Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. Counts and what closed are enough — never
 re-print a drafted page or the gaps just changed.
 
-Name `srd:kb` as the writer whenever a page changed, as a count
-per delegate: this skill writes nothing under the `kb` folder, and a report
-that says "closed two" without saying who wrote them reads as though it did.
-Never say what the answers were or where they landed, in any shape — the user
-gave them minutes ago. Wrong: `srd:kb saved 2 answers (3.4 V threshold, 6-hour
-uploads)`, or "the threshold (3.4 V) is now on `kb/logger.md`". Right:
-`srd:kb: 2 answers`.
+Name `srd:kb` as the writer whenever a page changed, as a count per delegate:
+this skill writes nothing under the `kb` folder. Never say what the answers
+were or where they landed, in any shape. Wrong: `srd:kb saved 2 answers (3.4 V
+threshold, 6-hour uploads)`, or "the threshold (3.4 V) is now on
+`kb/logger.md`". Right: `srd:kb: 2 answers`.
 
 "What closed" is said once per sitting, in the closing line — not again as each
 list finishes, and not restated in two shapes ("`gap-0010`, `gap-0015`
