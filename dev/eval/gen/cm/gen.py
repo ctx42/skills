@@ -463,8 +463,11 @@ README_V2 = "# app\n\nDownloads documents over HTTP.\n"
 HASHED = r"\b[0-9a-f]{7,40}\b[^\n]{0,20}\n?(?:```[a-z]*\n)?[a-z]+(\([^)\n]+\))?!?: "
 # A commit's own heredoc: nothing but flags between `git commit` and `<<`, so a
 # later heredoc in the same command (`git apply --cached`) is not read as its.
+# After the summary line only the terminator or a blank line opening a footer
+# may follow: `BREAKING CHANGE:` and `Refs:` are footers, not body, at any
+# verbosity.
 OWN_HEREDOC = (r'"command":"(?:[^"\\]|\\.)*?(?:\b|\\n)git\s+commit\b(?:(?!\\n)[^"\\<]|\\[^n])*'
-               r"<<\s*'?(\w+)'?\\n[^\\\"]+\\n(?!\1\b)")
+               r"<<\s*'?(\w+)'?\\n[^\\\"]+\\n(?!\1\b|\\n(?:BREAKING CHANGE|Refs): )")
 
 case(
     "cm--apply-splits-working-tree", "/craft:cm micro apply",
