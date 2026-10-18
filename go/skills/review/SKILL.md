@@ -165,7 +165,8 @@ delegated coherently. A module of three small packages is `./...` and still not 
   full of nits evicts another package's blocker while the global budget still
   has room. At the merge, regrade every correctness Blocker a worker reports
   against Output's rubric: workers inflate it with a missing test for correct
-  code, cosmetic output, and unreached misuse.
+  code, cosmetic output, and unreached misuse. Check every worker's
+  `file:line` against the file before it enters the report.
 - If the target is too large, do the highest-risk packages first and name the
   skipped ones in the report; never silently truncate.
 

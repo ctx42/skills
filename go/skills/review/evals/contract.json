@@ -108,6 +108,13 @@
         "rerun\\ the\\ baseline\\ on\\ `HEAD`\\ in\\ a\\ clean\\ worktree",
         "apply\\ the\\ fixes\\ in\\ the\\ working\\ tree\\ as\\ usual,\\ and\\ run\\ every\\ later\\ test\\ gate\\ in\\ that\\ worktree"
       ]
+    },
+    {
+      "id": "verify-merged-file-line",
+      "rule": "Every worker-reported file:line is checked against the file at the merge",
+      "must": [
+        "Check every worker's `file:line` against the file before it enters the report"
+      ]
     }
   ]
 }

@@ -1,1 +1,0 @@
-- In a fan-out brief, require each file read with its own line numbering (never `cat -n` over concatenated files), and check every merged `file:line` against the file before reporting it.
