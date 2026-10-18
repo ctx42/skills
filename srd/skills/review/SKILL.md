@@ -199,8 +199,7 @@ open findings and whether a blocker stands between the SRD and the Quality Bar.
 The findings live in the file the user is pointed to: the reply never lists
 them — one per line, by group, or in a table — nor quotes their trigger text.
 `errata` is a file-writing run and owes it too: its own "which numbers moved"
-line says what the re-sort did, not what the file now holds, and the two answer
-different questions.
+line says what the re-sort did, not what the file now holds.
 
 Count those from the finished file, not from memory of writing it: a wrong
 tally sends the author to the wrong findings.
@@ -237,10 +236,10 @@ in full.
    a pass that resolves nothing and appends nothing writes nothing.
 5. Close with the task-oriented line (Modes) and one start clause naming what
    the draft check found (`prior draft gaps: none`, or what was drained), unless
-   a caller said it ran the check and so owns the clause — a check that found
-   nothing otherwise looks like one that never ran. When the delegate makes the
-   offer (below), pass that line and clause in its args as `closing: <text>`
-   so its offer opens with them; otherwise write them as the reply.
+   a caller said it ran the check and so owns the clause. When the delegate
+   makes the offer (below), pass that line and clause in its args as
+   `closing: <text>` so its offer opens with them; otherwise write them as the
+   reply.
    Then, unless a caller said it makes the closing offer, invoke
    `srd:report-doc-gap` to offer the drafts this run captured — and only then:
    the start check governs a *prior* session's drafts, this offer covers what
@@ -291,7 +290,6 @@ open finding.
 3. Close with both, in this order: the status table — number, current state,
    assessment — then the task-oriented line (Modes) beneath it. The table says
    what this pass did to each finding; the line says where the SRD now stands.
-   Neither replaces the other.
 
 ## errata
 
@@ -350,11 +348,13 @@ Emit plain text for an email or ticket — no file write:
 
 ## Self-learning
 
-Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
-`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/srd/review.md`, the
-sibling winning a conflict — a read-only install writes the second, and what it
-learned there stays true once the checkout is writable again. Most runs have
-none; absence is the normal case and needs no comment. On a correction or
-self-caught mistake, append a one-line rule — general, naming nothing from
-the project at hand (its files, tests, tickets) — to the sibling when this
-directory is writable, else to the fallback, creating it, and report where.
+Obey this skill's lessons: every run, read with the file-read tool (never a
+shell), in parallel, the sibling `${CLAUDE_SKILL_DIR}/LESSONS.md` and the
+fallback `~/.agent-data/ctx42-skills/lessons/srd/review.md` (pass `~` as is, the
+file tools expand it; no environment probe; `$AGENT_DATA_DIR` replaces
+`~/.agent-data` only when you are told it is set). The sibling wins a conflict;
+the fallback, which a read-only install writes, still counts once the checkout
+is writable. A missing file needs no comment. On a correction or self-caught
+mistake, append a one-line rule — general, naming nothing from the project at
+hand (its files, tests, tickets) — to the sibling when this directory is
+writable, else to the fallback, creating it, and report where.

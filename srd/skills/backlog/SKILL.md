@@ -205,12 +205,10 @@ its `detail` words. Ask one closed question per turn, never an either/or a bare
 
 ### 5. unknowns
 
-Only the user closes an unknown. You may read the corpus — an unknown that
-turns out to be documented is worth knowing — but a hit is evidence to put in
-front of them, never a closure. It is either about a different question, or the
-very thing that should have closed this gap long ago, and only they can say
-which. Bring the hit, name what it does and does not settle, and let
-them decide.
+Only the user closes an unknown. You may read the corpus, but a hit is
+evidence to put in front of them, never a closure. It is either about a
+different question or the answer itself, and only they can say which. Bring
+the hit, name what it does and does not settle, and let them decide.
 
 For each unknown gap:
 
@@ -356,17 +354,18 @@ threshold, 6-hour uploads)`, or "the threshold (3.4 V) is now on
 
 "What closed" is said once per sitting, in the closing line — not again as each
 list finishes, and not restated in two shapes ("`gap-0010`, `gap-0015`
-filled" and "1 cluster closed (2 gaps)") in the same breath. Name partly
-filled gaps apart from filled ones (`gap-0003` partly filled): it still owes a
-section.
+filled" and "1 cluster closed (2 gaps)"). Name partly
+filled gaps apart from filled ones (`gap-0003` partly filled).
 
 ## Self-learning
 
-Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
-`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/srd/backlog.md`, the
-sibling winning a conflict — a read-only install writes the second, and what it
-learned there stays true once the checkout is writable again. Most runs have
-none; absence is the normal case and needs no comment. On a correction or
-self-caught mistake, append a one-line rule — general, naming nothing from
-the project at hand (its files, tests, tickets) — to the sibling when this
-directory is writable, else to the fallback, creating it, and report where.
+Obey this skill's lessons: every run, read with the file-read tool (never a
+shell), in parallel, the sibling `${CLAUDE_SKILL_DIR}/LESSONS.md` and the
+fallback `~/.agent-data/ctx42-skills/lessons/srd/backlog.md` (pass `~` as is,
+the file tools expand it; no environment probe; `$AGENT_DATA_DIR` replaces
+`~/.agent-data` only when you are told it is set). The sibling wins a conflict;
+the fallback, which a read-only install writes, still counts once the checkout
+is writable. A missing file needs no comment. On a correction or self-caught
+mistake, append a one-line rule — general, naming nothing from the project at
+hand (its files, tests, tickets) — to the sibling when this directory is
+writable, else to the fallback, creating it, and report where.

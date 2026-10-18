@@ -41,11 +41,14 @@ lessons live in one of two places; resolve per skill from the directory its
 - In-place: directory writable (source checkout or `--plugin-dir` copy) —
   sibling `LESSONS.md`. Committed there, lessons ship to everyone.
 - External: read-only or update-clobbered install (under `.../plugins/cache/`)
-  — `${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/<plugin>/<skill>.md`,
-  rooted outside the checkout to survive plugin updates. `AGENT_DATA_DIR` lets
-  a sandbox or an eval redirect the store; unset means the real one.
+  — `~/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md`, rooted outside
+  the checkout to survive plugin updates. `$AGENT_DATA_DIR` replaces
+  `~/.agent-data` when you are told it is set, so a sandbox or an eval can
+  redirect the store.
 
-Read both files when both exist and obey the union; write only to the writable
+Read both files with the file-read tool, never a shell (the permission check
+refuses `${…}` and prompts for reads outside the working directory), passing
+`~` as is (the file tools expand it), and obey the union; write only to the writable
 one, creating parent dirs. Never write under `.../plugins/cache/` even if the OS
 says it is writable — a plugin update wipes it. When the store is a writable
 sibling `LESSONS.md` and the external file also exists, offer to merge the
@@ -107,24 +110,28 @@ the target's path. Do not create a lessons file; the store appears on the first
 lesson. Retrofit edits `SKILL.md`, so it needs an in-place checkout — on a
 read-only install, report that and stop.
 
-Copy the block below word for word, then substitute `<plugin>`/`<skill>` and
+Copy the block below word for word, then substitute `<plugin>`/`<skill>`,
+write `<SKILL_DIR>` as a dollar sign, an opening brace, `CLAUDE_SKILL_DIR`, and
+a closing brace (spelled out here because the loader would expand it), and
 re-wrap the paragraph to 80 columns. Not byte for byte: the substituted path
 changes the line's length, so where the wrap falls differs per skill and the
 tree already carries five wrappings of the same words. The words are the
-constant; the wrapping follows the repo's own rule. `$HOME` stays literal — it
-is read when the skill runs, not now:
+constant; the wrapping follows the repo's own rule. That variable and `~` stay
+literal — they resolve when the skill runs, not now:
 
 ```
 ## Self-learning
 
-Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
-`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/<plugin>/<skill>.md`,
-the sibling winning a conflict — a read-only install writes the second, and what
-it learned there stays true once the checkout is writable again. Most runs have
-none; absence is the normal case and needs no comment. On a correction or
-self-caught mistake, append a one-line rule — general, naming nothing from
-the project at hand (its files, tests, tickets) — to the sibling when this
-directory is writable, else to the fallback, creating it, and report where.
+Obey this skill's lessons: every run, read with the file-read tool (never a
+shell), in parallel, the sibling `<SKILL_DIR>/LESSONS.md` and the fallback
+`~/.agent-data/ctx42-skills/lessons/<plugin>/<skill>.md` (pass `~` as is, the
+file tools expand it; no environment probe; `$AGENT_DATA_DIR` replaces
+`~/.agent-data` only when you are told it is set). The sibling wins a conflict;
+the fallback, which a read-only install writes, still counts once the checkout
+is writable. A missing file needs no comment. On a correction or self-caught
+mistake, append a one-line rule — general, naming nothing from the project at
+hand (its files, tests, tickets) — to the sibling when this directory is
+writable, else to the fallback, creating it, and report where.
 ```
 
 ## Lesson format
@@ -176,11 +183,13 @@ the least to report, and is where the report most often grows instead.
 
 ## Self-learning
 
-Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
-`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/craft/enhance-skills.md`,
-the sibling winning a conflict — a read-only install writes the second, and what
-it learned there stays true once the checkout is writable again. Most runs have
-none; absence is the normal case and needs no comment. On a correction or
-self-caught mistake, append a one-line rule — general, naming nothing from
-the project at hand (its files, tests, tickets) — to the sibling when this
-directory is writable, else to the fallback, creating it, and report where.
+Obey this skill's lessons: every run, read with the file-read tool (never a
+shell), in parallel, the sibling `${CLAUDE_SKILL_DIR}/LESSONS.md` and the
+fallback `~/.agent-data/ctx42-skills/lessons/craft/enhance-skills.md` (pass `~`
+as is, the file tools expand it; no environment probe; `$AGENT_DATA_DIR`
+replaces `~/.agent-data` only when you are told it is set). The sibling wins a
+conflict; the fallback, which a read-only install writes, still counts once the
+checkout is writable. A missing file needs no comment. On a correction or
+self-caught mistake, append a one-line rule — general, naming nothing from the
+project at hand (its files, tests, tickets) — to the sibling when this directory
+is writable, else to the fallback, creating it, and report where.

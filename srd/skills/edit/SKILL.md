@@ -144,8 +144,7 @@ proposal on an approved SRD or any proposal touching an id.
 
 When listing the issues found before the loop, keep only findings that survive
 scrutiny — a real rule violation, not a preference
-([references/proposals.md](references/proposals.md)). A finding withdrawn
-mid-session costs the user's trust in the whole list.
+([references/proposals.md](references/proposals.md)).
 
 Every mode but `autofix` runs this loop per change:
 
@@ -341,8 +340,7 @@ before the first proposal.
      ## <date>, as this session's summary`, with the block's real heading;
      omitted when nothing was applied, since the file does not exist.
    - One start clause: what the draft check found, which delegates ran,
-     whether the glossary resolved — a check that found nothing otherwise looks
-     like one that never ran.
+     whether the glossary resolved.
 
 `autofix` owes this section only as
 [references/autofix.md](references/autofix.md) step 8 states.
@@ -354,11 +352,13 @@ finished file, never carried from the work.
 
 ## Self-learning
 
-Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
-`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/srd/edit.md`, the
-sibling winning a conflict — a read-only install writes the second, and what it
-learned there stays true once the checkout is writable again. Most runs have
-none; absence is the normal case and needs no comment. On a correction or
-self-caught mistake, append a one-line rule — general, naming nothing from
-the project at hand (its files, tests, tickets) — to the sibling when this
-directory is writable, else to the fallback, creating it, and report where.
+Obey this skill's lessons: every run, read with the file-read tool (never a
+shell), in parallel, the sibling `${CLAUDE_SKILL_DIR}/LESSONS.md` and the
+fallback `~/.agent-data/ctx42-skills/lessons/srd/edit.md` (pass `~` as is, the
+file tools expand it; no environment probe; `$AGENT_DATA_DIR` replaces
+`~/.agent-data` only when you are told it is set). The sibling wins a conflict;
+the fallback, which a read-only install writes, still counts once the checkout
+is writable. A missing file needs no comment. On a correction or self-caught
+mistake, append a one-line rule — general, naming nothing from the project at
+hand (its files, tests, tickets) — to the sibling when this directory is
+writable, else to the fallback, creating it, and report where.

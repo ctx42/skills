@@ -148,11 +148,13 @@ branch by branch, until you both share one understanding of the subject.
 
 ## Self-learning
 
-Obey this skill's lessons when it has any: read both a sibling `LESSONS.md` and
-`${AGENT_DATA_DIR:-$HOME/.agent-data}/ctx42-skills/lessons/craft/grill-me.md`,
-the sibling winning a conflict — a read-only install writes the second, and what
-it learned there stays true once the checkout is writable again. Most runs have
-none; absence is the normal case and needs no comment. On a correction or
-self-caught mistake, append a one-line rule — general, naming nothing from
-the project at hand (its files, tests, tickets) — to the sibling when this
-directory is writable, else to the fallback, creating it, and report where.
+Obey this skill's lessons: every run, read with the file-read tool (never a
+shell), in parallel, the sibling `${CLAUDE_SKILL_DIR}/LESSONS.md` and the
+fallback `~/.agent-data/ctx42-skills/lessons/craft/grill-me.md` (pass `~` as is,
+the file tools expand it; no environment probe; `$AGENT_DATA_DIR` replaces
+`~/.agent-data` only when you are told it is set). The sibling wins a conflict;
+the fallback, which a read-only install writes, still counts once the checkout
+is writable. A missing file needs no comment. On a correction or self-caught
+mistake, append a one-line rule — general, naming nothing from the project at
+hand (its files, tests, tickets) — to the sibling when this directory is
+writable, else to the fallback, creating it, and report where.

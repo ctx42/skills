@@ -10,9 +10,9 @@ append_system_prompt: |
   ctx42-skills plugins. The skills this session used ran from it (./go/skills/review/), not
   from the read-only plugin copy this run loads: read and write those workspace
   files, never the loaded copy. The environment sets AGENT_DATA_DIR to
-  `.agent-data` at the root of this workspace, so
-  `${AGENT_DATA_DIR:-$HOME/.agent-data}` resolves to ./.agent-data here; never
-  touch the real home directory.
+  `.agent-data` at the root of this workspace, so `$AGENT_DATA_DIR` replaces
+  `~/.agent-data` and the lessons store is ./.agent-data here; never touch the
+  real home directory.
 
   Automated eval: the user is absent. Whenever the skill would stop and wait
   for the user, take the next scripted answer below as the reply and continue
