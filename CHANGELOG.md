@@ -1,3 +1,141 @@
+## v0.27.0 (Mon, 19 Oct 2026 06:32:21 UTC)
+- feat(srd:backlog): park a gap as `kb` until a page is published.
+- fix(notify): skip attention cards for subagent hook events.
+- feat(plan-smith): end every plan with a remove-this-plan item.
+- docs(plan-smith): say which work an update appends.
+- fix(srd): cite corpus documents by their confluence ids.
+- fix(srd:kb): confirm a KB write with search, not by assumption.
+- chore: record lessons for cm and go:review.
+- feat(srd)!: keep project data in the project and on the server.
+- chore(dev): retire srd-sync and the standard drift check.
+- docs: describe the project-config.md setup for the srd skills.
+- test(enhance-skills): stop citing the removed SRD standard copy.
+- fix(srd:create): agree the SRD path at the first doc gap.
+- fix(srd): use the glossary location to scope Company Glossary hits.
+- fix(srd:backlog): never park a gap against the KB inbox.
+- fix(srd:kb): keep the inbox's Provenance table, dedup only after confirmation.
+- fix(srd): list dialogue → dialog among the errata spellings.
+- test(srd): make the eval expectations checkable after the config round.
+- fix(go:style): let a package-godoc overview satisfy the README rule.
+- fix(go:style): settle severities, job sizing and readings runners split on.
+- fix(go:review): name how go:style loads and what tools may run.
+- test(go:style): make two expectations able to fail.
+- fix(srd:kb): settle attestation, closed-question links and gap fields.
+- fix(srd:backlog): align with the inbox and keep published facts out of the KB.
+- fix(srd:edit): settle walk order, removals and decision-log reasons.
+- fix(srd:review): settle citation tie-breaks and the notice's errata anchor.
+- fix(srd:report-doc-gap): settle direct hand-off, re-show and demand merge.
+- fix(srd:system-check): order dependent questions and scope stale citations.
+- fix(srd:create): say which user-defined terms go to the KB.
+- test(srd): tighten bullets that could not fail or carried rationale.
+- fix(go:style): re-check a rule only one package flags.
+- fix(srd:backlog): offer the next list without restating what closed.
+- fix(srd): compare glossary headings with requirement wording.
+- test(go,srd): fix expectations the last eval round could not grade.
+- feat(dev): confirm a skill change with native eval cases in minutes.
+- test(eval): forbid probing the real store and invented timestamps.
+- docs: describe the three eval tiers.
+- test(srd:kb): add native eval cases.
+- test(srd:create): add native eval cases.
+- test(srd:review): add native eval cases.
+- test(srd:edit): add native eval cases.
+- test(srd:system-check): add native eval cases.
+- test(srd:report-doc-gap): add native eval cases.
+- test(srd:backlog): add native eval cases.
+- test(go:style): add native eval cases.
+- test(go:review): add native eval cases.
+- test(go:cover): add native eval cases.
+- test(go:doc): add native eval cases.
+- test(go:reshape): add native eval cases.
+- test(craft:cm): add native eval cases.
+- test(craft:grill-me): add native eval cases.
+- test(craft:plan-smith): add native eval cases.
+- test(craft:readme-smith): add native eval cases.
+- test(craft:doc-smith): add native eval cases.
+- test(craft:enhance-skills): add native eval cases.
+- chore: record lessons for go:review and go:style.
+- build(dev): make eval-changed.sh safe and diagnosable to run.
+- test(dev): add generators for the native eval cases.
+- fix(craft:cm): hold full to two paragraphs and stop amend hints.
+- fix(craft:doc-smith): keep unsettled facts out of the draft.
+- fix(craft:enhance-skills): point missed rules at their line.
+- fix(craft:readme-smith): wait for answers before drafting.
+- fix(craft:grill-me): bound branch scope and re-audit on conflict.
+- fix(craft:plan-smith): wait on decisions that change items.
+- fix(go:cover): measure each function before writing the next.
+- fix(go:doc): fix the shape of the changes-made line.
+- fix(go:review): decide fan-out by size and name every command.
+- fix(go:style): settle test-shape rules and fan-out by size.
+- fix(srd:backlog): report delegate answers as counts only.
+- fix(srd:create): write only after blockers settle.
+- fix(srd:kb): mark late conflicts and report one line per page.
+- feat(srd:report-doc-gap): accept a caller's closing report.
+- fix(srd:edit): open on the status clause and close with open questions.
+- fix(srd:review): keep findings in the file and close via the delegate.
+- test(craft): fix eval graders that failed correct replies.
+- test(go): fix eval graders and fixtures for the go skills.
+- test(srd): fix eval graders and add stop cases for the srd skills.
+- chore: replace the platform name with a neutral placeholder.
+- fix(srd:kb): cite a page by its front-matter url.
+- test: check skills with free contracts and cached probes.
+- test: keep three agent-run scenarios per skill.
+- refactor(srd): drop Confluence and org-policy specifics.
+- docs(eval): list the generic policy-notice grader keywords.
+- test: batch probes and add hunt, trigger and ledger checks.
+- chore(dev): stop eval scripts writing dev/__pycache__.
+- feat(srd)!: close gaps by filling from the corpus, add doc-edit.
+- test(go): tag the review cases that run git as needs-shell.
+- build(dev): run needs-shell eval cases with plain claude -p.
+- feat(srd): record who can answer a gap and send them its questions.
+- test(srd): stop contract guards naming project folders and tools.
+- feat(srd): fence requirement groups with --- dividers.
+- chore: record lessons for srd:edit.
+- feat(srd): walk Scope last when editing an SRD.
+- feat(srd): keep Scope last when an edit starts at a line.
+- fix(srd): write edit placeholders as [TBD: name].
+- chore: record lessons for srd:edit.
+- chore: record lessons for srd:review.
+- feat(srd): fix a missing STR-8 notice as errata.
+- test(srd): cover autofix of a missing keyword notice.
+- feat(srd): treat a variant name for a required section as errata.
+- chore: record lessons for srd:edit and srd:review.
+- feat(srd): fix a missing GLO-4 first-use link as errata.
+- feat(craft): add fix-all to fix findings unattended.
+- feat(srd): cite the corpus page behind corpus-sourced SRD text.
+- feat(srd): show and log corpus sources in edit proposals.
+- feat(srd): put source lines on corpus-backed review findings.
+- feat(srd): cite corpus sources in system-check, doc-edit, and backlog.
+- feat: keep self-learned lessons free of project names.
+- refactor(go): fold recorded lessons into the skills.
+- refactor(craft): fold recorded lessons into the skills.
+- refactor(srd:edit): fold recorded lessons into the skill.
+- refactor(srd): fold backlog, kb, and review lessons into the skills.
+- feat(go:style): skip the line-width check at light depth.
+- docs(srd:create): require scope items to stand alone.
+- refactor(craft): fold recorded lessons into the skills.
+- refactor(srd:edit): fold recorded lessons into the skill.
+- refactor(srd): fold backlog and kb lessons into the skills.
+- refactor(craft): fold recorded lessons into the skills.
+- refactor(go:review): fold recorded lessons into the skill.
+- refactor(srd): fold edit and review casing lessons into the skills.
+- feat(craft:cm)!: split the working tree into logical commits.
+- docs(craft:grill-me): keep the branch map to the requested change.
+- docs(craft:fix-all): record triage and scripted-edit lessons.
+- docs(go:review): check fan-out file:line references against the file.
+- docs(srd:edit): check Out of Scope and quote before text verbatim.
+- docs(srd:review): hand one-by-one finding walks to srd:edit.
+- fix(dev): map frontmatter changes in eval-changed.sh.
+- docs(craft:cm): stage with context and scope claims to the whole code.
+- feat(srd:edit)!: load by default, walk from an id, propose named changes.
+- refactor(srd:edit): fold recorded lessons into the skill.
+- feat(srd): widen the errata class; standard outranks house rules.
+- docs(srd): give gap questions context and keep pasted text bare.
+- docs(craft): tighten commit checks, triage asks, and branch maps.
+- docs(go:review): check merged file:line references against the file.
+- docs(craft:cm): write staging commands the permission check can read.
+- fix: read skill lessons with the file tool, not a shell.
+- test(craft:cm): let the micro apply grader accept footers.
+
 ## v0.26.0 (Thu, 01 Oct 2026 21:28:07 UTC)
 - docs(srd): clarify rule id prefixes are not reserved.
 - chore!: retire the skill-smith skill.
