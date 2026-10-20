@@ -31,6 +31,16 @@
       "setup": "The server holds no draft gap for this SRD. `specs/login.md` has two style defects and one duplicate id, asserts nothing about existing system behavior, and no `specs/login.review.md` exists yet.",
       "query": "/review specs/login.md",
       "files": []
+    },
+    {
+      "id": 11,
+      "name": "errata-re-sorts-findings",
+      "skills": [
+        "review"
+      ],
+      "setup": "`specs/login.md` is a clean SRD except for four defects, and `specs/login.review.md` already exists with no `## Errata` section. Its open findings are #1 under Introduction (a misspelling already written as a substitution), and under Requirements #2 (a misspelling written as prose, \"fix the spelling\"), #3 (a two-rule requirement, not errata), and #4 (one finding naming both a British spelling and a passive-voice rewrite). `## Resolved` holds #5.",
+      "query": "/review specs/login.md errata",
+      "files": []
     }
   ]
 }
