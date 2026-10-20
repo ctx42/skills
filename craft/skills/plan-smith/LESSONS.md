@@ -1,0 +1,1 @@
+- Put no context paragraph between the summary table and the first item; background belongs in an item's own section or in the reply.
