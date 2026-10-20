@@ -277,6 +277,30 @@ verifies each plugin `source` is a real plugin directory and every skill sits
 under exactly one plugin's `skills/` dir. It edits nothing and exits non-zero on
 any error.
 
+## Folding Lessons
+
+A skill's `LESSONS.md` is a holding area. Every so often, fold its rules into the
+skill so they become part of the skill itself:
+
+- Scope: every `LESSONS.md` in the checkout; a file under `~/.agent-data/`
+  is the user's own, so fold it only on request.
+- Put each rule into the step it governs, in `SKILL.md` or in the `references/`
+  file that step loads; never as a loose list of notes.
+- If the skill already has the rule and a run missed it, reword that line
+  instead of adding a second one.
+- Generalize: drop product names, ids, file names, and examples from one
+  codebase; the rule must hold for any SRD or codebase.
+- Never cut a settled rule to make room; over the ~5000-token aim, move
+  condition-triggered prose (a mode, a claim type) to `references/` and leave a
+  pointer plus the one-line rule.
+- Delete the folded `LESSONS.md`; keep the `## Self-learning` block.
+- Give each high-stakes rule a `contract.json` phrase, and a probe if it is
+  likely to regress.
+- Wrap at ~80 columns.
+- Run `./dev/lint-skills.sh`, then `./dev/eval-routine.sh`; probes and the hunt
+  show nothing broke, not that the folded rule works.
+- Keep each skill's fold a self-contained edit, so it commits on its own.
+
 ## Documentation
 
 When adding a skill, update:
