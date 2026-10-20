@@ -134,7 +134,9 @@ branch by branch, until you both share one understanding of the subject.
   is what remains, and the count is owed on that first turn too even though
   the interview did not start there. Then say how much is left as each branch
   closes, recounting the tally from the branch map every turn — never add to
-  the last count, which drifts once a branch reopens.
+  the last count, which drifts once a branch reopens. A branch counts as
+  resolved only when none of its sub-parts is still open — the parts its own
+  question asked, not an edge step 6 lists as not covered.
 
 - Re-audit on collapse. When an answer overturns an assumption an earlier
   branch was resolved on, that branch reopens — and so does every other one

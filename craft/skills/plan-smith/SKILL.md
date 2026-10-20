@@ -91,7 +91,9 @@ carries the detail. Align the table so the `|` delimiters line up vertically:
 Compute the widths from the widest cell — don't eyeball it — then verify the
 header, separator, and every body row have identical character width.
 
-Then one section per item, numbered to match the table, each led by a checkbox:
+Then one section per item, numbered to match the table, each led by a
+checkbox. The first item follows the legend directly: no context paragraph
+between them — background belongs in an item's own section or in the reply.
 
 ```
 ## 1. <item name> — [x]

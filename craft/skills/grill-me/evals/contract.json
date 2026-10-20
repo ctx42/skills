@@ -84,6 +84,13 @@
       "must": [
         "every branch the requested change touches"
       ]
+    },
+    {
+      "id": "resolved-needs-all-subparts",
+      "rule": "A branch counts as resolved only when none of its sub-parts is open",
+      "must": [
+        "resolved\\ only\\ when\\ none\\ of\\ its\\ sub\\-parts\\ is\\ still\\ open"
+      ]
     }
   ]
 }
