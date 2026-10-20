@@ -1,3 +1,6 @@
+## v0.27.1 (Tue, 20 Oct 2026 13:45:24 UTC)
+- docs(skills): add lessons for plan-smith and edit.
+
 ## v0.27.0 (Mon, 19 Oct 2026 06:32:21 UTC)
 - feat(srd:backlog): park a gap as `kb` until a page is published.
 - fix(notify): skip attention cards for subagent hook events.
