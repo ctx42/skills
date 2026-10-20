@@ -130,6 +130,14 @@
       "must": [
         "one by one through `srd:edit` feedback mode — never a loop improvised here"
       ]
+    },
+    {
+      "id": "req5-all-methods",
+      "rule": "REQ-5 is judged against every verification method it names, not test alone",
+      "must": [
+        "Judge\\ REQ\\-5\\ against\\ every\\ method\\ it\\ names,\\ not",
+        "may\\ still\\ pass"
+      ]
     }
   ]
 }

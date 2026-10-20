@@ -48,7 +48,9 @@ touches ids.
    the proof, so those findings carry a class plus a neighbouring word instead.
    Verify those by the class: find the neighbouring word inside the anchor,
    confirm the named defect is present beside it exactly once, and apply the
-   canonical fix for that class. Absent or ambiguous behaves as above.
+   canonical fix for that class. Absent or ambiguous behaves as above. A
+   whitespace fix a sync restores is a no-op: report it, never re-apply it
+   ([proposals.md](proposals.md#findings)).
    A missing-notice finding (`old` is `(missing)` and `new` the notice, per
    `errata.md`) has
    nothing to count in an anchor: count keyword notices in the whole SRD.

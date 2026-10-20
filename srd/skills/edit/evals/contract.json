@@ -201,6 +201,24 @@
       "must": [
         "Proposals asked for to paste elsewhere carry only the before and after text"
       ]
+    },
+    {
+      "id": "sync-restored-fix-no-op",
+      "file": "references/proposals.md",
+      "rule": "A whitespace fix a sync restores is reported as a no-op, never re-applied",
+      "must": [
+        "check\\ the\\ synced\\ source\\ after\\ a\\ round\\-trip",
+        "report\\ it,\\ never\\ apply\\ it\\ again"
+      ]
+    },
+    {
+      "id": "sibling-shape-check",
+      "file": "references/proposals.md",
+      "rule": "A fix carried to a sibling surface first checks the sibling's shape; a per-item value is never collapsed",
+      "must": [
+        "check\\ the\\ sibling\\ has\\ the\\ same\\ shape",
+        "never\\ collapse\\ a\\ per\\-item\\ value\\ into\\ one\\ value"
+      ]
     }
   ]
 }

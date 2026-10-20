@@ -36,8 +36,10 @@ author-facing account of what changed and why, which a diff cannot carry.
   different limit ``) and process notes (`so no corpus lookup`, `read as a
   figure the SRD sets`); keep its typos and shorthand. No quotable reason, no
   reason logged — an `autofix` entry has no proposal, so it logs the user's
-  words or nothing, never the review finding's text. A reason that holds a
-  double quote is wrapped in single quotes.
+  words or nothing, never the review finding's text. Quote the whole
+  rationale, never its first sentence alone. A reason that holds a double
+  quote is wrapped in single quotes, verbatim — never in double quotes with
+  backslash escapes.
 - An entry ends with every source line its proposal carried, verbatim, one
   per line — a KB section the change contradicts included: the user approved
   the text knowing where it came from, and the log is where that stays

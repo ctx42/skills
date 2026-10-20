@@ -23,6 +23,9 @@ never needs it.
   each surface the change adds, or its class. A ruling that keeps the text
   means leave it and recommend withdrawing the finding; one that excluded what
   the change adds is a conflict the proposal states.
+- On an SRD another tool syncs, check the synced source after a round-trip
+  before re-applying a whitespace fix: a fix the sync restores is a no-op —
+  report it, never apply it again.
 
 ## Wording
 
@@ -49,6 +52,12 @@ never needs it.
 - When a fix loosens an exhaustive rule ("exactly", "only") to admit an
   exception, keep its exclusion half and state the exception inside it; then
   re-validate what the rule no longer forbids.
+- Check a heading rename against every other heading in the document, at any
+  level or parent: a new name that duplicates one recreates the defect the
+  rename fixes.
+- Before carrying a fix to a sibling surface, check the sibling has the same
+  shape (one item or a list); never collapse a per-item value into one value
+  because a sibling was collapsed.
 - Pad every Markdown table in a proposal to aligned columns, before-and-after
   tables included; check each row's width before sending.
 - Proposals asked for to paste elsewhere carry only the before and after text:

@@ -143,7 +143,9 @@ entry leads and the lower becomes the second tag:
   corpus doc id and heading that contradict it, or the dead link.
 - `redundancy` — two rules state the same thing, or one subsumes the other.
 - `verifiability` — a vague quality, an unmeasurable criterion, an open-ended
-  list (REQ-5, REQ-6, LANG-7).
+  list (REQ-5, REQ-6, LANG-7). Judge REQ-5 against every method it names, not
+  test alone: a rule no finite test proves ("MUST NOT limit X") may still pass
+  by inspection or analysis.
 - `atomicity` — one item carrying more than one rule, an example or note
   inside a rule, a rule stating appearance instead of behavior (REQ-1, REQ-7,
   LANG-5, SCO-1).
