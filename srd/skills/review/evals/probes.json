@@ -68,6 +68,14 @@
       "pass": "^\\W*(DEPENDS|NO-FINDING)\\b",
       "fail": "^\\W*FINDING",
       "class": "load-bearing"
+    },
+    {
+      "id": "req5-not-test-alone",
+      "rule": "req5-all-methods",
+      "prompt": "Situation: reviewing specs/gw.md. GR-9 says \"The gateway MUST NOT limit the number of tag subscriptions per client.\" Drafting its acceptance test, you find no finite test can prove the absence of every limit: any test only shows that some number of subscriptions succeeded. Nothing else about GR-9 is wrong.\n\nQuestion: do you record GR-9 as an unverifiable (REQ-5) `verifiability` blocker? Answer on the first line with exactly one of: FINDING, NO-FINDING. Then one sentence on why.",
+      "pass": "^\\W*NO-FINDING\\b",
+      "fail": "^\\W*FINDING\\b",
+      "class": "load-bearing"
     }
   ]
 }
