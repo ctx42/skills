@@ -1,0 +1,106 @@
+{
+  "skill_name": "fold-lessons",
+  "rules": [
+    {
+      "id": "generic-test",
+      "rule": "An item is kept only if it would change a run on an unrelated input; task nouns are stripped or the item dropped",
+      "must": [
+        "would it change a run\\s+on an unrelated input",
+        "If nothing survives the strip, it is a Drop",
+        "When in doubt between Generalize and Drop, Drop"
+      ]
+    },
+    {
+      "id": "edits-gated-too",
+      "rule": "Pending skill edits pass the same gate as lessons; a dropped edit is reverted and flagged",
+      "must": [
+        "Judge each lesson and each rule an edit adds by one test",
+        "For an edit,\\s+Drop reverts the hunk",
+        "flagging each reverted\\s+hunk"
+      ]
+    },
+    {
+      "id": "reword-not-duplicate",
+      "rule": "An item the skill already carries rewords that line instead of adding a second",
+      "must": [
+        "Sharpen that\\s+line instead of adding a second"
+      ]
+    },
+    {
+      "id": "hold-overrule",
+      "rule": "An item that overrules the body or conflicts is held for the user; a held lesson stays in LESSONS.md",
+      "must": [
+        "the item overrules the body, contradicts another item",
+        "a held lesson stays in `LESSONS\\.md`"
+      ]
+    },
+    {
+      "id": "validate-before-propose",
+      "rule": "Every kept item is validated; a failed check changes the verdict",
+      "must": [
+        "a failed\\s+check changes the verdict, never passes silently"
+      ]
+    },
+    {
+      "id": "probe-red-green",
+      "rule": "A new probe must fail at the base and pass on the result",
+      "must": [
+        "A new probe must FAIL\\s+at the base",
+        "One that passes at the base proves nothing"
+      ]
+    },
+    {
+      "id": "confirm-once",
+      "rule": "Propose once for all skills and wait for the answer before changing anything",
+      "must": [
+        "Wait for the answer,\\s+then work unattended"
+      ]
+    },
+    {
+      "id": "no-cut-settled-rule",
+      "rule": "Never cut a settled rule to make room; move condition-triggered prose to references",
+      "must": [
+        "Never cut a settled\\s+rule to make room",
+        "move condition-triggered prose"
+      ]
+    },
+    {
+      "id": "fold-into-step",
+      "rule": "Each rule goes into the step it governs, never a loose notes list",
+      "must": [
+        "put each rule into the step it governs",
+        "never a loose list of notes"
+      ]
+    },
+    {
+      "id": "external-store-on-request",
+      "rule": "A store under ~/.agent-data is folded only when the user names it",
+      "must": [
+        "fold it\\s+only when the user names it"
+      ]
+    },
+    {
+      "id": "test-after-fold",
+      "rule": "Lint then the eval routine after folding; a missing script is reported, not improvised",
+      "must": [
+        "then `\\./dev/eval-routine\\.sh --base <base>`",
+        "A missing script\\s+is reported, never replaced by an improvised check"
+      ]
+    },
+    {
+      "id": "eval-loop-bounds",
+      "rule": "One fix per FAIL; second failure goes to the user; agent-run cases only on request",
+      "must": [
+        "gets one fix and one re-run",
+        "Agent-run cases and blind rounds only on the user's request"
+      ]
+    },
+    {
+      "id": "description-triggers",
+      "rule": "An item that changes the description adds its requests to the trigger cases",
+      "must": [
+        "an item that changes the description adds its requests to\\s+`dev/eval/triggers\\.json`"
+      ]
+    }
+  ]
+}

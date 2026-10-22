@@ -104,6 +104,8 @@ source of truth.
   contradictions, drift, and gaps, and re-checks each edit against the rest.
 - `enhance-skills` — harvests session corrections into per-skill lessons;
   retrofits the `## Self-learning` block.
+- `fold-lessons` — folds `LESSONS.md` rules and pending skill edits into the
+  skills, keeping only what generalizes; validates, lints, and evals each.
 - `fix-all` — fixes every finding in the conversation, one commit each, after
   one up-front question round for contract and compatibility changes.
 
