@@ -66,7 +66,8 @@ check changes the verdict, never passes silently:
 - Consistent: no conflict with the body, another item, or `contract.json`.
 - Placed: one step governs it; a rule that fits no step is not yet a rule.
 - Written to the authoring rules: one dense imperative line, stated once, in
-  the surrounding text's terms, no hedging; wrapped at ~80 columns; never a
+  the surrounding text's terms, no hedging; re-flowed so the paragraph it
+  lands in wraps at ~80 columns, no short line left mid-paragraph; never a
   dollar-digit positional in a body.
 - Budget: `SKILL.md` aims at ~5000 tokens and ~500 lines. Never cut a settled
   rule to make room; move condition-triggered prose (a mode, a case type) to
@@ -100,7 +101,8 @@ check changes the verdict, never passes silently:
 4. Fold, one skill at a time, as a self-contained edit so each commits alone:
    put each rule into the step it governs, in `SKILL.md` or the reference that
    step loads, never a loose list of notes; apply each Drop's revert and each
-   Generalize rewrite to the edited line in place; add the guards. Delete
+   Generalize rewrite where the edit put its text, re-flowing per
+   [Validate](#validate); add the guards. Delete
    `LESSONS.md` once no lesson is held; a Hold keeps the file with only its
    held lines. Keep `## Self-learning`.
 
