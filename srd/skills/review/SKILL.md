@@ -61,7 +61,7 @@ and tell the user.
   how to reach the documentation corpus, how its sources rank, and where an
   unconfirmed claim goes. `check`, `errata`, and `feedback` never reach it.
 - [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
-  (on-demand: the first GLO-3 / STR-10 check) — the Company Glossary's term
+  (on-demand: the first GLO-3, GLO-4, or STR-10 check) — the Company Glossary's term
   set, from the server.
 
 Apply the full rule set. `create` leaves STR-2..7 (≥ 2 owners, Initiative

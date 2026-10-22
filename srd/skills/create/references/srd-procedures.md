@@ -20,7 +20,9 @@ known-term set is exactly what `mcp__<mcp-server>__glossary_terms` returns.
    lies under the `glossary` location needs no local entry; link it on first
    use to `<path>#<anchor>` (the result's `anchor`: the term's heading slug),
    written relative to the SRD's own file (GLO-4/5): a link navigates, so it
-   takes `path`, never `id`. A hit whose `path` lies elsewhere is not the
+   takes `path`, never `id`. The first use counts from the Introduction on: a
+   use in the metadata block (Objective included) takes no link, and a finding
+   asking for one there is invalid. A hit whose `path` lies elsewhere is not the
    Company Glossary: treat the term as not in the set.
 3. A term not in the set needs a local Glossary entry, even when another corpus
    document explains it: `search` returns meaning, not coverage. Say so once
