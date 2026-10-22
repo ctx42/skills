@@ -50,7 +50,8 @@ on an unrelated input the skill will meet tomorrow? Then give one verdict:
   shared reference already carries, become one line.
 - Hold: the item overrules the body, contradicts another item or a
   `contract.json` rule, or its intent is unclear. Change nothing for it; it is
-  a question for the user, and a held lesson stays in `LESSONS.md`.
+  a question for the user, and a held lesson stays in `LESSONS.md`. Narrowing
+  what the body or its standard permits is not overruling.
 
 When in doubt between Generalize and Drop, Drop: a narrow rule in the body
 costs every future run context and misleads runs it does not fit.

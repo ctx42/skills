@@ -31,7 +31,8 @@
       "rule": "An item that overrules the body or conflicts is held for the user; a held lesson stays in LESSONS.md",
       "must": [
         "the item overrules the body, contradicts another item",
-        "a held lesson stays in `LESSONS\\.md`"
+        "a held lesson stays in `LESSONS\\.md`",
+        "Narrowing\\s+what the body or its standard permits is not overruling"
       ]
     },
     {
