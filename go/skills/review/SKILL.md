@@ -121,7 +121,9 @@ delegated coherently. A module of three small packages is `./...` and still not 
    twice.
 3. Review each file for what style does not cover, in this order:
    - Correctness: bugs, wrong logic, nil/bounds, ignored errors, data races.
-   - Edge cases: empty/large/concurrent inputs and every error path.
+   - Edge cases: empty/large/concurrent inputs and every error path; never
+     call one unreachable without reading the callee's doc for every input it
+     can receive, a replaceable package-level variable passed in included.
    - Error handling & API: wrapping, sentinels, boundaries, easy misuse.
    - Leaks: search for every acquisition (container, file, goroutine) with no
      release at all, not only for releases done wrong.
