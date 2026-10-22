@@ -317,9 +317,12 @@ Emit plain text for an email or ticket — no file write:
   it: the section name, and a short quote when the section holds more than one
   candidate. `#2 Metadata (Owners): only one owner is listed; add a secondary
   owner.` `#5 Introduction ("the system handles all remaining cases"): states a
-  rule outside Requirements; move it or drop it.` Drop the checkbox, the
-  severity tag, the category tag, and the rule-id citation; keep a source
-  line, as the bullet's last sentence. No bold. One
+  rule outside Requirements; move it or drop it.` A project instruction
+  limiting author-facing lists to what is wrong and where overrides this:
+  drop the fix from every ordinary bullet; an errata bullet keeps its
+  substitution and excluded terms, which state what is wrong. Drop the
+  checkbox, the severity tag, the category tag, and the rule-id citation;
+  keep a source line, as the bullet's last sentence. No bold. One
   bullet is one paragraph — it wraps like any prose, and "no multi-line
   bullets" means no sub-bullets and no blank line inside a bullet, not a
   bullet that fits on one physical line.
