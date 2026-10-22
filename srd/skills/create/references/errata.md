@@ -115,7 +115,13 @@ Nothing outside this list is errata.
   Errata only when the rules lowercase it whatever its sense, so no site needs
   judgment; never at a sentence start, in a heading, glossary entry heading,
   quoted UI string, code span, or anchor. Every site named with its count.
-  Cite the standard's casing rule, else `(SRD:house)`.
+  A local Glossary term or user-interface component whose name contains the
+  word (`Order Status` for `Order`) is no site and costs no judgment: name each
+  as excluded (`excluding Order Status, Order Tabs`), and the finding still
+  qualifies. Any other capitalized phrase holding the word (a proper name, a
+  named screen) takes judgment: the whole finding is ordinary, never split
+  into errata and ordinary parts. Cite the standard's
+  casing rule, else `(SRD:house)`.
 
 The GLO-4 link and casing entries are `[minor]` and `terminology`: a missing
 link or a case slip is cosmetic, never the terminology drift `major` covers. A

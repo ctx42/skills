@@ -100,7 +100,8 @@ In order:
    the heading plus
    `` `(missing)` → `---` `` or `` `---` → `(none)` `` — and a
    substitution repeated across sites lists every site so `autofix` can verify
-   the count. Two different substitutions are two findings. Omit the section
+   the count; a casing fix also names, in the same finding, the terms it
+   excludes. Two different substitutions are two findings. Omit the section
    when empty.
 2. Open findings, grouped by document section: Metadata, Introduction,
    Glossary, Scope, Requirements. Omit a section with no open findings. An

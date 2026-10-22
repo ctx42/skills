@@ -65,6 +65,9 @@ touches ids.
    `(end of document)`): blank lines aside, an insertion needs no `---` line
    there, a removal exactly one; insert or delete that one line, adding a blank
    line on any side that lacks one. Otherwise stale.
+   A casing finding is counted and applied only on running-text occurrences
+   of `old`: skip its named excluded terms and every place `errata.md`'s
+   casing entry rules out.
    A multi-site finding is verified per site and applies only where it
    matches; report each site that did not. Never substitute by whole-document
    search-and-replace; never widen beyond the quoted `old`.

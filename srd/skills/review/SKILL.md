@@ -307,7 +307,8 @@ Emit plain text for an email or ticket — no file write:
 - Title: `<Document Title> — Review Feedback`.
 - Group by section name as a plain heading (no markdown symbols). `## Errata`
   is one such group — list it first, as `Errata`, when it holds open findings.
-  An errata finding keeps its substitution in prose, not markdown:
+  An errata finding keeps its substitution in prose, not markdown, and a
+  casing fix its excluded terms in full, however long the bullet wraps:
   `#4 GR-2: "behaviour" should read "behavior"`.
 - One bullet per open finding, blank-line separated. Keep the finding number
   and the SRD's own requirement id (`#7 GR-3a:`), then a one-line
