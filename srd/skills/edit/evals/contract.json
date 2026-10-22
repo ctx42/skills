@@ -219,6 +219,15 @@
         "check\\ the\\ sibling\\ has\\ the\\ same\\ shape",
         "never\\ collapse\\ a\\ per\\-item\\ value\\ into\\ one\\ value"
       ]
+    },
+    {
+      "id": "keep-author-tbd",
+      "rule": "Never remove or propose removing an author's inline TBD reminder; recommend withdrawing a finding that asks to drop it",
+      "file": "references/proposals.md",
+      "must": [
+        "Never remove, or propose removing, an author's inline `\\(TBD: …\\)` reminder",
+        "recommend\\s+withdrawing a finding, REQ-7 included, that asks to drop it"
+      ]
     }
   ]
 }

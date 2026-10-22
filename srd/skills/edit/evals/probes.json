@@ -92,6 +92,18 @@
       "pass": "^\\W*YES\\b",
       "fail": "^\\W*NO\\b",
       "class": "load-bearing"
+    },
+    {
+      "id": "keep-author-tbd",
+      "rule": "keep-author-tbd",
+      "context": [
+        "SKILL.md",
+        "references/proposals.md"
+      ],
+      "prompt": "Situation: `/edit specs/alerts.md` applying its review file. GR-6 reads: \"The gateway MUST retry a failed delivery at most 3 times. (TBD: confirm with ops)\". Finding #4 cites REQ-7: a requirement MUST be the rule and nothing more, so the trailing `(TBD: confirm with ops)` must go.\n\nQuestion: what do you propose for finding #4? Answer on the first line with exactly one of: REMOVE-TBD, MOVE-TBD-TO-NOTES, WITHDRAW-FINDING. Then one sentence why.",
+      "pass": "^\\W*WITHDRAW-FINDING",
+      "fail": "^\\W*(REMOVE-TBD|MOVE-TBD-TO-NOTES)",
+      "class": "unmutated"
     }
   ]
 }

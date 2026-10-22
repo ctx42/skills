@@ -10,6 +10,9 @@ never needs it.
   disabled control vs a grayed one; a length cap vs its truncation format); a
   scope item covering one capability across many surfaces is atomic; a
   compound term whose parts are in the Company Glossary needs no entry.
+- Never remove, or propose removing, an author's inline `(TBD: …)` reminder
+  on a requirement, colored or not: it is the author's worklist, so recommend
+  withdrawing a finding, REQ-7 included, that asks to drop it.
 - Check every capitalized noun phrase that reads like a name against the
   glossaries and the requirements it summarizes; an undefined pseudo-name is a
   finding.
