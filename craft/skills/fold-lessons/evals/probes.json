@@ -2,15 +2,6 @@
   "skill_name": "fold-lessons",
   "probes": [
     {
-      "id": "domain-id-generic",
-      "rule": "generic-test",
-      "prompt": "Situation: `/fold-lessons` on an SRD review skill whose every run checks documents against one SRD standard. A lesson reads: \"For GLO-4 first-use links, ignore the metadata block: the first use counts from the Introduction on.\" GLO-4 is a rule id of that standard, which every SRD the skill reviews follows.\n\nQuestion: which verdict do you give it? Answer on the first line with exactly one of: KEEP, GENERALIZE, DROP, HOLD. Then one sentence why.",
-      "pass": "^\\W*KEEP\\b",
-      "fail": "^\\W*(GENERALIZE|DROP|HOLD)\\b",
-      "bullets": [],
-      "class": "redundant"
-    },
-    {
       "id": "second-hunt-split",
       "rule": "eval-loop-bounds",
       "prompt": "Situation: `/fold-lessons`. The hunt found a split on a line you folded; you reworded that line once. The re-run hunt now reports a new split on the reworded line itself.\n\nQuestion: what do you do with the new split? Answer on the first line with exactly one of: REWORD-AGAIN, BACKLOG, REVERT-FOLD. Then one sentence why.",

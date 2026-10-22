@@ -7,7 +7,8 @@
       "must": [
         "would it change a run\\s+on an unrelated input",
         "If nothing survives the strip, it is a Drop",
-        "When in doubt between Generalize and Drop, Drop"
+        "When in doubt between Generalize and Drop, Drop",
+        "its standard's rule ids and sections, its modes, its tools — are\\s+generic there"
       ]
     },
     {
