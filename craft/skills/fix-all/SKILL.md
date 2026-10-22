@@ -112,9 +112,10 @@ Deferred
 ```
 
 `fixed N of M`: M counts every finding but those the arguments skip, which
-the report leaves out. Align the table's columns. Name every other finding
-not fixed under Deferred with its reason; a finding already fixed or not
-reproducible counts as not fixed and goes there too. Omit an empty section.
+the report leaves out. Align the table's columns, sizing each from its
+longest cell before writing the table. Name every other finding not fixed
+under Deferred with its reason; a finding already fixed or not reproducible
+counts as not fixed and goes there too. Omit an empty section.
 
 ## Self-learning
 
