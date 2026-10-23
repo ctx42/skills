@@ -91,10 +91,13 @@ For each fix:
    restore the fix's files and defer it with the failing check named.
    Per-file checks (formatter, line width) skip the fix's deleted paths;
    staging still includes them.
-4. Stage only the fix's files by path (`git add -- <paths>`), compare
-   `git diff --cached --name-only` with that list in the same command, and
-   commit with a message written per [../cm/SKILL.md](../cm/SKILL.md) at
-   `mini`, from the staged diff alone (`git commit -F -`).
+4. Stage only the fix's files by path (`git add -- <paths>`), first unstaging
+   anything else the index holds, the user's own staged changes included
+   (`git restore --staged` keeps them in the tree; a `git rm` or `git mv`
+   stages at once), compare `git diff --cached --name-only` with that list in
+   the same command, and commit with a message written per
+   [../cm/SKILL.md](../cm/SKILL.md) at `mini`, from the staged diff alone
+   (`git commit -F -`).
 
 Never push, amend, rebase, or touch a commit the run did not make. Never add a
 trailer beyond what `cm` allows.
