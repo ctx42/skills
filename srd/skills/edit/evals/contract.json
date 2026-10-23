@@ -261,6 +261,13 @@
       "must": [
         "Open\\ a\\ block\\ at\\ the\\ session's\\ first\\ applied\\ edit\\ and\\ at\\ the\\ first\\ applied\\ edit\\ after\\ a\\ `summary`\\ run"
       ]
+    },
+    {
+      "id": "status-reread-on-disk-change",
+      "rule": "Re-read Status before applying when the file changed on disk since the gate; ACCEPTED puts the edit under STA-4",
+      "must": [
+        "If\\s+the\\s+file\\s+changed\\s+on\\s+disk\\s+since\\s+the\\s+approval\\s+gate,\\s+re-read\\s+`Status`\\s+first"
+      ]
     }
   ]
 }

@@ -169,7 +169,9 @@ Every mode but `autofix` runs this loop per change:
    count out ("paragraph three"); this holds for what comes next as much as for
    the proposal itself.
 2. Close the proposal with the choices (Yes / Yes Next / Skip / Edit) — the
-   capital letter is the key — and apply only on explicit approval:
+   capital letter is the key — and apply only on explicit approval. If the
+   file changed on disk since the approval gate, re-read `Status` first: an
+   `ACCEPTED` there puts the edit under STA-4, asked before it lands. The keys:
    - `Y` (Yes): apply, then stay on the current entry and propose its next
      issue; when that entry has no more, say so and name the way on ("nothing
      further on GR-3 — next entry, or name one"), then stop. `Y` never advances
