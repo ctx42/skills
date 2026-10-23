@@ -115,6 +115,13 @@
       "must": [
         "Check every worker's `file:line` against the file before it enters the report"
       ]
+    },
+    {
+      "id": "count-from-listing",
+      "rule": "The reported file count is read off the scope listing, never estimated",
+      "must": [
+        "counted off the step-1 listing at\\s+report time less any skipped, never estimated"
+      ]
     }
   ]
 }

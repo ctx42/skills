@@ -212,8 +212,9 @@ Each finding:
 
 End with a one-line verdict (ship / fix-first) and the per-severity counts. For
 a module, give the verdict per package plus an overall summary. Report budget
-usage: `depth`, packages/files reviewed, and how many findings went unreported
-past `max_issues`.
+usage: `depth`, packages/files reviewed — counted off the step-1 listing at
+report time less any skipped, never estimated — and how many findings went
+unreported past `max_issues`.
 
 ### Applying fixes
 
