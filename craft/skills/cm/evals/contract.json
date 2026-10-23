@@ -83,7 +83,8 @@
       "rule": "Every number in the body is read off the diff, not reasoned out",
       "must": [
         "Every number in the body is read off the diff, not reasoned out from it",
-        "compute them from the changed lines or leave them out"
+        "take them from the changed lines or leave them out",
+        "nor\\s+carried from the session"
       ]
     },
     {
@@ -174,7 +175,8 @@
       "must": [
         "before presenting it and before its commit runs",
         "measured, not eyeballed",
-        "sentence parsing on one read"
+        "sentence parsing on one read",
+        "and passing Describe changes only, its numbers and any\\s+contrast with a design the diff does not contain"
       ]
     },
     {
