@@ -73,12 +73,13 @@ check changes the verdict, never passes silently:
   rule to make room; move condition-triggered prose (a mode, a case type) to
   `references/`, leaving a pointer and the one-line rule. A reference over
   ~100 lines starts with a Contents list.
-- Guarded: a high-stakes rule gets an `evals/contract.json` phrase, and a probe
-  in `evals/probes.json` when it is likely to regress. A new probe must FAIL
-  at the base (`./dev/eval-probe.py --probe <group>/<skill>:<id> --against
-  <base>`) and pass on the result; then class it with `--baseline --write`.
-  One that passes at the base proves nothing — sharpen its situation; one
-  that classes `prior`, rewrite or delete.
+- Guarded: a high-stakes rule gets an `evals/contract.json` phrase — with a
+  `file` key when the phrase lives in a reference, since without one the check
+  reads only `SKILL.md` — and a probe in `evals/probes.json` when it is likely
+  to regress. A new probe must FAIL at the base (`./dev/eval-probe.py --probe
+  <group>/<skill>:<id> --against <base>`) and pass on the result; then class
+  it with `--baseline --write`. One that passes at the base proves nothing —
+  sharpen its situation; one that classes `prior`, rewrite or delete.
 - Triggers: an item that changes the description adds its requests to
   `dev/eval/triggers.json`.
 
