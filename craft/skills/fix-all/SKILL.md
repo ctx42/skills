@@ -78,9 +78,10 @@ For each fix:
    leaves the tree untouched. An
    edit to hard-wrapped Markdown rewraps the whole paragraph it touches,
    never splitting an inline code span across lines. Before proving a new
-   test red on the old code, read what the old code does with that input: a
-   test that shells out from the package directory (a runner invoking
-   `go test ./...`) can recurse, so run it in a temp dir.
+   test red on the old code, read what the old code does with that input:
+   shape the fixture so only the check under test can fire, and run a test
+   that shells out from the package directory (a runner invoking
+   `go test ./...`) in a temp dir, since it can recurse.
 2. Check before committing. A fix that turns out to need a contract or compat
    change nobody foresaw is not applied: restore its files, defer it with the
    reason, and go on.
