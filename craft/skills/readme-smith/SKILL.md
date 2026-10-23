@@ -75,8 +75,10 @@ testable `Example…` functions, never hand-written.
 `:doc:mce` is a gomake built-in, so it lists on any machine with gomake
 installed — its presence says nothing about this project. Decide from the repo:
 an existing `<!-- gmmce:… -->` marker, a gomake config, or a gomake step in CI.
-Absent those, hand-write the examples rather than introducing a tool the
-project's own contributors may not have.
+A repo with no README yet has no markers of its own: check the same owner's
+sibling repos for that evidence and inherit their convention. Absent all of
+those, hand-write the examples rather than introducing a tool the project's own
+contributors may not have.
 
 Injection needs `Example…` functions, and those are Go source: they join the
 test suite, CI, coverage, and the diff. Nobody asking for a README asked for

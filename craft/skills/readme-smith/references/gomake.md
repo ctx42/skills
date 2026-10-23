@@ -14,8 +14,9 @@ let the target fill them. The README is written once, by the target.
    built-in: `gomake --list` shows it in any directory on a box where gomake is
    installed, including one with no gomake config at all. That listing is a
    precondition, not evidence. The evidence is in the repo: an existing
-   `<!-- gmmce:… -->` marker, a gomake config, or a gomake step in CI. Without
-   one, hand-write the examples — injected fences a contributor cannot
+   `<!-- gmmce:… -->` marker, a gomake config, or a gomake step in CI — for a
+   repo with no README yet, in the same owner's sibling repos. Without one,
+   hand-write the examples — injected fences a contributor cannot
    regenerate are worse than snippets they can read.
 2. Author runnable examples first: Go testable `Example…` functions in
    `_test.go`; run `go test ./...` until they pass. These are new Go source
