@@ -141,16 +141,16 @@ delegated coherently. A module of three small packages is `./...` and still not 
      code visibly uses (an unindexed nested module) → fall back to grep/read
      and note the reduced confidence in the finding.
 4. Reason only while reviewing: do not run gofmt, go vet, golangci-lint, or
-   go test — judge by reading the code. A shell width measure (`awk` line
-   length) is allowed. Say so in the report: one line naming every command
-   this pass ran — the `awk` measure and a `grep` count; "none" only when
-   nothing ran — and that the style dimension came
-   from `go:style`. A reader cannot otherwise tell a review that honored
-   this from one that shelled out, and neither can anyone checking the run
-   afterwards. `LSP` is allowed (read-only
-   navigation). This governs the review, not the fix: applying findings
-   requires the test gate in `references/fixing.md`, which proves each bug red
-   then green and runs `go test ./... -race` per chunk.
+   go test, `-cover` included — judge coverage by grepping the symbol in
+   `*_test.go`, and the rest by reading the code. A shell width measure
+   (`awk` line length) is allowed. Say so in the report: one line naming every
+   command this pass ran — the `awk` measure and a `grep` count; "none" only
+   when nothing ran — and that the style dimension came from `go:style`. A
+   reader cannot otherwise tell a review that honored this from one that
+   shelled out, and neither can anyone checking the run afterwards. `LSP` is
+   allowed (read-only navigation). This governs the review, not the fix:
+   applying findings requires the test gate in `references/fixing.md`, which
+   proves each bug red then green and runs `go test ./... -race` per chunk.
 5. Merge the style offenses with the correctness findings and report (below).
    Do not change code unless asked.
 
