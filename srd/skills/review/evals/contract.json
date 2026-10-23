@@ -145,6 +145,14 @@
       "must": [
         "moves\\ to\\ `\\#\\#\\ Withdrawn`\\ with\\ a\\ reason,\\ stamped\\ with\\ this\\ run's\\ `updated:`\\ time"
       ]
+    },
+    {
+      "id": "check-reads-kb-by-srd-ref",
+      "rule": "check reads the KB pages naming the SRD before keeping a finding open; a banked author answer withdraws it",
+      "must": [
+        "once\\s+the\\s+KB\\s+pages\\s+whose\\s+`srd_ref`\\s+names\\s+the\\s+SRD\\s+are\\s+read",
+        "`check`\\s+reads\\s+only\\s+the\\s+KB\\s+pages\\s+whose\\s+`srd_ref`"
+      ]
     }
   ]
 }

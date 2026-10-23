@@ -59,7 +59,8 @@ and tell the user.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
   (on-demand: the facts-vs-corpus pass, which only `review` and `walk` run) —
   how to reach the documentation corpus, how its sources rank, and where an
-  unconfirmed claim goes. `check`, `errata`, and `feedback` never reach it.
+  unconfirmed claim goes. `check` reads only the KB pages whose `srd_ref`
+  names the SRD (check step 1); `errata` and `feedback` never reach it.
 - [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
   (on-demand: the first GLO-3, GLO-4, or STR-10 check) — the Company
   Glossary's term set, from the server.
@@ -281,7 +282,9 @@ open finding.
    - fixed → tick `[x]` and move to `## Resolved`.
    - partial → stays `[ ]` in its section with `*(Partial — …)*` appended;
      never ticks.
-   - not addressed → stays `[ ]`, untouched.
+   - not addressed → stays `[ ]`, untouched — once the KB pages whose
+     `srd_ref` names the SRD are read: an author answer banked there that
+     invalidates the finding withdraws it (step 2), citing that page.
 2. Withdrawal is check-only: a finding that proves invalid (mistaken, the
    author justified the text, or it cites a rule absent from the standard such
    as a defunct `MD-*`) moves to `## Withdrawn` with a reason, stamped with
