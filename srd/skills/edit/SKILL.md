@@ -73,7 +73,7 @@ is missing at run time, stop and tell the user.**
 - [references/proposals.md](references/proposals.md) (on-demand: the
   interactive summary or first proposal) — what counts as a finding and how a
   fix is worded.
-- [references/modes.md](references/modes.md) (on-demand: `feedback`,
+- [references/modes.md](references/modes.md) (on-demand: `walk`, `feedback`,
   `polish`, `targeted`, a start line or id) — those procedures.
 - [../review/references/review-file.md](../review/references/review-file.md)
   (on-demand: feedback, autofix) — how `<srd>.review.md` is numbered, cited and
@@ -288,19 +288,9 @@ Open the SRD for the user's own edit prompts; find and propose nothing.
 
 ### interactive (`walk`)
 
-1. Front-load a grouped issue summary — every issue found, grouped by document
-   section (Metadata, Introduction, Glossary, Scope, Requirements), each citing
-   its rule id. Edit nothing yet; the first proposal may follow in the same
-   turn.
-2. Walk entry by entry in document order — each requirement (`PFX-n`), glossary
-   term, scope item — running the loop for every fix the user approves; Scope
-   goes last, after Requirements, since it derives from them.
-   Move on only on `YN` or an explicit ask, and never before the current entry
-   is resolved or skipped. An entry with no finding resolves on sight: say so
-   and move on — nothing was proposed, so no key is owed.
-
-Start point (path + line or id): see
-[references/modes.md](references/modes.md).
+A grouped issue summary, then the loop entry by entry in document order, Scope
+last: read [references/modes.md](references/modes.md) *(on-demand: this mode)*
+before the summary.
 
 ### autofix
 

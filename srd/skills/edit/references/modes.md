@@ -1,9 +1,22 @@
 # Mode procedures
 
-The procedures for `feedback`, `polish`, `targeted`, and the start points (an
-interactive start line or id, a feedback `#n`). Read when the run is one of
-those; `load` and the interactive walk are in `SKILL.md`, and `autofix` is in
+The procedures for `walk`, `feedback`, `polish`, `targeted`, and the start
+points (an interactive start line or id, a feedback `#n`). Read when the run is
+one of those; `load` is in `SKILL.md`, and `autofix` is in
 [autofix.md](autofix.md).
+
+## interactive (`walk`)
+
+1. Front-load a grouped issue summary — every issue found, grouped by document
+   section (Metadata, Introduction, Glossary, Scope, Requirements), each citing
+   its rule id. Edit nothing yet; the first proposal may follow in the same
+   turn.
+2. Walk entry by entry in document order — each requirement (`PFX-n`), glossary
+   term, scope item — running the loop for every fix the user approves; Scope
+   goes last, after Requirements, since it derives from them. Move on only on
+   `YN` or an explicit ask, and never before the current entry is resolved or
+   skipped. An entry with no finding resolves on sight: say so and move on —
+   nothing was proposed, so no key is owed.
 
 ## interactive start point (path + line or id)
 
