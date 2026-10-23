@@ -204,7 +204,11 @@ Each finding:
   process state; a tool that does not perform the edit (`go mod tidy` never
   merges single-line `require` statements) gets a manual fix instead. A fix
   making an operation idempotent covers every write it performs, not only the
-  one that failed loudly.
+  one that failed loudly. Never prescribe lazy initialization inside a
+  value-receiver method — the field lands on a copy and is lost; prescribe a
+  pointer receiver or a constructor the godoc requires. A fix replacing a
+  format verb matches named types of a kind (`json.RawMessage`) by reflect
+  kind, never by a type-switch case on the base type (`[]byte`, `string`).
 
 End with a one-line verdict (ship / fix-first) and the per-severity counts. For
 a module, give the verdict per package plus an overall summary. Report budget
