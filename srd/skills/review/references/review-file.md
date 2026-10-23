@@ -114,8 +114,11 @@ In order:
    what closed it (`— added GR-11`). Keep, then append: a rewritten finding
    loses what was wrong, and the pair is what makes the entry readable a month
    later.
-4. A `---` line, then `## Withdrawn` (last): `- #9 … (withdrawn: <reason>)` —
-   no checkbox, keeps the number.
+4. A `---` line, then `## Withdrawn` (last):
+   `- #9 … (withdrawn <YYYY-MM-DD HH:MM>: <reason>)` — no checkbox, keeps the
+   number. The stamp is the withdrawing run's `updated:` value, which
+   `edit summary` uses to date the withdrawal; an unstamped entry stays as
+   found.
 
 ## What the sections still owe
 
@@ -182,6 +185,6 @@ source: path/to/srd.md
 
 ## Withdrawn
 
-- #2 [major, redundancy] GR-5 seemed to overlap GR-6 (withdrawn: distinct
-  triggers, confirmed by author).
+- #2 [major, redundancy] GR-5 seemed to overlap GR-6 (withdrawn YYYY-MM-DD
+  HH:MM: distinct triggers, confirmed by author).
 ```

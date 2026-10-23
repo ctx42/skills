@@ -76,6 +76,18 @@
       "pass": "^\\W*NO-FINDING\\b",
       "fail": "^\\W*FINDING\\b",
       "class": "load-bearing"
+    },
+    {
+      "id": "withdrawal-stamped",
+      "rule": "withdrawal-stamped",
+      "context": [
+        "SKILL.md",
+        "references/review-file.md"
+      ],
+      "prompt": "Situation: `/review specs/gw.md check`. This run will set the review file's `updated:` to 2026-10-01 16:20. Finding #4 \"[major, redundancy] GR-5 overlaps GR-6\" proves mistaken: the author showed the triggers differ.\n\nQuestion: write the `## Withdrawn` line for #4 exactly as it goes in the file, on one line.",
+      "pass": "\\(withdrawn 2026-10-01 16:20:",
+      "fail": "\\(withdrawn:",
+      "class": "redundant"
     }
   ]
 }

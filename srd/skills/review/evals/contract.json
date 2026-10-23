@@ -138,6 +138,13 @@
         "Judge\\ REQ\\-5\\ against\\ every\\ method\\ it\\ names,\\ not",
         "may\\ still\\ pass"
       ]
+    },
+    {
+      "id": "withdrawal-stamped",
+      "rule": "check stamps each withdrawal with the run's updated: time",
+      "must": [
+        "moves\\ to\\ `\\#\\#\\ Withdrawn`\\ with\\ a\\ reason,\\ stamped\\ with\\ this\\ run's\\ `updated:`\\ time"
+      ]
     }
   ]
 }

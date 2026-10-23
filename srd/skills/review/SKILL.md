@@ -284,7 +284,8 @@ open finding.
    - not addressed → stays `[ ]`, untouched.
 2. Withdrawal is check-only: a finding that proves invalid (mistaken, the
    author justified the text, or it cites a rule absent from the standard such
-   as a defunct `MD-*`) moves to `## Withdrawn` with a reason. Never carry a
+   as a defunct `MD-*`) moves to `## Withdrawn` with a reason, stamped with
+   this run's `updated:` time (review-file.md). Never carry a
    non-enforceable finding open. No other mode withdraws — which is why this
    mode is where another skill's invalidity report lands: `srd:system-check`
    cannot write the review file, so it names the numbers its corpus lookups
