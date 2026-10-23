@@ -78,8 +78,10 @@ check changes the verdict, never passes silently:
   reads only `SKILL.md` — and a probe in `evals/probes.json` when it is likely
   to regress. A new probe must FAIL at the base (`./dev/eval-probe.py --probe
   <group>/<skill>:<id> --against <base>`) and pass on the result; then class
-  it with `--baseline --write`. One that passes at the base proves nothing —
-  sharpen its situation; one that classes `prior`, rewrite or delete.
+  it with `--baseline --write`. Write its situation to withhold what the rule
+  makes a run go and read, its options naming no answer. One that passes at
+  the base proves nothing — sharpen its situation; one that classes `prior`,
+  rewrite or delete.
 - Triggers: an item that changes the description adds its requests to
   `dev/eval/triggers.json`.
 

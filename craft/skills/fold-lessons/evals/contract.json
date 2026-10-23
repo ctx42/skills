@@ -48,7 +48,8 @@
       "rule": "A new probe must fail at the base and pass on the result",
       "must": [
         "A new probe must FAIL\\s+at the base",
-        "One that passes at the base proves nothing"
+        "One that passes at the base proves nothing",
+        "Write its situation to withhold what the rule\\s+makes a run go and read"
       ]
     },
     {
