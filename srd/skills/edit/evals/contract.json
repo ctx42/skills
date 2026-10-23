@@ -228,6 +228,39 @@
         "Never remove, or propose removing, an author's inline `\\(TBD: …\\)` reminder",
         "recommend\\s+withdrawing a finding, REQ-7 included, that asks to drop it"
       ]
+    },
+    {
+      "id": "summary-read-only",
+      "file": "references/summary.md",
+      "rule": "summary reads the SRD, the decision log and the review file, and writes no file",
+      "must": [
+        "nothing\\ else\\ —\\ no\\ transcript,\\ corpus,\\ or\\ glossary\\ call\\ —\\ and\\ writes\\ no\\ file"
+      ]
+    },
+    {
+      "id": "summary-linkage",
+      "file": "references/summary.md",
+      "rule": "A finding is named only when its note describes a selected change, or its withdrawal stamp falls in a selected span",
+      "must": [
+        "its\\ resolution\\ or\\ partial\\ note\\ describes\\ that\\ entry's\\ change",
+        "An\\ unstamped\\ withdrawal\\ is\\ never\\ listed"
+      ]
+    },
+    {
+      "id": "summary-numbers-trail",
+      "file": "references/summary.md",
+      "rule": "Finding numbers trail a self-contained line in parentheses",
+      "must": [
+        "never\\ worded\\ into\\ the\\ sentence:\\ deleting\\ them\\ leaves\\ a\\ complete\\ statement"
+      ]
+    },
+    {
+      "id": "block-after-summary",
+      "file": "references/decision-log.md",
+      "rule": "A timed decision-log block opens at the session's first edit and after each summary run",
+      "must": [
+        "Open\\ a\\ block\\ at\\ the\\ session's\\ first\\ applied\\ edit\\ and\\ at\\ the\\ first\\ applied\\ edit\\ after\\ a\\ `summary`\\ run"
+      ]
     }
   ]
 }

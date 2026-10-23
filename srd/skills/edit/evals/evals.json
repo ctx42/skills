@@ -52,6 +52,26 @@
       "setup": "`specs/login.md` carries the STR-8 keyword notice, but at the end of the Introduction instead of below the metadata block. The `## Errata` block of `specs/login.review.md` still lists the notice as `(missing)` → the template notice, beside one ordinary spelling substitution.",
       "query": "/edit specs/login.md autofix",
       "files": []
+    },
+    {
+      "id": 22,
+      "name": "summary-default-newest-block",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`specs/login.decisions.md` holds three blocks: `## 2026-09-30 15:20` (LCK-2 now unlocks after 15 minutes; GR-2's expiry grace cut from 60 to 30 seconds; GR-3 reworded with the system as subject), `## 2026-09-30 09:10` (GR-1 now names a request with no Login Token; GR-2 given a 60-second grace after expiry), and a date-only `## 2026-09-29` (LCK-2 added). `specs/login.review.md` has resolved #3 (added LCK-2), #5 (GR-1), #6 (GR-2 grace), #8 (LCK-2 now 15 minutes), #10 (GR-3 subject); withdrawn #2 (unstamped), #4 (stamped 2026-09-30 09:30) and #9 (stamped 2026-09-30 15:40); and open #12 on LCK-1 with no note.",
+      "query": "/edit specs/login.md summary",
+      "files": []
+    },
+    {
+      "id": 23,
+      "name": "summary-merges-a-day",
+      "skills": [
+        "edit"
+      ],
+      "setup": "The same `specs/login.md`, `specs/login.decisions.md` and `specs/login.review.md` as `summary-default-newest-block`: two blocks dated 2026-09-30 (15:20 and 09:10) and a date-only 2026-09-29 block; GR-2 changed in both 2026-09-30 blocks, ending at a 30-second grace.",
+      "query": "/edit specs/login.md summary 2026-09-30",
+      "files": []
     }
   ]
 }

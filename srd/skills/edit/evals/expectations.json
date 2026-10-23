@@ -53,6 +53,32 @@
         "Reports `#10` as stale — a notice already exists, and moving a misplaced one is not errata",
         "Applies `#4` and hands only it to `check`: `review specs/login.md check #4`"
       ]
+    },
+    {
+      "id": 22,
+      "name": "summary-default-newest-block",
+      "expected_behavior": [
+        "Covers only the newest block: the 15-minute unlock and the 30-second grace appear, the earlier block's GR-1 change does not",
+        "Links the LCK-2 line to #8 in trailing parentheses and never names #3, the older finding on the same id",
+        "Lists withdrawn #9 (stamped inside the newest block's span) and neither #4 (stamped in the earlier block's span) nor the unstamped #2",
+        "Puts the GR-3 rewording only in a closing `Wording` section, after every group of changes in meaning",
+        "Opens with the header line `Login Token Validation: changes 2026-09-30 15:20` and uses no Markdown: no asterisks, backticks, or `#` headings",
+        "Writes no file: no Write or Edit call, the decision log and review file included",
+        "Groups the changes under the SRD's own requirement group names, `Gateway Rules` and `Account Lockout`, each on its own line",
+        "Names no open finding the selection did not touch: #12 is absent"
+      ]
+    },
+    {
+      "id": 23,
+      "name": "summary-merges-a-day",
+      "expected_behavior": [
+        "Opens with the header line `Login Token Validation: changes 2026-09-30`, with no time",
+        "Covers both 2026-09-30 blocks: the GR-1 change and the 15-minute unlock both appear",
+        "Reports GR-2 once, by its end state: the 30-second grace appears once and the 60-second grace not at all",
+        "Lists withdrawn #4 and #9, both stamped on 2026-09-30, and not the unstamped #2",
+        "Leaves out the 2026-09-29 block: #3 is not named",
+        "Writes no file: no Write or Edit call"
+      ]
     }
   ]
 }

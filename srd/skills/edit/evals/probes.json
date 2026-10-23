@@ -104,6 +104,30 @@
       "pass": "^\\W*WITHDRAW-FINDING",
       "fail": "^\\W*(REMOVE-TBD|MOVE-TBD-TO-NOTES)",
       "class": "unmutated"
+    },
+    {
+      "id": "summary-unstamped-withdrawal",
+      "rule": "summary-linkage",
+      "context": [
+        "SKILL.md",
+        "references/summary.md"
+      ],
+      "prompt": "Situation: `/edit specs/gw.md summary`. The newest decision-log block is headed `## 2026-10-01 14:00`. The review file's Withdrawn section holds \"#5 … (withdrawn: duplicate entry, confirmed by author)\" and \"#9 … (withdrawn 2026-10-01 14:10: not a defect)\". Nothing else in the selection touches #5 or #9.\n\nQuestion: which withdrawn findings does the summary list? Answer on the first line with exactly one of: ONLY-9, ONLY-5, BOTH, NONE. Then one sentence why.",
+      "pass": "^\\W*ONLY-9",
+      "fail": "^\\W*(ONLY-5|BOTH|NONE)",
+      "class": "redundant"
+    },
+    {
+      "id": "new-block-after-summary",
+      "rule": "block-after-summary",
+      "context": [
+        "SKILL.md",
+        "references/decision-log.md"
+      ],
+      "prompt": "Situation: in one `/edit specs/gw.md` session you applied two edits, logged in specs/gw.decisions.md under a block opened at 14:00 on 2026-10-01. The user then ran `/edit specs/gw.md summary`, and now, at 15:30 the same day and in the same session, approves an edit to GR-6.\n\nQuestion: write the exact `##` heading line the GR-6 entry sits under, on one line.",
+      "pass": "^\\W*## 2026-10-01 15:30\\W*$",
+      "fail": "## 2026-10-01 14:00|^\\W*## 2026-10-01\\s*$",
+      "class": "load-bearing"
     }
   ]
 }

@@ -465,4 +465,122 @@ write_case("edit--autofix-misplaced-notice-is-stale", AUTOFIX, "/srd:edit specs/
            },
            ["To the batch confirmation: \"Yes\"."])
 
+# ---------------------------------------------------------------- 22, 23
+s_sum = srd(groups=[("Gateway Rules", [
+    GR[0],
+    ("GR-2", "The system MUST reject an API request whose Login Token expired more than 30 seconds ago with HTTP status 401."),
+    GR[2]]),
+    ("Account Lockout", LCK)])
+d_sum = """# Changes — Login Token Validation
+
+## 2026-09-30 15:20
+
+### Requirements
+
+LCK-2 now unlocks a locked user account 15 minutes after it was locked,
+instead of "after a short while".
+Reason: "a tester can wait 15 minutes and check."
+
+GR-2 now rejects a Login Token that expired more than 30 seconds ago, instead
+of 60 seconds.
+Reason: "security asked for a shorter grace."
+
+GR-3 now has the system as its subject: "The system MUST reject …" instead of
+"An API request … MUST be rejected".
+Reason: "this makes the system the subject."
+
+## 2026-09-30 09:10
+
+### Requirements
+
+GR-1 now rejects an API request that carries no Login Token, instead of "an
+unauthorised API request".
+Reason: "names a condition a tester can create."
+
+GR-2 now rejects a Login Token only once it expired more than 60 seconds ago.
+Reason: "client clocks drift."
+
+## 2026-09-29
+
+### Requirements
+
+LCK-2 was added: the system unlocks a locked user account after a short while.
+Reason: "accounts must not stay locked forever."
+"""
+r_sum = review("""## Requirements
+
+- [ ] #12 [major, verifiability] LCK-1: "consecutive" does not say whether a
+  successful sign-in resets the count — state it. (SRD:REQ-5)
+
+---
+
+## Resolved
+
+- [x] #3 [blocker, coverage] SC-2: no requirement says when a locked account
+  unlocks — add one. (SRD:SCO-2) — added LCK-2.
+
+- [x] #5 [blocker, verifiability] GR-1: "unauthorised" names no condition a
+  tester can create — state it. (SRD:REQ-5) — GR-1 now names a request with no
+  Login Token.
+
+- [x] #6 [major, logical] GR-2: a client whose clock runs behind sees fresh
+  Login Tokens rejected — state the tolerance. (SRD:consistency) — GR-2 now
+  allows a grace period after expiry.
+
+- [x] #8 [major, verifiability] LCK-2: "after a short while" is vague — state
+  the unlock delay. (SRD:REQ-6) — LCK-2 now unlocks after 15 minutes.
+
+- [x] #10 [major, linguistic] GR-3: "MUST be rejected" is passive — rewrite with
+  "the system" as subject. (SRD:LANG-1) — GR-3 now has the system as subject.
+
+---
+
+## Withdrawn
+
+- #2 [minor, terminology] Login Token is defined twice (withdrawn: one entry,
+  confirmed by author).
+
+- #4 [major, redundancy] GR-1 and GR-2 overlap (withdrawn 2026-09-30 09:30:
+  distinct conditions, confirmed by author).
+
+- #9 [minor, format] LCK-1: a trailing space after the word "attempts"
+  (withdrawn 2026-09-30 15:40: the sync restores it).""")
+SUM_FILES = {"specs/login.md": s_sum, "specs/login.decisions.md": d_sum, "specs/login.review.md": r_sum}
+SUM_TAGS = DLOG + REVIEW + ["ref:edit/summary"]
+NO_MD = r"\*|\x60|^#"
+
+write_case("edit--summary-default-newest-block", SUM_TAGS, "/srd:edit specs/login.md summary", SUM_FILES,
+           {
+               "b1-newest-changes": g_last(r"^(?=[\s\S]*15[ -]minute)(?=[\s\S]*30[ -]second)"),
+               "b1-no-earlier-block": g_last(r"no Login Token|unauthori[sz]ed", "i", "not_contains"),
+               "b2-links-8": g_last(r"15[ -]minute[^\n]*\(#8\)"),
+               "b2-not-3": g_last(r"#3\b", None, "not_contains"),
+               "b3-lists-9": g_last(r"#9\b"),
+               "b3-not-4": g_last(r"#4\b", None, "not_contains"),
+               "b3-not-2": g_last(r"#2\b", None, "not_contains"),
+               "b4-wording-section": g_last(r"^Wording:?\s*$[\s\S]*(GR-3|#10)", "m"),
+               "b4-wording-last": g_last(r"(GR-3|#10)[\s\S]*^Wording:?\s*$", "m", "not_contains"),
+               "b5-header": g_last(r"^Login Token Validation: changes 2026-09-30 15:20\s*$", "m"),
+               "b5-no-markdown": g_last(NO_MD, "m", "not_contains"),
+               "b6-no-write": g_never("Write"),
+               "b6-no-edit": g_never("Edit"),
+               "b7-groups": g_last(r"^(?=[\s\S]*^Gateway Rules:?\s*$)(?=[\s\S]*^Account Lockout:?\s*$)", "m"),
+               "b8-not-12": g_last(r"#12\b", None, "not_contains"),
+           },
+           max_turns=20)
+
+write_case("edit--summary-merges-a-day", SUM_TAGS, "/srd:edit specs/login.md summary 2026-09-30", SUM_FILES,
+           {
+               "b1-header": g_last(r"^Login Token Validation: changes 2026-09-30\s*$", "m"),
+               "b2-both-blocks": g_last(r"^(?=[\s\S]*no Login Token)(?=[\s\S]*15[ -]minute)", "i"),
+               "b3-gr2-end-state": g_last(r"30[ -]second", None, "count:1"),
+               "b3-no-60": g_last(r"60 seconds|60-second", "i", "not_contains"),
+               "b4-lists-4-and-9": g_last(r"^(?=[\s\S]*#4\b)(?=[\s\S]*#9\b)"),
+               "b4-not-2": g_last(r"#2\b", None, "not_contains"),
+               "b5-not-3": g_last(r"#3\b", None, "not_contains"),
+               "b6-no-write": g_never("Write"),
+               "b6-no-edit": g_never("Edit"),
+           },
+           max_turns=20)
+
 print("done")

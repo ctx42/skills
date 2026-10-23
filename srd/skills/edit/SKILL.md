@@ -5,7 +5,7 @@ description: >
   place against the SRD standard. Use when asked to edit, improve, fix,
   revise, or clean up an SRD, to open one for editing, or to apply findings
   from a review file or pasted feedback.
-argument-hint: "<path to SRD> [walk | <line> | <id> | <review-file> | #n | autofix | polish | <target>]"
+argument-hint: "<path to SRD> [walk | <line> | <id> | <review-file> | #n | autofix | polish | summary | <target>]"
 license: MIT
 ---
 
@@ -22,6 +22,7 @@ license: MIT
 /edit <srd> #2               feedback from finding #2, then next by number or jump to any number
 /edit <srd> autofix          bulk-apply the review's ## Errata block behind one confirmation
 /edit <srd> polish           mechanical-only cleanup (spelling, numbering, keywords), confirm each
+/edit <srd> summary [today]  read-only: newest decision-log block (or a day; `<date> <HH:MM>` one block) as a chat message
 /edit <srd> GR-3a <change>   targeted: edit one entry by id plus the change, quoted text, or description
 ```
 
@@ -118,6 +119,7 @@ Otherwise three steps, no questions of its own.
    in the loop.
 
 `autofix` runs only steps 1–2: errata never touches ids or term wording.
+`summary` runs only step 1.
 
 ### Glossary (on the first term)
 
@@ -266,6 +268,7 @@ with a confirmation and expects no review file.
 - path + `#n` → feedback from finding `#n`.
 - path + `autofix` → autofix.
 - path + `polish` → polish.
+- path + `summary`, optionally `today`, a date, or a date and time → summary.
 - path + anything else (an id plus a change, a glossary term, quoted
   text, description) → targeted.
 
@@ -299,6 +302,11 @@ confirmation — never the edit loop, never a re-scan of the SRD. The full
 procedure is in [references/autofix.md](references/autofix.md) *(on-demand:
 this mode only)*: read it before applying anything.
 
+### summary
+
+Read-only, writing no file: read
+[references/summary.md](references/summary.md) *(on-demand: this mode only)*.
+
 ### feedback, polish, targeted
 
 Findings from a review or pasted feedback, mechanical-only cleanup, or one
@@ -326,14 +334,15 @@ before the first proposal.
      scaffold left standing — by name and item count, not its items.
    - `## Open questions`: what remains of the held-over list, numbered from 1,
      one line each — the list itself, never a bare count.
-   - `Decision log: <srd>.decisions.md — hand the author its newest block,
-     ## <date>, as this session's summary`, with the block's real heading;
-     omitted when nothing was applied, since the file does not exist.
+   - `Decision log: <srd>.decisions.md — /edit <srd> summary turns its newest
+     block, ## <date> <HH:MM>, into a chat message`, with the block's real
+     heading; omitted when nothing was applied, since the file does not exist.
    - One start clause: what the draft check found, which delegates ran,
      whether the glossary resolved.
 
 `autofix` owes this section only as
-[references/autofix.md](references/autofix.md) step 8 states.
+[references/autofix.md](references/autofix.md) step 8 states. `summary` owes
+none of it: it applied nothing.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. Every count in the manifest — requirements

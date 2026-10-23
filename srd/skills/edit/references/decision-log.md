@@ -18,11 +18,15 @@ author-facing account of what changed and why, which a diff cannot carry.
 
 - Write after each applied edit, never batched to session end: a session that
   clears mid-flow must lose nothing.
-- Accumulate: one file per SRD, `##` session blocks headed by the date, newest
-  first. Never rewrite or prune an earlier block.
-- One `###` heading per section per session: a later entry for a section this
-  session already wrote under appends to that block, it never opens a second
-  one. A new `###` heading only for a section the session has not touched yet.
+- Accumulate: one file per SRD, `##` blocks newest first, each headed
+  `## <YYYY-MM-DD> <HH:MM>` — the local time of its first entry, read from the
+  clock (`date '+%Y-%m-%d %H:%M'`); with no clock, the date alone. Open a block
+  at the session's first applied edit and at the first applied edit after a
+  `summary` run; every other entry joins the newest block. Never rewrite or
+  prune an earlier block; a date-only heading stays as found.
+- One `###` heading per section per block: a later entry for a section this
+  block already wrote under appends to it, it never opens a second one. A new
+  `###` heading only for a section the block has not touched yet.
   Incremental writing is what makes this explicit — the entries arrive one at a
   time, and the block they join is the one already on the page.
 - Record the entry/id, the change in prose (not a diff), and the reason,
@@ -60,7 +64,7 @@ illustrative, not boilerplate to copy:
 ````
 # Changes — <Document Title>
 
-## 2026-07-27
+## 2026-07-27 14:05
 
 ### Details page
 
@@ -77,6 +81,6 @@ Source: Telemetry › Sampling (rank 2, 1 = most trusted) — https://example.at
 The British spellings in the Introduction were changed to US English.
 ````
 
-The second Details page entry was written later in the same session and joined
-the heading already there; General is a second heading because the session had
+The second Details page entry was written later in the same block and joined
+the heading already there; General is a second heading because the block had
 not written under it before.
