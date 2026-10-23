@@ -81,16 +81,19 @@ For each fix:
    test red on the old code, read what the old code does with that input:
    shape the fixture so only the check under test can fire, and run a test
    that shells out from the package directory (a runner invoking
-   `go test ./...`) in a temp dir, since it can recurse.
+   `go test ./...`) in a temp dir, since it can recurse. Prove it red as it
+   will be committed — after it passes the per-file checks, line width
+   included — and before changing any signature it calls, which leaves the old
+   code unbuildable.
 2. Check before committing. A fix that turns out to need a contract or compat
    change nobody foresaw is not applied: restore its files, defer it with the
    reason, and go on.
-3. Run the project's checks, gated on exit status in the same command that
-   commits (`make test >out 2>&1 || exit 1`), never on piped or filtered
-   output. A failure the baseline did not have: repair it once; still red,
-   restore the fix's files and defer it with the failing check named.
-   Per-file checks (formatter, line width) skip the fix's deleted paths;
-   staging still includes them.
+3. Run the project's checks, per-file ones (formatter, line width) included,
+   gated on exit status in the same command that commits
+   (`make test >out 2>&1 || exit 1`), never on piped or filtered output. A
+   failure the baseline did not have: repair it once; still red, restore the
+   fix's files and defer it with the failing check named. Per-file checks skip
+   the fix's deleted paths; staging still includes them.
 4. Stage only the fix's files by path (`git add -- <paths>`), first unstaging
    anything else the index holds, the user's own staged changes included
    (`git restore --staged` keeps them in the tree; a `git rm` or `git mv`
