@@ -50,12 +50,15 @@ something no finding names. No findings in the conversation: say so and stop.
    findings did not make is a question too: commit them in with the fix, or
    skip the fix — a file is staged whole, never by hunk.
 5. Ask the round: every contract, compat, and needs-user finding plus any
-   baseline or dirty-tree question, in order, one question per question-tool
-   call (one numbered message without such a tool), each with the situation,
-   the options, and your recommendation in plain terms. Nothing to ask: say
-   "no questions; working unattended" and go on in the same turn. Ask every
-   one and wait for the answers. Each left unanswered takes the safe side: the
-   finding is skipped, a baseline failure counts as known.
+   baseline or dirty-tree question and, when the user's instructions or the
+   harness forbid committing, one asking leave to commit, answered once for
+   every fix — in order, one question per question-tool call (one numbered
+   message without such a tool), each with the situation, the options, and
+   your recommendation in plain terms. Nothing to ask: say "no questions;
+   working unattended" and go on in the same turn. Ask every one and wait for
+   the answers. Each left unanswered takes the safe side: the finding is
+   skipped, a baseline failure counts as known, and without leave to commit
+   the run lists the triage, writes no Report, and stops before any edit.
 
 From here on, never ask: not to confirm a fix, not to commit, not to continue.
 

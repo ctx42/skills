@@ -70,6 +70,14 @@
       "must": [
         "asserts every replacement changed the text"
       ]
+    },
+    {
+      "id": "leave-to-commit",
+      "rule": "When committing is forbidden, triage asks leave to commit; without it the run stops before any edit",
+      "must": [
+        "harness\\s+forbid\\s+committing,\\s+one\\s+asking\\s+leave\\s+to\\s+commit,\\s+answered\\s+once\\s+for\\s+every\\s+fix",
+        "without\\s+leave\\s+to\\s+commit\\s+the\\s+run\\s+lists\\s+the\\s+triage,\\s+writes\\s+no\\s+Report,\\s+and\\s+stops\\s+before\\s+any\\s+edit"
+      ]
     }
   ]
 }
