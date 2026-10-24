@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "ux",
+  "description": "Web-app UX improvement: audits the running app in a visible Chrome and commits one ranked fix at a time with before/after pictures (improve).",
+  "version": "0.27.1",
+  "author": {
+    "name": "Rafal Zajac",
+    "email": "rzajac@gmail.com"
+  },
+  "keywords": ["ux", "accessibility", "web", "ui"],
+  "license": "MIT"
+}

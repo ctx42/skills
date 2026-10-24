@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Settings · Tasks</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <span class="brand">Tasks</span>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html">Today</a>
+      <a href="archive.html">Archive</a>
+      <a href="settings.html" aria-current="page">Settings</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Settings</h1>
+    <form class="settings-form">
+      <fieldset>
+        <legend>Profile</legend>
+        <span>Display name</span>
+        <input type="text" name="name">
+        <button type="submit">Save</button>
+        <span class="saved" role="status"></span>
+      </fieldset>
+    </form>
+    <form class="settings-form">
+      <fieldset>
+        <legend>Notifications</legend>
+        <input type="checkbox" id="digest" name="digest">
+        <label for="digest">Email me a daily digest</label>
+        <button type="submit">Persist</button>
+        <span class="saved" role="status"></span>
+      </fieldset>
+    </form>
+  </main>
+  <footer class="site-footer">Tasks keeps your list in this browser only.</footer>
+  <script src="settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Archive · Tasks</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <span class="brand">Tasks</span>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html">Today</a>
+      <a href="archive.html" aria-current="page">Archive</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Archive</h1>
+    <p id="status" class="status">Loading…</p>
+    <ul id="tasks" class="task-list" data-source="data/archive.json"></ul>
+  </main>
+  <footer class="site-footer">Tasks keeps your list in this browser only.</footer>
+  <script src="tasks.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

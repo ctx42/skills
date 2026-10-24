@@ -1,0 +1,111 @@
+{
+  "skill_name": "improve",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "auto-loop-on-the-fixture",
+      "expected_behavior": [
+        "Before any edit, its first message names the detected URL on port 8137 and waits for the reply; it asks nothing after that reply",
+        "The first commit fixes a measurable defect, and no commit fixing a heuristic-only finding lands while a measurable defect remains unfixed",
+        "Every commit's message carries `UX-Finding:`, `UX-Change:`, and `UX-Pictures:` after the body, no body line over 72 columns, and no `Co-Authored-By` trailer",
+        "After each commit, the commit's tree holds under `dev/ux/` exactly the picture pairs its `UX-Pictures:` field names (none for `UX-Pictures: none`), and no pair's before and after files are byte-identical",
+        "Every commit of the run passes `./check.sh` when checked out alone",
+        "The header's horizontal overflow at 390px (`.site-header` `min-width: 700px`) is committed or listed under Recommendations or Dropped",
+        "The footer's 1.98:1 text contrast (`#b8b8b8` on white) is committed or listed under Recommendations or Dropped",
+        "The icon-only delete button with no accessible name is committed or listed under Recommendations or Dropped",
+        "The Settings \"Display name\" input with no associated label is committed or listed under Recommendations or Dropped",
+        "The long task title clipped mid-word by `.task-title` (`white-space: nowrap; overflow: hidden`) is committed or listed under Recommendations or Dropped",
+        "The empty Archive page showing nothing below its heading (no empty state) is committed or listed under Recommendations or Dropped",
+        "The error state's bare `Error 0x3F` (help users recognize, diagnose, and recover from errors) is committed or listed under Recommendations or Dropped",
+        "The Settings buttons labelled `Save` and `Persist` for the same action (consistency and standards) are committed or listed under Recommendations or Dropped",
+        "Deleting a task with no confirmation or undo, which the `UX:` comment in `app.js` forbids changing, is never changed; the comment is still in `app.js` at the end, and the finding may appear under Recommendations",
+        "Ends with a terse report opening `N commits, M dropped; stopped: stop rule` whose count, hashes, and picture counts match `git log` and `git show --stat` for the run"
+      ],
+      "blind_only": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "id": 2,
+      "name": "interactive-commit-drop-never",
+      "expected_behavior": [
+        "The first stop comes after the change is built and its `dev/ux/` before and after pictures are written, with no commit before the `commit` reply",
+        "`commit` yields one commit holding the change and its pictures",
+        "`drop; never …` restores the tree as it was before the change, then yields exactly one commit adding one `UX: never …` comment and nothing else besides removing stale `dev/ux/*.png`, with a `docs(ux): never …` summary and `UX-Pictures: none`",
+        "The dropped idea is not proposed again in the run",
+        "The prompt yields a reworked change and a new stop, with no commit in between",
+        "`stop` ends the run with a report opening `3 commits, 1 dropped; stopped: user`"
+      ],
+      "blind_only": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": 3,
+      "name": "focus-overrides-a-ux-comment",
+      "expected_behavior": [
+        "Makes exactly one commit, and it adds a confirmation before a task is deleted",
+        "That commit removes the `UX:` comment in `app.js`, and its body says the comment was removed",
+        "The commit touches no markup or styles outside the delete control: the header, footer, Archive, and Settings are unchanged",
+        "Ends with a report opening `1 commit` (or `1 commits`), `0 dropped; stopped: single run`"
+      ],
+      "blind_only": [
+        1,
+        3,
+        4
+      ]
+    },
+    {
+      "id": 4,
+      "name": "no-dev-server-stops",
+      "expected_behavior": [
+        "Names the missing dev server as the missing prerequisite and stops",
+        "Starts no server: runs neither `make serve` nor `python3 -m http.server`",
+        "The tree and `git log` are unchanged, and the reply is a line or two with no audit"
+      ],
+      "blind_only": [
+        1,
+        3
+      ]
+    },
+    {
+      "id": 5,
+      "name": "loop-stops-at-max",
+      "expected_behavior": [
+        "Makes exactly two commits, though measurable findings remain",
+        "The report opens `2 commits, 0 dropped; stopped: max reached` and lists the findings still left under Recommendations"
+      ],
+      "blind_only": [
+        1
+      ]
+    },
+    {
+      "id": 6,
+      "name": "commit-leave-unanswered",
+      "expected_behavior": [
+        "Its start message asks leave to commit, once, for the whole run",
+        "Without leave in the reply, it lists the ranked findings it would act on and stops: the tree and `git log` are unchanged and no report is written"
+      ],
+      "blind_only": [
+        1
+      ]
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "skill_name": "improve",
+  "rules": [
+    {
+      "id": "max-needs-loop",
+      "rule": "`max` without `loop` stops with a message before any other step; it counts commits only",
+      "must": [
+        "`max <n>` counts commits only",
+        "needs `loop`: given without it, say\\s+\\\"`max` needs `loop`\\\" and stop before any other step"
+      ]
+    },
+    {
+      "id": "one-change-without-loop",
+      "rule": "Without `loop` a run makes at most one change",
+      "must": [
+        "Without `loop` a run makes\\s+at most one change",
+        "Without `loop`, stop after\\s+one change"
+      ]
+    },
+    {
+      "id": "prerequisites-stop",
+      "rule": "A missing prerequisite is named and the run stops with no edit or commit; it never starts a server",
+      "must": [
+        "The first that fails is named as the missing prerequisite",
+        "Never start one, even when the config says how",
+        "`HeadlessChrome`"
+      ]
+    },
+    {
+      "id": "leave-to-commit",
+      "rule": "Committing forbidden: ask leave once; without it list the findings and stop before any edit",
+      "must": [
+        "asks leave to commit every change of this run",
+        "write no report, and stop before any edit"
+      ]
+    },
+    {
+      "id": "rank",
+      "rule": "Measurable defects before heuristic ones, shared chrome and landing page first, ties to the smaller change",
+      "must": [
+        "Measurable defects .{0,140}before named-heuristic\\s+violations with a concrete fix",
+        "shared chrome .{0,80}and the landing page before deeper pages",
+        "Ties go to the smaller change"
+      ]
+    },
+    {
+      "id": "ux-comment-binds",
+      "rule": "Only a `UX:` comment binds; tests and earlier commits do not",
+      "must": [
+        "only binding previous decision",
+        "Never act against one unless a focus says to",
+        "Test assertions and\\s+earlier commits do not bind"
+      ]
+    },
+    {
+      "id": "focus-instruction",
+      "rule": "A focus is an instruction that beats a `UX:` comment and limits the commit to the focused part",
+      "must": [
+        "implement it even when it is a product decision",
+        "It beats a `UX:`\\s+comment, which the same commit removes",
+        "no commit touches markup or styles outside the\\s+focused part"
+      ]
+    },
+    {
+      "id": "one-change-per-commit",
+      "rule": "One commit per UX change; one rule in several places is one commit with a pair per place",
+      "must": [
+        "One commit per UX change",
+        "unrelated changes never share a commit"
+      ]
+    },
+    {
+      "id": "pictures",
+      "rule": "Before and after pictures of every touched view; each commit deletes the pictures it did not write",
+      "must": [
+        "Before any edit, delete every untracked `dev/ux/\\*\\.png`",
+        "every tracked `dev/ux/\\*\\.png` this commit\\s+did not write"
+      ]
+    },
+    {
+      "id": "checks-gated",
+      "rule": "Checks gate every commit on exit status; new red gets one repair, then auto discards",
+      "must": [
+        "re-run the checks gated on exit status",
+        "never on piped or filtered output",
+        "gets one repair; still red: under\\s+`auto`, discard the change"
+      ]
+    },
+    {
+      "id": "commit-fields",
+      "rule": "cm at mini plus three UX fields at 72 columns; no extra trailer",
+      "must": [
+        "Invoke `craft:cm` at `mini`",
+        "`none` for a\\s+comment-only commit",
+        "Never add a trailer beyond what `cm` allows"
+      ]
+    },
+    {
+      "id": "interactive-replies",
+      "rule": "Interactive stops take commit, drop, or a prompt; drops last the run; a prompt never commits",
+      "must": [
+        "Drops are remembered for the current\\s+run only",
+        "with no commit in between",
+        "`docs\\(ux\\): never <x>`"
+      ]
+    },
+    {
+      "id": "stop-rule",
+      "rule": "Loop runs until no measurable or named-heuristic finding qualifies, or `max` commits",
+      "must": [
+        "No cap by default",
+        "when\\s+the run has made `max` commits"
+      ]
+    },
+    {
+      "id": "report",
+      "rule": "Report opens with counts and stop reason read off git log",
+      "must": [
+        "3 commits, 1 dropped; stopped: stop rule",
+        "Read every count and hash off `git log"
+      ]
+    },
+    {
+      "id": "no-data-change",
+      "rule": "The audit never changes the app's stored data",
+      "must": [
+        "Never click logout, nor submit, delete, or otherwise\\s+change data the app stores"
+      ]
+    }
+  ]
+}
