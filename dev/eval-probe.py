@@ -66,7 +66,7 @@ import time
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CACHE = os.path.join(ROOT, "tmp", "probe-cache")
-GROUPS = ("go", "srd", "craft")
+GROUPS = ("go", "srd", "craft", "ux", "web")
 MAX_BATCH = 8
 
 FRAME = """You are an AI coding agent with the skill below loaded: its SKILL.md \

@@ -33,7 +33,7 @@ import subprocess
 import sys
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-GROUPS = ("go", "srd", "craft")
+GROUPS = ("go", "srd", "craft", "ux", "web")
 # eval-probe.py --baseline classes; `prior` probes test the model, not the skill.
 CLASSES = ("load-bearing", "redundant", "unmutated", "prior")
 

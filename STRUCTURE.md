@@ -34,7 +34,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 ├── .claude/
 │   └── hooks/skill-guard.sh        # Reminds an edit in a skill of the authoring conventions
 ├── .claude-plugin/
-│   └── marketplace.json            # Marketplace catalog: the four plugins below
+│   └── marketplace.json            # Marketplace catalog: the six plugins below
 │
 ├── go/                             # Plugin: Go workflow
 │   ├── .claude-plugin/plugin.json
@@ -70,6 +70,16 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       ├── enhance-skills/         # Record lessons into skills; self-learning
 │       ├── fold-lessons/           # Fold lessons and skill edits in; lint + eval
 │       └── fix-all/                # Fix all findings unattended, one commit each
+├── ux/                             # Plugin: web-app UX improvement
+│   ├── .claude-plugin/plugin.json
+│   ├── evals/assets/               # Fixture web app with planted UX defects
+│   └── skills/
+│       └── improve/                # Audit a running app, commit one UX fix at a time
+├── web/                            # Plugin: web-app performance
+│   ├── .claude-plugin/plugin.json
+│   ├── evals/assets/               # Fixture app and API server with planted perf defects
+│   └── skills/
+│       └── perf/                   # Measure a running app, commit one measured fix at a time
 └── notify/                         # Plugin: desktop attention hooks (no skills)
     ├── .claude-plugin/plugin.json
     └── hooks/
@@ -78,8 +88,8 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
         └── notify-monitors.py      # GTK card drawn on every monitor
 ```
 
-Skills are grouped into **three plugins** (`go`, `srd`, `craft`); a fourth,
-`notify`, ships hooks instead of skills.
+Skills are grouped into **five plugins** (`go`, `srd`, `craft`, `ux`,
+`web`); a sixth, `notify`, ships hooks instead of skills.
 Each skill plugin is a directory with a `.claude-plugin/plugin.json` manifest and
 a `skills/` folder holding one directory per skill. Each skill directory has a
 `SKILL.md` (the prompt, including its `## Usage` block), an `evals/evals.json`
@@ -95,7 +105,7 @@ Skills ship no `README.md` — the repo-level one orients humans.
 
 Claude consumes the skills as plugins, not as loose skill folders:
 
-- `.claude-plugin/marketplace.json` lists the four plugins, each pointing at its
+- `.claude-plugin/marketplace.json` lists the six plugins, each pointing at its
   group directory via `source` (e.g. `"./srd"`). Skills inside a group are
   discovered by the default `skills/` scan — the marketplace does not list them
   individually.
@@ -128,6 +138,10 @@ reference each other with relative paths from their own directory:
   `../style/rules.md`.
 
 Keep these skills within the same plugin so the `../sibling` paths resolve.
+
+A skill may invoke another plugin's skill by name, never by path: `ux:improve`
+calls `craft:cm` through the Skill tool and checks at start that the craft
+plugin is installed; `web:perf` does the same.
 
 A path written in a `references/` file needs one more `..` than the same path
 in a `SKILL.md`, since it sits a directory deeper — `../../create/references/`

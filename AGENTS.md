@@ -3,9 +3,9 @@
 Guide for AI agents working in this repository.
 
 This repository is a collection of reusable skills for Claude. Skills ship as
-**Claude Code plugins**, grouped into `go`, `srd`, and `craft`. A fourth
-plugin, `notify`, ships desktop-attention hooks and no skills. Each skill is a
-directory under a group's `skills/` folder with a `SKILL.md` (the prompt,
+**Claude Code plugins**, grouped into `go`, `srd`, `craft`, `ux`, and `web`. A
+sixth plugin, `notify`, ships desktop-attention hooks and no skills. Each skill
+is a directory under a group's `skills/` folder with a `SKILL.md` (the prompt,
 including its `## Usage` block), an `evals/evals.json` (its eval scenarios), an
 `evals/expectations.json` (how each is graded — separate so a run can be
 given a scenario without its rubric), an `evals/contract.json` (its high-stakes
@@ -108,6 +108,19 @@ source of truth.
   skills, keeping only what generalizes; validates, lints, and evals each.
 - `fix-all` — fixes every finding in the conversation, one commit each, after
   one up-front question round for contract and compatibility changes.
+
+### ux
+
+- `improve` — audits a running web app in a visible Chrome and commits one
+  ranked UX fix at a time with before/after pictures; interactive by default,
+  `auto` and `loop` for unattended runs. Needs the craft plugin (`craft:cm`).
+
+### web
+
+- `perf` — measures a running web app in a visible Chrome at a 4x CPU
+  slowdown and commits one measured speed or memory fix at a time, front end
+  and live-reloading back end, never changing what the user sees; interactive
+  by default, `auto` and `loop` for unattended runs. Needs the craft plugin.
 
 ### notify
 

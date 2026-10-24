@@ -5,7 +5,10 @@
     "security-review": "Complete a security review of the pending changes on the current branch.",
     "anthropic-skills:docs": "Editable docs people share and comment on: a document, report, proposal, guide, how-to.",
     "skill-creator:skill-creator": "Create new skills, modify and improve existing skills, and measure skill performance.",
-    "claude-md-management:revise-claude-md": "Update CLAUDE.md with learnings from this session."
+    "claude-md-management:revise-claude-md": "Update CLAUDE.md with learnings from this session.",
+    "chrome-devtools-mcp:a11y-debugging": "Uses Chrome DevTools MCP for accessibility (a11y) debugging and auditing based on web.dev guidelines: semantic HTML, ARIA labels, focus states, keyboard navigation, color contrast.",
+    "chrome-devtools-mcp:debug-optimize-lcp": "Guides debugging and optimizing Largest Contentful Paint (LCP) using Chrome DevTools MCP tools: slow page loads, Core Web Vitals, why the main content takes too long to appear.",
+    "chrome-devtools-mcp:memory-leak-debugging": "Diagnoses and resolves memory leaks in JavaScript/Node.js applications: high memory usage, OOM errors, capturing and comparing heap snapshots."
   },
   "cases": [
     {"say": "fix all of them and commit each one separately", "want": "craft:fix-all"},
@@ -79,6 +82,15 @@
     {"say": "draft a proposal document for the team about the Q4 roadmap", "want": "anthropic-skills:docs"},
     {"say": "make a new skill that formats SQL", "want": "skill-creator:skill-creator"},
     {"say": "what's the weather in Zurich", "want": "none"},
+    {"say": "the settings page looks broken on my phone, fix the UX and commit each fix", "want": "ux:improve"},
+    {"say": "go through our web app and polish the UI one commit at a time", "want": "ux:improve"},
+    {"say": "here's a screenshot of the checkout form, make its error messages clearer", "want": "ux:improve"},
+    {"say": "fix the accessibility problems in our dashboard and commit them with before and after screenshots", "want": "ux:improve"},
+    {"say": "check the focus states and keyboard navigation on this page in Chrome and tell me what fails", "want": "chrome-devtools-mcp:a11y-debugging"},
+    {"say": "the device list is sluggish when I sort it, make the front end faster and commit each fix", "want": "web:perf"},
+    {"say": "profile our web app in the browser and fix the slow interactions and memory leaks one commit at a time", "want": "web:perf"},
+    {"say": "speed up the dashboard page, both the frontend and our Go API, keep going until it is fast", "want": "web:perf"},
+    {"say": "why is the largest contentful paint on my landing page so slow? walk me through it", "want": "chrome-devtools-mcp:debug-optimize-lcp"},
     {"say": "rename the variable x to count in main.go", "want": "none"},
     {"say": "explain how goroutines are scheduled", "want": "none"},
     {"say": "run the tests", "want": "none"},
