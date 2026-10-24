@@ -20,7 +20,7 @@ skills — it ships only desktop-notification hooks:
 <repo-root>/
 ├── README.md  CONTRIBUTING.md  STRUCTURE.md  ONBOARDING.md  AGENTS.md
 ├── dev/                                 # maintainer scripts (lint, version sync)
-├── .claude-plugin/marketplace.json      # the marketplace catalog (5 plugins)
+├── .claude-plugin/marketplace.json      # the marketplace catalog (6 plugins)
 │
 ├── go/
 │   ├── .claude-plugin/plugin.json
