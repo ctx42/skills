@@ -1,0 +1,218 @@
+{
+  "skill_name": "perf",
+  "rules": [
+    {
+      "id": "max-needs-loop",
+      "rule": "`max` without `loop` stops with a message before any other step; it counts commits only",
+      "must": [
+        "`max <n>` counts commits only",
+        "needs `loop`: given without it, say\\s+\\\"`max` needs `loop`\\\" and stop before any other step"
+      ]
+    },
+    {
+      "id": "one-change-without-loop",
+      "rule": "Without `loop` a run makes at most one change",
+      "must": [
+        "Without `loop` a run makes\\s+at most one change",
+        "Without `loop`, stop after one change"
+      ]
+    },
+    {
+      "id": "prerequisites-stop",
+      "rule": "A missing prerequisite is named and the run stops with no edit or commit; it never starts a server",
+      "must": [
+        "The first that fails is named as the missing prerequisite",
+        "Never start one, even when the config says how",
+        "`HeadlessChrome`"
+      ]
+    },
+    {
+      "id": "leave-to-commit",
+      "rule": "Committing forbidden: ask leave once; without it list the findings and stop before any edit",
+      "must": [
+        "asks leave\\s+to commit every change of this run",
+        "write no\\s+report, and stop before any edit"
+      ]
+    },
+    {
+      "id": "scratch-only",
+      "rule": "Builds, traces, snapshots, and captures go to a scratch directory; the build never writes the project's output",
+      "must": [
+        "never into the tree",
+        "It runs only with its output pointed at the scratch\\s+directory",
+        "skip bundle findings and say so under Not\\s+measured"
+      ]
+    },
+    {
+      "id": "cpu-4x",
+      "rule": "Every measurement runs at a 4x CPU slowdown; load cost only from the build",
+      "must": [
+        "`cpuThrottlingRate: 4`",
+        "bundle size only from the\\s+scratch build, never from the dev server"
+      ]
+    },
+    {
+      "id": "thresholds",
+      "rule": "Timed findings exist only past their thresholds; counted ones at every instance",
+      "must": [
+        "a timed one exists only while past its threshold",
+        "INP over 200 ms",
+        "over 50 ms",
+        "CLS over 0\\.1",
+        "grows on every one of 5\\s+navigate-away-and-back cycles",
+        "A counted one is a finding at every instance"
+      ]
+    },
+    {
+      "id": "noise-keep",
+      "rule": "Median of 5; keep a change only past the before spread; else drop as no measurable gain, focus included",
+      "must": [
+        "measured 5 times and its median used",
+        "more than the spread \\(max − min\\) of the 5 before runs",
+        "\\\"no measurable gain\\\" —\\s+a focus instruction included"
+      ]
+    },
+    {
+      "id": "write-safety",
+      "rule": "Exploration never triggers a write unless the focus names the flow",
+      "must": [
+        "nor trigger a write — a POST, PUT,\\s+PATCH, or DELETE — unless the focus names that flow",
+        "never used again this run"
+      ]
+    },
+    {
+      "id": "perf-comment-binds",
+      "rule": "Only a `PERF:` comment binds; tests and earlier commits do not",
+      "must": [
+        "the only binding previous decision",
+        "Never act against one unless the focus asks for what it\\s+forbids",
+        "Test assertions and\\s+earlier commits do not bind"
+      ]
+    },
+    {
+      "id": "rank",
+      "rule": "Timed findings first by ratio, leaks top; then network; then bundle; shared chrome first; ties to the smaller change",
+      "must": [
+        "Timed findings, the worst ratio of value to threshold first",
+        "a leak ranks\\s+above every other timed finding",
+        "Network waste",
+        "Bundle findings",
+        "ties go to the\\s+smaller change"
+      ]
+    },
+    {
+      "id": "back-end-scope",
+      "rule": "Own back end changes only with live reload; outside APIs only as recommendations",
+      "must": [
+        "only when start step\\s+6 turned back-end edits on",
+        "APIs outside the repo are never changed",
+        "otherwise every back-end idea goes to\\s+Recommendations"
+      ]
+    },
+    {
+      "id": "merge-rule",
+      "rule": "Merge calls only for one resource always loaded together; never a per-page bundle; keep endpoints still called",
+      "must": [
+        "their\\s+data describes one resource",
+        "Never add an\\s+endpoint bundling unrelated resources for one page",
+        "Keep an old endpoint while\\s+anything else in the repo calls it"
+      ]
+    },
+    {
+      "id": "reload-wait",
+      "rule": "Measure a back-end change only after the server reloaded",
+      "must": [
+        "PID \\(`ss -ltnp`\\) has changed",
+        "No\\s+restart within 60 s"
+      ]
+    },
+    {
+      "id": "focus-instruction",
+      "rule": "A focus beats a `PERF:` comment, may name a visible change, and limits commits to its part",
+      "must": [
+        "It beats a `PERF:` comment, which the\\s+same commit removes",
+        "It may require a visible change it\\s+names explicitly",
+        "no commit touches code outside the focused part"
+      ]
+    },
+    {
+      "id": "no-visible-change",
+      "rule": "Nothing the user sees changes; checked by the visible-change check",
+      "must": [
+        "Nothing the user sees changes",
+        "go to\\s+Recommendations unless a focus names them",
+        "a mismatch discards the change"
+      ]
+    },
+    {
+      "id": "tests-and-benchmarks",
+      "rule": "New code paths get tests; isolated gains get a benchmark run before and after",
+      "must": [
+        "gets unit or integration tests in the\\s+same commit",
+        "Write it first, run it on the unchanged code, then on\\s+the change"
+      ]
+    },
+    {
+      "id": "code-quality",
+      "rule": "Never trade readability, layering, or tests for speed",
+      "must": [
+        "Never, for speed:",
+        "weaken or delete a test",
+        "A gain that needs one of these\\s+rules broken goes to Recommendations"
+      ]
+    },
+    {
+      "id": "one-change-per-commit",
+      "rule": "One commit per performance change",
+      "must": [
+        "One commit per performance change",
+        "unrelated changes never share a commit"
+      ]
+    },
+    {
+      "id": "checks-gated",
+      "rule": "Checks gate every commit on exit status; new red gets one repair, then auto discards",
+      "must": [
+        "re-run the checks gated on exit status",
+        "never on piped or filtered output",
+        "gets one repair; still red: under\\s+`auto`, discard the change"
+      ]
+    },
+    {
+      "id": "commit-fields",
+      "rule": "cm at mini plus Perf fields at 72 columns; pictures only when carried; no extra trailer",
+      "must": [
+        "Invoke `craft:cm` at `mini`",
+        "only on a commit carrying\\s+pictures",
+        "carries `Perf-Finding:` alone",
+        "Never\\s+add a trailer beyond what `cm` allows"
+      ]
+    },
+    {
+      "id": "interactive-replies",
+      "rule": "Interactive stops take commit, drop, or a prompt; drops last the run; a prompt never commits",
+      "must": [
+        "Drops are remembered for the current\\s+run only",
+        "with no commit in\\s+between",
+        "`docs\\(perf\\): never <x>`"
+      ]
+    },
+    {
+      "id": "stop-rule",
+      "rule": "Loop runs until nothing the run may fix remains, or `max` commits; re-measure the whole scope before stopping",
+      "must": [
+        "No cap by default",
+        "has made `max` commits",
+        "measure the whole scope once more"
+      ]
+    },
+    {
+      "id": "report",
+      "rule": "Report opens with counts and stop reason read off git log",
+      "must": [
+        "2 commits, 1 dropped; stopped: stop rule",
+        "Read every count and hash off `git log"
+      ]
+    }
+  ]
+}

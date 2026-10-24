@@ -1,0 +1,122 @@
+{
+  "skill_name": "perf",
+  "evals": [
+    {
+      "id": 1,
+      "name": "auto-loop-on-the-fixture",
+      "skills": [
+        "perf"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a plain HTML, CSS, and JS device dashboard (`index.html`, `app.js`, `lib.js`, `style.css`) with a hash router — Devices (`#/devices`, the landing page, listing 2000 devices with a search box and a sort button), a device detail view (`#/device/<id>`), and Settings — under one shared header. `server.py`, a stdlib Python server with no live reload, serves the files and a JSON API and appends every request to `requests.log` (ignored by `.gitignore`). `package.json` declares no scripts and no dependencies. The `Makefile` has `serve` (`python3 server.py`, port 8138), `check` (`./check.sh`, green on this tree), and `bench` (runs `tests/*.bench.js` with the helper in `tests/bench.js`). `python3 server.py` is serving on port 8138, the only listening port. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; nothing forbids committing. The user answers the start message with `ok`.",
+      "query": "/web:perf auto loop",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "A visible Chrome driven by Chrome DevTools MCP, the fixture's server on port 8138, Node.js, and the craft plugin. Without a browser no measurement is established; a run that cannot meet this reports the scenario blocked."
+    },
+    {
+      "id": 2,
+      "name": "interactive-commit-drop-never",
+      "skills": [
+        "perf"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a plain HTML, CSS, and JS device dashboard (`index.html`, `app.js`, `lib.js`, `style.css`) with a hash router — Devices (`#/devices`, the landing page, listing 2000 devices with a search box and a sort button), a device detail view (`#/device/<id>`), and Settings — under one shared header. `server.py`, a stdlib Python server with no live reload, serves the files and a JSON API and appends every request to `requests.log` (ignored by `.gitignore`). `package.json` declares no scripts and no dependencies. The `Makefile` has `serve` (`python3 server.py`, port 8138), `check` (`./check.sh`, green on this tree), and `bench` (runs `tests/*.bench.js` with the helper in `tests/bench.js`). `python3 server.py` is serving on port 8138, the only listening port. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; nothing forbids committing. The user answers the start message with `ok`, the first stop with `commit`, the second with `drop; never <that change, restated in a few words>`, the third with `rework it: make it smaller`, the stop after that with `commit`, and the next stop with `stop`.",
+      "query": "/web:perf loop",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "A visible Chrome driven by Chrome DevTools MCP, the fixture's server on port 8138, Node.js, and the craft plugin. Without a browser no measurement is established; a run that cannot meet this reports the scenario blocked."
+    },
+    {
+      "id": 3,
+      "name": "focus-overrides-a-perf-comment",
+      "skills": [
+        "perf"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a plain HTML, CSS, and JS device dashboard (`index.html`, `app.js`, `lib.js`, `style.css`) with a hash router — Devices (`#/devices`, the landing page, listing 2000 devices with a search box and a sort button), a device detail view (`#/device/<id>`), and Settings — under one shared header. `server.py`, a stdlib Python server with no live reload, serves the files and a JSON API and appends every request to `requests.log` (ignored by `.gitignore`). `package.json` declares no scripts and no dependencies. The `Makefile` has `serve` (`python3 server.py`, port 8138), `check` (`./check.sh`, green on this tree), and `bench` (runs `tests/*.bench.js` with the helper in `tests/bench.js`). `python3 server.py` is serving on port 8138, the only listening port. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; nothing forbids committing. `app.js` carries a `PERF:` comment in `showDevices` forbidding reuse of the header's `/api/status` response for the open-incident count. The user answers the start message with `ok`.",
+      "query": "/web:perf auto share one /api/status request between the header badge and the device list's open-incident count",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "A visible Chrome driven by Chrome DevTools MCP, the fixture's server on port 8138, Node.js, and the craft plugin. Without a browser no measurement is established; a run that cannot meet this reports the scenario blocked."
+    },
+    {
+      "id": 4,
+      "name": "no-dev-server-stops",
+      "skills": [
+        "perf"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a plain HTML, CSS, and JS device dashboard (`index.html`, `app.js`, `lib.js`, `style.css`) with a hash router — Devices (`#/devices`, the landing page, listing 2000 devices with a search box and a sort button), a device detail view (`#/device/<id>`), and Settings — under one shared header. `server.py`, a stdlib Python server with no live reload, serves the files and a JSON API and appends every request to `requests.log` (ignored by `.gitignore`). `package.json` declares no scripts and no dependencies. The `Makefile` has `serve` (`python3 server.py`, port 8138), `check` (`./check.sh`, green on this tree), and `bench` (runs `tests/*.bench.js` with the helper in `tests/bench.js`). Nothing is listening on any port. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; nothing forbids committing.",
+      "query": "/web:perf auto loop",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Chrome DevTools MCP connected and the craft plugin installed, so that the dev server is the only missing prerequisite. A stand-in without them establishes only that some prerequisite stops the run, not that the server check names the right one."
+    },
+    {
+      "id": 5,
+      "name": "loop-stops-at-max",
+      "skills": [
+        "perf"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a plain HTML, CSS, and JS device dashboard (`index.html`, `app.js`, `lib.js`, `style.css`) with a hash router — Devices (`#/devices`, the landing page, listing 2000 devices with a search box and a sort button), a device detail view (`#/device/<id>`), and Settings — under one shared header. `server.py`, a stdlib Python server with no live reload, serves the files and a JSON API and appends every request to `requests.log` (ignored by `.gitignore`). `package.json` declares no scripts and no dependencies. The `Makefile` has `serve` (`python3 server.py`, port 8138), `check` (`./check.sh`, green on this tree), and `bench` (runs `tests/*.bench.js` with the helper in `tests/bench.js`). `python3 server.py` is serving on port 8138, the only listening port. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; nothing forbids committing. The user answers the start message with `ok`.",
+      "query": "/web:perf auto loop max 2",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "A visible Chrome driven by Chrome DevTools MCP, the fixture's server on port 8138, Node.js, and the craft plugin. Without a browser no measurement is established; a run that cannot meet this reports the scenario blocked."
+    },
+    {
+      "id": 6,
+      "name": "focus-change-with-no-gain",
+      "skills": [
+        "perf"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a plain HTML, CSS, and JS device dashboard (`index.html`, `app.js`, `lib.js`, `style.css`) with a hash router — Devices (`#/devices`, the landing page, listing 2000 devices with a search box and a sort button), a device detail view (`#/device/<id>`), and Settings — under one shared header. `server.py`, a stdlib Python server with no live reload, serves the files and a JSON API and appends every request to `requests.log` (ignored by `.gitignore`). `package.json` declares no scripts and no dependencies. The `Makefile` has `serve` (`python3 server.py`, port 8138), `check` (`./check.sh`, green on this tree), and `bench` (runs `tests/*.bench.js` with the helper in `tests/bench.js`). `python3 server.py` is serving on port 8138, the only listening port. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; nothing forbids committing. The user answers the start message with `ok`.",
+      "query": "/web:perf auto cache the Settings form's markup so the Settings page renders faster",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "A visible Chrome driven by Chrome DevTools MCP, the fixture's server on port 8138, Node.js, and the craft plugin. Without a browser no measurement is established; a run that cannot meet this reports the scenario blocked."
+    },
+    {
+      "id": 7,
+      "name": "focus-names-a-write-flow",
+      "skills": [
+        "perf"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a plain HTML, CSS, and JS device dashboard (`index.html`, `app.js`, `lib.js`, `style.css`) with a hash router — Devices (`#/devices`, the landing page, listing 2000 devices with a search box and a sort button), a device detail view (`#/device/<id>`), and Settings — under one shared header. `server.py`, a stdlib Python server with no live reload, serves the files and a JSON API and appends every request to `requests.log` (ignored by `.gitignore`). `package.json` declares no scripts and no dependencies. The `Makefile` has `serve` (`python3 server.py`, port 8138), `check` (`./check.sh`, green on this tree), and `bench` (runs `tests/*.bench.js` with the helper in `tests/bench.js`). `python3 server.py` is serving on port 8138, the only listening port. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; nothing forbids committing. The user answers the start message with `ok`.",
+      "query": "/web:perf auto profile saving the display name on the Settings page",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "A visible Chrome driven by Chrome DevTools MCP, the fixture's server on port 8138, Node.js, and the craft plugin. Without a browser no measurement is established; a run that cannot meet this reports the scenario blocked."
+    },
+    {
+      "id": 8,
+      "name": "focus-names-a-visible-change",
+      "skills": [
+        "perf"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a plain HTML, CSS, and JS device dashboard (`index.html`, `app.js`, `lib.js`, `style.css`) with a hash router — Devices (`#/devices`, the landing page, listing 2000 devices with a search box and a sort button), a device detail view (`#/device/<id>`), and Settings — under one shared header. `server.py`, a stdlib Python server with no live reload, serves the files and a JSON API and appends every request to `requests.log` (ignored by `.gitignore`). `package.json` declares no scripts and no dependencies. The `Makefile` has `serve` (`python3 server.py`, port 8138), `check` (`./check.sh`, green on this tree), and `bench` (runs `tests/*.bench.js` with the helper in `tests/bench.js`). `python3 server.py` is serving on port 8138, the only listening port. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; nothing forbids committing. The user answers the start message with `ok`.",
+      "query": "/web:perf auto paginate the device list, 100 devices per page",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "A visible Chrome driven by Chrome DevTools MCP, the fixture's server on port 8138, Node.js, and the craft plugin. Without a browser no measurement is established; a run that cannot meet this reports the scenario blocked."
+    },
+    {
+      "id": 9,
+      "name": "commit-leave-unanswered",
+      "skills": [
+        "perf"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a plain HTML, CSS, and JS device dashboard (`index.html`, `app.js`, `lib.js`, `style.css`) with a hash router — Devices (`#/devices`, the landing page, listing 2000 devices with a search box and a sort button), a device detail view (`#/device/<id>`), and Settings — under one shared header. `server.py`, a stdlib Python server with no live reload, serves the files and a JSON API and appends every request to `requests.log` (ignored by `.gitignore`). `package.json` declares no scripts and no dependencies. The `Makefile` has `serve` (`python3 server.py`, port 8138), `check` (`./check.sh`, green on this tree), and `bench` (runs `tests/*.bench.js` with the helper in `tests/bench.js`). `python3 server.py` is serving on port 8138, the only listening port. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; the user's `CLAUDE.md` says: \"Never run git commit; leave committing to me.\" The user answers the start message with `ok` and nothing about committing.",
+      "query": "/web:perf auto loop",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "A visible Chrome driven by Chrome DevTools MCP, the fixture's server on port 8138, Node.js, and the craft plugin. Without a browser no measurement is established; a run that cannot meet this reports the scenario blocked."
+    }
+  ]
+}

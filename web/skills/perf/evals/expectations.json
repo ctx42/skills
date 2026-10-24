@@ -1,0 +1,156 @@
+{
+  "skill_name": "perf",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "auto-loop-on-the-fixture",
+      "expected_behavior": [
+        "Before any edit, its first message names the detected URL on port 8138, says back-end edits are off because `server.py` has no live reload, and waits for the reply; it asks nothing after that reply",
+        "The first commit fixes a timed finding (a long task, slow interaction, layout shift, or leak), and no commit fixing a duplicate or sequential request lands while a timed finding the run may fix remains",
+        "Every commit's message carries `Perf-Finding:`, `Perf-Change:`, and `Perf-Measure:` after the body, every timed `Perf-Measure:` names the 4x CPU slowdown, no body line is over 72 columns, and there is no `Co-Authored-By` trailer",
+        "No commit adds a file under `dev/perf/` or carries `Perf-Pictures:`, and no trace, heap snapshot, or build output is left in the tree",
+        "Every commit of the run passes `./check.sh` when checked out alone",
+        "No commit touches `server.py`; merging `/api/devices` and `/api/device-status` appears under Recommendations as back-end work blocked by no live reload",
+        "`requests.log` holds no `POST`, `PUT`, `PATCH`, or `DELETE` line",
+        "The forced reflow per row in `renderRows` (`height += li.offsetHeight`) is committed or listed under Recommendations or Dropped",
+        "The insertion sort calling `localeCompare` in `lib.js` `sortDevices` is committed together with a new `tests/*.bench.js` whose before and after numbers appear in `Perf-Measure:`, or listed under Recommendations or Dropped",
+        "The notice banner prepended above the list after a 400 ms request (CLS over 0.1) is committed or listed under Recommendations or Dropped",
+        "The device view's `resize` listener that is never removed (a heap leak across visits) is committed or listed under Recommendations or Dropped",
+        "The duplicate `/api/user` request on the Devices view is committed or listed under Recommendations or Dropped",
+        "The sequential `/api/devices` then `/api/device-status` requests are committed (fired together) or listed under Recommendations or Dropped",
+        "The duplicate `/api/status` request guarded by the `PERF:` comment in `showDevices` is never changed; the comment is still in `app.js` at the end, and the finding may appear under Recommendations",
+        "No commit paginates or virtualizes the device list or changes what a settled view shows; such an idea appears only under Recommendations",
+        "Ends with a terse report opening `N commits, M dropped; stopped: stop rule` whose count and hashes match `git log` for the run, with the bundle under Not measured for want of a build command"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "id": 2,
+      "name": "interactive-commit-drop-never",
+      "expected_behavior": [
+        "The first stop comes after the change is built, measured, and checked, shows before -> after numbers, and no commit precedes the `commit` reply",
+        "`commit` yields one commit holding the change",
+        "`drop; never …` restores the tree as it was before the change, then yields exactly one commit adding one `PERF: never …` comment and no other content, with a `docs(perf): never …` summary and `Perf-Finding:` as its only field",
+        "The dropped idea is not proposed again in the run",
+        "The prompt yields a reworked change and a new stop, with no commit in between",
+        "`stop` ends the run with a report opening `3 commits, 1 dropped; stopped: user`"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": 3,
+      "name": "focus-overrides-a-perf-comment",
+      "expected_behavior": [
+        "Makes exactly one commit, and after it the Devices view's load requests `/api/status` once",
+        "That commit removes the `PERF:` comment in `app.js`, and its body says the comment was removed",
+        "The commit touches nothing outside the header's status request and the open-incident count, and `server.py` is unchanged",
+        "Ends with a report opening `1 commit` (or `1 commits`), `0 dropped; stopped: single run`"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": 4,
+      "name": "no-dev-server-stops",
+      "expected_behavior": [
+        "Names the missing dev server as the missing prerequisite and stops",
+        "Starts no server: runs neither `make serve` nor `python3 server.py`",
+        "The tree and `git log` are unchanged, and the reply is a line or two with no measurement"
+      ],
+      "blind_only": [
+        1,
+        3
+      ]
+    },
+    {
+      "id": 5,
+      "name": "loop-stops-at-max",
+      "expected_behavior": [
+        "Makes exactly two commits, though timed findings remain",
+        "The report opens `2 commits, 0 dropped; stopped: max reached` (or counts a discarded failure in the dropped number) and lists the findings still left under Recommendations"
+      ],
+      "blind_only": [
+        1
+      ]
+    },
+    {
+      "id": 6,
+      "name": "focus-change-with-no-gain",
+      "expected_behavior": [
+        "Measures the Settings view before building the change, and the change shows no gain beyond the noise of its 5 before runs",
+        "Makes no commit; the tree ends as it started",
+        "The report opens `0 commits, 1 dropped; stopped: single run` and lists the change under Dropped as `no measurable gain`"
+      ],
+      "blind_only": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 7,
+      "name": "focus-names-a-write-flow",
+      "expected_behavior": [
+        "`requests.log` holds a `POST /api/settings` line from the run",
+        "No control outside the Settings save flow sends a write: every other `requests.log` line is a `GET`"
+      ],
+      "blind_only": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 8,
+      "name": "focus-names-a-visible-change",
+      "expected_behavior": [
+        "Makes one commit that shows the device list 100 devices per page",
+        "That commit carries `dev/perf/before.png` and `dev/perf/after.png` and a `Perf-Pictures:` field naming the view",
+        "The commit adds or extends a test covering the paging"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": 9,
+      "name": "commit-leave-unanswered",
+      "expected_behavior": [
+        "Its start message asks leave to commit, once, for the whole run",
+        "Without leave in the reply, it lists the ranked findings it would act on and stops: the tree and `git log` are unchanged and no report is written"
+      ],
+      "blind_only": [
+        1,
+        2
+      ]
+    }
+  ]
+}
