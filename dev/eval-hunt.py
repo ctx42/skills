@@ -106,8 +106,9 @@ def added_lines(sdir, files, base):
     for f in rel:  # untracked files: every line is added
         if git("ls-files", "--", f) == "" and os.path.isfile(os.path.join(ROOT, f)):
             with open(os.path.join(ROOT, f)) as fh:
-                added += fh.read().splitlines()
-                diff += f"\n+++ new file {f}\n"
+                lines = fh.read().splitlines()
+            added += lines
+            diff += f"\n+++ new file {f}\n" + "".join(f"+{l}\n" for l in lines)
     return diff, norm("\n".join(added))
 
 
