@@ -8,7 +8,8 @@ only its plugin loaded. Each skill keeps three scenarios, chosen for
 what only a full run shows — writes to the srd server, files written,
 tool order; a rule a single answer can show belongs in a probe, not a case. `evals/evals.json` and
 `evals/expectations.json` stay the scenario spec; a case is that scenario made
-executable.
+executable. A scenario carrying `requires` (a visible browser, a live dev
+server) has no case.
 
 A skill with a generator in `dev/eval/gen/<skill>/` owns its cases there:
 edit the generator, run it from its own directory (`python3 gen.py`; it

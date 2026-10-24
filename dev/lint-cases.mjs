@@ -6,7 +6,8 @@
 //
 // For each group with an evals/ dir it checks:
 //   - every evals.json scenario has a case `<skill>--<name>` (gate and other
-//     suffixed variants `<skill>--<name>--<suffix>` count), and every case
+//     suffixed variants `<skill>--<name>--<suffix>` count) unless it carries
+//     `requires` (a live service no case can stand in for), and every case
 //     belongs to a scenario,
 //   - prompt.md tags: `case:<dir>` present; each skill:/sec:/ref: tag names a
 //     real skill, `## ` section, or reference; any other tag is a known free
@@ -99,13 +100,13 @@ function knownTags(group) {
 }
 
 function scenarios(group) {
-  const out = new Map(); // "<skill>--<name>" -> evals.json path
+  const out = new Map(); // "<skill>--<name>" -> {src: evals.json path, requires}
   const skillsDir = path.join(ROOT, group, "skills");
   for (const s of fs.readdirSync(skillsDir)) {
     const f = path.join(skillsDir, s, "evals", "evals.json");
     if (!fs.existsSync(f)) continue;
     for (const e of JSON.parse(fs.readFileSync(f, "utf8")).evals) {
-      out.set(`${s}--${slug(e.name)}`, path.relative(ROOT, f));
+      out.set(`${s}--${slug(e.name)}`, { src: path.relative(ROOT, f), requires: !!e.requires });
     }
   }
   return out;
@@ -215,8 +216,8 @@ for (const group of fs.readdirSync(ROOT).sort()) {
     if (scen.has(key)) covered.add(key);
     else err(`${group}/evals/${dir}: no evals.json scenario ${key}`);
   }
-  for (const [key, src] of scen) {
-    if (!covered.has(key)) err(`${src}: scenario ${key.split("--")[1]} has no native case ${group}/evals/${key}`);
+  for (const [key, { src, requires }] of scen) {
+    if (!covered.has(key) && !requires) err(`${src}: scenario ${key.split("--")[1]} has no native case ${group}/evals/${key}`);
   }
   lintTraceability(group, cases);
 }

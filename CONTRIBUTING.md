@@ -59,7 +59,9 @@ loop* below).
 A scenario may add `requires` when it cannot run on an ordinary checkout — a
 private mirror, a live service, a toolchain. Say what is needed and what a
 stand-in does and does not establish, so a run that cannot meet it reports the
-scenario blocked instead of quietly narrating one.
+scenario blocked instead of quietly narrating one. Such a scenario needs no
+native case — a case's sandbox cannot meet it either — so each of its bullets
+is a probe's or `blind_only`.
 
 **Two files, deliberately.** A run must be able to read a scenario without the
 rubric it will be graded on. While both lived in one file, no eval in this repo
