@@ -320,8 +320,9 @@ forbidden, and not blocked by sections 3 to 5 or a dirty file — or when the ru
 has made `max` commits. No cap by default. Before stopping on the stop rule,
 measure the whole scope once more: a fix can move cost elsewhere, and a new
 finding there continues the loop. Without `loop`, stop after one change,
-committed, dropped, or discarded. What is left goes to Recommendations; ideas
-dropped this run are listed under Dropped.
+committed, dropped, or discarded. Once stopped, list every finding left
+under Recommendations, whatever kept the run from it; ideas dropped or
+discarded this run go under Dropped.
 
 ## 10. Report
 
