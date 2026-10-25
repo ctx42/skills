@@ -98,10 +98,10 @@
     {
       "id": "single-run-stops",
       "rule": "one-change-without-loop",
-      "prompt": "Situation: `/web:perf auto` (no `loop`). The first change was discarded: it showed no gain beyond the noise. Four findings remain.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: END-THE-RUN, TRY-NEXT-FINDING. Then one sentence why.",
-      "pass": "^\\W*END-THE-RUN\\b",
-      "fail": "^\\W*(TRY-NEXT-FINDING)\\b",
-      "class": "load-bearing"
+      "prompt": "Situation: `/web:perf auto` (no `loop`). The first change was discarded: it showed no gain beyond the noise. Four findings remain.\n\nQuestion: is the run over? Answer on the first line with exactly one of: RUN-OVER, RUN-CONTINUES. Then one sentence why.",
+      "pass": "^\\W*RUN-OVER\\b",
+      "fail": "^\\W*(RUN-CONTINUES)\\b",
+      "class": "redundant"
     },
     {
       "id": "report-max-reached",

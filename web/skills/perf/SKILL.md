@@ -27,8 +27,8 @@ other token starts the focus, free text to the end. A pasted image, or an image
 path in the focus, shows the part. `max <n>` counts commits only — drops and
 discarded failures do not count — and needs `loop`: given without it, say
 "`max` needs `loop`" and stop before any other step. Without `loop` a run makes
-at most one change. No focus measures the whole app. The CPU slowdown is fixed
-at 4x; no keyword changes it.
+at most one change, committed, dropped, or discarded. No focus measures the
+whole app. The CPU slowdown is fixed at 4x; no keyword changes it.
 
 Arguments: $ARGUMENTS
 
