@@ -194,6 +194,7 @@
       "rule": "Interactive stops take commit, drop, or a prompt; drops last the run; a prompt never commits",
       "must": [
         "Drops are remembered for the current\\s+run only",
+        "its finding is not taken up again this run",
         "with no commit in\\s+between",
         "`docs\\(perf\\): never <x>`"
       ]

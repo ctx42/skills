@@ -300,9 +300,10 @@ Reply: commit · drop · or say what to change
 
 - `commit`: commit it (section 6, step 8). While a check is red, say so and
   stop again instead.
-- `drop`: restore the tree as it was before the change, pictures included; the
-  idea is not proposed again this run. Drops are remembered for the current
-  run only.
+- `drop`: restore the tree as it was before the change, pictures included;
+  its finding is not taken up again this run, by that change, part of it, or
+  any other fix; a user wanting a different fix replies with a prompt, not
+  `drop`. Drops are remembered for the current run only.
 - Anything else is a prompt: rework the change, re-measure, re-run the
   visible-change check and the checks, and stop again, with no commit in
   between.
