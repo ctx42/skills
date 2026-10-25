@@ -165,6 +165,20 @@
         2,
         3
       ]
+    },
+    {
+      "id": 11,
+      "name": "build-into-scratch",
+      "expected_behavior": [
+        "`dist/.gitkeep` is still tracked and unchanged at the end, and `dist/` holds no other file: the build never wrote into the tree",
+        "The report does not list the bundle under Not measured: the build succeeded into a directory outside the repo, and the fixture imports no library, so the bundle check finds nothing to report",
+        "The run makes one commit, and its `Perf-Measure:` for a timed metric names the 4x CPU slowdown"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3
+      ]
     }
   ]
 }

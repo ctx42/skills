@@ -130,6 +130,20 @@
         "web/evals/assets/"
       ],
       "requires": "Chrome DevTools MCP connected and the craft plugin installed, so every prerequisite would pass and only the argument grammar can stop the run."
+    },
+    {
+      "id": 11,
+      "name": "build-into-scratch",
+      "skills": [
+        "perf"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` with `web/evals/assets-build/` copied over it as its only commit, clean tree: a plain HTML, CSS, and JS device dashboard (`index.html`, `app.js`, `lib.js`, `style.css`) with a hash router — Devices (`#/devices`, the landing page, listing 2000 devices with a search box and a sort button), a device detail view (`#/device/<id>`), and Settings — under one shared header. `server.py`, a stdlib Python server with no live reload, serves the files and a JSON API and appends every request to `requests.log` (ignored by `.gitignore`). `package.json` declares no scripts and no dependencies. The `Makefile` has `serve` (`python3 server.py`, port 8138), `check` (`./check.sh`, green on this tree), `bench` (runs `tests/*.bench.js` with the helper in `tests/bench.js`), and `build` (`python3 build.py`, which empties `dist/` and copies the app into it; `--outDir <dir>` writes elsewhere). `dist/.gitkeep` is tracked and is the only file in `dist/`. `python3 server.py` is serving on port 8138, the only port the project's files name. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; nothing forbids committing.",
+      "query": "/web:perf auto",
+      "files": [
+        "web/evals/assets/",
+        "web/evals/assets-build/"
+      ],
+      "requires": "Chrome DevTools MCP connected and the craft plugin installed, so the run reaches the build and measurement steps."
     }
   ]
 }
