@@ -135,7 +135,9 @@ Noise: a timed metric is measured 5 times and its median used; a counted one
 once. A change is kept only when its after median beats the before median by
 more than the spread (max − min) of the 5 before runs; for a counted metric any
 reduction counts. A leak is measured by one series of 5 cycles, before and
-after; a leak fix is kept when the after series is no longer a leak.
+after; a leak fix is kept when the after series is no longer a leak. A change
+with a benchmark (section 5) is also kept when the benchmark, 5 runs each way,
+passes that test and the browser median is not worse by more than its spread.
 It need not clear the threshold in one go. A change with no
 gain beyond that is discarded and listed under Dropped, "no measurable gain" —
 a focus instruction included.

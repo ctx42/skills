@@ -69,7 +69,8 @@
       "must": [
         "measured 5 times and its median used",
         "more than the spread \\(max − min\\) of the 5 before runs",
-        "\\\"no measurable gain\\\" —\\s+a focus instruction included"
+        "\\\"no measurable gain\\\" —\\s+a focus instruction included",
+        "passes that test and the browser median is not worse by more than its spread"
       ]
     },
     {

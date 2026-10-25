@@ -26,7 +26,7 @@
       "prompt": "Situation: `/web:perf auto loop`, no focus, nothing committed yet. The only measurable interaction is sorting a table: INP median 150 ms at 4x CPU. Memoizing a comparator would bring it to about 60 ms. No other finding exists.\n\nQuestion: what do you do? Answer on the first line with exactly one of: FIX-SORT, STOP. Then one sentence why.",
       "pass": "^\\W*STOP\\b",
       "fail": "^\\W*(FIX-SORT)\\b",
-      "class": "load-bearing"
+      "class": "redundant"
     },
     {
       "id": "leak-needs-every-step",
@@ -53,7 +53,15 @@
       "bullets": [
         "focus-change-with-no-gain#b3"
       ],
-      "class": "redundant"
+      "class": "load-bearing"
+    },
+    {
+      "id": "bench-gain-keeps",
+      "rule": "noise-keep",
+      "prompt": "Situation: `/web:perf auto`. The change replaces an insertion sort in a pure JS function with `Array.sort`. Benchmark, 5 runs each: before 18.1, 18.6, 18.9, 18.4, 19.0 ms/op; after 1.5, 1.6, 1.6, 1.7, 1.6 ms/op. Browser sort INP, 5 runs each: before 430, 464, 470, 448, 502 ms (median 464, spread 72); after 440, 448, 455, 430, 470 ms (median 448). Checks pass.\n\nQuestion: what do you do with the change? Answer on the first line with exactly one of: COMMIT, DROP. Then one sentence why.",
+      "pass": "^\\W*COMMIT\\b",
+      "fail": "^\\W*(DROP)\\b",
+      "class": "load-bearing"
     },
     {
       "id": "write-seen-backs-off",
