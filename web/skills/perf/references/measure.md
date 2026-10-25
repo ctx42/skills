@@ -132,12 +132,13 @@ signature of the settled view, saved with `evaluate_script`'s `filePath`:
 
 Settled means loaded, network quiet, scrolled to the top, then — for a view
 reached by an interaction — after that interaction. Take two before captures,
-reloading between them, then the after capture the same way:
+reloading between them, then the after capture the same way. The tool saves
+each capture as a JSON string (adding `.json` to the name), so decode it first:
 
 ```bash
-python3 -I - <scratch>/b1 <scratch>/b2 <scratch>/a <<'EOF'
-import sys
-b1, b2, a = (open(p).read().split("\n") for p in sys.argv[1:])
+python3 -I - <scratch>/b1.json <scratch>/b2.json <scratch>/a.json <<'EOF'
+import json, sys
+b1, b2, a = (json.load(open(p)).split("\n") for p in sys.argv[1:])
 if len(a) != len(b1): sys.exit(f"line count {len(b1)} -> {len(a)}")
 bad = [i for i, (x, y, z) in enumerate(zip(b1, b2, a)) if x == y and x != z]
 sys.exit(f"changed: {[a[i] for i in bad[:5]]}" if bad else 0)
