@@ -101,7 +101,9 @@ loads, and after every action while playing:
   finding only when the code shows the later request uses nothing from the
   earlier response.
 
-A counted metric is the request count of the view's load. An API call's
+A counted metric is the request count of the view's load; for a sequential
+finding, the number of requests that start after a response they do not use
+(a fix firing them together takes it to 0). An API call's
 latency, for the proof of a back-end change, is its `responseEnd - startTime`,
 as a series of 5.
 
