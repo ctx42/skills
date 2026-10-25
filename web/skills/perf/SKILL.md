@@ -118,10 +118,10 @@ Findings — a timed one exists only while past its threshold:
 - Slow interaction: INP over 200 ms.
 - Long task: over 50 ms during an interaction or a view's load.
 - Layout shift: CLS over 0.1.
-- Leak: a view whose heap, after a forced GC, grows on every one of 5
-  navigate-away-and-back cycles, by any amount; a view whose heap levels off
-  is no leak. A heap snapshot then names what is retained (detached nodes,
-  listeners, timers).
+- Leak: a view whose heap size in bytes, after a forced GC, grows by more than
+  50 KB on every one of 5 navigate-away-and-back cycles; smaller growth is the
+  browser's own bookkeeping, and a heap that levels off is no leak. A heap
+  snapshot then names what is retained (detached nodes, listeners, timers).
 
 A counted one is a finding at every instance:
 
@@ -135,7 +135,7 @@ Noise: a timed metric is measured 5 times and its median used; a counted one
 once. A change is kept only when its after median beats the before median by
 more than the spread (max − min) of the 5 before runs; for a counted metric any
 reduction counts. A leak is measured by one series of 5 cycles, before and
-after; a leak fix is kept when the after series no longer grows at every step.
+after; a leak fix is kept when the after series is no longer a leak.
 It need not clear the threshold in one go. A change with no
 gain beyond that is discarded and listed under Dropped, "no measurable gain" —
 a focus instruction included.

@@ -71,17 +71,21 @@ shifting element.
 Per view: load it, then 5 times navigate to another view and back by the
 app's own navigation. After the first visit and after each return,
 `take_heapsnapshot` (it forces a full GC first) to
-`<scratch>/heap-<view>-<n>.heapsnapshot` and read its object count:
+`<scratch>/heap-<view>-<n>.heapsnapshot` and read its heap size in bytes:
 
 ```bash
-head -c 65536 <file> | grep -o '"node_count":[0-9]*'
+python3 -I - <file> <<'EOF'
+import json, sys
+s = json.load(open(sys.argv[1])); f = s["snapshot"]["meta"]["node_fields"]
+print(sum(s["nodes"][f.index("self_size")::len(f)]))
+EOF
 ```
 
-A leak: the count rises at each of the 5 steps after the first snapshot. The
-cause is in the last snapshot: compare it with the first by constructor
-(detached `HTMLElement`s, closures held by a listener or timer) and find the
-code that adds without removing. A fix's after series repeats the 5 cycles; the
-measurement is the growth from first to last snapshot.
+A leak: the size rises by more than 50 KB at each of the 5 steps after the
+first snapshot. The cause is in the last snapshot: compare it with the first by
+constructor (detached `HTMLElement`s, closures held by a listener or timer) and
+find the code that adds without removing. A fix's after series repeats the 5
+cycles; the measurement is the growth from first to last snapshot.
 
 ## Network
 

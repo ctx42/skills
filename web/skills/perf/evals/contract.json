@@ -59,7 +59,7 @@
         "INP over 200 ms",
         "over 50 ms",
         "CLS over 0\\.1",
-        "grows on every one of 5\\s+navigate-away-and-back cycles",
+        "grows by more than\\s+50 KB on every one of 5\\s+navigate-away-and-back cycles",
         "A counted one is a finding at every instance"
       ]
     },
