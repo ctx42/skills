@@ -151,6 +151,20 @@
         1,
         2
       ]
+    },
+    {
+      "id": 10,
+      "name": "max-without-loop-stops",
+      "expected_behavior": [
+        "The reply says \"`max` needs `loop`\" and stops: no start message, no prerequisite report, no measurement",
+        "Sends no request to the server: `requests.log` holds nothing beyond the setup's own readiness check",
+        "The tree and `git log` are unchanged"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3
+      ]
     }
   ]
 }
