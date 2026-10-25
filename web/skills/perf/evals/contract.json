@@ -180,6 +180,14 @@
       ]
     },
     {
+      "id": "pictures-after-first",
+      "rule": "Focus-named visible change: after shot at the changed part first, before shot from the stashed tree at the same scroll",
+      "must": [
+        "shoots its pictures, after first",
+        "shoot `before`\\s+at the same scroll"
+      ]
+    },
+    {
       "id": "commit-fields",
       "rule": "cm at mini plus Perf fields at 72 columns; pictures only when carried; no extra trailer",
       "must": [

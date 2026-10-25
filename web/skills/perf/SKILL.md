@@ -232,10 +232,10 @@ commit; unrelated changes never share a commit. Per change:
 2. Before any edit, take the 5 before measurements of the finding's metric and
    the visible-change check's two before captures of each view the change will
    touch. A visible change a focus named also deletes every untracked
-   `dev/perf/*.png` and shoots each touched view (`take_screenshot` with
-   `filePath`): one pair is `dev/perf/before.png` and `dev/perf/after.png`;
-   several are `before-1.png` and `after-1.png` on, numbered as in the
-   message. No other change writes into `dev/perf/`.
+   `dev/perf/*.png`; its pictures come at step 5. One pair is
+   `dev/perf/before.png` and `dev/perf/after.png`; several are `before-1.png`
+   and `after-1.png` on, numbered as in the message. No other change writes
+   into `dev/perf/`.
 3. Make the smallest change that fixes the finding, with its tests and any
    benchmark (section 5).
 4. Reload (wait for the back end, section 3) and take the 5 after
@@ -244,7 +244,12 @@ commit; unrelated changes never share a commit. Per change:
    gain".
 5. Run the visible-change check; a mismatch discards the change and lists the
    idea under Recommendations as a visible change. A focus-named visible
-   change skips it and shoots the `after` pictures instead.
+   change skips it and shoots its pictures, after first: per touched view,
+   scroll to the first element the change adds (a pager, a placeholder, a
+   "load more" button), else to where it removed content, and
+   `take_screenshot` with `filePath`;
+   then `git stash push -u -- <the change's files>`, reload, shoot `before`
+   at the same scroll, and `git stash pop`.
 6. Run the project's checks on exit status, never on piped or filtered output.
    A check red that was green at the start gets one repair; still red: under
    `auto`, discard the change and list it under Dropped with the failing
