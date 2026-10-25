@@ -1,0 +1,1 @@
+- Treat a minimum runtime shown by a version badge as already stated; do not propose a prose line repeating it.
