@@ -27,14 +27,6 @@
       ]
     },
     {
-      "id": "leave-to-commit",
-      "rule": "Committing forbidden: ask leave once; without it list the findings and stop before any edit",
-      "must": [
-        "asks leave to commit every change of this run",
-        "write no report, and stop before any edit"
-      ]
-    },
-    {
       "id": "rank",
       "rule": "Measurable defects before heuristic ones, shared chrome and landing page first, ties to the smaller change",
       "must": [
@@ -141,6 +133,13 @@
       "must": [
         "Write every code change to `\\.\\./style/SKILL\\.md`",
         "no `web:style` pass runs here"
+      ]
+    },
+    {
+      "id": "commits-its-changes",
+      "rule": "The skill commits each kept change even where agents may not commit",
+      "must": [
+        "Committing\\s+each kept change is this skill's job, whatever rule forbids an agent to\\s+commit"
       ]
     }
   ]

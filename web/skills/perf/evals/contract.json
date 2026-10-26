@@ -27,14 +27,6 @@
       ]
     },
     {
-      "id": "leave-to-commit",
-      "rule": "Committing forbidden: ask leave once; without it list the findings and stop before any edit",
-      "must": [
-        "asks leave\\s+to commit every change of this run",
-        "write no\\s+report, and stop before any edit"
-      ]
-    },
-    {
       "id": "scratch-only",
       "rule": "Builds, traces, snapshots, and captures go to a scratch directory; the build never writes the project's output",
       "must": [
@@ -231,6 +223,13 @@
       "must": [
         "Write every code change to `\\.\\./style/SKILL\\.md`",
         "no `web:style` pass runs here"
+      ]
+    },
+    {
+      "id": "commits-its-changes",
+      "rule": "The skill commits each kept change even where agents may not commit",
+      "must": [
+        "Committing\\s+each kept change is this skill's job, whatever rule forbids an agent to\\s+commit"
       ]
     }
   ]

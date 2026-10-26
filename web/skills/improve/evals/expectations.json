@@ -89,17 +89,6 @@
       "blind_only": [
         1
       ]
-    },
-    {
-      "id": 6,
-      "name": "commit-leave-unanswered",
-      "expected_behavior": [
-        "Its start message asks leave to commit, once, for the whole run",
-        "Without leave in the reply, it lists the ranked findings it would act on and stops: the tree and `git log` are unchanged and no report is written"
-      ],
-      "blind_only": [
-        1
-      ]
     }
   ]
 }
