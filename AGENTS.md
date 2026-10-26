@@ -117,6 +117,8 @@ source of truth.
 - `review` — done-time review of finished frontend code; delegates the style
   pass to `style`, adds correctness and the `api.ts` ↔ Go JSON contract; also
   owns adding and learning style rules.
+- `cover` — raises Vitest coverage per function, store, or component,
+  measured from direct tests only.
 - `improve` — audits a running web app in a visible Chrome and commits one
   ranked UX fix at a time with before/after pictures; interactive by default,
   `auto` and `loop` for unattended runs. Needs the craft plugin (`craft:cm`).

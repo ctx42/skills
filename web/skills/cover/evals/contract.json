@@ -1,0 +1,50 @@
+{
+  "skill_name": "cover",
+  "rules": [
+    {
+      "id": "direct-tests-only",
+      "rule": "Coverage counts only the unit's own tests run in isolation",
+      "must": [
+        "Coverage a unit picks up from a caller's tests or a\\s+parent component's tests does not count",
+        "The unit — never the file or the\\s+directory — is the unit of work"
+      ]
+    },
+    {
+      "id": "thresholds-never-lowered",
+      "rule": "Coverage thresholds are never lowered; the config is never edited to measure",
+      "must": [
+        "Never lower the project's coverage\\s+thresholds",
+        "the\\s+config is never edited",
+        "Never lower a threshold to pass"
+      ]
+    },
+    {
+      "id": "one-unit-at-a-time",
+      "rule": "Finish and verify one unit before the next",
+      "must": [
+        "Never start unit B until unit A's loop is\\s+complete and verified"
+      ]
+    },
+    {
+      "id": "empty-match-is-uncovered",
+      "rule": "A filter matching no test is an uncovered unit, not a clean one",
+      "must": [
+        "that is an uncovered unit, not a clean one"
+      ]
+    },
+    {
+      "id": "plan-before-writing",
+      "rule": "File, directory, and all targets present a plan and wait before writing",
+      "must": [
+        "Wait\\s+for approval, then run steps 3–4 unit by unit"
+      ]
+    },
+    {
+      "id": "counts-off-artifacts",
+      "rule": "Report numbers come off the finished artifacts",
+      "must": [
+        "Every number is read off the finished artifacts"
+      ]
+    }
+  ]
+}

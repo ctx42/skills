@@ -76,6 +76,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │   └── skills/
 │       ├── style/                  # Vue/TS rulebook + reference Biome config; style-only pass
 │       ├── review/                 # Done-time review: style via style, correctness, API contract
+│       ├── cover/                  # Raise Vitest coverage per unit, from direct tests only
 │       ├── improve/                # Audit a running app, commit one UX fix at a time
 │       └── perf/                   # Measure a running app, commit one measured fix at a time
 └── notify/                         # Plugin: desktop attention hooks (no skills)
