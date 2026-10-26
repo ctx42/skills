@@ -109,9 +109,10 @@ check changes the verdict, never passes silently:
    `LESSONS.md` once no lesson is held; a Hold keeps the file with only its
    held lines. Keep `## Self-learning`.
 
-5. Test: `./dev/lint-skills.sh` until it reports no error and no warning the
-   fold caused, then `./dev/eval-routine.sh --base <base>`. A missing script
-   is reported, never replaced by an improvised check.
+5. Test: `./dev/lint-skills.sh`, its output read unfiltered on every run,
+   re-runs included, until it reports no error and no warning the fold
+   caused, then `./dev/eval-routine.sh --base <base>`. A missing script is
+   reported, never replaced by an improvised check.
 
 6. Evaluate per CONTRIBUTING.md's eval loop:
    - A probe FAIL or SPLIT on a changed skill gets one fix and one re-run; a
