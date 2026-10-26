@@ -2,7 +2,7 @@
 
 This document explains how to add, organize, and maintain skills in this
 repository. Skills ship as Claude Code plugins, grouped into `go`, `srd`,
-`craft`, `ux`, and `web`.
+`craft`, and `web`.
 
 ## Core Principles
 
@@ -18,10 +18,9 @@ A skill lives at `<group>/skills/<skill-name>/`. Pick the group by purpose:
 | `go`    | Go tooling (style, review, coverage)    |
 | `srd`   | Software Requirement Document lifecycle |
 | `craft` | Cross-cutting engineering-craft aids    |
-| `ux`    | Web-app UX improvement                  |
-| `web`   | Web-app performance                     |
+| `web`   | Web-app UX and performance              |
 
-The sixth plugin, `notify`, is hooks-only and holds no `skills/` directory —
+The fifth plugin, `notify`, is hooks-only and holds no `skills/` directory —
 never place a skill there.
 
 Adding a skill to an existing group needs **no** marketplace change — the

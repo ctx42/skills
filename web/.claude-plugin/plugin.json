@@ -1,12 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
   "name": "web",
-  "description": "Web-app performance: measures the running app in a visible Chrome under a 4x CPU slowdown and commits one measured speed or memory fix at a time, front end and back end, without changing what the user sees (perf).",
+  "description": "Web-app workflow: UX improvement committed one ranked fix at a time with before/after pictures (improve), and performance fixes measured under a 4x CPU slowdown, front end and back end, without changing what the user sees (perf).",
   "version": "0.27.1",
   "author": {
     "name": "Rafal Zajac",
     "email": "rzajac@gmail.com"
   },
-  "keywords": ["web", "performance", "inp", "memory", "bundle"],
+  "keywords": ["web", "ux", "accessibility", "ui", "performance", "inp", "memory", "bundle"],
   "license": "MIT"
 }

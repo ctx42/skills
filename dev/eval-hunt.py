@@ -76,7 +76,7 @@ def changed_skills(base):
     names = git("diff", "--name-only", base, "--") + git("ls-files", "-o", "--exclude-standard")
     out = []
     for f in names.splitlines():
-        m = re.match(r"^(go|srd|craft|ux|web)/skills/([^/]+)/(SKILL\.md|references/.+\.md)$", f)
+        m = re.match(r"^(go|srd|craft|web)/skills/([^/]+)/(SKILL\.md|references/.+\.md)$", f)
         if m and f"{m.group(1)}/{m.group(2)}" not in out:
             out.append(f"{m.group(1)}/{m.group(2)}")
     return out

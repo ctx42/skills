@@ -12,8 +12,8 @@ symlinking.
 
 ## Organization
 
-Skills are grouped into five plugins, one directory per plugin, each with its
-own manifest and a `skills/` folder. A sixth plugin, `notify`, carries no
+Skills are grouped into four plugins, one directory per plugin, each with its
+own manifest and a `skills/` folder. A fifth plugin, `notify`, carries no
 skills — it ships only desktop-notification hooks:
 
 ```
@@ -31,12 +31,9 @@ skills — it ships only desktop-notification hooks:
 ├── craft/
 │   ├── .claude-plugin/plugin.json
 │   └── skills/{cm,grill-me,plan-smith,readme-smith,doc-smith,enhance-skills,fold-lessons,fix-all}/
-├── ux/
-│   ├── .claude-plugin/plugin.json
-│   └── skills/improve/
 ├── web/
 │   ├── .claude-plugin/plugin.json
-│   └── skills/perf/
+│   └── skills/{improve,perf}/
 └── notify/                              # hooks only — no skills/ folder
     ├── .claude-plugin/plugin.json
     └── hooks/{hooks.json,notify-project.sh,notify-monitors.py}
@@ -47,8 +44,7 @@ skills — it ships only desktop-notification hooks:
 | `go`     | `style`, `review`, `cover`, `doc`, `reshape`                                                             | Go style (write + check), done-time review, test coverage, doc fixing, API proposals                                       |
 | `srd`    | `create`, `review`, `edit`, `doc-edit`, `system-check`, `report-doc-gap`, `backlog`, `kb`                | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base                                          |
 | `craft`  | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `enhance-skills`, `fold-lessons`, `fix-all` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning, lesson folding, unattended fixing |
-| `ux`     | `improve`                                                                                                | Web-app UX: audit in a visible Chrome, one committed fix at a time with before/after pictures                              |
-| `web`    | `perf`                                                                                                   | Web-app performance: measure in a visible Chrome at 4x CPU, one committed, measured fix at a time                          |
+| `web`    | `improve`, `perf`                                                                                        | Web-app UX and performance in a visible Chrome, one committed fix at a time: UX with pictures, speed at 4x CPU             |
 | `notify` | — (hooks only)                                                                                           | Sound and an on-screen card on every monitor when Claude stops or needs input                                              |
 
 Plugin skills are **namespaced** by their plugin (e.g. `/srd:review`),
@@ -66,7 +62,6 @@ so they never silently shadow a personal or project skill of the same name.
 /plugin install go@ctx42-skills
 /plugin install srd@ctx42-skills
 /plugin install craft@ctx42-skills
-/plugin install ux@ctx42-skills       # needs craft and Chrome DevTools MCP
 /plugin install web@ctx42-skills      # needs craft and Chrome DevTools MCP
 /plugin install notify@ctx42-skills   # Linux/macOS desktop only
 ```
@@ -103,7 +98,6 @@ per machine.
    claude plugin install go@ctx42-skills
    claude plugin install srd@ctx42-skills
    claude plugin install craft@ctx42-skills
-   claude plugin install ux@ctx42-skills
    claude plugin install web@ctx42-skills
    claude plugin install notify@ctx42-skills
    ```
@@ -127,7 +121,6 @@ dotfiles:
     "go@ctx42-skills": true,
     "srd@ctx42-skills": true,
     "craft@ctx42-skills": true,
-    "ux@ctx42-skills": true,
     "web@ctx42-skills": true,
     "notify@ctx42-skills": true
   }

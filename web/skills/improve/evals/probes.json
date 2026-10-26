@@ -1,0 +1,119 @@
+{
+  "skill_name": "improve",
+  "probes": [
+    {
+      "id": "max-without-loop",
+      "rule": "max-needs-loop",
+      "prompt": "Situation: the user types `/web:improve max 3` in a web app's repo. A dev server is running and Chrome is connected.\n\nQuestion: what is your first action? Answer on the first line with exactly one of: STOP-WITH-MESSAGE, AUDIT-THREE, AUDIT-ONE. Then one sentence why.",
+      "pass": "^\\W*STOP-WITH-MESSAGE\\b",
+      "fail": "^\\W*AUDIT-(THREE|ONE)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "no-server-never-start",
+      "rule": "prerequisites-stop",
+      "prompt": "Situation: `/web:improve auto loop` in a Vite app's repo. `package.json` has `\"dev\": \"vite\"`; no port is listening.\n\nQuestion: what do you do? Answer on the first line with exactly one of: RUN-NPM-DEV, STOP, ASK-FOR-URL. Then one sentence why.",
+      "pass": "^\\W*STOP\\b",
+      "fail": "^\\W*(RUN-NPM-DEV|ASK-FOR-URL)\\b",
+      "bullets": [
+        "no-dev-server-stops#b2"
+      ],
+      "class": "redundant"
+    },
+    {
+      "id": "rank-measurable-first",
+      "rule": "rank",
+      "prompt": "Situation: `/web:improve auto`, no focus, no `UX:` comments. Two findings remain: (a) on the landing page, `Delete account` acts at once with no confirmation (error prevention), a three-line fix; (b) on a report page three levels deep, a decorative chart image has no `alt` attribute (a Lighthouse accessibility failure), a one-line fix.\n\nQuestion: which do you change first? Answer on the first line with exactly one of: DELETE-CONFIRM, ALT-TEXT. Then one sentence why.",
+      "pass": "^\\W*ALT-TEXT\\b",
+      "fail": "^\\W*DELETE-CONFIRM\\b",
+      "bullets": [
+        "auto-loop-on-the-fixture#b2"
+      ],
+      "class": "redundant"
+    },
+    {
+      "id": "earlier-decisions-dont-bind",
+      "rule": "ux-comment-binds",
+      "prompt": "Situation: `/web:improve auto loop`, no focus. The source holds no `UX:` comment. The top-ranked remaining finding: deleting a task has no undo (user control and freedom); an undo toast is a small, concrete fix. An earlier commit's message reads `remove the undo toast; we decided against undo`, and a test asserts that deleting shows no toast.\n\nQuestion: what do you do with the finding? Answer on the first line with exactly one of: IMPLEMENT-AND-REWRITE-TEST, RECOMMEND, ASK-USER. Then one sentence why.",
+      "pass": "^\\W*IMPLEMENT-AND-REWRITE-TEST\\b",
+      "fail": "^\\W*(RECOMMEND|ASK-USER)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "focus-beats-comment",
+      "rule": "focus-instruction",
+      "prompt": "Situation: `/web:improve add an undo toast after deleting a task`. The delete handler carries `// UX: never add a confirmation or an undo step to deleting a task`. You have built the undo toast.\n\nQuestion: what does the commit do with that comment line? Answer on the first line with exactly one of: REMOVE, REWRITE, KEEP. Then one sentence why.",
+      "pass": "^\\W*REMOVE\\b",
+      "fail": "^\\W*(REWRITE|KEEP)\\b",
+      "bullets": [
+        "focus-overrides-a-ux-comment#b2"
+      ],
+      "class": "load-bearing"
+    },
+    {
+      "id": "focus-stays-in-part",
+      "rule": "focus-instruction",
+      "prompt": "Situation: `/web:improve loop the Today page's add-task form: make the input wider`. The instruction is committed. Auditing the form's views you also see the shared footer fails contrast (1.98:1) on every page.\n\nQuestion: what do you do with the footer? Answer on the first line with exactly one of: FIX-NEXT, RECOMMEND. Then one sentence why.",
+      "pass": "^\\W*RECOMMEND\\b",
+      "fail": "^\\W*FIX-NEXT\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "red-check-interactive-shows",
+      "rule": "checks-gated",
+      "prompt": "Situation: `/web:improve loop` (interactive, no `auto`). After change 3, `make check` fails a test that passed on the untouched tree. You tried one repair and it is still red.\n\nQuestion: what do you do? Answer on the first line with exactly one of: STOP-SHOWING-FAILURE, DISCARD-AND-CONTINUE, REPAIR-AGAIN. Then one sentence why.",
+      "pass": "^\\W*STOP-SHOWING-FAILURE\\b",
+      "fail": "^\\W*(DISCARD-AND-CONTINUE|REPAIR-AGAIN)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "never-comment-pictures",
+      "rule": "commit-fields",
+      "prompt": "Situation: `/web:improve` interactive. At a stop the user replies `drop; never collapse the nav into a menu`. You restored the tree and now commit the comment that reply asks for.\n\nQuestion: write that commit's `UX-Pictures:` line exactly, and nothing else.",
+      "pass": "^\\W*UX-Pictures:\\s*none\\b",
+      "fail": "^\\W*UX-Pictures:(?!\\s*none)",
+      "bullets": [
+        "interactive-commit-drop-never#b3"
+      ],
+      "class": "redundant"
+    },
+    {
+      "id": "report-max-reached",
+      "rule": "report",
+      "prompt": "Situation: `/web:improve auto loop max 2` finished. `git log <start>..HEAD` shows 2 commits; one change before them was discarded after a check stayed red; measurable findings remain.\n\nQuestion: write the report's first line exactly, and nothing else on that line.",
+      "pass": "^\\W*2 commits, 1 dropped; stopped: max reached\\b",
+      "fail": "^\\W*(?!2 commits, 1 dropped; stopped: max reached)",
+      "bullets": [
+        "loop-stops-at-max#b2"
+      ],
+      "class": "load-bearing"
+    },
+    {
+      "id": "leave-unanswered-stops",
+      "rule": "leave-to-commit",
+      "prompt": "Situation: `/web:improve auto loop`. The user's CLAUDE.md says: \"Never run git commit.\" Your start message named the URL and asked leave to commit this run's changes. The user replied: \"ok, I'm logged in\" and said nothing about committing.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: STOP-BEFORE-EDIT, EDIT-WITHOUT-COMMITTING, EDIT-AND-COMMIT. Then one sentence why.",
+      "pass": "^\\W*STOP-BEFORE-EDIT\\b",
+      "fail": "^\\W*EDIT-",
+      "bullets": [
+        "commit-leave-unanswered#b2"
+      ],
+      "class": "redundant"
+    },
+    {
+      "id": "single-run-stops",
+      "rule": "one-change-without-loop",
+      "prompt": "Situation: `/web:improve auto` (no `loop`). The first change was discarded: a check stayed red after one repair, so nothing was committed. Five measurable findings remain.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: STOP, TRY-NEXT-FINDING. Then one sentence why.",
+      "pass": "^\\W*STOP\\b",
+      "fail": "^\\W*TRY-NEXT-FINDING\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "two-view-picture-names",
+      "rule": "pictures",
+      "prompt": "Situation: `/web:improve auto`. The change touches two views: Today at 390px and Settings at 390px. No other pictures exist.\n\nQuestion: list the four picture paths you write, comma-separated, on one line, and nothing else.",
+      "pass": "dev/ux/before-1\\.png.*dev/ux/(after-1|before-2)\\.png",
+      "fail": "dev/ux/before\\.png",
+      "class": "redundant"
+    }
+  ]
+}

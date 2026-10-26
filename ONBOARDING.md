@@ -17,7 +17,6 @@ marketplace.
 /plugin install go@ctx42-skills
 /plugin install srd@ctx42-skills
 /plugin install craft@ctx42-skills
-/plugin install ux@ctx42-skills
 /plugin install web@ctx42-skills
 ```
 

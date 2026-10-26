@@ -16,11 +16,11 @@ license: MIT
 ## Usage
 
 ```
-/ux:improve                   audit the app, build the top fix, stop for commit, drop, or a prompt
-/ux:improve auto              the same, committing without stopping
-/ux:improve loop              one change after another until the stop rule
-/ux:improve auto loop max 5   unattended, at most 5 commits
-/ux:improve <focus>           do what the focus asks to the part it names or a screenshot shows
+/web:improve                  audit the app, build the top fix, stop for commit, drop, or a prompt
+/web:improve auto             the same, committing without stopping
+/web:improve loop             one change after another until the stop rule
+/web:improve auto loop max 5  unattended, at most 5 commits
+/web:improve <focus>          do what the focus asks to the part it names or a screenshot shows
 ```
 
 `auto`, `loop`, and `max <n>` are leading keywords in any order; the first
@@ -277,7 +277,7 @@ user". Omit an empty section.
 
 Obey this skill's lessons: every run, read with the file-read tool (never a
 shell), in parallel, the sibling `${CLAUDE_SKILL_DIR}/LESSONS.md` and the
-fallback `~/.agent-data/ctx42-skills/lessons/ux/improve.md` (pass `~` as is,
+fallback `~/.agent-data/ctx42-skills/lessons/web/improve.md` (pass `~` as is,
 the file tools expand it; no environment probe; `$AGENT_DATA_DIR` replaces
 `~/.agent-data` only when you are told it is set). The sibling wins a conflict;
 the fallback, which a read-only install writes, still counts once the checkout
