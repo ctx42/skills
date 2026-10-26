@@ -134,6 +134,14 @@
         "its pictures by\\s+file name in their own",
         "never\\s+force a directory"
       ]
+    },
+    {
+      "id": "style-read-no-gate",
+      "rule": "Code changes follow ../style/SKILL.md, read once; no web:style gate",
+      "must": [
+        "Write every code change to `\\.\\./style/SKILL\\.md`",
+        "no `web:style` pass runs here"
+      ]
     }
   ]
 }

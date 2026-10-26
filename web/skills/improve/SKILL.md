@@ -35,6 +35,9 @@ Arguments: $ARGUMENTS
 Report tersely: no preamble or narration; state each fact once. Never push,
 amend, rebase, or touch a commit the run did not make.
 
+Write every code change to `../style/SKILL.md`, read once before the first
+edit; the project's checks stay the gate, and no `web:style` pass runs here.
+
 ## 1. Start — before any edit
 
 Check in order. The first that fails is named as the missing prerequisite and

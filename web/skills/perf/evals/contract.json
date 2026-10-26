@@ -224,6 +224,14 @@
         "2 commits, 1 dropped; stopped: stop rule",
         "Read every count and hash off `git log"
       ]
+    },
+    {
+      "id": "style-read-no-gate",
+      "rule": "Code changes follow ../style/SKILL.md, read once; no web:style gate",
+      "must": [
+        "Write every code change to `\\.\\./style/SKILL\\.md`",
+        "no `web:style` pass runs here"
+      ]
     }
   ]
 }
