@@ -1,1 +1,0 @@
-- Prove a new coverage test red by mutating the branch it covers; a test still green under the mutation asserts a rendering that hides the change (an error's text can hide its nested fields), so assert the data the branch changes instead.

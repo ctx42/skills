@@ -87,6 +87,14 @@
         "Prove it red as it\\s+will be committed",
         "before changing any signature it calls"
       ]
+    },
+    {
+      "id": "timing-fix-unverified",
+      "rule": "A timing or ordering fix not run in the real runtime is committed and listed under Unverified, not as fixed",
+      "must": [
+        "is checked in the real runtime",
+        "list it under Unverified"
+      ]
     }
   ]
 }

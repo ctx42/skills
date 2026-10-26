@@ -84,10 +84,16 @@ For each fix:
    `go test ./...`) in a temp dir, since it can recurse. Prove it red as it
    will be committed — after it passes the per-file checks, line width
    included — and before changing any signature it calls, which leaves the old
-   code unbuildable.
+   code unbuildable. A test for code already correct is proved red by mutating
+   the branch it covers; one still green under the mutation asserts a
+   rendering that hides the change (an error's text can hide its nested
+   fields), so assert the data the branch changes.
 2. Check before committing. A fix that turns out to need a contract or compat
    change nobody foresaw is not applied: restore its files, defer it with the
-   reason, and go on.
+   reason, and go on. A fix relying on timing or ordering (a watcher flush, a
+   render or layout step, an event order) is checked in the real runtime
+   before its commit; when the run cannot reach that runtime, commit it and
+   list it under Unverified, naming the missing check, not as fixed.
 3. Run the project's checks, per-file ones (formatter, line width) included,
    gated on exit status in the same command that commits
    (`make test >out 2>&1 || exit 1`), never on piped or filtered output. A
@@ -122,10 +128,13 @@ Deferred
 ```
 
 `fixed N of M`: M counts every finding but those the arguments skip, which
-the report leaves out. Align the table's columns, sizing each from its
-longest cell before writing the table. Name every other finding not fixed
-under Deferred with its reason; a finding already fixed or not reproducible
-counts as not fixed and goes there too. Omit an empty section.
+the report leaves out; N leaves out the fixes listed under Unverified, a
+section before Deferred giving each one's number, hash, and missing check
+(`- #4 b4c5d6e: not run against a real file watcher`). Align the table's
+columns, sizing each from its longest cell before writing the table. Name
+every other finding not fixed under Deferred with its reason; a finding
+already fixed or not reproducible counts as not fixed and goes there too. Omit
+an empty section.
 
 ## Self-learning
 
