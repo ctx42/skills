@@ -245,8 +245,9 @@ Recommendations; ideas dropped this run are listed under Dropped.
 Read every count and hash off `git log <start>..HEAD` and `git show --stat`,
 never from memory. Interactive runs end with the same report; a run stopped
 at the start (section 1) writes none. Print it in
-exactly this shape: the count line verbatim as its first line, nothing
-before it, and the headings `Dropped` and `Recommendations` as written.
+exactly this shape: the count line first, nothing before it, in the sample's
+exact format with its numbers and reason read off this run, and the headings
+`Dropped` and `Recommendations` as written.
 
 ```
 3 commits, 1 dropped; stopped: stop rule
