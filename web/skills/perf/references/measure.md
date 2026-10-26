@@ -12,6 +12,7 @@ build goes to the run's scratch directory, never into the tree.
 - [Network](#network)
 - [Bundle](#bundle)
 - [Visible-change check](#visible-change-check)
+- [Back-end reload](#back-end-reload)
 
 ## Setup
 
@@ -156,3 +157,11 @@ time, live data) and masked; exit 0 means unchanged. A count that differs
 between the two before captures (live data adds rows) leaves the view
 unprovable: a change touching it goes to Recommendations, and the view under
 Not measured.
+
+## Back-end reload
+
+After a back-end edit, measure only once the reloaded server answers — both
+hold: the listening process's PID (`ss -ltnp`) has changed, and the API
+responds. An API answering from the old PID has not reloaded. No
+restart within 60 s means the build failed or nothing reloaded — treat it as a
+red check (SKILL.md section 6, step 6).

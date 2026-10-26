@@ -125,7 +125,8 @@
       "must": [
         "PID \\(`ss -ltnp`\\) has changed",
         "No\\s+restart within 60 s"
-      ]
+      ],
+      "file": "references/measure.md"
     },
     {
       "id": "focus-instruction",

@@ -177,10 +177,9 @@ does. Anything outside this rule goes to Recommendations. With back-end edits
 off, a pair the rule allows that still runs one after the other at the end
 goes there under Back end without live reload; one fired together does not.
 
-After a back-end edit, measure only once the reloaded server answers: the
-listening process's PID (`ss -ltnp`) has changed and the API responds. No
-restart within 60 s means the build failed or nothing reloaded — treat it as a
-red check (section 6, step 6).
+After a back-end edit, wait for the reload as
+[references/measure.md](references/measure.md#back-end-reload) says before
+measuring.
 
 ## 4. Focus
 
