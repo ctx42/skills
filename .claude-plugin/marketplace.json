@@ -32,7 +32,7 @@
     {
       "name": "web",
       "source": "./web",
-      "description": "Web-app workflow on Vue 3 + TypeScript: the enforced style rules and a style-only pass with a reference Biome config (style), UX improvement committed one ranked fix at a time with before/after pictures (improve), and performance fixes measured under a 4x CPU slowdown, front end and back end, without changing what the user sees (perf).",
+      "description": "Web-app workflow on Vue 3 + TypeScript: the enforced style rules and a style-only pass with a reference Biome config (style), done-time review with the API contract (review), UX improvement committed one ranked fix at a time with before/after pictures (improve), and performance fixes measured under a 4x CPU slowdown, front end and back end, without changing what the user sees (perf).",
       "strict": true,
       "category": "development"
     },

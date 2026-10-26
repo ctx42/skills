@@ -33,7 +33,7 @@ skills — it ships only desktop-notification hooks:
 │   └── skills/{cm,grill-me,plan-smith,readme-smith,doc-smith,enhance-skills,fold-lessons,fix-all}/
 ├── web/
 │   ├── .claude-plugin/plugin.json
-│   └── skills/{style,improve,perf}/
+│   └── skills/{style,review,improve,perf}/
 └── notify/                              # hooks only — no skills/ folder
     ├── .claude-plugin/plugin.json
     └── hooks/{hooks.json,notify-project.sh,notify-monitors.py}
@@ -44,7 +44,7 @@ skills — it ships only desktop-notification hooks:
 | `go`     | `style`, `review`, `cover`, `doc`, `reshape`                                                             | Go style (write + check), done-time review, test coverage, doc fixing, API proposals                                       |
 | `srd`    | `create`, `review`, `edit`, `doc-edit`, `system-check`, `report-doc-gap`, `backlog`, `kb`                | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base                                          |
 | `craft`  | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `enhance-skills`, `fold-lessons`, `fix-all` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning, lesson folding, unattended fixing |
-| `web`    | `style`, `improve`, `perf`                                                                               | Vue/TS style rules and check; UX and speed fixes in a visible Chrome, one commit each                                      |
+| `web`    | `style`, `review`, `improve`, `perf`                                                                     | Vue/TS style rules, done-time review; UX and speed fixes in a visible Chrome, one commit each                              |
 | `notify` | — (hooks only)                                                                                           | Sound and an on-screen card on every monitor when Claude stops or needs input                                              |
 
 Plugin skills are **namespaced** by their plugin (e.g. `/srd:review`),

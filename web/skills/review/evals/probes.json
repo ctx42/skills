@@ -1,0 +1,57 @@
+{
+  "skill_name": "review",
+  "probes": [
+    {
+      "id": "leak-reported-once",
+      "rule": "one-finding-per-defect",
+      "prompt": "Situation: `/web:review all`. `web:style` reported an offense `undo-onbeforeunmount-everything` for a `keydown` listener a page adds in `onMounted` and never removes. Reviewing correctness you see the same listener leaks on every visit.\n\nQuestion: how many findings does the report list for this listener? Answer on the first line with exactly one of: ONE, TWO. Then one sentence why.",
+      "pass": "^\\W*ONE\\b",
+      "fail": "^\\W*TWO\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "review-runs-no-tests",
+      "rule": "review-reads-only",
+      "prompt": "Situation: `/web:review src/pages` (no `fix`). You want to know whether a page's error branch is tested.\n\nQuestion: what do you do? Answer on the first line with exactly one of: RUN-VITEST-COVERAGE, GREP-THE-TESTS. Then one sentence why.",
+      "pass": "^\\W*GREP-THE-TESTS",
+      "fail": "^\\W*RUN-VITEST-COVERAGE",
+      "class": "redundant"
+    },
+    {
+      "id": "normalized-rename-severity",
+      "rule": "contract-both-sides",
+      "context": [
+        "SKILL.md",
+        "references/contract.md"
+      ],
+      "prompt": "Situation: the Go handler encodes a device's model as `model_name`; `api.ts` normalizes `field(body, \"model\")` to `\"\"` when missing, and the device table shows the model column.\n\nQuestion: what severity is the finding? Answer on the first line with exactly one of: BLOCKER, SHOULD-FIX, NIT. Then one sentence why.",
+      "pass": "^\\W*BLOCKER",
+      "fail": "^\\W*(SHOULD-FIX|NIT)",
+      "class": "redundant"
+    },
+    {
+      "id": "rule-goes-to-biome",
+      "rule": "rule-placement",
+      "context": [
+        "SKILL.md",
+        "references/rule-editing.md"
+      ],
+      "prompt": "Situation: `/web:review add \"never export a default from a .ts module\"`. Biome has the rule `style/noDefaultExport`.\n\nQuestion: where does the rule go? Answer on the first line with exactly one of: STYLE-SKILL-MD, REFERENCE-BIOME-JSON, BOTH. Then one sentence why.",
+      "pass": "^\\W*(REFERENCE-)?BIOME-JSON",
+      "fail": "^\\W*(STYLE-SKILL-MD|BOTH)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "unprovable-fix",
+      "rule": "prove-before-fixing",
+      "context": [
+        "SKILL.md",
+        "references/fixing.md"
+      ],
+      "prompt": "Situation: `/web:review src fix`. One finding is a race you are sure of, but no Vitest or Playwright test can reproduce it.\n\nQuestion: do you apply its fix? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES\\b",
+      "class": "redundant"
+    }
+  ]
+}

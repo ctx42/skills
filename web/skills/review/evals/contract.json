@@ -1,0 +1,85 @@
+{
+  "skill_name": "review",
+  "rules": [
+    {
+      "id": "style-delegated",
+      "rule": "The style dimension is delegated to web:style; never re-derived",
+      "must": [
+        "the whole style dimension is delegated to\\s+it",
+        "never re-derive style rules here"
+      ]
+    },
+    {
+      "id": "one-finding-per-defect",
+      "rule": "A defect that is both style and correctness is reported once, under correctness",
+      "must": [
+        "is reported once, under correctness, with the higher\\s+grade, naming the style rule id it also breaks"
+      ]
+    },
+    {
+      "id": "review-reads-only",
+      "rule": "The review runs no tooling; it names the commands it ran",
+      "must": [
+        "run no Biome, `vue-tsc`, Vitest, Playwright, or Go\\s+tooling while reviewing",
+        "Name every command this pass ran, as run, in one report line"
+      ]
+    },
+    {
+      "id": "contract-in-scope",
+      "rule": "The API contract is checked for all, the root, or a diff touching either side",
+      "must": [
+        "The API contract is in scope for `all`, for the root, and for any target or\\s+diff touching the API client module or a Go file that serves its paths"
+      ]
+    },
+    {
+      "id": "contract-both-sides",
+      "rule": "A contract finding cites the TS and the Go side; a match yields nothing",
+      "must": [
+        "Each finding cites both sides",
+        "never list a match"
+      ],
+      "file": "references/contract.md"
+    },
+    {
+      "id": "contract-out-of-reach",
+      "rule": "No Go code serving the paths: skip, never guess the shape",
+      "must": [
+        "Never guess a server's shape from the frontend alone"
+      ],
+      "file": "references/contract.md"
+    },
+    {
+      "id": "prove-before-fixing",
+      "rule": "A behavioural bug is reproduced red before the fix and green after",
+      "must": [
+        "reproduce it before touching the fix",
+        "If no test can\\s+reproduce it, do not apply the fix"
+      ],
+      "file": "references/fixing.md"
+    },
+    {
+      "id": "never-commit",
+      "rule": "Fixing never commits",
+      "must": [
+        "Never `git commit`"
+      ],
+      "file": "references/fixing.md"
+    },
+    {
+      "id": "rule-placement",
+      "rule": "A rule Biome enforces goes in the reference config, never the prose rulebook",
+      "must": [
+        "it goes in\\s+`\\.\\./style/references/biome\\.json`",
+        "Nothing goes in the prose rulebook"
+      ],
+      "file": "references/rule-editing.md"
+    },
+    {
+      "id": "confirm-before-writing",
+      "rule": "No rule is written without confirmation",
+      "must": [
+        "never write a rule without confirmation"
+      ]
+    }
+  ]
+}

@@ -75,6 +75,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │   ├── evals/assets/               # Shared Vue + Go fixture app every web skill's evals run on
 │   └── skills/
 │       ├── style/                  # Vue/TS rulebook + reference Biome config; style-only pass
+│       ├── review/                 # Done-time review: style via style, correctness, API contract
 │       ├── improve/                # Audit a running app, commit one UX fix at a time
 │       └── perf/                   # Measure a running app, commit one measured fix at a time
 └── notify/                         # Plugin: desktop attention hooks (no skills)
