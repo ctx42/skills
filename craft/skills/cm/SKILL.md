@@ -78,11 +78,12 @@ Commit control:
      first commit), then per group stage, check, and commit in one command;
      a part of a file is staged in its own command just before. Stage whole
      files with `git add -- <paths>`; part of a file with
-     `printf 'y\nn\n' | git add -p -- <path>`, one answer per hunk of
-     `git diff -- <path>` in order, or, when two concerns share a hunk or the
-     file is new (`git add -p` offers it no hunks), by piping the intended
-     content (`sed -n '1,32p' <path>`) to `git hash-object -w --stdin` and
-     passing the printed sha to
+     `printf 'y\nn\n' | git add -p -- <path>`, one answer per hunk
+     `git diff -- <path> | grep '^@@'` lists, in order — counted, never guessed
+     from the edits, since nearby edits share a hunk — or, when two concerns
+     share a hunk or the file is new (`git add -p` offers it no hunks), by
+     piping the intended content (`sed -n '1,32p' <path>`) to
+     `git hash-object -w --stdin` and passing the printed sha to
      `git update-index --add --cacheinfo <mode>,<sha>,<path>` (mode from
      `git ls-files -s`, `100644` for a new file) in the next command; never
      zero-context hunks (`-U0`, `--unidiff-zero`), which land on the wrong
@@ -148,8 +149,10 @@ Commit control:
 1. Pick the diff source and verbosity from Input and Arguments.
 2. Draft the message per the sections below.
 3. Check each message before presenting it and before its commit runs:
-   summary ≤ 72 chars, body wrapped at 72 (measured, not eyeballed), every
-   sentence parsing on one read — no dangling opener, no clause stranded on a
+   summary ≤ 72 chars, body wrapped at 72 (measured, not eyeballed: counted
+   in characters, not bytes, by a command run before the commit command, the
+   body fed to it inline by `printf`, never a second heredoc), every sentence
+   parsing on one read — no dangling opener, no clause stranded on a
    preposition — and passing Describe changes only, its numbers and any
    contrast with a design the diff does not contain ("instead of …")
    included; no process jargon, no trailer beyond the two allowed. Fix and

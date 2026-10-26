@@ -1,3 +1,0 @@
-- Measure every body line's width before the commit command runs, not after it lands: a line wrapped by eye can overflow 72 columns and force an amend.
-- Measure line widths in characters, not bytes: a multi-byte character such as an ellipsis counts once, and a byte count flags lines that fit.
-- List a file's hunks with `git diff -- <path> | grep '^@@'` before answering `git add -p`: two nearby edits often share one hunk, so the answer count cannot be guessed from the edits made.
