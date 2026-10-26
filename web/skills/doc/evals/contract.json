@@ -1,0 +1,43 @@
+{
+  "skill_name": "doc",
+  "rules": [
+    {
+      "id": "checklist-governs",
+      "rule": "A comment changes only when it fails the checklist",
+      "must": [
+        "a comment changes only when it fails the checklist",
+        "A comment that passes is left alone"
+      ]
+    },
+    {
+      "id": "header-holds-members",
+      "rule": "Props, events, slots, model are named in the header block; member TSDoc is moved there and deleted",
+      "must": [
+        "does not name, in\\s+backticks, every prop, event, slot, and model",
+        "Move any fact it holds that the header\\s+block lacks into the block, then delete it"
+      ]
+    },
+    {
+      "id": "facts-from-code",
+      "rule": "Never write a fact the code does not establish",
+      "must": [
+        "Never write a fact you cannot confirm from the code; flag it instead",
+        "never on a category the code\\s+leaves open"
+      ]
+    },
+    {
+      "id": "directives-untouched",
+      "rule": "Directive comments are never edited",
+      "must": [
+        "`// biome-ignore …`, `// @ts-expect-error`"
+      ]
+    },
+    {
+      "id": "plan-before-writing",
+      "rule": "File, directory, and all targets present a plan and wait",
+      "must": [
+        "Wait for approval, then run the loop and Verify"
+      ]
+    }
+  ]
+}

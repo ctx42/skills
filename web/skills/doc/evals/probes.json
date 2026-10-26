@@ -1,0 +1,29 @@
+{
+  "skill_name": "doc",
+  "probes": [
+    {
+      "id": "undocumented-prop-placement",
+      "rule": "header-holds-members",
+      "prompt": "Situation: `/web:doc component=AppLayout`. The component declares `defineProps<{ title: string; wide?: boolean }>()`; its header block above the macro names `title` but not `wide`.\n\nQuestion: where does the documentation of `wide` go? Answer on the first line with exactly one of: TSDOC-ON-THE-MEMBER, HEADER-BLOCK. Then one sentence why.",
+      "pass": "^\\W*HEADER-BLOCK",
+      "fail": "^\\W*TSDOC-ON-THE-MEMBER",
+      "class": "load-bearing"
+    },
+    {
+      "id": "param-tags",
+      "rule": "checklist-governs",
+      "prompt": "Situation: `/web:doc src/format.ts`. A function's TSDoc is accurate and complete but documents its arguments with `@param value …` and `@returns …` tags.\n\nQuestion: do you change it? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "member-tsdoc-duplicate",
+      "rule": "header-holds-members",
+      "prompt": "Situation: `/web:doc component=AppLayout`. The header block names `title` as the page heading; the `title` member of the `defineProps` type also carries `/** The page heading. */`.\n\nQuestion: what happens to the member's TSDoc? Answer on the first line with exactly one of: KEEP, DELETE. Then one sentence why.",
+      "pass": "^\\W*DELETE",
+      "fail": "^\\W*KEEP",
+      "class": "load-bearing"
+    }
+  ]
+}
