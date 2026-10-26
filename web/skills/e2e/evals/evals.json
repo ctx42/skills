@@ -1,0 +1,44 @@
+{
+  "skill_name": "e2e",
+  "evals": [
+    {
+      "id": 1,
+      "name": "route-needs-the-fake-extended",
+      "skills": [
+        "e2e"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree; `bun install --frozen-lockfile` has run in `web/`, Playwright's Chromium is installed, and `bun run test` in `web/` and `go test ./...` at the root are green. The router has a `site` route (`/sites/:id`, `SitePage.vue`); the app server answers `GET /api/sites/{id}` by asking the inventory for `/sites/{id}`, which the fake inventory (`internal/fake`, run by `cmd/fake-upstream`) does not serve. No spec visits a site page.",
+      "query": "/web:e2e route=site",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies, Playwright's Chromium, and a Go toolchain with the fixture's modules cached, to build, run the fake and the app server, and run the specs."
+    },
+    {
+      "id": 2,
+      "name": "route-with-no-spec",
+      "skills": [
+        "e2e"
+      ],
+      "setup": "The same fixture repository as scenario 1, clean tree, everything installed and green. No spec visits the settings page (`/settings`, its date zone `SelectButton`).",
+      "query": "/web:e2e route=settings",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies, Playwright's Chromium, and a Go toolchain, to build and run the specs."
+    },
+    {
+      "id": 3,
+      "name": "all-routes-plan",
+      "skills": [
+        "e2e"
+      ],
+      "setup": "The same fixture repository as scenario 1, clean tree, everything installed and green. The user answers the plan with `none, just the plan`.",
+      "query": "/web:e2e",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies, Playwright's Chromium, and a Go toolchain, for the baseline run."
+    }
+  ]
+}

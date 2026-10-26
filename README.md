@@ -33,7 +33,7 @@ skills — it ships only desktop-notification hooks:
 │   └── skills/{cm,grill-me,plan-smith,readme-smith,doc-smith,enhance-skills,fold-lessons,fix-all}/
 ├── web/
 │   ├── .claude-plugin/plugin.json
-│   └── skills/{style,review,cover,doc,improve,perf}/
+│   └── skills/{style,review,cover,doc,e2e,improve,perf}/
 └── notify/                              # hooks only — no skills/ folder
     ├── .claude-plugin/plugin.json
     └── hooks/{hooks.json,notify-project.sh,notify-monitors.py}
@@ -44,7 +44,7 @@ skills — it ships only desktop-notification hooks:
 | `go`     | `style`, `review`, `cover`, `doc`, `reshape`                                                             | Go style (write + check), done-time review, test coverage, doc fixing, API proposals                                       |
 | `srd`    | `create`, `review`, `edit`, `doc-edit`, `system-check`, `report-doc-gap`, `backlog`, `kb`                | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base                                          |
 | `craft`  | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `enhance-skills`, `fold-lessons`, `fix-all` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning, lesson folding, unattended fixing |
-| `web`    | `style`, `review`, `cover`, `doc`, `improve`, `perf`                                                     | Vue/TS style, review, coverage, docs; UX and speed fixes in a visible Chrome, one commit each                              |
+| `web`    | `style`, `review`, `cover`, `doc`, `e2e`, `improve`, `perf`                                              | Vue/TS style, review, unit and e2e coverage, docs; UX and speed fixes in a visible Chrome                                  |
 | `notify` | — (hooks only)                                                                                           | Sound and an on-screen card on every monitor when Claude stops or needs input                                              |
 
 Plugin skills are **namespaced** by their plugin (e.g. `/srd:review`),

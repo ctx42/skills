@@ -13,12 +13,12 @@ repository. Skills ship as Claude Code plugins, grouped into `go`, `srd`,
 
 A skill lives at `<group>/skills/<skill-name>/`. Pick the group by purpose:
 
-| Group   | For                                     |
-|---------|-----------------------------------------|
-| `go`    | Go tooling (style, review, coverage)    |
-| `srd`   | Software Requirement Document lifecycle |
-| `craft` | Cross-cutting engineering-craft aids    |
-| `web`   | Web-app UX and performance              |
+| Group   | For                                              |
+|---------|--------------------------------------------------|
+| `go`    | Go tooling (style, review, coverage)             |
+| `srd`   | Software Requirement Document lifecycle          |
+| `craft` | Cross-cutting engineering-craft aids             |
+| `web`   | Vue/TS frontend: style, review, tests, UX, speed |
 
 The fifth plugin, `notify`, is hooks-only and holds no `skills/` directory —
 never place a skill there.

@@ -1,0 +1,13 @@
+{
+  "skill_name": "e2e",
+  "probes": [
+    {
+      "id": "smoke-project",
+      "rule": "no-credentials",
+      "prompt": "Situation: the Playwright config has a project `e2e` against the fake and a project `smoke` that logs in to a test environment with credentials from the environment, which are set on this machine.\n\nQuestion: which projects does the run use? Answer on the first line with exactly one of: E2E-ONLY, BOTH. Then one sentence why.",
+      "pass": "^\\W*E2E-ONLY",
+      "fail": "^\\W*BOTH",
+      "class": "redundant"
+    }
+  ]
+}

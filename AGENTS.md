@@ -121,6 +121,8 @@ source of truth.
   measured from direct tests only.
 - `doc` — fixes and completes module TSDoc, symbol TSDoc, component header
   blocks, and inline comments per documentable item; edits and verifies.
+- `e2e` — raises Playwright coverage per route and control, proving each spec
+  can fail; extends the Go fake upstream when a route needs it.
 - `improve` — audits a running web app in a visible Chrome and commits one
   ranked UX fix at a time with before/after pictures; interactive by default,
   `auto` and `loop` for unattended runs. Needs the craft plugin (`craft:cm`).
