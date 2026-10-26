@@ -159,14 +159,17 @@ a picture pair per place; unrelated changes never share a commit. Per change:
    show the failure at the stop.
 6. Interactive: stop (section 6). `auto`: commit.
 7. Commit: unstage everything (`git restore --staged .`), stage the change's
-   files and pictures by path (`git add -f -- <paths>`, so an ignored `dev/`
-   still ships them), `git rm -q --` every tracked `dev/ux/*.png` this commit
-   did not write, and write the message (section 5). Then, in one command,
-   re-run the checks gated on exit status (`make check >out 2>&1 || exit 1`),
-   exit on any byte-identical pair (`cmp -s before-1.png after-1.png &&
-   exit 1`), compare `git diff --cached --name-only` with that list, and
-   `git commit -F -`. A red re-run commits nothing and returns to step 5; an
-   identical pair, to step 4.
+   code with a plain `git add -- <paths>`, never `-f`, then its pictures by
+   file name in their own `git add -f -- <pictures>` (so an ignored `dev/`
+   still ships them) — never force a directory, which stages everything its
+   ignore rules keep out — `git rm -q --` every tracked `dev/ux/*.png` this
+   commit did not write, and write the message (section 5). Then, in one
+   command, re-run the checks gated on exit status
+   (`make check >out 2>&1 || exit 1`), exit on any byte-identical pair
+   (`cmp -s before-1.png after-1.png && exit 1`), compare
+   `git diff --cached --name-only` with that list, and `git commit -F -`. A
+   red re-run commits nothing and returns to step 5; an identical pair, to
+   step 4.
 
 ## 5. Commit message
 

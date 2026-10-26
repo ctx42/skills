@@ -126,6 +126,14 @@
       "must": [
         "Never click logout, nor submit, delete, or otherwise\\s+change data the app stores"
       ]
+    },
+    {
+      "id": "force-add-pictures-only",
+      "rule": "Code is staged plainly; only pictures are forced, by file name, never a directory",
+      "must": [
+        "its pictures by\\s+file name in their own",
+        "never\\s+force a directory"
+      ]
     }
   ]
 }
