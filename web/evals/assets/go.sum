@@ -1,0 +1,6 @@
+github.com/ctx42/ring v0.8.2 h1:Cf2bksHABA/uZM2+Nn9TQgvpWHaOMhVlenBYZJ4hdvo=
+github.com/ctx42/ring v0.8.2/go.mod h1:1/1t9RWlLwktfzkO7iISiICOzQ57o8ASYX0FulRcMgs=
+github.com/ctx42/testing v0.57.1 h1:/yQWQeHLMK6WkiHfO/5d+a3yqY8JU+h4f6UUknMRPKA=
+github.com/ctx42/testing v0.57.1/go.mod h1:wRBqNRtlxDZnXIjgCX3zr05Acl6JC1D6cSBN2IpaMIs=
+github.com/ctx42/testkit v0.16.3 h1:yl7Strwx1ggRAn9w+8rEcYEqtGjdLHTeK+QwxyjFikc=
+github.com/ctx42/testkit v0.16.3/go.mod h1:byv5xbKl++RfZNTGg3/61Qibo/CbVQZStyVJS9/ckVo=

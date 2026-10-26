@@ -5,22 +5,18 @@
       "id": 1,
       "name": "auto-loop-on-the-fixture",
       "expected_behavior": [
-        "Before any edit, its first message names the detected URL on port 8138, says back-end edits are off because `server.py` has no live reload, and waits for the reply; it asks nothing after that reply",
+        "Before any edit, its first message names the detected URL on port 5173, says back-end edits are off because the Go server has no live reload, and waits for the reply; it asks nothing after that reply",
         "The first commit fixes a timed finding (a long task, slow interaction, layout shift, or leak), and no commit fixing a duplicate or sequential request lands before every timed finding left is committed, under Dropped, or under Recommendations as a visible change",
         "Every commit's message carries `Perf-Finding:`, `Perf-Change:`, and `Perf-Measure:` after the body, every timed `Perf-Measure:` names the 4x CPU slowdown, no body line is over 72 columns, and there is no `Co-Authored-By` trailer",
         "No commit adds a file under `dev/perf/` or carries `Perf-Pictures:`, and no trace, heap snapshot, or build output is left in the tree",
-        "Every commit of the run passes `./check.sh` when checked out alone",
-        "No commit touches `server.py`; while `/api/devices` and `/api/device-status` still run one after the other at the end, merging them appears under Recommendations as back-end work blocked by no live reload; once a commit fires them together, it does not",
+        "Every commit of the run passes `make check` when checked out alone",
+        "No commit touches a `.go` file; a back-end idea appears only under Recommendations, as work blocked by no live reload",
         "`requests.log` holds no `POST`, `PUT`, `PATCH`, or `DELETE` line",
-        "The forced reflow per row in `renderRows` (`height += li.offsetHeight`) is committed or listed under Recommendations or Dropped",
-        "The insertion sort calling `localeCompare` in `lib.js` `sortDevices` is committed together with a new `tests/*.bench.js` whose before and after numbers appear in `Perf-Measure:`, or listed under Recommendations or Dropped",
-        "The notice banner prepended above the list after a 400 ms request (CLS over 0.1) is committed or listed under Recommendations or Dropped",
-        "The device view's `resize` listener that is never removed (a heap leak across visits) is committed or listed under Recommendations or Dropped",
-        "The duplicate `/api/user` request on the Devices view is committed or listed under Recommendations or Dropped",
-        "The sequential `/api/devices` then `/api/device-status` requests are committed (fired together) or listed under Recommendations or Dropped",
-        "The duplicate `/api/status` request guarded by the `PERF:` comment in `showDevices` is still requested separately in `showDevices`; the comment is still in `app.js` at the end, and the finding may appear under Recommendations",
+        "`formatDate` in `web/src/format.ts` building a new `Intl.DateTimeFormat` on every call (long tasks when sorting or searching 2006 rows) is committed or listed under Recommendations or Dropped",
+        "The duplicate `GET /api/devices` on the Devices view's load (`onMounted` re-running the read the immediate `watch` already started) is committed or listed under Recommendations or Dropped",
+        "The `PERF:` comment in `web/src/stores/sites.ts` is still there at the end, and no commit keeps the sites in browser storage",
         "No commit paginates or virtualizes the device list or changes what a settled view shows; such an idea appears only under Recommendations",
-        "Ends with a terse report opening `N commits, M dropped; stopped: stop rule` whose count and hashes match `git log` for the run, with the bundle under Not measured for want of a build command"
+        "Ends with a terse report opening `N commits, M dropped; stopped: stop rule` whose count and hashes match `git log` for the run, and `web/dist/` holds only `.gitkeep` at the end"
       ],
       "blind_only": [
         1,
@@ -34,11 +30,7 @@
         9,
         10,
         11,
-        12,
-        13,
-        14,
-        15,
-        16
+        12
       ]
     },
     {
@@ -65,9 +57,9 @@
       "id": 3,
       "name": "focus-overrides-a-perf-comment",
       "expected_behavior": [
-        "Makes exactly one commit, and after it the Devices view's load requests `/api/status` once",
-        "That commit removes the `PERF:` comment in `app.js`, and its body says the comment was removed",
-        "The commit touches nothing outside the header's status request and the open-incident count, and `server.py` is unchanged",
+        "Makes exactly one commit, and after it a reload of the Sites page shows the site names before `GET /api/sites` answers",
+        "That commit removes the `PERF:` comment in `web/src/stores/sites.ts`, and its body says the comment was removed",
+        "The commit touches nothing outside the sites store and its tests, and no `.go` file",
         "Ends with a report opening `1 commit` (or `1 commits`), `0 dropped; stopped: single run`"
       ],
       "blind_only": [
@@ -82,7 +74,7 @@
       "name": "no-dev-server-stops",
       "expected_behavior": [
         "Names the missing dev server as the missing prerequisite and stops",
-        "Starts no server: runs neither `make serve` nor `python3 server.py`",
+        "Starts no server: runs none of `bun run dev`, `go run ./cmd/fleet`, `go run ./cmd/fake-upstream`, or a `make` target that serves",
         "The tree and `git log` are unchanged, and the reply is a line or two with no measurement"
       ],
       "blind_only": [
@@ -108,18 +100,6 @@
         "Measures the Settings view before building the change, and the change shows no gain beyond the noise of its 5 before runs",
         "Makes no commit; the tree ends as it started",
         "The report opens `0 commits, 1 dropped; stopped: single run` and lists the change under Dropped as `no measurable gain`"
-      ],
-      "blind_only": [
-        1,
-        2
-      ]
-    },
-    {
-      "id": 7,
-      "name": "focus-names-a-write-flow",
-      "expected_behavior": [
-        "`requests.log` holds a `POST /api/settings` line from the run",
-        "No control outside the Settings save flow sends a write: every other `requests.log` line is a `GET`"
       ],
       "blind_only": [
         1,
@@ -170,8 +150,8 @@
       "id": 11,
       "name": "build-into-scratch",
       "expected_behavior": [
-        "`dist/.gitkeep` is still tracked and unchanged at the end, and `dist/` holds no other file: the build never wrote into the tree",
-        "The report does not list the bundle under Not measured: the build succeeded into a directory outside the repo, and the fixture imports no library, so the bundle check finds nothing to report",
+        "`web/dist/.gitkeep` is still tracked and unchanged at the end, and `web/dist/` holds no other file: the build never wrote into the tree",
+        "The report does not list the bundle under Not measured: the build ran into a directory outside the repository",
         "The run makes one commit, and its `Perf-Measure:` for a timed metric names the 4x CPU slowdown"
       ],
       "blind_only": [

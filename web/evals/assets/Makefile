@@ -1,12 +1,11 @@
-PORT ?= 8138
-
-serve:
-	PORT=$(PORT) python3 server.py
-
+# Every check: Go vet and tests, then the frontend check.
 check:
-	./check.sh
+	go vet ./...
+	go test ./...
+	cd web && bun run check
 
-bench:
-	for f in tests/*.bench.js; do node "$$f"; done
+# The frontend build the server embeds, then the end-to-end tests.
+test: check
+	cd web && bun run test
 
-.PHONY: serve check bench
+.PHONY: check test
