@@ -52,9 +52,10 @@ don't restate output the user can already see.
 
 !`git diff HEAD 2>/dev/null || (git diff --cached; git diff)`
 
-The Check target when no target token is given; a named target ignores it. On
-a branch with no commits yet, `HEAD` does not resolve, so the staged diff
-followed by the unstaged one stands in for it.
+The Check target when no target token is given, unless this session has made
+fixes (see Target); a named target ignores it. On a branch with no commits
+yet, `HEAD` does not resolve, so the staged diff followed by the unstaged one
+stands in for it.
 
 ## Check mode
 
@@ -66,7 +67,11 @@ The target token is:
   branch's own work is the target: diff it against the base branch
   (`git diff <base>...HEAD`) and say which of the two you reviewed. On a
   branch with no commits, an empty injected diff leaves nothing to review:
-  say so and ask for a target.
+  say so and ask for a target. Once this session has made fixes, by this
+  skill or any other, committed or not, the empty target is instead the diff
+  from the commit before the first fix: a fix to identity, nil, or undo logic
+  regresses the inputs beside it. With no commit before the first fix, the
+  no-commits fallback above stands.
 - a package — a path like `./pkg/foo` or an import path; review that one
   package's `.go` files.
 - a module / many packages — `./...`, a directory containing `go.mod`, or an
