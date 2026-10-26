@@ -1,0 +1,44 @@
+{
+  "skill_name": "style",
+  "evals": [
+    {
+      "id": 1,
+      "name": "whole-frontend-on-the-fixture",
+      "skills": [
+        "style"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a Go server (`cmd/`, `internal/`) and its Vue 3 + TypeScript frontend in `web/` (`package.json`, `biome.json`, `vite.config.ts`, `src/` with components, pages, and stores, colocated `*.test.ts`, `e2e/`). `bun install --frozen-lockfile` has run in `web/`, and `bun run check` is green there. The user answers a plan or pick question with `none, just the list`.",
+      "query": "/web:style all",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies installed from its lockfile. Without them the gate cannot run, which this scenario never reaches, so a reading-only run still grades."
+    },
+    {
+      "id": 3,
+      "name": "fix-one-file-behind-a-green-gate",
+      "skills": [
+        "style"
+      ],
+      "setup": "The same fixture repository as scenario 1, clean tree, dependencies installed, `bun run check` green in `web/`.",
+      "query": "/web:style web/src/components/AppLayout.vue fix",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies installed, to run the `bun run check` gate."
+    },
+    {
+      "id": 4,
+      "name": "reference-while-writing-a-page",
+      "skills": [
+        "style"
+      ],
+      "setup": "The same fixture repository as scenario 1. An agent has read the skill as context and is about to add a page; the project already has `src/read.ts` (`useRead`), `queryText` in `src/router.ts`, `readError` in `src/api.ts`, and `src/testing.ts` with `mountAt`, `fakeFetch`, and `xxxAnswers()` factories.",
+      "query": "Add a Models page at /models listing the distinct device models with how many devices each has, linked from the main navigation, with its test.",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies installed, so the new page's test and `bun run check` run."
+    }
+  ]
+}

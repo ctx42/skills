@@ -1,0 +1,85 @@
+{
+  "skill_name": "style",
+  "rules": [
+    {
+      "id": "rules-change-via-review",
+      "rule": "Rulebook and reference config change only through web:review",
+      "must": [
+        "Change\\s+either only through `web:review`",
+        "never hand-edit them",
+        "adding or changing a rule belongs to\\s+web:review"
+      ]
+    },
+    {
+      "id": "reference-vs-pass",
+      "rule": "Production applies to .vue/.ts, Test to tests; Test inherits Production",
+      "must": [
+        "apply Production to `\\*\\.vue` and `\\*\\.ts`, and Test to `\\*\\.test\\.ts`",
+        "Test inherits Production unless a Test rule overrides\\s+it"
+      ]
+    },
+    {
+      "id": "biome-holds-mechanical",
+      "rule": "Mechanical rules live in the reference Biome config; the project config may add, never drop",
+      "must": [
+        "Mechanical rules live in \\[references/biome\\.json\\]",
+        "it may add rules,\\s+never drop one"
+      ]
+    },
+    {
+      "id": "client-checks-responses",
+      "rule": "Every response is checked into app types at the client boundary; no unchecked as T",
+      "must": [
+        "never `as T` an unchecked body",
+        "pages and stores never\\s+call `fetch`"
+      ]
+    },
+    {
+      "id": "named-routes",
+      "rule": "Navigate by route name, never a string path",
+      "must": [
+        "navigate with `\\{ name, params, query \\}`,\\s+never a string path"
+      ]
+    },
+    {
+      "id": "shared-read-helper",
+      "rule": "Async read state goes through the one shared read helper",
+      "must": [
+        "in the project's one shared read\\s+helper, never in\\s+hand-rolled refs per page"
+      ]
+    },
+    {
+      "id": "tsdoc-verb-first",
+      "rule": "TSDoc summaries start with a verb or noun phrase, never the symbol's name",
+      "must": [
+        "never with the symbol's own name",
+        "no `@param` or `@returns`"
+      ]
+    },
+    {
+      "id": "fetch-fake-keys",
+      "rule": "Tests fake fetch with METHOD /path keys and never mock own modules",
+      "must": [
+        "keyed `\"METHOD /path\"` that\\s+throw on any request not listed; never mock your own modules"
+      ]
+    },
+    {
+      "id": "gate-before-and-after",
+      "rule": "Fixing runs bun run check before and after; never commits",
+      "must": [
+        "Run `bun run check` in the root",
+        "the job is\\s+not done until it passes",
+        "Never `git commit`"
+      ],
+      "file": "references/checking.md"
+    },
+    {
+      "id": "plan-first-stops",
+      "rule": "plan_first proposes the budget and stops before checking",
+      "must": [
+        "propose the budget and the directory list, then stop for\\s+the user's answer, checking nothing until it comes"
+      ],
+      "file": "references/checking.md"
+    }
+  ]
+}

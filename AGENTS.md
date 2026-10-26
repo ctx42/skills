@@ -111,6 +111,9 @@ source of truth.
 
 ### web
 
+- `style` — the enforced Vue 3 + TypeScript style rules (Production + Test)
+  and the reference Biome config: read before any `.vue`/`.ts` edit, or run
+  it on a target for a style-only check-and-fix pass.
 - `improve` — audits a running web app in a visible Chrome and commits one
   ranked UX fix at a time with before/after pictures; interactive by default,
   `auto` and `loop` for unattended runs. Needs the craft plugin (`craft:cm`).
