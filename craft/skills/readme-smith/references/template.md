@@ -45,7 +45,8 @@ section set, prerequisites format, and tone — a repo's READMEs read as a set.
 3. Features: concise bullets of what it does. Capabilities only; mechanics
    belong to Usage, so cut a bullet that re-narrates a run step.
 4. Prerequisites: required toolchain/runtime versions, accounts, services. Omit
-   if none.
+   if none. A minimum runtime a version badge shows is already stated; add no
+   prose line repeating it.
 5. Installation: copy-pasteable commands, one block per supported method
    (package manager, binary, source). Enumerate the methods from the tool's own
    docs and manifests; a method absent from a sibling README still exists.
