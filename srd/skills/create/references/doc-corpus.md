@@ -65,9 +65,10 @@ path.
 each result carries `rank`: 1 is the most trusted, a higher number less;
 results under `initiatives` (SRDs) carry none.
 
-- Two corpus sources disagree: the lower `rank` states the platform; the
-  other's statement is a `wrong` doc gap for `srd:report-doc-gap`. Name both
-  and the ranks that settled it.
+- Two corpus sources disagree and their ranks differ: the lower `rank` states
+  the platform, settled without asking the user; the other's statement is a
+  `wrong` doc gap for `srd:report-doc-gap`. Name both and the ranks that
+  settled it.
 - Equal ranks, or no `rank` on either side: nothing settles it — surface both
   to the user as a finding.
 - Never settle by folder name, source type, or a remembered order — only by
