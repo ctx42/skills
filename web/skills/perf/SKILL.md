@@ -142,10 +142,8 @@ once. A change is kept only when its after median beats the before median by
 more than the spread (max − min) of the 5 before runs; for a counted metric any
 reduction counts. A leak is measured by one series of 5 cycles, before and
 after, taken the same way both times; a leak fix is kept when the after series
-is no longer a leak. A change
-with a benchmark (section 5) is also kept when the benchmark, 5 runs each way,
-passes that test and the browser median is not worse by more than its spread.
-It need not clear the threshold in one go. A change with no
+is no longer a leak. A change with a benchmark is also kept by the keep rule
+in [references/benchmarks.md](references/benchmarks.md). A change with no
 gain beyond that is discarded and listed under Dropped, "no measurable gain" —
 a focus instruction included.
 
@@ -175,14 +173,9 @@ Back-end code in this repo may change, its API included, only when start step
 help there (a field, a batch call, caching headers) goes to Recommendations as
 feedback for their owners.
 
-Merge two calls into one endpoint only when all hold: the view makes both on
-every load; they run one after the other, or are always fired together; their
-data describes one resource (a list and its counts or statuses). Never add an
-endpoint bundling unrelated resources for one page. Keep an old endpoint while
-anything else in the repo calls it; remove it in the same commit once nothing
-does. Anything outside this rule goes to Recommendations. With back-end edits
-off, a pair the rule allows that still runs one after the other at the end
-goes there under Back end without live reload; one fired together does not.
+Two calls merge into one endpoint only as
+[references/merge-rule.md](references/merge-rule.md) allows; read it before
+merging or recommending a merge. Never bundle unrelated resources for one page.
 
 After a back-end edit, wait for the reload as
 [references/measure.md](references/measure.md#back-end-reload) says before
@@ -195,10 +188,11 @@ screenshot, with what the user wants; one naming only a part measures that
 part. The description is an instruction. It beats a `PERF:` comment, which the
 same commit removes, its body saying so. It may require a visible change it
 names explicitly (pagination, virtualization, a debounce), which then carries
-picture pairs (section 6, step 2). The instruction is the run's first change;
-with `loop`, the run then keeps improving that part by the normal rules. With
-a focus, no commit touches code outside the focused part and what serves it; a
-fix that would goes to Recommendations.
+picture pairs ([references/focus-pictures.md](references/focus-pictures.md)).
+The instruction is the run's first change; with `loop`, the run then keeps
+improving that part by the normal rules. With a focus, no commit touches code
+outside the focused part and what serves it; a fix that would goes to
+Recommendations.
 
 ## 5. What a change may be
 
@@ -211,13 +205,9 @@ fix that would goes to Recommendations.
 - **Tests.** Every code path a change adds — a cache and its invalidation, a
   merged endpoint, a lazy boundary — gets unit or integration tests in the
   same commit.
-- **Benchmarks.** A gain in code that runs in isolation (a Go function or
-  handler, a pure JS or TS function) also gets a benchmark in the project's
-  tool — Go `Benchmark…` with `b.ReportAllocs()`, Vitest `bench`, or the
-  stack's equivalent. Write it first, run it on the unchanged code, then on
-  the change; both results go in `Perf-Measure:`. A gain seen only in the
-  browser (fewer requests, a smaller bundle, less re-rendering) is proved by
-  the browser measurement.
+- **Benchmarks.** A gain in code that runs in isolation (a function or
+  handler) also gets a benchmark, written first and run before and after as
+  [references/benchmarks.md](references/benchmarks.md) says.
 - **Never, for speed:** duplicate or inline logic, bypass a layer (a handler
   querying storage directly, a component calling an API a store owns), add
   global mutable state, weaken or delete a test, or hand-roll what the
@@ -237,11 +227,9 @@ commit; unrelated changes never share a commit. Per change:
    to Recommendations, naming the file — a focus instruction included).
 2. Before any edit, take the 5 before measurements of the finding's metric and
    the visible-change check's two before captures of each view the change will
-   touch. A visible change a focus named also deletes every untracked
-   `dev/perf/*.png`; its pictures come at step 6. One pair is
-   `dev/perf/before.png` and `dev/perf/after.png`; several are `before-1.png`
-   and `after-1.png` on, numbered as in the message. No other change writes
-   into `dev/perf/`.
+   touch. A focus-named visible change also prepares its pictures per
+   [references/focus-pictures.md](references/focus-pictures.md); no other
+   change writes into `dev/perf/`.
 3. Make the smallest change that fixes the finding, with its tests and any
    benchmark (section 5).
 4. Run the targeted checks right after the edit, on exit status, never on
@@ -255,12 +243,7 @@ commit; unrelated changes never share a commit. Per change:
    gain".
 6. Run the visible-change check; a mismatch discards the change and lists the
    idea under Recommendations as a visible change. A focus-named visible
-   change skips it and shoots its pictures, after first: per touched view,
-   scroll to the first element the change adds (a pager, a placeholder, a
-   "load more" button), else to where it removed content, and
-   `take_screenshot` with `filePath`;
-   then `git stash push -u -- <the change's files>`, reload, shoot `before`
-   at the same scroll, and `git stash pop`.
+   change skips it and shoots its pictures instead.
 7. Interactive: stop (section 8). `auto`: commit.
 8. Commit: unstage everything (`git restore --staged .`), stage the change's
    files and pictures by path (`git add -f -- <paths>`, so an ignored `dev/`
@@ -292,7 +275,7 @@ Perf-Measure: INP 610 -> 140 ms, median of 5 at 4x CPU (before
 
 `Perf-Finding:` the metric, its threshold, and where it breaks;
 `Perf-Change:` what changed; `Perf-Measure:` before -> after with the method,
-plus a benchmark's ns/op and allocs/op before and after; `Perf-Pictures:` each
+and any benchmark's; `Perf-Pictures:` each
 pair's view and state, numbered as the files, only on a commit carrying
 pictures. A `docs(perf): never …` commit carries `Perf-Finding:` alone. Never
 add a trailer beyond what `cm` allows.

@@ -58,6 +58,10 @@
     {
       "id": "bench-gain-keeps",
       "rule": "noise-keep",
+      "context": [
+        "SKILL.md",
+        "references/benchmarks.md"
+      ],
       "prompt": "Situation: `/web:perf auto`. The change replaces an insertion sort in a pure JS function with `Array.sort`. Benchmark, 5 runs each: before 18.1, 18.6, 18.9, 18.4, 19.0 ms/op; after 1.5, 1.6, 1.6, 1.7, 1.6 ms/op. Browser sort INP, 5 runs each: before 430, 464, 470, 448, 502 ms (median 464, spread 72); after 440, 448, 455, 430, 470 ms (median 448). Checks pass.\n\nQuestion: what do you do with the change? Answer on the first line with exactly one of: COMMIT, DROP. Then one sentence why.",
       "pass": "^\\W*COMMIT\\b",
       "fail": "^\\W*(DROP)\\b",

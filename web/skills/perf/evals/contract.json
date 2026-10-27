@@ -62,8 +62,7 @@
       "must": [
         "measured 5 times and its median used",
         "more than the spread \\(max − min\\) of the 5 before runs",
-        "\\\"no measurable gain\\\" —\\s+a focus instruction included",
-        "passes that test and the browser median is not worse by more than its spread"
+        "\\\"no measurable gain\\\" —\\s+a focus instruction included"
       ]
     },
     {
@@ -106,10 +105,19 @@
     {
       "id": "merge-rule",
       "rule": "Merge calls only for one resource always loaded together; never a per-page bundle; keep endpoints still called",
+      "file": "references/merge-rule.md",
       "must": [
         "their\\s+data describes one resource",
         "Never add an\\s+endpoint bundling unrelated resources for one page",
         "Keep an old endpoint while\\s+anything else in the repo calls it"
+      ]
+    },
+    {
+      "id": "merge-rule-pointer",
+      "rule": "The merge rule is read before any merge; per-page bundles never",
+      "must": [
+        "\\[references/merge-rule\\.md\\]",
+        "Never bundle unrelated resources for one page"
       ]
     },
     {
@@ -141,10 +149,19 @@
     },
     {
       "id": "tests-and-benchmarks",
-      "rule": "New code paths get tests; isolated gains get a benchmark run before and after",
+      "rule": "New code paths get tests; isolated gains get a benchmark per the reference",
       "must": [
         "gets unit or integration tests in the\\s+same commit",
-        "Write it first, run it on the unchanged code, then on\\s+the change"
+        "also gets a benchmark, written first and\\s+run before and after"
+      ]
+    },
+    {
+      "id": "benchmark-method",
+      "rule": "A benchmark is written first and run on the unchanged code, then the change; its keep rule",
+      "file": "references/benchmarks.md",
+      "must": [
+        "Write it first, run it on the unchanged code, then on the change",
+        "the browser median is not worse by more than its spread"
       ]
     },
     {
@@ -196,8 +213,9 @@
     {
       "id": "pictures-after-first",
       "rule": "Focus-named visible change: after shot at the changed part first, before shot from the stashed tree at the same scroll",
+      "file": "references/focus-pictures.md",
       "must": [
-        "shoots its pictures, after first",
+        "shoot its pictures, after\\s+first",
         "shoot `before`\\s+at the same scroll"
       ]
     },
