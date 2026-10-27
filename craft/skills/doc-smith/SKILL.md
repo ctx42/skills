@@ -5,7 +5,8 @@ description: >
   existing ones, catching contradictions, terminology drift, repetition,
   structural gaps, and dubious claims across the whole document. Use when
   asked to create, audit, review, proof, proofread, check, or work through
-  technical docs, a user manual, or product documentation.
+  technical docs, a user manual, an operator or admin guide, or product
+  documentation.
 argument-hint: "[create|audit*|proof|revise] [<file>... | <desc>]"
 license: MIT
 ---
