@@ -6,7 +6,7 @@
       "name": "auto-loop-on-the-fixture",
       "expected_behavior": [
         "Before any edit, its first message names the detected URL on port 5173 and waits for the reply; it asks nothing after that reply",
-        "The first commit fixes a measurable defect, and no commit fixing a heuristic-only finding lands while a measurable defect remains unfixed",
+        "The first commit fixes a measurable defect (a failed Lighthouse accessibility audit, overflow or clipping, a broken or empty state, or text contrast below 4.5:1), and no commit fixing a finding outside that list lands while one on it remains unfixed",
         "Every commit's message carries `UX-Finding:`, `UX-Change:`, and `UX-Pictures:` after the body, no body line over 72 columns, and no `Co-Authored-By` trailer",
         "After each commit, the commit's tree holds under `dev/ux/` exactly the picture pairs its `UX-Pictures:` field names (none for `UX-Pictures: none`), and no pair's before and after files are byte-identical",
         "Every commit of the run passes `make check` when checked out alone",
