@@ -129,7 +129,9 @@ change counts as still red. Still red: revert that commit
 (`git revert --no-commit <hash>`, then commit with summary
 `revert: <its summary>`) and move its findings under Deferred with the failing
 check. A revert that conflicts is aborted (`git revert --abort`) and the check
-stays red.
+stays red. When bisect pins no single commit (the check flakes, or only the
+fixes together fail), re-run it once; still red, one repair at HEAD as a
+`fix`; still red, it stays red and nothing is reverted.
 
 ## 4. Report
 

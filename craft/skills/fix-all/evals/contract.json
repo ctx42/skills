@@ -43,7 +43,8 @@
         "plus the tests covering the files\\s+a fix touches",
         "`git bisect run <check>`",
         "Still red: revert that commit",
-        "Checks: pass"
+        "Checks: pass",
+        "When bisect pins no single\\s+commit"
       ]
     },
     {
