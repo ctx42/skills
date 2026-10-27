@@ -181,7 +181,8 @@ track.
 - Names: `answer: deferred`, `ask` each person's name exactly as typed, the
   name alone (`piotr k`, not `piotr k from billing`) — no @, no completion,
   no correction.
-- "Nobody", "not sure", or no name: `answer: unknown`, no `ask`.
+- "Nobody", "not sure", or no person's name (a team or role, "someone in
+  hardware"): `answer: unknown`, no `ask`.
 - Names volunteered unprompted ("Piotr knows"): recorded the same way; skip
   the question.
 - The user knows but defers ("not now"): `answer: deferred`, no `ask`, no

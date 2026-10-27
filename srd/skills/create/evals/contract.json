@@ -167,7 +167,8 @@
       "must": [
         "ask\\ exactly\\ one\\ follow\\-up,\\ \"Who\\ would\\ know\\?\"",
         "Names:\\ `answer:\\ deferred`,\\ `ask`\\ each\\ person's\\ name\\ exactly\\ as\\ typed,\\ the\\ name\\ alone",
-        "\"Nobody\",\\ \"not\\ sure\",\\ or\\ no\\ name:\\ `answer:\\ unknown`,\\ no\\ `ask`",
+        "\"Nobody\",\\ \"not\\ sure\",\\ or\\ no\\ person's\\ name",
+        "\"someone\\s+in\\s+hardware\"\\):\\ `answer:\\ unknown`,\\ no\\ `ask`",
         "Names\\ volunteered\\ unprompted\\ \\(\"Piotr\\ knows\"\\):\\ recorded\\ the\\ same\\ way;\\ skip\\ the\\ question"
       ]
     },
