@@ -122,9 +122,9 @@
     {
       "id": "single-run-stops",
       "rule": "one-change-without-loop",
-      "prompt": "Situation: `/web:perf auto` (no `loop`). The first change was discarded: it showed no gain beyond the noise. Four findings remain.\n\nQuestion: is the run over? Answer on the first line with exactly one of: RUN-OVER, RUN-CONTINUES. Then one sentence why.",
-      "pass": "^\\W*RUN-OVER\\b",
-      "fail": "^\\W*(RUN-CONTINUES)\\b",
+      "prompt": "Situation: `/web:perf auto` (no `loop`). The first change was discarded: it showed no gain beyond the noise. Four findings remain.\n\nQuestion: how many more changes does the run start? Answer on the first line with only a number. Then one sentence why.",
+      "pass": "^\\W*0\\b",
+      "fail": "^\\W*[1-9]",
       "class": "redundant"
     },
     {
