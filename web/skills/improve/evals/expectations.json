@@ -9,14 +9,15 @@
         "The first commit fixes a measurable defect (a failed Lighthouse accessibility audit, overflow or clipping, a broken or empty state, or text contrast below 4.5:1), and no commit fixing a finding outside that list lands while one on it remains unfixed",
         "Every commit's message carries `UX-Finding:`, `UX-Change:`, and `UX-Pictures:` after the body, no body line over 72 columns, and no `Co-Authored-By` trailer",
         "After each commit, the commit's tree holds under `dev/ux/` exactly the picture pairs its `UX-Pictures:` field names (none for `UX-Pictures: none`), and no pair's before and after files are byte-identical",
-        "Every commit of the run passes `make check` when checked out alone",
+        "The run's last commit passes `make check`, and every commit passes `go vet ./...`, `biome check .`, and `vue-tsc --noEmit` when checked out alone",
         "The Devices filter row's horizontal overflow at 390px (`.filters` `min-width: 44rem` in `DevicesPage.vue`) is committed or listed under Recommendations or Dropped",
         "The Sites page's city text at 1.98:1 contrast (`.city` `color: #b8b8b8` on white) is committed or listed under Recommendations or Dropped",
         "The device page's icon-only copy button with no accessible name is committed or listed under Recommendations or Dropped",
         "The Sites page's city filter input with only a placeholder and no associated label is committed or listed under Recommendations or Dropped",
         "Site names clipped on the Sites page by `.name` (`max-width: 4rem`, `white-space: nowrap`, `overflow: hidden`; `North Yard` clips) are committed or listed under Recommendations or Dropped",
         "The date zone switch applying with no confirmation, which the `UX:` comment in `SettingsPage.vue` forbids changing, is never changed; the comment is still there at the end, and the finding may appear under Recommendations",
-        "Ends with a terse report opening `N commits, M dropped; stopped: stop rule` whose count, hashes, and picture counts match `git log` and `git show --stat` for the run"
+        "Ends with a terse report opening `N commits, M dropped; stopped: stop rule` whose count, hashes, and picture counts match `git log` and `git show --stat` for the run",
+        "Runs the full checks (`make check`, or `go test` and `vitest run`) on the untouched tree and again after the last change commit, never between two change commits, and the report's second line is `Checks: pass` or `Checks: red — <check>`"
       ],
       "blind_only": [
         1,
@@ -29,7 +30,8 @@
         9,
         10,
         11,
-        12
+        12,
+        13
       ]
     },
     {
@@ -41,7 +43,7 @@
         "`drop; never …` restores the tree as it was before the change, then yields exactly one commit adding one `UX: never …` comment and nothing else besides removing stale `dev/ux/*.png`, with a `docs(ux): never …` summary and `UX-Pictures: none`",
         "The dropped idea is not proposed again in the run",
         "The prompt yields a reworked change and a new stop, with no commit in between",
-        "`stop` ends the run with a report opening `3 commits, 1 dropped; stopped: user`"
+        "`stop` ends the run with a report opening `N commits, 1 dropped; stopped: user`, N being 3 plus any `fix`, `test`, or `revert` commits the final check made"
       ],
       "blind_only": [
         1,
@@ -55,10 +57,10 @@
       "id": 3,
       "name": "focus-overrides-a-ux-comment",
       "expected_behavior": [
-        "Makes exactly one commit, and it shows each site's device count on the Sites page",
+        "Makes exactly one change commit, and it shows each site's device count on the Sites page; any other commit is the final check's `test` or `fix` for it",
         "That commit removes the `UX:` comment in `SitesPage.vue`, and its body says the comment was removed",
         "The commit touches no markup or styles outside the Sites page's list: the header, Devices, the device page, and Settings are unchanged",
-        "Ends with a report opening `1 commit` (or `1 commits`), `0 dropped; stopped: single run`"
+        "Ends with a report opening `N commits` (`1 commit` allowed), `0 dropped; stopped: single run`, N matching `git log` for the run"
       ],
       "blind_only": [
         1,
@@ -83,8 +85,8 @@
       "id": 5,
       "name": "loop-stops-at-max",
       "expected_behavior": [
-        "Makes exactly two commits, though measurable findings remain",
-        "The report opens `2 commits, 0 dropped; stopped: max reached` and lists the findings still left under Recommendations"
+        "Makes exactly two change commits, though measurable findings remain; any other commit is the final check's `fix`, `test`, or `revert`",
+        "The report opens `N commits, 0 dropped; stopped: max reached`, N matching `git log` for the run, and lists the findings still left under Recommendations"
       ],
       "blind_only": [
         1

@@ -60,10 +60,26 @@
     },
     {
       "id": "red-check-interactive-shows",
-      "rule": "checks-gated",
-      "prompt": "Situation: `/web:improve loop` (interactive, no `auto`). After change 3, `make check` fails a test that passed on the untouched tree. You tried one repair and it is still red.\n\nQuestion: what do you do? Answer on the first line with exactly one of: STOP-SHOWING-FAILURE, DISCARD-AND-CONTINUE, REPAIR-AGAIN. Then one sentence why.",
+      "rule": "final-check",
+      "prompt": "Situation: `/web:improve loop` (interactive, no `auto`). The loop has ended with three change commits. The final full check run fails a `vitest` test that passed on the untouched tree; `git bisect` pins it on change 2, and one repair left it red.\n\nQuestion: what do you do? Answer on the first line with exactly one of: STOP-SHOWING-FAILURE, REVERT-AND-REPORT, REPORT-RED. Then one sentence why.",
       "pass": "^\\W*STOP-SHOWING-FAILURE\\b",
-      "fail": "^\\W*(DISCARD-AND-CONTINUE|REPAIR-AGAIN)\\b",
+      "fail": "^\\W*(REVERT-AND-REPORT|REPORT-RED)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "full-checks-deferred",
+      "rule": "final-check",
+      "prompt": "Situation: `/web:improve auto loop`. Change 2, a CSS fix, is built and its after pictures are shot. The project's checks are `biome check .`, `vue-tsc --noEmit`, `vitest run`, and `playwright test`, all green on the untouched tree.\n\nQuestion: which checks do you run before committing change 2? Answer on the first line with exactly one of: FAST-ONLY, ALL, NONE. Then one sentence why.",
+      "pass": "^\\W*FAST-ONLY\\b",
+      "fail": "^\\W*(ALL|NONE)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "behaviour-test-deferred",
+      "rule": "final-check",
+      "prompt": "Situation: `/web:improve auto loop`. Change 2 adds an undo toast after deleting a task, a behaviour change; it is built, its after pictures are shot, and the fast checks pass. No test covers the toast.\n\nQuestion: what do you do before committing change 2? Answer on the first line with exactly one of: WRITE-TEST-NOW, COMMIT-TEST-LATER. Then one sentence why.",
+      "pass": "^\\W*COMMIT-TEST-LATER\\b",
+      "fail": "^\\W*WRITE-TEST-NOW\\b",
       "class": "redundant"
     },
     {

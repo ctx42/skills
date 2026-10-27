@@ -5,7 +5,7 @@
       "id": "max-needs-loop",
       "rule": "`max` without `loop` stops with a message before any other step; it counts commits only",
       "must": [
-        "`max <n>` counts commits only",
+        "`max <n>` counts change commits only",
         "needs `loop`: given without it, say\\s+\\\"`max` needs `loop`\\\" and stop before any other step"
       ]
     },
@@ -71,11 +71,21 @@
     },
     {
       "id": "checks-gated",
-      "rule": "Checks gate every commit on exit status; new red gets one repair, then auto discards",
+      "rule": "Fast checks gate every change commit on exit status; new red gets one repair, then auto discards",
       "must": [
-        "re-run the checks gated on exit status",
+        "re-run the fast checks, each gated on exit status",
         "never on piped or filtered output",
-        "gets one repair; still red: under\\s+`auto`, discard the change"
+        "gets one repair; still red: under\\s+`auto`,\\s+discard the change"
+      ]
+    },
+    {
+      "id": "final-check",
+      "rule": "Full checks run once after the last change; a new red is bisected to its commit, repaired once, else reverted; missing behaviour tests land there",
+      "must": [
+        "the full checks wait for the final check",
+        "`git bisect run <check>`",
+        "Write a test for each behaviour change the run committed without one",
+        "Checks: pass"
       ]
     },
     {
@@ -101,7 +111,7 @@
       "rule": "Loop runs until no measurable or named-heuristic finding qualifies, or `max` commits",
       "must": [
         "No cap by default",
-        "when\\s+the run has made `max` commits"
+        "when\\s+the run has made `max` change commits"
       ]
     },
     {

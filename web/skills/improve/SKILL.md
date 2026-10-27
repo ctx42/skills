@@ -25,8 +25,9 @@ license: MIT
 
 `auto`, `loop`, and `max <n>` are leading keywords in any order; the first
 other token starts the focus, free text to the end. A pasted image, or an image
-path in the focus, shows the part. `max <n>` counts commits only — drops and
-discarded failures do not count — and needs `loop`: given without it, say
+path in the focus, shows the part. `max <n>` counts change commits only, a
+`docs(ux): never` commit included — drops, discarded failures, and the final
+check's commits do not count — and needs `loop`: given without it, say
 "`max` needs `loop`" and stop before any other step. Without `loop` a run makes
 at most one change. No focus audits the whole app.
 
@@ -66,10 +67,12 @@ Then:
    (`git status --porcelain`).
 6. Find the project's checks as `craft:fix-all` finds them — `AGENTS.md`,
    `CLAUDE.md`, `CONTRIBUTING.md`, a `Makefile`, the package manifest: build,
-   test, lint, format, e2e included — and run them once on the untouched tree.
-   A check already red there is known: name it in the message below, and
-   leave it out of every gate (run the others by name) — it never blocks a
-   commit.
+   test, lint, format, e2e included. The fast checks are the static ones
+   (lint, format, typecheck, vet), each run by its own command even when a
+   combined target bundles it; the full checks are all of them. Run the full
+   checks once on the untouched tree. A check already red there is known:
+   name it in the message below, and leave it out of every gate (run the
+   others by name) — it never blocks a commit.
 7. Send one message and wait: the detected URL, open in the Chrome window, and
    a request to log in there if the app needs it, then reply (or give the right
    URL). An app with no login proceeds on the reply. The start asks nothing
@@ -145,18 +148,20 @@ a picture pair per place; unrelated changes never share a commit. Per change:
    numbered as in the message. A change that alters nothing on screen (an
    accessible name, an ARIA attribute) shoots no pictures.
 3. Make the smallest change that fixes the finding. A behaviour change (what
-   the UI does, not how it looks) gets a test.
-4. Reload each view bypassing the cache (`navigate_page` `type: "reload"`,
+   the UI does, not how it looks) gets its test in the final check
+   (section 8), not here.
+4. Run the fast checks right after the edit, on exit status, never on piped
+   or filtered output; the full checks wait for the final check. A check red
+   that was green at the start gets one repair; still red: under `auto`,
+   discard the change (restore its files, delete its new files and pictures)
+   and list it under Dropped with the failing check; interactive, show the
+   failure at the stop.
+5. Reload each view bypassing the cache (`navigate_page` `type: "reload"`,
    `ignoreCache: true`; a navigation by URL can keep the old file), confirm
    the page runs the change, re-run the measurement that found the defect —
    it must pass now — and shoot the same views, widths, state, and
    `fullPage` setting to the `after` files. A pair whose files are
    byte-identical (`cmp`) shows nothing: re-shoot both so the defect shows.
-5. Run the project's checks on exit status, never on piped or filtered output.
-   A check red that was green at the start gets one repair; still red: under
-   `auto`, discard the change (restore its files, delete its new files and
-   pictures) and list it under Dropped with the failing check; interactive,
-   show the failure at the stop.
 6. Interactive: stop (section 6). `auto`: commit.
 7. Commit: unstage everything (`git restore --staged .`), stage the change's
    code with a plain `git add -- <paths>`, never `-f`, then its pictures by
@@ -164,12 +169,12 @@ a picture pair per place; unrelated changes never share a commit. Per change:
    still ships them) — never force a directory, which stages everything its
    ignore rules keep out — `git rm -q --` every tracked `dev/ux/*.png` this
    commit did not write, and write the message (section 5). Then, in one
-   command, re-run the checks gated on exit status
-   (`make check >out 2>&1 || exit 1`), exit on any byte-identical pair
+   command, re-run the fast checks, each gated on exit status
+   (`<check> >out 2>&1 || exit 1`), exit on any byte-identical pair
    (`cmp -s before-1.png after-1.png && exit 1`), compare
    `git diff --cached --name-only` with that list, and `git commit -F -`. A
-   red re-run commits nothing and returns to step 5; an identical pair, to
-   step 4.
+   red re-run commits nothing and returns to step 4, one repair per change in
+   all; an identical pair, to step 5.
 
 ## 5. Commit message
 
@@ -204,19 +209,19 @@ pictures to `dev/ux/`:
 Change 2 — Today, 390px: long task titles clipped mid-word (clipping)
 Change: wrap long titles
 Pictures: dev/ux/before.png, dev/ux/after.png
-Checks: pass
+Checks: fast pass; full at the end
 Reply: commit · drop · or say what to change
 ```
 
-- `commit`: commit it (section 4, step 7). While a check is red, say so and
-  stop again instead.
+- `commit`: commit it (section 4, step 7). While a fast check is red, say so
+  and stop again instead.
 - `drop`: restore the tree as it was before the change, pictures included; the
   idea is not proposed again this run. Drops are remembered for the current
   run only.
 - Anything else is a prompt: rework the change, keep its before pictures,
   re-shoot every after, shoot a before for any view the rework newly touches
-  (with the change's files stashed), re-run the checks, and stop again, with
-  no commit in between.
+  (with the change's files stashed), re-run the fast checks, and stop again,
+  with no commit in between.
 - A reply saying "never …" also writes a `UX: never …` comment, in the file's
   comment syntax, at the code concerned: with `commit`, into that change's
   commit; with neither `commit` nor `drop`, into the reworked change, which
@@ -225,8 +230,9 @@ Reply: commit · drop · or say what to change
   `UX-Pictures: none`.
   That commit counts toward `max` like any other, so reaching `max` with it
   ends the run; without `loop`, the drop still ends the run.
-- A reply asking to stop ends the run: restore the tree as `drop` does, not
-  counted as a drop, and list the change's finding under Recommendations.
+- A reply asking to stop ends the loop: restore the tree as `drop` does, not
+  counted as a drop, list the change's finding under Recommendations, and run
+  the final check.
 
 ## 7. Loop and stop rule
 
@@ -234,23 +240,54 @@ With `loop`, after each commit or drop, re-check the pages the change touched
 and take the next finding. Stop when no remaining finding is a measurable
 defect or a named-heuristic violation with a concrete fix — counting only
 findings not dropped, not forbidden, and not blocked by a dirty file — or when
-the run has made `max` commits. No cap by default. Without `loop`, stop after
-one change, committed, dropped, or discarded. What is left (product decisions,
-taste, findings a `UX:` comment forbids or a dirty file blocks, and on a stop
-at `max` or after one change every finding still qualifying) goes to
+the run has made `max` change commits. No cap by default. Without `loop`, stop
+after one change, committed, dropped, or discarded. Every stop runs the final
+check (section 8) before the report. What is left (product decisions, taste,
+findings a `UX:` comment forbids or a dirty file blocks, and on a stop at
+`max` or after one change every finding still qualifying) goes to
 Recommendations; ideas dropped this run are listed under Dropped.
 
-## 8. Report
+## 8. Final check
+
+Verify the run as a whole once its last change is committed or dropped; skip it
+when the run committed no code (a `docs(ux): never` commit alone is none). Its
+commits touch code and tests only, write no pictures, `git rm -q` every tracked
+`dev/ux/*.png`, and take `craft:cm` at `mini` with no UX fields, the body naming
+the change commit each serves. They commit without a stop; an interactive run's
+one stop here is a check still red after its repair (step 1). They obey the
+focus limit and never touch a file the start found dirty; a repair or test that
+would counts as still red.
+
+1. Run the full checks, known red ones aside, on exit status. A check red
+   that was green at the start is pinned on a commit:
+   `git bisect start HEAD <start>`, `git bisect run <check>`,
+   `git bisect reset`. It gets one repair, committed as a `fix` once the full
+   checks pass. Still red: under `auto`, revert that commit
+   (`git revert --no-commit <hash>`, summary `revert: <its summary>`) and list
+   its change under Dropped with the failing check; interactive, stop showing
+   the failure and the commit — reply `revert`, or a prompt for one more repair,
+   after which a check still red reverts. A revert that conflicts is aborted
+   (`git revert --abort`) and the check stays red.
+2. Write a test for each behaviour change the run committed without one and did
+   not revert, asserting the new behaviour, and run the full checks. A new test
+   that fails exposes its change: one repair beside the test; still red, delete
+   the test and treat the change as step 1's still red.
+3. Commit each change's test on its own (`test` type), with its repair if any,
+   staged by path and the staged list compared as in section 4, step 7; the
+   green full run of step 2 is their gate.
+
+## 9. Report
 
 Read every count and hash off `git log <start>..HEAD` and `git show --stat`,
 never from memory. Interactive runs end with the same report; a run stopped
-at the start (section 1) writes none. Print it in
-exactly this shape: the count line first, nothing before it, in the sample's
-exact format with its numbers and reason read off this run, and the headings
-`Dropped` and `Recommendations` as written.
+at the start (section 1) writes none. Print it in exactly this shape: the count
+line first, nothing before it, in the sample's exact format with its numbers
+and reason read off this run, then the checks line, and the headings `Dropped`
+and `Recommendations` as written.
 
 ```
 3 commits, 1 dropped; stopped: stop rule
+Checks: pass
 
 | Commit  | Summary                                         | Pictures |
 |---------|-------------------------------------------------|----------|
@@ -264,14 +301,16 @@ Recommendations
   comment at `app.js:41` forbids it
 ```
 
-`N` is the number of commits `git log <start>..HEAD` lists — a
-`docs(ux): never` commit among them, a dropped or discarded change never — and
-the table lists each; `M` counts drops and discarded failures. The reason is
-`stop rule`, `max reached`, `single run`, or `user` (only when a reply asked
-to stop). Pictures counts the pairs a commit carries, `0` for one with
-`UX-Pictures: none`. Size each table column from its longest cell before
-writing the table. A drop's reason is the failing check or "dropped by the
-user". Omit an empty section.
+`N` is the number of commits `git log <start>..HEAD` lists — a `docs(ux): never`
+commit and the final check's commits among them, a dropped or discarded change
+never — and the table lists each; `M` counts drops, discarded failures, and
+reverted changes. The checks line is `Checks: pass` (known red checks aside),
+`Checks: red — <check>`, or `Checks: none` when the final check was skipped. The
+reason is `stop rule`, `max reached`, `single run`, or `user` (only when a reply
+asked to stop). Pictures counts the pairs a commit carries, `0` for one with
+`UX-Pictures: none` or no UX fields. Size each table column from its longest
+cell before writing the table. A drop's reason is the failing check or "dropped
+by the user". Omit an empty section.
 
 ## Self-learning
 
