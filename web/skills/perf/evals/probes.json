@@ -23,9 +23,9 @@
     {
       "id": "below-threshold-stops",
       "rule": "thresholds",
-      "prompt": "Situation: `/web:perf auto loop`, no focus, nothing committed yet. The only measurable interaction is sorting a table: INP median 150 ms at 4x CPU. Memoizing a comparator would bring it to about 60 ms. No other finding exists.\n\nQuestion: what do you do? Answer on the first line with exactly one of: FIX-SORT, STOP. Then one sentence why.",
-      "pass": "^\\W*STOP\\b",
-      "fail": "^\\W*(FIX-SORT)\\b",
+      "prompt": "Situation: `/web:perf auto loop`, no focus, nothing committed yet. The only measurable interaction is sorting a table: INP median 150 ms at 4x CPU. Memoizing a comparator would bring it to about 60 ms. No other finding exists.\n\nQuestion: what do you do? Give one sentence of reasoning, then on the last line exactly one of: FIX-SORT, STOP.",
+      "pass": "STOP\\W*$",
+      "fail": "FIX-SORT\\W*$",
       "class": "redundant"
     },
     {
