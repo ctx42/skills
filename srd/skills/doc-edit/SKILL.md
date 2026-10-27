@@ -110,8 +110,9 @@ and names the gap; the key picks its home:
   `path` (`1882030917#recording-overlap`). The whole fact: `complete: true`;
   part: `complete: false`, `remaining` what is still missing.
 - `K` — the KB: hand the fact to `srd:kb` with the gap id; this document
-  stays. Fill from the KB section (`kb/<page>.md#<slug>`) only once it sits on
-  a topic page. In `_inbox.md`: no fill; the gap stays open; offer `/kb file`.
+  stays. Fill only once it sits on a topic page: `fill_gap` with `filled_by`
+  `kb/<page>.md#<slug>`, though this document is unchanged. In `_inbox.md`:
+  no fill; the gap stays open; offer `/kb file`.
 - Never fill from a URL, `_inbox.md`, a document under `initiatives`, or an
   unconfirmed fact.
 - A fact this document now states goes nowhere else: the KB holds only what
