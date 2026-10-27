@@ -56,10 +56,10 @@
         "SKILL.md",
         "../create/references/project-config.md"
       ],
-      "prompt": "Situation: srd:create hands you a confirmed platform fact for the SRD at initiatives/int384-hydrophone/srd.md. That SRD's front matter has `id: 1774485505` and its title is \"INT-384 Hydrophone Sensors\". The fact goes to the inbox as a new section with its attestation line.\n\nQuestion: what exact token do you write right after `Attested` on that line? Answer on the first line with only that token, then one sentence why.",
-      "pass": "^\\W*int384-hydrophone\\b",
-      "fail": "1774485505|initiatives/|INT-384",
-      "class": "load-bearing"
+      "prompt": "Situation: srd:create hands you a confirmed platform fact for the SRD at initiatives/int384-hydrophone/srd.md. That SRD's front matter has `id: 1774485505` and its title is \"INT-384 Hydrophone Sensors\". The fact goes to the inbox as a new section with its attestation line.\n\nQuestion: write that attestation line exactly, dated 2026-10-27, on the first line, then one sentence why.",
+      "pass": "^[^\\n]*Attested\\W+int384-hydrophone\\b",
+      "fail": "^[^\\n]*Attested\\W+(1774485505|initiatives/|INT-384)",
+      "class": "redundant"
     },
     {
       "id": "no-sync-config-check",

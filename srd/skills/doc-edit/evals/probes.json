@@ -12,9 +12,9 @@
     {
       "id": "inbox-fills-nothing",
       "rule": "kb-fill-topic-page-only",
-      "prompt": "Situation: You are editing `docs/operations/correlation.md` with srd:doc-edit. `list_docs` lists it as {\"id\":\"1882030917\",\"path\":\"docs/operations/correlation.md\",\"rank\":3,\"title\":\"Correlation\"}. Open gap gap-0410 asks for the minimum recording overlap. The user supplied the fact and pressed K (the KB instead). srd:kb reports `kb/_inbox.md: 1 section`, under the heading `## Correlation minimum overlap`; that section states the whole fact.\n\nQuestion: what do you do about gap-0410 now? Answer on the first line with exactly one of: FILL-FROM-INBOX-SECTION, FILL-FROM-THIS-DOCUMENT, NO-FILL-OFFER-KB-FILE. Then one sentence why.",
-      "pass": "^\\W*NO-FILL",
-      "fail": "^\\W*FILL-FROM",
+      "prompt": "Situation: You are editing `docs/operations/correlation.md` with srd:doc-edit. `list_docs` lists it as {\"id\":\"1882030917\",\"path\":\"docs/operations/correlation.md\",\"rank\":3,\"title\":\"Correlation\"}. Open gap gap-0410 asks for the minimum recording overlap. The user supplied the fact and pressed K (the KB instead). srd:kb reports `kb/_inbox.md: 1 section`, under the heading `## Correlation minimum overlap`; that section states the whole fact.\n\nQuestion: what do you do about gap-0410 now? Give one sentence of reasoning, then on the last line exactly one of: FILL-FROM-INBOX-SECTION, FILL-FROM-THIS-DOCUMENT, NO-FILL-OFFER-KB-FILE.",
+      "pass": "NO-FILL-OFFER-KB-FILE\\W*$",
+      "fail": "(FILL-FROM-INBOX-SECTION|FILL-FROM-THIS-DOCUMENT)\\W*$",
       "class": "redundant"
     },
     {
@@ -23,7 +23,7 @@
       "prompt": "Situation: You are editing `docs/operations/correlation.md` with srd:doc-edit. `list_docs` lists it as {\"id\":\"1882030917\",\"path\":\"docs/operations/correlation.md\",\"rank\":3,\"title\":\"Correlation\"}. Open gap gap-0410 asks for the minimum recording overlap. The user pressed K; srd:kb wrote the fact to the inbox, and the user then ran `/kb file`, which moved the section into the topic page `kb/correlation.md` under the heading `## Minimum recording overlap`. Your correlation page is unchanged.\n\nQuestion: what exact single `filled_by` entry do you pass to fill_gap? Answer on the first line with only that value (or NONE), then one sentence why.",
       "pass": "^\\W*kb/correlation\\.md#minimum-recording-overlap\\b",
       "fail": "^\\W*(NONE|1882030917|kb/_inbox)",
-      "class": "load-bearing"
+      "class": "redundant"
     },
     {
       "id": "srd-goes-to-edit",
@@ -84,10 +84,10 @@
     {
       "id": "rank-not-folder",
       "rule": "trust-by-rank",
-      "prompt": "Situation: editing `docs/operations/correlation.md` (rank 3), you look up the overlap figure. `kb/correlation.md#overlap` (rank 1) says 30 minutes; `docs/api-gateway/acoustics.md#overlap` (rank 2), the official API documentation, says 20 minutes.\n\nQuestion: which figure states the platform? Answer on the first line with exactly one of: 30-MINUTES, 20-MINUTES, ASK-THE-USER. Then one sentence why.",
-      "pass": "^\\W*30-MINUTES",
-      "fail": "^\\W*(20|ASK)",
-      "class": "load-bearing"
+      "prompt": "Situation: editing `docs/operations/correlation.md` (rank 3), you look up the overlap figure. `kb/correlation.md#overlap` (rank 1) says 30 minutes; `docs/api-gateway/acoustics.md#overlap` (rank 2), the official API documentation, says 20 minutes.\n\nQuestion: which figure states the platform? Give one sentence of reasoning, then on the last line exactly one of: 30-MINUTES, 20-MINUTES, ASK-THE-USER.",
+      "pass": "30-MINUTES\\W*$",
+      "fail": "(20-MINUTES|ASK-THE-USER)\\W*$",
+      "class": "redundant"
     },
     {
       "id": "gap-doc-id-is-id",

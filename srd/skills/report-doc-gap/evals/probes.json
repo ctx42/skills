@@ -55,7 +55,7 @@
       "prompt": "Situation: srd:create is mid-interview on `specs/gateway.md`. From the user's description you concluded that an API key can be rotated without downtime; the user never confirmed it and the interview moved on. No corpus document states it. srd:create invokes you with the SRD path and that point in prose. Your `list_gaps` query finds no matching gap.\n\nQuestion: how is it recorded? Answer on the first line with exactly one of: REPORT-DRAFT-DEFERRED, REPORT-DRAFT-UNKNOWN, WRITE-TO-KB, NOTHING. Then one sentence why.",
       "pass": "^\\W*REPORT-DRAFT-DEFERRED",
       "fail": "^\\W*(REPORT-DRAFT-UNKNOWN|WRITE|NOTHING)",
-      "class": "redundant"
+      "class": "load-bearing"
     },
     {
       "id": "cut-gap-submitted",

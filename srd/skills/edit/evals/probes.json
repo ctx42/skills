@@ -88,10 +88,10 @@
         "SKILL.md",
         "references/modes.md"
       ],
-      "prompt": "Situation: the user runs `/edit specs/gw.md GR-4` and nothing else. specs/gw.md is IN PROGRESS and has GR-1 to GR-9, and GR-6 has an issue.\n\nQuestion: once GR-4 is resolved, does the run go on to GR-5 and later entries? Answer on the first line YES or NO, then one sentence why.",
-      "pass": "^\\W*YES\\b",
-      "fail": "^\\W*NO\\b",
-      "class": "load-bearing"
+      "prompt": "Situation: the user runs `/edit specs/gw.md GR-4` and nothing else. specs/gw.md is IN PROGRESS and has GR-1 to GR-9, and GR-6 has an issue.\n\nQuestion: which mode does the run start in? Give one sentence of reasoning, then on the last line exactly one of: INTERACTIVE-FROM-GR-4, TARGETED-GR-4-ONLY.",
+      "pass": "INTERACTIVE-FROM-GR-4\\W*$",
+      "fail": "TARGETED-GR-4-ONLY\\W*$",
+      "class": "redundant"
     },
     {
       "id": "keep-author-tbd",

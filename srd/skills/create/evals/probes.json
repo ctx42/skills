@@ -56,9 +56,9 @@
         "SKILL.md",
         "references/doc-corpus.md"
       ],
-      "prompt": "Situation: interviewing for specs/tags.md, you search the corpus for the Tag name separator. Two results disagree. Result A: {\"id\":\"1774485611\",\"path\":\"docs/user_manual/tags.md\",\"rank\":2,\"title\":\"Tags (user manual)\",\"text\":\"Tag node names are separated by commas.\"}. Result B: {\"id\":\"docs/api-reference/tags.md\",\"path\":\"docs/api-reference/tags.md\",\"rank\":5,\"title\":\"Tags API reference\",\"text\":\"Tag node names are separated by dots.\"}. The user has not said which is right.\n\nQuestion: which statement do you treat as the platform's behavior? Answer on the first line with exactly one of: COMMAS-FROM-A, DOTS-FROM-B, NEITHER-ASK-THE-USER. Then one sentence why.",
-      "pass": "^\\W*COMMAS-FROM-A",
-      "fail": "^\\W*(DOTS|NEITHER)",
+      "prompt": "Situation: interviewing for specs/tags.md, you search the corpus for the Tag name separator. Two results disagree. Result A: {\"id\":\"1774485611\",\"path\":\"docs/user_manual/tags.md\",\"rank\":2,\"title\":\"Tags (user manual)\",\"text\":\"Tag node names are separated by commas.\"}. Result B: {\"id\":\"docs/api-reference/tags.md\",\"path\":\"docs/api-reference/tags.md\",\"rank\":5,\"title\":\"Tags API reference\",\"text\":\"Tag node names are separated by dots.\"}. The user has not said which is right.\n\nQuestion: which statement do you treat as the platform's behavior? Give one sentence of reasoning, then on the last line exactly one of: COMMAS-FROM-A, DOTS-FROM-B, NEITHER-ASK-THE-USER.",
+      "pass": "COMMAS-FROM-A\\W*$",
+      "fail": "(DOTS-FROM-B|NEITHER-ASK-THE-USER)\\W*$",
       "class": "redundant"
     },
     {
