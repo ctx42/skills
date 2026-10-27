@@ -73,9 +73,10 @@ both — invoked directly, this skill hands a fact the grill confirmed to
 `srd:kb` itself.
 
 A platform question SRD work leaves open is a gap too, marked by `answer`:
-`deferred` when someone knows but was not asked (the user waved it off, or it
-is the agent's own unconfirmed guess), `unknown` when nobody has pinned it
-down. Both are filed here, never written to the KB. Who decides between them,
+`deferred` when someone could answer but was not asked (the user waved it off,
+or it is the agent's own unconfirmed guess), `unknown` when nobody can answer
+it (never decided, or no one the user can name knows). Both are filed here,
+never written to the KB. Who decides between them,
 and whose names go to `ask`:
 [Who would know](../create/references/doc-corpus.md#who-would-know).
 
