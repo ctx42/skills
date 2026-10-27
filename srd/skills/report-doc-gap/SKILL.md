@@ -5,7 +5,8 @@ description: >
   corpus (pulled docs or the knowledge base) does not supply reliably because
   it is missing, wrong, incomplete, or ambiguous. Use when an SRD skill cannot
   confirm a claim against the corpus, when a doc gap should reach the
-  documentation backlog, or to work an SRD's unreported doc gaps.
+  documentation backlog, or to work an SRD's unreported doc gaps. Gaps already
+  reported are written up and filled by srd:backlog.
 argument-hint: "[<srd path>]"
 license: MIT
 ---
