@@ -72,7 +72,9 @@ shifting element.
 Per view: load it, then 5 times navigate to another view and back by the
 app's own navigation. After the first visit and after each return,
 `take_heapsnapshot` (it forces a full GC first) to
-`<scratch>/heap-<view>-<n>.heapsnapshot` and read its heap size in bytes:
+`<scratch>/heap-<view>-<n>.heapsnapshot` and read its heap size in bytes. Take
+each snapshot under `emulate` with `cpuThrottlingRate: 1`, then set 4 again
+before the next navigation:
 
 ```bash
 python3 -I - <file> <<'EOF'
@@ -86,7 +88,10 @@ A leak: the size rises by more than 50 KB at each of the 5 steps after the
 first snapshot. The cause is in the last snapshot: compare it with the first by
 constructor (detached `HTMLElement`s, closures held by a listener or timer) and
 find the code that adds without removing. A fix's after series repeats the 5
-cycles; the measurement is the growth from first to last snapshot.
+cycles with the before series' exact steps — the same navigation, and no
+`take_snapshot` or other call the before series did not make, since each one
+adds to the heap. A changed method needs a new before series on the unchanged
+code. The measurement is the growth from first to last snapshot.
 
 ## Network
 

@@ -37,10 +37,11 @@
     },
     {
       "id": "cpu-4x",
-      "rule": "Every measurement runs at a 4x CPU slowdown; load cost only from the build",
+      "rule": "Every measurement runs at a 4x CPU slowdown, heap snapshots at 1x; load cost only from the build",
       "must": [
         "`cpuThrottlingRate: 4`",
-        "bundle size only from the\\s+scratch build, never from the dev server"
+        "bundle size only from the\\s+scratch build, never from the dev server",
+        "except heap snapshots: those run at `cpuThrottlingRate: 1`"
       ]
     },
     {
@@ -230,6 +231,13 @@
       "rule": "The skill commits each kept change even where agents may not commit",
       "must": [
         "Committing\\s+each kept change is this skill's job, whatever rule forbids an agent to\\s+commit"
+      ]
+    },
+    {
+      "id": "leak-same-method",
+      "rule": "A leak's before and after series are taken the same way",
+      "must": [
+        "after, taken the same way both times"
       ]
     }
   ]

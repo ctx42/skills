@@ -98,10 +98,12 @@ Then:
 
 Every measurement runs under `emulate` with `cpuThrottlingRate: 4` — each
 `emulate` call replaces all settings, so pass it every time — and no network
-throttling. Interactions, a view's load (its long tasks and layout shift),
-and API calls are measured on the dev server; bundle size only from the
-scratch build, never from the dev server. How to take each
-number: [references/measure.md](references/measure.md).
+throttling, except heap snapshots: those run at `cpuThrottlingRate: 1`, since
+heap size does not depend on CPU speed and a throttled snapshot can time out;
+a leak's measure names them unthrottled. Interactions, a view's load (its
+long tasks and layout shift), and API calls are measured on the dev server;
+bundle size only from the scratch build, never from the dev server. How to
+take each number: [references/measure.md](references/measure.md).
 
 Scope: with no focus, every page reachable from the app's navigation (its
 shared header, sidebar, menus, and footer); with a focus, only the views that
@@ -134,7 +136,8 @@ Noise: a timed metric is measured 5 times and its median used; a counted one
 once. A change is kept only when its after median beats the before median by
 more than the spread (max − min) of the 5 before runs; for a counted metric any
 reduction counts. A leak is measured by one series of 5 cycles, before and
-after; a leak fix is kept when the after series is no longer a leak. A change
+after, taken the same way both times; a leak fix is kept when the after series
+is no longer a leak. A change
 with a benchmark (section 5) is also kept when the benchmark, 5 runs each way,
 passes that test and the browser median is not worse by more than its spread.
 It need not clear the threshold in one go. A change with no

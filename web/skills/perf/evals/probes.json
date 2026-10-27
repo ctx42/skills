@@ -113,6 +113,14 @@
         "loop-stops-at-max#b2"
       ],
       "class": "load-bearing"
+    },
+    {
+      "id": "leak-measure-line",
+      "rule": "cpu-4x",
+      "prompt": "Situation: `/web:perf auto`, no focus. The Devices view leaked a keydown listener: its heap grew about 5 MB on each of 5 navigate-away-and-back cycles. You removed the listener on unmount; the after series grows under 50 KB per cycle. The heap snapshots were taken as the skill directs.\n\nQuestion: write the commit's `Perf-Measure:` line, and nothing else.",
+      "pass": "(?i)(unthrottled|1x|cpuThrottlingRate: 1|no (cpu )?throttl)",
+      "fail": "(?i)^(?!.*(unthrottled|1x|cpuThrottlingRate: 1|no (cpu )?throttl))",
+      "class": "load-bearing"
     }
   ]
 }
