@@ -64,7 +64,8 @@ the run stops, editing and committing nothing:
 Then:
 
 5. Record the start commit (`git rev-parse HEAD`) and the dirty files
-   (`git status --porcelain`).
+   (`git status --porcelain`), and make a scratch directory outside the repo
+   (`mktemp -d`) for check output.
 6. Find the project's checks as `craft:fix-all` finds them — `AGENTS.md`,
    `CLAUDE.md`, `CONTRIBUTING.md`, a `Makefile`, the package manifest: build,
    test, lint, format, e2e included. The fast checks are the static ones
@@ -170,7 +171,7 @@ a picture pair per place; unrelated changes never share a commit. Per change:
    ignore rules keep out — `git rm -q --` every tracked `dev/ux/*.png` this
    commit did not write, and write the message (section 5). Then, in one
    command, re-run the fast checks, each gated on exit status
-   (`<check> >out 2>&1 || exit 1`), exit on any byte-identical pair
+   (`<check> ><scratch>/out 2>&1 || exit 1`), exit on any byte-identical pair
    (`cmp -s before-1.png after-1.png && exit 1`), compare
    `git diff --cached --name-only` with that list, and `git commit -F -`. A
    red re-run commits nothing and returns to step 4, one repair per change in

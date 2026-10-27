@@ -247,12 +247,12 @@ commit; unrelated changes never share a commit. Per change:
 7. Interactive: stop (section 8). `auto`: commit.
 8. Commit: unstage everything (`git restore --staged .`), stage the change's
    files and pictures by path (`git add -f -- <paths>`, so an ignored `dev/`
-   still ships them), `git rm -q --` every tracked `dev/perf/*.png` this
-   commit did not write, and write the message (section 7). Then, in one
-   command, re-run the targeted checks, each gated on exit status
-   (`<check> >out 2>&1 || exit 1`), compare `git diff --cached --name-only`
-   with that list, and `git commit -F -`. A red re-run commits nothing and
-   returns to step 4, one repair per change in all.
+   still ships them), `git rm -q --` every tracked `dev/perf/*.png` this commit
+   did not write, and write the message (section 7). Then, in one command,
+   re-run the targeted checks, each gated on exit status
+   (`<check> ><scratch>/out 2>&1 || exit 1`), compare
+   `git diff --cached --name-only` with that list, and `git commit -F -`. A red
+   re-run commits nothing and returns to step 4, one repair per change in all.
 
 ## 7. Commit message
 
