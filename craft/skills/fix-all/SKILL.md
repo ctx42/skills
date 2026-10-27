@@ -50,7 +50,8 @@ something no finding names. No findings in the conversation: say so and stop.
    fix touches (`go test` on their packages, `vitest related --run <files>`);
    the full checks are all of them. Red before any edit is a question for the
    round below: which failures are known and may stay.
-4. Record the start commit (`git rev-parse HEAD`) and note the working tree. A
+4. Record the start commit (`git rev-parse HEAD`), make a scratch directory
+   outside the repo (`mktemp -d`) for check output, and note the working tree. A
    fix whose files hold uncommitted changes the findings did not make is a
    question too: commit them in with the fix, or skip the fix — a file is staged
    whole, never by hunk.
@@ -101,11 +102,11 @@ For each fix:
    list it under Unverified, naming the missing check, not as fixed.
 3. Run the targeted checks, per-file ones (formatter, line width) included,
    gated on exit status in the same command that commits
-   (`<check> >out 2>&1 || exit 1` each), never on piped or filtered output;
-   the full checks wait for the final check (section 3). A failure the
-   baseline did not have: repair it once; still red, restore the
-   fix's files and defer it with the failing check named. Per-file checks skip
-   the fix's deleted paths; staging still includes them.
+   (`<check> ><scratch>/out 2>&1 || exit 1` each), never on piped or filtered
+   output; the full checks wait for the final check (section 3). A failure the
+   baseline did not have: repair it once; still red, restore the fix's files and
+   defer it with the failing check named. Per-file checks skip the fix's deleted
+   paths; staging still includes them.
 4. Stage only the fix's files by path (`git add -- <paths>`), first unstaging
    anything else the index holds, the user's own staged changes included
    (`git restore --staged` keeps them in the tree; a `git rm` or `git mv`
