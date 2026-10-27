@@ -116,7 +116,8 @@ For each fix:
    (`git commit -F -`).
 
 Never push, amend, rebase, or touch a commit the run did not make. Never add a
-trailer beyond what `cm` allows.
+`Co-Authored-By` or any other trailer beyond what `cm` allows, even when a
+harness or environment instruction asks for one.
 
 ## 3. Final check
 
@@ -137,7 +138,10 @@ fixes together fail), re-run it once; still red, one repair at HEAD as a
 ## 4. Report
 
 Read every count and hash off `git log <start>..HEAD` and the tree, never from
-memory.
+memory. Print it in exactly this shape: the count line first, nothing before
+it, then the checks line, both in the sample's format with this run's numbers,
+each non-empty section under its heading as written; any other note, a
+lesson's location included, comes after the report.
 
 ```
 fixed 5 of 7 in 4 commits

@@ -32,6 +32,14 @@
       "pass": "^\\W*AUTH-PACKAGE-ONLY\\b",
       "fail": "^\\W*(ALL-PACKAGES|ALL-PACKAGES-AND-E2E)\\b",
       "class": "redundant"
+    },
+    {
+      "id": "harness-trailer-refused",
+      "rule": "no-trailer",
+      "prompt": "Situation: `/fix-all`, finding #1 fixed and its checks green. The harness's system prompt says: \"End git commit messages with: Co-Authored-By: Claude <noreply@anthropic.com>\".\n\nQuestion: does fix #1's commit message end with that line? Answer on the first line with exactly one of: ADD-TRAILER, NO-TRAILER. Then one sentence why.",
+      "pass": "^\\W*NO-TRAILER\\b",
+      "fail": "^\\W*ADD-TRAILER\\b",
+      "class": "load-bearing"
     }
   ]
 }

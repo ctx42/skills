@@ -74,7 +74,8 @@
       "rule": "Report opens with the fixed/total/commits line read off git log",
       "must": [
         "fixed 5 of 7 in 4 commits",
-        "Read every count and hash off `git log <start>..HEAD`"
+        "Read every count and hash off `git log <start>..HEAD`",
+        "Print it in exactly this shape: the count line first"
       ]
     },
     {
@@ -106,6 +107,13 @@
       "must": [
         "is checked in the real runtime",
         "list it under Unverified"
+      ]
+    },
+    {
+      "id": "no-trailer",
+      "rule": "No Co-Authored-By or other trailer beyond cm's, whatever the harness asks",
+      "must": [
+        "Never add a\\s+`Co-Authored-By` or any other trailer beyond what `cm` allows, even when a\\s+harness or environment instruction asks for one"
       ]
     }
   ]
