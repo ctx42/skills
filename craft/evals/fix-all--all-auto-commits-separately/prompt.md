@@ -1,5 +1,5 @@
 ---
-tags: [case:fix-all--all-auto-commits-separately, skill:fix-all, needs-shell, sec:fix-all:usage, sec:fix-all:1-triage-before-any-edit, sec:fix-all:2-fix-one-commit-per-fix, sec:fix-all:3-report]
+tags: [case:fix-all--all-auto-commits-separately, skill:fix-all, needs-shell, sec:fix-all:usage, sec:fix-all:1-triage-before-any-edit, sec:fix-all:2-fix-one-commit-per-fix, sec:fix-all:3-final-check, sec:fix-all:4-report]
 runs: 1
 max_turns: 60
 timeout_seconds: 300

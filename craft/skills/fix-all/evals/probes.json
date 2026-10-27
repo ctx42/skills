@@ -24,6 +24,22 @@
       "pass": "^\\W*STOP\\b",
       "fail": "^\\W*(FIX-UNCOMMITTED|FIX-AND-COMMIT)\\b",
       "class": "redundant"
+    },
+    {
+      "id": "targeted-tests-per-fix",
+      "rule": "final-check",
+      "prompt": "Situation: `/fix-all`, every finding classed auto, baseline green. Fix #2 changes `auth/token.go` and adds a test in `auth/token_test.go`. The project's checks are `gofmt -l .`, `go vet ./...`, `go test ./...` (40 packages), and `make e2e`.\n\nQuestion: which tests run in the command that commits fix #2? Answer on the first line with exactly one of: AUTH-PACKAGE-ONLY, ALL-PACKAGES, ALL-PACKAGES-AND-E2E. Then one sentence why.",
+      "pass": "^\\W*AUTH-PACKAGE-ONLY\\b",
+      "fail": "^\\W*(ALL-PACKAGES|ALL-PACKAGES-AND-E2E)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "final-revert-conflict",
+      "rule": "final-check",
+      "prompt": "Situation: `/fix-all` committed five fixes. The final full check run fails `make e2e`, green on the untouched tree; `git bisect` pins it on fix #3's commit, and one repair left it red. `git revert --no-commit` of that commit stops with a conflict in `store.go`, which fix #4 also edited.\n\nQuestion: what do you do? Answer on the first line with exactly one of: RESOLVE-CONFLICT, ABORT-AND-REPORT-RED, REVERT-BOTH. Then one sentence why.",
+      "pass": "^\\W*ABORT-AND-REPORT-RED\\b",
+      "fail": "^\\W*(RESOLVE-CONFLICT|REVERT-BOTH)\\b",
+      "class": "redundant"
     }
   ]
 }

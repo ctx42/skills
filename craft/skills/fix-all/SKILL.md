@@ -42,13 +42,18 @@ something no finding names. No findings in the conversation: say so and stop.
    - **needs-user** — the fix needs a fact or choice only the user has: two
      defensible fixes that behave differently, a credential, a product call.
    - **auto** — everything else.
-3. Find the project's checks from `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`,
-   a `Makefile`, or the package manifest — build, test, lint, format — and run
-   them once on the untouched tree. Red before any edit is a question for the
+3. Find the project's checks from `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, a
+   `Makefile`, or the package manifest — build, test, lint, format, e2e — and
+   run them once on the untouched tree. The targeted checks are the static and
+   per-file ones (lint, format, typecheck, vet, line width), each by its own
+   command, even inside a combined target, plus the tests covering the files a
+   fix touches (`go test` on their packages, `vitest related --run <files>`);
+   the full checks are all of them. Red before any edit is a question for the
    round below: which failures are known and may stay.
-4. Note the working tree. A fix whose files hold uncommitted changes the
-   findings did not make is a question too: commit them in with the fix, or
-   skip the fix — a file is staged whole, never by hunk.
+4. Record the start commit (`git rev-parse HEAD`) and note the working tree. A
+   fix whose files hold uncommitted changes the findings did not make is a
+   question too: commit them in with the fix, or skip the fix — a file is staged
+   whole, never by hunk.
 5. Ask the round: every contract, compat, and needs-user finding plus any
    baseline or dirty-tree question and, when the user's instructions or the
    harness forbid committing, one asking leave to commit, answered once for
@@ -94,10 +99,11 @@ For each fix:
    render or layout step, an event order) is checked in the real runtime
    before its commit; when the run cannot reach that runtime, commit it and
    list it under Unverified, naming the missing check, not as fixed.
-3. Run the project's checks, per-file ones (formatter, line width) included,
+3. Run the targeted checks, per-file ones (formatter, line width) included,
    gated on exit status in the same command that commits
-   (`make test >out 2>&1 || exit 1`), never on piped or filtered output. A
-   failure the baseline did not have: repair it once; still red, restore the
+   (`<check> >out 2>&1 || exit 1` each), never on piped or filtered output;
+   the full checks wait for the final check (section 3). A failure the
+   baseline did not have: repair it once; still red, restore the
    fix's files and defer it with the failing check named. Per-file checks skip
    the fix's deleted paths; staging still includes them.
 4. Stage only the fix's files by path (`git add -- <paths>`), first unstaging
@@ -111,12 +117,28 @@ For each fix:
 Never push, amend, rebase, or touch a commit the run did not make. Never add a
 trailer beyond what `cm` allows.
 
-## 3. Report
+## 3. Final check
 
-Read every count and hash off `git log` and the tree, never from memory.
+After the last fix, run the full checks, known failures aside, on exit status;
+skip this when the run made no commit. A check red that was green at the start
+is pinned on a commit: `git bisect start HEAD <start>`,
+`git bisect run <check>`, `git bisect reset`. It gets one repair, staged and
+committed as section 2, step 4 says, as a `fix` whose body names the commit it
+repairs, once the full checks pass; a repair that needs a contract or compat
+change counts as still red. Still red: revert that commit
+(`git revert --no-commit <hash>`, then commit with summary
+`revert: <its summary>`) and move its findings under Deferred with the failing
+check. A revert that conflicts is aborted (`git revert --abort`) and the check
+stays red.
+
+## 4. Report
+
+Read every count and hash off `git log <start>..HEAD` and the tree, never from
+memory.
 
 ```
 fixed 5 of 7 in 4 commits
+Checks: pass
 
 | #  | Commit  | Summary                          |
 |----|---------|----------------------------------|
@@ -127,10 +149,14 @@ Deferred
 - #7 check: `go test ./auth` fails after the fix (restored)
 ```
 
-`fixed N of M`: M counts every finding but those the arguments skip, which
-the report leaves out; N leaves out the fixes listed under Unverified, a
+`fixed N of M in K commits`: K counts every commit the run made, the final
+check's included, each a table row under the number of the finding it serves;
+M counts every finding but those the arguments skip, which the report leaves
+out; N leaves out the fixes listed under Unverified, a
 section before Deferred giving each one's number, hash, and missing check
-(`- #4 b4c5d6e: not run against a real file watcher`). Align the table's
+(`- #4 b4c5d6e: not run against a real file watcher`). The checks line is
+`Checks: pass` (known failures aside), `Checks: red — <check>`, or
+`Checks: none` when the final check was skipped. Align the table's
 columns, sizing each from its longest cell before writing the table. Name
 every other finding not fixed under Deferred with its reason; a finding
 already fixed or not reproducible counts as not fixed and goes there too. Omit

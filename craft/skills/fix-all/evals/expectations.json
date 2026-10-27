@@ -10,7 +10,8 @@
         "Runs `go test` or `go vet` in the same command that commits",
         "Commit messages follow Conventional Commits and carry no Co-Authored-By trailer",
         "The tree ends fixed: `resp.Body.Close()` is deferred before the status check, `recieve` is gone, `trimAll` is gone",
-        "Ends with a terse report saying 3 of 3 were fixed, with no Deferred section"
+        "Ends with a terse report saying 3 of 3 were fixed, with no Deferred section",
+        "The report carries a `Checks: pass` line"
       ]
     },
     {

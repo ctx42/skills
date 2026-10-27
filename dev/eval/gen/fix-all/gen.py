@@ -97,7 +97,7 @@ plausible answer and continue.
 
 TAGS = ["skill:fix-all", "needs-shell", "sec:fix-all:usage",
         "sec:fix-all:1-triage-before-any-edit", "sec:fix-all:2-fix-one-commit-per-fix",
-        "sec:fix-all:3-report"]
+        "sec:fix-all:3-final-check", "sec:fix-all:4-report"]
 
 CASES = []
 
@@ -230,6 +230,7 @@ case(
             target="trace"),
         "b6-fixed-3-of-3": g_regex(r"fixed 3 of 3", flags="i"),
         "b6-no-deferred": g_regex(r"^#*\s*\**Deferred", flags="im", match="not_contains"),
+        "b7-checks-line": g_regex(r"^\W*Checks: pass\b", flags="im"),
     },
     system=ATTRIBUTION,
 )
