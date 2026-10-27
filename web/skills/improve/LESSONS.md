@@ -1,0 +1,1 @@
+- Run the linter on exit status right after each edit, never through `tail` or a filter: a lint rule that forbids the fix must surface before the browser checks, not at the gate.
