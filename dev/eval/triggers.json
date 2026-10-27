@@ -106,8 +106,8 @@
     {"say": "write an end-to-end test for the settings page against the fake backend", "want": "web:e2e"},
     {"say": "the site page has no e2e test and the fake upstream can't serve it, fix that", "want": "web:e2e"},
     {"say": "why is the largest contentful paint on my landing page so slow? walk me through it", "want": "chrome-devtools-mcp:debug-optimize-lcp"},
-    {"say": "rename the variable x to count in main.go", "want": "none"},
-    {"say": "explain how goroutines are scheduled", "want": "none"},
+    {"say": "rename the variable x to count in main.go", "want": "go:style"},
+    {"say": "explain how goroutines are scheduled", "want": "none"}, {"say": "what does HTTP status 418 mean?", "want": "none"},
     {"say": "run the tests", "want": "none"},
     {"say": "what time zone is the server in?", "want": "none"}
   ]

@@ -2,9 +2,9 @@
 name: style
 description: >
   Enforced Go coding style for this project (production and test code): the
-  rulebook to read before writing or editing any .go file, and a runnable
-  style-only pass that lists style offenses across a diff, package, or module
-  and proposes fixes to apply. Use before touching Go, or to check or fix Go
+  rulebook to read before writing or editing any .go file, however small, and
+  a runnable style-only pass that lists style offenses across a diff, package,
+  or module and proposes fixes to apply. Use before touching Go, or to check or fix Go
   style; adding or changing a rule belongs to go:review.
 license: MIT
 argument-hint: "[TARGET] [packages=a,b] [max_issues=N]
