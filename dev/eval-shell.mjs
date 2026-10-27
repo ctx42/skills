@@ -90,13 +90,19 @@ function flowMap(v) {
   return out;
 }
 
-// Top-level `key: value` lines of a grader or prompt frontmatter.
+// Top-level `key: value` lines of a grader or prompt frontmatter. A key with
+// no value takes the indented `key: value` lines under it as a block map.
 function fields(fm) {
   const out = {};
+  let block = null;
   for (const line of fm.split("\n")) {
+    const sub = block && line.match(/^\s+([a-z_]+):\s*(.*)$/);
+    if (sub) { block[sub[1]] = scalar(sub[2]); continue; }
+    block = null;
     const m = line.match(/^([a-z_]+):\s*(.*)$/);
     if (!m) continue;
     const v = m[2].trim();
+    if (v === "") { block = out[m[1]] = {}; continue; }
     out[m[1]] = v.startsWith("{") ? flowMap(v) : v.startsWith("[") ? v : scalar(v);
   }
   return out;
@@ -284,7 +290,18 @@ async function runCase(c) {
     } else if (!result.error) result.error = `claude exited ${code} without a result`;
     result.lastMessage = lastMessage;
 
-    const run = { cwd, trace: text, lastMessage, toolUses, scaffolded };
+    // Grade the trace without the `wire_*` fields newer CLIs add to assistant
+    // events: they repeat each tool input, so a trace pattern counted twice.
+    const graded = text.split("\n").map((line) => {
+      let e;
+      try { e = JSON.parse(line); } catch { return line; }
+      if (!e || typeof e !== "object") return line;
+      const keys = Object.keys(e).filter((k) => k.startsWith("wire_"));
+      if (!keys.length) return line;
+      for (const k of keys) delete e[k];
+      return JSON.stringify(e);
+    }).join("\n");
+    const run = { cwd, trace: graded, lastMessage, toolUses, scaffolded };
     result.graders = c.graders.map((g) => grade(g, run));
     result.passed = !result.error && result.graders.every((g) => g.passed);
   } catch (e) {
