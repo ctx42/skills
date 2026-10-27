@@ -1,3 +1,117 @@
+## v0.28.0 (Tue, 27 Oct 2026 22:08:36 UTC)
+- docs(contributing): add rules for folding lessons into skills.
+- refactor(craft): fold recorded lessons into the skills.
+- refactor(srd:review): move the errata mode procedure to a reference.
+- refactor(srd): fold edit and review lessons into the skills.
+- test(srd:review): probe that REQ-5 is not judged by test alone.
+- test(srd:review): add an agent-run case for the errata mode.
+- docs(srd:review): add a lesson on feedback lists without fixes.
+- feat(craft): add the fold-lessons skill.
+- docs(contributing): point Folding Lessons at fold-lessons.
+- fix(go:review): read the working diff on a branch with no commits.
+- docs(go:review): read the callee's doc before calling a path unreachable.
+- docs(craft:fix-all): size report columns from their longest cell.
+- docs(srd): name the terms a casing errata finding excludes.
+- docs(srd): count a GLO-4 first use from the Introduction on.
+- refactor(srd:review): fold the feedback lesson into the skill.
+- docs(srd:edit): keep an author's inline TBD reminders.
+- docs(craft:fold-lessons): fold narrowing lessons instead of holding them.
+- docs(craft:fold-lessons): re-flow the paragraph a folded rule lands in.
+- test(craft:fold-lessons): guard domain names by contract, not a probe.
+- docs(craft:fold-lessons): add a lesson on contract rules for references.
+- style(srd:review): wrap the glossary procedure note at 80 columns.
+- docs(srd:review): add a lesson on KB answers in check mode.
+- docs(craft:fold-lessons): give reference contract phrases a file key.
+- docs(craft:fold-lessons): add a lesson on probe situations.
+- docs(craft:fix-all): ask leave to commit when committing is forbidden.
+- docs(craft:fix-all): shape a red-test fixture for the check under test.
+- docs(craft:fix-all): unstage what the index already holds before staging.
+- docs(craft:readme-smith): inherit gomake from the owner's sibling repos.
+- docs(go:review): judge coverage by reading the tests.
+- docs(go:review): rule out two suggested fixes that do not work.
+- docs(srd:review): owe no GLO-4 link in the metadata block.
+- docs(srd:review): stamp each withdrawal with the run's time.
+- docs(srd:review): read KB pages naming the SRD before keeping a finding.
+- refactor(srd:edit): move the walk procedure into modes.md.
+- feat(srd:edit): add a summary mode for chat-ready change notes.
+- docs(srd:edit): re-read Status when the SRD changed on disk.
+- docs(craft:cm): take body numbers from the diff literally.
+- docs(craft:fix-all): gate per-file checks and the red proof.
+- docs(go:review): count reviewed files off the scope listing.
+- docs(craft:fold-lessons): make probe situations withhold the answer.
+- docs(craft:fold-lessons): add a lesson on reading lint warnings.
+- fix(eval-hunt): put an untracked file's lines in the hunted diff.
+- feat(lint-cases): exempt `requires` scenarios from native cases.
+- feat(ux): add the ux plugin with the improve skill.
+- feat(web): add the web plugin with the perf skill.
+- feat: list the ux and web plugins in the marketplace.
+- docs(craft:cm): add lessons on measuring widths and listing hunks.
+- docs(go:review): add a lesson on reviewing a fix loop's own commits.
+- docs(readme): count six plugins in the marketplace catalog.
+- fix(web:perf): decode visible-change captures as JSON.
+- fix(web:perf): measure leaks in heap bytes with a 50 KB floor.
+- feat(web:perf): keep a change on a benchmark gain.
+- fix(web:perf): define the count for sequential requests.
+- fix(web:perf): list every finding left under Recommendations.
+- fix(web:perf): recommend an endpoint merge only for sequential calls.
+- fix(web:perf): retire a dropped finding for the rest of the run.
+- fix(web:perf): frame a focus-named visible change in its pictures.
+- fix(web:perf): count a discarded change as the run's one change.
+- test(web:perf): tighten the scenario rubrics.
+- test(web:perf): add a max-without-loop scenario.
+- test(web:perf): add a build-into-scratch scenario.
+- docs(craft:fix-all): add a lesson on proving coverage tests red.
+- docs(craft:readme-smith): add a lesson on version badges.
+- docs(ux:improve): never force-add a directory when committing.
+- docs(ux:improve): read the report's count line off the run.
+- docs(go:review): re-review the fixes a session already made.
+- docs(craft:fix-all): prove coverage tests by mutation, flag timing fixes.
+- docs(craft:readme-smith): treat a version badge as stating the runtime.
+- docs(craft:cm): measure widths and count hunks with a command.
+- docs(craft:fold-lessons): read lint output unfiltered on every run.
+- test(web): replace the perf fixture with a shared Vue app.
+- refactor(web)!: move improve into web and retire ux.
+- feat(web): add style, the Vue and TypeScript rulebook.
+- feat(web): add review, with the API contract check.
+- feat(web): add cover, per-unit Vitest coverage.
+- feat(web): add doc, TSDoc and comment fixing.
+- feat(web): add e2e, per-route Playwright coverage.
+- docs(web): move perf's back-end reload wait to measure.md.
+- feat(web): write improve and perf changes to the style rules.
+- feat(web)!: commit improve and perf changes without asking leave.
+- fix(web): take perf heap snapshots unthrottled, leaks one way.
+- test(web): narrow the fixture's site names so North Yard clips.
+- test(web): list what counts as a measurable defect for improve.
+- test(web): say the fixture's dev config names no port.
+- docs(craft): add a fix-all lesson on checking a new test's layout.
+- docs(web): add an improve lesson on linting right after each edit.
+- feat(web): run improve's full checks once, after the last change.
+- feat(web): run perf's full checks once, after the last change.
+- docs(web): move perf's on-demand rules into references.
+- feat(craft): run fix-all's full checks once, after the last fix.
+- test(web): sharpen two improve probes and drop a third.
+- test(craft): probe fix-all's count of findings fixed before the run.
+- test(web): ask perf's single-run probe for a count of further changes.
+- docs(srd:create): settle a ranked corpus conflict without asking.
+- docs(srd:create): count a team or role as no name for who would know.
+- docs(srd:doc-edit): fill a KB-homed gap from its topic page section.
+- docs(srd:report-doc-gap): tell a deferred question from an unknown one.
+- test(srd): grade flaky srd probes on the answer they settle on.
+- docs(craft): add a cm lesson on measuring every message in a series.
+- docs(web): drop the improve lesson its step 4 now states.
+- feat(web): repair at HEAD when bisect pins no single commit.
+- feat(craft): repair fix-all at HEAD when bisect pins no single commit.
+- docs(web): keep one repair per change across interactive reworks.
+- test(web): accept cpuThrottlingRate 1 without a colon in the leak probe.
+- fix(web): write commit-gate check output outside the repo.
+- fix(craft): write fix-all's check output outside the repo.
+- test(web): grade perf's below-threshold probe on its last line.
+- docs(srd:report-doc-gap): send already-reported gaps to srd:backlog.
+- docs(craft): name operator and admin guides in doc-smith's description.
+- test(go): route a one-line .go rename to go:style.
+- fix(dev): grade shell cases without wire inputs and with block maps.
+- fix(craft): keep fix-all's commits trailer-free and its report in shape.
+
 ## v0.27.1 (Tue, 20 Oct 2026 13:45:24 UTC)
 - docs(skills): add lessons for plan-smith and edit.
 
