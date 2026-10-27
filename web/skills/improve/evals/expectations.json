@@ -14,7 +14,7 @@
         "The Sites page's city text at 1.98:1 contrast (`.city` `color: #b8b8b8` on white) is committed or listed under Recommendations or Dropped",
         "The device page's icon-only copy button with no accessible name is committed or listed under Recommendations or Dropped",
         "The Sites page's city filter input with only a placeholder and no associated label is committed or listed under Recommendations or Dropped",
-        "Site names clipped by `.name` (`max-width: 5rem`, `white-space: nowrap`, `overflow: hidden`) on the Sites page are committed or listed under Recommendations or Dropped",
+        "Site names clipped on the Sites page by `.name` (`max-width: 4rem`, `white-space: nowrap`, `overflow: hidden`; `North Yard` clips) are committed or listed under Recommendations or Dropped",
         "The date zone switch applying with no confirmation, which the `UX:` comment in `SettingsPage.vue` forbids changing, is never changed; the comment is still there at the end, and the finding may appear under Recommendations",
         "Ends with a terse report opening `N commits, M dropped; stopped: stop rule` whose count, hashes, and picture counts match `git log` and `git show --stat` for the run"
       ],

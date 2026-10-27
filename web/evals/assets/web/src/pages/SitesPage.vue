@@ -76,7 +76,7 @@ onMounted(() => void read.run());
 
 .name {
   display: inline-block;
-  max-width: 5rem;
+  max-width: 4rem;
   overflow: hidden;
   white-space: nowrap;
   vertical-align: bottom;
