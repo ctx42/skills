@@ -96,6 +96,26 @@
       "class": "redundant"
     },
     {
+      "id": "targeted-tests-only",
+      "rule": "final-check",
+      "prompt": "Situation: `/web:perf auto loop`. Change 2 memoizes the device table's sort in `web/src/devices/sort.ts`, with a new unit test; it beats the noise. The project's checks are `biome check .`, `vue-tsc --noEmit`, `vitest run` (400 tests across the app), and `playwright test`, all green on the untouched tree.\n\nQuestion: which tests do you run before committing change 2? Answer on the first line with exactly one of: RELATED-TESTS-ONLY, FULL-SUITE, NO-TESTS. Then one sentence why.",
+      "pass": "^\\W*RELATED-TESTS-ONLY\\b",
+      "fail": "^\\W*(FULL-SUITE|NO-TESTS)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "final-revert-conflict",
+      "rule": "final-check-red",
+      "context": [
+        "SKILL.md",
+        "references/final-check.md"
+      ],
+      "prompt": "Situation: `/web:perf auto loop` stopped by the stop rule after three change commits. The final full check run fails a `playwright` test that passed on the untouched tree; `git bisect` pins it on change 2, and one repair left it red. `git revert --no-commit` of change 2 stops with a conflict in `web/src/devices/store.ts`, which change 3 also edited.\n\nQuestion: what do you do? Answer on the first line with exactly one of: RESOLVE-CONFLICT, ABORT-AND-REPORT-RED, REVERT-BOTH. Then one sentence why.",
+      "pass": "^\\W*ABORT-AND-REPORT-RED\\b",
+      "fail": "^\\W*(RESOLVE-CONFLICT|REVERT-BOTH)\\b",
+      "class": "redundant"
+    },
+    {
       "id": "single-run-stops",
       "rule": "one-change-without-loop",
       "prompt": "Situation: `/web:perf auto` (no `loop`). The first change was discarded: it showed no gain beyond the noise. Four findings remain.\n\nQuestion: is the run over? Answer on the first line with exactly one of: RUN-OVER, RUN-CONTINUES. Then one sentence why.",

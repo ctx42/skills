@@ -5,7 +5,7 @@
       "id": "max-needs-loop",
       "rule": "`max` without `loop` stops with a message before any other step; it counts commits only",
       "must": [
-        "`max <n>` counts commits only",
+        "`max <n>` counts change commits only",
         "needs `loop`: given without it, say\\s+\\\"`max` needs `loop`\\\" and stop before any other step"
       ]
     },
@@ -166,11 +166,31 @@
     },
     {
       "id": "checks-gated",
-      "rule": "Checks gate every commit on exit status; new red gets one repair, then auto discards",
+      "rule": "Targeted checks gate every change commit on exit status; new red gets one repair, then auto discards",
       "must": [
-        "re-run the checks gated on exit status",
+        "re-run the targeted checks, each gated on exit status",
         "never on piped or filtered output",
-        "gets one repair; still red: under\\s+`auto`, discard the change"
+        "gets one repair;\\s+still red: under `auto`, discard the change"
+      ]
+    },
+    {
+      "id": "final-check",
+      "rule": "Full checks run once after the last change; a new red is bisected to its commit, repaired once keeping the gain, else reverted",
+      "must": [
+        "the full checks wait for the final check",
+        "plus the tests covering the files a change\\s+touches",
+        "bisected to its commit, repaired once\\s+keeping the gain, else reverted",
+        "Checks: pass"
+      ]
+    },
+    {
+      "id": "final-check-red",
+      "rule": "A new red at the end is bisected; one repair must keep the gain; else auto reverts, interactive stops",
+      "file": "references/final-check.md",
+      "must": [
+        "`git bisect run <check>`",
+        "re-measure shows the commit's gain kept",
+        "Still red, or the gain lost: under `auto`, revert that commit"
       ]
     },
     {
@@ -206,7 +226,7 @@
       "rule": "Loop runs until nothing the run may fix remains, or `max` commits; re-measure the whole scope before stopping",
       "must": [
         "No cap by default",
-        "has made `max` commits",
+        "has made `max` change commits",
         "measure the whole scope once more"
       ]
     },

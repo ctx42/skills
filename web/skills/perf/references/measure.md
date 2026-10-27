@@ -169,4 +169,4 @@ After a back-end edit, measure only once the reloaded server answers — both
 hold: the listening process's PID (`ss -ltnp`) has changed, and the API
 responds. An API answering from the old PID has not reloaded. No
 restart within 60 s means the build failed or nothing reloaded — treat it as a
-red check (SKILL.md section 6, step 6).
+red check (SKILL.md section 6, step 4).

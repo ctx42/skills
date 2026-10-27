@@ -24,8 +24,9 @@ license: MIT
 
 `auto`, `loop`, and `max <n>` are leading keywords in any order; the first
 other token starts the focus, free text to the end. A pasted image, or an image
-path in the focus, shows the part. `max <n>` counts commits only — drops and
-discarded failures do not count — and needs `loop`: given without it, say
+path in the focus, shows the part. `max <n>` counts change commits only (a
+`docs(perf): never` one included; not drops, discards, or the final check's)
+and needs `loop`: given without it, say
 "`max` needs `loop`" and stop before any other step. Without `loop` a run makes
 at most one change, committed, dropped, or discarded. No focus measures the
 whole app. The CPU slowdown is fixed at 4x; no keyword changes it.
@@ -85,10 +86,14 @@ Then:
    measured.
 8. Find the project's checks as `craft:fix-all` finds them — `AGENTS.md`,
    `CLAUDE.md`, `CONTRIBUTING.md`, a `Makefile`, the package manifest: build,
-   test, lint, format, e2e included — and run them once on the untouched tree.
-   A check already red there is known: name it in the message below, and
-   leave it out of every gate (run the others by name) — it never blocks a
-   commit.
+   test, lint, format, e2e included. The targeted checks are the static ones
+   (lint, format, typecheck, vet), each by its own command, even inside a
+   combined target, plus the tests covering the files a change
+   touches (`vitest related --run <files>`, `go test <their packages>`); the
+   full checks are all of them. Run the full checks once on
+   the untouched tree. A check already red there is known: name it in the
+   message below, and leave it out of every gate (run the others by name) —
+   it never blocks a commit.
 9. Send one message and wait: the detected URL, open in the Chrome window,
    whether back-end edits are on or off and why, and a request to log in there
    if the app needs it, then reply (or give the right URL). An app with no
@@ -151,7 +156,7 @@ sits on. Never act against one unless the focus asks for what it forbids
 (section 4); a finding it
 forbids goes to Recommendations, citing the comment. Test assertions and
 earlier commits do not bind. A `UX:` comment governs what users see, which no
-commit here changes, so it never blocks a fix (section 10 flags it).
+commit here changes, so it never blocks a fix (section 11 flags it).
 
 Rank, top first:
 
@@ -233,17 +238,22 @@ commit; unrelated changes never share a commit. Per change:
 2. Before any edit, take the 5 before measurements of the finding's metric and
    the visible-change check's two before captures of each view the change will
    touch. A visible change a focus named also deletes every untracked
-   `dev/perf/*.png`; its pictures come at step 5. One pair is
+   `dev/perf/*.png`; its pictures come at step 6. One pair is
    `dev/perf/before.png` and `dev/perf/after.png`; several are `before-1.png`
    and `after-1.png` on, numbered as in the message. No other change writes
    into `dev/perf/`.
 3. Make the smallest change that fixes the finding, with its tests and any
    benchmark (section 5).
-4. Reload (wait for the back end, section 3) and take the 5 after
+4. Run the targeted checks right after the edit, on exit status, never on
+   piped or filtered output; the full checks wait for the final check. A
+   check red that was green at the start gets one repair;
+   still red: under `auto`, discard the change and list it under Dropped with
+   the failing check; interactive, show the failure at the stop.
+5. Reload (wait for the back end, section 3) and take the 5 after
    measurements. No gain beyond the noise: discard the change (restore its
    files, delete its new files) and list it under Dropped, "no measurable
    gain".
-5. Run the visible-change check; a mismatch discards the change and lists the
+6. Run the visible-change check; a mismatch discards the change and lists the
    idea under Recommendations as a visible change. A focus-named visible
    change skips it and shoots its pictures, after first: per touched view,
    scroll to the first element the change adds (a pager, a placeholder, a
@@ -251,19 +261,15 @@ commit; unrelated changes never share a commit. Per change:
    `take_screenshot` with `filePath`;
    then `git stash push -u -- <the change's files>`, reload, shoot `before`
    at the same scroll, and `git stash pop`.
-6. Run the project's checks on exit status, never on piped or filtered output.
-   A check red that was green at the start gets one repair; still red: under
-   `auto`, discard the change and list it under Dropped with the failing
-   check; interactive, show the failure at the stop.
 7. Interactive: stop (section 8). `auto`: commit.
 8. Commit: unstage everything (`git restore --staged .`), stage the change's
    files and pictures by path (`git add -f -- <paths>`, so an ignored `dev/`
    still ships them), `git rm -q --` every tracked `dev/perf/*.png` this
    commit did not write, and write the message (section 7). Then, in one
-   command, re-run the checks gated on exit status
-   (`make check >out 2>&1 || exit 1`), compare `git diff --cached --name-only`
+   command, re-run the targeted checks, each gated on exit status
+   (`<check> >out 2>&1 || exit 1`), compare `git diff --cached --name-only`
    with that list, and `git commit -F -`. A red re-run commits nothing and
-   returns to step 6.
+   returns to step 4, one repair per change in all.
 
 ## 7. Commit message
 
@@ -300,25 +306,26 @@ it. A change with no gain beyond the noise never reaches a stop; it is dropped.
 Change 2 — Devices: search input runs a 180 ms long task per keystroke
 Change: dedupe tags with a Set instead of a nested scan
 Measure: long task 180 -> 30 ms, median of 5 at 4x CPU; bench 9.1 -> 0.4 ms/op
-Checks: pass
+Checks: pass (targeted)
 Reply: commit · drop · or say what to change
 ```
 
-- `commit`: commit it (section 6, step 8). While a check is red, say so and
-  stop again instead.
+- `commit`: commit it (section 6, step 8). While a targeted check is red, say
+  so and stop again instead.
 - `drop`: restore the tree as it was before the change, pictures included;
   its finding is not taken up again this run, by that change, part of it, or
   any other fix; a user wanting a different fix replies with a prompt, not
   `drop`. Drops are remembered for the current run only.
 - Anything else is a prompt: rework the change, re-measure, re-run the
-  visible-change check and the checks, and stop again, with no commit in
-  between.
+  visible-change check and the targeted checks, and stop again, with no
+  commit in between.
 - A reply saying "never …" also writes a `PERF: never …` comment, in the file's
   comment syntax, at the code concerned: into that change's commit, or on a
   drop into its own commit adding that comment alone — summary
   `docs(perf): never <x>`, no body, `Perf-Finding:` only. That commit counts
   toward `max` like any other; without `loop`, the drop still ends the run.
-- A reply asking to stop ends the run.
+- A reply asking to stop ends the loop: restore the tree as `drop` does, not
+  counted as a drop.
 
 ## 9. Loop and stop rule
 
@@ -326,20 +333,30 @@ With `loop`, after each commit or drop, re-measure the views the change touched
 and take the next finding. Stop when no remaining finding past its threshold,
 or counted, is one the run may fix — counting only findings not dropped, not
 forbidden, and not blocked by sections 3 to 5 or a dirty file — or when the run
-has made `max` commits. No cap by default. Before stopping on the stop rule,
-measure the whole scope once more: a fix can move cost elsewhere, and a new
-finding there continues the loop. Without `loop`, stop after one change,
-committed, dropped, or discarded. Once stopped, list every finding left
-under Recommendations, whatever kept the run from it; ideas dropped or
-discarded this run go under Dropped.
+has made `max` change commits. No cap by default. Before stopping on the stop
+rule, measure the whole scope once more: a fix can move cost elsewhere, and a
+new finding there continues the loop. Without `loop`, stop after one change,
+committed, dropped, or discarded. Every stop runs the final check
+(section 10), whose repair or revert still commits, then reports.
+Once stopped, list every finding left under Recommendations, whatever kept the
+run from it; ideas dropped or discarded this run go under Dropped.
 
-## 10. Report
+## 10. Final check
+
+After the last change, run the full checks, known red ones aside, on exit
+status; skip this when the run committed no code (a
+`docs(perf): never` commit alone is none). A check red that was green at the
+start is bisected to its commit, repaired once keeping the gain, else
+reverted, as [references/final-check.md](references/final-check.md) says.
+
+## 11. Report
 
 Read every count and hash off `git log <start>..HEAD`, never from memory.
 Interactive runs end with the same report.
 
 ```
 2 commits, 1 dropped; stopped: stop rule
+Checks: pass
 
 | Commit  | Summary                                       | Before -> After   |
 |---------|-----------------------------------------------|-------------------|
@@ -358,13 +375,15 @@ Not measured
 - Settings save: a write flow, not in the focus
 ```
 
-`N` counts the commits `git log <start>..HEAD` lists; `M` counts drops and
-discarded failures. The reason is `stop rule`, `max reached`, `single run`, or
-`user`. Recommendations group under: External API, Own API outside the merge
-rule, Back end without live reload, Visible change, Code quality (naming the
-rule a gain would break); one that contradicts a `UX:` comment names that
-comment's location. Size each table column from its longest cell before
-writing the table. Omit an empty section.
+`N` counts the commits `git log <start>..HEAD` lists, the final check's included
+(Before -> After `—`); `M` counts drops, discarded failures, and reverted
+changes. The checks line is `Checks: pass` (known red checks aside),
+`Checks: red — <check>`, or `Checks: none` when the final check was skipped. The
+reason is `stop rule`, `max reached`, `single run`, or `user`. Recommendations
+group under: External API, Own API outside the merge rule, Back end without live
+reload, Visible change, Code quality (naming the rule a gain would break); one
+that contradicts a `UX:` comment names that comment's location. Size each table
+column from its longest cell before writing the table. Omit an empty section.
 
 ## Self-learning
 
