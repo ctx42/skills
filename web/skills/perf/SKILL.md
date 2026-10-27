@@ -300,8 +300,8 @@ Reply: commit · drop · or say what to change
   any other fix; a user wanting a different fix replies with a prompt, not
   `drop`. Drops are remembered for the current run only.
 - Anything else is a prompt: rework the change, re-measure, re-run the
-  visible-change check and the targeted checks, and stop again, with no
-  commit in between.
+  visible-change check and the targeted checks (a repair already spent is
+  not renewed), and stop again, with no commit in between.
 - A reply saying "never …" also writes a `PERF: never …` comment, in the file's
   comment syntax, at the code concerned: into that change's commit, or on a
   drop into its own commit adding that comment alone — summary

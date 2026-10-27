@@ -220,8 +220,8 @@ Reply: commit · drop · or say what to change
   run only.
 - Anything else is a prompt: rework the change, keep its before pictures,
   re-shoot every after, shoot a before for any view the rework newly touches
-  (with the change's files stashed), re-run the fast checks, and stop again,
-  with no commit in between.
+  (with the change's files stashed), re-run the fast checks (a repair already
+  spent is not renewed), and stop again, with no commit in between.
 - A reply saying "never …" also writes a `UX: never …` comment, in the file's
   comment syntax, at the code concerned: with `commit`, into that change's
   commit; with neither `commit` nor `drop`, into the reworked change, which
