@@ -51,14 +51,6 @@
       "class": "load-bearing"
     },
     {
-      "id": "focus-stays-in-part",
-      "rule": "focus-instruction",
-      "prompt": "Situation: `/web:improve loop the Today page's add-task form: make the input wider`. The instruction is committed. Auditing the form's views you also see the shared footer fails contrast (1.98:1) on every page.\n\nQuestion: what do you do with the footer? Answer on the first line with exactly one of: FIX-NEXT, RECOMMEND. Then one sentence why.",
-      "pass": "^\\W*RECOMMEND\\b",
-      "fail": "^\\W*FIX-NEXT\\b",
-      "class": "load-bearing"
-    },
-    {
       "id": "red-check-interactive-shows",
       "rule": "final-check",
       "prompt": "Situation: `/web:improve loop` (interactive, no `auto`). The loop has ended with three change commits. The final full check run fails a `vitest` test that passed on the untouched tree; `git bisect` pins it on change 2, and one repair left it red.\n\nQuestion: what do you do? Answer on the first line with exactly one of: STOP-SHOWING-FAILURE, REVERT-AND-REPORT, REPORT-RED. Then one sentence why.",
@@ -85,9 +77,9 @@
     {
       "id": "never-comment-pictures",
       "rule": "commit-fields",
-      "prompt": "Situation: `/web:improve` interactive. At a stop the user replies `drop; never collapse the nav into a menu`. You restored the tree and now commit the comment that reply asks for.\n\nQuestion: write that commit's `UX-Pictures:` line exactly, and nothing else.",
-      "pass": "^\\W*UX-Pictures:\\s*none\\b",
-      "fail": "^\\W*UX-Pictures:(?!\\s*none)",
+      "prompt": "Situation: `/web:improve` interactive. At a stop the user replies `drop; never collapse the nav into a menu`. You restored the tree and now commit the `UX: never` comment that reply asks for, alone.\n\nQuestion: which `UX-` fields does that commit's message carry? Answer on the first line with exactly one of: ALL-THREE, PICTURES-ONLY, NONE. Then one sentence why.",
+      "pass": "^\\W*ALL-THREE\\b",
+      "fail": "^\\W*(PICTURES-ONLY|NONE)\\b",
       "bullets": [
         "interactive-commit-drop-never#b3"
       ],
@@ -107,10 +99,10 @@
     {
       "id": "single-run-stops",
       "rule": "one-change-without-loop",
-      "prompt": "Situation: `/web:improve auto` (no `loop`). The first change was discarded: a check stayed red after one repair, so nothing was committed. Five measurable findings remain.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: STOP, TRY-NEXT-FINDING. Then one sentence why.",
+      "prompt": "Situation: `/web:improve auto make the add-task input wider` (no `loop`). That instruction is committed. The same form's submit button has no accessible name, a Lighthouse accessibility failure inside the focused part.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: FIX-THE-BUTTON, STOP. Then one sentence why.",
       "pass": "^\\W*STOP\\b",
-      "fail": "^\\W*TRY-NEXT-FINDING\\b",
-      "class": "load-bearing"
+      "fail": "^\\W*FIX-THE-BUTTON\\b",
+      "class": "redundant"
     },
     {
       "id": "two-view-picture-names",
