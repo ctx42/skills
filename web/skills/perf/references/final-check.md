@@ -19,3 +19,7 @@ failed (step 3).
    repair, after which a check still red reverts.
 4. A revert that conflicts is aborted (`git revert --abort`) and the check
    stays red in the report.
+5. Bisect pins no single commit (the check flakes, or only the changes
+   together fail): re-run it once; still red, one repair at HEAD as a `fix`,
+   kept only with every gain kept; still red, it stays red, nothing is
+   reverted, and no stop asks.

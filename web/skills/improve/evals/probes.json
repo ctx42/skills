@@ -111,6 +111,14 @@
       "pass": "dev/ux/before-1\\.png.*dev/ux/(after-1|before-2)\\.png",
       "fail": "dev/ux/before\\.png",
       "class": "redundant"
+    },
+    {
+      "id": "bisect-no-single-commit",
+      "rule": "final-check",
+      "prompt": "Situation: `/web:improve auto loop` stopped by the stop rule after three change commits. The final full check run fails a `vitest` test that passed on the untouched tree. `git bisect` pins no single commit: each change's commit passes alone, only HEAD with all three fails, and a re-run of the test still fails.\n\nQuestion: what do you do? Give one sentence of reasoning, then on the last line exactly one of: REPAIR-AT-HEAD, REVERT-LAST-CHANGE, REVERT-ALL-CHANGES.",
+      "pass": "REPAIR-AT-HEAD\\W*$",
+      "fail": "(REVERT-LAST-CHANGE|REVERT-ALL-CHANGES)\\W*$",
+      "class": "redundant"
     }
   ]
 }

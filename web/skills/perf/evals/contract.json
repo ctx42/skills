@@ -207,7 +207,8 @@
       "must": [
         "`git bisect run <check>`",
         "re-measure shows the commit's gain kept",
-        "Still red, or the gain lost: under `auto`, revert that commit"
+        "Still red, or the gain lost: under `auto`, revert that commit",
+        "Bisect pins no single commit"
       ]
     },
     {

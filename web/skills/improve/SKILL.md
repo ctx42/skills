@@ -267,7 +267,10 @@ would counts as still red.
    its change under Dropped with the failing check; interactive, stop showing
    the failure and the commit — reply `revert`, or a prompt for one more repair,
    after which a check still red reverts. A revert that conflicts is aborted
-   (`git revert --abort`) and the check stays red.
+   (`git revert --abort`) and the check stays red. When bisect pins no single
+   commit (the check flakes, or only the changes together fail), re-run it
+   once; still red, one repair at HEAD as a `fix`; still red, it stays red,
+   nothing is reverted, and no stop asks.
 2. Write a test for each behaviour change the run committed without one and did
    not revert, asserting the new behaviour, and run the full checks. A new test
    that fails exposes its change: one repair beside the test; still red, delete

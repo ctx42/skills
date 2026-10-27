@@ -85,7 +85,8 @@
         "the full checks wait for the final check",
         "`git bisect run <check>`",
         "Write a test for each behaviour change the run committed without one",
-        "Checks: pass"
+        "Checks: pass",
+        "When bisect pins no single\\s+commit"
       ]
     },
     {
