@@ -1,9 +1,10 @@
 ---
 name: create
 description: >
-  Authors a new Software Requirement Document (SRD) to the SRD standard. Use
-  when asked to create, write, draft, or start an SRD, a software
-  requirements document, or a spec.
+  Authors a new Software Requirement Document (SRD) to the SRD standard: the
+  requirements, scope, and glossary that define what a feature or initiative
+  must do before it is built. Use when asked to create, write, draft, or start
+  an SRD or a software requirements document.
 argument-hint: "[<what the SRD should specify>]"
 license: MIT
 ---
