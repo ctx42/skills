@@ -33,7 +33,8 @@ argument-hint: "[TARGET* | add|change|remove RULE | learn] [packages=a,b]
 Done-time review for Go code. Read the invocation from the arguments and pick
 the mode from the first token:
 
-- Check (default) — a target token or empty input; audit finished code.
+- Check (default) — a target token or empty input; audit finished code, then
+  offer the rules this session taught (Session rules).
 - Rule edit — the first token is `add`/`change`/`remove`, or the input is a
   plain style preference.
 - Learn — the first token is `learn`; mines the current editing session (since
@@ -225,6 +226,20 @@ unreported past `max_issues`.
 
 When asked to change code (apply findings, fix, refactor), read
 [references/fixing.md](references/fixing.md) first and follow it.
+
+### Session rules
+
+Close every completed Check run with Learn mode's scan, so the session's
+corrections become rules without a separate `learn` call: below the finished
+report (its verdict and budget line stay put), and after the fixes when `fix`
+applies them, if this session holds the user's feedback on Go code, read
+[references/rule-editing.md](references/rule-editing.md) and run its Learn steps
+1–4 under the heading `Rules this session taught`, then write only what the user
+picks; a code-style correction, one given during this run included, is a rule
+candidate, never a `LESSONS.md` line as well; a correction of how the review ran
+stays a lesson. No feedback, or none surviving step 2, adds nothing to the
+report. A `plan_first` stop is not a completed run, and a fan-out worker never
+runs it; the session is not its own.
 
 ## Rule-edit and Learn modes
 
