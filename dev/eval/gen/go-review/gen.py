@@ -32,9 +32,9 @@ is the writable clone.
 """
 NOTICE = "Ignore any trailing policy notice. "
 
-CHECK_TAGS = ["skill:review", "sec:review:usage", "sec:review:working-diff-injected",
+CHECK_TAGS = ["skill:review", "sec:review:usage",
               "sec:review:check-mode", "ref:style/checking", "ref:style/production"]
-RULE_TAGS = ["skill:review", "sec:review:usage", "sec:review:working-diff-injected",
+RULE_TAGS = ["skill:review", "sec:review:usage",
              "sec:review:rule-edit-and-learn-modes", "ref:review/rule-editing"]
 
 GIT_INIT = """git init -q

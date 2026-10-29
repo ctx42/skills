@@ -55,30 +55,23 @@ Sources of truth:
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
 
-## Working diff (injected)
-
-!`git diff HEAD 2>/dev/null || (git diff --cached; git diff)`
-
-The Check target when no target token is given, unless this session has made
-fixes (see Target); a named target ignores it. On a branch with no commits
-yet, `HEAD` does not resolve, so the staged diff followed by the unstaged one
-stands in for it.
-
 ## Check mode
 
 ### Target
 
 The target token is:
-- empty — review the injected working diff; if it is empty, fall back to
-  `git diff HEAD` (staged and unstaged together). If that is also empty, the
-  branch's own work is the target: diff it against the base branch
+- empty — run `git diff HEAD` (staged and unstaged together) and review that
+  working diff; on a branch with no commits, where `HEAD` does not resolve,
+  run `git diff --cached` and then `git diff` instead. If the working diff is
+  empty, the branch's own work is the target: diff it against the base branch
   (`git diff <base>...HEAD`) and say which of the two you reviewed. On a
-  branch with no commits, an empty injected diff leaves nothing to review:
-  say so and ask for a target. Once this session has made fixes, by this
-  skill or any other, committed or not, the empty target is instead the diff
-  from the commit before the first fix: a fix to identity, nil, or undo logic
-  regresses the inputs beside it. With no commit before the first fix, the
-  no-commits fallback above stands.
+  branch with no commits, an empty working diff leaves nothing to review: say
+  so and ask for a target. Once this session has made fixes, by this skill or
+  any other, committed or not, the empty target is instead the diff from the
+  commit before the first fix (`git diff <commit>`): a fix to identity, nil,
+  or undo logic regresses the inputs beside it. With no commit before the
+  first fix, the no-commits fallback above stands. A named target below runs
+  none of these diffs.
 - `func=NAME` or `func=T.Bar` — that function or method; `FILE:LINE` — the
   function enclosing that line; `FILE.go` — that file. Review just that code,
   style included; read beyond it only to verify a finding. A name matching in

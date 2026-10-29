@@ -65,23 +65,18 @@ Sources of truth:
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
 
-## Working diff (injected)
-
-!`git diff HEAD 2>/dev/null || (git diff --cached; git diff)`
-
-The Check target when no target token is given, unless this session has made
-fixes (see Target); a named target ignores it.
-
 ## Check mode
 
 ### Target
 
 Resolve the frontend root and the target — empty, a directory, a file,
 `FILE:LINE`, `func=`, `component=`, or `all` — exactly as
-`../style/references/checking.md` (Frontend root, Target) does, with one
+`../style/references/checking.md` (Frontend root, Target) does: the empty
+target runs the diff that file names, and a named target runs no diff. One
 difference for the empty target: once this session has made fixes, by this
 skill or any other, committed or not, it is the diff from the commit before
-the first fix, since a fix regresses the code beside it. State the resolved
+the first fix (`git diff <commit>`, restricted the same way), since a fix
+regresses the code beside it. State the resolved
 root, target, and file set before reviewing.
 
 The API contract is in scope for `all`, for the root, and for any target or
