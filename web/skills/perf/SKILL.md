@@ -6,7 +6,7 @@ description: >
   interactions, long tasks, layout shift, memory leaks, wasted requests, and
   bundle bloat without changing what users see. Use to speed up or profile a
   web app, page, or interaction, front end or back end.
-argument-hint: "[auto] [loop] [max <n>] [<focus>]"
+argument-hint: "[auto] [loop] [max=N] [<focus>]"
 license: MIT
 ---
 
@@ -18,18 +18,23 @@ license: MIT
 /web:perf                   measure the app, build the top fix, stop for commit, drop, or a prompt
 /web:perf auto              the same, committing without stopping
 /web:perf loop              one change after another until the stop rule
-/web:perf auto loop max 5   unattended, at most 5 commits
+/web:perf auto loop max=5   unattended, at most 5 commits
 /web:perf <focus>           do what the focus asks to the part it names or a screenshot shows
 ```
 
-`auto`, `loop`, and `max <n>` are leading keywords in any order; the first
-other token starts the focus, free text to the end. A pasted image, or an image
-path in the focus, shows the part. `max <n>` counts change commits only (a
-`docs(perf): never` one included; not drops, discards, or the final check's)
-and needs `loop`: given without it, say
-"`max` needs `loop`" and stop before any other step. Without `loop` a run makes
-at most one change, committed, dropped, or discarded. No focus measures the
-whole app. The CPU slowdown is fixed at 4x; no keyword changes it.
+Modes and controls come first, in any order; the first other word starts the
+focus, which runs to the end — reserved words in it are text. A pasted image, or
+an image path in the focus, shows the part. `max=N` counts change commits only
+(a `docs(perf): never` one included; not drops, discards, or the final check's)
+and needs `loop`: given without it, say "`max` needs `loop`" and stop before any
+other step. Without `loop` a run makes at most one change. No focus measures the
+whole app. The CPU slowdown is always 4x.
+
+A `key=value` that names no control here, or a word left over once the modes and
+the focus are read: say it was not recognized, name the ones that exist, and run
+with the defaults as if it were absent — unless dropping it would widen what the
+run changes; then ask. A focus that resolves to nothing: say so and ask — never
+guess what to work on.
 
 Arguments: $ARGUMENTS
 
@@ -187,10 +192,9 @@ measuring.
 
 ## 4. Focus
 
-A focus — any text after the keywords — is an instruction about one part of
-the UI; with one, read [references/focus.md](references/focus.md) before the
-first change: it beats a `PERF:` comment, may name a visible change, and keeps
-every commit to that part.
+A focus is an instruction about one part of the UI; with one, read
+[references/focus.md](references/focus.md) before the first change: it beats a
+`PERF:` comment, may name a visible change, and keeps every commit to that part.
 
 ## 5. What a change may be
 
@@ -257,27 +261,15 @@ commit; unrelated changes never share a commit. Per change:
 
 Invoke `craft:cm` at `mini` on the staged diff for the summary and body. After
 its body, before any footer it wrote, append the fields wrapped at 72 columns,
-continuation lines indented two spaces:
+continuation lines indented two spaces, as the example in
+[references/commit-message.md](references/commit-message.md) shows (read it
+before the first commit):
 
-```
-perf(devices): insert the device rows at once
-
-Each appended row read offsetHeight, forcing a layout per row, so
-sorting 2000 devices blocked the page.
-
-Perf-Finding: sorting the device list takes INP 610 ms at 4x CPU
-  (good <= 200 ms)
-Perf-Change: build the rows in a fragment and insert them once
-Perf-Measure: INP 610 -> 140 ms, median of 5 at 4x CPU (before
-  spread 40 ms)
-```
-
-`Perf-Finding:` the metric, its threshold, and where it breaks;
-`Perf-Change:` what changed; `Perf-Measure:` before -> after with the method,
-and any benchmark's; `Perf-Pictures:` each
-pair's view and state, numbered as the files, only on a commit carrying
-pictures. A `docs(perf): never …` commit carries `Perf-Finding:` alone. Never
-add a trailer beyond what `cm` allows.
+`Perf-Finding:` the metric, its threshold, and where it breaks; `Perf-Change:`
+what changed; `Perf-Measure:` before -> after with the method, and any
+benchmark's; `Perf-Pictures:` each pair's view and state, numbered as the files,
+only on a commit carrying pictures. A `docs(perf): never …` commit carries
+`Perf-Finding:` alone. Never add a trailer beyond what `cm` allows.
 
 ## 8. Interactive stops
 

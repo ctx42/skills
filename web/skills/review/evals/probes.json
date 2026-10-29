@@ -60,6 +60,14 @@
       "pass": "^\\W*B\\b",
       "fail": "^\\W*[AC]\\b",
       "class": "redundant"
+    },
+    {
+      "id": "unknown-control",
+      "rule": "unknown-tokens",
+      "prompt": "Situation: the user runs `/web:review src/pages limit=10`. `src/pages` holds 12 files.\n\nQuestion: how many findings do you report at most, and what do you say about `limit=10`? Answer on the first line with exactly one of: CAP-AT-10, IGNORE-AND-SAY. Then one sentence why.",
+      "pass": "^\\W*IGNORE-AND-SAY",
+      "fail": "^\\W*CAP-AT-10",
+      "class": "load-bearing"
     }
   ]
 }

@@ -9,8 +9,8 @@ description: >
   code, or to check or fix its style; adding or changing a rule belongs to
   web:review.
 license: MIT
-argument-hint: "[TARGET] [dirs=a,b] [max_issues=N]
-  [depth=light|standard*|full] [plan_first] [fix]"
+argument-hint: "[TARGET] [dirs=a,b] [max=N] [depth=light|standard*|full]
+  [plan_first] [fix]"
 ---
 
 # style
@@ -21,12 +21,13 @@ argument-hint: "[TARGET] [dirs=a,b] [max_issues=N]
 /web:style                                style-check the current git diff (default)
 /web:style src/pages                      style-check one directory
 /web:style src/pages/DevicesPage.vue      style-check one file
+/web:style src/pages/DevicesPage.vue:42   the unit enclosing that line
 /web:style component=DeviceTable          one component; func=<name> for one function
 /web:style all                            check the whole frontend
 /web:style src/pages fix                  apply every offense's fix without asking
 /web:style all plan_first                 propose the budget, then stop
 /web:style all dirs=pages,stores          restrict a whole-frontend check to these directories
-/web:style all max_issues=15 depth=light  cap offenses; set depth
+/web:style all max=15 depth=light         cap offenses; set depth
 ```
 
 Authoritative frontend style rules and the style-only pass that enforces
@@ -41,6 +42,14 @@ TypeScript strict, Pinia, vue-router, PrimeVue 4, Bun, Vite, Biome,
 - Run a pass — when invoked as `/web:style [target]`: check finished code
   against these rules and propose fixes. Read
   [references/checking.md](references/checking.md) and follow it.
+
+Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
+a control, and anything else is the target. `func=` and `component=` name the
+target, not a control. A `key=value` that names no control here, or a word left
+over once the modes, the target, and any text the skill takes are read: say it
+was not recognized, name the ones that exist, and run with the defaults as if it
+were absent — unless dropping it would widen what the run changes; then ask. A
+target that resolves to nothing: say so and ask — never guess what to work on.
 
 Mechanical rules live in [references/biome.json](references/biome.json), the
 reference Biome config; this file holds the rules a tool cannot check. Change

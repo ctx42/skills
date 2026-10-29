@@ -89,6 +89,30 @@
         "then\\s+write only\\s+what the user picks",
         "a fan-out worker never runs it"
       ]
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Tokens read in any order; an unrecognized token is named and ignored, an unresolvable target asks",
+      "must": [
+        "Read the tokens in any order: a reserved word is a mode or flag, `key=value` is a control, and anything else is the target",
+        "say it was not recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target that resolves to nothing: say so and ask — never guess what to work on"
+      ]
+    },
+    {
+      "id": "cap-once-at-merge",
+      "rule": "max=N caps findings once, at the merge; workers get no share",
+      "must": [
+        "`max=N` \\(default 25, highest severity first\\)",
+        "Workers get no share of `max`; the merge applies it once"
+      ]
+    },
+    {
+      "id": "target-grammar",
+      "rule": "Check targets follow web:style's grammar, FILE:LINE (the enclosing unit), func=, and component= included",
+      "must": [
+        "the target — empty, a directory, a file, `FILE:LINE`, `func=`, `component=`, or `all` — exactly as `\\.\\./style/references/checking\\.md` \\(Frontend root, Target\\) does"
+      ]
     }
   ]
 }

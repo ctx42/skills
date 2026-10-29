@@ -45,6 +45,39 @@
       "must": [
         "Every number is read off the finished artifacts"
       ]
+    },
+    {
+      "id": "diff-default",
+      "rule": "No target works the units the working diff touches; an empty diff asks",
+      "must": [
+        "diff \\(default, no target\\) — every unit whose code the working diff changes",
+        "An empty diff: say so and ask for a target"
+      ]
+    },
+    {
+      "id": "auto-fan-out",
+      "rule": "Fan-out is automatic by size, announced in the plan; the max= cap is divided among workers",
+      "must": [
+        "Fan-out is automatic: a target spanning several directories with more than\\s+~40 files or ~3000 lines",
+        "whether the run\\s+fans out and why",
+        "a directory whose share is 0 gets no worker"
+      ]
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Unrecognized tokens are named and defaults run; an empty target resolution asks",
+      "must": [
+        "Read the tokens in any order: a reserved word is a mode or flag, `key=value`\\s+is a control, and anything else is the target",
+        "say it was not\\s+recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target\\s+that resolves to nothing: say so and ask — never guess what to work on"
+      ]
+    },
+    {
+      "id": "max-cap",
+      "rule": "max= is a hard cap on cases, counted per test or test.each row",
+      "must": [
+        "`max=N` — hard cap on cases added"
+      ]
     }
   ]
 }

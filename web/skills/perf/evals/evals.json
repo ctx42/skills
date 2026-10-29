@@ -60,7 +60,7 @@
         "perf"
       ],
       "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a Go server (`cmd/fleet`, serving the built frontend and the `/api` of `internal/server`, with no live reload) backed by a fake inventory (`cmd/fake-upstream`), and its Vue 3 + TypeScript frontend in `web/` — Devices (`/`, the landing page, with a site picker, a search box, and a sortable device table), a device page (`/devices/<id>`), Sites (`/sites`), a site page (`/sites/<id>`), and Settings (`/settings`), all under one shared header. `bun install --frozen-lockfile` has run in `web/`; `make check` at the root (Go vet and tests, then `bun run check` in `web/`) is green on this tree, and `bun run build` in `web/` writes the bundle into `web/dist/`, which the Go server embeds and which holds only a tracked `.gitkeep`. `FAKE_DEVICES=2000 go run ./cmd/fake-upstream` is serving 2006 devices on port 8191, `go run ./cmd/fleet` on 8080 with `FLEET_UPSTREAM_URL=http://localhost:8191` and `FLEET_REQUEST_LOG=requests.log`, appending every request to `requests.log` at the root (ignored by `.gitignore`), and `bun run dev` (Vite) on 5173, proxying `/api` to 8080; the dev config names no port, so 5173 is Vite's default and the only dev URL. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; nothing forbids committing. The user answers the start message with `ok`.",
-      "query": "/web:perf auto loop max 2",
+      "query": "/web:perf auto loop max=2",
       "files": [
         "web/evals/assets/"
       ],
@@ -99,7 +99,7 @@
         "perf"
       ],
       "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a Go server (`cmd/fleet`, serving the built frontend and the `/api` of `internal/server`, with no live reload) backed by a fake inventory (`cmd/fake-upstream`), and its Vue 3 + TypeScript frontend in `web/` — Devices (`/`, the landing page, with a site picker, a search box, and a sortable device table), a device page (`/devices/<id>`), Sites (`/sites`), a site page (`/sites/<id>`), and Settings (`/settings`), all under one shared header. `bun install --frozen-lockfile` has run in `web/`; `make check` at the root (Go vet and tests, then `bun run check` in `web/`) is green on this tree, and `bun run build` in `web/` writes the bundle into `web/dist/`, which the Go server embeds and which holds only a tracked `.gitkeep`. `FAKE_DEVICES=2000 go run ./cmd/fake-upstream` is serving 2006 devices on port 8191, `go run ./cmd/fleet` on 8080 with `FLEET_UPSTREAM_URL=http://localhost:8191` and `FLEET_REQUEST_LOG=requests.log`, appending every request to `requests.log` at the root (ignored by `.gitignore`), and `bun run dev` (Vite) on 5173, proxying `/api` to 8080; the dev config names no port, so 5173 is Vite's default and the only dev URL. Chrome DevTools MCP is connected with a visible window; the craft plugin is installed; the app has no login; nothing forbids committing. The user answers the start message with `ok`. `requests.log` holds only the setup's readiness check.",
-      "query": "/web:perf auto max 3",
+      "query": "/web:perf auto max=3",
       "files": [
         "web/evals/assets/"
       ],

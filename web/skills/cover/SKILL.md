@@ -7,8 +7,8 @@ description: >
   or the whole frontend, or when asked to add missing unit tests for
   uncovered lines or branches.
 license: MIT
-argument-hint: "[func=NAME | component=NAME | FILE:LINE | FILE | DIR* | all]
-  [max_tests=N] [dirs=a,b] [include=all] [fanout]"
+argument-hint: "[func=NAME | component=NAME | FILE:LINE | FILE | DIR | all]
+  [max=N] [dirs=a,b] [include=all]"
 ---
 
 # cover
@@ -16,16 +16,16 @@ argument-hint: "[func=NAME | component=NAME | FILE:LINE | FILE | DIR* | all]
 ## Usage
 
 ```
-/web:cover src/stores                  directory (default): per unit, plan-first
+/web:cover                             the working diff (default), plan-first if several units
 /web:cover func=formatDate             one function, composable, or store by name; no plan gate
 /web:cover component=DeviceTable       one component; no plan gate
 /web:cover src/format.ts:21            the unit enclosing that line
 /web:cover src/format.ts               every unit in the file, plan-first
-/web:cover all                         every directory, sequential, plan-first
-/web:cover src max_tests=8             cap cases added this run
+/web:cover src/stores                  every unit in the directory, plan-first
+/web:cover all                         every directory, plan-first; fans out when large
+/web:cover src max=8                   cap cases added this run
 /web:cover all dirs=pages,stores       restrict to these directories
 /web:cover func=formatDate include=all also attempt the deferred lines
-/web:cover all fanout                  one subagent per directory, merged
 ```
 
 Executing skill: it runs Vitest with coverage, reads the coverage JSON, edits
@@ -52,20 +52,25 @@ Sources of truth:
 
 ## Target
 
-The first token is the target; controls follow it. Resolve the frontend root
-as `../style/references/checking.md` does (the directory whose `package.json`
-depends on `vue`), then one of five kinds; each fixes an order, always worked
-one unit at a time:
+Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
+a control, and anything else is the target. `func=` and `component=` name the
+target, not a control. Resolve the frontend root as
+`../style/references/checking.md` does (the directory whose `package.json`
+depends on `vue`), then one of six kinds; each fixes an order, always worked one
+unit at a time:
 
+- diff (default, no target) — every unit whose code the working diff changes
+  (`git diff HEAD`; on a branch with no commits, staged then unstaged); files
+  alphabetically, units top to bottom. Plan-first when it holds more than one
+  unit, else run straight. An empty diff: say so and ask for a target.
 - unit — `func=<name>` (an exported function, composable, or `useXxxStore`)
   or `component=<Name>`. Just that one; run straight, then report.
 - line — `path/file.ts:42` or `path/Foo.vue:42`: the unit enclosing it; run
   straight.
 - file — every unit in the file, top to bottom. Plan-first.
-- directory (default) — files alphabetically; units top to bottom.
-  Plan-first.
+- directory — files alphabetically; units top to bottom. Plan-first.
 - all — every directory under `src/` alphabetically (`src` itself first),
-  sequentially unless `fanout`. Plan-first.
+  sequentially unless it fans out. Plan-first.
 
 Test helpers (`src/testing.ts`, the setup file), the entry point (`main.ts`),
 and the files the coverage config excludes are never units. State the resolved
@@ -73,21 +78,28 @@ kind and the unit set before measuring.
 
 ## Controls
 
-Read from `$ARGUMENTS`, any order after the target. A token that is none of
-these: say it was not recognized, name the controls, and run with defaults.
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
 
-- `max_tests=N` — hard cap on cases added: one per new `test` or
-  `test.each` row; a new two-row `test.each` is two, and an assertion added
-  to an existing test is none. Under `fanout`, give each worker `N` divided
-  by the number of directories in scope, rounded down, the remainder one at
-  a time to the most-uncovered directory first; a directory whose share is 0
-  gets no worker and is reported as skipped for the cap.
+- `max=N` — hard cap on cases added: one per new `test` or `test.each` row;
+  a new two-row `test.each` is two, and an assertion added to an existing
+  test is none. Under fan-out, give each worker `N` divided by the number of
+  directories in scope, rounded down, the remainder one at a time to the
+  most-uncovered directory first; a directory whose share is 0 gets no worker
+  and is reported as skipped for the cap.
 - `dirs=a,b` — restrict `all` to these directories.
 - `include=all` — also attempt deferred lines (below) that need more
   scaffolding than `src/testing.ts` offers, built in the test file. A line
   only a production change could reach stays deferred.
-- `fanout` — `all` only: one subagent per directory, each given this file's
-  path and `../style/SKILL.md`'s, merged into one report.
+
+Fan-out is automatic: a target spanning several directories with more than
+~40 files or ~3000 lines of `.vue`/`.ts` in scope (the threshold `web:style`
+and `web:review` use) runs one subagent per directory, each given this file's
+path and `../style/SKILL.md`'s, merged into one report; a smaller target runs
+sequentially.
 
 ## Per-unit loop
 
@@ -124,7 +136,7 @@ names another, added to `.git/info/exclude` when no ignore rule covers it — as
    report covered over total, statements and branches.
 3. Classify every uncovered statement and branch (below). Then add one
    targeted case per easy line or branch — a `test.each` row, a `test`, an
-   assertion — to the unit's own `describe`, stopping at `max_tests`.
+   assertion — to the unit's own `describe`, stopping at `max`.
 4. Re-measure into `<scratch>/<unit>.after/` and confirm every target went
    from 0 to hit. A target still dark: narrow to the case meant to cover it,
    fix or drop it, re-measure. A fixed case replaces the one it fixes; a
@@ -147,14 +159,15 @@ names another, added to `.git/info/exclude` when no ignore rule covers it — as
   - a build-time branch (`import.meta.env.DEV`, `import.meta.env.PROD`);
   - generated files.
 
-## Plan (file / directory / all)
+## Plan (diff / file / directory / all)
 
-Run loop steps 1–2 for every unit in scope, then present: current coverage
-per unit, the proposed cases (`test file:describe` and the line each targets)
-— under `max_tests`, only as many as it allows, in unit order, with the easy
-lines left over listed after them — deferred lines, and un-coverable lines,
-each as `file:line — reason`. Wait
-for approval, then run steps 3–4 unit by unit.
+Run loop steps 1–2 for every unit in scope, then present: whether the run
+fans out and why (the file and line count against the threshold); current
+coverage per unit; the proposed cases (`test file:describe` and the line each
+targets) — under `max`, only as many as it allows, in unit order, with the
+easy lines left over listed after them; deferred lines and un-coverable
+lines, each as `file:line — reason`. Wait for approval, then run steps 3–4
+unit by unit.
 
 ## Write
 
@@ -186,7 +199,7 @@ Use the labels below verbatim; readers scan for them.
   nested under their test, so the list counts.
 - Deferred lines: `file:line — reason`.
 - Un-coverable lines: `file:line — reason`.
-- Cases added this run, counted the way `max_tests` counts them, and under a
+- Cases added this run, counted the way `max` counts them, and under a
   cap, what is left.
 - `all`: which directories were covered and which skipped.
 - Never skip a line silently. Suggest running `web:review` on the new tests.

@@ -38,6 +38,39 @@
       "must": [
         "Wait for approval, then run the loop and Verify"
       ]
+    },
+    {
+      "id": "diff-default",
+      "rule": "No target works the items the working diff touches; an empty diff asks",
+      "must": [
+        "diff \\(default, no target\\) — every item whose code or comment the working\\s+diff changes",
+        "An empty diff: say so and ask\\s+for a target"
+      ]
+    },
+    {
+      "id": "auto-fan-out",
+      "rule": "Fan-out is automatic by size, announced in the plan; the parent re-reads workers' comments",
+      "must": [
+        "Fan-out is automatic: a target spanning several directories with more than\\s+~40 files or ~3000 lines",
+        "whether the run fans out and why",
+        "Merging\\s+is not accepting"
+      ]
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Unrecognized tokens are named and defaults run; an empty target resolution asks",
+      "must": [
+        "Read the tokens in any order: a reserved word is a mode or flag, `key=value`\\s+is a control, and anything else is the target",
+        "say it was not\\s+recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target\\s+that resolves to nothing: say so and ask — never guess what to work on"
+      ]
+    },
+    {
+      "id": "max-cap",
+      "rule": "max= is a hard cap on comments changed; what is left is reported",
+      "must": [
+        "`max=N` — hard cap on comments changed; report what is left"
+      ]
     }
   ]
 }

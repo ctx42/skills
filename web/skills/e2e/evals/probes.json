@@ -8,6 +8,14 @@
       "pass": "^\\W*E2E-ONLY",
       "fail": "^\\W*BOTH",
       "class": "redundant"
+    },
+    {
+      "id": "old-cap-spelling",
+      "rule": "unknown-tokens",
+      "prompt": "Situation: the user types `/web:e2e route=settings max_tests=1`; the route has 4 uncovered controls, each needing its own test.\n\nQuestion: how many tests do you add at most? Answer on the first line with exactly one of: ONE, FOUR, ASK. Then one sentence on what you tell the user about `max_tests=1`.",
+      "pass": "^\\W*ASK\\b",
+      "fail": "^\\W*(ONE|FOUR)\\b",
+      "class": "redundant"
     }
   ]
 }

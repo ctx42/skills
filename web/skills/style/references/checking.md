@@ -4,7 +4,7 @@ Read when `style` is invoked as a command (`/web:style ...`). The pass checks
 code against the style rules only — structure, naming, TSDoc, test shape, the
 Biome config; bugs, edge cases, and logic errors are `web:review`'s job.
 
-Read the invocation from `$ARGUMENTS`; its first token is the target.
+Read the invocation from `$ARGUMENTS`, by the token rules in `SKILL.md`.
 
 ## Contents
 
@@ -27,20 +27,23 @@ such directory, or several: say so and ask; never guess.
 
 ## Target
 
-The first token selects what to check:
+The target selects what to check:
 - empty — `git diff HEAD` restricted to `*.vue`, `*.ts`, and `biome.json`
   under the root; if that is empty, the diff vs the base branch (staged +
   unstaged).
 - not a path at all — `add`, `change`, `remove`, or prose about the rules
   themselves is a rulebook edit, not a target: redirect to `web:review` rather
-  than resolving it as a directory that does not exist. Anything else
-  unrecognized: say so and ask, do not guess a target.
+  than resolving it as a directory that does not exist.
 - a directory (`src/pages`) — its `.vue` and `.ts` files, recursively.
 - a file — that file.
 - `component=<Name>` — the one `<Name>.vue` under the root (and its
   `<Name>.test.ts`); `func=<name>` — the one exported function, composable, or
   store of that name, with its `describe("<name>")` tests. None or several
   matches: list them and ask.
+- `FILE:LINE` (`src/pages/DevicesPage.vue:42`) — the unit enclosing that
+  line, as `func=` or `component=` would name it: the exported function,
+  composable, or store around it, or, in a `.vue` file, the component. A line
+  in no unit: say so and ask.
 - `all` — every `.vue` and `.ts` file under the root (dependency, build, and
   coverage directories excluded), plus `biome.json`.
 
@@ -52,10 +55,10 @@ State the resolved root, target, and exact file set before checking.
 
 ## Budget & scope
 
-Read these from `$ARGUMENTS` (any order, after the target):
+Read these controls and flags:
 - `dirs=a,b` — restrict to these directories under `src/` (`pages`,
   `stores`, `components`; `src` itself means its top-level files).
-- `max_issues=N` — cap on offenses reported (default 25).
+- `max=N` — cap on offenses reported (default 25).
 - `depth=light|standard|full` — default `standard`. `light` reports only
   Blocker and Should-fix offenses, counts the Nits it leaves out in the
   unreported total, and skips `comments-fit-biomes`, saying both in one line;
@@ -67,8 +70,8 @@ Read these from `$ARGUMENTS` (any order, after the target):
 
 Default to plan-first for a broad target with no budget: propose defaults (the
 caps above, the directory list) and ask before applying anything. Either
-`dirs=` or `max_issues=` is a budget; `depth=` alone is not. Broad means more
-than ~40 files or ~3000 lines of `.vue`/`.ts` in scope. Plan-first is
+`dirs=` or `max=` is a budget; `depth=` alone is not. Broad means more than
+~40 files or ~3000 lines of `.vue`/`.ts` in scope. Plan-first is
 propose-then-stop: no check until the user answers.
 
 ## Principles
@@ -171,9 +174,9 @@ request through the one client module…* → `send-every-request`. *The
 project's `biome.json` turns on every rule…* → `projects-turns-every`.
 
 One offense is one rule broken in one file, however many times; list every
-site on it. Stop at `max_issues`, highest severity first; say how many
-offenses went unreported. End with a one-line verdict (clean / fix-first) and
-per-severity counts.
+site on it. Stop at `max`, highest severity first; say how many offenses went
+unreported. End with a one-line verdict (clean / fix-first) and per-severity
+counts.
 
 ## Fixing
 
@@ -211,14 +214,14 @@ the gate is the proof.
   this file — not their text — the `depth`, and the parent's list of rule ids
   and severities, derived once for every rule in scope. Workers neither coin
   an id nor grade a tier; a rule missing from the list comes back with the line
-  quoted, no id, no severity. Workers get no share of `max_issues`: the cap
-  applies once, at the merge.
+  quoted, no id, no severity. Workers get no share of `max`: the cap applies
+  once, at the merge.
 - The parent runs the Biome config check itself and merges only once every
   worker has returned. The merge folds by rule id (one rule broken in four
   directories is one finding listing four), then, for every rule flagged in
   some directories but not all, greps the others for the quoted trigger and
   reports the reconciled count. Then it sorts by severity and id and cuts at
-  `max_issues`. The verdict line carries the raw total, summed from the worker
+  `max`. The verdict line carries the raw total, summed from the worker
   reports, and the unreported count, zero included.
 
 ## Delegated by web:review

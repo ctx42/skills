@@ -80,6 +80,23 @@
         "propose the budget and the directory list, then stop for\\s+the user's answer, checking nothing until it comes"
       ],
       "file": "references/checking.md"
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Tokens read in any order; an unrecognized token is named and ignored, an unresolvable target asks",
+      "must": [
+        "Read the tokens in any order: a reserved word is a mode or flag, `key=value` is a control, and anything else is the target",
+        "say it was not recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target that resolves to nothing: say so and ask — never guess what to work on"
+      ]
+    },
+    {
+      "id": "file-line-unit",
+      "rule": "A FILE:LINE target checks the unit enclosing that line",
+      "must": [
+        "`FILE:LINE` \\(`src/pages/DevicesPage\\.vue:42`\\) — the unit enclosing that line"
+      ],
+      "file": "references/checking.md"
     }
   ]
 }

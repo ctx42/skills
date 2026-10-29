@@ -5,7 +5,7 @@
       "id": "max-needs-loop",
       "rule": "`max` without `loop` stops with a message before any other step; it counts commits only",
       "must": [
-        "`max <n>` counts change commits only",
+        "`max=N` counts change commits only",
         "needs `loop`: given without it, say\\s+\\\"`max` needs `loop`\\\" and stop before any other step"
       ]
     },
@@ -295,6 +295,15 @@
       "must": [
         "The sum leaves out compiled code",
         "growth only the\\s+dev build shows is no finding"
+      ]
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Tokens read in any order; unrecognized ones are named and defaults run",
+      "must": [
+        "the first other word starts the focus, which runs to the end",
+        "say it was not recognized, name the ones that\\s+exist, and run with the defaults as if it were absent",
+        "A focus that resolves to nothing: say so\\s+and ask — never guess what to work on"
       ]
     }
   ]

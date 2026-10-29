@@ -44,6 +44,23 @@
       "must": [
         "Red: stop and report the failures, editing nothing"
       ]
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Unrecognized tokens are named and defaults run; an empty target resolution asks",
+      "must": [
+        "Read the tokens in any order: a reserved word is a mode or flag, `key=value`\\s+is a control, and anything else is the target",
+        "say it was not\\s+recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target\\s+that resolves to nothing: say so and ask — never guess what to work on"
+      ]
+    },
+    {
+      "id": "max-cap",
+      "rule": "max= is a hard cap on tests added; what is left is reported",
+      "must": [
+        "`max=N` — hard cap on tests added \\(one per new `test`\\)",
+        "Stop at `max`"
+      ]
     }
   ]
 }

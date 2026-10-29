@@ -48,6 +48,14 @@
       "pass": "^\\W*PROPOSE-AND-STOP",
       "fail": "^\\W*CHECK-THEN-PRESENT",
       "class": "redundant"
+    },
+    {
+      "id": "unknown-control",
+      "rule": "unknown-tokens",
+      "prompt": "Situation: the user runs `/web:style src/pages limit=10`. `src/pages` holds 12 files.\n\nQuestion: how many offenses do you report at most, and what do you say about `limit=10`? Answer on the first line with exactly one of: CAP-AT-10, IGNORE-AND-SAY. Then one sentence why.",
+      "pass": "^\\W*IGNORE-AND-SAY",
+      "fail": "^\\W*CAP-AT-10",
+      "class": "redundant"
     }
   ]
 }

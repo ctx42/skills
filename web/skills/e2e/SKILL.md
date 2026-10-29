@@ -9,7 +9,7 @@ description: >
   user flow, or find what the end-to-end suite never exercises.
 license: MIT
 argument-hint: "[route=NAME|PATH | SPEC.spec.ts | flow=\"TEXT\" | all*]
-  [max_tests=N]"
+  [max=N]"
 ---
 
 # e2e
@@ -22,7 +22,7 @@ argument-hint: "[route=NAME|PATH | SPEC.spec.ts | flow=\"TEXT\" | all*]
 /web:e2e route=/sites/:id         the same, by path
 /web:e2e e2e/app.spec.ts          the routes and controls that spec touches, plan-first
 /web:e2e flow="pick a site, open a device, go back to its site"   one named flow; no plan gate
-/web:e2e max_tests=4              cap tests added this run
+/web:e2e max=4                    cap tests added this run
 ```
 
 Executing skill: it reads the router, the pages, and the specs, writes specs
@@ -62,6 +62,10 @@ Sources of truth:
 
 ## Target
 
+Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
+a control, and anything else is the target. `route=` and `flow=` name the
+target, not a control.
+
 - route — `route=<name>` (a route name in the router) or `route=<path>` (its
   path pattern). Just that one; run straight, then report.
 - spec — a spec file: the routes and controls its tests touch. Plan-first.
@@ -73,7 +77,13 @@ State the resolved kind and the route set before reading the specs.
 
 ## Controls
 
-- `max_tests=N` — hard cap on tests added (one per new `test`); report what
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
+
+- `max=N` — hard cap on tests added (one per new `test`); report what
   is left.
 
 ## Inventory
@@ -110,7 +120,7 @@ written and proven.**
      effect no browser shows (an email sent); report with the reason.
 3. Write one test per flow, adding to the spec file the route's neighbours
    live in, else a new `e2e/<area>.spec.ts`. Reuse the region helpers; add
-   one, documented, when a region needs it. Stop at `max_tests`.
+   one, documented, when a region needs it. Stop at `max`.
 4. Prove each new test, one at a time: run it green; then break the behaviour
    it drives — stash the handler's change, or revert the control's effect in
    the source — rebuild, run it red, restore, rebuild, run it green again.

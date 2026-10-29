@@ -8,8 +8,8 @@ description: >
   client's types against the JSON the Go server sends. Use after edits or a
   feature are complete, and to add, change, or learn frontend style rules.
 license: MIT
-argument-hint: "[TARGET* | add|change|remove RULE | learn] [dirs=a,b]
-  [max_issues=N] [depth=light|standard*|full] [plan_first] [fix]"
+argument-hint: "[TARGET* | add|change|remove RULE | learn] [dirs=a,b] [max=N]
+  [depth=light|standard*|full] [plan_first] [fix]"
 ---
 
 # review
@@ -20,8 +20,10 @@ argument-hint: "[TARGET* | add|change|remove RULE | learn] [dirs=a,b]
 /web:review                                  check (default): review the current git diff
 /web:review src/pages                        review one directory
 /web:review src/pages/DevicesPage.vue        review one file
+/web:review src/pages/DevicesPage.vue:42     review the unit enclosing that line
+/web:review component=DeviceTable            one component; func=<name> for one function
 /web:review all                              review the whole frontend and its API contract
-/web:review all max_issues=15 depth=light    cap findings; set review depth
+/web:review all max=15 depth=light           cap findings; set review depth
 /web:review all dirs=pages,stores            restrict to these directories
 /web:review all plan_first                   propose the budget, then stop for approval
 /web:review src/pages fix                    review, then apply the findings
@@ -31,15 +33,21 @@ argument-hint: "[TARGET* | add|change|remove RULE | learn] [dirs=a,b]
 /web:review learn                            mine this session's feedback into rules
 ```
 
-Done-time review for the frontend. Read the invocation from the arguments and
-pick the mode from the first token:
+Done-time review for the frontend. Read the tokens in any order: a reserved word
+is a mode or flag, `key=value` is a control, and anything else is the target.
+`func=` and `component=` name the target, not a control. A `key=value` that
+names no control here, or a word left over once the modes, the target, and any
+text the skill takes are read: say it was not recognized, name the ones that
+exist, and run with the defaults as if it were absent — unless dropping it would
+widen what the run changes; then ask. A target that resolves to nothing: say so
+and ask — never guess what to work on. Pick the mode:
 
-- Check (default) — a target token or empty input; audit finished code, then
-  offer the rules this session taught (Session rules).
-- Rule edit — the first token is `add`/`change`/`remove`, or the input is a
-  plain style preference.
-- Learn — the first token is `learn`; mines the current editing session (since
-  the last /clear) for convention feedback and proposes rules.
+- Check (default) — no mode word; audit the target, then offer the rules this
+  session taught (Session rules).
+- Rule edit — `add`/`change`/`remove`, the rest being the rule text, reserved
+  words included, or the input is a plain style preference.
+- Learn — `learn`; mines the current editing session (since the last /clear)
+  for convention feedback and proposes rules.
 
 Sources of truth:
 - `web:style` (on-demand: Check mode) — owns the style rules, the reference
@@ -67,7 +75,8 @@ fixes (see Target); a named target ignores it.
 
 ### Target
 
-Resolve the frontend root and the target exactly as
+Resolve the frontend root and the target — empty, a directory, a file,
+`FILE:LINE`, `func=`, `component=`, or `all` — exactly as
 `../style/references/checking.md` (Frontend root, Target) does, with one
 difference for the empty target: once this session has made fixes, by this
 skill or any other, committed or not, it is the diff from the commit before
@@ -79,16 +88,15 @@ diff touching the API client module or a Go file that serves its paths.
 
 ### Budget & scope
 
-Read from `$ARGUMENTS`, after the target: `dirs=a,b`, `max_issues=N`
-(default 25, highest severity first), `depth=light|standard|full` (default
-`standard`; `light` reports Blockers and Should-fix only, saying how many it
-left out), `plan_first`, and `fix` (apply the findings after reviewing; it
-neither triggers plan-first nor skips a stop the target triggers). Default to
-plan-first when the target is broad — more than ~40 files or ~3000 lines of
-`.vue`/`.ts` — and no `dirs=` or `max_issues=` was given: propose the budget
-and the directory list, then stop for the user's answer, reviewing nothing
-until it comes. The threshold is `web:style`'s, so the two agree on one
-target.
+Controls and flags: `dirs=a,b`, `max=N` (default 25, highest severity first),
+`depth=light|standard|full` (default `standard`; `light` reports Blockers and
+Should-fix only, saying how many it left out), `plan_first`, and `fix` (apply
+the findings after reviewing; it neither triggers plan-first nor skips a stop
+the target triggers). Default to plan-first when the target is broad — more
+than ~40 files or ~3000 lines of `.vue`/`.ts` — and no `dirs=` or `max=` was
+given: propose the budget and the directory list, then stop for the user's
+answer, reviewing nothing until it comes. The threshold is `web:style`'s, so
+the two agree on one target.
 
 ### Workflow
 
@@ -124,7 +132,7 @@ subagent per directory (`components`, `pages`, `stores`, top-level `src`,
 `e2e`), each invoking `web:style` for its own directory with the rule-id and
 severity list the parent derived once (per `../style/references/checking.md`),
 and reviewing correctness itself. The parent runs the contract check. Workers
-get no share of `max_issues`; the merge applies it once, regrades every worker
+get no share of `max`; the merge applies it once, regrades every worker
 Blocker against the rubric below, and checks every `file:line` against the
 file.
 
@@ -156,7 +164,7 @@ Each finding:
 
 End with a one-line verdict (ship / fix-first) and the per-severity counts,
 then the budget: `depth`, files reviewed — counted off the step-1 listing,
-never estimated — and how many findings went unreported past `max_issues`.
+never estimated — and how many findings went unreported past `max`.
 
 ### Applying fixes
 

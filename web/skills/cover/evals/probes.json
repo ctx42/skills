@@ -26,11 +26,27 @@
       "class": "redundant"
     },
     {
-      "id": "case-count",
-      "rule": "counts-off-artifacts",
-      "prompt": "Situation: `/web:cover func=formatDate max_tests=5`. You add one new `test.each` with two rows to `describe(\"formatDate\")` and nothing else.\n\nQuestion: how many cases did this run add? Answer on the first line with the number only.",
-      "pass": "^\\W*2\\b",
-      "fail": "^\\W*(1|3)\\b",
+      "id": "no-target-is-diff",
+      "rule": "diff-default",
+      "prompt": "Situation: the user types `/web:cover` with no arguments in a frontend with 6 directories under `src/`. `git diff HEAD` changes the body of `formatDate` in src/format.ts and the body of `useSites` in src/stores/sites.ts, and nothing else. You have measured both units.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: WRITE-THE-TESTS, PLAN-AND-WAIT, ASK-FOR-TARGET, COVER-WHOLE-FRONTEND. Then one sentence why.",
+      "pass": "^\\W*PLAN-AND-WAIT",
+      "fail": "^\\W*(WRITE-THE-TESTS|ASK-FOR-TARGET|COVER-WHOLE-FRONTEND)",
+      "class": "redundant"
+    },
+    {
+      "id": "large-target-fans-out",
+      "rule": "auto-fan-out",
+      "prompt": "Situation: the user types `/web:cover all` in a frontend of 7 directories under `src/` holding 65 `.vue`/`.ts` files and about 5,000 lines, and says nothing about subagents.\n\nQuestion: do you dispatch one subagent per directory? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "old-cap-spelling",
+      "rule": "unknown-tokens",
+      "prompt": "Situation: the user types `/web:cover src/stores max_tests=2`; the directory has 9 easy uncovered lines.\n\nQuestion: how many cases does the plan propose at most? Answer on the first line with exactly one of: TWO, NINE, ASK. Then one sentence on what you tell the user about `max_tests=2`.",
+      "pass": "^\\W*ASK\\b",
+      "fail": "^\\W*(TWO|NINE)\\b",
       "class": "redundant"
     }
   ]

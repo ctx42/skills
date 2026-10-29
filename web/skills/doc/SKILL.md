@@ -7,8 +7,8 @@ description: >
   inaccurate comments, or fill missing TSDoc across a function, a component, a
   line, a file, a directory, or the whole frontend.
 license: MIT
-argument-hint: "[func=NAME | component=NAME | FILE:LINE | FILE | DIR* | all]
-  [max_changes=N] [dirs=a,b] [only=tsdoc|exported] [fanout]"
+argument-hint: "[func=NAME | component=NAME | FILE:LINE | FILE | DIR | all]
+  [max=N] [dirs=a,b] [only=tsdoc|exported]"
 ---
 
 # doc
@@ -16,17 +16,17 @@ argument-hint: "[func=NAME | component=NAME | FILE:LINE | FILE | DIR* | all]
 ## Usage
 
 ```
-/web:doc src/stores                 directory (default): item by item, plan-first
+/web:doc                            the working diff (default), plan-first if several items
 /web:doc func=formatDate            one function's TSDoc + body comments; no plan
 /web:doc component=AppLayout        one component's header block + script comments; no plan
 /web:doc src/api.ts:42              the item enclosing that line; no plan
 /web:doc src/api.ts                 every item in the file, plan-first
-/web:doc all                        every directory, sequential, plan-first
-/web:doc src max_changes=8          cap comments changed this run; reports the rest
+/web:doc src/stores                 every item in the directory, plan-first
+/web:doc all                        every directory, plan-first; fans out when large
+/web:doc src max=8                  cap comments changed this run; reports the rest
 /web:doc all dirs=pages,stores      restrict to these directories
 /web:doc src only=tsdoc             skip inline comments
 /web:doc src only=exported          module headers, component headers, exports only
-/web:doc all fanout                 one subagent per directory, merged
 ```
 
 Executing skill: it reads code, edits TSDoc and comments in `.ts` and `.vue`
@@ -49,20 +49,26 @@ Sources of truth:
 
 ## Target
 
-The first token is the target; controls follow it. Resolve the frontend root
-as `../style/references/checking.md` does, then one of five kinds; each fixes
-an order, always worked one item at a time:
+Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
+a control, and anything else is the target. `func=` and `component=` name the
+target, not a control. Resolve the frontend root as
+`../style/references/checking.md` does, then one of six kinds; each fixes an
+order, always worked one item at a time:
 
+- diff (default, no target) — every item whose code or comment the working
+  diff changes (`git diff HEAD`; on a branch with no commits, staged then
+  unstaged); files alphabetically, items top to bottom. Plan-first when it
+  holds more than one item, else run straight. An empty diff: say so and ask
+  for a target.
 - unit — `func=<name>`: an exported function, composable, or store, with its
   TSDoc, its members' TSDoc, and its body's comments; `component=<Name>`: the
   component's header block and its script's TSDoc and comments. Run straight.
 - line — `path:42`: the innermost item containing the line (a body's inline
   comments, or the TSDoc the line sits in). Run straight.
 - file — every item in the file, top to bottom. Plan-first.
-- directory (default) — files alphabetically; items top to bottom.
-  Plan-first.
+- directory — files alphabetically; items top to bottom. Plan-first.
 - all — every directory under `src/`, plus `e2e/`, alphabetically,
-  sequentially unless `fanout`. Plan-first.
+  sequentially unless it fans out. Plan-first.
 
 A documentable item is one of: a production module's header block; a
 component's header block; one function's, type's, const's, or store member's
@@ -73,15 +79,25 @@ item set before reading.
 
 ## Controls
 
-- `max_changes=N` — hard cap on comments changed; report what is left.
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
+
+- `max=N` — hard cap on comments changed; report what is left.
 - `dirs=a,b` — restrict `all` to these directories.
 - `only=tsdoc` — skip inline comments in bodies and templates.
 - `only=exported` — module headers, component headers, and exported symbols
   only.
-- `fanout` — `all` only: one subagent per directory, each given this file's
-  path and `../style/SKILL.md`'s. Merging is not accepting: re-read every
-  added or changed comment against checklist item 4 and the code before it
-  enters the report, and revert a fact the code does not carry.
+
+Fan-out is automatic: a target spanning several directories with more than
+~40 files or ~3000 lines of `.vue`/`.ts` in scope (the threshold `web:style`
+and `web:review` use) runs one subagent per directory, each given this file's
+path and `../style/SKILL.md`'s; a smaller target runs sequentially. Merging
+is not accepting: re-read every added or changed comment against checklist
+item 4 and the code before it enters the report, and revert a fact the code
+does not carry.
 
 ## The checklist
 
@@ -135,7 +151,7 @@ For each item, in strict order; never start item B until item A is written.
 3. Confirm each fact you will write; demote the unverifiable to a flag.
 4. Write the minimal edit that clears the fired items — add only the missing
    fact, fix only the wrong clause; never rewrite a comment that needed a
-   clause. Obey `../style/SKILL.md`, `max_changes`, and the `only=` filter.
+   clause. Obey `../style/SKILL.md`, `max`, and the `only=` filter.
 
 ## Never touch
 
@@ -146,11 +162,13 @@ Never edit these; name them in the report when in scope:
 - generated files;
 - a comment whose intent the code cannot confirm — flag it.
 
-## Plan (file / directory / all)
+## Plan (diff / file / directory / all)
 
-Before writing, present: per item, which checklist items fire (`file:Symbol —
-item`, an item nothing fires on not listed); items to flag unverifiable; and
-never-touch items in scope. Wait for approval, then run the loop and Verify.
+Before writing, present: whether the run fans out and why (the file and line
+count against the threshold); per item, which checklist items fire
+(`file:Symbol — item`, an item nothing fires on not listed); items to flag
+unverifiable; and never-touch items in scope. Wait for approval, then run the
+loop and Verify.
 
 ## Verify
 

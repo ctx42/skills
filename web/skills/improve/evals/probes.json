@@ -4,7 +4,7 @@
     {
       "id": "max-without-loop",
       "rule": "max-needs-loop",
-      "prompt": "Situation: the user types `/web:improve max 3` in a web app's repo. A dev server is running and Chrome is connected.\n\nQuestion: what is your first action? Answer on the first line with exactly one of: STOP-WITH-MESSAGE, AUDIT-THREE, AUDIT-ONE. Then one sentence why.",
+      "prompt": "Situation: the user types `/web:improve max=3` in a web app's repo. A dev server is running and Chrome is connected.\n\nQuestion: what is your first action? Answer on the first line with exactly one of: STOP-WITH-MESSAGE, AUDIT-THREE, AUDIT-ONE. Then one sentence why.",
       "pass": "^\\W*STOP-WITH-MESSAGE\\b",
       "fail": "^\\W*AUDIT-(THREE|ONE)\\b",
       "class": "redundant"
@@ -88,7 +88,7 @@
     {
       "id": "report-max-reached",
       "rule": "report",
-      "prompt": "Situation: `/web:improve auto loop max 2` finished. `git log <start>..HEAD` shows 2 commits; one change before them was discarded after a check stayed red; measurable findings remain.\n\nQuestion: write the report's first line exactly, and nothing else on that line.",
+      "prompt": "Situation: `/web:improve auto loop max=2` finished. `git log <start>..HEAD` shows 2 commits; one change before them was discarded after a check stayed red; measurable findings remain.\n\nQuestion: write the report's first line exactly, and nothing else on that line.",
       "pass": "^\\W*2 commits, 1 dropped; stopped: max reached\\b",
       "fail": "^\\W*(?!2 commits, 1 dropped; stopped: max reached)",
       "bullets": [

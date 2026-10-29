@@ -7,7 +7,7 @@ description: >
   commits it with before/after screenshots. Use when asked to improve, polish,
   or fix a web app's UX, UI, accessibility, or layout, or a part a screenshot
   shows.
-argument-hint: "[auto] [loop] [max <n>] [<focus>]"
+argument-hint: "[auto] [loop] [max=N] [<focus>]"
 license: MIT
 ---
 
@@ -19,17 +19,23 @@ license: MIT
 /web:improve                  audit the app, build the top fix, stop for commit, drop, or a prompt
 /web:improve auto             the same, committing without stopping
 /web:improve loop             one change after another until the stop rule
-/web:improve auto loop max 5  unattended, at most 5 commits
+/web:improve auto loop max=5  unattended, at most 5 commits
 /web:improve <focus>          do what the focus asks to the part it names or a screenshot shows
 ```
 
-`auto`, `loop`, and `max <n>` are leading keywords in any order; the first
-other token starts the focus, free text to the end. A pasted image, or an image
-path in the focus, shows the part. `max <n>` counts change commits only, a
-`docs(ux): never` commit included — drops, discarded failures, and the final
-check's commits do not count — and needs `loop`: given without it, say
-"`max` needs `loop`" and stop before any other step. Without `loop` a run makes
-at most one change. No focus audits the whole app.
+Modes and controls come first, in any order; the first other word starts the
+focus, which runs to the end — reserved words in it are text. A pasted image, or
+an image path in the focus, shows the part. `max=N` counts change commits only,
+a `docs(ux): never` commit included — drops, discarded failures, and the final
+check's commits do not count — and needs `loop`: given without it, say "`max`
+needs `loop`" and stop before any other step. Without `loop` a run makes at most
+one change. No focus audits the whole app.
+
+A `key=value` that names no control here, or a word left over once the modes and
+the focus are read: say it was not recognized, name the ones that exist, and run
+with the defaults as if it were absent — unless dropping it would widen what the
+run changes; then ask. A focus that resolves to nothing: say so and ask — never
+guess what to work on.
 
 Arguments: $ARGUMENTS
 
@@ -123,14 +129,13 @@ Rank, top first:
 
 ## 3. Focus
 
-A focus — any text after the keywords — names a part of the UI or shows it in a
-screenshot, with what the user wants; one naming only a part audits that part.
-The description is an instruction: implement it even when it is a product
-decision. It beats a `UX:` comment, which the same commit removes, its body
-saying so. The instruction is the run's first change; with `loop`, the run then
-keeps improving that part by the normal rules. With a focus, no commit touches
-markup or styles outside the focused part; a fix that would goes to
-Recommendations.
+A focus names a part of the UI or shows it in a screenshot, with what the user
+wants; one naming only a part audits that part. The description is an
+instruction: implement it even when it is a product decision. It beats a `UX:`
+comment, which the same commit removes, its body saying so. The instruction is
+the run's first change; with `loop`, the run then keeps improving that part by
+the normal rules. With a focus, no commit touches markup or styles outside the
+focused part; a fix that would goes to Recommendations.
 
 ## 4. Change cycle
 
