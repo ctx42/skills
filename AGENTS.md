@@ -18,7 +18,10 @@ Skills ship no `README.md`; the repo-level one orients humans.
 1. **Edit only in this repo.** The installed copies under
    `~/.claude/plugins/cache/` are generated; never edit there.
 2. **Keep `SKILL.md` token-optimized.** These prompts are loaded into context.
-   Prefer short, dense, imperative wording over prose.
+   Prefer short, dense, imperative wording over prose. When an edit pushes a
+   `SKILL.md` past the lint's token aim, move a section whose trigger is a
+   condition (a mode, a claim type) into `references/<name>.md` and leave a
+   pointer plus its one-line rule; never cut settled rules to make room.
 3. **Skills live under a group.** A skill's path is `<group>/skills/<name>/`.
    Adding one to an existing group needs no marketplace edit — the default
    `skills/` scan finds it. A new group needs its own `.claude-plugin/plugin.json`
