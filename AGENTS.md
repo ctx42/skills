@@ -43,6 +43,9 @@ Skills ship no `README.md`; the repo-level one orients humans.
    manual audit only; a blind round is a release audit, not the gate on a
    change. A `LESSONS.md` change is a behaviour change too: skills load it at
    run time.
+7. **Skills stay interactive.** A skill that asks and waits is correct; never
+   add an "if no user is reachable, assume X and continue" fallback. Wiring an
+   unattended run belongs to the caller or an explicit mode (`auto`, `loop`).
 
 ## Dev loop
 
