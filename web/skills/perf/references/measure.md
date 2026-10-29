@@ -6,6 +6,7 @@ build goes to the run's scratch directory, never into the tree.
 ## Contents
 
 - [Setup](#setup)
+- [Survey](#survey)
 - [Interactions and long tasks](#interactions-and-long-tasks)
 - [Layout shift](#layout-shift)
 - [Leaks](#leaks)
@@ -46,6 +47,17 @@ A sample is one value; a series is 5 samples of the same action from the same
 state, and its median is the measurement. Put the state back between samples
 (reload, or undo the action: clear the search, sort back) so every sample
 starts alike.
+
+## Survey
+
+When the project has a CDP client (Playwright, Puppeteer), survey every view's
+load metrics in one scripted run before any MCP measurement:
+`Emulation.setCPUThrottlingRate` at 4, the observers above in an init script, 5
+loads per view. One MCP call per sample does not scale to a whole app. An app
+behind a login the script cannot reuse is surveyed through the MCP. The survey
+only picks what to measure: no finding, rank, or keep decision rests on its
+numbers, so confirm each finding, and take every before and after series, trace,
+and visible-change check, through the MCP.
 
 ## Interactions and long tasks
 
