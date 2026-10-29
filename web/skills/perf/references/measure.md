@@ -117,7 +117,12 @@ loads, and after every action while playing:
   `performance.getEntriesByType("resource").filter((e) => ["fetch", "xmlhttprequest"].includes(e.initiatorType))`,
   a request whose `startTime` is after another's `responseEnd`. It is a
   finding only when the code shows the later request uses nothing from the
-  earlier response.
+  earlier response. A request fired in a mount hook (`onMounted`,
+  `useEffect`) starts only after the first render, so it trails one fired
+  during setup; the fix starts the independent read during setup. After
+  moving a request earlier, judge a new trailing pair by start times: a
+  request starting no later than before, now trailing a response that moved
+  ahead of it, is no new finding.
 
 A counted metric is the request count of the view's load; for a sequential
 finding, the number of requests that start after a response they do not use
