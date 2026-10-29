@@ -1,0 +1,35 @@
+{
+  "skill_name": "review",
+  "evals": [
+    {
+      "id": 1,
+      "name": "review-the-current-diff",
+      "skills": [
+        "review"
+      ],
+      "setup": "A staged diff that drops one error return and wraps another with `fmt.Errorf` using `%v` instead of `%w`. Nothing names a target. A caller in the same package matches the `%v`-wrapped error with `errors.Is`.",
+      "query": "/review",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "rule-edit-add-change-remove",
+      "skills": [
+        "review"
+      ],
+      "setup": "`../style/references/production.md` already carries a receiver-naming rule. The session issues three rule edits in turn.",
+      "query": "/review add \"no naked returns in tests\", then /review change \"receivers are three letters\", then /review remove \"the compile-time check rule\"",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "learn-from-the-session",
+      "skills": [
+        "review"
+      ],
+      "setup": "A finished session with four corrections. Two are genuinely absent from the style rule files: the user rejected a `time.After` inside a `select` loop because each iteration leaks a timer until it fires, and asked that a string built in a loop use `strings.Builder` rather than `+=`. One repeats a rule the rulebook already carries verbatim — never store a `context.Context` in a struct field. The fourth was a rename specific to this project's domain vocabulary.",
+      "query": "/review learn",
+      "files": []
+    }
+  ]
+}

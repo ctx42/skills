@@ -1,0 +1,102 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "root": "..",
+    "useIgnoreFile": true
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "linter": {
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "noPlaywrightUselessAwait": "error"
+      },
+      "nursery": {
+        "noFloatingPromises": "error",
+        "noMisusedPromises": "error",
+        "noVueBooleanDefault": "error",
+        "noVueVHtml": "error",
+        "useNullishCoalescing": "error",
+        "useVueConsistentEventHyphenation": "error",
+        "useVueMatchingComponentFileName": "error"
+      },
+      "style": {
+        "noEnum": "error",
+        "noNestedTernary": "error",
+        "noVueOptionsApi": "error",
+        "useConsistentArrayType": "error",
+        "useConsistentTestIt": {
+          "level": "error",
+          "options": {
+            "function": "test",
+            "withinDescribe": "test"
+          }
+        },
+        "useConsistentTypeDefinitions": "error",
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "filenameCases": ["camelCase", "PascalCase"]
+          }
+        },
+        "useForOf": "error",
+        "useNamingConvention": {
+          "level": "error",
+          "options": {
+            "strictCase": true,
+            "conventions": [
+              {
+                "selector": {
+                  "kind": "typeParameter"
+                },
+                "formats": ["PascalCase"]
+              },
+              {
+                "selector": {
+                  "kind": "typeMember"
+                },
+                "formats": ["camelCase", "snake_case"]
+              },
+              {
+                "selector": {
+                  "kind": "objectLiteralProperty"
+                },
+                "formats": ["camelCase", "snake_case", "CONSTANT_CASE"]
+              }
+            ]
+          }
+        },
+        "useVueConsistentDefinePropsDeclaration": "error",
+        "useVueDefineMacrosOrder": "error"
+      },
+      "suspicious": {
+        "noConditionalExpect": "error",
+        "noPlaywrightWaitForTimeout": "error",
+        "useExpect": "error"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["*.config.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    }
+  ]
+}

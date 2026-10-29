@@ -1,0 +1,89 @@
+{
+  "skill_name": "review",
+  "probes": [
+    {
+      "id": "no-test-run",
+      "rule": "no-tools-while-reviewing",
+      "prompt": "Situation: the user runs `/review ./pkg/foo` on a small package and says 'be thorough'. You are unsure whether a function is correct; `go test ./pkg/foo` takes two seconds.\n\nQuestion: do you run go test during the review? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "plan-first-flag",
+      "rule": "plan-first-stops",
+      "prompt": "Situation: the user runs `/review all plan_first` on a module of 3 small packages.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: REVIEW-THEN-PRESENT, PROPOSE-AND-STOP. Then one sentence why.",
+      "pass": "^\\W*PROPOSE-AND-STOP",
+      "fail": "^\\W*REVIEW-THEN-PRESENT",
+      "class": "redundant"
+    },
+    {
+      "id": "double-finding",
+      "rule": "dedupe-style-correctness",
+      "prompt": "Situation: go:style reports a `%v` error wrap at store.go:40 as a style offense. During correctness review you see the same line breaks an error chain that a caller unwraps with errors.Is.\n\nQuestion: how many findings do you report for that line? Answer on the first line with exactly ONE or TWO, then one sentence saying under which dimension.",
+      "pass": "^\\W*ONE\\b.*correctness",
+      "fail": "^\\W*TWO",
+      "class": "redundant"
+    },
+    {
+      "id": "worker-cap",
+      "rule": "fanout-cap-at-merge",
+      "prompt": "Situation: `/review all max=10` on a large module; you fan out one subagent per package, 12 packages.\n\nQuestion: what cap do you give each worker? Answer on the first line with exactly one of: NONE, ONE-TENTH, TEN. Then one sentence why.",
+      "pass": "^\\W*NONE\\b",
+      "fail": "^\\W*(TEN|ONE-TENTH)",
+      "class": "redundant"
+    },
+    {
+      "id": "ungrounded-grade",
+      "rule": "grading",
+      "prompt": "Situation: during review you find a function that looks fragile, but you cannot name any reachable input that gives a wrong result, panic, or data loss.\n\nQuestion: what is the highest severity you may give it? Answer on the first line with exactly one of: BLOCKER, SHOULD-FIX, NIT. Then one sentence why.",
+      "pass": "^\\W*SHOULD-FIX",
+      "fail": "^\\W*BLOCKER",
+      "class": "redundant"
+    },
+    {
+      "id": "empty-diff",
+      "rule": "state-target",
+      "prompt": "Situation: the user runs `/review` with no target. `git diff HEAD` is empty (nothing uncommitted), and the feature branch has three commits ahead of main.\n\nQuestion: what do you review? Answer on the first line with exactly one of: NOTHING, LAST-COMMIT, BRANCH-DIFF, ASK-USER. Then one sentence on what you tell the user.",
+      "pass": "^\\W*BRANCH-DIFF",
+      "fail": "^\\W*(NOTHING|LAST-COMMIT|ASK-USER)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "merge-regrade-blocker",
+      "rule": "merge-regrade-blocker",
+      "prompt": "Situation: `/review all` fanned out over 9 packages, one worker each. All workers have returned, each with its findings already graded Blocker / Should-fix / Nit; together they report 14 correctness Blockers. You are writing the merged report.\n\nQuestion: what do you do with the workers' Blocker grades? Answer on the first line with exactly one of: KEEP-WORKER-GRADES, REGRADE-EACH-BLOCKER. Then one sentence why.",
+      "pass": "^\\W*REGRADE-EACH-BLOCKER",
+      "fail": "^\\W*KEEP-WORKER-GRADES",
+      "class": "redundant"
+    },
+    {
+      "id": "dirty-manifest-baseline",
+      "rule": "dirty-manifest-baseline",
+      "context": [
+        "SKILL.md",
+        "references/fixing.md"
+      ],
+      "prompt": "Situation: the user runs `/review ./pkg/foo fix`. Before editing, `go test ./... -race` fails in ./pkg/bar with a missing-module error. `git status` shows go.mod and go.sum modified and uncommitted.\n\nQuestion: what is your next step? Answer on the first line with exactly one of: REPORT-PREEXISTING-AND-STOP, RERUN-HEAD-CLEAN-WORKTREE. Then one sentence why.",
+      "pass": "^\\W*RERUN-HEAD-CLEAN-WORKTREE",
+      "fail": "^\\W*REPORT-PREEXISTING",
+      "class": "load-bearing"
+    },
+    {
+      "id": "session-rules-offered",
+      "rule": "session-rules-close",
+      "prompt": "Situation: the user runs `/review ./pkg/foo`. Earlier this session, before the review, while you edited Go code, the user corrected you twice: 'return early instead of nesting the else branch'. go:style carries no such rule. You have written the findings report.\n\nQuestion: where does that correction go in this run? A) a line in this skill's LESSONS.md; B) a candidate style rule listed after the report for the user to pick; C) nowhere until the user runs `/review learn`. Answer on the first line with the letter only, then one sentence why.",
+      "pass": "^\\W*B\\b",
+      "fail": "^\\W*[AC]\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "old-cap-spelling",
+      "rule": "unknown-token-defaults",
+      "prompt": "Situation: the user runs `/review ./pkg/foo max_issues=5`.\n\nQuestion: how many findings do you report at most? Answer on the first line with exactly one of: FIVE, TWENTY-FIVE. Then one sentence on what you tell the user about `max_issues=5`.",
+      "pass": "^\\W*TWENTY-FIVE",
+      "fail": "^\\W*FIVE",
+      "class": "redundant"
+    }
+  ]
+}

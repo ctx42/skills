@@ -1,0 +1,91 @@
+{
+  "skill_name": "cover",
+  "rules": [
+    {
+      "id": "direct-tests-only",
+      "rule": "Coverage counts only the unit's own tests run in isolation",
+      "must": [
+        "Coverage a unit picks up from a caller's tests or a\\s+parent component's tests does not count",
+        "The unit — never the file or the\\s+directory — is the unit of work"
+      ]
+    },
+    {
+      "id": "thresholds-never-lowered",
+      "rule": "Coverage thresholds are never lowered; the config is never edited to measure",
+      "must": [
+        "Never lower the project's coverage\\s+thresholds",
+        "the\\s+config is never edited",
+        "Never lower a threshold to pass"
+      ]
+    },
+    {
+      "id": "one-unit-at-a-time",
+      "rule": "Finish and verify one unit before the next",
+      "must": [
+        "Never start unit B until unit A's loop is\\s+complete and verified"
+      ]
+    },
+    {
+      "id": "empty-match-is-uncovered",
+      "rule": "A filter matching no test is an uncovered unit, not a clean one",
+      "must": [
+        "that is an uncovered unit, not a clean one"
+      ]
+    },
+    {
+      "id": "plan-before-writing",
+      "rule": "File, directory, and all targets present a plan and wait before writing",
+      "must": [
+        "Wait\\s+for approval, then run steps 3–4 unit by unit"
+      ]
+    },
+    {
+      "id": "counts-off-artifacts",
+      "rule": "Report numbers come off the finished artifacts",
+      "must": [
+        "Every number is read off the finished artifacts"
+      ]
+    },
+    {
+      "id": "diff-default",
+      "rule": "No target works the units the working diff touches; an empty diff asks",
+      "must": [
+        "diff \\(default, no target\\) — every unit whose code the working diff changes",
+        "An empty diff: say so and ask for a target"
+      ]
+    },
+    {
+      "id": "auto-fan-out",
+      "rule": "Fan-out is automatic by size, announced in the plan; the max= cap is divided among workers",
+      "must": [
+        "Fan-out is automatic: a target spanning several directories with more than\\s+~40 files or ~3000 lines",
+        "whether the run\\s+fans out and why",
+        "a directory whose share is 0 gets no worker"
+      ]
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Unrecognized tokens are named and defaults run; an empty target resolution asks",
+      "must": [
+        "Read the tokens in any order: a reserved word is a mode or flag, `key=value`\\s+is a control, and anything else is the target",
+        "say it was not\\s+recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target\\s+that resolves to nothing: say so and ask — never guess what to work on"
+      ]
+    },
+    {
+      "id": "max-cap",
+      "rule": "max= is a hard cap on cases, counted per test or test.each row",
+      "must": [
+        "`max=N` — hard cap on cases added"
+      ]
+    },
+    {
+      "id": "delegated-by-audit",
+      "rule": "Delegated by web:audit: report gaps, nothing written",
+      "must": [
+        "A run not told so is not delegated, and runs its target kind as usual",
+        "No\\ plan\\ gate,\\ no\\ test\\ written,\\ no\\ Verify,\\ no\\ fan-out"
+      ]
+    }
+  ]
+}

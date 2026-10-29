@@ -1,0 +1,148 @@
+# Finding, wording, and confirming a change
+
+What counts as a finding, how a proposal words its fix, and how the user
+confirms it. Read before the interactive summary or the first proposal,
+whichever comes first; `autofix` never needs it.
+
+## Contents
+
+- Findings
+- Wording
+- The confirmation
+- Open questions
+- Fixes that skip the loop
+- Resolving a comment block
+- Glossary
+
+## Findings
+
+When listing the issues found before the loop, keep only findings that survive
+scrutiny — a real rule violation, not a preference.
+
+- Requirements that read as overlapping are often independently testable (a
+  disabled control vs a grayed one; a length cap vs its truncation format); a
+  scope item covering one capability across many surfaces is atomic; a
+  compound term whose parts are in the project glossary needs no entry.
+- Never remove, or propose removing, an author's inline `(TBD: …)` reminder
+  on a requirement, colored or not: it is the author's worklist, so recommend
+  withdrawing a finding that asks to drop it, one citing the standard's rule
+  against notes in a requirement included.
+- Check every capitalized noun phrase that reads like a name against the
+  glossaries and the requirements it summarizes; an undefined pseudo-name is a
+  finding.
+- Before merging two names for one thing, check they mean the same; when they
+  differ in meaning, never pick one — put the question to the user ("Who would
+  know" in `doc-corpus.md`).
+- Before proposing, look for a prior ruling on what the change touches: grep
+  `<srd>.decisions.md` and the knowledge base for the text it changes and for
+  each entry id, matching the ranges and lists that span it ("ABC-3 to ABC-5",
+  "ABC-6, ABC-8"), not the bare id alone; check every out-of-scope item against
+  each surface the change adds, or its class. A ruling that keeps the text
+  means leave it and recommend withdrawing the finding; one that excluded what
+  the change adds is a conflict the proposal states.
+- On an SRD another tool syncs, check the synced source after a round-trip
+  before re-applying a whitespace fix: a fix the sync restores is a no-op —
+  report it, never apply it again.
+
+## Wording
+
+- Name the location the way the user can find it in the file — the
+  requirement, scope, or glossary id, and for prose that has none the line
+  number. Never an ordinal the user would have to count out ("paragraph
+  three"); this holds for what comes next as much as for the proposal itself.
+- Keep each requirement standalone: never resolve a conflict by having one
+  requirement cite others by id ("apply ABC-6 through ABC-10 only …"); put the
+  condition in each rule, through a glossary term when it is long.
+- When the user rewords a requirement to generalize it, confirm what the
+  generalization means before proposing to remove siblings it seems to make
+  redundant.
+- Glossary definitions stay general: never name UI surfaces, labels, or where a
+  term is shown — those change; they belong in UI requirements.
+- Never propose a link from a requirement to end-user documentation; when a fix
+  would need one, propose stating the rule or cutting the requirement instead.
+- Write units of measure lowercase (minutes, hours, days), selectable values
+  included; Title Case is for UI component names only.
+- A bulk rename (a case change across defined terms, say) checks each term
+  against the glossary that defines it first: a UI component name keeps its
+  form.
+- Never propose a casing-only change to make running text match a glossary
+  heading, self-found or from a review, before checking the project's casing
+  rules. Unless they require the glossary's casing in running text — silent
+  or missing rules included — drop it; a review finding asking for it skips
+  the loop with no proposal and goes in the manifest as declined.
+- When a fix loosens an exhaustive rule ("exactly", "only") to admit an
+  exception, keep its exclusion half and state the exception inside it; then
+  re-validate what the rule no longer forbids.
+- Check a heading rename against every other heading in the document, at any
+  level or parent: a new name that duplicates one recreates the defect the
+  rename fixes.
+- Before carrying a fix to a sibling surface, check the sibling has the same
+  shape (one item or a list); never collapse a per-item value into one value
+  because a sibling was collapsed.
+- Pad every Markdown table in a proposal to aligned columns, before-and-after
+  tables included; check each row's width before sending.
+- Proposals asked for to paste elsewhere carry only the before and after text:
+  no rationale, headers, framing, or follow-up notes.
+
+## The confirmation
+
+The keys that close a proposal (loop step 2 in `SKILL.md`):
+
+- `Y` (Yes): apply, then stay on the current entry and propose its next issue;
+  when that entry has no more, say so and name the way on ("nothing further on
+  ABC-3 — next entry, or name one"), then stop. `Y` never advances the walk, and
+  the user should not have to guess what does. In `feedback` the unit is the
+  review's finding (`modes.md`).
+- `YN` (Yes Next): apply and move to the next entry, leaving its remaining
+  issues flagged.
+- `S` (Skip): change nothing; leave the issue flagged. Like `Y`, it does not
+  advance the walk, even when it was the entry's last issue.
+- `E` (Edit): apply the user's amended text in place of the proposal.
+
+Ask one question at a time — the confirmation *is* that question. Never widen
+it into a menu of variants (`E1`/`E2`), never pair it with an open design
+question or an offer to do something else, and never put the held-over
+questions to the user as a set. When a proposal has two defensible wordings,
+pick one and propose it; `E` is how the user takes the other.
+
+## Open questions
+
+Anything held over goes in an `## Open questions` numbered list — one line
+each, no rationale — that you carry silently and draw from one item at a time,
+in the order the user set. That list is terminal output, not a section of the
+SRD: it belongs to this session and empties with it. Show it only when the user
+asks what is still open, renumbered from 1 each time so answered items leave no
+holes; what remains at the end goes in the closing manifest: numbered from 1,
+one line each — the list itself, never a bare count.
+
+## Fixes that skip the loop
+
+Both apply, log, report in one line, and go on — never ask (`autofix` takes
+them only as errata).
+
+- A first-use link the standard requires: when an edit, a finding, or the
+  session-end check finds a project-glossary term unlinked at its first use in
+  document order (an entry added earlier takes that use over), link that use
+  per srd-procedures step 2 and unlink a later use that carried the link. A
+  name the standard exempts from linking or a use that may mean the generic
+  sense goes through the loop instead. Text, case, and comment blocks stay as
+  found. A standard that requires no such link has no such fix.
+- A heading off its siblings' title case, the case fix the errata allowlist
+  covers.
+
+## Resolving a comment block
+
+Only on the user's explicit ask: remove the `> [!comment]` callout and its
+`[^…]` footnote reference from the requirement together, and log the removal. A
+requirement removed with a comment on it follows `id-rules.md` ("Removal and
+comment blocks").
+
+## Glossary
+
+A run that reaches no term never calls `glossary_terms`. The procedure in
+`srd-procedures.md` waits for the first thing that needs a term settled and
+lands before it: the first proposal that introduces, renames or rests on a
+possibly glossary-defined term, or in `interactive` the step-1 summary, which
+promises every issue found and so owes the term-definition rule too. A term put
+to the user against an unloaded term set misses that rule. Hold the set for
+the session.

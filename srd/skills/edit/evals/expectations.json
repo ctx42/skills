@@ -1,0 +1,84 @@
+{
+  "skill_name": "edit",
+  "expectations": [
+    {
+      "id": 8,
+      "name": "autofix-bulk-applies-errata",
+      "expected_behavior": [
+        "Acts on nothing outside the `## Errata` block: no mechanical issue absent from it is fixed, and the SRD is not re-scanned for new ones",
+        "Runs neither the glossary resolution nor the approval gate — errata touch neither ids nor terms — so no approval-gate status line and no glossary question reach the user, and no `glossary_terms` call is made; the closing manifest's status follow-up is not a gate line",
+        "Lists the three substitutions and takes one confirmation for the whole batch, not the per-change loop",
+        "Verifies each `old` at its anchor, applies the two that match exactly once, and reports the third as stale rather than guessing where it belongs",
+        "Writes no review file and invokes no `review` run; prints the exact hand-off command `review initiatives/payload-booking/srd.md check #n,n`, scoped to the two applied errata, for the user to run",
+        "Closes with a manifest naming what was applied, what was skipped and why, and the findings handed to `check` — not what `check` later did with them"
+      ],
+      "blind_only": [3]
+    },
+    {
+      "id": 11,
+      "name": "corpus-grounded-edit-routes-the-unconfirmable",
+      "expected_behavior": [
+        "Searches the corpus before accepting the edit, and the draft gap it hands over names the queries tried",
+        "Captures the gap with `srd:report-doc-gap` as a draft silently — no interruption and no grilling mid-edit",
+        "States the retry count as a fact inside the proposal, so the user's `YN` attests it and `srd:kb` receives it — the fact is in front of the user when the key is pressed, not looked up afterwards",
+        "Asks no separate \"bank this?\" question",
+        "Hands the unconfirmable claim to `srd:report-doc-gap` and the attested fact to `srd:kb`, and neither interrupts the edit in progress"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "feedback-without-a-review-file",
+      "expected_behavior": [
+        "Says the review file is absent and stops: `#n` names a finding only a review file can carry",
+        "Invents no findings and proposes no edit of its own, even though the SRD has real defects",
+        "Leaves `initiatives/payload-booking/srd.md` unchanged and writes no decision log",
+        "Says it in one or two lines naming the missing file, and reports nothing about its own start — no approval-gate line, no draft-check result, no closing manifest",
+        "Offers no menu of other ways in (run `review`, paste findings, drop the argument): the user asked for a finding number, and the answer is that there are none"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "autofix-inserts-missing-notice",
+      "expected_behavior": [
+        "Inserts the Conventions section with the notice exactly once, where the standard places it: directly after the Introduction and ahead of `## Boundaries`, not below the header table",
+        "Applies the ordinary substitution in the same batch",
+        "Hands the insertion to `check` with the other applied finding: `review initiatives/payload-booking/srd.md check #4,10`"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "autofix-misplaced-notice-is-stale",
+      "expected_behavior": [
+        "Inserts no second notice and adds no Conventions section: the SRD still holds exactly one notice, left where it was below the header table",
+        "Reports `#10` as stale — a notice already exists, and moving a misplaced one is not errata",
+        "Applies `#4` and hands only it to `check`: `review initiatives/payload-booking/srd.md check #4`"
+      ]
+    },
+    {
+      "id": 22,
+      "name": "summary-default-newest-block",
+      "expected_behavior": [
+        "Covers only the newest block: the 14-day swap deadline and the 21-day cutoff appear, the earlier block's PB-1 change does not",
+        "Links the SW-2 line to #8 in trailing parentheses and never names #3, the older finding on the same id",
+        "Lists withdrawn #9 (stamped inside the newest block's span) and neither #4 (stamped in the earlier block's span) nor the unstamped #2",
+        "Puts the PB-3 rewording only in a closing `Wording` section, after every group of changes in meaning",
+        "Opens with the header line `Payload Booking: changes 2026-09-30 15:20` and uses no Markdown: no asterisks, backticks, or `#` headings",
+        "Writes no file: no Write or Edit call, the decision log and review file included",
+        "Groups the changes under the SRD's own requirement group names, `Booking Requests` and `Slot Swaps`, each on its own line",
+        "Names no open finding the selection did not touch: #12 is absent"
+      ]
+    },
+    {
+      "id": 23,
+      "name": "summary-merges-a-day",
+      "expected_behavior": [
+        "Opens with the header line `Payload Booking: changes 2026-09-30`, with no time",
+        "Covers both 2026-09-30 blocks: the PB-1 change and the 14-day swap deadline both appear",
+        "Reports PB-2 once, by its end state: the 21-day cutoff appears once and the 28-day cutoff not at all",
+        "Lists withdrawn #4 and #9, both stamped on 2026-09-30, and not the unstamped #2",
+        "Leaves out the 2026-09-29 block: #3 is not named",
+        "Writes no file: no Write or Edit call"
+      ]
+    }
+  ]
+}

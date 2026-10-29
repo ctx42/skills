@@ -1,0 +1,65 @@
+{
+  "skill_name": "grill-me",
+  "probes": [
+    {
+      "id": "invoked-by-skill-no-offer",
+      "rule": "persist-offer",
+      "prompt": "Situation: srd:report-doc-gap invoked you on a documentation gap as the subject. You interviewed the user, every branch is resolved, and you have just presented the structured summary.\n\nQuestion: what closes your reply? Answer on the first line with exactly one of: OFFER-PLAN-FILE, ASK-IF-ANYTHING-MISSING, NOTHING-AFTER-SUMMARY. Then one sentence why.",
+      "pass": "^\\W*NOTHING-AFTER-SUMMARY",
+      "fail": "^\\W*(OFFER|ASK)",
+      "class": "redundant"
+    },
+    {
+      "id": "conflict-no-self-reconcile",
+      "rule": "conflict-hold-both",
+      "prompt": "Situation: mid-interview, branch A was resolved as 'all exports are synchronous'. The user now says export of large accounts should run in the background. Both statements cannot hold; 'small exports sync, large exports async' would reconcile them neatly.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: RECORD-MERGED-RULE, LATEST-WINS, REOPEN-A. Then one sentence why.",
+      "pass": "^\\W*REOPEN-A",
+      "fail": "^\\W*(RECORD|LATEST)",
+      "class": "redundant"
+    },
+    {
+      "id": "opening-count-line",
+      "rule": "progress-count",
+      "prompt": "Situation: cold open. The user pasted a plan for a billing migration. You mapped the decision tree into exactly 5 branches; none is resolved yet.\n\nQuestion: write the exact progress count that your opening message must contain, in the skill's required format, on the first line and nothing else on that line. Then one sentence on what else the opening message contains.",
+      "pass": "^\\W*0 resolved, 5 open\\b",
+      "fail": "^\\W*(5 branches|5 open, 0 resolved)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "unowned-branch-summary",
+      "rule": "open-branch-owner",
+      "prompt": "Situation: all branches but one are resolved. The last needs the monthly peak request rate, a number nobody in this conversation has; the platform team owns it. The user says 'just assume 100 rps and wrap up'.\n\nQuestion: on the first line, write exactly what the summary says for that branch, in at most 15 words. Then one sentence why.",
+      "pass": "^\\W*[^\\n]*platform team",
+      "fail": "^[^\\n]*\\bassum",
+      "class": "redundant",
+      "bullets": [
+        "branch-nobody-present-can-resolve#b1",
+        "branch-nobody-present-can-resolve#b3"
+      ]
+    },
+    {
+      "id": "sub-questions-split",
+      "rule": "one-question-per-turn",
+      "prompt": "Situation: opening turn. The user's plan is a nightly data sync. Your branch map is ready; the first topic is scheduling: who triggers it, at what time, in which timezone, and what happens on a failed run.\n\nQuestion: how many of these may you put to the user in this one turn? Answer on the first line with a single digit, then one sentence why.",
+      "pass": "^\\W*1\\b",
+      "fail": "^\\W*[2-9]",
+      "class": "redundant"
+    },
+    {
+      "id": "hold-for-exposition",
+      "rule": "hold-for-exposition",
+      "prompt": "Situation: `/grill-me`. The user writes: 'Before you start, I want to walk you through the whole design — it'll take a few messages.' Their next message describes the storage layer and leaves two obvious gaps: retention, and who may delete records.\n\nQuestion: what does your reply ask? A) the highest-impact gap, retention; B) only whether they have more to add; C) both gaps in one turn. Answer on the first line with the letter only, then one sentence why.",
+      "pass": "^\\W*B\\b",
+      "fail": "^\\W*[AC]\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "summary-edge-no-reopen",
+      "rule": "reaudit-on-collapse",
+      "prompt": "Situation: all branches are settled and you are writing the summary. Branch 5 settled \"every export is logged\". You now notice that branch 2's answer, \"exports are refused for guests\", raises a case branch 5 never covered: is a refused export logged?\n\nQuestion: what do you do? Answer on the first line with exactly one of: NOT-COVERED-LINE, REOPEN-BRANCH-5. Then one sentence why.",
+      "pass": "^\\W*NOT-COVERED-LINE\\b",
+      "fail": "^\\W*REOPEN-BRANCH-5\\b",
+      "class": "redundant"
+    }
+  ]
+}

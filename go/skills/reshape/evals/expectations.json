@@ -1,0 +1,35 @@
+{
+  "skill_name": "reshape",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "ranked-multi-archetype-proposals",
+      "expected_behavior": [
+        "Opens with the resolved library, the consumer scope, and the call-site count",
+        "Proposes across several archetypes, including at least one structural move — absorbing the repeated sequence, or moving a responsibility upstream — not only a rename or a single helper",
+        "Ranks by net impact and shows the working: each row's Reach is a fraction of the stated N, and the one-line rationale names what it trades against",
+        "Every proposal shows a before → after taken from one real call site, cited `file:line` and matching that file's text there — no composite excerpt spanning files, no placeholder where the before belongs",
+        "Offers concrete diffs, since the library source is editable here"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "proposals-stay-on-the-library",
+      "expected_behavior": [
+        "Every proposal changes `oskit`'s API; the consumer diff is shown as the payoff, never as the proposal itself",
+        "Names the call-site-only cleanup it declined and why, rather than silently omitting it — the reader needs to see the trap was spotted",
+        "Proposed signatures follow the style Naming, Errors, and API design rules",
+        "Edits nothing — reports the proposal set and stops"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "external-library-public-surface",
+      "expected_behavior": [
+        "Detects that the library is external and says so",
+        "Frames every proposal at the public-API level and notes it cannot diff internals",
+        "Offers a local wrapper as the fallback for changes that cannot land upstream"
+      ]
+    }
+  ]
+}

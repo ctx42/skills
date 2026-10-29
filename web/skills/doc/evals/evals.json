@@ -1,0 +1,44 @@
+{
+  "skill_name": "doc",
+  "evals": [
+    {
+      "id": 1,
+      "name": "component-header-and-member-tsdoc",
+      "skills": [
+        "doc"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree; `bun install --frozen-lockfile` has run in `web/`. `web/src/components/AppLayout.vue` declares the props `title` and `wide` and a `default` slot; its header block names `title` and the `default` slot but not `wide`, and the `title` member of the `defineProps` type carries its own TSDoc.",
+      "query": "/web:doc component=AppLayout",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies installed, to run Biome and vue-tsc in Verify."
+    },
+    {
+      "id": 2,
+      "name": "file-target-plan-and-facts",
+      "skills": [
+        "doc"
+      ],
+      "setup": "The same fixture repository as scenario 1, clean tree. The user answers the plan with `go`.",
+      "query": "/web:doc web/src/api.ts",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies installed, to run Biome and vue-tsc in Verify."
+    },
+    {
+      "id": 3,
+      "name": "pages-directory-stale-and-restating",
+      "skills": [
+        "doc"
+      ],
+      "setup": "The same fixture repository as scenario 1, clean tree. The user answers the plan with `go`.",
+      "query": "/web:doc web/src/pages only=tsdoc",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies installed, to run Biome and vue-tsc in Verify."
+    }
+  ]
+}

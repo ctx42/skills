@@ -1,0 +1,29 @@
+{
+  "skill_name": "e2e",
+  "probes": [
+    {
+      "id": "smoke-project",
+      "rule": "no-credentials",
+      "prompt": "Situation: the Playwright config has a project `e2e` against the fake and a project `smoke` that logs in to a test environment with credentials from the environment, which are set on this machine.\n\nQuestion: which projects does the run use? Answer on the first line with exactly one of: E2E-ONLY, BOTH. Then one sentence why.",
+      "pass": "^\\W*E2E-ONLY",
+      "fail": "^\\W*BOTH",
+      "class": "redundant"
+    },
+    {
+      "id": "old-cap-spelling",
+      "rule": "unknown-tokens",
+      "prompt": "Situation: the user types `/web:e2e route=settings max_tests=1`; the route has 4 uncovered controls, each needing its own test.\n\nQuestion: how many tests do you add at most? Answer on the first line with exactly one of: ONE, FOUR, ASK. Then one sentence on what you tell the user about `max_tests=1`.",
+      "pass": "^\\W*ASK\\b",
+      "fail": "^\\W*(ONE|FOUR)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "not-delegated-keeps-gate",
+      "rule": "delegated-by-audit",
+      "prompt": "Situation: earlier in this session the user ran `/web:audit`. Now the user types `/e2e` themselves; three routes have controls no spec drives.\n\nQuestion: do you stop for the user's approval before writing any spec? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "skill_name": "review",
+  "rules": [
+    {
+      "id": "read-only-check",
+      "rule": "Check mode never changes code unless asked",
+      "must": [
+        "Do not change code unless asked"
+      ]
+    },
+    {
+      "id": "no-tools-while-reviewing",
+      "rule": "Review judges by reading; no gofmt/vet/lint/test",
+      "must": [
+        "do not run gofmt, go vet, golangci-lint, or go test",
+        "a shell width measure"
+      ]
+    },
+    {
+      "id": "style-delegated",
+      "rule": "Style dimension delegated to go:style, not re-derived",
+      "must": [
+        "do not re-derive style rules here",
+        "report offenses only"
+      ]
+    },
+    {
+      "id": "plan-first-stops",
+      "rule": "plan_first proposes then stops; broad targets default to plan-first",
+      "must": [
+        "propose the budget and the package list, then stop for the user's answer",
+        "Default to plan-first: if the target is broad"
+      ]
+    },
+    {
+      "id": "state-target",
+      "rule": "State resolved target; empty diff falls back to the branch diff against base",
+      "must": [
+        "State the resolved target and the exact package/file set before reviewing",
+        "diff it against the base branch"
+      ]
+    },
+    {
+      "id": "fanout-cap-at-merge",
+      "rule": "Fan-out workers get no cap share; cap applied once at the merge",
+      "must": [
+        "Workers get no share of the cap",
+        "the cap is applied once at the merge"
+      ]
+    },
+    {
+      "id": "dedupe-style-correctness",
+      "rule": "A defect that is both is reported once, under correctness",
+      "must": [
+        "Report it once, under correctness, with the higher of its two grades"
+      ]
+    },
+    {
+      "id": "mandated-forms",
+      "rule": "Never flag mandated style forms (segmented strings) as defects",
+      "must": [
+        "never propose a backtick raw string for it"
+      ]
+    },
+    {
+      "id": "grading",
+      "rule": "Correctness findings graded by a named input",
+      "must": [
+        "one you cannot tie to an input is at most Should-fix"
+      ]
+    },
+    {
+      "id": "lsp-verify",
+      "rule": "Cross-boundary claims verified with LSP, not asserted",
+      "must": [
+        "confirm it with the `LSP` tool"
+      ]
+    },
+    {
+      "id": "report-commands-run",
+      "rule": "Report names every command the pass ran",
+      "must": [
+        "one line naming every command this pass ran"
+      ]
+    },
+    {
+      "id": "fix-gate",
+      "rule": "Applying fixes requires the fixing.md test gate; rule edits need confirmation",
+      "must": [
+        "applying findings requires the test gate in `references/fixing.md`",
+        "never write a rule without confirmation"
+      ]
+    },
+    {
+      "id": "merge-regrade-blocker",
+      "rule": "Fan-out: one rule-id/tier list in every brief; every worker Blocker regraded at the merge",
+      "must": [
+        "derive\\ the\\ `go:style`\\ rule\\-id\\ and\\ tier\\ list\\ once",
+        "regrade\\ every\\ correctness\\ Blocker\\ a\\ worker\\ reports\\ against\\ Output's\\ rubric"
+      ]
+    },
+    {
+      "id": "dirty-manifest-baseline",
+      "file": "references/fixing.md",
+      "rule": "A red baseline with uncommitted go.mod/go.sum is rerun on HEAD in a clean worktree before being called pre-existing",
+      "must": [
+        "with\\ any\\ uncommitted\\ change",
+        "rerun\\ the\\ baseline\\ on\\ `HEAD`\\ in\\ a\\ clean\\ worktree",
+        "apply\\ the\\ fixes\\ in\\ the\\ working\\ tree\\ as\\ usual,\\ and\\ run\\ every\\ later\\ test\\ gate\\ in\\ that\\ worktree"
+      ]
+    },
+    {
+      "id": "verify-merged-file-line",
+      "rule": "Every worker-reported file:line is checked against the file at the merge",
+      "must": [
+        "Check every worker's `file:line` against the file before it enters the report"
+      ]
+    },
+    {
+      "id": "count-from-listing",
+      "rule": "The reported file count is read off the scope listing, never estimated",
+      "must": [
+        "counted off the step-1 listing at\\s+report time less any skipped, never estimated"
+      ]
+    },
+    {
+      "id": "session-rules-close",
+      "rule": "Every Check run closes with Learn's scan of the session's feedback, writing only what the user picks; fan-out workers never run it",
+      "must": [
+        "Close every completed Check run with Learn mode's scan",
+        "then\\s+write only\\s+what the user picks",
+        "a fan-out worker never runs it"
+      ]
+    },
+    {
+      "id": "delegated-by-audit",
+      "rule": "Delegated by go:audit: findings uncapped, no plan_first, fix, Session rules, or fan-out",
+      "must": [
+        "no `plan_first` stop \\(the audit agreed the budget\\), no `fix`, no Session rules, and no fan-out"
+      ]
+    },
+    {
+      "id": "unknown-token-defaults",
+      "rule": "A token that is no control, mode, or target is named as unrecognized and the run uses the defaults; an unresolvable target asks",
+      "must": [
+        "say it was not recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target that resolves to nothing: say so and ask — never guess what to work on"
+      ]
+    }
+  ]
+}

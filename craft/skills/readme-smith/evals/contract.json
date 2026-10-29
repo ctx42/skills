@@ -1,0 +1,118 @@
+{
+  "skill_name": "readme-smith",
+  "rules": [
+    {
+      "id": "never-fabricate",
+      "rule": "Unverifiable claims, commands, versions, numbers are gaps: ask, then mark; never invented",
+      "must": [
+        "Never fabricate\\.",
+        "you cannot verify from\\s+the repo or the user is a gap: ask, and if still unknown mark it"
+      ]
+    },
+    {
+      "id": "unsupported-claim-deleted",
+      "rule": "A claim the README merely makes and cannot support is deleted, not TODO-marked",
+      "must": [
+        "is deleted, not marked",
+        "preserves the invention"
+      ]
+    },
+    {
+      "id": "repo-gap-reply-only",
+      "rule": "A gap in the repo (no license, CI, remote) goes in the reply, not the README",
+      "must": [
+        "goes in the reply and nowhere else"
+      ]
+    },
+    {
+      "id": "run-shipped-commands",
+      "rule": "Run every install and quickstart command shipped; never ship one not run",
+      "must": [
+        "Run every install and quickstart command you ship",
+        "never ship\\s+one you did not run"
+      ]
+    },
+    {
+      "id": "sandbox-failure-not-in-readme",
+      "rule": "A command that cannot pass yet, for a sandbox or a project reason, is reported in the reply; the README is left alone",
+      "must": [
+        "Say so in the\\s+reply and leave the README alone",
+        "never warn the reader about your\\s+sandbox"
+      ]
+    },
+    {
+      "id": "unpublished-ship-as-published",
+      "rule": "A command failing because the package is unpublished ships as if published, with no 'not published' note",
+      "must": [
+        "Ship it as if the package were published",
+        "no \"not published\" note"
+      ]
+    },
+    {
+      "id": "re-measure-numbers",
+      "rule": "Numbers called measured are re-measured against the final file",
+      "must": [
+        "Re-measure anything you call measured",
+        "measured against what the file\\s+finally ships"
+      ]
+    },
+    {
+      "id": "go-source-own-yes",
+      "rule": "Writing Go Example files needs its own yes, asked before any .go file is written; a no is honoured",
+      "must": [
+        "it gets its own yes — the approval covering the README does not reach\\s+it",
+        "never write the file and\\s+mention it afterwards"
+      ]
+    },
+    {
+      "id": "audit-no-edits-before-approval",
+      "rule": "Audit mode reports findings only and edits nothing until approved",
+      "must": [
+        "No edits until the user approves the findings",
+        "Report only\\."
+      ]
+    },
+    {
+      "id": "create-ask-then-stop",
+      "rule": "Create mode asks the gaps in one batch and stops; drafts only after answers",
+      "must": [
+        "ask in one\\s+batched round, a numbered list, then stop: draft only once the user has\\s+answered"
+      ]
+    },
+    {
+      "id": "no-paste-readme",
+      "rule": "The README is written to file, not pasted into chat",
+      "must": [
+        "do not paste it back into chat"
+      ]
+    },
+    {
+      "id": "gomake-evidence",
+      "rule": "Sibling repos count as gomake evidence only for a repo with no README yet",
+      "must": [
+        "Only a repo with no README yet, which has no markers of its own, checks the\\s+same owner's sibling repos"
+      ]
+    },
+    {
+      "id": "audit-go-gate-before-writes",
+      "rule": "In audit mode the Go-source gate comes right after approval, before any write, so the README is written once",
+      "must": [
+        "it comes right after approval, before any file is written, so the README\\s+is written once"
+      ]
+    },
+    {
+      "id": "readme-without-markers-wins",
+      "rule": "A usable README without markers outranks a gomake config or CI step: hand-written examples there are no finding",
+      "must": [
+        "outranks a gomake config or CI step"
+      ]
+    },
+    {
+      "id": "unfinishable-run-counts",
+      "rule": "An install command the environment cannot finish counts as run: ships as written, a reply note, no TODO",
+      "must": [
+        "ships as written with a reply note and no\\s+TODO in the file"
+      ]
+    }
+  ]
+}

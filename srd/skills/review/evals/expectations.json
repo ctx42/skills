@@ -1,0 +1,52 @@
+{
+  "skill_name": "review",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "default-review-of-a-flawed-srd",
+      "expected_behavior": [
+        "Reads the whole SRD, then writes `initiatives/scrub-refunds/srd.review.md` — and makes no edit to `srd.md`",
+        "Groups findings by document section under the section names the standard's layout gives (`## Boundaries` before `## Requirements`)",
+        "Tags the two-rule requirement `[blocker, atomicity]` citing RQT-1, and the uncovered Included item `[blocker, coverage]` citing BND-2 — the identifiers the fetched standard gives those rules",
+        "Collects the British spelling into the `## Errata` block at the top, tagged `[minor, linguistic]` citing `(SRD:house)`, stated as the substitution `` `behaviour` → `behavior` ``",
+        "Closes with a per-severity count and whether a blocker stands between the SRD and the standard's Acceptance Gate",
+        "The closing per-severity counts match what the review file actually contains — a tally is a claim about the file, and a wrong one sends the author to the wrong findings"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "facts-vs-corpus-routes-doc-gaps",
+      "expected_behavior": [
+        "Runs the draft check first and, on the prior session's drafts, invokes `srd:report-doc-gap` to drain them before any corpus search",
+        "Routes the unconfirmable `TLM-2` resend count to `srd:report-doc-gap` as a draft gap and files no finding against it in `srd.review.md` — an unconfirmable claim becomes a draft gap, never a review finding. Quoting the claim inside some other finding is not the test; where the gap went is",
+        "Records the contradicted `TLM-5` frame rate as a `reference` finding in the review file",
+        "After the closing tally, offers to work the `TLM-2` draft gap now or later, and never files it silently",
+        "Records the KB-contradicted `TLM-6` retention as a `reference` finding citing `kb/telemetry-channels.md` that names both figures and settles neither by trust or precedence — either the SRD or the KB may change"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "no-drafts-skip-the-delegate",
+      "expected_behavior": [
+        "Echoes the draft-check result and invokes `srd:report-doc-gap` neither at the start nor at the close — no draft exists, and this run captured nothing to offer",
+        "Raises no `reference` finding and captures no gap: the SRD asserts no platform fact",
+        "Creates `initiatives/bay-calendar/srd.review.md` and writes the three defects with fresh numbers from `#1`",
+        "The reply leads with the outcome — findings and the tally — with no narrated startup sequence (\"first I check…, then I read…\"); the one-clause draft-check result bullet 1 asks for is not narration"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "errata-re-sorts-findings",
+      "expected_behavior": [
+        "Reads the errata procedure in `references/errata-mode.md` before re-sorting",
+        "#2, a qualifying fix written as prose, moves to `## Errata` keeping its number and is rewritten as the substitution `wheather` → `weather`",
+        "#1 moves to `## Errata` keeping its number, and the Introduction heading it leaves empty is dropped",
+        "#4 is split: its spelling fix moves to `## Errata` under the next free number, #6, as `behaviour` → `behavior`, and #4 stays under Requirements naming only the voice fix",
+        "#3 stays under Requirements unchanged, Resolved #5 is untouched, and `## Errata` sits above the document sections",
+        "Never edits `initiatives/scrub-refunds/srd.md`",
+        "Bumps `updated:`, since findings moved",
+        "The reply names the numbers that moved and the split (#1, #2, #4, #6)"
+      ]
+    }
+  ]
+}

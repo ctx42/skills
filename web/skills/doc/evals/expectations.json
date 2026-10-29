@@ -1,0 +1,51 @@
+{
+  "skill_name": "doc",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "component-header-and-member-tsdoc",
+      "expected_behavior": [
+        "Adds `wide` to `AppLayout.vue`'s header block in backticks, saying what it changes (the content area drops its maximum width), and adds no TSDoc to the `wide` member of the `defineProps` type",
+        "Deletes the TSDoc on the `title` member of the `defineProps` type, keeping `title` named in the header block",
+        "Leaves the rest of the header block's wording and the script's other comments unchanged (rewrapping the block around the new sentence is allowed), and changes no code",
+        "Reports the two changes as `file:Symbol — 5: …` (the incomplete header) and `file:Symbol — 6: …` (the member TSDoc), and a Verify line naming Biome, vue-tsc, and the width measure as passed"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": 2,
+      "name": "file-target-plan-and-facts",
+      "expected_behavior": [
+        "Presents a plan listing the items whose checklist items fire, and writes nothing before `go`",
+        "Adds to `device`'s TSDoc that it returns null when the server has no device of that ID",
+        "Leaves the TSDoc of `devices`, `ApiError`, `readError`, and the module header unchanged",
+        "Changes no code in `api.ts`, and Verify passes"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": 3,
+      "name": "pages-directory-stale-and-restating",
+      "expected_behavior": [
+        "Corrects `SitesPage.vue`'s header from \"by city\" to by name, matching the sort in the code",
+        "Leaves the inline comment `// Delete the key when the value is empty.` in `DevicesPage.vue` untouched, because `only=tsdoc` skips inline comments",
+        "Changes no code in any page, and Verify passes"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+}

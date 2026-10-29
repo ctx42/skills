@@ -1,0 +1,38 @@
+{
+  "skill_name": "skill-eval",
+  "evals": [
+    {
+      "id": 1,
+      "name": "audit-defaults-to-the-diff",
+      "skills": [
+        "skill-eval"
+      ],
+      "setup": "A writable checkout of a skills repo with the `<group>/skills/<name>/` layout and its eval scripts working. Two skills, `craft:cm` and `go:style`, are clean at HEAD; the working tree changes only `craft/skills/cm/SKILL.md`, adding a rule that contradicts one of its `contract.json` phrases and a 40-line section past the token aim.",
+      "query": "/skill-eval",
+      "files": [],
+      "requires": "A writable skills-repo checkout with the `<group>/skills/<name>/` layout, its eval tools runnable, and the `claude` CLI signed in: the probe, hunt, and trigger tiers call models, which a sandboxed agent case cannot. A stand-in that reads the tools' output from a fixture does not establish that the skill runs them, in order, against the right target."
+    },
+    {
+      "id": 2,
+      "name": "run-asks-before-agent-cases",
+      "skills": [
+        "skill-eval"
+      ],
+      "setup": "The same repo with one changed skill, `craft:cm`. Lint and the routine tiers pass. `scripts/eval-changed.sh` lists 5 agent cases for it with an estimate of $1.50-4. The user declines the agent cases when asked.",
+      "query": "/skill-eval run",
+      "files": [],
+      "requires": "A writable skills-repo checkout with the `<group>/skills/<name>/` layout, its eval tools runnable, and the `claude` CLI signed in: the probe, hunt, and trigger tiers call models, which a sandboxed agent case cannot. A stand-in that reads the tools' output from a fixture does not establish that the skill runs them, in order, against the right target."
+    },
+    {
+      "id": 3,
+      "name": "fix-commits-each-improvement",
+      "skills": [
+        "skill-eval"
+      ],
+      "setup": "An audit earlier in the conversation found two problems in `craft:cm`: a probe that classes `prior`, and an ambiguous sentence the hunt split on. The user has an unrelated uncommitted edit to `README.md`. `craft:cm` is in the skill list. During the run the user corrects how `craft:cm` words one rule.",
+      "query": "/skill-eval fix craft:cm",
+      "files": [],
+      "requires": "A writable skills-repo checkout with the `<group>/skills/<name>/` layout, its eval tools runnable, and the `claude` CLI signed in: the probe, hunt, and trigger tiers call models, which a sandboxed agent case cannot. A stand-in that reads the tools' output from a fixture does not establish that the skill runs them, in order, against the right target."
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "skill_name": "perf",
+  "probes": [
+    {
+      "id": "max-without-loop",
+      "rule": "max-needs-loop",
+      "prompt": "Situation: the user types `/web:perf max=3` in a web app's repo. A dev server is running and Chrome is connected.\n\nQuestion: what is your first action? Answer on the first line with exactly one of: STOP-WITH-MESSAGE, MEASURE-THREE, MEASURE-ONE. Then one sentence why.",
+      "pass": "^\\W*STOP-WITH-MESSAGE\\b",
+      "fail": "^\\W*(MEASURE-THREE|MEASURE-ONE)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "no-server-never-start",
+      "rule": "prerequisites-stop",
+      "context": [
+        "SKILL.md",
+        "references/start.md"
+      ],
+      "prompt": "Situation: `/web:perf auto loop` in a Vite app's repo. `package.json` has `\"dev\": \"vite\"`; no port is listening.\n\nQuestion: what do you do? Answer on the first line with exactly one of: RUN-NPM-DEV, STOP, ASK-FOR-URL. Then one sentence why.",
+      "pass": "^\\W*STOP\\b",
+      "fail": "^\\W*(RUN-NPM-DEV|ASK-FOR-URL)\\b",
+      "bullets": [
+        "no-dev-server-stops#b2"
+      ],
+      "class": "redundant"
+    },
+    {
+      "id": "below-threshold-stops",
+      "rule": "thresholds",
+      "prompt": "Situation: `/web:perf auto loop`, no focus, nothing committed yet. The only measurable interaction is sorting a table: INP median 150 ms at 4x CPU. Memoizing a comparator would bring it to about 60 ms. No other finding exists.\n\nQuestion: what do you do? Give one sentence of reasoning, then on the last line exactly one of: FIX-SORT, STOP.",
+      "pass": "STOP\\W*$",
+      "fail": "FIX-SORT\\W*$",
+      "class": "redundant"
+    },
+    {
+      "id": "leak-needs-every-step",
+      "rule": "thresholds",
+      "context": [
+        "SKILL.md",
+        "references/measure.md"
+      ],
+      "prompt": "Situation: `/web:perf auto`. Heap sizes in bytes for one view, after the first visit and after each of 5 navigate-away-and-back cycles: 1875000, 2275000, 2680000, 2720000, 3120000, 3520000 — 1.6 MB of growth overall.\n\nQuestion: is this view a leak finding? Answer on the first line with exactly one of: LEAK, NO-LEAK. Then one sentence why.",
+      "pass": "^\\W*NO-LEAK\\b",
+      "fail": "^\\W*(LEAK)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "leak-floor",
+      "rule": "thresholds",
+      "context": [
+        "SKILL.md",
+        "references/measure.md"
+      ],
+      "prompt": "Situation: `/web:perf auto`. Heap sizes in bytes for one view, after the first visit and after each of 5 navigate-away-and-back cycles: 4800000, 4836000, 4871000, 4907000, 4942000, 4978000 — it grows at every cycle.\n\nQuestion: is this view a leak finding? Answer on the first line with exactly one of: LEAK, NO-LEAK. Then one sentence why.",
+      "pass": "^\\W*NO-LEAK\\b",
+      "fail": "^\\W*(LEAK)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "no-gain-drops",
+      "rule": "noise-keep",
+      "prompt": "Situation: `/web:perf auto cache the Settings form markup`. Before: long task in 5 runs 40, 44, 42, 46, 41 ms (median 42). After the change: 36, 38, 37, 39, 36 ms (median 37). Checks pass.\n\nQuestion: what do you do with the change? Answer on the first line with exactly one of: COMMIT, DROP. Then one sentence why.",
+      "pass": "^\\W*DROP\\b",
+      "fail": "^\\W*(COMMIT)\\b",
+      "bullets": [
+        "focus-change-with-no-gain#b3"
+      ],
+      "class": "load-bearing"
+    },
+    {
+      "id": "bench-gain-keeps",
+      "rule": "noise-keep",
+      "context": [
+        "SKILL.md",
+        "references/benchmarks.md"
+      ],
+      "prompt": "Situation: `/web:perf auto`. The change replaces an insertion sort in a pure JS function with `Array.sort`. Benchmark, 5 runs each: before 18.1, 18.6, 18.9, 18.4, 19.0 ms/op; after 1.5, 1.6, 1.6, 1.7, 1.6 ms/op. Browser sort INP, 5 runs each: before 430, 464, 470, 448, 502 ms (median 464, spread 72); after 440, 448, 455, 430, 470 ms (median 448). Checks pass.\n\nQuestion: what do you do with the change? Answer on the first line with exactly one of: COMMIT, DROP. Then one sentence why.",
+      "pass": "^\\W*COMMIT\\b",
+      "fail": "^\\W*(DROP)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "drop-retires-finding",
+      "rule": "interactive-replies",
+      "context": [
+        "SKILL.md",
+        "references/stops.md"
+      ],
+      "prompt": "Situation: `/web:perf loop`. At the first stop the change built the Devices rows in a fragment to fix the search long task (420 ms); the user replied `drop`, nothing more. The tree is restored. The search long task is still the top-ranked finding, and an unrelated technique — caching each device's lowercased search text once at load — would cut it to 40 ms without touching the rendering the user rejected.\n\nQuestion: do you build the caching fix next? Answer on the first line with exactly one of: BUILD, SKIP. Then one sentence why.",
+      "pass": "^\\W*SKIP\\b",
+      "fail": "^\\W*(BUILD)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "write-seen-backs-off",
+      "rule": "write-safety",
+      "prompt": "Situation: `/web:perf auto loop`, no focus. Typing in the Orders page's search box sends `POST /api/orders/search` with the query; it changes no data. Typing there is the slowest interaction you have seen.\n\nQuestion: what do you do with that search box for the rest of the run? Answer on the first line with exactly one of: KEEP-MEASURING-IT, STOP-USING-IT. Then one sentence why.",
+      "pass": "^\\W*STOP-USING-IT\\b",
+      "fail": "^\\W*(KEEP-MEASURING-IT)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "rank-timed-first",
+      "rule": "rank",
+      "prompt": "Situation: `/web:perf auto`, no focus, no `PERF:` comments. Two findings remain: (a) on the landing page, the same `GET /api/user` is sent twice during load; (b) on a report page three levels deep, clicking `Expand all` takes INP 300 ms at 4x CPU.\n\nQuestion: which do you change first? Answer on the first line with exactly one of: DUPLICATE-REQUEST, EXPAND-ALL. Then one sentence why.",
+      "pass": "^\\W*EXPAND-ALL\\b",
+      "fail": "^\\W*(DUPLICATE-REQUEST)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "visible-change-recommends",
+      "rule": "no-visible-change",
+      "prompt": "Situation: `/web:perf auto loop`, no focus. Typing in the search box takes INP 400 ms at 4x CPU because every keystroke re-filters 5000 rows. Debouncing the input by 150 ms brings INP to 90 ms.\n\nQuestion: what do you do? Answer on the first line with exactly one of: COMMIT-DEBOUNCE, RECOMMEND. Then one sentence why.",
+      "pass": "^\\W*RECOMMEND\\b",
+      "fail": "^\\W*(COMMIT-DEBOUNCE)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "targeted-tests-only",
+      "rule": "final-check",
+      "context": [
+        "SKILL.md",
+        "references/start.md"
+      ],
+      "prompt": "Situation: `/web:perf auto loop`. Change 2 memoizes the device table's sort in `web/src/devices/sort.ts`, with a new unit test; it beats the noise. The project's checks are `biome check .`, `vue-tsc --noEmit`, `vitest run` (400 tests across the app), and `playwright test`, all green on the untouched tree.\n\nQuestion: which tests do you run before committing change 2? Answer on the first line with exactly one of: RELATED-TESTS-ONLY, FULL-SUITE, NO-TESTS. Then one sentence why.",
+      "pass": "^\\W*RELATED-TESTS-ONLY\\b",
+      "fail": "^\\W*(FULL-SUITE|NO-TESTS)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "final-revert-conflict",
+      "rule": "final-check-red",
+      "context": [
+        "SKILL.md",
+        "references/final-check.md"
+      ],
+      "prompt": "Situation: `/web:perf auto loop` stopped by the stop rule after three change commits. The final full check run fails a `playwright` test that passed on the untouched tree; `git bisect` pins it on change 2, and one repair left it red. `git revert --no-commit` of change 2 stops with a conflict in `web/src/devices/store.ts`, which change 3 also edited.\n\nQuestion: what do you do? Answer on the first line with exactly one of: RESOLVE-CONFLICT, ABORT-AND-REPORT-RED, REVERT-BOTH. Then one sentence why.",
+      "pass": "^\\W*ABORT-AND-REPORT-RED\\b",
+      "fail": "^\\W*(RESOLVE-CONFLICT|REVERT-BOTH)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "single-run-stops",
+      "rule": "one-change-without-loop",
+      "prompt": "Situation: `/web:perf auto` (no `loop`). The first change was discarded: it showed no gain beyond the noise. Four findings remain.\n\nQuestion: how many more changes does the run start? Answer on the first line with only a number. Then one sentence why.",
+      "pass": "^\\W*0\\b",
+      "fail": "^\\W*[1-9]",
+      "class": "redundant"
+    },
+    {
+      "id": "report-max-reached",
+      "rule": "report",
+      "context": [
+        "SKILL.md",
+        "references/end-of-run.md"
+      ],
+      "prompt": "Situation: `/web:perf auto loop max=2` finished. `git log <start>..HEAD` shows 2 commits; one change before them was discarded for no measurable gain; timed findings remain.\n\nQuestion: write the report's first line exactly, and nothing else on that line.",
+      "pass": "^\\W*2 commits, 1 dropped; stopped: max reached\\b",
+      "fail": "^\\W*(?!2 commits, 1 dropped; stopped: max reached)",
+      "bullets": [
+        "loop-stops-at-max#b2"
+      ],
+      "class": "load-bearing"
+    },
+    {
+      "id": "leak-measure-line",
+      "rule": "cpu-4x",
+      "context": [
+        "SKILL.md",
+        "references/measure.md"
+      ],
+      "prompt": "Situation: `/web:perf auto`, no focus. The Devices view leaked a keydown listener: its heap grew about 5 MB on each of 5 navigate-away-and-back cycles. You removed the listener on unmount; the after series grows under 50 KB per cycle. The heap snapshots were taken as the skill directs.\n\nQuestion: write the commit's `Perf-Measure:` line, and nothing else.",
+      "pass": "(?i)(unthrottled|1x|cpuThrottlingRate:? 1\\b|no (cpu )?throttl)",
+      "fail": "(?i)^(?!.*(unthrottled|1x|cpuThrottlingRate:? 1\\b|no (cpu )?throttl))",
+      "class": "load-bearing"
+    },
+    {
+      "id": "leak-code-growth",
+      "rule": "leak-sum-skips-code",
+      "context": [
+        "SKILL.md",
+        "references/measure.md"
+      ],
+      "prompt": "Situation: `/web:perf auto`. One view's heap snapshots, after the first visit and after each of 5 navigate-away-and-back cycles, total 5.00, 5.31, 5.60, 5.92, 6.21, 6.52 MB of self size. Diffing the first and last snapshot by node type, all of the growth is nodes of type `code`; every other type is flat.\n\nQuestion: is this view a leak finding? Answer on the first line with exactly one of: LEAK, NO-LEAK. Then one sentence why.",
+      "pass": "^\\W*NO-LEAK\\b",
+      "fail": "^\\W*LEAK\\b",
+      "class": "redundant"
+    }
+  ]
+}

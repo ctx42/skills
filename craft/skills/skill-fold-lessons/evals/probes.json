@@ -1,0 +1,41 @@
+{
+  "skill_name": "skill-fold-lessons",
+  "probes": [
+    {
+      "id": "second-hunt-split",
+      "rule": "eval-loop-bounds",
+      "prompt": "Situation: `/skill-fold-lessons`. The hunt found a split on a line you folded; you reworded that line once. The re-run hunt now reports a new split on the reworded line itself.\n\nQuestion: what do you do with the new split? Answer on the first line with exactly one of: REWORD-AGAIN, BACKLOG, REVERT-FOLD. Then one sentence why.",
+      "pass": "^\\W*BACKLOG",
+      "fail": "^\\W*(REWORD-AGAIN|REVERT-FOLD)",
+      "bullets": [],
+      "class": "redundant"
+    },
+    {
+      "id": "description-needs-triggers",
+      "rule": "description-triggers",
+      "prompt": "Situation: `/skill-fold-lessons`. A lesson says the skill should also run when users ask to 'tidy' a plan, so you added that word to the skill's description in SKILL.md. The repo routes requests to skills by description.\n\nQuestion: besides SKILL.md, which file does this fold also change? Answer on the first line with exactly one of: NONE, README, TRIGGER-CASES, CHANGELOG. Then one sentence why.",
+      "pass": "^\\W*TRIGGER-CASES",
+      "fail": "^\\W*(NONE|README|CHANGELOG)",
+      "bullets": [],
+      "class": "redundant"
+    },
+    {
+      "id": "no-second-ask",
+      "rule": "confirm-once",
+      "prompt": "Situation: `/skill-fold-lessons`. The user approved your proposal for three skills. While folding the second skill, a Keep rule fits equally well in two adjacent sections of the same step, and either reads correctly.\n\nQuestion: what do you do? Answer on the first line with exactly one of: ASK-USER, PICK-ONE-AND-CONTINUE. Then one sentence why.",
+      "pass": "^\\W*PICK-ONE-AND-CONTINUE",
+      "fail": "^\\W*ASK-USER",
+      "bullets": [],
+      "class": "redundant"
+    },
+    {
+      "id": "sibling-reference-merge",
+      "rule": "validate-before-propose",
+      "prompt": "Situation: `/skill-fold-lessons` on skill `edit`. A lesson reads \"Keep an errata fix's excluded terms in full.\" `edit`'s own SKILL.md does not say this, but the sibling reference `../create/references/errata.md`, which `edit` loads for errata fixes, already states the same rule.\n\nQuestion: what verdict do you give the lesson? Answer on the first line with exactly one of: KEEP, MERGE, DROP. Then one sentence why.",
+      "pass": "^\\W*MERGE",
+      "fail": "^\\W*(KEEP|DROP)",
+      "bullets": [],
+      "class": "redundant"
+    }
+  ]
+}

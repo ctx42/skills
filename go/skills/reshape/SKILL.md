@@ -1,0 +1,219 @@
+---
+name: reshape
+description: >
+  Studies how a Go project consumes a given library and proposes ranked
+  changes to that library's API that would simplify the consuming code;
+  read-only. Use when asked how a dependency's API could change to clean up
+  the code that uses it, for an API wishlist, or for consumer-driven API
+  design.
+license: MIT
+argument-hint: "LIB [packages=a,b] [max=N]"
+---
+
+# reshape
+
+## Usage
+
+```
+/go:reshape github.com/x/y/must          consumer scope is the whole module (default)
+/go:reshape ../must                      the library by its directory (or a file) on disk
+/go:reshape must packages=render         restrict the consumer scope to these packages
+/go:reshape must max=5                   cap proposals reported (default 8, highest impact first)
+```
+
+Consumer-driven API review. Point it at a library the project depends on; it
+maps every call site, diagnoses the friction, and proposes the highest-impact
+changes to the *library's* API — the ones that would most simplify the code
+that uses it. It reasons only; it edits nothing.
+
+Keep the proposals on the **library** surface. The consumer simplification is
+the *payoff* shown in before/after, not the change itself — never propose
+refactoring only the call sites with the API left as-is.
+
+Sources of truth:
+- `../style/references/production.md` (on-demand: when drafting a proposal —
+  its Naming, Errors, and API design sections) — the Go idioms every proposed signature
+  must respect; do not restate them.
+- [references/change-catalog.md](references/change-catalog.md) (on-demand: the
+  entry for the archetype being drafted) — detection cue, API shape, and a Go
+  before/after per archetype in the list below.
+
+## Target
+
+Read the tokens in any order: a reserved word is a mode or flag, `key=value`
+is a control, and anything else is the target. The target is the library; with
+no target token, take it from the user's prose.
+
+- library — an import path (`github.com/x/y/pkg/must`), a module path, a
+  short package name the project imports, or a directory or file on disk: the
+  package it holds, named by the nearest `go.mod`'s module path. A path whose
+  package the project does not import resolves to nothing. Consumer scope
+  defaults to the current module.
+- `packages=a,b` — restricts the consumer scope to these packages.
+- `max=N` — caps the proposals reported (default 8), highest impact first.
+
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
+
+## Modifiability
+
+Detect whether the library source is editable:
+- local — in this repo, reachable via a `replace` directive, a `go.work`
+  module, or given as a path on disk. Source is readable → propose concrete
+  signature/type diffs. A path no `replace` or `go.work` points the project at
+  is another copy than the one it builds against: say so in the header line.
+- external — a normal module dependency. Work from the public surface (godoc /
+  the exported API) → propose at the API-shape level and note you can't diff
+  internals.
+
+## Workflow
+
+1. Resolve target + modifiability (above); list the symbols the consumer uses.
+2. Map usage with the `LSP` tool: `findReferences` on each imported symbol
+   (`workspaceSymbol`/`hover` for shape), falling back to grep on the import
+   path when no language server is reachable — whether none is configured or
+   the harness exposes no `LSP` tool at all; say which, and that the mapping is
+   textual, since grep cannot tell a same-named symbol on an unrelated type
+   from a real call site. Record every call site.
+3. Diagnose friction per usage pattern: repeated setup boilerplate, options
+   built inline, an interface the consumer declares itself, error-string
+   matching, awkward multi-returns, type assertions, a hand-rolled loop that
+   wants an iterator, test scaffolding the library could ship.
+4. Brainstorm across the archetypes below — force at least one structural
+   option, not only local tweaks. Structural means the library takes on work
+   the consumer is doing: absorb-the-sequence, move-responsibility-upstream,
+   invert-control, split-the-god-func, iterator, expose-the-interface. A
+   rename, a default, or one added helper is local. Draft each candidate from
+   its catalog entry and against the `style` sections above.
+5. Score and rank by the impact rubric.
+6. Report (below).
+
+## Change archetypes
+
+- options-constructor — functional options replace inline struct-building or
+  a long positional param list.
+- default-away-a-param — a useful zero value removes an arg every call passes
+  the same.
+- absorb-the-sequence — move a repeated call-site sequence into one library
+  call.
+- batch-or-variadic — collapse a consumer loop into one call.
+- iterator — a range-over-func replaces cursor/index boilerplate.
+- result-type — return a named struct instead of an awkward multi-value tuple.
+- sentinel-error — an `ErrXxx` + `errors.Is` support replaces string matching.
+- expose-the-interface — ship the interface the consumer keeps re-declaring.
+- testing-helper — ship a spy/fake/helper so consumers drop hand-rolled
+  scaffolding.
+- builder — a fluent builder for staged config done awkwardly inline.
+- split-the-god-func — separate the modes a consumer switches a flag on.
+- invert-control — take a callback or return the finished value instead of
+  making the consumer orchestrate.
+- generics — remove per-type duplication and call-site type assertions.
+- move-responsibility-upstream — the library owns what consumers keep
+  reimplementing (retry, pagination, normalization).
+- shed-a-leaky-return — drop an error that can't occur, or presentation the
+  caller shouldn't be forced to handle.
+
+## Impact rubric
+
+Rank each candidate by **net impact**, biggest first:
+
+- reach — how many of the N uses it simplifies. Uses, not calls: a change
+  that reshapes declarations rather than call sites (exposing an interface,
+  adding a testing helper) has a real reach, and counting only calls would pin
+  every such proposal at 0 while step 4 still requires one.
+- savings — boilerplate / lines / steps removed per site.
+- quality — readability, testability, fewer error-prone steps.
+- cost (discount) — API breakage (additive beats breaking), implementation
+  effort, blast radius on *other* consumers.
+
+Net = reach × savings × quality, discounted by cost. Label each **High** or
+**Med** — High is worth doing this quarter, Med worth doing — and lead with the
+single biggest-impact change. There is no third label: a shape worth knowing
+but not worth doing is a declined note under the table (see Output), so a
+bottom tier would only ever name rows that belong somewhere else. Label the
+Net, after the discount; the table's Breakage and Effort columns show what was
+discounted, so
+a High beside heavy Breakage means it survived that. A change that touches many
+sites and is additive outranks a flashy structural rewrite that breaks everyone.
+
+`max=N` caps what is reported, never what is considered, and it cuts from the
+bottom of the ranked list. The forced structural option competes on Net like
+everything else: if it does not make the cut, say in one line that it was
+considered and what displaced it, so the cap does not silently hide the kind of
+proposal the brainstorm exists to surface.
+
+## Output
+
+Open with the ranked payload:
+
+1. One line: library · consumer scope · modifiability · N uses ·
+   M proposals. N counts every syntactic use of the library's surface in the
+   consumer scope, each once: a call to one of its functions; a method call on
+   a value it owns (`src.Next()`); a composite literal of one of its types
+   (`must.Options{…}`); a conversion to one of its types
+   (`(*oskit.File)(nil)`); a variable, field, or parameter declared as one
+   (`var doc yaml.Node`); and a reference to one of its exported constants or
+   sentinel errors (`yaml.DocumentNode`, `errors.Is(err, tidy.ErrEmpty)`). A
+   line using two of them counts twice, unless one is nested inside the other
+   — `must.NewClient(must.Options{…})` is one use, since a single reshape
+   changes it once and counting it twice inflates the denominator every Reach
+   is measured against. A use inside a loop counts once. Not
+   files, not occurrences of the package name, not per-iteration executions.
+
+   N is the denominator every `Reach` is a fraction of, so both must count the
+   same way — a headline counting only calls beside a Reach counting literals
+   makes the table unreadable.
+2. A table ranked by impact — unless there are no proposals, in which case say
+   so in a sentence in place of the table, skip item 3, and still give item 4:
+   an empty table is a shrug with borders. Name what you looked for and found
+   absent, so the reader can tell a clean API from a shallow pass. A shape worth
+   knowing but not worth doing is a named declined note there, not a row padding
+   the table.
+
+
+   | # | Change (archetype) | Reach | Impact | Breakage | Effort |
+
+3. Then each proposal, top-down:
+   - the API change — the new signature/type; a concrete diff when local, an
+     API-shape sketch when external;
+   - a representative call site before → after proving the payoff. The
+     "before" is one real site, quoted from one file, cited `file:line-line`
+     and checkable there. Never stitch lines from several files into one
+     excerpt under a single citation, and never write a placeholder where the
+     before belongs (`// before — five keys, twenty lines`): a payoff nobody
+     can check against the code is the one thing this report exists to show,
+     and a composite excerpt looks exactly like evidence while being none. A
+     proposal with no single site that shows the payoff says so and gives the
+     count instead;
+   - one line tying it to the rubric: why this impact, and what it costs
+     (API breakage, implementation effort, other consumers) — named here even
+     though the table's columns show it: the line says why the cost is worth
+     paying, which no column does.
+4. Anything deferred or needing the user's judgment; for an external library,
+   the local wrapper to use where an upstream change can't land, called a
+   wrapper: it stands in for proposals above, which sets it apart from the
+   next case. A cleanup that changes only the consumer (a shared local
+   helper) is no library change: name it as declined, out of scope, and say
+   why — in this section, not with item 2's declined shapes.
+
+Report tersely: no preamble or narration; state each fact once; don't restate
+output the user can already see.
+
+## Self-learning
+
+Obey this skill's lessons: every run, read with the file-read tool (never a
+shell), in parallel, the sibling `${CLAUDE_SKILL_DIR}/LESSONS.md` and the
+fallback `~/.agent-data/ctx42-skills/lessons/go/reshape.md` (pass `~` as is, the
+file tools expand it; no environment probe; `$AGENT_DATA_DIR` replaces
+`~/.agent-data` only when you are told it is set). The sibling wins a conflict;
+the fallback, which a read-only install writes, still counts once the checkout
+is writable; this block never moves or merges lessons. A missing file needs no
+comment. On a correction or self-caught mistake, append a one-line rule —
+general, naming nothing from the project at hand (its files, tests, tickets) —
+to the sibling when this directory is writable (creating it even when only the
+fallback holds lessons so far; both stay read), else to the fallback, creating
+it, and report where. A lesson write is not a project write: a read-only or
+no-change run still makes it.

@@ -1,0 +1,25 @@
+---
+tags: [case:edit--corpus-grounded-edit-routes-the-unconfirmable, skill:edit, sec:edit:usage, sec:edit:boundaries, sec:edit:sources-of-truth, sec:edit:session-start-every-mode, sec:edit:edit-discipline, sec:edit:modes, sec:edit:session-end-every-mode, sec:edit:self-learning, ref:create/project-config, ref:create/doc-corpus, ref:create/authoring-guide, sec:edit:decision-log, ref:edit/decision-log, ref:edit/modes, ref:edit/corpus-edits, skill:report-doc-gap, skill:kb]
+runs: 1
+max_turns: 60
+timeout_seconds: 300
+allowed_tools: [Read, Glob, Grep, Skill, Write, Edit]
+append_system_prompt: |
+  The user writes English; reply in English.
+  Automated eval: the user is absent. Whenever the skill would stop and wait
+  for the user, take the next scripted answer below as the reply and continue
+  in this same run; never end the run to wait. If none fits, give the most
+  plausible answer and continue.
+  Before taking a scripted answer, write out in full, as your reply text, the
+  message you would send the user at that point (every proposal with its
+  location, before/after text and choices), then write the answer you take on a
+  line of its own as `User: <answer>`, and only then continue. Never apply a
+  change whose proposal you have not written out this way.
+
+  Scripted answers (pick the one that fits the question):
+  1. To a proposal for PB-2 that states three retries: "YN".
+  2. To an offer to file or work documentation gaps: "File it."
+  3. Anything else: "That's all — close the session."
+---
+
+/srd:edit initiatives/payload-booking/srd.md PB-2 the Booking API retries a failed slot lookup three times, that is what it does today; make PB-2 say so

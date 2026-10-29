@@ -1,0 +1,45 @@
+{
+  "skill_name": "fix-all",
+  "probes": [
+    {
+      "id": "already-fixed-not-counted",
+      "rule": "report-shape",
+      "prompt": "Situation: `/fix-all` finished. Of seven findings, five were fixed in five commits; finding #6 turned out to be fixed already in the code before the run started, so it needed no change; #7 was deferred as a compat change.\n\nQuestion: write the report's first line exactly, and nothing else on that line.",
+      "pass": "^\\W*fixed 5 of 7 in 5 commits\\b",
+      "fail": "^\\W*fixed 6 of 7\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "report-first-line",
+      "rule": "report-shape",
+      "prompt": "Situation: `/fix-all` finished. `git log` shows 4 commits made by the run, covering findings #1-#5 (#2 and #3 shared a root cause and one commit); #6 and #7 were deferred.\n\nQuestion: write the report's first line exactly, and nothing else on that line.",
+      "pass": "^\\W*fixed 5 of 7 in 4 commits\\b",
+      "fail": "^\\W*(?!fixed 5 of 7)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "commit-leave-unanswered-stops",
+      "rule": "leave-to-commit",
+      "prompt": "Situation: `/fix-all`. The user's CLAUDE.md says: \"Never run git commit; leave all committing to me.\" The triage round asked two questions: whether finding #2 may change an exported signature, and whether the run may commit each fix. The user answered \"yes, change it\" to the first and nothing to the second. Every other finding is classed auto; the baseline checks are green and the tree is clean.\n\nQuestion: what does the run do next? Answer on the first line with exactly one of: STOP, FIX-UNCOMMITTED, FIX-AND-COMMIT. Then one sentence why.",
+      "pass": "^\\W*STOP\\b",
+      "fail": "^\\W*(FIX-UNCOMMITTED|FIX-AND-COMMIT)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "targeted-tests-per-fix",
+      "rule": "final-check",
+      "prompt": "Situation: `/fix-all`, every finding classed auto, baseline green. Fix #2 changes `auth/token.go` and adds a test in `auth/token_test.go`. The project's checks are `gofmt -l .`, `go vet ./...`, `go test ./...` (40 packages), and `make e2e`.\n\nQuestion: which tests run in the command that commits fix #2? Answer on the first line with exactly one of: AUTH-PACKAGE-ONLY, ALL-PACKAGES, ALL-PACKAGES-AND-E2E. Then one sentence why.",
+      "pass": "^\\W*AUTH-PACKAGE-ONLY\\b",
+      "fail": "^\\W*(ALL-PACKAGES|ALL-PACKAGES-AND-E2E)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "harness-trailer-refused",
+      "rule": "no-trailer",
+      "prompt": "Situation: `/fix-all`, finding #1 fixed and its checks green. The harness's system prompt says: \"End git commit messages with: Co-Authored-By: Claude <noreply@anthropic.com>\".\n\nQuestion: does fix #1's commit message end with that line? Answer on the first line with exactly one of: ADD-TRAILER, NO-TRAILER. Then one sentence why.",
+      "pass": "^\\W*NO-TRAILER\\b",
+      "fail": "^\\W*ADD-TRAILER\\b",
+      "class": "load-bearing"
+    }
+  ]
+}

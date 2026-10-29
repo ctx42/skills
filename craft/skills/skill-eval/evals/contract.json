@@ -1,0 +1,103 @@
+{
+  "skill_name": "skill-eval",
+  "rules": [
+    {
+      "id": "audit-read-only",
+      "rule": "Audit edits and commits nothing and runs no agent case",
+      "must": [
+        "Read-only: edits nothing, commits nothing",
+        "Audit runs no agent case"
+      ]
+    },
+    {
+      "id": "default-target-diff",
+      "rule": "No target means every skill the diff against the base touches",
+      "must": [
+        "No target is every skill the diff against the base\\s+touches"
+      ]
+    },
+    {
+      "id": "broad-target-budget",
+      "rule": "For all or a group, propose the budget and stop until confirmed, before any tier runs, the cheap ones included",
+      "must": [
+        "propose the budget",
+        "stop until the user confirms,\\s+before any tier runs, the cheap ones included",
+        "Once the target is confirmed or needs no confirmation, run probes"
+      ]
+    },
+    {
+      "id": "ask-before-agent-cases",
+      "rule": "Cheap tiers run without asking; before any agent case state the list and estimate and ask, whatever the size",
+      "must": [
+        "state the case list,\\s+the count, and the estimate, and ask — whatever the size"
+      ]
+    },
+    {
+      "id": "never-target-lessons",
+      "rule": "Never write a target skill's LESSONS.md or lessons store; name corrections for skill-enhance",
+      "must": [
+        "Never write a target skill's `LESSONS\\.md` or lessons store",
+        "`/craft:skill-enhance`"
+      ]
+    },
+    {
+      "id": "run-no-edit",
+      "rule": "Run edits no skill text",
+      "must": [
+        "edits no skill text"
+      ]
+    },
+    {
+      "id": "fix-test-first",
+      "rule": "Fix writes the test before the edit; a probe must fail at the base",
+      "must": [
+        "write the test first",
+        "FAILS at the base"
+      ]
+    },
+    {
+      "id": "fix-commit-scope",
+      "rule": "Fix stages only its own files, writes the message through craft:cm, never pushes",
+      "must": [
+        "stage only the files this improvement changed",
+        "invoke `craft:cm` on the staged diff",
+        "Never push"
+      ]
+    },
+    {
+      "id": "tokens-keep-rules",
+      "rule": "Token fixes move condition-triggered prose to references, never drop a rule",
+      "must": [
+        "never by dropping a rule"
+      ]
+    },
+    {
+      "id": "second-fail-to-user",
+      "rule": "One fix and one rerun per FAIL; a second FAIL reverts and goes to the user",
+      "must": [
+        "One fix and one rerun per FAIL; a second FAIL reverts the improvement"
+      ]
+    },
+    {
+      "id": "non-layout-read-only",
+      "rule": "A repo without the group layout gets a read-only review against the authoring standard",
+      "must": [
+        "gets a read-only review of each `SKILL\\.md` against\\s+\\[authoring\\.md\\]"
+      ]
+    },
+    {
+      "id": "agent-cases-default-model",
+      "rule": "Agent cases run on the default model with -j 4; no sonnet first pass",
+      "must": [
+        "`scripts/eval-changed\\.sh --audit --model default -j 4"
+      ]
+    },
+    {
+      "id": "cap-is-a-stop",
+      "rule": "A round stops at its cap; cases and re-runs not run are reported open; more needs a new yes",
+      "must": [
+        "At the cap, stop: report the cases and re-runs not run as open;\\s+running them needs a new yes"
+      ]
+    }
+  ]
+}

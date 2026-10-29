@@ -1,0 +1,206 @@
+---
+name: doc-smith
+description: >
+  Writes new technical documentation and user manuals and reviews or fixes
+  existing ones, catching contradictions, terminology drift, repetition,
+  structural gaps, and dubious claims across the whole document. Use when
+  asked to create, audit, review, proof, proofread, check, or work through
+  technical docs, a user manual, an operator or admin guide, or product
+  documentation.
+argument-hint: "[create|audit*|proof|walk] [<file>... | <desc>]"
+license: MIT
+---
+
+# doc-smith
+
+## Usage
+
+```
+/craft:doc-smith <file>...         audit (default): report findings by severity, edit nothing until approved
+/craft:doc-smith create <desc>     draft a new document or section from scratch
+/craft:doc-smith audit <file>...   the default, named explicitly
+/craft:doc-smith proof <file>...   fix in place: grammar, clarity, consistency; flag what it can't decide
+/craft:doc-smith walk <file>...    work through the doc with the user, one unit at a time
+```
+
+Create, audit, proof, and walk through technical documentation and user manuals;
+Markdown is the assumed format. Read the tokens in any order: a reserved word is
+a mode or flag, `key=value` is a control, and anything else is the target. The
+mode is `create`, `audit`, `proof`, or `walk`; with none, infer it from the
+request; when the request does not settle it and names a target, default to
+audit (it edits nothing). The target names the file(s), or for create the
+description, free text to the end whose reserved words are text; with no target
+and no clear intent, ask which mode.
+
+- Create — draft a new document or section from scratch.
+- Audit — report findings on an existing doc; edit nothing until approved.
+- Proof — fix an existing doc in place; flag what has no single right answer.
+- Walk — work through the doc with the user, one unit at a time.
+
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
+
+Scope a run to the file — or the named set/directory — the user gives, and
+treat it as **one document**: consistency is judged across all of it. Flag a
+contradiction the pass surfaces in a file outside that scope rather than drop
+it.
+
+Structure, prose rules, and the defect taxonomy come from
+[`references/writing-guide.md`](references/writing-guide.md) *(eager: read once
+per run; every mode judges against all of it)*. Every judgment defers to it.
+
+Report tersely: no preamble or narration; state each fact once; don't restate
+output the user can already see. A written or edited file is the payload: state
+its path and what changed; never paste the document back into chat.
+
+The scope line an audit opens with is exempt: it is the first fact, not
+preamble — without it a reader cannot tell a clean document from an unresolved
+target, and in a multi-file audit cannot tell which files were read. Narration
+is the sentence about what you are *about to* do; the scope line says what you
+did.
+
+## Whole-document pass (all modes)
+
+Model the document before writing or judging — a line-by-line read misses a
+claim that a distant section negates. Build a ledger:
+
+- Entities & claims — each product, component, or feature and what the doc
+  asserts about it (what it is, does, runs on, requires).
+- Terminology — the term used for each concept and every synonym or variant.
+- Structure — the heading outline and the job each section does.
+- Audience & intent — who each part is for and whether it teaches, walks
+  through a task, or serves as lookup reference.
+
+Judge the ledger, not only the prose, against the guide's defect taxonomy; cite
+both locations for every contradiction.
+
+Coherence check — after any edit, re-check it against the ledger before moving
+on: one fix can contradict a distant claim, drift the terminology, orphan a
+reference, or duplicate a point. Update the ledger with each accepted change.
+After a reflow, re-read the changed lines to confirm the wrap is clean — no
+orphaned word or broken sentence flow.
+
+## Technical claims: flag, don't fix
+
+Internal consistency you resolve; real-world technical accuracy you flag.
+Resolving follows the mode: audit reports the fix, proof and revise apply it —
+for a contradiction only when the intended meaning is unambiguous, else they
+flag it as a question. A claim that contradicts the ledger is a consistency
+finding. A claim that looks factually wrong about a technology, and that the
+document does not settle, is raised as a question stating what you'd expect and
+why — never silently rewritten or "corrected" with a fact you cannot ground.
+
+## Create mode
+
+1. Gather context: related docs and, if available, the product or repo. Fix the
+   audience, product, and purpose; ask only the gaps you cannot infer (audience,
+   scope, key tasks, preferred terminology) in one batched round.
+
+2. Outline a structure that fits the purpose per the guide, with only the
+   sections the product needs. Confirm the outline before drafting a long
+   document.
+
+3. Draft to the guide. A fact neither the sources nor the user settled stays
+   out of the text and goes on the reply's open list, never a `TODO` in the file.
+
+4. Write the file(s).
+
+5. Self-review the written file with the whole-document pass, fix what it
+   finds, then state the path and what the pass changed. The review needs the
+   whole document in front of it and the document may not be pasted into chat,
+   so the file is where it lives while being reviewed — "before writing" would
+   leave a long draft nowhere to exist. Nothing is reported as finished until
+   the pass has run and its fixes are in.
+
+## Audit mode
+
+1. Resolve the target; state the exact file(s) in scope.
+
+2. Run the whole-document pass.
+
+3. Audit against the guide's defect taxonomy; flag dubious technical claims as
+   questions.
+
+4. Report only. Group the findings Blocker / Should-fix / Nit, numbered in
+   one run across the groups — 1..n, not restarting at each heading — so a
+   number identifies a finding on its own and the user can answer "3 and 7"
+   without naming a severity;
+   each names the location, the problem in one line, the guide rule it breaks,
+   and a minimal fix; a contradiction cites both locations. End with a verdict
+   — fit to publish as it stands, or the class of defect that has to clear
+   first — and per-severity counts.
+
+5. Fix on confirmation: apply approved findings, run the coherence check, and
+   state what changed. An audit that draws no answer is finished at step 4 —
+   the report is the deliverable, and nothing is applied on silence.
+
+## Proof mode
+
+Fix in place. Reserve edits for what has one right answer; flag the rest.
+
+1. Run the whole-document pass.
+
+2. Apply corrections directly: grammar, clarity, terminology consistency,
+   repetition, formatting. Fix a contradiction only when the intended meaning is
+   unambiguous; otherwise flag it as a question. Flag dubious technical claims.
+
+3. Run the coherence check.
+
+4. State what changed — edit classes and counts — and list every flagged
+   contradiction, ambiguity, and technical claim awaiting the user's decision.
+   Proof reports as a flat list, not audit's numbered severity groups: nothing
+   here is waiting to be triaged, the edits are already in the file, and what
+   is left is a question list the user works through.
+
+## Walk mode
+
+Work through the document with the user, one unit at a time — a paragraph,
+or the smallest thing that can be judged whole where a paragraph is not it: a
+list, a table, a procedure's numbered step, a fenced example with the sentence
+that introduces it. Splitting one of those in half asks the user to approve
+prose whose point lands in the part they have not seen. Work in document
+order.
+
+1. Run the whole-document pass. Confirm the starting unit — the top, or a
+   section the user names.
+
+2. For the current unit, name the findings (consistency, clarity, structure,
+   dubious claim) and propose a concrete revision. Refine with the user; apply
+   only what they agree to. Flag dubious technical claims.
+
+3. Run the coherence check on the rest of the document; report any break with
+   its location before advancing.
+
+4. Advance only when the user is done with the unit. Track position so they can
+   pause and resume. On request or at the end, run a final whole-document pass.
+
+Per turn, show the proposed revision and the coherence-check result — plus,
+where the unit has them, the findings that prompted the revision, in a line
+each. "Only" rules out narration and a re-read of the unit, not the reason the
+unit is being changed; a proposal the user cannot see the grounds for is one
+they can only rubber-stamp.
+
+## Self-application
+
+`doc-smith` obeys the skill authoring standard; when you change this skill,
+re-check it against `../skill-eval/references/authoring.md` and run
+`/craft:skill-eval`.
+
+## Self-learning
+
+Obey this skill's lessons: every run, read with the file-read tool (never a
+shell), in parallel, the sibling `${CLAUDE_SKILL_DIR}/LESSONS.md` and the
+fallback `~/.agent-data/ctx42-skills/lessons/craft/doc-smith.md` (pass `~` as
+is, the file tools expand it; no environment probe; `$AGENT_DATA_DIR` replaces
+`~/.agent-data` only when you are told it is set). The sibling wins a conflict;
+the fallback, which a read-only install writes, still counts once the checkout
+is writable; this block never moves or merges lessons. A missing file needs no
+comment. On a correction or self-caught mistake, append a one-line rule —
+general, naming nothing from the project at hand (its files, tests, tickets) —
+to the sibling when this directory is writable (creating it even when only the
+fallback holds lessons so far; both stay read), else to the fallback, creating
+it, and report where. A lesson write is not a project write: a read-only or
+no-change run still makes it.

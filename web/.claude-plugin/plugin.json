@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "web",
+  "description": "Web-app workflow on Vue 3 + TypeScript: the enforced style rules and a style-only pass with a reference Biome config (style), done-time review with the API contract (review), per-unit Vitest coverage (cover), TSDoc and comment fixing (doc), per-route Playwright coverage (e2e), UX improvement committed one ranked fix at a time with before/after pictures (improve), and performance fixes measured under a 4x CPU slowdown, front end and back end, without changing what the user sees (perf), and a read-only audit of the code across review, coverage, TSDoc, and route coverage in one graded report (audit).",
+  "version": "0.28.0",
+  "author": {
+    "name": "Rafal Zajac",
+    "email": "rzajac@gmail.com"
+  },
+  "keywords": ["web", "vue", "typescript", "style", "ux", "accessibility", "ui", "performance", "inp", "memory", "bundle", "audit"],
+  "license": "MIT"
+}

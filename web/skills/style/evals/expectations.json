@@ -1,0 +1,69 @@
+{
+  "skill_name": "style",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "whole-frontend-on-the-fixture",
+      "expected_behavior": [
+        "Opens with one line naming the frontend root (`web/`), the target, the files in scope, and the line width with its source",
+        "Reports the project `biome.json` as missing the reference settings — the HTML formatter and the rules the reference turns on beyond `recommended`, such as `useNamingConvention`, `noFloatingPromises`, and `useVueDefineMacrosOrder` — graded Blocker",
+        "Reports the unchecked `as { data: Site[] }` cast in `sites()` in `src/api.ts` as a Blocker",
+        "Reports the string-path link `` :to=\"`/?site=${s.id}`\" `` in `src/pages/SitesPage.vue`",
+        "Reports the TSDoc starting with the symbol's name (`formatDate returns …`) in `src/format.ts`",
+        "Reports `toBeTruthy()` in `src/pages/SitesPage.test.ts`",
+        "Reports the `px` sizes (`gap: 24px`, `padding: 12px 24px`) in `src/components/AppLayout.vue`, and not the `1px` border",
+        "Reports the `qry` abbreviation in `src/pages/DevicesPage.vue`",
+        "Flags nothing in `src/read.ts`, `src/router.ts`, `src/stores/`, `src/components/DeviceTable.vue`, `src/components/LoadError.vue`, or `e2e/app.spec.ts`",
+        "Re-reports none of the rules the reference Biome config enforces as code offenses: no offense cites a `noNonNullAssertion`, `useImportType`, `noFloatingPromises`, or naming-convention case in the code",
+        "Each offense carries `file:line`, a derived rule id, the quoted trigger, and a fix opening with insert, delete, rename, move, replace, or reword",
+        "Asks which offenses to apply before editing anything, and after the answer `none` leaves every fixture file unchanged"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 3,
+      "name": "fix-one-file-behind-a-green-gate",
+      "expected_behavior": [
+        "Runs `bun run check` in `web/` for a green baseline before editing",
+        "Replaces the `px` gap and padding in `src/components/AppLayout.vue` with `rem` values and leaves the `1px` border",
+        "Re-runs `bun run check` after the edit and reports it green",
+        "Reports each fix as one `file:symbol — what changed` line plus the gate result, prints no diff, and never commits"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": 4,
+      "name": "reference-while-writing-a-page",
+      "expected_behavior": [
+        "The new page's script puts its component TSDoc after the imports, above the first statement",
+        "The page reads through `useRead` (no hand-rolled `busy`/`error` refs) and starts the read with `onMounted(() => void …)`",
+        "Navigation to it and from it uses named routes, and the route is named in kebab-case and lazy-loaded",
+        "Its test fakes `fetch` through `fakeFetch` with `\"GET /path\"` keys and mounts with `mountAt`, inside one `describe(\"ModelsPage\")`"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  ]
+}

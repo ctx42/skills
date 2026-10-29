@@ -1,0 +1,35 @@
+{
+  "skill_name": "cover",
+  "evals": [
+    {
+      "id": 1,
+      "name": "single-function-in-isolation",
+      "skills": [
+        "cover"
+      ],
+      "setup": "`Parse` has one happy-path test, `Test_Parse`, and two uncovered error branches. A caller's test, `Test_Load`, incidentally executes one of those branches, so a whole-package coverage run credits `Parse` with more than its own test earns.",
+      "query": "/cover func=Parse",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "package-target-is-plan-first",
+      "skills": [
+        "cover"
+      ],
+      "setup": "`./pkg/svc` holds six exported functions, four of them partly covered.",
+      "query": "/cover ./pkg/svc",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "deferred-and-uncoverable-are-reported",
+      "skills": [
+        "cover"
+      ],
+      "setup": "`Dial` has one branch reachable only behind a network seam and one defensive `return` that no input can reach. The same package holds `MustDial`, whose godoc documents that it panics on a bad address, and `Retry`, whose backoff line is reached only by waiting out a real 100ms `time.Sleep` it calls directly. The run is repeated afterwards with `include=all`.",
+      "query": "/cover ./pkg/net",
+      "files": []
+    }
+  ]
+}

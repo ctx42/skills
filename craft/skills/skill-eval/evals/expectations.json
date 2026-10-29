@@ -1,0 +1,53 @@
+{
+  "skill_name": "skill-eval",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "audit-defaults-to-the-diff",
+      "expected_behavior": [
+        "Audits `craft:cm` only — the skill the diff touches — and not `go:style`",
+        "Reports the contract conflict as a Blocker and the oversized section as a token finding, each with its `file:line` and the command that fixes it",
+        "Edits no file, commits nothing, and runs no agent case",
+        "Reports tersely: one line per finding, most severe first, no narration of the scan"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": 2,
+      "name": "run-asks-before-agent-cases",
+      "expected_behavior": [
+        "Runs lint and the routine tiers first, without asking",
+        "States the 5 cases, their count, and the estimate, and asks before running any; on the user's no, runs none",
+        "Edits no skill text",
+        "Reports per tier the counts and the cost, read off the tool output"
+      ],
+      "blind_only": [
+        1,
+        3,
+        4
+      ]
+    },
+    {
+      "id": 3,
+      "name": "fix-commits-each-improvement",
+      "expected_behavior": [
+        "Writes the test for each improvement before the edit (a probe that fails at the base, or a contract phrase)",
+        "Commits each improvement on its own, staging only the files it changed; `README.md` stays uncommitted and unstaged",
+        "Never pushes",
+        "Writes no `LESSONS.md` for `craft:cm`; names the user's correction for `/craft:skill-enhance`",
+        "Reports each commit's hash and summary tersely, with open questions at the end"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        5
+      ]
+    }
+  ]
+}

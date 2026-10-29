@@ -1,0 +1,29 @@
+{
+  "description": "Sound plus an on-screen card on every monitor when Claude stops or needs attention.",
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/notify-project.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/notify-project.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

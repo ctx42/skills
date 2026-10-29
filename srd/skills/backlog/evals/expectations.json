@@ -1,0 +1,68 @@
+{
+  "skill_name": "backlog",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "opens-with-counts",
+      "expected_behavior": [
+        "States the three counts and stops, letting the user pick a list",
+        "Lists `deferred` first",
+        "Starts no grilling and drafts no page before the user picks",
+        "No preamble; each count stated once"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "reclassifies-rather-than-skipping",
+      "expected_behavior": [
+        "Reclassifies the gap with `update_gap` `answer: unknown`, and says so",
+        "Writes nothing under the `kb` folder and hands nothing to `srd:kb`: a reclassification changes only the gap",
+        "Does not treat it as a skip or leave the gap marked deferred",
+        "Files no new gap and closes none: no `report_gap`, `fill_gap`, or `wontfix_gap`, and no talk of a documentation gap"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "clusters-gaps-and-drafts-outside-the-corpus",
+      "expected_behavior": [
+        "Clusters the two duplicates and surfaces the cluster size as priority",
+        "Checks the corpus before drafting, separating content that is absent from content that is present but unranked",
+        "Writes the draft outside every corpus source, the `kb` folder included",
+        "Publishes nothing itself; given only the published URL it fills no gap and says the cluster stays open until the page is pulled into the corpus"
+      ],
+      "blind_only": [
+        1
+      ]
+    },
+    {
+      "id": 5,
+      "name": "sweeps-an-abandoned-srd",
+      "expected_behavior": [
+        "Before the counts, files exactly one `wrong` gap per uncovered section citing `crew-seats` — two `report_gap` calls, each submitted open without asking",
+        "The \"Mission visibility\" gap's `detail` names the co-attesting SRD folder `payload-booking`",
+        "Files nothing for \"Crew seat limit\" and adds no hit to `gap-0040`",
+        "Reports the sweep in the opening counts line and edits no KB section"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "rechecks-stale-gaps",
+      "expected_behavior": [
+        "Refreshes `gap-0050` with `fill_gap`, the identical `filled_by`, and `complete: true`; does not reopen it",
+        "Reopens `gap-0051` with `reopen_gap` and a reason; never fills it",
+        "Re-points `gap-0052` with `fill_gap` at `1000000110#cold-archive`, `complete: true`; never passes the vanished ref",
+        "Lists stale gaps before any fill, and reports the re-check as a clause of the opening counts line"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "ask-writes-one-message-per-person",
+      "expected_behavior": [
+        "Prints one paste-ready block per person, Maya R and John K, each holding the part-kit expiry question",
+        "Leaves the already-asked gap and the gap naming nobody out of every block; counts the already-asked one and offers `ask reminders`",
+        "Keeps gap ids and @-mentions out of the blocks",
+        "Sets `asked` only after the user confirms the sends: no `update_gap` before, then one with a date on `gap-0061` and none on the other two"
+      ]
+    }
+  ]
+}

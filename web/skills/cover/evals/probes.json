@@ -1,0 +1,61 @@
+{
+  "skill_name": "cover",
+  "probes": [
+    {
+      "id": "caller-coverage",
+      "rule": "direct-tests-only",
+      "prompt": "Situation: `/web:cover func=readError`. The full Vitest run reports `readError` at 100%, reached through the tests of `useRead` and the pages; `api.test.ts` has no `describe(\"readError\")`.\n\nQuestion: what is `readError`'s coverage for this run? Answer on the first line with exactly one of: COVERED, UNCOVERED. Then one sentence why.",
+      "pass": "^\\W*UNCOVERED",
+      "fail": "^\\W*COVERED",
+      "class": "redundant"
+    },
+    {
+      "id": "file-target-plan",
+      "rule": "plan-before-writing",
+      "prompt": "Situation: `/web:cover src/format.ts`. You have measured both units in the file and know which cases to add.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: WRITE-THE-TESTS, PRESENT-PLAN-AND-WAIT. Then one sentence why.",
+      "pass": "^\\W*PRESENT-PLAN-AND-WAIT",
+      "fail": "^\\W*WRITE-THE-TESTS",
+      "class": "redundant"
+    },
+    {
+      "id": "layout-line",
+      "rule": "direct-tests-only",
+      "prompt": "Situation: `/web:cover component=ChartPanel`. One uncovered branch runs only when `el.getBoundingClientRect().width` is 0; happy-dom always reports 0 width, so the other branch is the uncovered one.\n\nQuestion: what do you do with that branch? Answer on the first line with exactly one of: STUB-GETBOUNDINGCLIENTRECT, DEFER-TO-E2E. Then one sentence why.",
+      "pass": "^\\W*DEFER-TO-E2E",
+      "fail": "^\\W*STUB-GETBOUNDINGCLIENTRECT",
+      "class": "redundant"
+    },
+    {
+      "id": "no-target-is-diff",
+      "rule": "diff-default",
+      "prompt": "Situation: the user types `/web:cover` with no arguments in a frontend with 6 directories under `src/`. `git diff HEAD` changes the body of `formatDate` in src/format.ts and the body of `useSites` in src/stores/sites.ts, and nothing else. You have measured both units.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: WRITE-THE-TESTS, PLAN-AND-WAIT, ASK-FOR-TARGET, COVER-WHOLE-FRONTEND. Then one sentence why.",
+      "pass": "^\\W*PLAN-AND-WAIT",
+      "fail": "^\\W*(WRITE-THE-TESTS|ASK-FOR-TARGET|COVER-WHOLE-FRONTEND)",
+      "class": "redundant"
+    },
+    {
+      "id": "large-target-fans-out",
+      "rule": "auto-fan-out",
+      "prompt": "Situation: the user types `/web:cover all` in a frontend of 7 directories under `src/` holding 65 `.vue`/`.ts` files and about 5,000 lines, and says nothing about subagents.\n\nQuestion: do you dispatch one subagent per directory? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "old-cap-spelling",
+      "rule": "unknown-tokens",
+      "prompt": "Situation: the user types `/web:cover src/stores max_tests=2`; the directory has 9 easy uncovered lines.\n\nQuestion: how many cases does the plan propose at most? Answer on the first line with exactly one of: TWO, NINE, ASK. Then one sentence on what you tell the user about `max_tests=2`.",
+      "pass": "^\\W*ASK\\b",
+      "fail": "^\\W*(TWO|NINE)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "not-delegated-keeps-gate",
+      "rule": "delegated-by-audit",
+      "prompt": "Situation: earlier in this session the user ran `/web:audit`. Now the user types `/cover src/stores` themselves; the directory has three units with uncovered lines.\n\nQuestion: do you stop for the user's approval before writing any test? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
+    }
+  ]
+}

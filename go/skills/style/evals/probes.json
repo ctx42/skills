@@ -1,0 +1,103 @@
+{
+  "skill_name": "style",
+  "probes": [
+    {
+      "id": "rule-edit-via-review",
+      "rule": "rules-change-via-review",
+      "prompt": "Situation: the user says: \"From now on, no named return values anywhere. Add that to the style rulebook.\" You have the style skill loaded and can edit files.\n\nQuestion: how do you add the rule? Answer on the first line with exactly one of: EDIT-STYLE-MD, VIA-REVIEW. Then one sentence why.",
+      "pass": "^\\W*VIA-REVIEW",
+      "fail": "^\\W*EDIT-STYLE-MD",
+      "class": "load-bearing"
+    },
+    {
+      "id": "test-edit-reads",
+      "rule": "reference-vs-pass",
+      "prompt": "Situation: you are about to change one assertion in `cache_test.go`. You have the style skill loaded and have read none of its rule files yet.\n\nQuestion: which rule files do you read before the edit? Answer on the first line with exactly one of: TEST-ONLY, TEST-AND-PRODUCTION, NONE. Then one sentence why.",
+      "pass": "^\\W*TEST-AND-PRODUCTION",
+      "fail": "^\\W*(TEST-ONLY|NONE)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "env-var-access",
+      "rule": "env-via-ring",
+      "context": [
+        "SKILL.md",
+        "references/production.md"
+      ],
+      "prompt": "Situation: you are writing a production Go function that needs the value of the environment variable CACHE_DIR.\n\nQuestion: which call reads it? Answer on the first line with the call only, e.g. pkg.Func.",
+      "pass": "^\\W*`?rng\\.Env(Get|Lookup)",
+      "fail": "^\\W*`?os\\.",
+      "class": "load-bearing"
+    },
+    {
+      "id": "test-env-set",
+      "rule": "test-env-via-ring",
+      "context": [
+        "SKILL.md",
+        "references/test.md",
+        "references/production.md"
+      ],
+      "prompt": "Situation: you are writing a Go test where the code under test reads CACHE_DIR from a *ring.Ring and you must set it to a temp dir.\n\nQuestion: which call sets it? Answer on the first line with the call only.",
+      "pass": "^\\W*`?\\w*\\.?EnvSet|^\\W*`?rng\\.EnvSet",
+      "fail": "t\\.Setenv|os\\.Setenv",
+      "class": "load-bearing"
+    },
+    {
+      "id": "multiline-literal",
+      "rule": "multiline-strings",
+      "context": [
+        "SKILL.md",
+        "references/production.md"
+      ],
+      "prompt": "Situation: production Go code must hold a fixed three-line plain-text usage message that is too long for one source line.\n\nQuestion: how is the literal written? Answer on the first line with exactly one of: RAW-BACKTICK, PLUS-SEGMENTS. Then one sentence why.",
+      "pass": "^\\W*PLUS-SEGMENTS",
+      "fail": "^\\W*RAW-BACKTICK",
+      "class": "load-bearing"
+    },
+    {
+      "id": "plan-first-flag",
+      "rule": "plan-first-stops",
+      "context": [
+        "SKILL.md",
+        "references/checking.md"
+      ],
+      "prompt": "Situation: the user runs `/style all plan_first` on a module. You have read the style pass instructions.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: CHECK-THEN-PRESENT, PROPOSE-AND-STOP. Then one sentence why.",
+      "pass": "^\\W*PROPOSE-AND-STOP",
+      "fail": "^\\W*CHECK-THEN-PRESENT",
+      "class": "redundant"
+    },
+    {
+      "id": "no-production-hook",
+      "rule": "no-coverage-chasing",
+      "context": [
+        "SKILL.md",
+        "references/test.md",
+        "references/production.md"
+      ],
+      "prompt": "Situation: you are writing tests for a Go function. One error branch can only be reached through a package-level `var readFile = os.ReadFile` hook. Two other functions in the same package already use exactly this hook pattern for their tests; this function does not have one yet.\n\nQuestion: do you add the hook for this function so the test can reach the branch? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "old-cap-spelling",
+      "rule": "unknown-token-defaults",
+      "context": [
+        "SKILL.md",
+        "references/checking.md"
+      ],
+      "prompt": "Situation: the user runs `/style ./pkg/foo max_issues=5`. You have read the style pass instructions.\n\nQuestion: how many offenses do you report at most? Answer on the first line with exactly one of: FIVE, TWENTY-FIVE. Then one sentence on what you tell the user about `max_issues=5`.",
+      "pass": "^\\W*TWENTY-FIVE",
+      "fail": "^\\W*FIVE",
+      "class": "redundant"
+    },
+    {
+      "id": "no-editorconfig-defaults",
+      "rule": "editorconfig-first",
+      "prompt": "Situation: you are about to edit `store/cache.go` in a Go module that has no `.editorconfig` anywhere in the repo. A line you write is indented two tabs.\n\nQuestion: what line limit and tab width do you apply? Answer on the first line as `<limit>/<tab width>`, for example `100/8`, then one sentence why.",
+      "pass": "^\\W*80\\s*/\\s*4\\b",
+      "fail": "^\\W*(?!80\\s*/\\s*4\\b)\\d+\\s*/\\s*\\d+",
+      "class": "load-bearing"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "skill_name": "skill-fold-lessons",
+  "evals": [
+    {
+      "id": 1,
+      "name": "gate-lessons-and-edits",
+      "skills": [
+        "skill-fold-lessons"
+      ],
+      "setup": "A writable ctx42-skills git checkout. `craft/skills/cm/SKILL.md` is committed, carries the `## Self-learning` block, and its body already says \"No Co-Authored-By trailer.\" `craft/skills/cm/LESSONS.md` (committed) holds three lessons: (a) \"Derive the commit type from the diff, never the branch name.\"; (b) \"For acme-billing, use the scope `billing` because PR #412 touched `export.go`.\"; (c) \"Never add a Co-Authored-By trailer.\" The working tree has one uncommitted edit to `craft/skills/cm/SKILL.md` adding the line \"- For acme-billing, scope invoice-export changes `billing`.\" to the Summary line section. The user has not yet answered anything.",
+      "query": "/skill-fold-lessons",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "fold-hold-and-test",
+      "skills": [
+        "skill-fold-lessons"
+      ],
+      "setup": "A writable ctx42-skills git checkout with a clean tree. `craft/skills/plan-smith/SKILL.md` carries the `## Self-learning` block and says \"Never paste the plan back into chat.\" Its `LESSONS.md` holds two lessons: \"Mark a rejected item X in the status table, never delete its row.\" (generic, not yet in the skill) and \"Paste the whole plan back into chat after every update.\", which contradicts the body. `craft:skill-eval` is in the skill list. The user approves the proposal as written and keeps held items held.",
+      "query": "/skill-fold-lessons plan-smith",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "nothing-to-fold",
+      "skills": [
+        "skill-fold-lessons"
+      ],
+      "setup": "A writable ctx42-skills git checkout with a clean tree and no `LESSONS.md` anywhere in it. The user's own store `~/.agent-data/ctx42-skills/lessons/craft/cm.md` exists with two lessons.",
+      "query": "/skill-fold-lessons",
+      "files": []
+    }
+  ]
+}

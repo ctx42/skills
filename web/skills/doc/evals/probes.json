@@ -1,0 +1,77 @@
+{
+  "skill_name": "doc",
+  "probes": [
+    {
+      "id": "undocumented-prop-placement",
+      "rule": "header-holds-members",
+      "prompt": "Situation: `/web:doc component=AppLayout`. The component declares `defineProps<{ title: string; wide?: boolean }>()`; its header block above the macro names `title` but not `wide`.\n\nQuestion: where does the documentation of `wide` go? Answer on the first line with exactly one of: TSDOC-ON-THE-MEMBER, HEADER-BLOCK. Then one sentence why.",
+      "pass": "^\\W*HEADER-BLOCK",
+      "fail": "^\\W*TSDOC-ON-THE-MEMBER",
+      "class": "load-bearing"
+    },
+    {
+      "id": "param-tags",
+      "rule": "checklist-governs",
+      "prompt": "Situation: `/web:doc src/format.ts`. A function's TSDoc is accurate and complete but documents its arguments with `@param value …` and `@returns …` tags.\n\nQuestion: do you change it? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "member-tsdoc-duplicate",
+      "rule": "header-holds-members",
+      "prompt": "Situation: `/web:doc component=AppLayout`. The header block names `title` as the page heading; the `title` member of the `defineProps` type also carries `/** The page heading. */`.\n\nQuestion: what happens to the member's TSDoc? Answer on the first line with exactly one of: KEEP, DELETE. Then one sentence why.",
+      "pass": "^\\W*DELETE",
+      "fail": "^\\W*KEEP",
+      "class": "load-bearing"
+    },
+    {
+      "id": "no-target-is-diff",
+      "rule": "diff-default",
+      "prompt": "Situation: the user types `/web:doc` with no arguments in a frontend with 6 directories under `src/`. `git diff HEAD` changes the body of `formatDate` in src/format.ts and the body of `useSites` in src/stores/sites.ts, and nothing else. The checklist fires on both.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: EDIT-THE-COMMENTS, PLAN-AND-WAIT, ASK-FOR-TARGET, DOCUMENT-WHOLE-FRONTEND. Then one sentence why.",
+      "pass": "^\\W*PLAN-AND-WAIT",
+      "fail": "^\\W*(EDIT-THE-COMMENTS|ASK-FOR-TARGET|DOCUMENT-WHOLE-FRONTEND)",
+      "class": "redundant"
+    },
+    {
+      "id": "large-target-fans-out",
+      "rule": "auto-fan-out",
+      "prompt": "Situation: the user types `/web:doc all` in a frontend of 7 directories under `src/` plus `e2e/`, holding 65 `.vue`/`.ts` files and about 5,000 lines, and says nothing about subagents.\n\nQuestion: do you dispatch one subagent per directory? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "old-cap-spelling",
+      "rule": "unknown-tokens",
+      "prompt": "Situation: the user types `/web:doc src/stores max_changes=2`; the checklist fires on 6 items in the directory.\n\nQuestion: how many comments does the plan propose to change at most? Answer on the first line with exactly one of: TWO, SIX, ASK. Then one sentence on what you tell the user about `max_changes=2`.",
+      "pass": "^\\W*ASK\\b",
+      "fail": "^\\W*(TWO|SIX)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "not-delegated-keeps-gate",
+      "rule": "delegated-by-audit",
+      "prompt": "Situation: earlier in this session the user ran `/web:audit`. Now the user types `/doc src/stores` themselves; the checklist fires on four items.\n\nQuestion: do you stop for the user's approval before editing any comment? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "stale-comment-fix-and-flag",
+      "rule": "facts-from-code",
+      "prompt": "Situation: a TSDoc says \"Loads the devices once\", but the code refetches them on every mount. Nothing shows whether \"once\" was the intent and the code is the bug.\n\nQuestion: what do you do? Answer on the first line with exactly one of: FIX-AND-FLAG, FIX-ONLY, FLAG-ONLY. Then one sentence why.",
+      "pass": "^\\W*FIX-AND-FLAG\\b",
+      "fail": "^\\W*(FIX-ONLY|FLAG-ONLY)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "line-in-no-item",
+      "rule": "unknown-tokens",
+      "prompt": "Situation: `/web:doc src/api.ts:3`. Line 3 is an `import` statement; the module has a header block at line 1 and functions from line 10.\n\nQuestion: what do you work on? Answer on the first line with exactly one of: ASK, MODULE-HEADER. Then one sentence why.",
+      "pass": "^\\W*ASK\\b",
+      "fail": "^\\W*MODULE-HEADER\\b",
+      "class": "redundant"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "skill_name": "edit",
+  "evals": [
+    {
+      "id": 8,
+      "name": "autofix-bulk-applies-errata",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`initiatives/payload-booking/srd.review.md` has an `## Errata` block of three findings. Two anchors still match their quoted `old` text exactly once; the third entry has since been reworded, so its anchor no longer contains the quoted text. The SRD also carries one British spelling the `## Errata` block does not list.",
+      "query": "/edit initiatives/payload-booking/srd.md autofix",
+      "files": []
+    },
+    {
+      "id": 11,
+      "name": "corpus-grounded-edit-routes-the-unconfirmable",
+      "skills": [
+        "edit",
+        "report-doc-gap",
+        "kb"
+      ],
+      "setup": "The user asks for `PB-2` to say the Booking API retries a failed slot lookup three times; the retry count appears in no document. The user approves the proposal with `YN`.",
+      "query": "/edit initiatives/payload-booking/srd.md PB-2 the Booking API retries a failed slot lookup three times, that is what it does today; make PB-2 say so",
+      "files": []
+    },
+    {
+      "id": 19,
+      "name": "feedback-without-a-review-file",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`initiatives/payload-booking/srd.md` exists and has real defects, but no `initiatives/payload-booking/srd.review.md` beside it — the user asks for a finding number anyway.",
+      "query": "/edit initiatives/payload-booking/srd.md #2",
+      "files": []
+    },
+    {
+      "id": 20,
+      "name": "autofix-inserts-missing-notice",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`initiatives/payload-booking/srd.md` carries no obligation-word notice anywhere and no Conventions section. The `## Errata` block of `initiatives/payload-booking/srd.review.md` lists that section as `(missing)` → the Conventions heading plus the notice, beside one ordinary spelling substitution.",
+      "query": "/edit initiatives/payload-booking/srd.md autofix",
+      "files": []
+    },
+    {
+      "id": 21,
+      "name": "autofix-misplaced-notice-is-stale",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`initiatives/payload-booking/srd.md` carries the obligation-word notice, but as a bare quote directly below the header table instead of in a Conventions section after the Introduction. The `## Errata` block of `initiatives/payload-booking/srd.review.md` still lists the Conventions section as `(missing)` → the Conventions heading plus the notice, beside one ordinary spelling substitution.",
+      "query": "/edit initiatives/payload-booking/srd.md autofix",
+      "files": []
+    },
+    {
+      "id": 22,
+      "name": "summary-default-newest-block",
+      "skills": [
+        "edit"
+      ],
+      "setup": "`initiatives/payload-booking/srd.decisions.md` holds three blocks: `## 2026-09-30 15:20` (SW-2 now refuses a swap less than 14 days before launch; PB-2's cutoff cut from 28 to 21 days; PB-3 reworded with the system as subject), `## 2026-09-30 09:10` (PB-1 now names a request with no launch slot; PB-2 given a 28-day cutoff), and a date-only `## 2026-09-29` (SW-2 added). `initiatives/payload-booking/srd.review.md` has resolved #3 (added SW-2), #5 (PB-1), #6 (PB-2 cutoff), #8 (SW-2 now 14 days), #10 (PB-3 subject); withdrawn #2 (unstamped), #4 (stamped 2026-09-30 09:30) and #9 (stamped 2026-09-30 15:40); and open #12 on SW-1 with no note.",
+      "query": "/edit initiatives/payload-booking/srd.md summary",
+      "files": []
+    },
+    {
+      "id": 23,
+      "name": "summary-merges-a-day",
+      "skills": [
+        "edit"
+      ],
+      "setup": "The same `initiatives/payload-booking/srd.md`, `initiatives/payload-booking/srd.decisions.md` and `initiatives/payload-booking/srd.review.md` as `summary-default-newest-block`: two blocks dated 2026-09-30 (15:20 and 09:10) and a date-only 2026-09-29 block; PB-2 changed in both 2026-09-30 blocks, ending at a 21-day cutoff.",
+      "query": "/edit initiatives/payload-booking/srd.md summary 2026-09-30",
+      "files": []
+    }
+  ]
+}

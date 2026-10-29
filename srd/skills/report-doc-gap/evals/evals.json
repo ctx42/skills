@@ -1,0 +1,36 @@
+{
+  "skill_name": "report-doc-gap",
+  "evals": [
+    {
+      "id": 1,
+      "name": "capture-does-not-interrupt",
+      "skills": [
+        "report-doc-gap",
+        "review"
+      ],
+      "setup": "`srd:review` is mid-pass. The SRD claims \"the Booking API holds a slot for 15 minutes\"; corpus searches find no document stating any hold period.",
+      "query": "/review initiatives/booking-holds/srd.md",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "drain-grill-confirm-file",
+      "skills": [
+        "report-doc-gap"
+      ],
+      "setup": "Two draft gaps with `srd_ref` `booking-holds` sit on the server. Offered them, the finder works them now.",
+      "query": "/report-doc-gap initiatives/booking-holds/srd.md",
+      "files": []
+    },
+    {
+      "id": 9,
+      "name": "drafts-survive-a-new-session",
+      "skills": [
+        "report-doc-gap"
+      ],
+      "setup": "A prior session captured one gap for `initiatives/booking-holds/srd.md` as a draft and ended before filing it. This is a fresh session; nothing about the gap exists on this machine.",
+      "query": "/report-doc-gap initiatives/booking-holds/srd.md",
+      "files": []
+    }
+  ]
+}

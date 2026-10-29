@@ -1,0 +1,35 @@
+{
+  "skill_name": "plan-smith",
+  "evals": [
+    {
+      "id": 1,
+      "name": "create-from-brief",
+      "skills": [
+        "plan-smith"
+      ],
+      "setup": "Cold open. No prior conversation — this is the user's first message. The working directory is a Go web service repository.",
+      "query": "/plan-smith create the work to add SSO: provider config, login flow, session storage, and a page in the operator docs.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "bundled-brief",
+      "skills": [
+        "plan-smith"
+      ],
+      "setup": "Cold open. No prior conversation.",
+      "query": "/plan-smith we need to get the nightly export working properly — right now it dumps everything to one CSV on the app server, which fills the disk, nobody is told when it fails, and finance says the numbers do not tie out with the dashboard. The figures can only be reconciled once the export is split per entity, since today there is nothing to compare line by line. Write that up as a plan.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "grill-me-handoff",
+      "skills": [
+        "plan-smith"
+      ],
+      "setup": "A grill-me interview just finished and printed its structured summary. All branches resolved:\n\n1. Scope — the export covers the currently filtered view, not the whole dataset. Verified by: exporting from a filtered report yields exactly the filtered rows.\n2. Size limit — over 100k rows the export is refused with a message telling the user to narrow the filter. Verified by: a 100,001-row selection is refused and names the filter as the fix.\n3. Format — RFC 4180, UTF-8 with a BOM so Excel opens it correctly. Verified by: the file opens in Excel with accented characters intact and round-trips through a CSV parser.\n4. Delivery — synchronous download, no email and no background job. Verified by: the request returns the file itself, and no job row is created.\n5. Permissions — anyone who can see the report can export it, no separate grant. Verified by: a viewer-role user can export, and a user who cannot open the report gets 403.\n6. Audit — every export is logged with user, timestamp, and row count. Verified by: an export writes exactly one audit row carrying those three fields.\n\nThe user has been asked whether to persist this and has just answered.",
+      "query": "Yes, turn it into a plan.",
+      "files": []
+    }
+  ]
+}

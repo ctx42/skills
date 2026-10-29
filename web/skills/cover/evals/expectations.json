@@ -1,0 +1,53 @@
+{
+  "skill_name": "cover",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "function-covered-only-by-callers",
+      "expected_behavior": [
+        "Measures `readError` with only `api.test.ts` filtered to `readError` and reports it uncovered before (0 statements hit), though the whole suite runs it",
+        "Adds a `describe(\"readError\")` to `web/src/api.test.ts` covering both branches: an `ApiError`'s message and the sentence naming what could not be read",
+        "Re-measures and reports `readError` fully covered after, from a kept `.after` measurement",
+        "Leaves the coverage thresholds in `vite.config.ts` unchanged, and `bun run check` and `bun run coverage` pass at the end",
+        "Reports `Cases added this run:` with a count that matches the `Tests added:` list"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": 2,
+      "name": "component-covered-only-by-parents",
+      "expected_behavior": [
+        "Reports `LoadError.vue` at 0% direct coverage before, though the page tests mount it",
+        "Creates `web/src/components/LoadError.test.ts` with one `describe(\"LoadError\")` that shows the message and checks the `retry` event on a click, finding the button by its text",
+        "Reports `LoadError.vue` fully covered after",
+        "Changes no file outside `LoadError.test.ts` (and `src/testing.ts` only if a shared fake was added there)"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": 3,
+      "name": "file-target-is-plan-first",
+      "expected_behavior": [
+        "Measures every unit in `format.ts` (`isDateZone`, `formatDate`) and presents the plan — coverage per unit, the proposed cases, deferred and un-coverable lines — before writing any test",
+        "Proposes a `formatDate` case for a value that is not a time (the `\"-\"` branch) and none for `isDateZone`, which its tests already cover",
+        "After `go`, adds the case to the existing `describe(\"formatDate\")` table and reports `formatDate` fully covered"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+{
+  "skill_name": "backlog",
+  "rules": [
+    {
+      "id": "no-kb-writes",
+      "rule": "Writes nothing under the kb folder; every KB write is delegated to srd:kb",
+      "must": [
+        "write\\ any\\ file\\ under\\ the\\ `kb`\\ folder",
+        "every\\ knowledge\\-base\\ write\\ is\\ delegated\\ there"
+      ]
+    },
+    {
+      "id": "no-new-gaps-no-publish",
+      "rule": "Never publishes, authors SRDs, or files gaps itself; the sweep's gaps go through srd:report-doc-gap",
+      "must": [
+        "publish\\ anywhere;\\ author\\ or\\ edit\\ an\\ SRD;\\ file\\ new\\ gaps",
+        "`srd:report\\-doc\\-gap`\\ owns\\ that,\\ the\\ sweep's\\ included"
+      ]
+    },
+    {
+      "id": "gate-first",
+      "rule": "Pass the project gate before anything else",
+      "must": [
+        "0\\.\\ Pass\\ the\\ gate\\.\\ Always,\\ before\\ anything\\ below"
+      ]
+    },
+    {
+      "id": "abandoned-sweep",
+      "rule": "Every run sweeps abandoned SRDs (lifecycle value from the standard): one wrong gap per citing KB section through srd:report-doc-gap, filed at once, skipping a section an open revert gap covers",
+      "must": [
+        "1\\.\\ Sweep\\ abandoned\\ SRDs\\.\\ Always,\\ any\\ list\\ named\\ \\(not\\ `ask`\\)\\.",
+        "Take\\ the\\ field's\\ name\\ and\\ that\\ value\\ from\\ the\\s+standard",
+        "already\\ reverts\\ it\\ —\\ skip\\ the\\ section,\\ no\\ hit",
+        "The\\ abandoning\\ value\\ is\\ the\\ confirmation:\\ no\\ proposal,\\ no\\ grill",
+        "naming\\ the\\ abandoned\\ SRD\\ and\\ every\\ other\\ SRD\\ the\\ attestation\\ line\\ names"
+      ]
+    },
+    {
+      "id": "stale-recheck",
+      "rule": "Every run re-checks stale gaps: refresh with the same refs only when the sections still state the fact, correct a moved ref, reopen a filled gap whose fact is gone, ask when unsure",
+      "must": [
+        "2\\.\\ Re\\-check\\ stale\\ gaps\\.\\ Always,\\ any\\ list\\ named\\ \\(not\\ `ask`\\)\\.",
+        "`complete:\\ true`\\ refreshes\\ a\\ filled\\ gap,\\ `complete:\\ false`\\ re\\-hashes\\ an\\ open\\ one",
+        "else\\ `reopen_gap`,\\ `reason`\\ what\\ changed",
+        "none\\ hold:\\ no\\ call",
+        "Never\\ refresh\\ on\\ a\\ guess"
+      ]
+    },
+    {
+      "id": "unknowns-user-closes",
+      "rule": "Only the user closes an unknown; a corpus hit is evidence, never closure",
+      "must": [
+        "Only\\ the\\ user\\ closes\\ an\\ unknown",
+        "a\\ hit\\ is\\ evidence\\ to\\ put\\ in\\ front\\ of\\ them,\\ never\\ a\\ closure"
+      ]
+    },
+    {
+      "id": "never-close-by-guess",
+      "rule": "Never invent an answer to close a gap",
+      "must": [
+        "Never\\ invent\\ an\\ answer\\ to\\ close\\ a\\ gap",
+        "closed\\ with\\ a\\ guess\\ is\\ a\\ fact\\ the\\ corpus\\ will\\ serve\\ as\\ truth"
+      ]
+    },
+    {
+      "id": "draft-not-guessed",
+      "file": "references/gaps.md",
+      "rule": "Every sentence of a draft is user-confirmed or corpus-stated",
+      "must": [
+        "Do\\ not\\ draft\\ from\\ guesses",
+        "every\\ sentence\\ of\\ the\\ draft\\ is\\ something\\ the\\ user\\ confirmed\\ or\\ the\\ corpus\\ states"
+      ]
+    },
+    {
+      "id": "draft-outside-sources",
+      "file": "references/gaps.md",
+      "rule": "Drafts go outside every corpus source, kb included",
+      "must": [
+        "outside\\ every\\ corpus\\ source",
+        "a\\ draft\\ inside\\ a\\ source\\ is\\ clobbered\\ by\\ the\\ next\\ sync"
+      ]
+    },
+    {
+      "id": "fill-from-corpus-only",
+      "file": "references/gaps.md",
+      "rule": "Fill only from a corpus section get_doc shows; a URL or unpulled draft fills nothing",
+      "must": [
+        "Fill\\ once\\ a\\ corpus\\ section\\ states\\ the\\ fact\\ and\\ `get_doc`\\ shows\\ it",
+        "A\\ URL\\ never\\ fills\\ a\\ gap",
+        "fill\\ nothing"
+      ]
+    },
+    {
+      "id": "fill-rules",
+      "file": "references/gaps.md",
+      "rule": "Never fill against _inbox.md or an unconfirmed fact; part of the fact is a partial fill",
+      "must": [
+        "Never\\ fill\\ against\\ `_inbox\\.md`",
+        "Never\\ fill\\ against\\ an\\ unconfirmed\\ fact",
+        "`complete:\\ false`\\ with\\ `remaining`\\ saying\\ what\\ is\\ still\\ missing"
+      ]
+    },
+    {
+      "id": "wontfix-user-decides",
+      "file": "references/gaps.md",
+      "rule": "Wontfix only on the user's decision, never to clear the list",
+      "must": [
+        "Wontfix\\ only\\ on\\ the\\ user's\\ decision",
+        "Never\\ to\\ clear\\ the\\ list"
+      ]
+    },
+    {
+      "id": "deferred-no-answer-is-unknown",
+      "file": "references/ask.md",
+      "rule": "A deferred gap with no answer becomes an unknown via update_gap, not a skip",
+      "must": [
+        "No\\ answer\\ exists:\\ it\\ is\\ an\\ unknown,\\ not\\ a\\ skip\\ —\\ `update_gap`\\ with\\ `answer:\\ unknown`"
+      ]
+    },
+    {
+      "id": "deferred-answered",
+      "file": "references/ask.md",
+      "rule": "An answered deferred gap goes to srd:kb, loses its answer mark, and fills only once a topic page states it",
+      "must": [
+        "hand\\ the\\ fact\\ to\\ `srd:kb`\\ with\\ the\\ gap's\\ id,\\ then\\ `update_gap`\\ `answer:\\ \"\"`",
+        "`srd:kb`\\ writes\\ to\\ its\\ inbox,\\ never\\ a\\ fill\\ target"
+      ]
+    },
+    {
+      "id": "report-shape",
+      "rule": "Report names delegates by count and never states the answers",
+      "must": [
+        "Never\\ say\\ what\\ the\\ answers\\ were\\ or\\ where\\ they\\ landed",
+        "`srd:kb:\\ 2\\ answers`"
+      ]
+    },
+    {
+      "id": "store-error-stops",
+      "rule": "A store error stops gaps work; no retry",
+      "must": [
+        "report\\ it\\ with\\ its\\ message\\ and\\ stop;\\ never\\ retry\\ it\\ or\\ work\\ around\\ it"
+      ]
+    },
+    {
+      "id": "filled-by-identity",
+      "file": "references/gaps.md",
+      "rule": "filled_by entries use the result's id copied as is, never its path",
+      "must": [
+        "the\\ identity\\ is\\ the\\ result's\\ `id`\\ from\\ `search`\\ or\\ `list_docs`,\\ copied\\ as\\ is,\\ never\\ its\\ `path`"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "\\bdoc/[a-z_]+/",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust-gaps",
+      "file": "references/gaps.md",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "\\bdoc/[a-z_]+/",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust-ask",
+      "file": "references/ask.md",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "\\bdoc/[a-z_]+/",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "ask-confirmed-only",
+      "file": "references/ask.md",
+      "rule": "ask mode sets asked only on the user's confirmation, on gaps whose blocks all went out",
+      "must": [
+        "Only\\ on\\ the\\ user's\\ confirmation:\\ `update_gap`\\ `asked`\\ today's\\ date\\ on\\ every\\ gap\\ whose\\ blocks\\ all\\ went\\ out",
+        "Never\\ before,\\ never\\ for\\ a\\ person\\ not\\ confirmed,\\ never\\ on\\ \"will\\ send\\ later\""
+      ]
+    },
+    {
+      "id": "ask-block-shape",
+      "file": "references/ask.md",
+      "rule": "One paste-ready block per person; a gap naming two people sits in both; no gap ids or @-mentions in a block",
+      "must": [
+        "A\\ gap\\ naming\\ two\\ people\\ sits\\ in\\ both\\ groups",
+        "No\\ gap\\ ids,\\ SRD\\ folders,\\ tool\\ or\\ field\\ names\\ in\\ the\\ block;\\ the\\ plain\\ name,\\ never\\ an\\ @\\-mention"
+      ]
+    },
+    {
+      "id": "answers-back",
+      "file": "references/ask.md",
+      "rule": "Pasted replies are mapped and confirmed; a redirect adds the new name and clears asked; ask and asked stay as history",
+      "must": [
+        "Show\\ the\\ mapping\\ \\(`Maya\\ R\\ 1\\ →\\ gap\\-0042`\\)\\ and\\ act\\ on\\ the\\ user's\\ yes",
+        "\"Don't\\ know,\\ ask\\ Y\":\\ `update_gap`\\ `ask`\\ the\\ existing\\ names\\ plus\\ Y,\\ `asked:\\ \"\"`",
+        "`ask`\\ and\\ `asked`\\ stay\\ as\\ history"
+      ]
+    },
+    {
+      "id": "deferred-who-would-know",
+      "file": "references/ask.md",
+      "rule": "A user who does not know a deferred gap's answer gets Who would know; names merge into ask",
+      "must": [
+        "The\\ user\\ does\\ not\\ know:\\ \"Who\\ would\\ know\"\\ in\\ `doc\\-corpus\\.md`;\\ names\\ merge\\ into\\ `ask`"
+      ]
+    },
+    {
+      "id": "ask-selects",
+      "file": "references/ask.md",
+      "rule": "ask mode compiles only open deferred gaps that name someone; a draft is never asked",
+      "must": [
+        "keep\\ `answer:\\ deferred`\\ gaps\\ with\\ a\\ non\\-empty\\ `ask`",
+        "a\\ draft\\ is\\ never\\ asked"
+      ]
+    },
+    {
+      "id": "question-context-first",
+      "rule": "Each question on a gap opens with its context; text for others stands alone",
+      "must": [
+        "Each question to the user on a gap opens with its context",
+        "earlier answers verbatim with who gave them",
+        "stands alone: plain terms, an example, nothing they cannot open"
+      ]
+    },
+    {
+      "id": "ask-skips-sweep",
+      "rule": "ask runs the gate and step 7 only; steps 1 and 2 run for any list named, not ask",
+      "must": [
+        "Always, any list named \\(not `ask`\\)"
+      ]
+    },
+    {
+      "id": "lead-order-when-deferred-empty",
+      "rule": "With deferred empty, lead with unknowns, then gaps",
+      "must": [
+        "`deferred` empty, lead with `unknowns`, then `gaps`"
+      ]
+    }
+  ]
+}

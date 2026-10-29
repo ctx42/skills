@@ -1,0 +1,147 @@
+{
+  "skill_name": "cover",
+  "rules": [
+    {
+      "id": "per-function-direct",
+      "rule": "Coverage judged per function from its own Test_Foo family only",
+      "must": [
+        "coverage is per-function, from direct tests only",
+        "Coverage it picks up from other functions' tests, `-coverpkg`, or a whole-suite run does not count"
+      ]
+    },
+    {
+      "id": "write-scope",
+      "rule": "Writes limited to *_test.go; never add a production seam",
+      "must": [
+        "`\\*_test\\.go`, which is the whole of this skill's write scope",
+        "Adding one is an API change, not a test"
+      ]
+    },
+    {
+      "id": "sequential-functions",
+      "rule": "Never start function B before A is complete and verified",
+      "must": [
+        "Never start function B until function A's loop is complete and verified"
+      ]
+    },
+    {
+      "id": "isolated-measure",
+      "rule": "Measure with go test -run isolated family into per-function profiles",
+      "must": [
+        "go test -run '\\^Test_Foo\\(\\$\\|_\\)'",
+        "Keep each function's profiles rather than overwriting one scratch file"
+      ]
+    },
+    {
+      "id": "plan-gates",
+      "rule": "Diff/file/package/module plan-first and wait for approval; func/line run straight",
+      "must": [
+        "Run straight \\(no plan gate\\), then report",
+        "Wait for approval, then run steps 3–4 function by function"
+      ]
+    },
+    {
+      "id": "diff-default",
+      "rule": "No target works the functions the working diff touches; an empty diff asks",
+      "must": [
+        "diff \\(default: no target\\) — every function/method in a non-test `\\.go` file whose lines the working diff adds or changes",
+        "An empty diff: say so and ask for a target"
+      ]
+    },
+    {
+      "id": "auto-fan-out",
+      "rule": "Fan-out is automatic by size, announced in the plan",
+      "must": [
+        "Fan-out is automatic, never asked for: when the target spans more than ~6 packages and more than ~500 lines of Go in scope",
+        "The plan says it will fan out and why"
+      ]
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Unrecognized tokens are named and defaults run; an empty target resolution asks",
+      "must": [
+        "Read the tokens in any order: a reserved word is a mode or flag, `key=value` is a control, and anything else is the target",
+        "say it was not recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target that resolves to nothing: say so and ask — never guess what to work on"
+      ]
+    },
+    {
+      "id": "max-cap",
+      "rule": "max= is a hard cap on cases, counted per row/subtest",
+      "must": [
+        "`max=N` — hard cap on cases added this run"
+      ]
+    },
+    {
+      "id": "classification",
+      "rule": "Complex deferred, un-coverable never attempted; documented panic is easy",
+      "must": [
+        "un-coverable — one of the categories below. Never attempt",
+        "A \\*documented\\* panic is a contract"
+      ]
+    },
+    {
+      "id": "verify-gate",
+      "rule": "End of run: gofmt -l and go test -v -race on edited packages",
+      "must": [
+        "Run `gofmt -l` on every edited `\\*_test\\.go` file",
+        "Run `go test -v -race` over every package this run edited"
+      ]
+    },
+    {
+      "id": "test-style",
+      "rule": "Tests obey go:style Test and inherited Production rules",
+      "must": [
+        "obey them in every test\\s+written",
+        "Test does not replace Production, it adds to it"
+      ]
+    },
+    {
+      "id": "never-skip-silently",
+      "rule": "Report counts and every skipped line; never skip silently",
+      "must": [
+        "Never skip a line silently",
+        "Report the count on every run, capped or not"
+      ]
+    },
+    {
+      "id": "fan-out-cap-wins",
+      "rule": "Under fan-out the max= cap is divided before dispatch and never exceeded; a zero share gets no worker",
+      "must": [
+        "The cap wins over coverage",
+        "a package whose share is 0 gets no\\s+worker",
+        "any share left unused goes, in one\\s+follow-up dispatch, to packages that still have easy lines"
+      ]
+    },
+    {
+      "id": "cap-ends-loop",
+      "rule": "The per-function loop ends at max=; a fixed case replaces the one it fixes",
+      "must": [
+        "or `max=` is reached",
+        "A fixed case replaces the one\\s+it fixes and does not count again"
+      ]
+    },
+    {
+      "id": "delegated-by-audit",
+      "rule": "Delegated by go:audit: report gaps, no plan gate, no tests written",
+      "must": [
+        "A run not told so is not delegated, and runs its target kind as usual",
+        "No plan gate, no test written, no Verify, no fan-out"
+      ]
+    },
+    {
+      "id": "write-scope-lessons-aside",
+      "rule": "The *_test.go write scope covers the project; Self-learning lessons are outside it and still written",
+      "must": [
+        "the whole of this skill's write scope in the project \\(its\\s+Self-learning lessons aside\\)"
+      ]
+    },
+    {
+      "id": "delegated-still-learns",
+      "rule": "A delegated run still writes Self-learning lessons",
+      "must": [
+        "Self-learning lessons are still\\s+written"
+      ]
+    }
+  ]
+}

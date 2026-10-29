@@ -1,0 +1,154 @@
+{
+  "skill_name": "perf",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "auto-loop-on-the-fixture",
+      "expected_behavior": [
+        "Before any edit, its first message names the detected URL on port 5173, says back-end edits are off because the Go server has no live reload, and waits for the reply; it asks nothing after that reply",
+        "The first commit fixes a timed finding (a long task, slow interaction, layout shift, or leak), and no commit fixing a duplicate or sequential request lands before every timed finding left is committed, under Dropped, or under Recommendations as a visible change",
+        "Every commit's message carries `Perf-Finding:`, `Perf-Change:`, and `Perf-Measure:` after the body, every timed `Perf-Measure:` names the 4x CPU slowdown, no body line is over 72 columns, and there is no `Co-Authored-By` trailer",
+        "No commit adds a file under `dev/perf/` or carries `Perf-Pictures:`, and no trace, heap snapshot, or build output is left in the tree",
+        "The run's last commit passes `make check`, and every commit passes `go vet ./...`, `biome check .`, and `vue-tsc --noEmit` when checked out alone",
+        "No commit touches a `.go` file; a back-end idea appears only under Recommendations, as work blocked by no live reload",
+        "`requests.log` holds no `POST`, `PUT`, `PATCH`, or `DELETE` line",
+        "`formatDate` in `web/src/format.ts` building a new `Intl.DateTimeFormat` on every call (long tasks when sorting or searching 2006 rows) is committed or listed under Recommendations or Dropped",
+        "The duplicate `GET /api/devices` on the Devices view's load (`onMounted` re-running the read the immediate `watch` already started) is committed or listed under Recommendations or Dropped",
+        "The `PERF:` comment in `web/src/stores/sites.ts` is still there at the end, and no commit keeps the sites in browser storage",
+        "No commit paginates or virtualizes the device list or changes what a settled view shows; such an idea appears only under Recommendations",
+        "Ends with a terse report opening `N commits, M dropped; stopped: stop rule` whose count and hashes match `git log` for the run, and `web/dist/` holds only `.gitkeep` at the end",
+        "Per change runs only the static checks and the tests covering the touched files; runs the full checks (`make check`, or `go test ./...` and `vitest run`) on the untouched tree and again after the last change commit, never between two change commits; the report's second line is `Checks: pass` or `Checks: red — <check>`"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    {
+      "id": 2,
+      "name": "interactive-commit-drop-never",
+      "expected_behavior": [
+        "The first stop comes after the change is built, measured, and checked, shows before -> after numbers, and no commit precedes the `commit` reply",
+        "`commit` yields one commit holding the change",
+        "`drop; never …` restores the tree as it was before the change, then yields exactly one commit adding one `PERF: never …` comment and no other content, with a `docs(perf): never …` summary and `Perf-Finding:` as its only field",
+        "The dropped idea is not proposed again in the run",
+        "The prompt yields a reworked change and a new stop, with no commit in between",
+        "`stop` ends the run with a report opening `K commits, N dropped; stopped: user`, K being 3 plus any `fix` or `revert` commits the final check made, N counting the user's drop plus any change discarded for no gain or reverted"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": 3,
+      "name": "focus-overrides-a-perf-comment",
+      "expected_behavior": [
+        "Makes exactly one change commit (any other is the final check's `fix` for it), and after it a reload of the Sites page shows the site names before `GET /api/sites` answers",
+        "That commit removes the `PERF:` comment in `web/src/stores/sites.ts`, and its body says the comment was removed",
+        "The commit touches nothing outside the sites store and its tests, and no `.go` file",
+        "Ends with a report opening `N commits` (`1 commit` allowed), `0 dropped; stopped: single run`, N matching `git log` for the run"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": 4,
+      "name": "no-dev-server-stops",
+      "expected_behavior": [
+        "Names the missing dev server as the missing prerequisite and stops",
+        "Starts no server: runs none of `bun run dev`, `go run ./cmd/fleet`, `go run ./cmd/fake-upstream`, or a `make` target that serves",
+        "The tree and `git log` are unchanged, and the reply is a line or two with no measurement"
+      ],
+      "blind_only": [
+        1,
+        3
+      ]
+    },
+    {
+      "id": 5,
+      "name": "loop-stops-at-max",
+      "expected_behavior": [
+        "Makes exactly two change commits, though timed findings remain; any other commit is the final check's `fix` or `revert`",
+        "The report opens `N commits, 0 dropped; stopped: max reached`, N matching `git log` for the run (or counts a discarded failure in the dropped number) and lists the findings still left under Recommendations"
+      ],
+      "blind_only": [
+        1
+      ]
+    },
+    {
+      "id": 6,
+      "name": "focus-change-with-no-gain",
+      "expected_behavior": [
+        "Measures the Settings view before building the change, and the change shows no gain beyond the noise of its 5 before runs",
+        "Makes no commit; the tree ends as it started",
+        "The report opens `0 commits, 1 dropped; stopped: single run` and lists the change under Dropped as `no measurable gain`"
+      ],
+      "blind_only": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 8,
+      "name": "focus-names-a-visible-change",
+      "expected_behavior": [
+        "Makes one commit that shows the device list 100 devices per page",
+        "That commit carries `dev/perf/before.png` and `dev/perf/after.png` and a `Perf-Pictures:` field naming the view; `after.png` shows the pagination control and `before.png` does not",
+        "The commit adds or extends a test covering the paging"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": 10,
+      "name": "max-without-loop-stops",
+      "expected_behavior": [
+        "The reply says \"`max` needs `loop`\" and stops: no start message, no prerequisite report, no measurement",
+        "Sends no request to the server: `requests.log` holds nothing beyond the setup's own readiness check",
+        "The tree and `git log` are unchanged"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": 11,
+      "name": "build-into-scratch",
+      "expected_behavior": [
+        "`web/dist/.gitkeep` is still tracked and unchanged at the end, and `web/dist/` holds no other file: the build never wrote into the tree",
+        "The report does not list the bundle under Not measured: the build ran into a directory outside the repository",
+        "The run makes one commit, and its `Perf-Measure:` for a timed metric names the 4x CPU slowdown"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+}

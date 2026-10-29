@@ -1,0 +1,335 @@
+{
+  "skill_name": "perf",
+  "rules": [
+    {
+      "id": "max-needs-loop",
+      "rule": "`max` without `loop` stops with a message before any other step; it counts commits only",
+      "must": [
+        "`max=N` counts change commits only",
+        "needs `loop`: given without it, say\\s+\\\"`max` needs `loop`\\\" and stop before any other step"
+      ]
+    },
+    {
+      "id": "one-change-without-loop",
+      "rule": "Without `loop` a run makes at most one change",
+      "must": [
+        "Without `loop` a run makes\\s+at most one change",
+        "Without `loop`, stop after one change"
+      ]
+    },
+    {
+      "id": "prerequisites-stop",
+      "rule": "A missing prerequisite is named and the run stops with no edit or commit; it never starts a server",
+      "must": [
+        "The first that fails is named as the missing prerequisite",
+        "Never start one, even when the config says how",
+        "`HeadlessChrome`"
+      ]
+    },
+    {
+      "id": "scratch-only",
+      "rule": "Builds, traces, snapshots, and captures go to a scratch directory; the build never writes the project's output",
+      "must": [
+        "never into the tree",
+        "It runs only with its output pointed at the scratch\\s+directory",
+        "skip bundle and leak findings and say so\\s+under Not\\s+measured"
+      ]
+    },
+    {
+      "id": "cpu-4x",
+      "rule": "Every measurement runs at a 4x CPU slowdown, heap snapshots at 1x; load cost only from the build",
+      "must": [
+        "`cpuThrottlingRate: 4`",
+        "bundle size only from the\\s+scratch build, never from the dev server",
+        "except heap snapshots: those run at `cpuThrottlingRate: 1`"
+      ]
+    },
+    {
+      "id": "thresholds",
+      "rule": "Timed findings exist only past their thresholds; counted ones at every instance",
+      "must": [
+        "a timed one exists only while past its threshold",
+        "INP over 200 ms",
+        "over 50 ms",
+        "CLS over 0\\.1",
+        "grows by more than\\s+50 KB on every one of 5\\s+navigate-away-and-back cycles",
+        "A counted one is a finding at every instance"
+      ]
+    },
+    {
+      "id": "noise-keep",
+      "rule": "Median of 5; keep a change only past the before spread; else drop as no measurable gain, focus included",
+      "must": [
+        "measured 5 times and its median used",
+        "more than the spread \\(max − min\\) of the 5 before runs",
+        "\\\"no measurable gain\\\" —\\s+a focus instruction included"
+      ]
+    },
+    {
+      "id": "write-safety",
+      "rule": "Exploration never triggers a write unless the focus names the flow",
+      "must": [
+        "nor trigger a write — a POST, PUT,\\s+PATCH, or DELETE — unless the focus names that flow",
+        "never used again this run"
+      ]
+    },
+    {
+      "id": "perf-comment-binds",
+      "rule": "Only a `PERF:` comment binds; tests and earlier commits do not",
+      "must": [
+        "the only binding previous decision",
+        "Never act against one unless the focus asks for what it\\s+forbids",
+        "Test assertions and\\s+earlier commits do not bind"
+      ]
+    },
+    {
+      "id": "rank",
+      "rule": "Timed findings first by ratio, leaks top; then network; then bundle; shared chrome first; ties to the smaller change",
+      "must": [
+        "Timed findings, the worst ratio of value to threshold first",
+        "a leak ranks\\s+above every other timed finding",
+        "Network waste",
+        "Bundle findings",
+        "ties go to the\\s+smaller change"
+      ]
+    },
+    {
+      "id": "back-end-scope",
+      "rule": "Own back end changes only with live reload; outside APIs only as recommendations",
+      "must": [
+        "only when start step\\s+6 turned back-end edits on",
+        "APIs outside the repo are never changed",
+        "otherwise every back-end idea goes to\\s+Recommendations"
+      ]
+    },
+    {
+      "id": "merge-rule",
+      "rule": "Merge calls only for one resource always loaded together; never a per-page bundle; keep endpoints still called",
+      "file": "references/merge-rule.md",
+      "must": [
+        "their\\s+data describes one resource",
+        "Never add an\\s+endpoint bundling unrelated resources for one page",
+        "Keep an old endpoint while\\s+anything else in the repo calls it"
+      ]
+    },
+    {
+      "id": "merge-rule-pointer",
+      "rule": "The merge rule is read before any merge; per-page bundles never",
+      "must": [
+        "\\[references/merge-rule\\.md\\]",
+        "Never bundle unrelated resources for one page"
+      ]
+    },
+    {
+      "id": "reload-wait",
+      "rule": "Measure a back-end change only after the server reloaded",
+      "must": [
+        "PID \\(`ss -ltnp`\\) has changed",
+        "No\\s+restart within 60 s"
+      ],
+      "file": "references/measure.md"
+    },
+    {
+      "id": "focus-instruction",
+      "rule": "A focus beats a `PERF:` comment, may name a visible change, and limits commits to its part",
+      "must": [
+        "It beats a `PERF:` comment, which the\\s+same commit removes",
+        "It may require a visible change it\\s+names explicitly",
+        "no commit touches code outside the focused part"
+      ],
+      "file": "references/focus.md"
+    },
+    {
+      "id": "no-visible-change",
+      "rule": "Nothing the user sees changes; checked by the visible-change check",
+      "must": [
+        "Nothing the user sees changes",
+        "go to\\s+Recommendations unless a focus names them",
+        "a mismatch discards the change"
+      ]
+    },
+    {
+      "id": "tests-and-benchmarks",
+      "rule": "New code paths get tests; isolated gains get a benchmark per the reference",
+      "must": [
+        "gets unit or integration tests in the\\s+same commit",
+        "also gets a benchmark, written first and\\s+run before and after"
+      ]
+    },
+    {
+      "id": "benchmark-method",
+      "rule": "A benchmark is written first and run on the unchanged code, then the change; its keep rule",
+      "file": "references/benchmarks.md",
+      "must": [
+        "Write it first, run it on the unchanged code, then on the change",
+        "the browser median is not worse by more than its spread"
+      ]
+    },
+    {
+      "id": "code-quality",
+      "rule": "Never trade readability, layering, or tests for speed",
+      "must": [
+        "Never, for speed:",
+        "weaken or delete a test",
+        "A gain that needs one of these\\s+rules broken goes to Recommendations"
+      ]
+    },
+    {
+      "id": "one-change-per-commit",
+      "rule": "One commit per performance change",
+      "must": [
+        "One commit per performance change",
+        "unrelated changes never share a commit"
+      ]
+    },
+    {
+      "id": "checks-gated",
+      "rule": "Targeted checks gate every change commit on exit status; new red gets one repair, then auto discards",
+      "must": [
+        "re-run the targeted checks, each gated on exit status",
+        "never on piped or filtered output",
+        "gets one repair;\\s+still red: under `auto`, discard the change"
+      ]
+    },
+    {
+      "id": "final-check",
+      "rule": "Full checks run once after the last change; a new red is bisected to its commit, repaired once keeping the gain, else reverted",
+      "must": [
+        "the full checks wait for the final check",
+        "plus the tests covering the files a change\\s+touches",
+        "bisected to its commit, repaired once\\s+keeping the gain, else reverted"
+      ]
+    },
+    {
+      "id": "final-check-line",
+      "rule": "The report states the final check result on its checks line",
+      "file": "references/end-of-run.md",
+      "must": [
+        "Checks: pass"
+      ]
+    },
+    {
+      "id": "final-check-red",
+      "rule": "A new red at the end is bisected; one repair must keep the gain; else auto reverts, interactive stops",
+      "file": "references/final-check.md",
+      "must": [
+        "`git bisect run <check>`",
+        "re-measure shows the commit's gain kept",
+        "Still red, or the gain lost: under `auto`, revert that commit",
+        "Bisect pins no single commit"
+      ]
+    },
+    {
+      "id": "pictures-after-first",
+      "rule": "Focus-named visible change: after shot at the changed part first, before shot from the stashed tree at the same scroll",
+      "file": "references/focus-pictures.md",
+      "must": [
+        "shoot its pictures, after\\s+first",
+        "shoot `before`\\s+at the same scroll"
+      ]
+    },
+    {
+      "id": "commit-fields",
+      "rule": "cm at mini plus the Perf fields; no extra trailer",
+      "must": [
+        "Invoke `craft:cm` at `mini`",
+        "Never\\s+add a trailer beyond what `cm` allows"
+      ]
+    },
+    {
+      "id": "commit-fields-ref",
+      "rule": "Perf fields at 72 columns; pictures only when carried; a never commit carries the finding alone",
+      "file": "references/commit-message.md",
+      "must": [
+        "only on a commit carrying\\s+pictures",
+        "carries `Perf-Finding:` alone"
+      ]
+    },
+    {
+      "id": "interactive-replies",
+      "rule": "Interactive stops take commit, drop, or a prompt; drops last the run; a prompt never commits",
+      "must": [
+        "Drops are remembered for the current\\s+run only",
+        "its finding is not taken up again this run",
+        "with no commit in\\s+between",
+        "`docs\\(perf\\): never <x>`"
+      ],
+      "file": "references/stops.md"
+    },
+    {
+      "id": "stop-rule",
+      "rule": "Loop runs until nothing the run may fix remains, or `max` commits; re-measure the whole scope before stopping",
+      "must": [
+        "No cap by default",
+        "has made `max` change commits",
+        "measure the whole scope once more"
+      ],
+      "file": "references/loop.md"
+    },
+    {
+      "id": "report",
+      "rule": "Report opens with counts and stop reason",
+      "must": [
+        "2 commits, 1 dropped; stopped: stop rule"
+      ],
+      "file": "references/end-of-run.md"
+    },
+    {
+      "id": "report-from-git-log",
+      "rule": "Every count and hash in the report is read off git log",
+      "must": [
+        "Read every count and hash off `git log"
+      ]
+    },
+    {
+      "id": "style-read-no-gate",
+      "rule": "Code changes follow the web:style rule files, read once; no web:style gate",
+      "must": [
+        "Write every code change to `\\.\\./style/references/production\\.md`",
+        "no `web:style` pass runs here"
+      ]
+    },
+    {
+      "id": "commits-its-changes",
+      "rule": "The skill commits each kept change even where agents may not commit",
+      "must": [
+        "Committing\\s+each kept change is this skill's job, whatever rule forbids an agent to\\s+commit"
+      ]
+    },
+    {
+      "id": "leak-same-method",
+      "rule": "A leak's before and after series are taken the same way",
+      "must": [
+        "after, taken the same way both times"
+      ],
+      "file": "references/measure.md"
+    },
+    {
+      "id": "known-red-by-names",
+      "rule": "A known-red test check stays gated, passing while every test it fails also failed at the start; other known checks stay out of gates",
+      "must": [
+        "A\\s+known test check stays in every gate, passing while every test it fails\\s+also failed at the start",
+        "never judged by its failure count"
+      ],
+      "file": "references/start.md"
+    },
+    {
+      "id": "leak-sum-skips-code",
+      "rule": "The leak heap sum leaves out compiled code; a leak is confirmed on a production build",
+      "file": "references/measure.md",
+      "must": [
+        "The sum leaves out compiled code",
+        "growth only the\\s+dev build shows is no finding"
+      ]
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Tokens read in any order; unrecognized ones are named and defaults run",
+      "must": [
+        "the first other word starts the focus, which runs to the end",
+        "say it was not recognized, name the ones that\\s+exist, and run with the defaults as if it were absent",
+        "A focus that resolves to nothing: say so\\s+and ask — never guess what to work on"
+      ]
+    }
+  ]
+}

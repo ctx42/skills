@@ -1,0 +1,102 @@
+{
+  "skill_name": "audit",
+  "probes": [
+    {
+      "id": "style-worker",
+      "rule": "no-style-dimension",
+      "bullets": [
+        "whole-frontend-merges-every-dimension#b2"
+      ],
+      "prompt": "Situation: /audit src/pages with no controls; the directory is small and every dimension runs.\n\nQuestion: how many workers do you dispatch for `web:style` on its own? Answer on the first line with the integer only, then one sentence why.",
+      "pass": "^\\W*0\\b",
+      "fail": "^\\W*[1-9]",
+      "class": "load-bearing"
+    },
+    {
+      "id": "no-improve-worker",
+      "rule": "no-running-app",
+      "bullets": [
+        "whole-frontend-merges-every-dimension#b2"
+      ],
+      "prompt": "Situation: /audit all on a small frontend; a dev server is running and Chrome DevTools MCP is available.\n\nQuestion: do you dispatch a worker running `web:improve` or `web:perf`? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "empty-target-scope",
+      "rule": "diff-default",
+      "prompt": "Situation: /audit with no arguments in a repository whose frontend root is `web/`; the working diff touches only `internal/server/server.go`, the Go server that answers the frontend's API.\n\nQuestion: what do you do? Answer on the first line with exactly one of: AUDIT-ALL (audit the whole frontend), AUDIT-SERVER (audit the changed Go file and what calls it), ASK (say the target resolves to nothing and ask what to audit). Then one sentence why.",
+      "pass": "^\\W*ASK\\b",
+      "fail": "^\\W*AUDIT",
+      "class": "redundant"
+    },
+    {
+      "id": "worker-count",
+      "rule": "flat-dispatch",
+      "prompt": "Situation: /audit src/stores with no controls; the directory holds 4 files and 300 lines, and one route renders a component that reads one of its stores.\n\nQuestion: how many workers do you dispatch in all? Answer on the first line with the integer only, then one sentence why.",
+      "pass": "^\\W*4\\b",
+      "fail": "^\\W*([0-35-9]|\\d\\d)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "untested-unit-grade",
+      "rule": "gap-grades",
+      "bullets": [
+        "whole-frontend-merges-every-dimension#b4",
+        "overlapping-findings-merge-once#b3"
+      ],
+      "prompt": "Situation: the `cover` worker reports that the exported `isDateZone` in `src/format.ts` has no direct tests: its `describe` block was deleted. Every one of its lines still runs during `formatDate`'s tests, which call it.\n\nQuestion: what grade does that finding get? Answer on the first line with exactly one of BLOCKER, SHOULD-FIX, NIT, NONE (not a finding), then one sentence why.",
+      "pass": "^\\W*SHOULD-FIX",
+      "fail": "^\\W*(BLOCKER|NIT|NONE)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "missing-fact-grade",
+      "rule": "gap-grades",
+      "prompt": "Situation: the `doc` worker reports checklist item 4 (missing fact: the TSDoc of the exported store action `load` does not say it sends a request).\n\nQuestion: what grade does that finding get? Answer on the first line with exactly one of BLOCKER, SHOULD-FIX, NIT, then one sentence why.",
+      "pass": "^\\W*NIT\\b",
+      "fail": "^\\W*(BLOCKER|SHOULD-FIX)",
+      "class": "redundant"
+    },
+    {
+      "id": "unreached-checkout-grade",
+      "rule": "e2e-grade",
+      "bullets": [
+        "overlapping-findings-merge-once#b3",
+        "restricted-dimensions-on-the-diff#b3"
+      ],
+      "prompt": "Situation: the `e2e` worker reports that no spec reaches the `checkout` route, where users enter their card and pay.\n\nQuestion: what grade does that route's finding get? Answer on the first line with exactly one of BLOCKER, SHOULD-FIX, NIT, then one sentence why.",
+      "pass": "^\\W*SHOULD-FIX",
+      "fail": "^\\W*(BLOCKER|NIT)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "undriven-retry-grade",
+      "rule": "e2e-grade",
+      "prompt": "Situation: the `e2e` worker reports that specs reach the `sites` route and drive every control on it except the Retry button its error state shows.\n\nQuestion: what grade does that route's finding get? Answer on the first line with exactly one of BLOCKER, SHOULD-FIX, NIT, then one sentence why.",
+      "pass": "^\\W*SHOULD-FIX",
+      "fail": "^\\W*(BLOCKER|NIT)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "style-before-cover",
+      "rule": "fix-order",
+      "bullets": [
+        "whole-frontend-merges-every-dimension#b6"
+      ],
+      "prompt": "Situation: the report has two findings on `src/format.ts`: a Should-fix `cover` gap on `formatDate`, and a style Nit on its parameter name.\n\nQuestion: in the Fix order, which command comes first? Answer on the first line with exactly one of STYLE, COVER, then one sentence why.",
+      "pass": "^\\W*STYLE\\b",
+      "fail": "^\\W*COVER\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "dedupe-owner-grade",
+      "rule": "dedupe",
+      "prompt": "Situation: `/web:audit all`. On `src/pages/DevicesPage.vue` the `review` worker reports \"reachable error branch with no test\" as Should-fix. The `cover` worker reports the same unit: the branch's statement lines are uncovered, which the audit's `cover` grades call a Nit.\n\nQuestion: what grade does the merged finding carry? Answer on the first line with exactly one of: SHOULD-FIX, NIT. Then one sentence why.",
+      "pass": "^\\W*NIT\\b",
+      "fail": "^\\W*SHOULD-FIX\\b",
+      "class": "load-bearing"
+    }
+  ]
+}

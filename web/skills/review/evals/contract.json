@@ -1,0 +1,140 @@
+{
+  "skill_name": "review",
+  "rules": [
+    {
+      "id": "style-delegated",
+      "rule": "The style dimension is delegated to web:style; never re-derived",
+      "must": [
+        "the whole style dimension is delegated to\\s+it",
+        "never re-derive style rules here"
+      ]
+    },
+    {
+      "id": "one-finding-per-defect",
+      "rule": "A defect that is both style and correctness is reported once, under correctness",
+      "must": [
+        "is reported once, under correctness, with the higher\\s+grade, naming the style rule id it also breaks"
+      ]
+    },
+    {
+      "id": "review-reads-only",
+      "rule": "The review runs no tooling; it names the commands it ran",
+      "must": [
+        "run no Biome, `vue-tsc`, Vitest, Playwright, or Go\\s+tooling while reviewing",
+        "Name every command this pass ran, as run, in one report line"
+      ]
+    },
+    {
+      "id": "contract-in-scope",
+      "rule": "The API contract is checked for all, the root, or a diff touching either side",
+      "must": [
+        "The API contract is in scope for `all`, for the root, and for any target or\\s+diff touching the API client module or a Go file that serves its paths"
+      ]
+    },
+    {
+      "id": "contract-both-sides",
+      "rule": "A contract finding cites the TS and the Go side; a match yields nothing",
+      "must": [
+        "Each finding cites both sides",
+        "never list a match"
+      ],
+      "file": "references/contract.md"
+    },
+    {
+      "id": "contract-out-of-reach",
+      "rule": "No Go code serving the paths: skip, never guess the shape",
+      "must": [
+        "Never guess a server's shape from the frontend alone"
+      ],
+      "file": "references/contract.md"
+    },
+    {
+      "id": "prove-before-fixing",
+      "rule": "A behavioural bug is reproduced red before the fix and green after",
+      "must": [
+        "reproduce it before touching the fix",
+        "If no test can\\s+reproduce it, do not apply the fix"
+      ],
+      "file": "references/fixing.md"
+    },
+    {
+      "id": "never-commit",
+      "rule": "Fixing never commits",
+      "must": [
+        "Never `git commit`"
+      ],
+      "file": "references/fixing.md"
+    },
+    {
+      "id": "rule-placement",
+      "rule": "A rule Biome enforces goes in the reference config, never the prose rulebook",
+      "must": [
+        "it goes in\\s+`\\.\\./style/references/biome\\.json`",
+        "Nothing goes in the prose rulebook"
+      ],
+      "file": "references/rule-editing.md"
+    },
+    {
+      "id": "confirm-before-writing",
+      "rule": "No rule is written without confirmation",
+      "must": [
+        "never write a rule without confirmation"
+      ]
+    },
+    {
+      "id": "session-rules-close",
+      "rule": "Every Check run closes with Learn's scan of the session's feedback, writing only what the user picks; fan-out workers never run it",
+      "must": [
+        "Close every completed Check run with Learn mode's scan",
+        "then\\s+write only\\s+what the user picks",
+        "a fan-out worker never runs it"
+      ]
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Tokens read in any order; an unrecognized token is named and ignored, an unresolvable target asks",
+      "must": [
+        "Read the tokens in any order: a reserved word is a mode or flag, `key=value` is a control, and anything else is the target",
+        "say it was not recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target that resolves to nothing: say so and ask — never guess what to work on"
+      ]
+    },
+    {
+      "id": "cap-once-at-merge",
+      "rule": "max=N caps findings once, at the merge; workers get no share",
+      "must": [
+        "`max=N` \\(default 25, highest severity first\\)",
+        "Workers get no share of `max`; the merge applies it once"
+      ]
+    },
+    {
+      "id": "target-grammar",
+      "rule": "Check targets follow web:style's grammar, FILE:LINE (the enclosing unit), func=, and component= included",
+      "must": [
+        "the target — empty, a directory, a file, `FILE:LINE`, `func=`, `component=`, or `all` — exactly as `\\.\\./style/references/checking\\.md` \\(Frontend root, Target\\) does"
+      ]
+    },
+    {
+      "id": "delegated-by-audit",
+      "rule": "Delegated by web:audit: findings uncapped, no plan_first, fix, Session rules, or fan-out",
+      "must": [
+        "no `plan_first` stop \\(the audit agreed the budget\\), no `fix`, no Session rules, and no fan-out"
+      ]
+    },
+    {
+      "id": "delegated-passes-pinned-list",
+      "rule": "A delegated review passes target, depth, and the brief's pinned list to web:style, never max; a silent brief means another worker runs the contract check",
+      "must": [
+        "invoke `web:style` with the target, `depth`, and the pinned list when\\s+the brief gives one, never `max`",
+        "a silent brief means another worker runs it, or it is out of scope"
+      ]
+    },
+    {
+      "id": "style-never-relays-stop",
+      "rule": "In step 2 web:style runs delegated and never stops for plan-first, so the review relays no stop",
+      "must": [
+        "a delegated `web:style` never stops for plan-first, so the review relays no\\s+stop"
+      ]
+    }
+  ]
+}

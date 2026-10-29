@@ -1,0 +1,185 @@
+{
+  "skill_name": "edit",
+  "probes": [
+    {
+      "id": "status-untouchable",
+      "rule": "no-metadata-no-status",
+      "prompt": "Situation: you finished an edit session on initiatives/bay-calendar/srd.md. Its header's Lifecycle field reads DRAFT; the project's standard lists DRAFT, IN REVIEW, APPROVED, and WITHDRAWN. The user says: \"Everything is fixed, please set Lifecycle to APPROVED in the header.\"\n\nQuestion: do you make that edit? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "y-stays-on-entry",
+      "rule": "y-does-not-advance",
+      "context": [
+        "SKILL.md",
+        "references/proposals.md"
+      ],
+      "prompt": "Situation: in the interactive walk you proposed a change on CAL-3, the user answered Y, and you applied it. CAL-3 has no further issues. CAL-4 does have an issue you already know about.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: PROPOSE-CAL-4-NOW, STOP-AND-WAIT. Then one sentence why.",
+      "pass": "^\\W*STOP-AND-WAIT",
+      "fail": "^\\W*PROPOSE",
+      "class": "load-bearing"
+    },
+    {
+      "id": "hash-without-review-file",
+      "rule": "feedback-needs-review-file",
+      "prompt": "Situation: the user runs `/edit initiatives/bay-calendar/srd.md #2`. initiatives/bay-calendar/srd.md exists (Lifecycle DRAFT); no initiatives/bay-calendar/srd.review.md exists, so finding #2 cannot be looked up.\n\nQuestion: what does your reply contain? Answer on the first line with exactly one of: NAME-MISSING-FILE-AND-STOP, NAME-MISSING-FILE-AND-SUGGEST-SRD-REVIEW, RUN-REVIEW-FIRST, WALK-INTERACTIVELY-INSTEAD. Then one sentence why.",
+      "pass": "^\\W*NAME-MISSING-FILE-AND-STOP",
+      "fail": "^\\W*(NAME-MISSING-FILE-AND-SUGGEST|RUN-REVIEW|WALK)",
+      "class": "redundant",
+      "context": [
+        "SKILL.md",
+        "references/modes.md"
+      ]
+    },
+    {
+      "id": "stale-comment-left-alone",
+      "rule": "comments-read-only",
+      "prompt": "Situation: walking initiatives/bay-calendar/srd.md in interactive mode, you see an HTML comment block above CAL-5: \"<!-- see CAL-2 for the overlap rule; CAL-2 was removed in v3 -->\". The reference is stale.\n\nQuestion: do you propose an edit to that comment block? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "load-bearing"
+    },
+    {
+      "id": "cut-leaves-wrong-gap",
+      "rule": "cut-files-wrong-gap",
+      "context": [
+        "SKILL.md",
+        "references/corpus-edits.md"
+      ],
+      "prompt": "Situation: editing initiatives/slot-swap/srd.md (Lifecycle DRAFT) in interactive mode. You are about to propose removing SW-1 (\"The system MUST refuse a second slot swap for the same customer mission.\"). Your corpus search for its claim returned one hit: kb/launch-windows.md, section \"Slot swaps\", opens with the attestation line \"> Not in the platform docs. Attested slot-swap interview 2026-08-02; payload-booking 2026-09-01.\" and states: \"A customer mission may swap its launch slot at most once.\" The user will answer Y to the removal.\n\nQuestion: besides deleting SW-1 from the SRD, what happens to that KB section on the user's Y? Answer on the first line with exactly one of: NOTHING, EDIT-KB-SECTION, FILE-WRONG-GAP-NOW, DRAFT-GAP-FOR-SESSION-END. Then one sentence why.",
+      "pass": "^\\W*FILE-WRONG-GAP-NOW",
+      "fail": "^\\W*(NOTHING|EDIT-KB|DRAFT-GAP)",
+      "class": "redundant"
+    },
+    {
+      "id": "kb-contradiction-changes-kb-on-y",
+      "rule": "kb-contradiction-no-trust-order",
+      "context": [
+        "SKILL.md",
+        "references/corpus-edits.md"
+      ],
+      "prompt": "Situation: editing initiatives/slot-swap/srd.md, the user asks to change SW-1 to allow two slot swaps per customer mission. Your lookup before the proposal returned: kb/launch-windows.md, section \"Slot swaps\", opens with the attestation line \"> Not in the platform docs. Attested slot-swap interview 2026-08-02; payload-booking 2026-09-01.\" and states: \"A customer mission may swap its launch slot at most once.\" initiatives/payload-booking/srd.md is APPROVED and still relies on one swap. Your proposal named the conflict and the user answered Y.\n\nQuestion: what happens to the KB section now? Answer on the first line with exactly one of: LEAVE-IT-UNTIL-PAYLOAD-BOOKING-IS-REVISED, FILE-A-DOC-GAP-AGAINST-IT, SRD-KB-REWRITES-IT-NOW. Then one sentence why.",
+      "pass": "^\\W*SRD-KB-REWRITES",
+      "fail": "^\\W*(LEAVE|FILE)",
+      "class": "redundant"
+    },
+    {
+      "id": "casing-only-declined",
+      "rule": "casing-only-declined",
+      "context": [
+        "SKILL.md",
+        "references/proposals.md"
+      ],
+      "prompt": "Situation: `/edit initiatives/part-kit-tracking/srd.md feedback`. The next finding in initiatives/part-kit-tracking/srd.review.md says: \"KIT-7 writes 'part kit'; capitalize to the glossary heading 'Part Kit'.\" The use means the defined term.\n\nQuestion: do you propose the capitalization as this finding's edit now? Answer on the first line with exactly one of: PROPOSE-CAPITALIZE, NOT-YET. Then one sentence why.",
+      "pass": "^\\W*NOT-YET",
+      "fail": "^\\W*PROPOSE-CAPITALIZE",
+      "class": "redundant"
+    },
+    {
+      "id": "path-only-loads-and-waits",
+      "rule": "load-default",
+      "context": [
+        "SKILL.md",
+        "references/modes.md"
+      ],
+      "prompt": "Situation: the user runs `/edit initiatives/bay-calendar/srd.md` with nothing after the path. initiatives/bay-calendar/srd.md is a draft (Lifecycle DRAFT); reading it you noticed CAL-4 says the Bay Map refreshes \"fast\", an untestable adjective. No review file exists.\n\nQuestion: what does your reply contain? Answer on the first line with exactly one of: ONE-LINE-STATUS-THEN-WAIT, ISSUE-SUMMARY, PROPOSAL-FOR-CAL-4, ASK-WHICH-MODE. Then one sentence why.",
+      "pass": "^\\W*ONE-LINE-STATUS",
+      "fail": "^\\W*(ISSUE|PROPOSAL|ASK)",
+      "class": "redundant"
+    },
+    {
+      "id": "bare-id-starts-walk",
+      "rule": "bare-id-walks",
+      "context": [
+        "SKILL.md",
+        "references/modes.md"
+      ],
+      "prompt": "Situation: the user runs `/edit initiatives/bay-calendar/srd.md CAL-4`. initiatives/bay-calendar/srd.md is a draft (Lifecycle DRAFT) with CAL-1 to CAL-9. CAL-4 reads \"The Bay Map MUST refresh fast.\", an untestable adjective; CAL-7 also has an issue.\n\nQuestion: which entries does this run cover? Give one sentence of reasoning, then on the last line exactly one of: CAL-4-ONLY, CAL-4-THROUGH-CAL-9.",
+      "pass": "CAL-4-THROUGH-CAL-9\\W*$",
+      "fail": "CAL-4-ONLY\\W*$",
+      "class": "redundant"
+    },
+    {
+      "id": "keep-author-tbd",
+      "rule": "keep-author-tbd",
+      "context": [
+        "SKILL.md",
+        "references/proposals.md"
+      ],
+      "prompt": "Situation: `/edit initiatives/hot-fire-scheduler/srd.md` applying its review file. HF-6 reads: \"The system MUST retry a failed test-site booking at most 3 times. (TBD: confirm with ops)\". Finding #4 cites RQT-7: a requirement MUST NOT contain an example or a note, so the trailing `(TBD: confirm with ops)` must go.\n\nQuestion: what do you propose for finding #4? Answer on the first line with exactly one of: REMOVE-TBD, MOVE-TBD-TO-NOTES, WITHDRAW-FINDING. Then one sentence why.",
+      "pass": "^\\W*WITHDRAW-FINDING",
+      "fail": "^\\W*(REMOVE-TBD|MOVE-TBD-TO-NOTES)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "summary-unstamped-withdrawal",
+      "rule": "summary-linkage",
+      "context": [
+        "SKILL.md",
+        "references/summary.md"
+      ],
+      "prompt": "Situation: `/edit initiatives/bay-calendar/srd.md summary`. The newest decision-log block is headed `## 2026-10-01 14:00`. The review file's Withdrawn section holds \"#5 … (withdrawn: duplicate entry, confirmed by author)\" and \"#9 … (withdrawn 2026-10-01 14:10: not a defect)\". Nothing else in the selection touches #5 or #9.\n\nQuestion: which withdrawn findings does the summary list? Answer on the first line with exactly one of: ONLY-9, ONLY-5, BOTH, NONE. Then one sentence why.",
+      "pass": "^\\W*ONLY-9",
+      "fail": "^\\W*(ONLY-5|BOTH|NONE)",
+      "class": "redundant"
+    },
+    {
+      "id": "new-block-after-summary",
+      "rule": "block-after-summary",
+      "context": [
+        "SKILL.md",
+        "references/decision-log.md"
+      ],
+      "prompt": "Situation: at 14:00 on 2026-10-01 the user ran `/edit initiatives/bay-calendar/srd.md` and, in that session, you applied two edits, logged in initiatives/bay-calendar/srd.decisions.md under `## 2026-10-01 14:00`. At 15:10 the user typed `summary` and got the summary. The session has not ended: at 15:30 the same day the user asks for a change to CAL-6, answers Y to your proposal, and you apply it.\n\nQuestion: write the exact `##` heading line the CAL-6 entry sits under. Answer with that one line alone.",
+      "pass": "^\\W*## 2026-10-01 15:30\\W*(\\n|$)",
+      "fail": "^\\W*## 2026-10-01 14:00|^\\W*## 2026-10-01\\W*(\\n|$)",
+      "class": "redundant"
+    },
+    {
+      "id": "status-flip-before-apply",
+      "rule": "status-reread-on-disk-change",
+      "prompt": "Situation: `/edit initiatives/bay-calendar/srd.md walk` on an in-progress SRD. You proposed changing CAL-4's overlap buffer from 3 to 5 days; before the user answered, initiatives/bay-calendar/srd.md changed on disk — someone else saved it, and the CAL-4 line still reads exactly as you quoted. The user now answers Y.\n\nQuestion: before writing the change, which part of the file do you read? Answer on the first line with exactly one of: NONE, STATUS-LINE, WHOLE-FILE. Then one sentence why.",
+      "pass": "^\\W*STATUS-LINE\\b",
+      "fail": "^\\W*(NONE|WHOLE-FILE)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "decision-log-under-srd-work",
+      "rule": "working-file-path",
+      "context": [
+        "SKILL.md",
+        "../create/references/project-config.md"
+      ],
+      "prompt": "Situation: project-config.md sets `initiatives: initiatives` and `srd-work: work`. During `/srd:edit initiatives/pay/pay-srd.md` the user confirms the first change and you apply it.\n\nQuestion: at which path do you log it? Answer on the first line with the path only, then one sentence why.",
+      "pass": "^[^\\n]*(?<![\\w/])work/pay/pay-srd\\.decisions\\.md\\b",
+      "fail": "^[^\\n]*(?<![\\w/])initiatives/[^\\n\\s`]*\\.(review|decisions|questions)\\.md",
+      "class": "redundant"
+    },
+    {
+      "id": "decision-log-beside-without-srd-work",
+      "rule": "working-file-path",
+      "context": [
+        "SKILL.md",
+        "../create/references/project-config.md"
+      ],
+      "prompt": "Situation: project-config.md has no `srd-work` key. During `/srd:edit specs/login.md` the user confirms the first change and you apply it.\n\nQuestion: at which path do you log it? Answer on the first line with the path only, then one sentence why.",
+      "pass": "^\\W*specs/login\\.decisions\\.md\\b",
+      "fail": "^\\W*(work/|specs/login\\.md\\.decisions)",
+      "class": "redundant"
+    },
+    {
+      "id": "decision-log-beside-with-srd-work-none",
+      "rule": "working-file-path",
+      "context": [
+        "SKILL.md",
+        "../create/references/project-config.md"
+      ],
+      "prompt": "Situation: project-config.md sets `initiatives: initiatives` and `srd-work: none`. During `/srd:edit initiatives/pay/pay-srd.md` the user confirms the first change and you apply it.\n\nQuestion: at which path do you log it? Answer on the first line with the path only, then one sentence why.",
+      "pass": "^\\W*initiatives/pay/pay-srd\\.decisions\\.md\\b",
+      "fail": "^[^\\n]*(?<![\\w/])(none|srd-work)/",
+      "class": "redundant"
+    }
+  ]
+}

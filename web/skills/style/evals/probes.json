@@ -1,0 +1,78 @@
+{
+  "skill_name": "style",
+  "probes": [
+    {
+      "id": "rule-edit-via-review",
+      "rule": "rules-change-via-review",
+      "prompt": "Situation: the user says: \"From now on, no default exports in .ts modules. Add that to the frontend style rulebook.\" You have the web style skill loaded and can edit files.\n\nQuestion: how do you add the rule? Answer on the first line with exactly one of: EDIT-STYLE-MD, VIA-REVIEW. Then one sentence why.",
+      "pass": "^\\W*VIA-REVIEW",
+      "fail": "^\\W*EDIT-STYLE-MD",
+      "class": "load-bearing"
+    },
+    {
+      "id": "test-edit-reads",
+      "rule": "reference-vs-pass",
+      "prompt": "Situation: you are about to change one assertion in `src/stores/devices.test.ts`. You have the style skill loaded and have read none of its rule files yet.\n\nQuestion: which rule files do you read before the edit? Answer on the first line with exactly one of: TEST-ONLY, TEST-AND-PRODUCTION, NONE. Then one sentence why.",
+      "pass": "^\\W*TEST-AND-PRODUCTION",
+      "fail": "^\\W*(TEST-ONLY|NONE)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "page-read-state",
+      "rule": "shared-read-helper",
+      "context": [
+        "SKILL.md",
+        "references/production.md"
+      ],
+      "prompt": "Situation: a new page must load the device models and show a spinner while loading and an error with a retry button when it fails. The project has `src/read.ts` exporting `useRead`.\n\nQuestion: where does the page hold the loading and error state? Answer on the first line with exactly one of: OWN-REFS, SHARED-HELPER. Then one sentence why.",
+      "pass": "^\\W*SHARED-HELPER",
+      "fail": "^\\W*OWN-REFS",
+      "class": "load-bearing"
+    },
+    {
+      "id": "fake-fetch-key",
+      "rule": "fetch-fake-keys",
+      "context": [
+        "SKILL.md",
+        "references/test.md",
+        "references/production.md"
+      ],
+      "prompt": "Situation: a Vitest test fakes the network for a page that reads `/api/sites`.\n\nQuestion: write the key the canned answer is stored under and nothing else.",
+      "pass": "GET /api/sites",
+      "fail": "^\\W*[\"'`]?/api/sites[\"'`]?\\s*$",
+      "class": "load-bearing"
+    },
+    {
+      "id": "fix-gate",
+      "rule": "gate-before-and-after",
+      "context": [
+        "SKILL.md",
+        "references/checking.md"
+      ],
+      "prompt": "Situation: `/web:style src/pages fix` found four offenses. You have not edited anything yet.\n\nQuestion: what is your next command? Answer on the first line with the command only.",
+      "pass": "bun run check",
+      "fail": "^\\W*`?(git|sed|bunx biome check --write)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "plan-first-flag",
+      "rule": "plan-first-stops",
+      "context": [
+        "SKILL.md",
+        "references/checking.md"
+      ],
+      "prompt": "Situation: the user runs `/web:style all plan_first` on a frontend of 90 files. You have read the style pass instructions.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: CHECK-THEN-PRESENT, PROPOSE-AND-STOP. Then one sentence why.",
+      "pass": "^\\W*PROPOSE-AND-STOP",
+      "fail": "^\\W*CHECK-THEN-PRESENT",
+      "class": "redundant"
+    },
+    {
+      "id": "unknown-control",
+      "rule": "unknown-tokens",
+      "prompt": "Situation: the user runs `/web:style src/pages limit=10`. `src/pages` holds 12 files.\n\nQuestion: how many offenses do you report at most, and what do you say about `limit=10`? Answer on the first line with exactly one of: CAP-AT-10, IGNORE-AND-SAY. Then one sentence why.",
+      "pass": "^\\W*IGNORE-AND-SAY",
+      "fail": "^\\W*CAP-AT-10",
+      "class": "redundant"
+    }
+  ]
+}

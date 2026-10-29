@@ -1,0 +1,44 @@
+{
+  "skill_name": "review",
+  "evals": [
+    {
+      "id": 1,
+      "name": "whole-frontend-and-contract-on-the-fixture",
+      "skills": [
+        "review",
+        "style"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree: a Go server (`cmd/fleet`, `internal/server` encoding the API, `internal/upstream`, a fake inventory in `internal/fake`) and its Vue 3 + TypeScript frontend in `web/` (`src/api.ts` is the API client, plus components, pages, stores, colocated `*.test.ts`, and `e2e/`). `bun install --frozen-lockfile` has run in `web/`; `bun run check` there and `go test ./...` at the root are green. The user answers a plan or pick question with `none, just the report`.",
+      "query": "/web:review all",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies installed and a Go toolchain with the fixture's modules cached, so the baseline the setup states holds. The review itself runs neither."
+    },
+    {
+      "id": 2,
+      "name": "rule-edit-picks-biome-over-prose",
+      "skills": [
+        "review"
+      ],
+      "setup": "The web plugin is loaded from the git clone of this skills repository (`claude --plugin-dir ./web`), so a rule edit writes into the repository. The working directory is a frontend project. The user answers the confirmation with `yes`.",
+      "query": "/web:review add \"never export a default from a .ts module\"",
+      "files": [],
+      "requires": "A writable clone of this skills repository loaded as the plugin, and Biome installed (its `configuration_schema.json` names the rules). Run against a throwaway copy of the clone; never write the real one."
+    },
+    {
+      "id": 3,
+      "name": "fix-proves-the-leak-red-then-green",
+      "skills": [
+        "review",
+        "style"
+      ],
+      "setup": "The same fixture repository as scenario 1, clean tree, dependencies installed, both suites green.",
+      "query": "/web:review web/src/pages/DevicesPage.vue fix",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies installed, to run the tests and the `bun run check` gate."
+    }
+  ]
+}

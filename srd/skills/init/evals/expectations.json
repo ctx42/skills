@@ -1,0 +1,57 @@
+{
+  "skill_name": "init",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "adds-srd-keys-to-a-starter-config",
+      "expected_behavior": [
+        "Shows the whole proposed front matter and asks before writing anything",
+        "The proposal names `wiki/srd` for `initiatives` and the guidelines document for `srd-standard`",
+        "Writes `kb: kb`, `initiatives: wiki/srd`, `srd-standard: wiki/doc/process/srd-guidelines.md`, `glossary: wiki/doc/glossary`, `gaps: gap`, and `srd-work: srd-work` into `project-config.md`",
+        "Writes `precedence` as `kb` then `wiki/doc`, leaving out `wiki/srd`",
+        "Keeps `mcp-server: docs`, `mcp-port: 7791`, `watch: true`, and the body as found, and adds `kb` to `sources`",
+        "Creates `kb/.gitkeep`, `gap/.gitkeep`, and `srd-work/.gitkeep`",
+        "Appends the key reference (`## Front matter keys`, copied verbatim) after the kept body"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "writes-a-whole-file-without-one",
+      "expected_behavior": [
+        "Writes `project-config.md` with `mcp-server: docs`, `mcp-port: 7777`, and `watch: true`",
+        "Writes `sources` as `docs` and `kb`, and `kb: kb`",
+        "Writes `initiatives: docs/initiatives`, `srd-standard: docs/standards/srd-standard.md`, and `glossary: docs/glossary.md`",
+        "Creates `gap/.gitkeep` and `srd-work/.gitkeep`, and no `kb/.gitkeep`",
+        "Gives the new file the body `# Project configuration` followed by the key reference"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "stops-when-already-set-up",
+      "expected_behavior": [
+        "Says the folder is already set up, in one or two lines",
+        "Writes nothing"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "check-describes-a-sound-setup",
+      "expected_behavior": [
+        "Writes nothing",
+        "Calls `list_docs` and `list_gaps`",
+        "Gives the trust order with `kb` first, then `docs/api`",
+        "Counts 5 documents in `docs` and 1 SRD",
+        "Ends with no problems"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "check-flags-misplaced-folders",
+      "expected_behavior": [
+        "Writes nothing",
+        "Names `srd-work` in `sources` as a problem, with the fix to remove it",
+        "Names `kb` missing from `sources` as a problem, with the fix to add it"
+      ]
+    }
+  ]
+}

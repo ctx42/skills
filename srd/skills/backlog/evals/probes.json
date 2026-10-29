@@ -1,0 +1,175 @@
+{
+  "skill_name": "backlog",
+  "probes": [
+    {
+      "id": "hit-is-not-a-closure",
+      "rule": "unknowns-user-closes",
+      "prompt": "Situation: working `unknowns`, the row asks \"how many hot-fires does a Wisp engine need before it flies?\". A corpus search returns a page stating exactly \"a Wisp engine is cleared after two hot-fires\".\n\nQuestion: do you close the row on that hit? Answer on the first line YES or NO, then one sentence what you do with the hit.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "inbox-is-not-a-fill-target",
+      "rule": "fill-rules",
+      "context": [
+        "SKILL.md",
+        "references/gaps.md"
+      ],
+      "prompt": "Situation: working `gaps`, the user decides the fact belongs in the KB. srd:kb has just written the confirmed fact, and it sits only in kb/_inbox.md, not on any topic page.\n\nQuestion: what do you do with the gap? Answer on the first line with exactly one of: FILL-FROM-INBOX, LEAVE-OPEN-UNTIL-TOPIC-PAGE, WONTFIX. Then one sentence why.",
+      "pass": "^\\W*LEAVE-OPEN-UNTIL-TOPIC-PAGE",
+      "fail": "^\\W*(FILL|WONTFIX)",
+      "class": "redundant"
+    },
+    {
+      "id": "draft-outside-every-source",
+      "rule": "draft-outside-sources",
+      "context": [
+        "SKILL.md",
+        "references/gaps.md"
+      ],
+      "prompt": "Situation: working `gaps`, the user says: \"just put the draft at kb/drafts/slot-hold-policy.md, that is handy\".\n\nQuestion: do you write the draft there? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "published-url-is-not-a-fill",
+      "rule": "fill-from-corpus-only",
+      "context": [
+        "SKILL.md",
+        "references/gaps.md"
+      ],
+      "prompt": "Situation: working `gaps`, you drafted the page for a two-gap cluster outside the corpus. The user says: \"Published it: https://wiki.example.com/pages/1000000110 — it's live, I checked. Fill both gaps with that link so they drop off the list; the docs pull only runs tonight.\" `fill_gap` takes any string as `filled_by`.\n\nQuestion: what exact `filled_by` do you pass to `fill_gap` for the two gaps now? Answer on the first line with only that value, or NONE if you make no `fill_gap` call. Then one sentence why.",
+      "pass": "^\\W*NONE\\b",
+      "fail": "^\\W*(https?:|\\S*#)",
+      "class": "redundant"
+    },
+    {
+      "id": "no-answer-reclassifies",
+      "rule": "deferred-no-answer-is-unknown",
+      "context": [
+        "SKILL.md",
+        "references/ask.md"
+      ],
+      "prompt": "Situation: working `deferred`, you ask the question of open gap `gap-0042` (`answer: deferred`): \"at what chamber temperature does an Anvil engine raise its default overheat warning?\" The user says: \"Actually nobody knows that yet — no one has measured it on the new injector.\"\n\nQuestion: what do you do with gap-0042? Answer on the first line with exactly one of: SKIP-IT, SET-ANSWER-UNKNOWN, HAND-TO-KB, FILE-NEW-GAP, WONTFIX. Then one sentence naming the call you make, if any.",
+      "pass": "^\\W*SET-ANSWER-UNKNOWN.*update_gap",
+      "fail": "^\\W*(SKIP|HAND|FILE|WONTFIX)",
+      "class": "redundant"
+    },
+    {
+      "id": "answered-deferred-waits-for-a-topic-page",
+      "rule": "deferred-answered",
+      "context": [
+        "SKILL.md",
+        "references/ask.md",
+        "references/gaps.md"
+      ],
+      "prompt": "Situation: working `deferred`, the user answers open gap `gap-0042` (`answer: deferred`): \"3,350 kelvin\". You hand the fact to srd:kb, which writes it to kb/_inbox.md; no topic page states it yet.\n\nQuestion: what happens to gap-0042 now? Answer on the first line with exactly one of: FILL-FROM-INBOX, CLEAR-ANSWER-KEEP-OPEN, KEEP-DEFERRED, WONTFIX. Then one sentence why.",
+      "pass": "^\\W*CLEAR-ANSWER-KEEP-OPEN",
+      "fail": "^\\W*(FILL|KEEP-DEFERRED|WONTFIX)",
+      "class": "redundant"
+    },
+    {
+      "id": "filled-by-uses-id",
+      "rule": "filled-by-identity",
+      "context": [
+        "SKILL.md",
+        "references/gaps.md"
+      ],
+      "prompt": "Situation: working a gaps cluster, the page now states the fact and get_doc returned {\"id\":\"1000000110\",\"path\":\"docs/engines/hot-fire-campaigns.md\",\"rank\":4,\"title\":\"Hot-Fire Campaigns\"}; the section stating it is the heading \"Cold archive\" (anchor cold-archive). The user confirmed the fact and wants the gap filled.\n\nQuestion: what exact `filled_by` ref string do you pass to fill_gap? Answer on the first line with only that string, then one sentence why.",
+      "pass": "^\\W*1000000110#cold-archive\\b",
+      "fail": "^\\W*docs/",
+      "class": "load-bearing"
+    },
+    {
+      "id": "second-sweep-files-nothing",
+      "rule": "abandoned-sweep",
+      "prompt": "Situation: running `/backlog`, the sweep found initiatives/crew-seats/srd.md abandoned: its lifecycle field holds the value the SRD standard gives a document that will not be built. kb/mission-portal.md, section \"Crew seat booking\", opens with the attestation line \"> Not in the platform docs. Attested crew-seats interview 2026-09-02; payload-booking interview 2026-10-20.\" `list_gaps` with status open and srd_ref crew-seats returns gap-0041: kind wrong, doc_id kb/mission-portal.md, heading_path [\"Mission Portal\", \"Crew seat booking\"], hits 1, filed by last week's sweep, its `detail` naming only crew-seats — the payload-booking attestation was added since. srd:report-doc-gap answers a report that matches an already-open gap by bumping its `hits`: repeats are the backlog's priority signal.\n\nQuestion: what do you do for that section now? Answer on the first line with exactly one of: SKIP, ADD-HIT, UPDATE-GAP-DETAIL, FILE-NEW-GAP. Then one sentence why.",
+      "pass": "^\\W*SKIP\\b",
+      "fail": "^\\W*(ADD-HIT|UPDATE|FILE)",
+      "class": "redundant"
+    },
+    {
+      "id": "sweep-files-without-asking",
+      "rule": "abandoned-sweep",
+      "prompt": "Situation: the user ran `/backlog deferred`. You found initiatives/crew-seats/srd.md with Lifecycle WITHDRAWN, the value the SRD standard gives a document that will not be built. kb/mission-portal.md, section \"Crew seat booking\", opens with the attestation line \"> Not in the platform docs. Attested crew-seats interview 2026-09-02.\" No open gap covers that section. The user has said nothing about crew-seats.\n\nQuestion: what do you do with that section? Answer on the first line with exactly one of: NOTHING-ONLY-DEFERRED-WAS-ASKED, ASK-USER-BEFORE-FILING, HAND-TO-REPORT-DOC-GAP-NOW, EDIT-KB-SECTION. Then one sentence why.",
+      "pass": "^\\W*HAND-TO-REPORT-DOC-GAP-NOW",
+      "fail": "^\\W*(NOTHING|ASK|EDIT)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "recheck-runs-on-a-named-list",
+      "rule": "stale-recheck",
+      "prompt": "Situation: the user ran `/backlog deferred`. The abandoned-SRD sweep found nothing. `list_gaps` with `stale: true` would return two filled gaps whose cited KB sections changed since they were filled. The user has said nothing about stale gaps.\n\nQuestion: before working `deferred`, do you re-check those two gaps? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "vanished-ref-fact-moved",
+      "rule": "stale-recheck",
+      "prompt": "Situation: the stale re-check lists `gap-0052`, status `filled`, `filled_by` `1000000110#recordings`, `stale_refs` that ref with reason `vanished`; its target_claim is \"Hot-fire recordings older than 30 days move to the cold archive.\" `get_doc` on 1000000110 shows the heading \"Recordings\" is gone; a new heading \"Cold archive\" states exactly that sentence. The store offers `update_gap` (`gap_id` and only the fields that change, `filled_by` included), `fill_gap` (`gap_id`, `filled_by`, `complete`), and `reopen_gap` (`gap_id`, `reason`).\n\nQuestion: which single call do you make for gap-0052? Answer on the first line with the tool name and its arguments, e.g. `tool(gap_id=..., ...)`, or NO-CALL. Then one sentence why.",
+      "pass": "^\\W*fill_gap\\b.*cold-archive",
+      "fail": "^\\W*(update_gap|reopen_gap|NO-CALL)",
+      "class": "redundant"
+    },
+    {
+      "id": "open-gap-with-no-ref-left",
+      "rule": "stale-recheck",
+      "prompt": "Situation: the stale re-check lists `gap-0062`, status `open`, partly filled by one section, `kb/scrub-refunds.md#weather-scrub-fee`, stale with reason `changed`. `get_doc` shows the section now covers only customer-caused scrubs; nothing in the corpus states the weather-scrub fee any more. `update_gap` can set any field of the record, `filled_by` included.\n\nQuestion: what do you do with gap-0062? Answer on the first line with exactly one of: FILL-EMPTY-LIST, CLEAR-REF-WITH-UPDATE-GAP, REOPEN, WONTFIX, NO-CALL-REPORT-STILL-STALE, REFRESH-SAME-REFS. Then one sentence why.",
+      "pass": "^\\W*NO-CALL-REPORT-STILL-STALE",
+      "fail": "^\\W*(FILL|CLEAR|REOPEN|WONTFIX|REFRESH)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "asked-only-for-confirmed-person",
+      "rule": "ask-confirmed-only",
+      "context": [
+        "SKILL.md",
+        "references/ask.md"
+      ],
+      "prompt": "Situation: `/backlog ask` printed two per-person blocks: Maya R (questions for gap-0061 and gap-0064) and John K (questions for gap-0064 and gap-0065); gap-0064's `ask` names both of them. The user says: \"Sent Maya's. John is on leave, holding his.\"\n\nQuestion: which gaps get `asked` set to today? Answer on the first line with only the gap ids, comma-separated, then one sentence why.",
+      "pass": "^\\W*gap-0061\\b(?![^\\n]*gap-006[45])",
+      "fail": "^[^\\n]*gap-006[45]",
+      "class": "redundant"
+    },
+    {
+      "id": "redirect-adds-name-clears-asked",
+      "rule": "answers-back",
+      "context": [
+        "SKILL.md",
+        "references/ask.md"
+      ],
+      "prompt": "Situation: in a backlog sitting the user pastes Maya R's reply to the question of open gap gap-0061 (`answer: deferred`, `ask: [\"Maya R\"]`, `asked: \"2026-09-28\"`): \"No clue, ask Ethan P, he set it up.\" The user confirmed the mapping.\n\nQuestion: which `ask` and `asked` do you pass to update_gap? Answer on the first line exactly as `ask=<JSON list> asked=<value>`, then one sentence why.",
+      "pass": "^\\W*(ask\\W*)?\\[\\s*\"Maya R\"\\s*,\\s*\"Ethan P\"\\s*\\]\\W+asked\\W*(\"\"|empty|clear)",
+      "fail": "^\\W*ask\\W*\\[\\s*\"Ethan P\"\\s*\\]|asked\\W*\"?2026",
+      "class": "load-bearing"
+    },
+    {
+      "id": "answered-gap-is-not-asked",
+      "rule": "ask-selects",
+      "prompt": "Situation: `/backlog ask`. list_gaps (`status: open`, `asked: false`) returns gap-0061 (`answer: deferred`, `ask: [\"Maya R\"]`, `asked: \"\"`, question \"does a picked part kit expire?\") and gap-0058 (`answer: \"\"`, `ask: [\"Maya R\"]`, `asked: \"\"`, question \"which formats can a mission manifest be exported in?\"). Neither question has gone out to Maya R yet.\n\nQuestion: which gaps' questions go into Maya R's block? Answer on the first line with only the gap ids, comma-separated, then one sentence why.",
+      "pass": "^\\W*gap-0061\\b(?!\\W*,\\W*gap-0058)",
+      "fail": "^\\W*(gap-0061\\W*,\\W*)?gap-0058",
+      "class": "redundant",
+      "context": [
+        "SKILL.md",
+        "references/ask.md"
+      ]
+    },
+    {
+      "id": "one-follow-up-only",
+      "rule": "deferred-who-would-know",
+      "context": [
+        "SKILL.md",
+        "references/ask.md",
+        "../create/references/doc-corpus.md"
+      ],
+      "prompt": "Situation: working `deferred`, the user did not know the answer to open gap gap-0042 (`answer: deferred`, no `ask`): \"at what chamber temperature does an Anvil engine raise its default overheat warning?\" You asked \"Who would know?\". The user says: \"Hmm, maybe someone at the test site? Not sure.\"\n\nQuestion: what do you do next? Answer on the first line with exactly one of: ASK-WHO-AT-TEST-SITE, SET-ANSWER-UNKNOWN, ADD-TEST-SITE-TO-ASK. Then one sentence why.",
+      "pass": "^\\W*SET-ANSWER-UNKNOWN",
+      "fail": "^\\W*(ASK-WHO|ADD)",
+      "class": "redundant"
+    }
+  ]
+}

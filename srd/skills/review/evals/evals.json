@@ -1,0 +1,46 @@
+{
+  "skill_name": "review",
+  "evals": [
+    {
+      "id": 1,
+      "name": "default-review-of-a-flawed-srd",
+      "skills": [
+        "review"
+      ],
+      "setup": "`initiatives/scrub-refunds/srd.md`: `REF-4` reads \"The system SHALL validate the scrub cause and log the refund\", one `Included` item has no requirement covering it, and `REF-7` spells `behaviour` where US English wants `behavior`.",
+      "query": "/review initiatives/scrub-refunds/srd.md",
+      "files": []
+    },
+    {
+      "id": 9,
+      "name": "facts-vs-corpus-routes-doc-gaps",
+      "skills": [
+        "review",
+        "report-doc-gap"
+      ],
+      "setup": "`TLM-2` states \"the ground station's 3× resend requests\" and no corpus document states any resend count; `TLM-5` names a flight frame rate the corpus documents as a different value; `TLM-6` names a 30-day pad-downlink retention a KB section (`kb/telemetry-channels.md`, attested by another SRD) states as 90 days. A prior session left draft gaps for this SRD on the server; offered them at the start, the user keeps them as drafts for later.",
+      "query": "/review initiatives/telemetry-replay/srd.md",
+      "files": []
+    },
+    {
+      "id": 10,
+      "name": "no-drafts-skip-the-delegate",
+      "skills": [
+        "review"
+      ],
+      "setup": "The server holds no draft gap for this SRD. `initiatives/bay-calendar/srd.md` has two style defects and one duplicate id, asserts nothing about existing system behavior, and no `initiatives/bay-calendar/srd.review.md` exists yet.",
+      "query": "/review initiatives/bay-calendar/srd.md",
+      "files": []
+    },
+    {
+      "id": 11,
+      "name": "errata-re-sorts-findings",
+      "skills": [
+        "review"
+      ],
+      "setup": "`initiatives/scrub-refunds/srd.md` is a clean SRD except for four defects, and `initiatives/scrub-refunds/srd.review.md` already exists with no `## Errata` section. Its open findings are #1 under Introduction (a misspelling already written as a substitution), and under Requirements #2 (a misspelling written as prose, \"fix the spelling\"), #3 (a two-rule requirement, not errata), and #4 (one finding naming both a British spelling and a passive-voice rewrite). `## Resolved` holds #5.",
+      "query": "/review initiatives/scrub-refunds/srd.md errata",
+      "files": []
+    }
+  ]
+}

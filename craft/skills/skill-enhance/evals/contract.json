@@ -1,0 +1,169 @@
+{
+  "skill_name": "skill-enhance",
+  "rules": [
+    {
+      "id": "confirm-before-write",
+      "rule": "Propose per skill and wait for confirmation before writing anything",
+      "must": [
+        "Wait for confirmation before writing",
+        "Write: on approval"
+      ]
+    },
+    {
+      "id": "no-write-plugin-cache",
+      "rule": "Never write under plugins/cache, even if writable; write only to the writable store",
+      "must": [
+        "Never write under `\\.\\.\\./plugins/cache/` even if the OS\\s+says it is writable",
+        "write only to the writable\\s+one"
+      ]
+    },
+    {
+      "id": "lessons-not-inline",
+      "rule": "Lessons never live inline in a SKILL.md body",
+      "must": [
+        "Lessons never live inline in a `SKILL\\.md` body"
+      ]
+    },
+    {
+      "id": "only-used-skills",
+      "rule": "Harvest covers skills actually invoked; skills only mentioned are ignored",
+      "must": [
+        "every skill actually invoked in this conversation",
+        "Ignore skills only mentioned"
+      ]
+    },
+    {
+      "id": "already-carried-not-a-lesson",
+      "rule": "A rule the skill already carries is not a lesson; point at the line and offer a skill edit",
+      "must": [
+        "A rule the skill already carries",
+        "Point at the line",
+        "a skill edit, not a lesson"
+      ]
+    },
+    {
+      "id": "overrule-body-handoff",
+      "rule": "A rule that overrules the body is a skill edit: file nothing, name the contradicted line, hand to user",
+      "must": [
+        "A rule that overrules the body is a skill edit, not a lesson: file nothing",
+        "name the line it contradicts, and hand it to the user"
+      ]
+    },
+    {
+      "id": "name-unfiled-corrections",
+      "rule": "Name each mined correction not filed and why; no silent drops",
+      "must": [
+        "Name in one line each\\s+correction you mined and did not file, and why"
+      ]
+    },
+    {
+      "id": "retrofit-in-place-only",
+      "rule": "Retrofit edits SKILL.md so needs an in-place checkout; on read-only report and stop",
+      "must": [
+        "it needs an in-place checkout — on a\\s+read-only install, report that and stop"
+      ]
+    },
+    {
+      "id": "retrofit-block-verbatim",
+      "rule": "Retrofit copies the Self-learning block word for word as the last section; skip if present",
+      "must": [
+        "Copy the block below word for word",
+        "as its\\s+last `## ` section",
+        "Skip when the block already exists"
+      ]
+    },
+    {
+      "id": "empty-run-short",
+      "rule": "A run that files nothing is a line or two: what was mined and that nothing qualified; no retrofit or store-path accounting",
+      "must": [
+        "A run that files nothing is a line or two",
+        "Do not account for the retrofit check, name the store\\s+path a lesson would have taken"
+      ]
+    },
+    {
+      "id": "merge-external-offer",
+      "rule": "When a writable sibling LESSONS.md and a stranded external file both exist, offer to merge and delete the external file",
+      "must": [
+        "offer to merge the\\s+external lessons into `LESSONS\\.md`",
+        "and delete the external file"
+      ]
+    },
+    {
+      "id": "one-correction-one-rule",
+      "rule": "One correction yields one rule; a second rule from the same correction is usually a restatement",
+      "must": [
+        "One correction yields one rule"
+      ]
+    },
+    {
+      "id": "route-to-learn",
+      "rule": "Code conventions route to go:review/web:review learn and platform facts to srd:questions learn, whichever skill was driving; invoked after the lessons are written",
+      "must": [
+        "route it\\s+to `go:review learn` or `web:review learn`",
+        "route it to `srd:questions learn`",
+        "whichever skill was driving,\\s+or none",
+        "Then invoke each destination with\\s+`learn` through the Skill tool"
+      ]
+    },
+    {
+      "id": "single-skill-harvest",
+      "rule": "A named skill narrows Harvest to it, retrofitting it if it lacks the block; `retrofit <skill>` runs Retrofit alone; bare or `all` harvests every skill used",
+      "must": [
+        "No argument or `all` harvests every skill used",
+        "A skill \\(name or path\\) narrows Harvest to it",
+        "leave every other correction unmined, routed kinds included",
+        "`retrofit <skill>` runs\\s+Retrofit alone",
+        "A named skill\\s+that never ran yields no lessons; say so in one line, and still retrofit\\s+it when it lacks the block"
+      ]
+    },
+    {
+      "id": "merge-offer-in-harvest",
+      "rule": "The merge offer is part of the Harvest proposal for skills in scope; reading this skill's own lessons never triggers it",
+      "must": [
+        "The offer is part of the Harvest proposal \\(step 4\\) for the skills in\\s+scope; reading this skill's own lessons never triggers it"
+      ]
+    },
+    {
+      "id": "block-sibling-even-fallback-only",
+      "rule": "Self-learning appends to the sibling when writable, even when only the fallback holds lessons",
+      "must": [
+        "even when only the fallback holds lessons so far"
+      ]
+    },
+    {
+      "id": "all-dropped-named",
+      "rule": "When every mined correction was dropped, one line per dropped correction with its reason, nothing else",
+      "must": [
+        "When every mined correction was dropped, the report is one line per\\s+correction with its reason"
+      ]
+    },
+    {
+      "id": "proposal-names-retrofit",
+      "rule": "The proposal names each retrofit of the block",
+      "must": [
+        "the retrofit of the block into each `SKILL\\.md` that\\s+lacks it"
+      ]
+    },
+    {
+      "id": "unknown-word-runs-harvest",
+      "rule": "An unknown word is reported and Harvest runs: its proposal gate means dropping it widens nothing",
+      "must": [
+        "Harvest's proposal waits for a yes, so dropping a word widens\\s+nothing"
+      ]
+    },
+    {
+      "id": "retrofit-request-alone",
+      "rule": "A request to add self-learning to a skill is Retrofit alone",
+      "must": [
+        "is Retrofit alone, no harvest"
+      ]
+    },
+    {
+      "id": "lesson-write-not-project-write",
+      "rule": "A lesson write is not a project write: read-only or no-change runs still make it",
+      "must": [
+        "A lesson write is not a project write: a read-only or no-change run\\s+still makes it"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "skill_name": "audit",
+  "evals": [
+    {
+      "id": 1,
+      "name": "whole-frontend-merges-every-dimension",
+      "skills": [
+        "audit",
+        "review",
+        "style",
+        "cover",
+        "doc",
+        "e2e"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit: a Go server and its Vue 3 + TypeScript frontend in `web/` (`src/api.ts` is the API client; components, pages, stores, colocated `*.test.ts`, and `e2e/app.spec.ts`; about 30 `.vue`/`.ts` files). `bun install --frozen-lockfile` has run in `web/`. As shipped, `DevicesPage.vue` adds a `keydown` listener in `onMounted` and never removes it, and no spec reaches the `settings` route. Seeded on top, uncommitted: the `isDateZone` describe block is deleted from `src/format.test.ts`, and the TSDoc of `formatDate` says it returns \"-\" for null (the code returns \"never\").",
+      "query": "/web:audit all",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Subagent dispatch (the Agent tool), Bun with the fixture's dependencies installed for `cover`'s Vitest runs, and the web sibling skills loadable by path. A stand-in that audits in one context does not establish the dispatch, the delegation briefs, or the merge."
+    },
+    {
+      "id": 2,
+      "name": "overlapping-findings-merge-once",
+      "skills": [
+        "audit",
+        "review",
+        "style",
+        "cover",
+        "doc"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit: a Go server and its Vue 3 + TypeScript frontend in `web/` (`src/api.ts` is the API client; components, pages, stores, colocated `*.test.ts`, and `e2e/app.spec.ts`; about 30 `.vue`/`.ts` files). `bun install --frozen-lockfile` has run in `web/`. As shipped, `DevicesPage.vue` adds a `keydown` listener in `onMounted` and never removes it, and no spec reaches the `settings` route. Seeded on top, uncommitted: `src/format.ts` gains an exported `formatCount(n: number): string` with a branch for negative `n` that no test reaches, which `review` can report as a reachable branch with no test and `cover` measures; its TSDoc names a parameter `count` the code calls `n`, which both `web:style`'s TSDoc rules and `doc`'s checklist item 3 flag.",
+      "query": "/web:audit src/format.ts",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Subagent dispatch (the Agent tool), Bun with the fixture's dependencies installed for `cover`'s Vitest runs, and the web sibling skills loadable by path. A stand-in that audits in one context does not establish the dispatch, the delegation briefs, or the merge."
+    },
+    {
+      "id": 3,
+      "name": "restricted-dimensions-on-the-diff",
+      "skills": [
+        "audit",
+        "review",
+        "style",
+        "e2e"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit: a Go server and its Vue 3 + TypeScript frontend in `web/` (`src/api.ts` is the API client; components, pages, stores, colocated `*.test.ts`, and `e2e/app.spec.ts`; about 30 `.vue`/`.ts` files). `bun install --frozen-lockfile` has run in `web/`. As shipped, `DevicesPage.vue` adds a `keydown` listener in `onMounted` and never removes it, and no spec reaches the `settings` route. Seeded on top, uncommitted: `src/pages/SettingsPage.vue` gains a Reset button that writes the default date zone, which no spec operates.",
+      "query": "/web:audit only=review,e2e",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Subagent dispatch (the Agent tool) and the web sibling skills loadable by path. A stand-in that audits in one context does not establish the dispatch or the dimension restriction across workers."
+    }
+  ]
+}

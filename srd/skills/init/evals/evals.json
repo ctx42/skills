@@ -1,0 +1,55 @@
+{
+  "skill_name": "init",
+  "evals": [
+    {
+      "id": 1,
+      "name": "adds-srd-keys-to-a-starter-config",
+      "skills": [
+        "init"
+      ],
+      "setup": "`project-config.md` is a server host's starter config: front matter `mcp-server: docs`, `sources: [wiki]`, `watch: true`, `mcp-port: 7791`, then a one-paragraph body. Under `wiki/`: `doc/process/srd-guidelines.md` (title \"Software Requirements Document Guidelines\"), `doc/glossary/launch-slot.md`, `doc/engines/overview.md`, and `srd/slot-swap/slot-swap-srd.md`. No `kb/`, `gap/`, or `srd-work/` folder exists. The user answers the proposal \"yes\".",
+      "query": "/init",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "writes-a-whole-file-without-one",
+      "skills": [
+        "init"
+      ],
+      "setup": "No `project-config.md` exists. Top-level `docs/` holds `api/overview.md`, `standards/srd-standard.md` (title \"Software Requirements Document Standard\"), `glossary.md`, and `initiatives/pay/pay-srd.md`. A top-level `kb/` holds `billing.md`. No `gap/` or `srd-work/` folder exists. The user answers the proposal \"yes\".",
+      "query": "/init",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "stops-when-already-set-up",
+      "skills": [
+        "init"
+      ],
+      "setup": "`project-config.md` sets `mcp-server`, `sources`, `kb`, `initiatives`, `srd-standard`, `glossary`, `gaps`, `precedence`, and `srd-work`, each folder it names existing, and its body has a `## Front matter keys` section. The user answers nothing.",
+      "query": "/init",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "check-describes-a-sound-setup",
+      "skills": [
+        "init"
+      ],
+      "setup": "`project-config.md` names server `srd` on port 7777, sources `docs` and `kb`, `kb: kb`, `initiatives: docs/initiatives`, `srd-standard: docs/srd-standard.md`, `glossary: docs/glossary`, `gaps: gap`, precedence `kb` then `docs/api`, and `srd-work: srd-work`, every folder existing, and its body has the key reference. `.mcp.json` registers `srd` at port 7777. The server answers: `list_docs` lists `kb/billing.md` (rank 1), `docs/api/invoices.md` and `docs/api/payments.md` (rank 2), `docs/srd-standard.md`, `docs/glossary/terms.md`, and `docs/initiatives/pay/pay-srd.md` (no rank); no open or draft gaps. The user answers nothing.",
+      "query": "/init check",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "check-flags-misplaced-folders",
+      "skills": [
+        "init"
+      ],
+      "setup": "As in check-describes-a-sound-setup, but `sources` lists `docs` and `srd-work` (not `kb`), and `list_docs` also lists `srd-work/pay/pay-srd.review.md` and no `kb/` document. The user answers nothing.",
+      "query": "/init check",
+      "files": []
+    }
+  ]
+}

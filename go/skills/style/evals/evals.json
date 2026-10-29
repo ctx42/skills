@@ -1,0 +1,35 @@
+{
+  "skill_name": "style",
+  "evals": [
+    {
+      "id": 1,
+      "name": "production-rules-while-writing",
+      "skills": [
+        "style"
+      ],
+      "setup": "An agent has read the skill as context and is about to edit `service.go` — production code, not a test file.",
+      "query": "Add a Close method to the Service type in service.go",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "fix-applies-everything-behind-a-green-gate",
+      "skills": [
+        "style"
+      ],
+      "setup": "`./pkg/foo` has six offenses. The module test suite is green before the run.",
+      "query": "/style ./pkg/foo fix",
+      "files": []
+    },
+    {
+      "id": 12,
+      "name": "fanout-opposing-fixes-kept-apart",
+      "skills": [
+        "style"
+      ],
+      "setup": "An 8-package module, byte-identical apart from the package name except in one test: four packages have a `--- Given ---` block with no blank line between two distinct subjects (a variable with its own setup statement, then a second variable), and the other four have a blank line splitting one `--- Then ---` subject (an `assert.NoError` and the `assert.Equal` checking the same call's result). So one rule is broken at eight sites, four needing a blank line inserted and four needing one deleted — both directions genuinely right where they are. Every package also has a correct blank line in `--- Then ---` before a second action (a further call on the `--- When ---` result, asserted on its own). Nothing else in the module breaks any rule.",
+      "query": "/style all max=25 depth=standard",
+      "files": []
+    }
+  ]
+}

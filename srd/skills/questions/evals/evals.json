@@ -1,0 +1,38 @@
+{
+  "skill_name": "questions",
+  "evals": [
+    {
+      "id": 1,
+      "name": "surfaces-a-system-contradiction",
+      "skills": [
+        "questions",
+        "review"
+      ],
+      "setup": "`initiatives/part-kit-tracking/srd.md` has `KIT-4` requiring each Part Kit to be picked 3 working days before its Stage Integration, and `KIT-7` requiring Part Kit lookups to be \"fast\" with no criterion. No `initiatives/part-kit-tracking/srd.review.md` exists. The corpus contradicts `KIT-4`: `docs/concepts/part-kits.md` states that part kits are picked 5 working days before stage integration. The server holds no draft gap for this SRD. The user answers the first question and then says \"next\".",
+      "query": "/questions initiatives/part-kit-tracking/srd.md",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "resume-after-an-srd-edit",
+      "skills": [
+        "questions",
+        "review"
+      ],
+      "setup": "A re-run after the author edited the SRD. Both `initiatives/part-kit-tracking/srd.questions.md` and `initiatives/part-kit-tracking/srd.review.md` already exist, the latter written by the author's own review pass. The edit fixed six findings and introduced two new blockers: `KIT-12` states a vague quality attribute with no measurable criterion (RQT-6), and the Included item `IN-4` is covered by no requirement (BND-2). After the refreshed set is put, the user answers the first question and says \"next\".",
+      "query": "/questions initiatives/part-kit-tracking/srd.md",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "looks-it-up-before-asking",
+      "skills": [
+        "questions",
+        "kb"
+      ],
+      "setup": "An open question asks whether \"Launch Slot\" is a defined term — the project glossary (`docs/glossary/terms.md`, Starforge Terms) does define it. Later in the walk, the user adds \"remember that kits can't span bays.\"",
+      "query": "/questions initiatives/part-kit-tracking/srd.md",
+      "files": []
+    }
+  ]
+}

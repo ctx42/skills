@@ -1,0 +1,184 @@
+{
+  "skill_name": "report-doc-gap",
+  "rules": [
+    {
+      "id": "confirm-before-filing",
+      "rule": "Every record is confirmed before filing; never file silently",
+      "must": [
+        "Must\\ not:\\ file\\ silently\\ \\(every\\ record\\ is\\ confirmed\\ first",
+        "file\\ only\\ on\\ their\\ yes"
+      ]
+    },
+    {
+      "id": "three-way-offer",
+      "rule": "The confirm question offers file, change, or drop, not a bare File it?",
+      "must": [
+        "file\\ it,\\ change\\ something\\ first,\\ or\\ drop\\ it",
+        "rather\\ than\\ a\\ bare\\ \"File\\ it\\?\""
+      ]
+    },
+    {
+      "id": "drafts-only",
+      "rule": "Never report_gap without draft: true; only a draft is discardable",
+      "must": [
+        "`report_gap`\\ without\\ `draft:\\ true`\\ is\\ never\\ called",
+        "Only\\ a\\ draft\\ is\\ discardable"
+      ]
+    },
+    {
+      "id": "capture-no-interruption",
+      "rule": "Capture is a light draft, no grill, no filing, no drain",
+      "must": [
+        "capture\\ a\\ light\\ draft,\\ no\\ interruption",
+        "no\\ user\\ interruption,\\ no\\ grill,\\ no\\ filing"
+      ]
+    },
+    {
+      "id": "srd-gap-not-filed",
+      "rule": "An SRD gap is never filed as a doc gap",
+      "must": [
+        "file\\ an\\ SRD\\ gap",
+        "An\\ SRD\\ gap\\ \\(unmet\\ SRD\\-standard\\ rules"
+      ]
+    },
+    {
+      "id": "questions-filed-with-answer",
+      "rule": "A deferred or unknown platform question is filed here as a gap with answer set, never written to the KB",
+      "must": [
+        "A\\ platform\\ question\\ SRD\\ work\\ leaves\\ open\\ is\\ a\\ gap\\ too,\\ marked\\ by\\ `answer`",
+        "Both\\ are\\ filed\\ here,\\ never\\ written\\ to\\ the\\ KB"
+      ]
+    },
+    {
+      "id": "store-error-stops",
+      "rule": "A store error is reported, never retried or worked around",
+      "must": [
+        "report\\ it,\\ never\\ retry\\ or\\ work\\ around\\ it"
+      ]
+    },
+    {
+      "id": "detail-floor",
+      "rule": "detail is the floor; never file without it",
+      "must": [
+        "never\\ file\\ without\\ it"
+      ]
+    },
+    {
+      "id": "dedup-merge",
+      "rule": "Query every gap before capturing and merge a same-fact draft rather than duplicate",
+      "must": [
+        "run\\ `list_gaps`\\ with\\ `query`\\ the\\ topic\\ and\\ detail\\ words,\\ no\\ `status`\\ or\\ `srd_ref`\\ filter",
+        "merge\\ into\\ it\\ with\\ `update_gap`\\ rather\\ than\\ duplicate",
+        "keep\\ the\\ `doc_id`/`heading_path`\\ already\\ set"
+      ]
+    },
+    {
+      "id": "open-dup-add-hit",
+      "rule": "A same-fact open gap gets add_hit, never a new record",
+      "must": [
+        "`open`:\\ `update_gap`\\ with\\ `add_hit:\\ true`"
+      ]
+    },
+    {
+      "id": "reopen-confirmed",
+      "rule": "A filled gap whose sections lack the fact is reopened only through a confirmed draft",
+      "must": [
+        "capture\\ a\\ draft\\ whose\\ `detail`\\ opens\\ `Reopens\\ gap\\-NNNN:`",
+        "on\\ yes,\\ `reopen_gap`\\ on\\ `gap\\-NNNN`"
+      ]
+    },
+    {
+      "id": "discard-recorded",
+      "rule": "A discard is a decision; topic recorded in the caller's output",
+      "must": [
+        "A\\ discard\\ is\\ a\\ decision,\\ not\\ a\\ deletion",
+        "Nothing\\ durable\\ is\\ written\\ for\\ it"
+      ]
+    },
+    {
+      "id": "gate-first",
+      "rule": "Run the gate first",
+      "must": [
+        "Run\\ the\\ gate\\ first"
+      ]
+    },
+    {
+      "id": "filing-leaves-corpus",
+      "rule": "Filing only records the gap; corpus unchanged",
+      "must": [
+        "Filing\\ only\\ records\\ the\\ gap;\\ the\\ corpus\\ is\\ unchanged"
+      ]
+    },
+    {
+      "id": "never-fills",
+      "rule": "Never fills or wontfixes a gap; that is srd:backlog",
+      "must": [
+        "fill\\ a\\ gap,\\ or\\ close\\ it\\ as\\ wontfix\\ \\(that\\ is\\ `srd:backlog`\\)"
+      ]
+    },
+    {
+      "id": "cut-gap-filed-at-once",
+      "rule": "A cut requirement's or abandoned SRD's KB-section gap arrives confirmed: kind wrong, submitted at once, no grill",
+      "must": [
+        "A\\ KB\\ section\\ left\\ behind\\ by\\ a\\ cut\\ requirement\\ \\(or\\ an\\ abandoned\\ SRD:",
+        "`kind:\\ wrong`",
+        "then\\ file\\ at\\ once\\ —\\ no\\ grill,\\ no\\ phase\\ D",
+        "from\\ `srd:backlog`'s\\ sweep,\\ by\\ the\\ SRD's\\ abandoned\\ state"
+      ]
+    },
+    {
+      "id": "doc-id-is-identity",
+      "rule": "A gap's doc_id is the result's id, never its path",
+      "must": [
+        "the\\ `id`,\\ never\\ the\\ `path`,\\ even\\ when\\ they\\ differ"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "\\bdoc/[a-z_]+/",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "ask-merge",
+      "rule": "A dedup match merges ask: existing names first, new ones appended ignoring case, none dropped; a new name makes the gap deferred and clears asked",
+      "must": [
+        "pass\\ the\\ existing\\ names\\ followed\\ by\\ each\\ new\\ one\\ not\\ already\\ there,\\ ignoring\\ case;\\ never\\ drop\\ a\\ name",
+        "A\\ name\\ the\\ gap\\ lacked\\ also\\ sets\\ `answer:\\ deferred`\\ when\\ the\\ gap\\ is\\ `unknown`\\ or\\ plain,\\ and\\ clears\\ `asked`\\ \\(`asked:\\ \"\"`\\)",
+        "`asked`\\ —\\ never\\ set\\ to\\ a\\ date\\ here,\\ only\\ cleared\\ by\\ an\\ `ask`\\ merge"
+      ]
+    },
+    {
+      "id": "srd-ref-appends",
+      "rule": "One capture writes one srd_ref; a later hit on the same gap appends, never replaces",
+      "must": [
+        "never both in one\\s+capture; a later hit on the same gap appends"
+      ]
+    },
+    {
+      "id": "ask-names-no-grill",
+      "rule": "An answer draft, which ask names make of any gap, gets no grill",
+      "must": [
+        "An `answer` draft — `ask` names make one, a plain gap included — gets\\s+no grill"
+      ]
+    },
+    {
+      "id": "shared-draft-files-for-all",
+      "rule": "One finder's yes files a shared draft for every SRD it names",
+      "must": [
+        "One finder's yes is enough: a draft whose `srd_ref` names other SRDs too\\s+opens for all of them on this yes"
+      ]
+    },
+    {
+      "id": "shared-answer-discards",
+      "rule": "A finder's answer discards a shared draft too: the fact answers it for every SRD",
+      "must": [
+        "a shared draft included: the fact answers it for every SRD it\\s+names"
+      ]
+    }
+  ]
+}

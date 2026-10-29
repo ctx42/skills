@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "ctx42-skills",
+  "description": "Shared skill suite for Claude Code — Go tooling, SRD authoring, general authoring skills, and web-app UX and performance.",
+  "version": "0.28.0",
+  "owner": {
+    "name": "Rafal Zajac",
+    "email": "rzajac@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "go",
+      "source": "./go",
+      "description": "Go workflow: enforced write-time style (style), done-time quality review (review), and per-function test-coverage improvement (cover).",
+      "strict": true,
+      "category": "development"
+    },
+    {
+      "name": "srd",
+      "source": "./srd",
+      "description": "Software Requirement Document lifecycle: author (create), review read-only (review), edit in place (edit), and build-readiness questions (questions), all against one SRD standard.",
+      "strict": true,
+      "category": "productivity"
+    },
+    {
+      "name": "craft",
+      "source": "./craft",
+      "description": "Cross-cutting engineering-craft aids: Conventional Commit messages (cm), a relentless planning interview (grill-me), a plan author/tracker (plan-smith), a README author (readme-smith), skill self-learning (skill-enhance), and unattended fixing of review findings (fix-all).",
+      "strict": true,
+      "category": "productivity"
+    },
+    {
+      "name": "web",
+      "source": "./web",
+      "description": "Web-app workflow on Vue 3 + TypeScript: the enforced style rules and a style-only pass with a reference Biome config (style), done-time review with the API contract (review), per-unit Vitest coverage (cover), TSDoc and comment fixing (doc), per-route Playwright coverage (e2e), UX improvement committed one ranked fix at a time with before/after pictures (improve), and performance fixes measured under a 4x CPU slowdown, front end and back end, without changing what the user sees (perf), and a read-only audit of the code across review, coverage, TSDoc, and route coverage in one graded report (audit).",
+      "strict": true,
+      "category": "development"
+    },
+    {
+      "name": "notify",
+      "source": "./notify",
+      "description": "Desktop attention signal: a sound plus a small card centred near the top of every monitor when Claude stops or asks for input. Hooks only \u2014 ships no skills.",
+      "strict": true,
+      "category": "productivity"
+    }
+  ]
+}

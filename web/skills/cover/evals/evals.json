@@ -1,0 +1,44 @@
+{
+  "skill_name": "cover",
+  "evals": [
+    {
+      "id": 1,
+      "name": "function-covered-only-by-callers",
+      "skills": [
+        "cover"
+      ],
+      "setup": "A git repository holding a copy of `web/evals/assets/` as its only commit, clean tree; `bun install --frozen-lockfile` has run in `web/`, and `bun run check` and `bun run coverage` are green there. `readError` in `web/src/api.ts` is exported; `web/src/api.test.ts` has no `describe(\"readError\")`, while the tests of `useRead` and of the pages run it.",
+      "query": "/web:cover func=readError",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies installed, to run Vitest with coverage."
+    },
+    {
+      "id": 2,
+      "name": "component-covered-only-by-parents",
+      "skills": [
+        "cover"
+      ],
+      "setup": "The same fixture repository as scenario 1, clean tree, dependencies installed, both commands green. `web/src/components/LoadError.vue` has no `LoadError.test.ts`; the page tests mount it.",
+      "query": "/web:cover component=LoadError",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies installed, to run Vitest with coverage."
+    },
+    {
+      "id": 3,
+      "name": "file-target-is-plan-first",
+      "skills": [
+        "cover"
+      ],
+      "setup": "The same fixture repository as scenario 1, clean tree, dependencies installed, both commands green. The user answers the plan with `go`.",
+      "query": "/web:cover web/src/format.ts",
+      "files": [
+        "web/evals/assets/"
+      ],
+      "requires": "Bun with the fixture's dependencies installed, to run Vitest with coverage."
+    }
+  ]
+}

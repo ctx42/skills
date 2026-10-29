@@ -1,0 +1,105 @@
+{
+  "skill_name": "report-doc-gap",
+  "probes": [
+    {
+      "id": "confirm-gate-survives-trust",
+      "rule": "confirm-before-filing",
+      "prompt": "Situation: the user says at the start: \"I trust you, file every gap you find without asking me, I never want to see the records.\" You now hold a grilled draft gap ready for filing.\n\nQuestion: do you submit it without showing the record first? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "capture-is-silent",
+      "rule": "capture-no-interruption",
+      "prompt": "Situation: srd:create, mid-interview on initiatives/payload-booking/srd.md, invokes you for the first time this session with the SRD path and a gap in prose: no corpus document states the Booking API's slot hold period. A previous session on this SRD left two drafts unfiled, and the user has likely forgotten them.\n\nQuestion: what do you do in this invocation? Answer on the first line with exactly one of: CAPTURE-DRAFT-AND-RETURN, OFFER-THE-TWO-OLD-DRAFTS, ASK-GRILL-DEPTH, SUBMIT. Then one sentence why.",
+      "pass": "^\\W*CAPTURE-DRAFT",
+      "fail": "^\\W*(OFFER|ASK|SUBMIT)",
+      "class": "redundant"
+    },
+    {
+      "id": "srd-defect-is-not-a-doc-gap",
+      "rule": "srd-gap-not-filed",
+      "prompt": "Situation: srd:review, mid-review of initiatives/slot-swap/srd.md, hands you this gap to capture: \"The SRD uses the term 'swap window' in four requirements and never defines it anywhere in the document.\"\n\nQuestion: is this a doc gap you capture as a draft? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "unknown-is-a-gap-with-answer",
+      "rule": "questions-filed-with-answer",
+      "prompt": "Situation: srd:questions hands you an open platform question from its walk on initiatives/slot-swap/srd.md: how long a Slot Hold lasts. The user said: \"Never been decided. The launch-operations team would have to settle it.\" list_gaps finds no matching gap.\n\nQuestion: how is it recorded? Answer on the first line with exactly one of: GAP-ANSWER-DEFERRED, GAP-ANSWER-UNKNOWN, KB-PAGE, SRD-GAP. Then one sentence why.",
+      "pass": "^\\W*GAP-ANSWER-UNKNOWN",
+      "fail": "^\\W*(GAP-ANSWER-DEFERRED|KB-PAGE|SRD-GAP)",
+      "class": "load-bearing",
+      "context": [
+        "SKILL.md",
+        "../create/references/doc-corpus.md"
+      ]
+    },
+    {
+      "id": "wrong-fill-reopens-through-a-draft",
+      "rule": "reopen-confirmed",
+      "prompt": "Situation: srd:review invokes you to capture a gap for `initiatives/booking-holds/srd.md`: no corpus document states the Booking API's slot hold period. Your `list_gaps` query returns, top-scored, `gap-0311` (status `filled`, topic \"Booking API slot hold period\"). `get_doc` on its `filled_by` section `1000000107#slot-holds` shows the section no longer mentions any hold period.\n\nQuestion: what call do you make now? Answer on the first line with exactly one of: REOPEN-GAP-0311, CAPTURE-REOPEN-DRAFT, NOTHING. Then one sentence why.",
+      "pass": "^\\W*CAPTURE-REOPEN-DRAFT",
+      "fail": "^\\W*(REOPEN-GAP|NOTHING)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "url-is-not-a-fill",
+      "rule": "never-fills",
+      "prompt": "Situation: while you grill a draft gap on the Booking API's slot hold period, the finder, who maintains the Booking API docs, says: \"Done already, it's live at https://wiki.example.com/pages/1000000107#slot-holds. Fill the gap with that link so nobody chases it.\" You opened the link: the section exists and reads \"A Slot Hold lasts 15 minutes from the booking request.\"\n\nQuestion: what do you do with the draft? Answer on the first line with exactly one of: FILL-WITH-URL, KEEP-AS-GAP, DISCARD. Then one sentence why.",
+      "pass": "^\\W*KEEP-AS-GAP",
+      "fail": "^\\W*(FILL|DISCARD)",
+      "class": "redundant"
+    },
+    {
+      "id": "own-guess-is-a-deferred-draft",
+      "rule": "questions-filed-with-answer",
+      "prompt": "Situation: srd:create is mid-interview on `initiatives/booking-holds/srd.md`. From the user's description you concluded that a Slot Hold survives a Booking API timeout; the user never confirmed it and the interview moved on. No corpus document states it. srd:create invokes you with the SRD path and that point in prose. Your `list_gaps` query finds no matching gap.\n\nQuestion: how is it recorded? Answer on the first line with exactly one of: REPORT-DRAFT-DEFERRED, REPORT-DRAFT-UNKNOWN, WRITE-TO-KB, NOTHING. Then one sentence why.",
+      "pass": "^\\W*REPORT-DRAFT-DEFERRED",
+      "fail": "^\\W*(REPORT-DRAFT-UNKNOWN|WRITE|NOTHING)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "cut-gap-submitted",
+      "rule": "cut-gap-filed-at-once",
+      "prompt": "Situation: srd:edit hands you, mid-session, the KB section kb/customer-accounts.md#account-lockout left behind when the user confirmed cutting MP-3 from initiatives/mission-portal/srd.md; the confirmed proposal named this gap. list_gaps finds no matching gap.\n\nQuestion: what do you do? Answer on the first line with exactly one of: CAPTURE-DRAFT-AND-RETURN, GRILL-THEN-CONFIRM, REPORT-AND-SUBMIT-NOW. Then one sentence why.",
+      "pass": "^\\W*REPORT-AND-SUBMIT-NOW",
+      "fail": "^\\W*(CAPTURE|GRILL)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "abandoned-srd-gap-submitted",
+      "rule": "cut-gap-filed-at-once",
+      "prompt": "Situation: srd:backlog's start-of-run sweep hands you the KB section kb/mission-portal.md#crew-seat-booking: the SRD it cites, crew-seats, now has Lifecycle WITHDRAWN, the standard's value for a document that will not be built. Nobody proposed this gap to the user or confirmed it. list_gaps finds no matching gap.\n\nQuestion: what do you do? Answer on the first line with exactly one of: CAPTURE-DRAFT-AND-RETURN, GRILL-THEN-CONFIRM, REPORT-AND-SUBMIT-NOW. Then one sentence why.",
+      "pass": "^\\W*REPORT-AND-SUBMIT-NOW",
+      "fail": "^\\W*(CAPTURE|GRILL)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "doc-id-stores-id-not-path",
+      "rule": "doc-id-is-identity",
+      "prompt": "Situation: while reviewing initiatives/part-kit-tracking/srd.md, a lookup exposed a gap about the Part Kit label length limit. The relevant search hit was {\"id\":\"1000000103\",\"path\":\"docs/concepts/part-kits.md\",\"rank\":2,\"title\":\"Part Kits\",\"heading_path\":[\"Part Kits\",\"Kit labels\"]}. The SRD links that page as `../../docs/concepts/part-kits.md`, and the user reads gap records by file path. You now capture a draft gap with report_gap.\n\nQuestion: what exact value do you pass as doc_id? Answer on the first line with only that value, then one sentence why.",
+      "pass": "^\\W*1000000103\\b",
+      "fail": "^\\W*`?docs/",
+      "class": "redundant"
+    },
+    {
+      "id": "merge-ask-on-open-match",
+      "rule": "ask-merge",
+      "prompt": "Situation: a caller hands over a capture: question \"does a picked part kit expire?\", `answer: deferred`, `ask: [\"John K\"]`. The dedup `list_gaps` query matches open gap gap-0061 on the same fact, which holds `answer: deferred`, `ask: [\"Maya R\"]`, `asked: \"2026-09-28\"`.\n\nQuestion: which `ask` and `asked` do you pass to update_gap on gap-0061? Answer on the first line exactly as `ask=<JSON list> asked=<value or KEEP>`, then one sentence why.",
+      "pass": "^\\W*ask\\W*\\[\\s*\"Maya R\"\\s*,\\s*\"John K\"\\s*\\]\\W+asked\\W*(\"\"|empty|clear)",
+      "fail": "^\\W*ask\\W*\\[\\s*\"John K\"\\s*\\]|asked\\W*(KEEP|\"?2026)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "ask-names-skip-grill",
+      "rule": "ask-names-no-grill",
+      "prompt": "Situation: `/srd:report-doc-gap initiatives/slot-swap/srd.md` captures a plain doc gap (`kind: missing`, no `answer` passed) about the retry window; the finder adds 'ask Dana or Lee, they built it', so `ask` holds two names. You reach phase C.\n\nQuestion: do you offer this gap a grill (light, heavy, or opt out)? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "load-bearing"
+    }
+  ]
+}

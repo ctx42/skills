@@ -1,0 +1,37 @@
+{
+  "skill_name": "style",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "production-rules-while-writing",
+      "expected_behavior": [
+        "Applies the Production section: gofmt and goimports, lines within the line limit it resolved for the module, `%w` error wrapping with short context, godoc on exported symbols",
+        "Applies no Test-only rule to the production file — no `have`/`want` naming, no subtest conventions"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "fix-applies-everything-behind-a-green-gate",
+      "expected_behavior": [
+        "Runs `go test ./... -race` for a green baseline before editing anything",
+        "Applies every listed fix, then re-runs the gate",
+        "Reports each fix as one `file:sym — what changed` line plus the gate result",
+        "Prints no diffs and never commits"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "fanout-opposing-fixes-kept-apart",
+      "expected_behavior": [
+        "Fans out one subagent per package — eight — each checking the same pinned rule set",
+        "Reports the blank-line topic rule as one finding under one id and one severity, listing all eight packages",
+        "Keeps each site's own fix: the four packages missing a blank line get an `insert`, the four with a surplus one get a `delete` — no site's fix replaced by the majority's or by one prescription for all eight",
+        "Shows a re-check of the opposing sites against the source — what it searched for and what it found — in the reply or in a file it saved before the reply, before the report",
+        "Flags no offense at the correct blank line before the second action in `--- Then ---` present in every package",
+        "Every fix opens with its verb, so the direction at each site reads without parsing prose",
+        "Edits no file before the pick step; if fixes are picked, the four missing packages gain exactly one blank line and the four surplus packages lose exactly one, and nothing else in any file changes"
+      ],
+      "blind_only": [1, 2, 3, 4, 5, 6]
+    }
+  ]
+}

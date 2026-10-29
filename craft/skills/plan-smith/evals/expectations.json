@@ -1,0 +1,41 @@
+{
+  "skill_name": "plan-smith",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "create-from-brief",
+      "expected_behavior": [
+        "Writes one file containing a `## Summary` table with the Y/N/X legend and one numbered section per item, each heading carrying a checkbox",
+        "Carries exactly the four pieces of work the brief named, plus the closing `Remove this plan` item last — no invented items such as tests, CI, monitoring, rollout, or migration, which the user did not ask for",
+        "Every item starts unchecked and `N`, since nothing has been built yet",
+        "Each item states acceptance criteria concrete enough to verify against the finished work, not a restatement of the item name",
+        "Does not silently settle a decision the brief left open — such as OIDC versus SAML, or which session store ships — and the file carries only the summary table and the numbered item sections, with no extra assumptions or open-choices section bolted on",
+        "The summary table is aligned: every row the same character width, separator dashes flush to the pipes with no surrounding spaces",
+        "Reports the path and the status counts on one line, any further lines being the leave-outs — a name and at most a half-line each — and does not paste the plan back into the reply"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "bundled-brief",
+      "expected_behavior": [
+        "Splits the bundle into separate items, one per outcome — at minimum the storage/disk problem, the failure notification, and the reconciliation with the dashboard — rather than a single 'fix the export' item",
+        "Asks about the piece that is genuinely underdetermined (what the numbers not tying out actually means, or where the export should go instead) rather than inventing a resolution for it",
+        "Does not pad the plan with work the user never raised, such as rewriting the export in a different language or adding a scheduler",
+        "Gives each item acceptance criteria that a reader could check",
+        "Where one item cannot start until another finishes, says so in that item's section — the order alone proves nothing when it matches the order the user happened to speak in"
+      ],
+      "blind_only": [2]
+    },
+    {
+      "id": 3,
+      "name": "grill-me-handoff",
+      "expected_behavior": [
+        "Writes the plan straight from the six resolved branches without re-interviewing the user about decisions the summary already settled",
+        "Carries each branch's own verification into that item's acceptance criteria rather than inventing different ones",
+        "Keeps all six branches as items — none dropped, none merged away, none added — followed by the closing `Remove this plan` item as item 7",
+        "Every item starts unchecked and `N`",
+        "Reports the path and the counts tersely instead of replaying the summary the user just read"
+      ]
+    }
+  ]
+}

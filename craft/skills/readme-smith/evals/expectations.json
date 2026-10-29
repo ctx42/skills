@@ -1,0 +1,41 @@
+{
+  "skill_name": "readme-smith",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "create-from-scan",
+      "expected_behavior": [
+        "Scans manifests, the entrypoint, examples, CI config, and `assets/` for a logo before writing anything",
+        "Asks its gaps in one batched round, and the question turn is in the reply — a single numbered list, not a question per turn",
+        "Drafts to the blueprint order — header/logo, overview, features, install, usage, configuration — using the repo's real module path, flag names, and commands",
+        "Builds and runs the install and quickstart commands it ships, fixing them until they pass, or names the blocking prerequisite",
+        "Wraps prose at the repo's own 100-column `max_line_length`, not a hardcoded 80"
+      ],
+      "blind_only": [2]
+    },
+    {
+      "id": 3,
+      "name": "audit-member-readme",
+      "expected_behavior": [
+        "Reports the badges row, the `## License` section, and the `## Contributing` section as findings — the root README and the dedicated files own those",
+        "Each finding names the template section it comes from — Badges, Nav, Quickstart, License — so the reader can look the rule up without being told it",
+        "Groups findings Blocker / Should-fix / Nit with a one-line fix each, ends with a one-line verdict, and edits nothing before the user confirms",
+        "Applies the approved findings on confirmation, then re-runs Verify and states what changed"
+      ],
+      "blind_only": [1, 2, 3]
+    },
+    {
+      "id": 4,
+      "name": "gomake-example-injection",
+      "expected_behavior": [
+        "Names the evidence that the project uses gomake — the CI step — in the reply, rather than establishing it from the tool being installed",
+        "Asks separately, before creating any `.go` file, naming the files and their functions in one batch — the README approval does not cover writing Go source",
+        "Writes runnable `Example…` functions in `_test.go` and runs `go test ./...` until they pass, instead of pasting hand-written snippets",
+        "Marks each spot with a `<!-- gmmce:<relpath>/<FuncName> -->` comment above an empty `go` fence and runs `gomake :doc:mce` to fill them",
+        "Names each injected key in the reply, taken from the target's `Found <key>` lines — the exit status and the `Writing` line are 0 and present either way",
+        "Hand-edits no injected fence; a change to an example goes back through its `Example…` function and a re-run of the target"
+      ],
+      "blind_only": [1]
+    }
+  ]
+}

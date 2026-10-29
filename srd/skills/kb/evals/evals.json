@@ -1,0 +1,36 @@
+{
+  "skill_name": "kb",
+  "evals": [
+    {
+      "id": 1,
+      "name": "appends-instead-of-fragmenting",
+      "skills": [
+        "kb"
+      ],
+      "setup": "`kb/_inbox.md` holds a confirmed fact that part kits round fastener counts up to a per-bay pack size. A knowledge-base page on part kits already exists and is long enough to look worth splitting.",
+      "query": "/kb file",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "writes-to-the-inbox-at-confirmation",
+      "skills": [
+        "kb",
+        "create"
+      ],
+      "setup": "`srd:create` runs on initiatives/slot-swap/srd.md. The interview surfaces a platform fact the corpus does not carry, and the user confirms it in a branch restatement.",
+      "query": "/create",
+      "files": []
+    },
+    {
+      "id": 6,
+      "name": "restructure-repairs-every-reference",
+      "skills": [
+        "kb"
+      ],
+      "setup": "A `##` section moves out of `_inbox.md` into a new page. A gap record cites the inbox section's `doc_id`, and an SRD cites it too. A deferred question about that section is open gap `gap-0043`, also citing the inbox; the section carries its `> Open: gap-0043.` warning line.",
+      "query": "/kb restructure",
+      "files": []
+    }
+  ]
+}

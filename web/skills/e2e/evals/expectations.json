@@ -1,0 +1,55 @@
+{
+  "skill_name": "e2e",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "route-needs-the-fake-extended",
+      "expected_behavior": [
+        "Reports under `Baseline:` the build and the fake-backed Playwright project run green before any edit, with the number of tests that passed",
+        "Finds that the fake does not serve `/sites/{id}` and extends `internal/fake` to answer it (404 for an unknown ID), with Go tests for it in `internal/fake`, and `go test ./...` passes",
+        "Changes no file of the app server (`internal/server`, `internal/upstream`, `cmd/fleet`) and no frontend source to suit the fake",
+        "Adds a test that opens a site page and asserts what it shows, and covers its link to the site's devices (in the same test or another), using role and name locators",
+        "Proves each new test can fail: shows it red with the behaviour it drives broken, then green restored",
+        "Ends with `go test ./...` and the full e2e run green, reports the result of `bun run check`, and reports `Route coverage:`, `Tests added:`, and `Fake changes:`"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": 2,
+      "name": "route-with-no-spec",
+      "expected_behavior": [
+        "Reports the settings route as not reached and its date zone choice as not driven before",
+        "Adds a test that chooses a zone on the settings page and asserts the choice holds after a reload, locating the button by role and name",
+        "Proves the test red with the choice's effect broken, then green, and changes no frontend source or Go file"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": 3,
+      "name": "all-routes-plan",
+      "expected_behavior": [
+        "Presents a plan before writing any spec, listing gaps as `route — control`",
+        "Lists the settings route and its date zone choice, and the site route as needing the fake extended",
+        "Does not list as gaps the site picker, the search box, the last-seen sort, the device link, the not-found page's link, or the Sites navigation link, which the existing specs drive",
+        "Writes no spec and changes no file after the answer `none`"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  ]
+}

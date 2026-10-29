@@ -1,0 +1,118 @@
+{
+  "skill_name": "review",
+  "probes": [
+    {
+      "id": "unconfirmed-claim-is-doc-gap",
+      "rule": "gap-not-a-finding",
+      "prompt": "Situation: running a default review, requirement PB-4 says \"the Booking API retries a failed slot lookup 3 times\". You searched the corpus and no document states a retry count.\n\nQuestion: where does this go? Answer on the first line with exactly one of: REVIEW-FINDING, DOC-GAP, IGNORE. Then one sentence why.",
+      "pass": "^\\W*DOC-GAP",
+      "fail": "^\\W*(REVIEW-FINDING|IGNORE)",
+      "class": "redundant"
+    },
+    {
+      "id": "check-hunts-nothing-new",
+      "rule": "check-no-new-defects",
+      "context": [
+        "SKILL.md",
+        "references/check-mode.md"
+      ],
+      "prompt": "Situation: you are running `/review initiatives/payload-booking/srd.md check`. While re-verifying finding #2 you notice a new defect: a term used in PB-7 is undefined. It is not in the review file.\n\nQuestion: do you add it to the review file? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "reply-is-a-task-line",
+      "rule": "reply-never-lists-findings",
+      "prompt": "Situation: a default review of initiatives/payload-booking/srd.md has just written initiatives/payload-booking/srd.review.md with 9 new findings: 2 blocker, 4 major, 3 minor.\n\nQuestion: does your reply name the two blocker findings? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "default-never-withdraws",
+      "rule": "check-no-new-defects",
+      "prompt": "Situation: you are running a default review (no mode word) of initiatives/payload-booking/srd.md. initiatives/payload-booking/srd.review.md exists. Re-verifying open finding #3, you conclude it is invalid: the author justified the text and the rule it cites does not apply.\n\nQuestion: do you move #3 to ## Withdrawn in this run? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "back-links-not-flagged",
+      "rule": "no-back-link-finding",
+      "prompt": "Situation: the user asks for a full review of initiatives/payload-booking/srd.md against every rule of the fetched standard. The SRD's Tracking field links to work item SF-212. The standard's DOC-4 says \"The work item MUST link back to the SRD.\" The user adds: \"I checked SF-212 this morning, it has no link to the SRD.\"\n\nQuestion: do you raise a DOC-4 finding in the review file? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "load-bearing"
+    },
+    {
+      "id": "kb-contradiction-both-sides",
+      "rule": "kb-contradiction-is-finding",
+      "prompt": "Situation: running a default review of initiatives/slot-swap/srd.md. SW-1 says \"The system MUST allow two slot swaps per customer mission.\" Your corpus search returned: kb/launch-windows.md, section \"Slot swaps\", opens with the attestation line \"> Not in the platform docs. Attested slot-swap interview 2026-08-02; payload-booking 2026-09-01.\" and states: \"A customer mission may swap its launch slot at most once.\" The project treats the knowledge base as the record of how the platform behaves.\n\nQuestion: what does the review file get? Answer on the first line with exactly one of: ONE-SIDED (a finding that SW-1 is wrong and must match the KB), TWO-SIDED (a finding naming both claims, either side may change), DOC-GAP-ONLY, NOTHING. Then one sentence why.",
+      "pass": "^\\W*TWO-SIDED",
+      "fail": "^\\W*(ONE-SIDED|DOC-GAP|NOTHING)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "corpus-fix-has-source",
+      "rule": "fix-cites-source",
+      "context": [
+        "SKILL.md",
+        "../create/references/doc-corpus.md"
+      ],
+      "prompt": "Situation: reviewing initiatives/payload-booking/srd.md, PB-4 says a Spark payload may weigh up to 500 kg. A corpus `search` returned page \"Booking API\", heading_path [\"Payload checks\"], rank 3, source_url https://wiki.example.com/pages/1000000107, stating a Spark payload MUST NOT exceed 450 kg. You write the `reference` finding with the fix \"lower the limit to 450 kg\".\n\nQuestion: besides the `(SRD:ref …)` citation, does the finding carry any other line? Answer on the first line with exactly one of: NO-OTHER-LINE, SOURCE-LINE. On the second line write that line, or NONE.",
+      "pass": "SOURCE-LINE[\\s\\S]*Source: Booking API › Payload checks \\(rank 3, 1 = most trusted\\)",
+      "fail": "^\\W*NO-OTHER-LINE",
+      "class": "redundant"
+    },
+    {
+      "id": "casing-only-no-finding",
+      "rule": "casing-free-no-finding",
+      "context": [
+        "SKILL.md",
+        "references/finding-tags.md"
+      ],
+      "prompt": "Situation: the user asks for a strict terminology pass over initiatives/part-kit-tracking/srd.md. The SRD's Terms section defines \"Kit Label\" (Title Case heading); KIT-7 says \"the kit label MUST be unique\" in lowercase, meaning the defined term. Nothing else about KIT-7 is wrong.\n\nQuestion: is KIT-7's lowercase \"kit label\" a terminology finding? Answer on the first line with exactly one of: FINDING, NO-FINDING, DEPENDS. Then one sentence on what it depends on, or why.",
+      "pass": "^\\W*(DEPENDS|NO-FINDING)\\b",
+      "fail": "^\\W*FINDING",
+      "class": "load-bearing"
+    },
+    {
+      "id": "checkable-not-test-alone",
+      "rule": "checkable-all-methods",
+      "context": [
+        "SKILL.md",
+        "references/finding-tags.md"
+      ],
+      "prompt": "Situation: reviewing initiatives/mission-portal/srd.md. The fetched standard's RQT-5 says \"A requirement MUST be checkable.\" MP-9 says \"The Mission Portal MUST NOT limit the number of telemetry channels a customer follows.\" Drafting its acceptance test, you find no finite test can prove the absence of every limit: any test only shows that some number of followed channels succeeded. Nothing else about MP-9 is wrong.\n\nQuestion: do you record MP-9 as an unverifiable (RQT-5) `verifiability` blocker? Answer on the first line with exactly one of: FINDING, NO-FINDING. Then one sentence on why.",
+      "pass": "^\\W*NO-FINDING\\b",
+      "fail": "^\\W*FINDING\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "withdrawal-stamped",
+      "rule": "withdrawal-stamped",
+      "context": [
+        "SKILL.md",
+        "references/review-file.md",
+        "references/check-mode.md"
+      ],
+      "prompt": "Situation: `/review initiatives/mission-portal/srd.md check`. This run will set the review file's `updated:` to 2026-10-01 16:20. Finding #4 \"[major, redundancy] MP-5 overlaps MP-6\" proves mistaken: the author showed the triggers differ.\n\nQuestion: write the `## Withdrawn` line for #4 exactly as it goes in the file, on one line.",
+      "pass": "\\(withdrawn 2026-10-01 16:20:",
+      "fail": "\\(withdrawn:",
+      "class": "redundant"
+    },
+    {
+      "id": "review-file-under-srd-work",
+      "rule": "working-file-path",
+      "context": [
+        "SKILL.md",
+        "../create/references/project-config.md"
+      ],
+      "prompt": "Situation: project-config.md sets `initiatives: initiatives` and `srd-work: work`. The user runs `/srd:review initiatives/login/login-srd.md`; no review file exists yet.\n\nQuestion: at which path do you write the review file? Answer on the first line with the path only, then one sentence why.",
+      "pass": "^[^\\n]*(?<![\\w/])work/login/login-srd\\.review\\.md\\b",
+      "fail": "^[^\\n]*(?<![\\w/])initiatives/[^\\n\\s`]*\\.(review|decisions|questions)\\.md",
+      "class": "redundant"
+    }
+  ]
+}

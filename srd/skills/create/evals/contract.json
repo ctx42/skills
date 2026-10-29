@@ -1,0 +1,276 @@
+{
+  "skill_name": "create",
+  "rules": [
+    {
+      "id": "gate-first",
+      "rule": "Every run passes the project-config gate before anything else",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "Every\\ srd\\ skill\\ runs\\ this\\ gate\\ first,\\ in\\ every\\ mode,\\ before\\ reading\\ the\\ SRD"
+      ]
+    },
+    {
+      "id": "gate-stops",
+      "rule": "A failed gate check stops the run; no REST, checkout, or offline fallback",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "Stop\\ before\\ any\\ other\\ work\\ and\\ say\\ exactly\\ which\\ check\\ failed",
+        "Never\\ fall\\ back\\ to\\ a\\ REST\\ call,\\ a\\ local\\ checkout,\\ or\\ offline\\ work"
+      ]
+    },
+    {
+      "id": "standard-live",
+      "rule": "The SRD standard is fetched live, never a stored copy, and is the only source of SRD rules",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "Never\\ use\\ a\\ stored\\ or\\ remembered\\ copy",
+        "never\\ apply\\ a\\ rule\\ it\\ does\\ not\\ state"
+      ]
+    },
+    {
+      "id": "never-approves",
+      "rule": "Never sets the standard's approval status; approval is human",
+      "must": [
+        "never\\ sets\\ an\\ SRD\\ to\\ the\\ standard's\\ approval\\ status:\\ approval\\ is\\ a\\ human\\ decision",
+        "Do\\ not\\ mark\\ the\\ draft\\ acceptable"
+      ]
+    },
+    {
+      "id": "blockers-before-write",
+      "rule": "No file is written until every self-check blocker is settled with the user",
+      "must": [
+        "Write\\ only\\ once\\ step\\ 4\\ has\\ settled\\ every\\ blocker",
+        "An\\ authoring\\ skill\\ does\\ not\\ knowingly\\ write\\ a\\ defect\\ it\\ has\\ already\\ named"
+      ]
+    },
+    {
+      "id": "one-branch-at-a-time",
+      "rule": "Interview asks one branch at a time, no bundled questions",
+      "must": [
+        "Ask\\ one\\ branch\\ at\\ a\\ time",
+        "no\\ bundled\\ questions"
+      ]
+    },
+    {
+      "id": "corpus-before-accepting",
+      "rule": "A claim about the existing system is searched in the corpus before acceptance; contradictions surfaced",
+      "must": [
+        "`search`\\ the\\ corpus\\ before\\ accepting\\ it",
+        "never\\ silently\\ accept\\ or\\ fix"
+      ]
+    },
+    {
+      "id": "kb-only-after-confirmation",
+      "rule": "A platform fact reaches srd:kb only after the branch restatement is confirmed, never by a separate prompt",
+      "must": [
+        "reaches\\ `srd:kb`\\ only\\ once\\ that\\ restatement\\ is\\ confirmed",
+        "never\\ through\\ a\\ separate\\ prompt"
+      ]
+    },
+    {
+      "id": "gaps-drafted-then-offered",
+      "rule": "Doc gaps are captured as drafts and offered at step 5, never filed silently",
+      "must": [
+        "Gaps\\ are\\ captured\\ as\\ server\\-side\\ drafts\\ on\\ discovery\\ and\\ offered\\ at\\ step\\ 5",
+        "a\\ draft\\ left\\ without\\ a\\ path\\ is\\ invisible\\ to\\ every\\ later\\ draft\\ check"
+      ]
+    },
+    {
+      "id": "placeholders-not-collected",
+      "rule": "People and link fields stay placeholders; the status field holds the standard's initial status",
+      "must": [
+        "Do\\ not\\ collect\\ the\\ metadata\\ fields\\ that\\ name\\ people\\ or\\ link\\ outside\\ the\\ SRD",
+        "status\\ field\\ always\\ holds\\ the\\ standard's\\ initial\\ status"
+      ]
+    },
+    {
+      "id": "report-counts-from-artifact",
+      "rule": "Report counts only, read off the finished file",
+      "must": [
+        "counts\\ only",
+        "read\\ off\\ the\\ finished\\ artifact,\\ never\\ carried\\ from\\ the\\ work\\ that\\ produced\\ it"
+      ]
+    },
+    {
+      "id": "srd-kb-never-contradict",
+      "file": "references/doc-corpus.md",
+      "rule": "KB and SRDs describe the target system and never contradict; a contradiction is a finding no rank settles; a confirmed fact changes the KB at once",
+      "must": [
+        "so\\ no\\ rank\\ settles\\ an\\ SRD\\ claim\\ a\\ KB\\ section\\ contradicts",
+        "The\\ KB\\ and\\ the\\ SRDs\\ both\\ describe\\ the\\ target\\ system",
+        "a\\ confirmed\\ fact\\ changes\\ the\\ KB\\ at\\ once"
+      ]
+    },
+    {
+      "id": "rank-settles-sources",
+      "rule": "Conflicting corpus sources are settled by the server's rank (lower wins), never by folder name or a remembered order",
+      "file": "../create/references/doc-corpus.md",
+      "must": [
+        "the\\ lower\\ `rank`\\ states\\ the\\ platform",
+        "Never\\ settle\\ by\\ folder\\ name,\\ source\\ type,\\ or\\ a\\ remembered\\ order"
+      ],
+      "must_not": [
+        "\\bdoc/[a-z_]+/",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "store-identity",
+      "rule": "A stored document reference is the result's id copied as is, never its path; Markdown links stay paths",
+      "file": "../create/references/doc-corpus.md",
+      "must": [
+        "copy\\ the\\ result's\\ `id`\\ as\\ is,\\ never\\ its\\ `path`",
+        "A\\ Markdown\\ link\\ stays\\ a\\ relative\\ path\\ built\\ from\\ `path`"
+      ]
+    },
+    {
+      "id": "srd-ref-folder",
+      "rule": "An SRD reference is the SRD's folder name under initiatives, never a document identity",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "SRD's\\ folder\\ name\\ under\\ `initiatives`"
+      ],
+      "must_not": [
+        "\\bdoc/[a-z_]+/",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "frontmatter-neutral",
+      "rule": "Reads only id, title, url, aliases; never adds or removes a front-matter key or marker another tool owns",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "Read only the front-matter keys `id`, `title`, `url`, and `aliases`",
+        "Never add, remove, or change a front-matter key or marker"
+      ],
+      "must_not": [
+        "\\.obsidian|page_id|space_id|page_version|heading_anchors|ignore-push"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "\\bdoc/[a-z_]+/",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "who-would-know",
+      "file": "references/doc-corpus.md",
+      "rule": "A user who does not know a platform answer gets exactly one follow-up, \"Who would know?\"; names make the gap deferred with ask as typed, none make it unknown",
+      "must": [
+        "ask\\ exactly\\ one\\ follow\\-up,\\ \"Who\\ would\\ know\\?\"",
+        "Names:\\ `answer:\\ deferred`,\\ `ask`\\ each\\ person's\\ name\\ exactly\\ as\\ typed,\\ the\\ name\\ alone",
+        "\"Nobody\",\\ \"not\\ sure\",\\ or\\ no\\ person's\\ name",
+        "\"someone\\s+in\\s+hardware\"\\):\\ `answer:\\ unknown`,\\ no\\ `ask`",
+        "Names\\ volunteered\\ unprompted\\ \\(\"Dana\\ knows\"\\):\\ recorded\\ the\\ same\\ way;\\ skip\\ the\\ question"
+      ]
+    },
+    {
+      "id": "cite-corpus-source",
+      "file": "references/doc-corpus.md",
+      "rule": "Corpus-backed text names each source page in a fixed source line; no quote, no caution line, no rank total",
+      "must": [
+        "`Source:\\ <title>\\ ›\\ <heading>\\ \\(rank\\ <n>,\\ 1\\ =\\ most\\ trusted\\)\\ —\\ <source_url>`",
+        "corpus\\ content\\ never\\ reaches\\ SRD\\ or\\ corpus\\-page\\ text\\ unseen",
+        "Never\\ a\\ quote,\\ a\\ summary\\ of\\ the\\ page,\\ a\\ caution\\ line,\\ or\\ a\\ rank\\ total"
+      ]
+    },
+    {
+      "id": "corpus-fact-through-interview",
+      "rule": "A corpus fact reaches the draft only through an interview question with its source line; the report lists every corpus-sourced statement",
+      "must": [
+        "Corpus\\ content\\ enters\\ the\\ draft\\ only\\ through\\ the\\ interview",
+        "lists\\ every corpus\\-sourced\\ statement\\ in\\ the\\ file\\ with\\ its\\ source\\ line"
+      ]
+    },
+    {
+      "id": "generic-standard-skill",
+      "rule": "Names no rule identifier of any standard; illustrations use the ABC/XYZ placeholders",
+      "must_not": [
+        "(?-i:\\b(?!ABC-|XYZ-)[A-Z]{2,5}-\\d+[a-z]?\\b)"
+      ],
+      "must": [
+        "Act\\ only\\ on\\ what\\ it\\ states,\\ and\\ cite\\ a\\ rule\\ by\\ the\\ identifier\\ it\\ writes"
+      ]
+    },
+    {
+      "id": "generic-standard-guide",
+      "rule": "Names no rule identifier of any standard; illustrations use the ABC/XYZ placeholders",
+      "must_not": [
+        "(?-i:\\b(?!ABC-|XYZ-)[A-Z]{2,5}-\\d+[a-z]?\\b)"
+      ],
+      "file": "references/authoring-guide.md"
+    },
+    {
+      "id": "generic-standard-errata",
+      "rule": "Names no rule identifier of any standard; illustrations use the ABC/XYZ placeholders",
+      "must_not": [
+        "(?-i:\\b(?!ABC-|XYZ-)[A-Z]{2,5}-\\d+[a-z]?\\b)"
+      ],
+      "file": "references/errata.md"
+    },
+    {
+      "id": "generic-standard-procedures",
+      "rule": "Names no rule identifier of any standard; illustrations use the ABC/XYZ placeholders",
+      "must_not": [
+        "(?-i:\\b(?!ABC-|XYZ-)[A-Z]{2,5}-\\d+[a-z]?\\b)"
+      ],
+      "file": "references/srd-procedures.md"
+    },
+    {
+      "id": "generic-standard-template",
+      "rule": "Names no rule identifier of any standard; illustrations use the ABC/XYZ placeholders",
+      "must_not": [
+        "(?-i:\\b(?!ABC-|XYZ-)[A-Z]{2,5}-\\d+[a-z]?\\b)"
+      ],
+      "file": "assets/srd-template.md",
+      "must": [
+        "this\\ file\\ fixes\\ none\\ of\\ them"
+      ]
+    },
+    {
+      "id": "gate-routes-missing-server",
+      "rule": "A missing mcp-server is sent to the server's host, not to srd:init",
+      "file": "references/project-config.md",
+      "must": [
+        "For\\ a\\ missing\\ `mcp\\-server`,\\ add:\\ the\\ server's\\ host\\ writes\\ it"
+      ]
+    },
+    {
+      "id": "srd-work-none",
+      "rule": "srd-work: none keeps working files beside the SRD, like no key",
+      "file": "references/project-config.md",
+      "must": [
+        "With\\ `srd\\-work`\\ naming\\ a\\ folder",
+        "This\\ covers\\ `srd\\-work:\\ none`,\\ no\\ `srd\\-work`\\ key"
+      ]
+    },
+    {
+      "id": "working-file-kinds",
+      "rule": "Working files are only the kinds the skills write",
+      "file": "references/project-config.md",
+      "must": [
+        "working\\ file\\ of\\ one\\ kind:\\ `review`,\\s+`decisions`,\\s+or\\s+`questions`\\."
+      ],
+      "must_not": [
+        "`retro`",
+        "`notes`"
+      ]
+    },
+    {
+      "id": "path-call-then-offer",
+      "rule": "Once the path is confirmed, invoke report-doc-gap to set srd_ref without an offer; step 5 offers the drafts",
+      "must": [
+        "sets the `srd_ref` of\\s+every draft captured without one, and offers nothing yet"
+      ]
+    }
+  ]
+}

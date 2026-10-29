@@ -1,0 +1,409 @@
+#!/usr/bin/env bash
+# Lints every skill in the repo under test against the conventions recorded in
+# references/authoring.md. Mechanical checks only — it never edits files.
+#
+# A "skill" is any directory containing a SKILL.md, outside tmp/ and outside any
+# assets/ dir. Eval workspaces live in tmp/ and hold snapshots of skills under
+# test; a SKILL.md under assets/ is an eval fixture — a skill a scenario acts
+# on, not one this repo ships. Neither is source, and linting either would fail
+# on files that are meant to be flawed. For each skill this script checks:
+#   - SKILL.md exists and carries a `## Usage` block,
+#   - eval scenarios exist in evals/evals.json, with their pass criteria in the
+#     separate evals/expectations.json (so a run can be given the scenario
+#     without its rubric), and the two agree id for id,
+#   - frontmatter has name + description, name equals the directory name,
+#   - the description stays near the ~350-char aim (warns past 500) and uses
+#     no first/second person (warning only),
+#   - the SKILL.md body stays under ~500 lines / ~5000 tokens (warning only),
+#   - the body carries the output-discipline line ("Report tersely" or the
+#     "no preamble or narration" phrasing),
+#   - the body has a `## Self-learning` block (warning only),
+#   - every bundled .md reference over ~100 lines starts with a Contents list,
+#   - Markdown prose wraps at ~80 columns (warning only).
+#
+# It then cross-checks .claude-plugin/marketplace.json (if present): every plugin
+# `source` must be a real plugin directory (with .claude-plugin/plugin.json), and
+# every shipped skill on disk must live under exactly one plugin's skills/
+# directory (skills under .claude/skills/ are project-local and exempt).
+#
+# Then it lints the native eval cases (<group>/evals/<case>/) via
+# lint-cases.mjs: scenario coverage, tags, the English line, limits, and
+# that every grader pattern compiles as JavaScript.
+#
+# No external dependencies beyond node for the case checks (no jq).
+#
+# Exit status is 0 when clean, 1 when any error is found. Warnings do not fail.
+set -euo pipefail
+shopt -s nullglob
+
+# The repo under test: $SKILL_EVAL_ROOT, else the git top level of the working
+# directory (the script ships inside the skill-eval skill, not the repo).
+HERE="$(cd "$(dirname "$0")" && pwd)"
+SKILLS_SRC="$(realpath "${SKILL_EVAL_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}")"
+export SKILL_EVAL_ROOT="$SKILLS_SRC"
+MARKETPLACE="$SKILLS_SRC/.claude-plugin/marketplace.json"
+
+errors=0
+warnings=0
+
+err()  { echo "ERROR  $1"; errors=$((errors + 1)); }
+warn() { echo "WARN   $1"; warnings=$((warnings + 1)); }
+
+# Print the YAML frontmatter block (between the first two --- lines) of a file.
+frontmatter() {
+    awk 'NR==1 && $0=="---"{f=1; next} f && $0=="---"{exit} f' "$1"
+}
+
+# The house wrap: Markdown prose lines stay within ~80 columns (Content
+# hygiene). 80 is the target; lines up to a few over are tolerated only
+# when unbreakable, which the heuristic below already exempts.
+WRAP_LIMIT=80
+
+# Warn on Markdown prose wider than WRAP_LIMIT. Skips fenced code blocks and
+# table rows (aligned columns legitimately run wide), and flags a line only when
+# it stays breakable past the limit — a space at or after the limit means it
+# could have wrapped. Long URLs, paths, and links (no trailing space) are exempt.
+# Width is display columns, not bytes: each UTF-8 multibyte sequence (arrows,
+# em-dashes, …) collapses to one column first, since mawk's length() counts
+# bytes. Rare double-width glyphs (emoji) undercount by one — acceptable slack.
+check_wrap() {
+    local f="$1" out
+    [ -f "$f" ] || return 0
+    out="$(awk -v L="$WRAP_LIMIT" '
+        /^[[:space:]]*```/ { fence = !fence; next }
+        fence              { next }
+        /^[[:space:]]*\|/   { next }
+        {
+            s = $0
+            gsub(/[\300-\367][\200-\277]*/, ".", s)
+            if (length(s) <= L) next
+            if (substr(s, L + 1) ~ / /) printf "%d (%d cols)\n", NR, length(s)
+        }
+    ' "$f")"
+    [ -n "$out" ] || return 0
+    local line
+    while IFS= read -r line; do
+        warn "${f#"$SKILLS_SRC"/}:$line exceeds ${WRAP_LIMIT}-col wrap"
+    done <<<"$out"
+}
+
+lint_skill() {
+    local dir="$1" name rel skill_md readme evals fm
+    name="$(basename "$dir")"
+    # Report by repo-relative path, not basename: two groups can hold skills of
+    # the same name (go/skills/review and srd/skills/review), and a bare name
+    # leaves the reader guessing which one a finding belongs to.
+    rel="${dir#"$SKILLS_SRC"/}"
+    skill_md="$dir/SKILL.md"
+    readme="$dir/README.md"
+    evals="$dir/evals/evals.json"
+
+    fm="$(frontmatter "$skill_md")"
+
+    # name + description present.
+    grep -qE '^name:[[:space:]]' <<<"$fm" \
+        || err "$rel: frontmatter missing 'name:'"
+    grep -qE '^description:[[:space:]]*([|>].*)?$|^description:[[:space:]]*\S' \
+        <<<"$fm" || err "$rel: frontmatter missing 'description:'"
+
+    # name equals directory name.
+    local declared
+    declared="$(grep -E '^name:[[:space:]]' <<<"$fm" \
+        | head -1 | sed -E 's/^name:[[:space:]]*//; s/[[:space:]]*$//')"
+    [ "$declared" = "$name" ] \
+        || err "$rel: frontmatter name '$declared' != directory '$name'"
+
+    # Description size and point of view (Description quality).
+    # The aim is ~350 chars; warn only past 500 so a trigger-rich description
+    # has headroom. Joins a folded/plain scalar into one string first.
+    local desc
+    desc="$(awk '
+        /^description:/ {
+            d = 1
+            sub(/^description:[[:space:]]*[>|]?[[:space:]]*/, "")
+            if (length($0)) printf "%s ", $0
+            next
+        }
+        d && /^[a-zA-Z_-]+:/ { d = 0 }
+        d { sub(/^[[:space:]]+/, ""); printf "%s ", $0 }
+    ' <<<"$fm")"
+    desc="${desc% }"
+    [ "${#desc}" -gt 500 ] \
+        && warn "$rel: description is ${#desc} chars (aim <= ~350)"
+    grep -qiE '(^|[^a-zA-Z])(I|you|your)([^a-zA-Z]|$)' <<<"$desc" \
+        && warn "$rel: description uses first/second person"
+
+    # Body size (Token performance): the always-loaded SKILL.md
+    # body should stay under ~500 lines / ~5000 tokens. Tokens are estimated as
+    # bytes/4 (no tokenizer dependency). Warnings only — the limits are soft
+    # aims. (A stricter `skills-ref validate` gate can be added here once that
+    # tool is a repo dependency; the script is dependency-free today.)
+    local body_lines body_tokens
+    body_lines="$(wc -l <"$skill_md")"
+    body_tokens=$(( $(wc -c <"$skill_md") / 4 ))
+    [ "$body_lines" -gt 500 ] \
+        && warn "$rel: SKILL.md is $body_lines lines (aim <= ~500)"
+    [ "$body_tokens" -gt 5000 ] \
+        && warn "$rel: SKILL.md is ~$body_tokens tokens (aim <= ~5000)"
+
+    # Body carries the output-discipline line (mandatory; the
+    # canonical wording is "Report tersely: …", grill-me embeds the phrasing).
+    grep -qiE 'report tersely|no preamble or narration' "$skill_md" \
+        || err "$rel: SKILL.md lacks the output-discipline line"
+
+    # Body carries the Self-learning block (every skill in this repo does).
+    grep -q '^## Self-learning' "$skill_md" \
+        || warn "$rel: SKILL.md has no '## Self-learning' block"
+
+    # SKILL.md carries the Usage block.
+    grep -qE '^##[[:space:]]+Usage' "$skill_md" \
+        || err "$rel: SKILL.md has no '## Usage' section"
+
+    # Relative links resolve. A reference file lives one directory deeper
+    # than SKILL.md, so a sibling path copied from a SKILL.md into a
+    # references/ file is one `../` short and silently points nowhere — which
+    # is exactly how edit/references/autofix.md lost its link to errata.md.
+    # Links inside fenced code blocks and blockquotes are skipped: a template's
+    # placeholder targets (`ci-link`, `doc/logo.png`) and an authoring guide's
+    # Bad/Good specimens are content to read, not navigation to follow.
+    local f target resolved
+    while IFS= read -r f; do
+        [ -f "$f" ] || continue
+        while IFS= read -r target; do
+            [ -n "$target" ] || continue
+            resolved="$(cd "$(dirname "$f")" 2>/dev/null && \
+                realpath -m --relative-to="$SKILLS_SRC" "$target" 2>/dev/null)"
+            [ -e "$SKILLS_SRC/$resolved" ] \
+                || err "${f#"$SKILLS_SRC"/}: link target '$target' does not exist"
+        done < <(awk '
+            /^[[:space:]]*```/ { fence = !fence; next }
+            fence { next }
+            /^[[:space:]]*>/ { next }
+            {
+                line = $0
+                while (match(line, /\]\([^)#][^)]*\)/)) {
+                    t = substr(line, RSTART + 2, RLENGTH - 3)
+                    sub(/#.*$/, "", t)
+                    if (t !~ /^(https?:|mailto:|#)/ && t ~ /\//) print t
+                    line = substr(line, RSTART + RLENGTH)
+                }
+            }
+        ' "$f")
+    done < <(printf '%s\n' "$skill_md" "$dir"/references/*.md)
+
+    # No positional argument placeholders anywhere the skill reads. Positional
+    # substitution is zero-indexed ($0 is the first token), so every "$1 is the
+    # first token" in this repo was off by one for as long as it stood. Prose
+    # naming the token cannot be off by one, so the placeholders are banned
+    # outright rather than corrected. Reference files are checked too: they are
+    # read by the same run and the one that survived the tree-wide fix was
+    # there, not in a SKILL.md.
+    local posarg
+    posarg="$(grep -rlnE '(^|[^\\$])\$[0-9]' "$skill_md" \
+        "$dir/references" "$dir/assets" 2>/dev/null || true)"
+    [ -n "$posarg" ] && err "$rel: positional argument placeholder (\$N) in:
+       $(echo "$posarg" | tr '\n' ' ')— name the token in prose instead"
+
+    # Argument conventions (references/authoring.md, Arguments): bare flags, never
+    # --flag; one cap key, max=N; a skill taking modes or controls carries the
+    # unknown-token sentence, so no token is silently dropped or guessed at.
+    local hint
+    hint="$(awk '
+        /^argument-hint:/ { h = 1; sub(/^argument-hint:[[:space:]]*/, ""); printf "%s ", $0; next }
+        h && /^[a-zA-Z_-]+:/ { h = 0 }
+        h { sub(/^[[:space:]]+/, ""); printf "%s ", $0 }
+    ' <<<"$fm")"
+    grep -qE '(^|[^-])--[a-z]' <<<"$hint" \
+        && err "$rel: argument-hint uses a --flag; use a bare word or key=value"
+    grep -qE 'max_[a-z]+=|max <' <<<"$hint" \
+        && err "$rel: argument-hint caps with something other than max=N"
+    if grep -qE '[=|]' <<<"$hint"; then
+        tr -s '[:space:]' ' ' <"$skill_md" | grep -q 'say it was not recognized' \
+            || err "$rel: takes modes or controls but lacks the unknown-token sentence"
+    fi
+
+    # Eval scenarios exist in evals/evals.json, pass criteria in
+    # evals/expectations.json. They are separate files so a run can be handed a
+    # scenario without the rubric it will be graded on; keeping both in one
+    # file made every eval in this repo non-blind.
+    local expects="$dir/evals/expectations.json"
+    if [ -f "$evals" ]; then
+        # Valid JSON carrying at least 3 scenarios (Evaluations).
+        # Counts "query" keys rather than parsing JSON — this script has no jq.
+        local n
+        n="$(grep -co '"query"[[:space:]]*:' "$evals" || true)"
+        [ "$n" -ge 3 ] \
+            || err "$rel: evals/evals.json has $n scenario(s) (want >= 3)"
+        grep -q '"expected_behavior"' "$evals" \
+            && err "$rel: evals/evals.json carries 'expected_behavior' — it belongs in evals/expectations.json"
+        if [ -f "$expects" ]; then
+            grep -q '"expected_behavior"' "$expects" \
+                || err "$rel: evals/expectations.json has no 'expected_behavior' checks"
+            # Every scenario id has expectations, and vice versa. Compares the
+            # sorted "id": lists from both files; no jq in this script.
+            local sids eids
+            sids="$(grep -o '"id"[[:space:]]*:[[:space:]]*[0-9]*' "$evals" \
+                | grep -o '[0-9]*$' | sort -n | tr '\n' ' ')"
+            eids="$(grep -o '"id"[[:space:]]*:[[:space:]]*[0-9]*' "$expects" \
+                | grep -o '[0-9]*$' | sort -n | tr '\n' ' ')"
+            [ "$sids" = "$eids" ] \
+                || err "$rel: evals ids [$sids] != expectations ids [$eids]"
+        else
+            err "$rel: no evals/expectations.json"
+        fi
+    else
+        err "$rel: no evals/evals.json"
+    fi
+
+    # Skills ship no README.md: SKILL.md and its bundled files carry everything.
+    [ -f "$readme" ] \
+        && err "$rel: has a README.md — skills ship none; fold it into SKILL.md"
+
+    # Every Markdown file in the skill wraps prose at ~80 columns.
+    check_wrap "$skill_md"
+    check_wrap "$readme"
+
+    # Bundled .md references over ~100 lines start with a Contents list, and
+    # wrap like every other Markdown file.
+    local f lines
+    for f in "$dir"/*.md "$dir"/references/*.md "$dir"/assets/*.md; do
+        [ -f "$f" ] || continue
+        case "$(basename "$f")" in SKILL.md|README.md) continue ;; esac
+        check_wrap "$f"
+        lines="$(wc -l <"$f")"
+        if [ "$lines" -gt 100 ]; then
+            # head -40, not -25: a leading banner comment may push the
+            # `## Contents` heading down.
+            head -40 "$f" | grep -qiE '^#+[[:space:]]+Contents|^Contents' \
+                || warn "${f#"$SKILLS_SRC"/}: $lines lines, no Contents list"
+        fi
+    done
+}
+
+# Print "name<TAB>source" for each object in the marketplace's "plugins" array,
+# one per line. Replaces `jq -r '.plugins[] | "\(.name)\t\(.source)"'` without a
+# JSON dependency: it relies on the manifest's well-formed layout — each plugin
+# object lists "name" before "source" — which the marketplace file guarantees.
+plugin_entries() {
+    awk '
+        # Return the first double-quoted string value on a "key": "value" line.
+        function strval(s) {
+            sub(/^[^:]*:[[:space:]]*"/, "", s)
+            sub(/".*/, "", s)
+            return s
+        }
+        /"plugins"[[:space:]]*:/       { in_plugins = 1; next }
+        !in_plugins                    { next }
+        /"name"[[:space:]]*:/          { name = strval($0); have = 1; next }
+        have && /"source"[[:space:]]*:/ { print name "\t" strval($0); have = 0 }
+    ' "$1"
+}
+
+# Cross-check the plugin marketplace against the skills on disk: every plugin
+# `source` must be a real plugin directory, and every skill must live under
+# exactly one plugin's skills/ dir. SKILL_PATHS is the set of skill directories
+# (relative to the repo root) collected by the main loop.
+check_marketplace() {
+    [ -f "$MARKETPLACE" ] || {
+        warn "no .claude-plugin/marketplace.json — skipping marketplace checks"
+        return
+    }
+    if ! grep -q '"plugins"[[:space:]]*:' "$MARKETPLACE"; then
+        err "marketplace.json: no \"plugins\" array (invalid or malformed)"
+        return
+    fi
+
+    # Collect plugin sources (leading "./" stripped) and validate each one is a
+    # real plugin directory carrying a manifest. plugin_entries emits a
+    # "name<TAB>source" line per object in the plugins array.
+    local -a sources=()
+    local name src
+    while IFS=$'\t' read -r name src; do
+        [ -n "$name" ] || continue
+        src="${src#./}"
+        sources+=("$src")
+        [ -f "$SKILLS_SRC/$src/.claude-plugin/plugin.json" ] \
+            || err "marketplace: plugin '$name' source '$src' has no .claude-plugin/plugin.json"
+    done < <(plugin_entries "$MARKETPLACE")
+
+    # Every shipped skill must sit under exactly one plugin source's skills/
+    # dir. Skills under .claude/skills/ are project-local maintainer tools (not
+    # shipped via the marketplace), so they are exempt from this rule but still
+    # get every per-skill quality check above. A git-ignored skill is a local,
+    # unshipped plugin and is exempt the same way.
+    local sp hits
+    for sp in "${SKILL_PATHS[@]}"; do
+        case "$sp" in .claude/skills/*) continue ;; esac
+        git -C "$SKILLS_SRC" check-ignore -q "$sp" && continue
+        hits=0
+        for src in "${sources[@]}"; do
+            case "$sp" in "$src"/skills/*) hits=$((hits + 1)) ;; esac
+        done
+        [ "$hits" -eq 1 ] \
+            || err "skill '$sp' sits under $hits plugin sources (want exactly 1)"
+    done
+}
+
+declare -a SKILL_PATHS=()
+while IFS= read -r skill_md; do
+    dir="$(dirname "$skill_md")"
+    SKILL_PATHS+=("${dir#"$SKILLS_SRC"/}")
+    lint_skill "$dir"
+done < <(find "$SKILLS_SRC" -path '*/.claude/worktrees' -prune -o \
+    -path "$SKILLS_SRC/tmp" -prune -o -path '*/assets' -prune -o \
+    -name SKILL.md -print | sort)
+
+check_marketplace
+
+# Every plugin/marketplace manifest version must match the VER file. Delegated
+# to version.sh so the version logic lives in exactly one place.
+if [ -x "$SKILLS_SRC/dev/version.sh" ]; then
+    "$SKILLS_SRC/dev/version.sh" verify \
+        || err "manifest versions drifted from VER (run ./dev/version.sh sync)"
+else
+    warn "skipping version-drift check (dev/version.sh missing or not executable)"
+fi
+
+# Every tracked JSON file parses — settings.json, manifests, and eval specs.
+# (A stray shell redirect once left a bare `2` in .claude/settings.json.)
+# One node process parses them all (one per file cost ~5 s); untracked files
+# that are not ignored count too, so a new spec is checked before it is added;
+# a tracked file deleted in the working tree is skipped.
+if command -v node >/dev/null; then
+    while IFS= read -r f; do
+        err "$f: not valid JSON"
+    done < <(git -C "$SKILLS_SRC" ls-files -co --exclude-standard '*.json' |
+        (cd "$SKILLS_SRC" && node -e '
+            const fs = require("fs");
+            for (const f of fs.readFileSync(0, "utf8").split("\n").filter(Boolean)) {
+                if (!fs.existsSync(f)) continue; // tracked but deleted
+                try { JSON.parse(fs.readFileSync(f, "utf8")); } catch { console.log(f); }
+            }'))
+fi
+
+# Native eval cases: patterns must compile as JavaScript, so this half runs in
+# node (lint-cases.mjs); its last line carries its counts.
+if command -v node >/dev/null; then
+    cases_out="$(node "$HERE/lint-cases.mjs" || true)"
+    printf '%s\n' "$cases_out" | sed '$d'
+    read -r ce cw < <(printf '%s\n' "$cases_out" | tail -1 |
+        sed -E 's/^cases: ([0-9]+) error\(s\), ([0-9]+) warning\(s\)$/\1 \2/')
+    errors=$((errors + ${ce:-1})); warnings=$((warnings + ${cw:-0}))
+else
+    warn "skipping native-case checks (node not found)"
+fi
+
+# Free eval checks (no model): contracts, probe files, generators reproduce
+# their cases, grader literals are served (eval-check.py).
+if command -v python3 >/dev/null; then
+    check_out="$("$HERE/eval-check.py" || true)"
+    printf '%s\n' "$check_out" | grep '^ERR' | sed 's/^ERR  */ERROR  /' || true
+    ec="$(printf '%s\n' "$check_out" | tail -1 | sed -nE 's/.* ([0-9]+) error\(s\)$/\1/p')"
+    errors=$((errors + ${ec:-1}))
+else
+    warn "skipping eval checks (python3 not found)"
+fi
+
+echo "----"
+echo "$errors error(s), $warnings warning(s)."
+[ "$errors" -eq 0 ]

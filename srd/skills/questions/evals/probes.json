@@ -1,0 +1,81 @@
+{
+  "skill_name": "questions",
+  "probes": [
+    {
+      "id": "disproved-finding-named",
+      "rule": "disproved-findings-named",
+      "prompt": "Situation: review finding #4 says the term Launch Window is undefined. During system confrontation, a corpus lookup shows the project glossary defines it. You cannot write initiatives/slot-swap/srd.review.md.\n\nQuestion: on the first line, give the exact command your report tells the user to run about #4, or NONE. Then one sentence why.",
+      "pass": "^[^\\n]*review[^\\n]*check",
+      "fail": "^\\W*NONE",
+      "class": "load-bearing"
+    },
+    {
+      "id": "srd-decision-to-edit-list",
+      "rule": "srd-decisions-handed-to-edit",
+      "prompt": "Situation: in the walk on initiatives/slot-swap/srd.md, you have write access to the repository and have been editing initiatives/slot-swap/srd.questions.md all session. Q5 there asks how long a customer has to confirm a slot swap. The user answers: \"24 hours. Update SW-4 to say so.\"\n\nQuestion: what happens to that answer? Answer on the first line with exactly one of: EDIT-SW-4-NOW, MARK-Q5-ANSWERED-IN-QUESTIONS-FILE, SRD-KB, LIST-AS-EDIT-FOR-SRD-EDIT. Then one sentence why.",
+      "pass": "^\\W*LIST-AS-EDIT-FOR-SRD-EDIT",
+      "fail": "^\\W*(EDIT-SW|MARK|SRD-KB)",
+      "class": "redundant"
+    },
+    {
+      "id": "emptied-file-stays",
+      "rule": "questions-file-never-deleted",
+      "prompt": "Situation: the user just answered the last open question in initiatives/slot-swap/srd.questions.md and nothing remains.\n\nQuestion: do you delete initiatives/slot-swap/srd.questions.md? Answer on the first line YES or NO, then one sentence what the file holds instead.",
+      "pass": "^\\W*NO\\b.*No open questions",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "stay-on-question",
+      "rule": "one-question-at-a-time",
+      "prompt": "Situation: in the walk you restated the user's answer to Q2 and removed it. Q3 is next in the file. The user has not said anything further.\n\nQuestion: do you now put Q3 to the user on your own? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "load-bearing"
+    },
+    {
+      "id": "rerun-refreshes-with-default-review",
+      "rule": "rerun-uses-default-review",
+      "prompt": "Situation: the author fixed the findings from the last pass in initiatives/slot-swap/srd.md and re-runs /questions initiatives/slot-swap/srd.md. initiatives/slot-swap/srd.questions.md exists with 3 open questions; initiatives/slot-swap/srd.review.md holds 6 findings. srd:review has three modes: DEFAULT (a full review), CHECK (re-verify the existing findings against the edited SRD), ERRATA (list mechanical fixes only).\n\nQuestion: which srd:review mode do you run to refresh the review layer? Answer on the first line with exactly one of: DEFAULT, CHECK, ERRATA. Then one sentence why.",
+      "pass": "^\\W*DEFAULT",
+      "fail": "^\\W*(CHECK|ERRATA)",
+      "class": "redundant"
+    },
+    {
+      "id": "kb-contradiction-question",
+      "rule": "kb-contradiction-asked",
+      "prompt": "Situation: running srd:questions on initiatives/slot-swap/srd.md. SW-2 says \"The system MUST allow a customer to swap a Launch Slot until 7 days before launch.\" Your corpus search returned: kb/launch-windows.md, section \"Slot swaps\", opens with the attestation line \"> Not in the platform docs. Attested `slot-swap` interview 2026-08-02; `payload-booking` 2026-09-01.\" and states: \"A slot swap is allowed until 14 days before launch, at most one per mission.\" The project treats the knowledge base as the record of how the platform behaves.\n\nQuestion: what goes into the question list? Answer on the first line with exactly one of: ASK-AUTHOR-TO-CHANGE-SW-2-TO-14, ASK-WHICH-STATES-WHAT-WILL-BE-BUILT, NOTHING-KB-WINS. Then one sentence why.",
+      "pass": "^\\W*ASK-WHICH",
+      "fail": "^\\W*(ASK-AUTHOR|NOTHING)",
+      "class": "redundant"
+    },
+    {
+      "id": "questions-file-under-srd-work",
+      "rule": "working-file-path",
+      "context": [
+        "SKILL.md",
+        "../create/references/project-config.md"
+      ],
+      "prompt": "Situation: project-config.md sets `initiatives: initiatives` and `srd-work: work`. `/srd:questions initiatives/login/login-srd.md` has its open questions ready to write.\n\nQuestion: at which path do you write the questions file? Answer on the first line with the path only, then one sentence why.",
+      "pass": "^[^\\n]*(?<![\\w/])work/login/login-srd\\.questions\\.md\\b",
+      "fail": "^[^\\n]*(?<![\\w/])initiatives/[^\\n\\s`]*\\.(review|decisions|questions)\\.md",
+      "class": "redundant"
+    },
+    {
+      "id": "deferred-srd-decision-no-gap",
+      "rule": "srd-decisions-handed-to-edit",
+      "prompt": "Situation: walking the questions for initiatives/slot-swap/srd.md. Q4 asks: \"Should a swap within 14 days be refused or only warned about?\" — a decision about this SRD, not a platform fact. The user says \"not now, ask the product owner\".\n\nQuestion: what happens to Q4? Answer on the first line with exactly one of: OPEN-QN-ONLY, DOC-GAP-DEFERRED, DROP-IT. Then one sentence why.",
+      "pass": "^\\W*OPEN-QN-ONLY\\b",
+      "fail": "^\\W*(DOC-GAP-DEFERRED|DROP-IT)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "disproved-named-before-walk",
+      "rule": "disproved-findings-named",
+      "prompt": "Situation: `/srd:questions` on an SRD with a review file. A corpus lookup disproves review finding #4 (the glossary defines the term it calls undefined). You have just written the questions file; the walk of the 5 questions has not started, and the user may stop after the first one.\n\nQuestion: does the report you send now, before the first question, name `#4` and the command that retires it? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "load-bearing"
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "skill_name": "doc",
+  "rules": [
+    {
+      "id": "checklist-governs",
+      "rule": "A comment changes only when it fails the checklist",
+      "must": [
+        "a comment changes only when it fails the checklist",
+        "A comment that passes is left alone"
+      ]
+    },
+    {
+      "id": "header-holds-members",
+      "rule": "Props, events, slots, model are named in the header block; member TSDoc is moved there and deleted",
+      "must": [
+        "does not name, in\\s+backticks, every prop, event, slot, and model",
+        "Move any fact it holds that the header\\s+block lacks into the block, then delete it"
+      ]
+    },
+    {
+      "id": "facts-from-code",
+      "rule": "Never write a fact the code does not establish",
+      "must": [
+        "Never write a fact you cannot confirm from the code; flag it instead",
+        "never on a category the code\\s+leaves open"
+      ]
+    },
+    {
+      "id": "directives-untouched",
+      "rule": "Directive comments are never edited",
+      "must": [
+        "`// biome-ignore …`, `// @ts-expect-error`"
+      ]
+    },
+    {
+      "id": "plan-before-writing",
+      "rule": "File, directory, and all targets present a plan and wait",
+      "must": [
+        "Wait for approval, then run the loop and Verify"
+      ]
+    },
+    {
+      "id": "diff-default",
+      "rule": "No target works the items the working diff touches; an empty diff asks",
+      "must": [
+        "diff \\(default, no target\\) — every item whose code or comment the working\\s+diff changes",
+        "An empty diff: say so and ask\\s+for a target"
+      ]
+    },
+    {
+      "id": "auto-fan-out",
+      "rule": "Fan-out is automatic by size, announced in the plan; the parent re-reads workers' comments",
+      "must": [
+        "Fan-out is automatic: a target spanning several directories with more than\\s+~40 files or ~3000 lines",
+        "whether the run fans out and why",
+        "Merging\\s+is not accepting"
+      ]
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Unrecognized tokens are named and defaults run; an empty target resolution asks",
+      "must": [
+        "Read the tokens in any order: a reserved word is a mode or flag, `key=value`\\s+is a control, and anything else is the target",
+        "say it was not\\s+recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target\\s+that resolves to nothing: say so and ask — never guess what to work on"
+      ]
+    },
+    {
+      "id": "max-cap",
+      "rule": "max= is a hard cap on comments changed; what is left is reported",
+      "must": [
+        "`max=N` — hard cap on comments changed; an item whose edit would pass it is\\s+not started, never left half done: it and every later item are reported as left"
+      ]
+    },
+    {
+      "id": "delegated-by-audit",
+      "rule": "Delegated by web:audit: report gaps, nothing written",
+      "must": [
+        "A run not told so is not delegated, and runs its target kind as usual",
+        "No\\ approval\\ gate,\\ no\\ edit,\\ no\\ Verify,\\ no\\ fan-out"
+      ]
+    },
+    {
+      "id": "move-settles-header-name",
+      "rule": "A member-TSDoc move is one change against max and settles item 5 for the name it adds",
+      "must": [
+        "The move counts as one change\\s+against `max`, and settles item 5 for the name it adds"
+      ]
+    },
+    {
+      "id": "delegated-empty-target",
+      "rule": "A delegated run whose target resolves to nothing returns empty lists with a note, never asks",
+      "must": [
+        "A target that resolves to nothing returns the three lists empty with a\\s+one-line note; a worker never asks"
+      ]
+    },
+    {
+      "id": "max-stops-at-first-misfit",
+      "rule": "An item past the remaining max stops the run; it and every later item are reported left",
+      "must": [
+        "it and every later item are reported as left; no later, smaller item\\s+jumps it"
+      ]
+    }
+  ]
+}

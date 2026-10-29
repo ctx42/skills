@@ -1,0 +1,230 @@
+# Go style — deep rules
+
+Keyed detection detail for the rules in `references/production.md` and
+`references/test.md`. An entry adds only what a capable reviewer can't infer
+from the one-line rule — an exemption or a detection heuristic — in two short
+sentences. Open an entry only when about to flag its rule; never preload the
+file. Grows via `go:review add`.
+
+## Contents
+
+- Lines fit the limit (Production + Test)
+- No name stutter (Production)
+- Method over a single-receiver-arg func (Production)
+- Name a helper for behavior, not its caller (Production)
+- Service interface naming (Production)
+- On interface-implementing methods, never restate the interface's contract (Production)
+- Use godoc cross-references (Production)
+- Example functions for public APIs (Production)
+- Reusable package ships a README (Production)
+- Package godoc lives in the package-named file (Production)
+- Output belongs to the entry point, not leaf functions (Production)
+- Read the environment through the ring (Production + Test)
+- Name the overflow (Production + Test)
+- Break an over-width table row positionally (Test)
+- Separate distinct topics with a blank line (Test)
+- Don't wrap a one-liner in a test helper (Test)
+- Assert on distinctive output, not shared tokens (Test)
+- must.Value for error not under test (Test)
+- Test helpers in all_test.go (Test)
+- Test order mirrors source order (Test)
+- Field-count guard forces new-field coverage (Test)
+- Cover error paths and edge cases (Test)
+
+## Lines fit the limit (Production + Test)
+
+Resolve the two settings once per run, with full EditorConfig semantics, for a
+notional `.go` file in the module root (the `go.mod` directory): walk up until
+a `root = true` file, closer files override farther ones, later matching
+sections override earlier ones, `tab_width` falls back to `indent_size`, and
+`indent_size = tab` means `tab_width`. One setting governs the whole module —
+`.editorconfig` files below the module root are ignored whatever the target
+(diff, function, file, package, or `all`). No `tab_width` and no numeric
+`indent_size` → a tab is 4 columns; no `max_line_length`, or
+`max_line_length = off` → 80.
+
+A generated line (`DO NOT EDIT`) over the limit is an offense against the
+generator template that produced it, never against the generated file: file it
+at the template's block and cite the generated site as evidence.
+
+## No name stutter (Production)
+
+Exemption: a name fixed by a contract outside the package — a method set another
+type is asserted against, or a name invoked by string via `text/template`,
+reflection, or (de)serialization — since renaming it breaks those callers with
+no local compile error. Detect: a member repeating its type or package
+qualifier (`Meta.MetaGet`, `client.ClientDo`) with no same-file `var _ ... =`
+pin or interface carrying the name plus a rationale comment.
+
+## Method over a single-receiver-arg func (Production)
+
+Exemption beyond the body's contract and typeless cases: the arg is one of
+several equals with no clear receiver. Detect: an unexported func with a single
+local-type parameter; convert it, update callers to `pag.f()`, and rename its
+test to `Test_T_f`.
+
+## Name a helper for behavior, not its caller (Production)
+
+Boolean predicates read third-person singular (`fileExists`, not `fileExist`);
+generalize incidental wrap text too ("checking cache file" → "checking file").
+Detect: a helper named for its caller or domain (`cached`, `writeConfig`) whose
+body touches only stdlib fs/string/math ops and no domain type.
+
+## Service interface naming (Production)
+
+The service layer is the type that holds a store and is held by HTTP endpoints
+or the CLI wiring. An adapter interface (auth, a client wrapper) is not a
+service and keeps its name. Detect: an interface named `Itf` or another
+non-`Service` name whose implementation holds a store.
+
+## On interface-implementing methods, never restate the interface's contract (Production)
+
+Never restate the interface's contract; godoc may carry only what the type adds
+beyond it (ordering, concurrency, side effects, error behavior), or the
+one-line reference `// implements [io.WriterTo].` Detect: godoc on a method
+whose signature matches a declared interface and whose text only paraphrases
+that interface's contract (confirm with `goToImplementation`).
+
+The rule is about methods written *to* an interface, not methods that happen to
+match one. Nearly every `Close() error`, `String() string`, and `Error() string`
+in Go incidentally satisfies some interface, and `goToImplementation` will say
+so — stripping their godoc on that basis would strip it from most of a
+codebase. Apply the rule only where the type declares the intent: a
+`var _ Iface = (*T)(nil)` assertion, the interface named in the type's own
+docs, or a signature that exists solely to satisfy it. A `Close` that is simply
+this type's own cleanup keeps its godoc.
+
+## Use godoc cross-references (Production)
+
+The comment's own leading name and lowercase concepts stay plain. Detect: prose
+naming another in-package exported symbol without brackets, or brackets around
+an unexported identifier; when editing a comment, fix the whole comment.
+
+## Example functions for public APIs (Production)
+
+Non-trivial means correct use takes more than one call (construct then use, a
+call sequence) or a non-obvious argument; a func used in one self-evident call
+— a ~6-line `Load(path)` — is trivial, as are getters, setters, and one-liners.
+Detect: such a symbol with no matching `Example`, `ExampleT`, or
+`ExampleT_method` in the package's `_test.go` files — typically new public API
+in a diff with no accompanying example.
+
+## Reusable package ships a README (Production)
+
+Scope to the module root and each public sub-package; never demand one per file.
+Detect: a package meant for outside consumption whose directory has neither a
+`README.md` nor a package-godoc overview — in the package-named file, or
+`doc.go` when none exists — beyond a one-line synopsis, or one missing the
+essentials (purpose, import path, one runnable snippet).
+
+## Package godoc lives in the package-named file (Production)
+
+Relation: the README rule accepts a package-godoc overview as a README
+substitute wherever this rule puts it, so the two never conflict. Detect: a
+`doc.go` whose sole content is the package doc comment while a package-named
+file exists — move the comment there and delete `doc.go`.
+
+## Output belongs to the entry point, not leaf functions (Production)
+
+Stricter than "never log-and-return": stream choice and exit code are policy
+owned by the single entry point (`Main`), so a non-entry function returns text
+or a result value plus `error` and writes nothing — passing a writer for
+streamed data is fine, passing `os.Stdout`/`os.Stderr` so a function can report
+its own errors or results is not. Detect: `fmt.Fprint*`/`fmt.Print*`/`log.*` to
+a process stream (or an injected reporting writer) outside the entry point; a
+function returning an `int` exit code instead of `error`; a function that both
+prints an error and returns or absorbs it.
+
+## Read the environment through the ring (Production + Test)
+
+The ring (`*ring.Ring`) is the injected process environment, so `os.Getenv`
+reaches around that seam and forces tests onto the global `t.Setenv`; in tests
+call `rng.EnvSet` after constructing the ring, capturing any
+working-directory-relative fixture path into a local first, since it mutates
+the ring in place. Detect: `os.Getenv`/`os.LookupEnv` in a function that has
+(or could take) a `*ring.Ring`; `t.Setenv` in a test whose subject reads env
+through a ring.
+
+## Name the overflow (Production + Test)
+
+A raw backtick string is banned for multi-line content in indented code because
+it must start at column 0 and hides trailing whitespace. Detect: a call wrapped
+only to fit the width; a multi-line backtick string in indented code; `+`-joined
+segments where the first trails the `:=` and the rest hang misaligned below it;
+a short string local whose literal fits inline at every use.
+
+## Break an over-width table row positionally (Test)
+
+A row is data whose field order the anonymous struct above already fixes, so
+keys add noise; this runs against the Go habit of keying multi-line struct
+literals, so never "fix" a positional row back to keys. Detect: a multi-line
+table-row literal using `field: value` keys, or a single-line row past the width
+limit that should wrap.
+
+## Separate distinct topics with a blank line (Test)
+
+Determine the subjects first, then read the blank lines off them. A run that
+scans for blank lines instead judges each one alone and reads the rule
+backwards as often as forwards — on identical code, twelve workers split eight
+flagging a missing blank line against four calling a correct one surplus: same
+rule, same severity, opposite edits. The line settles the `--- Then ---`
+subject; in `--- Given ---` it is the variable being declared, which the
+sibling rule "keep a variable's setup next to its declaration" already fixes —
+its setup lines belong to it, as does any later statement that configures it
+(a chdir into a fixture dir, an `EnvSet` on a ring, a `Parse` on a flag set),
+and the next unrelated declaration opens the next subject. A blank line between
+a flag set, its flag and its `Parse` is over-separation, not a boundary. In
+`--- Then ---` everything that observes the `--- When ---` call (results,
+mutated arguments, captured output, locals and comments) is one run; only a
+second action on the result opens a new group.
+
+## Don't wrap a one-liner in a test helper (Test)
+
+Detect: a `func(...) T { t.Helper(); return oneExpr }` in a `_test.go` file;
+inline it at every call site, and if it existed only to avoid repeating a
+literal, declare that literal as a `const`.
+
+## Assert on distinctive output, not shared tokens (Test)
+
+`assert.NotEqual(t, "", out)` or `len(out) > 0` as the only content check is
+the degenerate case — it never distinguishes correct output from garbage.
+Detect: `Contain` on a token that also appears in a sibling test's expected
+output (the program name, a shared wrapper prefix such as `"reading config"`);
+assertions against the binary or package name; a dispatch test whose asserted
+outcome more than one branch yields.
+
+## must.Value for error not under test (Test)
+
+`must.Value`/`must.Values` (`ctx42/testing/pkg/must`) panic on error, failing
+the test at that line. Detect: an `x, err :=` outside the `--- When ---` step
+immediately followed by `assert.NoError(t, err)` with `err` not otherwise
+inspected; never swap the `--- When ---` call itself for `must`.
+
+## Test helpers in all_test.go (Test)
+
+The compiler ignores unused package-level funcs, so a dead helper in
+`all_test.go` is caught only here. Detect: a helper (no `Test`/`Bench`/`Example`
+prefix) defined in a `_test.go` file other than `all_test.go` and called from
+more than one test file, or clearly package-wide in scope; also a helper in
+`all_test.go` with no caller.
+
+## Test order mirrors source order (Test)
+
+Subject extraction: strip the `Test_` prefix and take everything up to the
+first `_tabular` suffix, so `Test_Foo` and `Test_Foo_tabular` both map to
+`Foo`. Detect: walk the test file top to bottom, record each subject's first
+position in `foo.go`, and flag any subject positioned before the previous one.
+
+## Field-count guard forces new-field coverage (Test)
+
+The guard is `assert.Fields(t, N, T{})`: it fails when `T` gains or loses a
+field so the author must update the per-field assertions. Detect: a diff that
+changes `N` (or adds a struct field) without adding an assertion referencing the
+new field in the same change.
+
+## Cover error paths and edge cases (Test)
+
+Flag only an error return, or an edge case the godoc names, that no test
+reaches; an untested branch the godoc is silent on is coverage work for
+`go:cover`, not a style offense. Detect: per such return or named case, grep the
+package's `_test.go` files for an input that drives it.

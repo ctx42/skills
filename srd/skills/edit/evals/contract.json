@@ -1,0 +1,315 @@
+{
+  "skill_name": "edit",
+  "rules": [
+    {
+      "id": "one-confirmed-edit",
+      "rule": "Exactly one change per proposal, applied only on explicit approval",
+      "must": [
+        "Propose\\ exactly\\ one\\ change",
+        "apply\\ only\\ on\\ explicit\\ approval",
+        "never\\ edit\\ without\\ confirmation"
+      ]
+    },
+    {
+      "id": "no-invented-figures",
+      "rule": "Never invents a figure; placeholder in the after text",
+      "must": [
+        "Never\\ invent\\ a\\ figure\\ neither\\ the\\ SRD\\ nor\\ the\\ user\\ gives",
+        "`\\[TBD:\\ swap\\ deadline\\ days\\]`"
+      ]
+    },
+    {
+      "id": "no-metadata-no-status",
+      "rule": "Never edits the standard's header fields or the status field, never proposes a status transition",
+      "must": [
+        "never\\ edits\\ the\\ header\\ fields\\ the\\ standard\\ defines,\\ sets\\ back\\-links,\\ or\\ changes\\ the\\ status\\ field",
+        "never\\ proposes\\ a\\ status\\ transition"
+      ]
+    },
+    {
+      "id": "review-file-untouched",
+      "rule": "Never writes <srd>.review.md; hands off to review check",
+      "must": [
+        "It\\ never\\ writes\\ `<srd>\\.review\\.md`",
+        "hands\\ off\\ to\\ `review\\ <srd>\\ check`"
+      ]
+    },
+    {
+      "id": "frozen-ids",
+      "rule": "Ids frozen when the standard forbids renumbering at the SRD's status; any id change stated and approved in the loop",
+      "must": [
+        "on\\ a\\ frozen\\ SRD\\ ids\\ are\\ frozen",
+        "any\\ id\\ change\\ is\\ stated\\ and\\ approved\\ in\\ the\\ loop's\\ confirmation,\\ never\\ applied\\ quietly"
+      ]
+    },
+    {
+      "id": "y-does-not-advance",
+      "rule": "Y, S and E never advance the walk; only YN or explicit ask",
+      "must": [
+        "Advance\\ to\\ the\\ next\\ entry\\ only\\ on\\ `YN`\\ or\\ an\\ explicit\\ ask"
+      ]
+    },
+    {
+      "id": "comments-read-only",
+      "rule": "Comment blocks are read-only",
+      "must": [
+        "Comment\\ blocks\\ are\\ read\\-only"
+      ]
+    },
+    {
+      "id": "no-publish-proposals",
+      "rule": "Never proposes pushing, publishing, syncing, or accepting",
+      "must": [
+        "never\\ proposes\\ pushing,\\ publishing,\\ or\\ syncing\\ the\\ SRD\\ as\\ a\\ follow\\-up",
+        "Acceptance\\ is\\ a\\ human\\ decision"
+      ]
+    },
+    {
+      "id": "decision-log-per-edit",
+      "rule": "Every applied edit logged in <srd>.decisions.md before the next proposal",
+      "must": [
+        "Log\\ the\\ change\\ in\\ `<srd>\\.decisions\\.md`\\ before\\ proposing\\ the\\ next\\ one"
+      ]
+    },
+    {
+      "id": "feedback-needs-review-file",
+      "rule": "#n with no review file says so and stops",
+      "must": [
+        "if\\ absent,\\ say\\ so\\ and\\ stop",
+        "those\\ report\\ a\\ run\\ that\\ happened,\\ and\\ this\\ one\\ did\\ not"
+      ],
+      "file": "references/modes.md"
+    },
+    {
+      "id": "scaffolds-not-removed",
+      "rule": "Draft scaffolds never removed silently; in-scope derivation never self-triggered",
+      "must": [
+        "never\\ remove\\ either\\ silently",
+        "Never\\ trigger\\ the\\ in\\-scope\\ derivation\\ on\\ your\\ own"
+      ]
+    },
+    {
+      "id": "gate-first",
+      "rule": "Run the project gate first, before any other work",
+      "must": [
+        "Run\\ the\\ project\\ gate\\ first"
+      ]
+    },
+    {
+      "id": "rules-from-standard",
+      "rule": "Rules come only from the project's standard, read at run time; no rule id, field, status value, or section is hardcoded",
+      "must": [
+        "the\\ only\\ source\\ of\\ rules",
+        "Act\\ only\\ on\\ what\\ it\\ states",
+        "cites\\ the\\ identifier\\ of\\ the\\ rule\\ it\\ rests\\ on,\\ as\\ the\\ standard\\ writes\\ it"
+      ],
+      "must_not": [
+        "\\b(?!ABC-)[A-Z]{2,5}-[0-9]"
+      ]
+    },
+    {
+      "id": "removal-per-standard",
+      "file": "references/id-rules.md",
+      "rule": "A removed requirement follows the standard's rule on removed requirements; ids use the standard's format",
+      "must": [
+        "Where\\ the\\ standard's\\ rule\\ on\\ removed\\ requirements\\ applies\\ at\\ the\\ SRD's\\ status,\\ follow\\ it\\ exactly",
+        "Write\\ every\\ id\\ in\\ the\\ identifier\\ format\\ the\\ standard\\ sets"
+      ],
+      "must_not": [
+        "\\b(?!ABC-)[A-Z]{2,5}-[0-9]",
+        "~~"
+      ]
+    },
+    {
+      "id": "cut-files-wrong-gap",
+      "file": "references/corpus-edits.md",
+      "rule": "A cut requirement files one confirmed wrong gap per KB section it introduced for this SRD; the KB section is never edited",
+      "must": [
+        "A\\ removal\\ \\(deletion,\\ or\\ marking\\ it\\ removed\\ under\\ the\\ standard's\\ rule\\ on\\ removed\\ requirements\\)\\ in\\ any\\ mode\\ that\\ reaches\\ it\\ gets\\ a\\ lookup\\ too",
+        "as\\ a\\ confirmed\\ `wrong`\\ gap",
+        "every\\ other\\ SRD\\ the\\ attestation\\ line\\ names",
+        "Never\\ edit\\ the\\ KB\\ section"
+      ]
+    },
+    {
+      "id": "kb-contradiction-no-trust-order",
+      "file": "references/corpus-edits.md",
+      "rule": "A KB section contradicting a change is a finding named in the proposal, never aligned by rank",
+      "must": [
+        "Never\\ align\\ the\\ SRD\\ to\\ the\\ KB,\\ or\\ the\\ KB\\ to\\ the\\ SRD,\\ by\\ `rank`:\\ an\\ SRD\\ has\\ none"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "\\bdoc/[a-z_]+/",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "proposal-cites-source",
+      "file": "references/corpus-edits.md",
+      "rule": "A proposal resting on a corpus result carries its source line, a confirm-only lookup included",
+      "must": [
+        "each\\ result\\ it\\ rests\\ on\\ as\\ a\\ source\\ line",
+        "a\\ lookup\\ that\\ only\\ confirms\\ the\\ text\\ included"
+      ]
+    },
+    {
+      "id": "decision-log-keeps-source",
+      "file": "references/decision-log.md",
+      "rule": "The decision-log entry for a corpus-backed change keeps the proposal's source lines verbatim",
+      "must": [
+        "ends\\ with\\ every\\ source\\ line\\ its\\ proposal\\ carried"
+      ]
+    },
+    {
+      "id": "casing-only-declined",
+      "file": "references/proposals.md",
+      "rule": "No casing-only change to match a glossary heading when the project's casing rules allow lowercase",
+      "must": [
+        "Never\\ propose\\ a\\ casing\\-only\\ change\\ to\\ make\\ running\\ text\\ match\\ a\\ glossary\\ heading,\\ self\\-found\\ or\\ from\\ a\\ review",
+        "silent\\ or\\ missing\\ rules\\ included\\ —\\ drop\\ it",
+        "skips\\ the\\ loop\\ with\\ no\\ proposal\\ and\\ goes\\ in\\ the\\ manifest\\ as\\ declined"
+      ]
+    },
+    {
+      "id": "load-default",
+      "rule": "The path alone loads the SRD and waits for prompts; it finds and proposes nothing",
+      "must": [
+        "the\\ SRD\\ path\\ only\\ →\\ load",
+        "find\\ and\\ propose\\ nothing"
+      ]
+    },
+    {
+      "id": "before-text-verbatim",
+      "rule": "A proposal's before text is a verbatim quote and the after text is built from it",
+      "must": [
+        "before\\ text\\ quoted\\ verbatim\\ from\\ the\\ file,\\ the\\ after\\ text\\ built\\ from\\ that\\ quote"
+      ]
+    },
+    {
+      "id": "bare-id-walks",
+      "file": "references/modes.md",
+      "rule": "A bare requirement or scope id starts the interactive walk; a bare glossary term and an id with a change run targeted",
+      "must": [
+        "A\\ bare\\ requirement\\ or\\ scope\\ id\\ is\\ an\\ interactive\\ start\\ point\\ instead",
+        "a\\ bare\\ glossary\\ term\\ stays\\ targeted"
+      ]
+    },
+    {
+      "id": "prior-ruling-check",
+      "file": "references/proposals.md",
+      "rule": "Before proposing, grep the decision log and KB for the text and ids including spanning ranges, and check every out-of-scope item",
+      "must": [
+        "matching\\ the\\ ranges\\ and\\ lists\\ that\\ span\\ it",
+        "check\\ every\\ out\\-of\\-scope\\ item\\ against\\ each\\ surface\\ the\\ change\\ adds",
+        "one\\ that\\ excluded\\ what\\ the\\ change\\ adds\\ is\\ a\\ conflict\\ the\\ proposal\\ states"
+      ]
+    },
+    {
+      "id": "targeted-proposes-first",
+      "file": "references/modes.md",
+      "rule": "A targeted change the user named is written out as a proposal and the turn ends before anything is applied",
+      "must": [
+        "write\\ it\\ out\\ in\\ full\\ with\\ its\\ keys\\ and\\ end\\ the\\ turn\\ there",
+        "naming\\ a\\ change\\ is\\ not\\ approving\\ its\\ wording"
+      ]
+    },
+    {
+      "id": "paste-only-proposals",
+      "file": "references/proposals.md",
+      "rule": "Proposals for pasting carry only before and after text",
+      "must": [
+        "Proposals asked for to paste elsewhere carry only the before and after text"
+      ]
+    },
+    {
+      "id": "sync-restored-fix-no-op",
+      "file": "references/proposals.md",
+      "rule": "A whitespace fix a sync restores is reported as a no-op, never re-applied",
+      "must": [
+        "check\\ the\\ synced\\ source\\ after\\ a\\ round\\-trip",
+        "report\\ it,\\ never\\ apply\\ it\\ again"
+      ]
+    },
+    {
+      "id": "sibling-shape-check",
+      "file": "references/proposals.md",
+      "rule": "A fix carried to a sibling surface first checks the sibling's shape; a per-item value is never collapsed",
+      "must": [
+        "check\\ the\\ sibling\\ has\\ the\\ same\\ shape",
+        "never\\ collapse\\ a\\ per\\-item\\ value\\ into\\ one\\ value"
+      ]
+    },
+    {
+      "id": "keep-author-tbd",
+      "rule": "Never remove or propose removing an author's inline TBD reminder; recommend withdrawing a finding that asks to drop it",
+      "file": "references/proposals.md",
+      "must": [
+        "Never remove, or propose removing, an author's inline `\\(TBD: …\\)` reminder",
+        "recommend\\s+withdrawing a finding that asks to drop it"
+      ]
+    },
+    {
+      "id": "summary-read-only",
+      "file": "references/summary.md",
+      "rule": "summary reads the SRD, the decision log and the review file, and writes no file",
+      "must": [
+        "nothing\\ else\\ —\\ no\\ transcript,\\ corpus,\\ or\\ glossary\\ call\\ —\\ and\\ writes\\ no\\ file"
+      ]
+    },
+    {
+      "id": "summary-linkage",
+      "file": "references/summary.md",
+      "rule": "A finding is named only when its note describes a selected change, or its withdrawal stamp falls in a selected span",
+      "must": [
+        "its\\ resolution\\ or\\ partial\\ note\\ describes\\ that\\ entry's\\ change",
+        "An\\ unstamped\\ withdrawal\\ is\\ never\\ listed"
+      ]
+    },
+    {
+      "id": "summary-numbers-trail",
+      "file": "references/summary.md",
+      "rule": "Finding numbers trail a self-contained line in parentheses",
+      "must": [
+        "never\\ worded\\ into\\ the\\ sentence:\\ deleting\\ them\\ leaves\\ a\\ complete\\ statement"
+      ]
+    },
+    {
+      "id": "block-after-summary",
+      "file": "references/decision-log.md",
+      "rule": "A timed decision-log block opens at the session's first edit and after each summary run",
+      "must": [
+        "Open\\ a\\ block\\ at\\ the\\ session's\\ first\\ applied\\ edit\\ and\\ at\\ the\\ first\\ applied\\ edit\\ after\\ a\\ `summary`\\ run"
+      ]
+    },
+    {
+      "id": "status-reread-on-disk-change",
+      "rule": "Re-read the status field before applying when the file changed on disk since the gate; a value under sign-off puts the edit under that rule",
+      "must": [
+        "If\\s+the\\s+file\\s+changed\\s+on\\s+disk\\s+since\\s+the\\s+approval\\s+gate,\\s+re-read\\s+the\\s+status\\s+field\\s+first"
+      ]
+    },
+    {
+      "id": "working-file-path",
+      "rule": "A working file lives under <srd-work>/<srd-folder>/ when srd-work is set, else beside the SRD",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "`<srd\\-work>/<srd\\-folder>/<name>\\.<kind>\\.md`",
+        "Otherwise,\\ beside\\ the\\ SRD"
+      ]
+    },
+    {
+      "id": "attestation-names-folder",
+      "file": "references/corpus-edits.md",
+      "rule": "An attestation names an SRD by its folder name",
+      "must": [
+        "its source is the SRD's folder name,\\s+as in `Attested slot-swap interview 2026-08-02` for `initiatives/slot-swap/`"
+      ]
+    }
+  ]
+}

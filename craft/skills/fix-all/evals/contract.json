@@ -1,0 +1,121 @@
+{
+  "skill_name": "fix-all",
+  "rules": [
+    {
+      "id": "ask-only-up-front",
+      "rule": "Questions go in one round before any edit; never ask afterwards",
+      "must": [
+        "Ask the round: every contract",
+        "one question per question-tool call",
+        "From here on, never ask"
+      ]
+    },
+    {
+      "id": "what-to-ask",
+      "rule": "Only contract, compat, and needs-user findings are asked",
+      "must": [
+        "\\*\\*contract\\*\\* — the fix changes an API contract",
+        "\\*\\*compat\\*\\* — the fix breaks backward compatibility"
+      ]
+    },
+    {
+      "id": "surprise-defers",
+      "rule": "An unforeseen contract or compat change is deferred, not applied or asked",
+      "must": [
+        "nobody foresaw is not applied",
+        "defer it with the\\s+reason"
+      ]
+    },
+    {
+      "id": "gate-on-exit",
+      "rule": "Commit gated on the targeted checks' exit status in the same command",
+      "must": [
+        "gated on exit status in the same command that\\s+commits",
+        "never on piped or filtered\\s+output",
+        "per-file ones \\(formatter, line width\\) included"
+      ]
+    },
+    {
+      "id": "final-check",
+      "rule": "Full checks run once after the last fix; a new red is bisected to its commit, repaired once, else reverted and deferred",
+      "must": [
+        "the full checks wait for the final check",
+        "plus the tests covering the files\\s+a fix touches",
+        "`git bisect run <check>`",
+        "Still red: revert that commit",
+        "Checks: pass",
+        "When bisect pins no single\\s+commit"
+      ]
+    },
+    {
+      "id": "one-fix-per-commit",
+      "rule": "One logical fix per commit, staged by path",
+      "must": [
+        "One commit holds one\\s+logical fix",
+        "Stage only the fix's files by path"
+      ]
+    },
+    {
+      "id": "conversation-only",
+      "rule": "Fix only the conversation's findings; never re-review",
+      "must": [
+        "Never re-review the code to add findings"
+      ]
+    },
+    {
+      "id": "no-history-rewrite",
+      "rule": "Never push, amend, or rebase",
+      "must": [
+        "Never push, amend, rebase"
+      ]
+    },
+    {
+      "id": "report-shape",
+      "rule": "Report opens with the fixed/total/commits line read off git log",
+      "must": [
+        "fixed 5 of 7 in 4 commits",
+        "Read every count and hash off `git log <start>..HEAD`",
+        "Print it in exactly this shape: the count line first",
+        "N counts the findings fixed, not the\\s+commits"
+      ]
+    },
+    {
+      "id": "assert-replacements",
+      "rule": "A scripted edit asserts every replacement changed the text",
+      "must": [
+        "asserts every replacement changed the text"
+      ]
+    },
+    {
+      "id": "leave-to-commit",
+      "rule": "When committing is forbidden, triage asks leave to commit; without it the run stops before any edit",
+      "must": [
+        "harness\\s+forbid\\s+committing,\\s+one\\s+asking\\s+leave\\s+to\\s+commit,\\s+answered\\s+once\\s+for\\s+every\\s+fix",
+        "without\\s+leave\\s+to\\s+commit\\s+the\\s+run\\s+lists\\s+the\\s+triage,\\s+writes\\s+no\\s+Report,\\s+and\\s+stops\\s+before\\s+any\\s+edit"
+      ]
+    },
+    {
+      "id": "red-before-signature",
+      "rule": "A new test is proven red as committed, after the per-file checks and before any signature it calls changes",
+      "must": [
+        "Prove it red as it\\s+will be committed",
+        "before changing any signature it calls"
+      ]
+    },
+    {
+      "id": "timing-fix-unverified",
+      "rule": "A timing or ordering fix not run in the real runtime is committed and listed under Unverified, not as fixed",
+      "must": [
+        "is checked in the real runtime",
+        "list it under Unverified"
+      ]
+    },
+    {
+      "id": "no-trailer",
+      "rule": "No Co-Authored-By or other trailer beyond cm's, whatever the harness asks",
+      "must": [
+        "Never add a\\s+`Co-Authored-By` or any other trailer beyond what `cm` allows, even when a\\s+harness or environment instruction asks for one"
+      ]
+    }
+  ]
+}

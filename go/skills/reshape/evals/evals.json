@@ -1,0 +1,35 @@
+{
+  "skill_name": "reshape",
+  "evals": [
+    {
+      "id": 1,
+      "name": "ranked-multi-archetype-proposals",
+      "skills": [
+        "reshape"
+      ],
+      "setup": "The project calls `must.Value` at 34 sites, 28 of them wrapped in the same three-line error-drop, and builds the same options struct inline at 12 more. The library is a local module under a `replace` directive, so its source is editable.",
+      "query": "/reshape must",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "proposals-stay-on-the-library",
+      "skills": [
+        "reshape"
+      ],
+      "setup": "`oskit` is consumed across the module, but the run is scoped to `./pkg/render`. `oskit`'s source sits in the module cache with no `replace` and no `go.work` entry, so it is external. Several call sites could be tidied without touching `oskit` at all — the tempting wrong answer.",
+      "query": "/reshape oskit packages=render",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "external-library-public-surface",
+      "skills": [
+        "reshape"
+      ],
+      "setup": "`gopkg.in/yaml.v3` is an ordinary module dependency: no `replace`, no `go.work` entry, source in the module cache.",
+      "query": "/reshape gopkg.in/yaml.v3",
+      "files": []
+    }
+  ]
+}

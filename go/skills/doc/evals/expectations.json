@@ -1,0 +1,36 @@
+{
+  "skill_name": "doc",
+  "expectations": [
+    {
+      "id": 3,
+      "name": "directives-and-interface-method-godoc",
+      "expected_behavior": [
+        "Leaves both directive comments byte-for-byte unchanged and lists them as never-touch items in the plan",
+        "Plans the `Read` godoc for removal as unremarkable — it would be kept, naming the surprise, only if `Read` broke or exceeded the `io.Reader` contract",
+        "Writes nothing before approval: the plan is the run's only output on that turn, and every `.go` file's mtime is unchanged until the approval turn — check the files, not the promise"
+      ],
+      "blind_only": [3]
+    },
+    {
+      "id": 5,
+      "name": "line-target-resolves-to-its-item",
+      "expected_behavior": [
+        "States the resolved kind (line) and the item it resolved to: the inline comments of `(*Svc).Flush`'s body — the innermost item containing line 42, not the enclosing declaration's godoc, which `func=Flush` would reach",
+        "Touches only the item the line resolves to: every other function in the file is byte-identical after the run, whether or not it had a defect",
+        "Presents no plan; a line target is a single item, so it runs the loop straight through",
+        "Deletes `// increment i` as a comment that only restates the code"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "large-module-fans-out-with-filter",
+      "expected_behavior": [
+        "The plan lists items from the seven named packages only; `auth`, `metrics`, `queue`, and `retry` are reported as skipped",
+        "The plan says the run will fan out and why — more than ~6 packages and ~500 lines of Go in scope — and it then fans out one worker per in-scope package, unasked, and merges their reports; each worker's per-package report survives on disk, so the fan-out is visible rather than asserted",
+        "No comment anywhere claims `Router` is or is not safe for concurrent use — the absence of a mutex is not evidence either way",
+        "The parent re-checks each worker's added or changed comment against the checklist before merging, and reverts any fact the code does not establish, saying so in the report",
+        "Reports the Verify result in the reply — which packages were gate-checked and that `gofmt -l` and `go build` passed"
+      ]
+    }
+  ]
+}

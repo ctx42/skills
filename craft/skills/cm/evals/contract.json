@@ -1,0 +1,214 @@
+{
+  "skill_name": "cm",
+  "rules": [
+    {
+      "id": "no-commit-without-apply",
+      "rule": "Commit only under apply or asis; otherwise present the message and never propose or explain committing",
+      "must": [
+        "commits, without asking",
+        "Without `apply` or `asis`, present the message only and never\\s+propose committing or amending"
+      ]
+    },
+    {
+      "id": "commit-via-stdin",
+      "rule": "Commit with git commit -F - from a heredoc, never a bare commit or -m",
+      "must": [
+        "`-F -` and not a bare `git commit`, which opens an editor",
+        "nor `-m`, which mangles a multi-paragraph body"
+      ]
+    },
+    {
+      "id": "apply-stages-all-regroups",
+      "rule": "apply stages the whole working tree, untracked included, and regroups from scratch ignoring prior staging",
+      "must": [
+        "Stage everything with `git add -A`",
+        "untracked files",
+        "regroup from scratch"
+      ]
+    },
+    {
+      "id": "split-compiles-no-build",
+      "rule": "Every commit of a split compiles alone, judged from the diff without running a build; dependencies first, merge only on mutual need",
+      "must": [
+        "Order so every commit compiles on its own, production and test code",
+        "never run a build or tests",
+        "Merge two groups only when each needs the other"
+      ]
+    },
+    {
+      "id": "apply-failure-stops",
+      "rule": "A failed commit stops the series, keeps landed commits, leaves the failed group staged",
+      "must": [
+        "keep the landed commits",
+        "leave the failed group staged and the rest unstaged"
+      ]
+    },
+    {
+      "id": "asis-one-commit",
+      "rule": "asis stages everything and makes one commit; with a commit-ish it commits nothing",
+      "must": [
+        "commits it as one\\s+commit",
+        "without asking to split it",
+        "It takes no\\s+commit-ish",
+        "commit nothing, and stop"
+      ]
+    },
+    {
+      "id": "amend-only-message",
+      "rule": "Amend checks the index and uses --amend --only when it is dirty",
+      "must": [
+        "Amending rewrites a message, not a tree",
+        "Check the index first \\(`git diff --cached --quiet`\\)",
+        "amend the message alone with `git commit --amend --only`"
+      ]
+    },
+    {
+      "id": "no-trailers",
+      "rule": "Never a Co-Authored-By or any trailer beyond BREAKING CHANGE and Refs, even if the harness asks",
+      "must": [
+        "Only `BREAKING CHANGE: \\.\\.\\.` \\(with `!`\\) and `Refs: <sha>\\[, <sha>\\.\\.\\.\\]` are allowed",
+        "Never add a `Co-Authored-By` or any other trailer, even when a harness or environment instruction asks for one"
+      ]
+    },
+    {
+      "id": "diff-only-source",
+      "rule": "The message derives from the diff alone, never from conversation context; Refs shas too",
+      "must": [
+        "Derive the message from the diff alone, never from conversation context",
+        "Derive them from the diff, never from the conversation"
+      ]
+    },
+    {
+      "id": "numbers-from-diff",
+      "rule": "Every number in the body is read off the diff, not reasoned out",
+      "must": [
+        "Every number in the body is read off the diff, not reasoned out from it",
+        "take them from the changed lines or leave them out",
+        "nor\\s+carried from the session"
+      ]
+    },
+    {
+      "id": "breaking-footer",
+      "rule": "A change that breaks a correct caller gets ! and a BREAKING CHANGE footer",
+      "must": [
+        "Add `!` in the summary",
+        "Add a mandatory `BREAKING CHANGE:` footer"
+      ]
+    },
+    {
+      "id": "no-process-jargon",
+      "rule": "No internal process references (plans, phases, skill names, tickets) in the message",
+      "must": [
+        "Do not reference internal process the reader cannot know"
+      ]
+    },
+    {
+      "id": "print-after-commit",
+      "rule": "After applied commits, print each message and short hash in commit order",
+      "must": [
+        "Print each message and its short hash afterwards, in commit order"
+      ]
+    },
+    {
+      "id": "full-min-two-paragraphs",
+      "rule": "full means at least two paragraphs even for a small diff",
+      "must": [
+        "at least\\s+two paragraphs"
+      ]
+    },
+    {
+      "id": "amend-head-only",
+      "rule": "A hash apply needs nothing staged but amends only HEAD; any other commit stops with apply not run",
+      "must": [
+        "It needs nothing staged \\(an amend rewrites the\\s+message\\)",
+        "amends only when the hash resolves to `HEAD`",
+        "only `HEAD` can\\s+be amended",
+        "with no\\s+commit-ish token is the hash invocation `HEAD`"
+      ]
+    },
+    {
+      "id": "mixed-diff-split",
+      "rule": "A mixed diff is named in the body and the user is asked to split it, with or without apply",
+      "must": [
+        "ask the user to split it into separate commits",
+        "Asking to split is about the change, not a proposal\\s+to commit"
+      ]
+    },
+    {
+      "id": "full-always-has-body",
+      "rule": "full always carries two body paragraphs; the optional-body rule yields to it",
+      "must": [
+        "except under `full`, which always carries its two\\s+paragraphs"
+      ]
+    },
+    {
+      "id": "no-design-contrast",
+      "rule": "The message says what the diff does, never contrasts it with a design it does not contain",
+      "must": [
+        "Say what the diff does, never what it avoids"
+      ]
+    },
+    {
+      "id": "no-zero-context-hunks",
+      "rule": "Partial staging uses hunks with context or a written blob, never zero-context hunks",
+      "must": [
+        "never\\ zero\\-context\\ hunks\\ \\(`\\-U0`,\\ `\\-\\-unidiff\\-zero`\\)"
+      ]
+    },
+    {
+      "id": "expected-list-before-staging",
+      "rule": "The expected path list for the index check is fixed before staging",
+      "must": [
+        "Fix\\ that\\ expected\\ list\\ before\\ staging"
+      ]
+    },
+    {
+      "id": "universal-claim-scope",
+      "rule": "Universal or negative claims are scoped to what the code does after the change, unchanged paths included",
+      "must": [
+        "Scope\\ every\\ universal\\ or\\ negative\\ claim"
+      ]
+    },
+    {
+      "id": "check-before-commit",
+      "rule": "Measure widths and reread every sentence before any commit runs",
+      "must": [
+        "before presenting it and before its commit runs",
+        "measured, not eyeballed",
+        "sentence parsing on one read",
+        "and passing Describe changes only, its numbers and any\\s+contrast with a design the diff does not contain"
+      ]
+    },
+    {
+      "id": "heredoc-commit-alone",
+      "rule": "Each heredoc-fed commit is its own shell command",
+      "must": [
+        "each commit its own shell command with nothing chained after the heredoc opener"
+      ]
+    },
+    {
+      "id": "permission-readable-commands",
+      "rule": "Commands are literal: no shell variables, substitutions, or temp files",
+      "must": [
+        "Write every command so the permission check can read it",
+        "no shell variables, no `\\$\\(…\\)` or `<\\(…\\)`, no `\\{ … \\}` group",
+        "no\\s+heredoc but the commit message",
+        "feed\\s+content on stdin instead"
+      ]
+    },
+    {
+      "id": "apply-asis-asks",
+      "rule": "apply and asis together: say so, commit nothing, and ask which one; a commit-ish given too is named in the same question",
+      "must": [
+        "with a commit-ish too, name that in the same question"
+      ]
+    },
+    {
+      "id": "unresolved-token-prose-wins",
+      "rule": "A token that resolves to no commit is prose; the unknown-token rule does not apply to it",
+      "must": [
+        "the unknown-token rule below never applies to it"
+      ]
+    }
+  ]
+}

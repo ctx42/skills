@@ -1,0 +1,34 @@
+{
+  "skill_name": "skill-fold-lessons",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "gate-lessons-and-edits",
+      "expected_behavior": [
+        "Proposes before changing anything: `LESSONS.md` and `SKILL.md` end the turn unchanged",
+        "Gives lesson (a), the diff-not-branch rule, a Keep or Generalize verdict",
+        "Drops lesson (b) as a one-project fact",
+        "Proposes reverting the uncommitted acme-billing edit as task-specific",
+        "Treats lesson (c) as already carried: Reword or Merge, not a second line"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "fold-hold-and-test",
+      "expected_behavior": [
+        "Folds the rejected-item rule into `SKILL.md` and keeps the body's never-paste-back rule",
+        "Holds the paste-back lesson: `LESSONS.md` still exists and holds that line and not the folded one",
+        "Tests the fold by invoking `craft:skill-eval` with `run` on plan-smith",
+        "The final report puts the held paste-back lesson to the user as an open question"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "nothing-to-fold",
+      "expected_behavior": [
+        "Replies in one line that there is nothing to fold",
+        "Does not read the `~/.agent-data` store, which the user did not name"
+      ]
+    }
+  ]
+}

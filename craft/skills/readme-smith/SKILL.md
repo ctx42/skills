@@ -1,0 +1,224 @@
+---
+name: readme-smith
+description: >
+  Authors and improves README.md files for software projects, grounded in
+  the actual repo — never fabricates facts and verifies the commands it
+  ships. Use when asked to create, write, draft, review, or improve a README
+  or a project's front-page documentation.
+argument-hint: "[create|audit] [<readme-path>]"
+license: MIT
+---
+
+# readme-smith
+
+## Usage
+
+```
+/craft:readme-smith <request>               infer create vs audit from the request (default)
+/craft:readme-smith create [<readme-path>]  scan the repo and draft a new README from real code
+/craft:readme-smith audit <readme-path>     audit an existing README; fix on confirmation
+```
+
+Create and improve a project's `README.md`. Read the tokens in any order: a
+reserved word is a mode or flag, `key=value` is a control, and anything else is
+the target. The modes are `create` and `audit`; with neither, pick the mode
+from the request. The target (or the request) names the README path:
+
+- Create — no usable README exists, or the user asks for a new/rewritten one.
+- Audit — the user names an existing README to review or upgrade.
+
+If ambiguous, ask one question: create new or audit existing? A `key=value` that
+names no control here, or a word left over once the modes, the target, and any
+text the skill takes are read: say it was not recognized, name the ones that
+exist, and run with the defaults as if it were absent — unless dropping it would
+widen what the run changes; then ask. A target that resolves to nothing: say so
+and ask — never guess what to work on.
+
+Structure and style come from
+[`references/template.md`](references/template.md) *(eager: read once per
+run)*; every decision defers to it.
+
+Report tersely: no preamble or narration; state each fact once; don't restate
+output the user can already see. The README is the payload — write it in full
+to the file, state its path, and do not paste it back into chat.
+
+## Non-negotiables (both modes)
+
+- Never fabricate. A claim, command, version, or number you cannot verify from
+  the repo or the user is a gap: ask, and if still unknown mark it. Where it
+  gets marked depends on who needs to know:
+  - A fact the README *needs* and lacks, where the reader is the one left
+    stuck (the minimum runtime, an install command the repo does not
+    reveal) gets a `<!-- TODO: … -->` marker in the file.
+  - A gap in the *repo* rather than the README — no license file, no CI, no
+    remote — goes in the reply and nowhere else. A heading whose only body is a
+    marker is worse than no heading; `references/template.md` says which
+    sections those are, and it governs.
+  - A claim the README merely *makes* and cannot support (a benchmark figure, a
+    download count, "battle-tested") is deleted, not marked. A TODO asking
+    someone to source an invented number preserves the invention.
+- Re-measure anything you call measured. A number in the README — a byte
+  count, a timing, a line width, a version — is measured against what the file
+  finally ships, not against the draft it was probed on. A run measured a
+  306-character wire line, trimmed the payload afterwards, and shipped "~300"
+  over an example that renders 185. A number sold as measured is checked by the
+  first reader who tries.
+
+- Verify commands. Run every install and quickstart command you ship (see
+  Verify); a command you cannot run is marked, not guessed — "marked" meaning
+  whichever of the three above fits, which for a command this environment
+  simply cannot run is the reply, not the file. Running it is the
+  rule — passing is not always available, and a correct command the project has
+  not caught up to yet is still the right command to ship.
+
+## Go example injection (gomake)
+
+When the project is Go, the README wants `go` example fences, and the *project*
+uses gomake, read [`references/gomake.md`](references/gomake.md) *(on-demand:
+Go project with README examples)* and follow it: examples are injected from
+testable `Example…` functions, never hand-written.
+
+`:doc:mce` is a gomake built-in, so it lists on any machine with gomake
+installed — its presence says nothing about this project. Decide from the repo:
+an existing `<!-- gmmce:… -->` marker, a gomake config, or a gomake step in CI.
+Only a repo with no README yet, which has no markers of its own, checks the same
+owner's sibling repos for that evidence and inherits their convention; an
+unusable README, one create mode replaces, counts as none. A usable README
+without markers shows the project chose to hand-write, and outranks a gomake
+config or CI step: its hand-written examples are no finding. Absent all of
+those, hand-write the examples rather than introducing a tool the project's own
+contributors may not have.
+
+Injection needs `Example…` functions, and those are Go source: they join the
+test suite, CI, coverage, and the diff. Nobody asking for a README asked for
+that, so it gets its own yes — the approval covering the README does not reach
+it. Ask once per run, once the rest of the README is drafted and before writing
+`README.md` or any `.go` file, so the README is written once: name each file,
+the functions going in it, and that it becomes part of the test suite. On a no,
+hand-write the examples in create mode, or in audit mode leave that finding
+reported and its fence untouched — never write the file and mention it
+afterwards. The no declines the Go source, not the run: every other approved fix
+still applies.
+
+A fence left untouched that way can be one Verify would otherwise reject, and
+Verify does not override the no — shipping the snippet the README already had
+is what "untouched" means. Say in the reply that the fence stayed as it was and
+that it does not compile, so the state is the user's choice rather than an
+unnoticed defect.
+
+## Create mode
+
+1. Scan the repo. Ground everything in real code: package manifests
+   (`package.json`, `go.mod`, `pyproject.toml`, `Cargo.toml`, …), the
+   entrypoint / main command, existing docs, `examples/`, CI config, and
+   `.github/` or `assets/` for a logo or demo media, and `.editorconfig`,
+   `.markdownlint`, or `.prettierrc` for the Markdown wrap width. Note the
+   language, every install or integration method the tool's own docs and
+   manifests declare (never inferred from sibling READMEs), run command, and
+   public surface. Decide root vs member README per `references/template.md`.
+
+2. Ask only the gaps. List what code cannot reveal — positioning (what problem,
+   for whom), audience, notable features to lead with, roadmap — and ask in one
+   batched round, a numbered list, then stop: draft only once the user has
+   answered. A TODO marker is for what the answers left open, never a stand-in
+   for a question not yet asked. Do not ask what the repo already answers.
+
+3. Draft from the blueprint in `references/template.md`. A fact neither the
+   scan nor the answers yielded is a `<!-- TODO: … -->` marker, never a guess.
+   For Go examples, prefer gomake injection (see Go example injection).
+
+4. Verify (below), fixing the draft until it passes.
+
+5. Write `README.md` at the repo root (or the path the user gave). State the
+   path and any remaining `TODO` markers.
+
+## Audit mode
+
+No edits until the user approves the findings.
+
+1. Resolve the target. State the exact README path in scope. Scan the repo (as
+   in Create step 1) so the audit is grounded in code, not just prose.
+
+2. Audit against `references/template.md`:
+   - Structure — sections present and ordered per the blueprint; root/member,
+     navigation, and excluded-section rules hold; no colliding headings.
+   - Accuracy — commands, versions, paths, and badges match the repo; no stale
+     or fabricated claims.
+   - Style — fences declare a language, admonitions valid and non-decorative,
+     emoji restrained, header plain GFM.
+   - Completeness — a newcomer can install, run, and understand the project;
+     gaps are real gaps, not guesses. In a Go project that injects
+     examples (Go example injection decides), hand-written example snippets are
+     a finding.
+
+3. Report only. Group findings Blocker / Should-fix / Nit; each names the
+   location, the problem in one line, the `references/template.md` rule it
+   breaks, and a minimal fix. A gap only the user can close (the minimum
+   runtime, which remote is real) is a finding like any other, asked in its own
+   line — audit mode has no separate question round. The Go-source gate is the
+   exception, and it is not a question about the README: it comes right after
+   approval, before any file is written, so the README is written once — until
+   the fixes are approved there may be no example to write. End with a one-line
+   verdict; the verdict is the ask, so add no "shall I apply these?" after it.
+
+4. Fix on confirmation. Apply approved findings, then Verify. State what
+   changed.
+
+## Verify
+
+Run before finishing in either mode; fix the README until every check passes.
+
+Static — re-check the draft against `references/template.md` (Root vs member,
+Navigation, Style rules, Excluded sections), then:
+
+- [ ] Every internal link and nav/TOC anchor resolves to a real heading or file.
+- [ ] Every code fence declares a language and every fence line stays within
+      the template's width (≤ ~80 chars, hard cap ~100), long output split
+      across lines.
+- [ ] Every gap the README needs is a `<!-- TODO: … -->` marker, not a guessed
+      command, version, or number; every claim it cannot support is gone.
+- [ ] Prose is wrapped and tables padded to the repo's `[*.md] max_line_length`
+      (80 when unset; code fences keep the template's width above), every padded
+      table row within it too (size cells before writing), counted in
+      characters, not bytes: an em dash is one column, so byte-based length
+      checks over-report.
+
+Dynamic:
+
+- [ ] Run the install and quickstart commands exactly as written; never ship one
+      you did not run — a run this environment cannot finish still counts: it
+      ships as written with a reply note and no TODO in the file. Expect at
+      least one that cannot pass yet — an unpublished module, a private host, a
+      package not on a registry. On a fresh or private project that is the
+      ordinary case, not a failed run: the command is right and the project has
+      not caught up to it, whether it fails for a project reason (module
+      unpublished, package not on the registry) or because this environment
+      cannot run it (toolchain missing, no network). Ship it as if the package
+      were published. Say so in the reply and leave the README alone: no "not
+      published" note, which outlives the release it waits for, and never warn
+      the reader about your sandbox.
+- [ ] A verified command that writes files (a generator, a formatter) can
+      rewrite tracked files: check `git status` after it and restore what the
+      run alone changed.
+
+## Self-application
+
+`readme-smith` obeys the skill authoring standard. When you change this skill,
+re-check it against `../skill-eval/references/authoring.md` and run
+`/craft:skill-eval`.
+
+## Self-learning
+
+Obey this skill's lessons: every run, read with the file-read tool (never a
+shell), in parallel, the sibling `${CLAUDE_SKILL_DIR}/LESSONS.md` and the
+fallback `~/.agent-data/ctx42-skills/lessons/craft/readme-smith.md` (pass `~` as
+is, the file tools expand it; no environment probe; `$AGENT_DATA_DIR` replaces
+`~/.agent-data` only when you are told it is set). The sibling wins a conflict;
+the fallback, which a read-only install writes, still counts once the checkout
+is writable; this block never moves or merges lessons. A missing file needs no
+comment. On a correction or self-caught mistake, append a one-line rule —
+general, naming nothing from the project at hand (its files, tests, tickets) —
+to the sibling when this directory is writable (creating it even when only the
+fallback holds lessons so far; both stay read), else to the fallback, creating
+it, and report where. A lesson write is not a project write: a read-only or
+no-change run still makes it.

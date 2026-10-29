@@ -1,0 +1,37 @@
+{
+  "skill_name": "kb",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "appends-instead-of-fragmenting",
+      "expected_behavior": [
+        "Finds the existing part-kits page and proposes moving the inbox section there before touching a file",
+        "Moves it as a `##` section on that page, with its attestation line and provenance row, rather than creating a second part-kits page",
+        "Does not split the existing page to make room",
+        "Reports a pointer to what was written, not the page's contents"
+      ],
+      "blind_only": [1]
+    },
+    {
+      "id": 5,
+      "name": "writes-to-the-inbox-at-confirmation",
+      "expected_behavior": [
+        "`srd:kb` writes nothing and runs no duplicate-check search until the restatement is confirmed, and asks the user nothing; the caller's own interview lookup and draft-gap capture do not count",
+        "Once the restatement is confirmed, appends the fact to `kb/_inbox.md` as its own `##` section with the attestation line and a row in the inbox's `## Provenance` table, before the interview moves on",
+        "Writes it to no topic page and creates no new page",
+        "Asks no \"bank this?\" question at any point"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "restructure-repairs-every-reference",
+      "expected_behavior": [
+        "Shows the proposed moves and waits for confirmation before touching a file",
+        "Moves the section with its attestation line, its inbox `## Provenance` row, and its `> Open: gap-0043.` warning line, without writing the question's wording onto the new page",
+        "Repairs no SRD, and lists each SRD under the `initiatives` folder that cites an old id so the user can fix it",
+        "Reports each stale gap-store `doc_id` (`gap-0042` and `gap-0043`) with the value it should take, rather than writing it — this skill holds read access there"
+      ],
+      "blind_only": [1]
+    }
+  ]
+}

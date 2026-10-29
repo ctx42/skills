@@ -1,0 +1,35 @@
+{
+  "skill_name": "doc-smith",
+  "evals": [
+    {
+      "id": 2,
+      "name": "flag-dubious-claim",
+      "skills": [
+        "doc-smith"
+      ],
+      "setup": "`docs/api-guide.md` carries one line asserting \"REST APIs are stateful by design\", alongside ordinary defects the proof pass should fix: two comma splices, \"end-point\" and \"endpoint\" used interchangeably, and a sentence whose subject changes halfway through.",
+      "query": "/doc-smith proof docs/api-guide.md",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "create-grounded-manual",
+      "skills": [
+        "doc-smith"
+      ],
+      "setup": "A billing dashboard with no user documentation. The repo shows the screens and the API but says nothing about who uses it or which tasks matter.",
+      "query": "/doc-smith create a user manual for the billing dashboard",
+      "files": []
+    },
+    {
+      "id": 6,
+      "name": "walk-keeps-the-whole-coherent",
+      "skills": [
+        "doc-smith"
+      ],
+      "setup": "`docs/guide.md` uses \"workspace\" throughout. While revising an early paragraph the user renames it to \"project\". Later paragraphs still say \"workspace\".",
+      "query": "/doc-smith work through docs/guide.md with me",
+      "files": []
+    }
+  ]
+}

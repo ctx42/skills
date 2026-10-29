@@ -1,0 +1,244 @@
+{
+  "skill_name": "review",
+  "rules": [
+    {
+      "id": "read-only",
+      "rule": "Never edits the source SRD",
+      "must": [
+        "Must\\ not:\\ edit\\ the\\ source\\ SRD\\ or\\ fix\\ anything"
+      ]
+    },
+    {
+      "id": "todo-scaffold-blocks",
+      "file": "references/finding-tags.md",
+      "rule": "An unresolved in-scope TODO marker or non-empty ## TODO section is a blocker",
+      "must": [
+        "an\\ unresolved\\ draft\\ scaffold\\ —\\ the\\ in\\-scope\\ list's\\ `\\-\\-\\-\\ TODO\\ \\-\\-\\-`\\ marker\\ or\\ a\\ non\\-empty\\ `\\#\\#\\ TODO`\\ section"
+      ]
+    },
+    {
+      "id": "gate-first",
+      "rule": "Every mode runs the project-config gate first",
+      "must": [
+        "Every\\ mode\\ runs\\ the\\ gate\\ in",
+        "first"
+      ]
+    },
+    {
+      "id": "gap-not-a-finding",
+      "rule": "A corpus-unconfirmed claim is a doc gap for report-doc-gap, never a review finding; kb not invoked",
+      "must": [
+        "one\\ it\\ cannot\\ confirm\\ is\\ a\\ doc\\ gap\\ for\\ `srd:report\\-doc\\-gap`,\\ never\\ a\\ finding\\ in\\ `<srd>\\.review\\.md`",
+        "`srd:kb`\\ is\\ not\\ invoked"
+      ]
+    },
+    {
+      "id": "existing-file-not-rewritten",
+      "rule": "An existing review file is never rewritten; resolve then append with fresh numbers",
+      "must": [
+        "If\\ it\\ exists,\\ do\\ not\\ rewrite\\ it",
+        "append\\ newly\\ found\\ defects\\ with\\ fresh\\ numbers"
+      ]
+    },
+    {
+      "id": "check-no-new-defects",
+      "rule": "check re-verifies only and hunts no new defects; withdrawal is check-only",
+      "must": [
+        "Re\\-verify\\ only\\ —\\ hunt\\ no\\ new\\ defects",
+        "Withdrawal\\ is\\ check\\-only"
+      ]
+    },
+    {
+      "id": "idle-pass-writes-nothing",
+      "rule": "A pass that resolves nothing and appends nothing writes nothing",
+      "must": [
+        "a\\ pass\\ that\\ resolves\\ nothing\\ and\\ appends\\ nothing\\ writes\\ nothing"
+      ]
+    },
+    {
+      "id": "walk-confirmed-only",
+      "rule": "walk records only findings the user confirms",
+      "must": [
+        "record\\ only\\ findings\\ the\\ user\\ confirms",
+        "Append\\ only\\ confirmed\\ findings\\ to\\ the\\ review\\ file"
+      ]
+    },
+    {
+      "id": "feedback-no-write",
+      "rule": "feedback writes no file",
+      "must": [
+        "Emit\\ plain\\ text\\ for\\ an\\ email\\ or\\ ticket\\ —\\ no\\ file\\ write"
+      ]
+    },
+    {
+      "id": "reply-never-lists-findings",
+      "rule": "Reply carries a task line and counts, never the findings",
+      "must": [
+        "the\\ reply\\ never\\ lists\\ them",
+        "Count\\ those\\ from\\ the\\ finished\\ file,\\ not\\ from\\ memory"
+      ]
+    },
+    {
+      "id": "no-back-link-finding",
+      "rule": "A rule that an external artifact link back to the SRD never raises a finding",
+      "must": [
+        "never\\ raise\\ a\\ back\\-link\\ finding"
+      ]
+    },
+    {
+      "id": "closing-offer-delegated",
+      "rule": "Draft offer is made by report-doc-gap, never inline, and only when this run captured drafts",
+      "must": [
+        "The\\ offer\\ is\\ the\\ delegate's,\\ never\\ written\\ inline",
+        "a\\ run\\ that\\ captured\\ none\\ invokes\\ nothing\\ here\\ either"
+      ]
+    },
+    {
+      "id": "kb-contradiction-is-finding",
+      "rule": "An SRD/KB contradiction is a reference finding naming both claims and both fixes, never settled by rank",
+      "must": [
+        "A\\ KB\\ section\\ contradicting\\ the\\ SRD\\ is\\ a\\ `reference`\\ finding\\ too,\\ never\\ settled\\ by\\ `rank`\\ \\(an\\ SRD\\ has\\ none\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "\\bdoc/[a-z_]+/",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "fix-cites-source",
+      "rule": "A finding resting on a corpus result carries its source line",
+      "must": [
+        "A\\ finding\\ resting\\ on\\ a\\ corpus\\ result\\ carries\\ its\\ source\\ line"
+      ]
+    },
+    {
+      "id": "casing-free-no-finding",
+      "file": "references/finding-tags.md",
+      "rule": "A casing-only terminology finding needs a project casing rule; none, no finding",
+      "must": [
+        "Casing\\ drift\\ is\\ a\\ finding\\ only\\ where\\ the\\ project's\\ casing\\ rules\\ fix\\ running\\-text\\ casing",
+        "a\\ casing\\-only\\ difference\\ is\\ no\\ finding"
+      ]
+    },
+    {
+      "id": "one-by-one-to-edit",
+      "rule": "Acting on findings one by one hands off to srd:edit feedback mode",
+      "must": [
+        "one by one through `srd:edit` feedback mode — never a loop improvised here"
+      ]
+    },
+    {
+      "id": "checkable-all-methods",
+      "file": "references/finding-tags.md",
+      "rule": "A checkability rule is judged against every verification method the standard names, not test alone",
+      "must": [
+        "Judge\\ a\\ checkability\\ rule\\ against\\ every\\ verification\\ method\\ the\\ standard\\ names,\\ not\\ test\\ alone",
+        "may\\ still\\ pass"
+      ]
+    },
+    {
+      "id": "withdrawal-stamped",
+      "file": "references/check-mode.md",
+      "rule": "check stamps each withdrawal with the run's updated: time",
+      "must": [
+        "moves\\ to\\ `\\#\\#\\ Withdrawn`\\ with\\ a\\ reason,\\ stamped\\ with\\ this\\ run's\\ `updated:`\\ time"
+      ]
+    },
+    {
+      "id": "check-reads-kb-by-srd-ref",
+      "file": "references/check-mode.md",
+      "rule": "check reads the KB pages naming the SRD before keeping a finding open; a banked author answer withdraws it",
+      "must": [
+        "once\\s+the\\s+KB\\s+pages\\s+whose\\s+`srd_ref`\\s+names\\s+the\\s+SRD\\s+are\\s+read"
+      ]
+    },
+    {
+      "id": "check-kb-scope-by-srd-ref",
+      "rule": "check's corpus reach is only the KB pages whose srd_ref names the SRD",
+      "must": [
+        "`check`\\s+reads\\s+only\\s+the\\s+KB\\s+pages\\s+whose\\s+`srd_ref`"
+      ]
+    },
+    {
+      "id": "cites-the-fetched-standard",
+      "file": "references/review-file.md",
+      "rule": "A finding cites the rule identifier as the fetched standard writes it; the skill hardcodes no standard's identifiers",
+      "must": [
+        "Close\\ each\\ finding\\ with\\ the\\ identifier\\ of\\ the\\ rule\\ it\\ breaks,\\ as\\ the\\ fetched\\ standard\\ writes\\ it",
+        "Cite\\ only\\ identifiers\\ that\\ standard\\ states"
+      ],
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-rule-ids-skill",
+      "file": "SKILL.md",
+      "rule": "No rule-identifier citation other than house, consistency, ref, or the ABC- placeholder",
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-rule-ids-finding-tags",
+      "file": "references/finding-tags.md",
+      "rule": "No rule-identifier citation other than house, consistency, ref, or the ABC- placeholder",
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-rule-ids-feedback-mode",
+      "file": "references/feedback-mode.md",
+      "rule": "No rule-identifier citation other than house, consistency, ref, or the ABC- placeholder",
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-rule-ids-check-mode",
+      "file": "references/check-mode.md",
+      "rule": "No rule-identifier citation other than house, consistency, ref, or the ABC- placeholder",
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-rule-ids-errata-mode",
+      "file": "references/errata-mode.md",
+      "rule": "No rule-identifier citation other than house, consistency, ref, or the ABC- placeholder",
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "order-by-standard-layout",
+      "rule": "Findings are numbered and grouped in the standard's own section order, not a fixed one",
+      "must": [
+        "document\\ order\\ \\(the\\ standard's\\ section\\ order,\\ and\\ by\\ position\\ within\\ each\\)"
+      ]
+    },
+    {
+      "id": "working-file-path",
+      "rule": "A working file lives under <srd-work>/<srd-folder>/ when srd-work is set, else beside the SRD",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "`<srd\\-work>/<srd\\-folder>/<name>\\.<kind>\\.md`",
+        "Otherwise,\\ beside\\ the\\ SRD"
+      ]
+    },
+    {
+      "id": "check-fetches-named-doc",
+      "rule": "check also fetches the document a disproval report names",
+      "must": [
+        "plus the document a disproval report names \\(check step 2\\)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "skill_name": "readme-smith",
+  "evals": [
+    {
+      "id": 1,
+      "name": "create-from-scan",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "A Go CLI repo with no README: `go.mod` declaring `github.com/acme/portcheck`, `cmd/portcheck/main.go` wiring three flags (`-timeout`, `-json`, `-concurrency`), `internal/scan/` holding the logic, a `.github/workflows/ci.yml`, and `assets/logo.png`. `.editorconfig` sets `[*.md] max_line_length = 100`. Nothing states who the tool is for or why it exists.",
+      "query": "/readme-smith write a README for this project",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "audit-member-readme",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "A multi-package Go repo whose root `README.md` carries the badges and the Packages table. `pkg/store/README.md` is a member README that carries its own badges row, a `## License` section repeating the MIT text, two code fences with no language, a nav line whose `#usage` anchor points at a heading that was renamed, and a `## Contributing` section duplicating `CONTRIBUTING.md`.",
+      "query": "/readme-smith audit pkg/store/README.md",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "gomake-example-injection",
+      "skills": [
+        "readme-smith"
+      ],
+      "setup": "A Go library repo that uses gomake: its CI workflow runs a gomake step and `gomake --list` lists the built-in `:doc:mce` target. No README yet. The package has exported `New`, `(*Client).Do`, and `Parse`, and no `_test.go` files carrying `Example…` functions.",
+      "query": "/readme-smith write a README",
+      "files": []
+    }
+  ]
+}

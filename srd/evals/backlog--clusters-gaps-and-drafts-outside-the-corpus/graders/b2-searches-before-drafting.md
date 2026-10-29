@@ -1,0 +1,5 @@
+---
+type: tool_order
+before: {tool: mcp__srd__search, input_match: '[Rr]etention|[Dd]elet'}
+after: {tool: Write, input_match: '"file_path":"[^"]*drafts/hot-fire-recording-retention\.md"'}
+---

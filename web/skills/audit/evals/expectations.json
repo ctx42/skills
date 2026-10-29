@@ -1,0 +1,56 @@
+{
+  "skill_name": "audit",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "whole-frontend-merges-every-dimension",
+      "expected_behavior": [
+        "States the frontend root, the target, the file and route counts, the four dimensions, and the worker count before dispatching, without a plan_first stop (the target is under the broad threshold)",
+        "Dispatches no separate `web:style` worker and no `web:improve` or `web:perf` worker",
+        "Grades the `keydown` listener `DevicesPage.vue` never removes a Blocker under correctness, once",
+        "Grades `isDateZone` (no direct tests), the inaccurate `formatDate` TSDoc, and the `settings` route no spec reaches Should-fix",
+        "Every finding cites `file:line` and names a fix command of its owning skill (`/web:review src/pages/DevicesPage.vue fix`, `/web:cover src/format.ts:<line>`, `/web:doc src/format.ts:<line>`, `/web:e2e route=settings`)",
+        "Gives a Fix order that puts `review` correctness before style, `doc`, `cover`, and `e2e`, and names `/web:improve loop` and `/web:perf loop` as the next step on the running app",
+        "Edits no source file and writes no plan file; the `Ran:` line names `cover`'s Vitest runs",
+        "Report is terse: no preamble or narration, and a verdict of fix-first with per-severity counts that match the findings listed"
+      ],
+      "blind_only": [
+        1,
+        3,
+        5,
+        7,
+        8
+      ]
+    },
+    {
+      "id": 2,
+      "name": "overlapping-findings-merge-once",
+      "expected_behavior": [
+        "Reports the untested negative branch of `formatCount` once, as `cover`'s finding, not also as `review`'s",
+        "Reports the `count`/`n` TSDoc mismatch once, as a Should-fix naming both the `doc` and style dimensions",
+        "Grades no `cover`, `doc`, or `e2e` finding a Blocker",
+        "Runs `e2e` on no route, or says it found none, since no page renders `src/format.ts` directly"
+      ],
+      "blind_only": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": 3,
+      "name": "restricted-dimensions-on-the-diff",
+      "expected_behavior": [
+        "Audits only the working diff (`src/pages/SettingsPage.vue`) and the `settings` route",
+        "Runs no `cover` or `doc` worker and reports no coverage or TSDoc findings",
+        "Grades the `settings` route Should-fix: no spec reaches it, and its new Reset button writes data",
+        "Names `/web:e2e route=settings` as that finding's command"
+      ],
+      "blind_only": [
+        1,
+        2,
+        4
+      ]
+    }
+  ]
+}

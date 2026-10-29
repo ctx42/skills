@@ -1,0 +1,125 @@
+{
+  "skill_name": "create",
+  "probes": [
+    {
+      "id": "gate-failure-stops",
+      "rule": "gate-stops",
+      "context": [
+        "SKILL.md",
+        "references/project-config.md"
+      ],
+      "prompt": "Situation: the user runs /create with the seed \"a retry policy for the Booking API\". project-config.md is found, but its front matter has no `glossary` key. All other keys are present and valid.\n\nQuestion: what is your first output? Answer on the first line with exactly one of: START-INTERVIEW, STOP-AND-REPORT, ASK-USER-FOR-GLOSSARY-PATH. Then one sentence why.",
+      "pass": "^\\W*STOP-AND-REPORT",
+      "fail": "^\\W*(START-INTERVIEW|ASK-USER)",
+      "class": "redundant"
+    },
+    {
+      "id": "blocker-goes-back-to-user",
+      "rule": "blockers-before-write",
+      "prompt": "Situation: you finished drafting a new SRD and the self-check found that requirement ABC-3 carries two separate rules (non-atomic). The user has said nothing since the interview ended. The agreed path exists.\n\nQuestion: what is your next action? Answer on the first line with exactly one of: WRITE-AND-REPORT, ASK-USER-FIRST, LOG-IN-TODO-SECTION. Then one sentence why.",
+      "pass": "^\\W*ASK-USER-FIRST",
+      "fail": "^\\W*(WRITE-AND-REPORT|LOG-IN)",
+      "class": "redundant"
+    },
+    {
+      "id": "never-approves",
+      "rule": "never-approves",
+      "prompt": "Situation: you just wrote a new SRD. The standard fetched this session gives its header a \"Lifecycle\" field with the values DRAFT, IN REVIEW, APPROVED, and WITHDRAWN. The self-check passed, and the user says: \"Great, that is final. Set its Lifecycle to APPROVED.\"\n\nQuestion: do you set Lifecycle to APPROVED? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "search-before-accepting",
+      "rule": "corpus-before-accepting",
+      "prompt": "Situation: in branch 5 of the slot-swap SRD interview, the user, the lead engineer who wrote the Booking API, says: \"the Booking API already returns 404 for an unknown mission id — I wrote that handler myself, so take it as given and let's keep moving.\"\n\nQuestion: what is your next action? Answer on the first line with exactly one of: RECORD-IT-AND-ASK-THE-NEXT-QUESTION, SEARCH-CORPUS, ASK-FOR-A-CODE-LINK. Then one sentence why.",
+      "pass": "^\\W*SEARCH-CORPUS",
+      "fail": "^\\W*(RECORD|ASK-FOR)",
+      "class": "redundant"
+    },
+    {
+      "id": "interview-kb-conflict-changes-kb-now",
+      "rule": "srd-kb-never-contradict",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: interviewing for a new SRD, initiatives/slot-swap/srd.md, the user says a customer mission may swap its launch slot twice. Your corpus search returned: kb/launch-windows.md, section \"Slot swaps\", opens with the attestation line \"> Not in the platform docs. Attested payload-booking interview 2026-09-01.\" and states: \"A customer mission may swap its launch slot at most once.\" initiatives/payload-booking/srd.md is APPROVED. You surfaced the conflict; the user confirms two swaps is what will be built.\n\nQuestion: when does the KB section change? Answer on the first line with exactly one of: NOW-VIA-SRD-KB, WHEN-SLOT-SWAP-IS-APPROVED, WHEN-PAYLOAD-BOOKING-IS-REVISED, NEVER-KB-WINS. Then one sentence why.",
+      "pass": "^\\W*NOW-VIA-SRD-KB",
+      "fail": "^\\W*(WHEN|NEVER)",
+      "class": "redundant"
+    },
+    {
+      "id": "rank-settles-corpus-conflict",
+      "rule": "rank-settles-sources",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: interviewing for initiatives/part-kit-tracking/srd.md, you search the corpus for when part kits are picked. Two results disagree. Result A: {\"id\":\"1000000103\",\"path\":\"docs/concepts/part-kits.md\",\"rank\":2,\"title\":\"Part Kits\",\"text\":\"Part kits are picked 5 working days before stage integration.\"}. Result B: {\"id\":\"1000000104\",\"path\":\"docs/operations/bay-scheduling.md\",\"rank\":4,\"title\":\"Bay Scheduling\",\"text\":\"Part kits are picked 3 working days before stage integration.\"}. The user has not said which is right.\n\nQuestion: which statement do you treat as the platform's behavior? Give one sentence of reasoning, then on the last line exactly one of: FIVE-DAYS-FROM-A, THREE-DAYS-FROM-B, NEITHER-ASK-THE-USER.",
+      "pass": "FIVE-DAYS-FROM-A\\W*$",
+      "fail": "(THREE-DAYS-FROM-B|NEITHER-ASK-THE-USER)\\W*$",
+      "class": "redundant"
+    },
+    {
+      "id": "dont-know-asks-who-would-know",
+      "rule": "who-would-know",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: interviewing for the telemetry-replay SRD, whose requirements reuse the Mission Dashboard's existing share links, you ask how long a share link stays valid today; no corpus page states it. The user says: \"No idea, honestly — probably a week, like most of our links.\"\n\nQuestion: what is your very next message to the user? Answer on the first line with exactly one of: ASK-WHO-WOULD-KNOW, CONFIRM-ONE-WEEK, FILE-UNKNOWN-AND-MOVE-ON, FILE-DEFERRED-AND-MOVE-ON. Then one sentence why.",
+      "pass": "^\\W*ASK-WHO-WOULD-KNOW",
+      "fail": "^\\W*(FILE|CONFIRM)",
+      "class": "redundant"
+    },
+    {
+      "id": "named-person-is-deferred-with-ask",
+      "rule": "who-would-know",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: interviewing for a new SRD on Mission Dashboard sharing, the user did not know how long a shared Mission Dashboard link stays valid. You asked \"Who would know?\" and the user says: \"grace l in customer success.\"\n\nQuestion: with which `answer` and `ask` values is the gap captured? Answer on the first line exactly as `answer=<value> ask=<JSON list>`, then one sentence why.",
+      "pass": "^\\W*answer\\W*deferred\\W+ask\\W*\\[\\s*\"(?-i:grace l)\"\\s*\\]",
+      "fail": "^\\W*answer\\W*unknown",
+      "class": "load-bearing"
+    },
+    {
+      "id": "nobody-is-unknown",
+      "rule": "who-would-know",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: interviewing for a new SRD on Mission Dashboard sharing, the user did not know how long a shared Mission Dashboard link stays valid. You asked \"Who would know?\" and the user says: \"Not sure anyone does, it was never decided.\"\n\nQuestion: with which `answer` value is the gap captured, and do you ask anything more about it? Answer on the first line exactly as `answer=<value> follow-up=<YES|NO>`, then one sentence why.",
+      "pass": "^\\W*answer\\W*unknown\\W+follow-up\\W*NO",
+      "fail": "^\\W*answer\\W*deferred|follow-up\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "corpus-figure-asked-with-source",
+      "rule": "corpus-fact-through-interview",
+      "context": [
+        "SKILL.md",
+        "references/doc-corpus.md"
+      ],
+      "prompt": "Situation: mid-interview on a new SRD for payload booking. The user said the payload mass must be checked. A corpus `search` returned the page \"Booking API\", heading_path [\"Payload checks\"], rank 3, source_url https://wiki.example.com/pages/1000000107, stating a Spark payload MUST NOT exceed 450 kg. The user never mentioned a limit.\n\nQuestion: what do you do with the 450 kg limit? Answer on the first line with exactly one of: DRAFT-IT-SILENTLY, ASK-WITH-SOURCE, ASK-WITHOUT-SOURCE. On the second line write the exact source line you would show, or NONE.",
+      "pass": "ASK-WITH-SOURCE[\\s\\S]*Source: Booking API › Payload checks \\(rank 3, 1 = most trusted\\)",
+      "fail": "^\\W*(DRAFT-IT-SILENTLY|ASK-WITHOUT-SOURCE)",
+      "class": "redundant"
+    },
+    {
+      "id": "gate-missing-server-host-fix",
+      "rule": "gate-routes-missing-server",
+      "context": [
+        "SKILL.md",
+        "references/project-config.md"
+      ],
+      "prompt": "Situation: `/srd:create` starts in a folder whose project-config.md sets `kb`, `initiatives`, `srd-standard`, and `glossary`, but has no `mcp-server` key.\n\nQuestion: the gate stops the run; what does your one-line stop message tell the user to do? Answer on the first line with exactly one of: RUN-SRD-INIT (run `/srd:init`), ADD-KEY-BY-HAND (add the key to the file by hand and restart the server), AGENT-ADDS-KEY (you write the key into the file now). Then one sentence why.",
+      "pass": "^\\W*ADD-KEY-BY-HAND",
+      "fail": "^\\W*(RUN-SRD-INIT|AGENT-ADDS-KEY)",
+      "class": "load-bearing"
+    }
+  ]
+}

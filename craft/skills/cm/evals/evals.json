@@ -1,0 +1,35 @@
+{
+  "skill_name": "cm",
+  "evals": [
+    {
+      "id": 1,
+      "name": "message-from-staged-diff",
+      "skills": [
+        "cm"
+      ],
+      "setup": "A staged diff adding a JWT login endpoint: a new `handler/login.go` with `Login`, a `token.Issue` helper, and the route wired into the router. The conversation that produced it discussed session cookies at length — a design the diff does not contain.",
+      "query": "/cm",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "amend-from-hash",
+      "skills": [
+        "cm"
+      ],
+      "setup": "`HEAD` is a commit whose message reads \"fixes\". Its diff corrects an off-by-one in a pagination cursor. Separately, an unrelated `.gitignore` change is sitting staged in the index — content the message is not derived from.",
+      "query": "/cm HEAD and amend it",
+      "files": []
+    },
+    {
+      "id": 7,
+      "name": "apply-splits-working-tree",
+      "skills": [
+        "cm"
+      ],
+      "setup": "A Go module whose working tree holds three unrelated concerns: in `fetch/fetch.go`, a fix making `Get` reject a non-200 response and, in a separate hunk, a new exported `Head`; a new untracked `cmd/size/main.go` that calls `fetch.Head`; and a typo fix in `README.md`. `README.md` and `fetch/fetch.go` were staged together beforehand. The tree compiles. A harness attribution instruction active in the session asks for a `Co-Authored-By` trailer.",
+      "query": "/cm micro apply",
+      "files": []
+    }
+  ]
+}

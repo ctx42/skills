@@ -1,0 +1,109 @@
+{
+  "skill_name": "audit",
+  "rules": [
+    {
+      "id": "read-only",
+      "rule": "Reports only: no source edit, no fix, no plan file",
+      "must": [
+        "it edits no source, applies no fix, and writes no plan"
+      ]
+    },
+    {
+      "id": "no-style-dimension",
+      "rule": "style runs only through review, never as its own worker",
+      "must": [
+        "`style` is never a\\s+dimension or a worker of its own"
+      ]
+    },
+    {
+      "id": "no-running-app",
+      "rule": "The running app's UX and speed are not dispatched; the report names web:improve and web:perf as the next step",
+      "must": [
+        "The running app's UX and speed are not audited"
+      ]
+    },
+    {
+      "id": "diff-default",
+      "rule": "No target audits the working diff; `all` audits the whole frontend",
+      "must": [
+        "empty — the files under the root that the working diff touches",
+        "`all` — the whole frontend"
+      ]
+    },
+    {
+      "id": "budget-gate",
+      "rule": "Broad target with no budget: propose and stop before dispatch",
+      "must": [
+        "switches to `plan_first`",
+        "Nothing is dispatched before the answer"
+      ]
+    },
+    {
+      "id": "flat-dispatch",
+      "rule": "The audit splits all work; no worker fans out",
+      "must": [
+        "A subagent cannot dispatch subagents, so the audit splits all the work and no worker fans out"
+      ]
+    },
+    {
+      "id": "one-contract-check",
+      "rule": "Exactly one review worker runs the contract check, named in its brief",
+      "must": [
+        "Its brief says so; no other brief does"
+      ]
+    },
+    {
+      "id": "gap-grades",
+      "rule": "cover, doc, and e2e grade Should-fix or Nit, never Blocker",
+      "must": [
+        "`cover`, `doc`, and `e2e` never grade a Blocker",
+        "Nit when only statement lines are uncovered"
+      ]
+    },
+    {
+      "id": "e2e-grade",
+      "rule": "A route no spec reaches, or an undriven control that writes or recovers, is Should-fix; other undriven controls are Nit",
+      "must": [
+        "Should-fix when no spec reaches it, or a\\s+control no spec drives writes data or recovers from an error",
+        "Nit when no undriven control\\s+does either"
+      ]
+    },
+    {
+      "id": "dedupe",
+      "rule": "One finding per concern across dimensions; the measuring dimension owns it",
+      "must": [
+        "same concern is one finding, naming both dimensions",
+        "skill fixes that concern owns it: its grade, its command, its fix-order slot",
+        "is `cover`'s, which measured it"
+      ]
+    },
+    {
+      "id": "cap-at-merge",
+      "rule": "max applied once, after deduplicating",
+      "must": [
+        "Cap at `max` after deduplicating"
+      ]
+    },
+    {
+      "id": "fix-order",
+      "rule": "Fix order is dependency order, not severity",
+      "must": [
+        "Dependency order, not severity"
+      ]
+    },
+    {
+      "id": "counts-off-report",
+      "rule": "Counts read off the finished report",
+      "must": [
+        "Read every count off the finished report"
+      ]
+    },
+    {
+      "id": "output-discipline",
+      "rule": "Terse report",
+      "must": [
+        "Report tersely: no preamble or narration"
+      ]
+    }
+  ]
+}

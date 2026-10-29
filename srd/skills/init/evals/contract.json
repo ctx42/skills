@@ -1,0 +1,167 @@
+{
+  "skill_name": "init",
+  "rules": [
+    {
+      "id": "existing-lines-kept",
+      "rule": "Never changes or removes a set key, its value, or any other line",
+      "must": [
+        "Never\\ change\\ or\\ remove\\ a\\ key\\ the\\ file\\ sets,\\ its\\ value,\\ or\\ any\\ other\\ line"
+      ]
+    },
+    {
+      "id": "server-keys-kept",
+      "rule": "Server keys are kept as found and written only into a new file",
+      "must": [
+        "keep\\ `mcp\\-server`,\\ `mcp\\-port`,\\ `watch`,\\ and\\ `watch\\-debounce`\\ as\\ found,\\ and\\ write\\ them\\ only\\ into\\ a\\ new\\ file"
+      ]
+    },
+    {
+      "id": "propose-once",
+      "rule": "One proposal of the whole front matter, then one question",
+      "must": [
+        "Propose\\ once:\\ the\\ whole\\ front\\ matter\\ as\\ it\\ will\\ be",
+        "Ask\\ one\\ question:\\ write\\ it\\ as\\ shown,\\ or\\ which\\ values\\ to\\ change"
+      ]
+    },
+    {
+      "id": "required-blocks-write",
+      "rule": "A required key not found blocks the write, even after a yes",
+      "must": [
+        "still\\s+`not\\ found`\\ blocks\\ the\\ write\\.\\ After\\ the\\ user\\ answers\\ step\\ 4,\\ even\\ with\\ a\\s+yes"
+      ]
+    },
+    {
+      "id": "no-gate-no-server",
+      "rule": "Skips the gate and calls no server tool",
+      "must": [
+        "Skip\\ the\\ gate",
+        "Call\\ no\\ server\\ tool,\\ start\\ no\\ server,\\ and\\ never\\ touch\\ `\\.mcp\\.json`"
+      ]
+    },
+    {
+      "id": "output-discipline",
+      "rule": "Terse report",
+      "must": [
+        "Report\\ tersely:\\ no\\ preamble\\ or\\ narration"
+      ]
+    },
+    {
+      "id": "key-reference-verbatim",
+      "rule": "The key reference is copied verbatim and appended once",
+      "must": [
+        "Copy\\ \\[assets/keys\\.md\\]\\(assets/keys\\.md\\)\\ verbatim,\\ never\\ reworded",
+        "Skip\\ it\\ when\\ the\\ body\\ already\\ has\\ a\\ `\\#\\#\\ Front\\ matter\\ keys`\\ heading\\ or\\ a\\ table\\ row\\ naming\\ `mcp\\-server`"
+      ]
+    },
+    {
+      "id": "check-read-only",
+      "rule": "check writes nothing, fixes nothing, and calls only read tools",
+      "must": [
+        "`check`\\ is\\ read\\-only:\\ it\\ writes\\ nothing\\ and\\ fixes\\ nothing\\ in\\ the\\ project"
+      ]
+    },
+    {
+      "id": "check-runs-every-check",
+      "rule": "check never stops at the first problem; without a server it reports and continues",
+      "must": [
+        "Run\\ every\\ check\\ below;\\ never\\ stop\\ at\\ the\\ first\\ problem\\.",
+        "report\\ it\\ as\\ a\\ problem,\\ and\\ report\\ the\\ lines\\ that\\ need\\ the\\ server\\ as\\ `not\\ checked`"
+      ]
+    },
+    {
+      "id": "check-counts-from-server",
+      "rule": "counts are read off the server's answers",
+      "must": [
+        "Read\\ every\\ count\\ off\\ the\\ server's\\ answers,\\ never\\ estimate\\ one\\."
+      ]
+    },
+    {
+      "id": "host-writes-server-keys",
+      "rule": "Names the docket plugin as the writer of the server keys",
+      "must": [
+        "the\\ docket\\ plugin\\ writes\\ a\\ starter\\ config"
+      ]
+    },
+    {
+      "id": "no-server-not-set-up",
+      "rule": "A file without mcp-server or sources is not set up; the proposal notes it and never adds the key",
+      "must": [
+        "An\\ existing\\ file\\ without\\ `mcp\\-server`\\ or\\ `sources`\\ is\\ not\\ set\\ up",
+        "\\|\\ `mcp\\-server`\\ missing"
+      ]
+    },
+    {
+      "id": "answer-is-confirmation",
+      "rule": "Each missing required key is asked in turn; the last answer is the confirmation and the file is written at once",
+      "must": [
+        "ask\\ for\\ each\\ such\\ value\\ in\\ turn,\\ one\\ question\\ per\\ message",
+        "the\\ answers\\ are\\ the\\ confirmation,\\ even\\ though\\ the\\ front\\s+matter\\ now\\ differs"
+      ]
+    },
+    {
+      "id": "srd-work-none-is-set",
+      "rule": "srd-work: none counts as set; the proposal offers none",
+      "must": [
+        "`none`\\ counts\\ as\\ set",
+        "answer\\ `none`\\ to\\ keep\\ working\\ files\\ beside\\ each\\ SRD"
+      ]
+    },
+    {
+      "id": "key-reference-kinds",
+      "rule": "The key reference lists only the working-file kinds the skills write",
+      "file": "assets/keys.md",
+      "must": [
+        "Folder\\ for\\ SRD\\ working\\ files\\ \\(`review`,\\ `decisions`,\\ `questions`\\)"
+      ],
+      "must_not": [
+        "`retro`",
+        "`notes`"
+      ]
+    },
+    {
+      "id": "server-note-outside-block",
+      "rule": "The missing-mcp-server note sits above the yaml block, never inside it",
+      "must": [
+        "a\\ note\\ above\\ the\\ `yaml`\\ block,\\ never\\ inside\\ it"
+      ]
+    },
+    {
+      "id": "gaps-always-gap",
+      "rule": "gaps is always proposed as gap; no candidate search",
+      "must": [
+        "\\|\\ `gaps`\\ +\\|\\ always\\ `gap`"
+      ],
+      "must_not": [
+        "`gap`\\ or\\ `gaps`\\ folder"
+      ]
+    },
+    {
+      "id": "missing-folder-not-set-up",
+      "rule": "With every key set, a missing kb, gaps, or srd-work folder is proposed as a .gitkeep, not reported as set up",
+      "must": [
+        "one\\ line\\ per\\ folder\\ `kb`,\\ `gaps`,\\ or\\ `srd\\-work`\\ names\\ that\\s+does\\ not\\ exist"
+      ]
+    },
+    {
+      "id": "no-sources-note",
+      "rule": "A missing sources key gets a note, not a written key",
+      "must": [
+        "\"`sources`\\ is\\ not\\ set:\\ add\\ your\\ doc\\ folders\\ and\\ `kb`\\ yourself"
+      ]
+    },
+    {
+      "id": "kb-into-sources",
+      "rule": "kb, set before or added now, is added to a set sources that lacks it",
+      "must": [
+        "`kb`\\ added\\ to\\ `sources`,\\ when\\ `sources`\\ is\\ set\\ and\\ lacks\\ it"
+      ]
+    },
+    {
+      "id": "one-dir-per-run",
+      "rule": "One <dir> per run; a second directory is a leftover word, not recognized",
+      "must": [
+        "`check`\\s+may stand anywhere; the other token is `<dir>`, one per run"
+      ]
+    }
+  ]
+}

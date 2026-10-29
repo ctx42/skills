@@ -1,0 +1,125 @@
+{
+  "skill_name": "init",
+  "probes": [
+    {
+      "id": "set-value-kept",
+      "rule": "existing-lines-kept",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md sets `kb: notes/kb`. No `notes/kb` folder exists; a top-level `kb/` folder does.\n\nQuestion: what value does your proposal show for `kb`? Answer on the first line with the value only, then one sentence why.",
+      "pass": "^\\W*notes/kb",
+      "fail": "^\\W*kb\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "no-port-added",
+      "rule": "server-keys-kept",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md sets `mcp-server: docs` and `sources: [wiki]` but no `mcp-port`. The doc server will not start without a port, and 7777 is free.\n\nQuestion: does your proposal add `mcp-port: 7777`? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "missing-standard-asks",
+      "rule": "required-blocks-write",
+      "prompt": "Situation: `/srd:init` found every value but `srd-standard`: no document's title names an SRD standard. The proposal showed it as `not found`, and the user replied \"yes, write it\".\n\nQuestion: what do you do? Answer on the first line with exactly one of: WRITE-WITHOUT-IT, WRITE-A-PLACEHOLDER, ASK-FOR-IT. Then one sentence why.",
+      "pass": "^\\W*ASK-FOR-IT",
+      "fail": "^\\W*WRITE",
+      "class": "redundant"
+    },
+    {
+      "id": "missing-key-in-the-proposal",
+      "rule": "propose-once",
+      "prompt": "Situation: `/srd:init` is finding values. No folder looks like the SRD folder, so `initiatives` has no candidate and the user must name it; every other key has one value.\n\nQuestion: what is your next message? Answer on the first line with exactly one of: ASK-FOR-INITIATIVES-FIRST, ONE-PROPOSAL-OF-ALL-KEYS. Then one sentence why.",
+      "pass": "^\\W*ONE-PROPOSAL",
+      "fail": "^\\W*ASK-FOR",
+      "class": "load-bearing"
+    },
+    {
+      "id": "no-server-named-not-set",
+      "rule": "no-server-not-set-up",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md sets `sources`, `kb`, `initiatives`, `srd-standard`, `glossary`, `gaps`, `precedence`, and `srd-work`, and whose body has the key reference, but has no `mcp-server` key.\n\nQuestion: what do you tell the user? Answer on the first line with exactly one of: ALREADY-SET-UP (the folder is set up), WRITE-MCP-SERVER (you add `mcp-server` to the file), KEY-MISSING-ADD-BY-HAND (`mcp-server` is missing and the user adds it by hand; you write nothing). Then one sentence why.",
+      "pass": "^\\W*KEY-MISSING-ADD-BY-HAND",
+      "fail": "^\\W*(ALREADY-SET-UP|WRITE-MCP-SERVER)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "answer-writes-at-once",
+      "rule": "answer-is-confirmation",
+      "prompt": "Situation: `/srd:init` proposed the whole front matter with `initiatives: not found`; the user replied \"yes\", you asked which folder holds the SRDs, and the user answered \"specs\". The front matter you would write now is not the one the user said yes to.\n\nQuestion: what is your next step? Answer on the first line with exactly one of: WRITE-NOW (write the file with `initiatives: specs`), SHOW-AND-ASK-AGAIN (show the changed front matter and ask once more). Then one sentence why.",
+      "pass": "^\\W*WRITE-NOW",
+      "fail": "^\\W*SHOW-AND-ASK",
+      "class": "load-bearing"
+    },
+    {
+      "id": "srd-work-none-set-up",
+      "rule": "srd-work-none-is-set",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md sets `mcp-server`, `kb`, `initiatives`, `srd-standard`, `glossary`, `gaps`, `precedence`, and `srd-work: none`; every folder it names exists, no folder named `none` exists, and the body has the key reference.\n\nQuestion: what do you do? Answer on the first line with exactly one of: SAY-SET-UP (write nothing), PROPOSE-SRD-WORK-FOLDER (propose `srd-work: srd-work`), CREATE-NONE-FOLDER (create `none/.gitkeep`). Then one sentence why.",
+      "pass": "^\\W*SAY-SET-UP",
+      "fail": "^\\W*(PROPOSE-SRD-WORK|CREATE-NONE)",
+      "class": "redundant"
+    },
+    {
+      "id": "server-note-above-block",
+      "rule": "server-note-outside-block",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md has no `mcp-server` key and lacks `kb` and `gaps`. You are writing the proposal per steps 2 and 4.\n\nQuestion: where does the `mcp-server` not-set line go? Answer on the first line with exactly one of: INSIDE-AS-KEY (a `mcp-server: not set …` line inside the `yaml` block), INSIDE-AS-COMMENT (a `# mcp-server …` comment inside the block), ABOVE-THE-BLOCK (a plain note before the block). Then one sentence why.",
+      "pass": "^\\W*ABOVE-THE-BLOCK",
+      "fail": "^\\W*INSIDE",
+      "class": "redundant"
+    },
+    {
+      "id": "new-file-gets-server",
+      "rule": "no-server-not-set-up",
+      "prompt": "Situation: `/srd:init` runs in a folder with no project-config.md at all; you found a value for every srd key.\n\nQuestion: what does your proposal do about `mcp-server`? Answer on the first line with exactly one of: WRITE-DOCS (the block holds `mcp-server: docs`), NOTE-ONLY (a note that `mcp-server` is not set, and the key left out). Then one sentence why.",
+      "pass": "^\\W*WRITE-DOCS",
+      "fail": "^\\W*NOTE-ONLY",
+      "class": "redundant"
+    },
+    {
+      "id": "gaps-is-gap",
+      "rule": "gaps-always-gap",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md lacks `gaps`. Top-level folders `gap/` and `gaps/` both exist, both outside every source.\n\nQuestion: what value does your proposal give `gaps`? Answer on the first line with exactly one of: GAP, GAPS, NOT-FOUND. Then one sentence why.",
+      "pass": "^\\W*GAP\\b(?!S)",
+      "fail": "^\\W*(GAPS|NOT-FOUND)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "missing-gap-folder-proposed",
+      "rule": "missing-folder-not-set-up",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md sets `mcp-server`, `kb`, `initiatives`, `srd-standard`, `glossary`, `gaps: gap`, `precedence`, and `srd-work`, and whose body has the key reference. Every folder it names exists except `gap/`.\n\nQuestion: what do you do? Answer on the first line with exactly one of: SAY-SET-UP (write nothing), PROPOSE-GITKEEP (propose creating `gap/.gitkeep` and ask), WRITE-GITKEEP-UNASKED (create `gap/.gitkeep` without asking). Then one sentence why.",
+      "pass": "^\\W*PROPOSE-GITKEEP",
+      "fail": "^\\W*(SAY-SET-UP|WRITE-GITKEEP)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "ask-each-missing-key",
+      "rule": "answer-is-confirmation",
+      "prompt": "Situation: `/srd:init` proposed the whole front matter with `initiatives: not found` and `srd-standard: not found`; the user replied \"yes\". You asked which folder holds the SRDs, and the user answered \"specs\".\n\nQuestion: what is your next step? Answer on the first line with exactly one of: ASK-FOR-STANDARD (ask for the `srd-standard` value), WRITE-NOW (write the file now), SHOW-AND-ASK-AGAIN (show the changed front matter and ask once more). Then one sentence why.",
+      "pass": "^\\W*ASK-FOR-STANDARD",
+      "fail": "^\\W*(WRITE-NOW|SHOW-AND-ASK)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "set-kb-added-to-sources",
+      "rule": "kb-into-sources",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md sets `mcp-server`, `sources: [docs]`, `kb: kb`, `initiatives`, `srd-standard`, `glossary`, `gaps`, `precedence`, and `srd-work`; every folder it names exists and the body has the key reference.\n\nQuestion: what do you do? Answer on the first line with exactly one of: SAY-SET-UP (write nothing), PROPOSE-KB-IN-SOURCES (propose adding `kb` to `sources` and ask), ADD-KB-UNASKED (add it without asking). Then one sentence why.",
+      "pass": "^\\W*PROPOSE-KB-IN-SOURCES",
+      "fail": "^\\W*(SAY-SET-UP|ADD-KB-UNASKED)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "no-sources-noted",
+      "rule": "no-sources-note",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md sets `mcp-server`, `kb: kb`, `initiatives`, `srd-standard`, `glossary`, `gaps`, `precedence`, and `srd-work`, but has no `sources` key; every folder it names exists and the body has the key reference.\n\nQuestion: what do you do? Answer on the first line with exactly one of: SAY-SET-UP (write nothing), WRITE-SOURCES-KB (add `sources: [kb]` to the file), NOTE-SOURCES-NOT-SET (tell the user `sources` is not set and to add it; write nothing). Then one sentence why.",
+      "pass": "^\\W*NOTE-SOURCES-NOT-SET",
+      "fail": "^\\W*(SAY-SET-UP|WRITE-SOURCES)",
+      "class": "redundant"
+    },
+    {
+      "id": "set-kb-added-while-keys-missing",
+      "rule": "kb-into-sources",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md sets `mcp-server`, `sources: [docs]`, and `kb: kb`, and nothing else; you found values for the other srd keys.\n\nQuestion: does your proposal's front matter add `kb` to `sources`? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*YES",
+      "fail": "^\\W*NO\\b",
+      "class": "load-bearing"
+    }
+  ]
+}

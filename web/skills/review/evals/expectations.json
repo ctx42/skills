@@ -1,0 +1,69 @@
+{
+  "skill_name": "review",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "whole-frontend-and-contract-on-the-fixture",
+      "expected_behavior": [
+        "States the resolved root (`web/`), the target, and the file set before the findings",
+        "Says the style dimension came from `web:style`",
+        "Its style offenses keep web:style rule ids and include the Biome config drift, the unchecked cast in `sites()`, the string-path link in `SitesPage.vue`, `toBeTruthy`, the `px` sizes, `qry`, and the name-first TSDoc in `format.ts`",
+        "Reports the `keydown` listener `DevicesPage.vue` adds in `onMounted` and never removes as one Blocker under correctness, naming the style rule it also breaks, and not a second time as a style offense",
+        "Reports the `expect(...)` with no matcher in `DevicePage.test.ts` (the loading test) as a test that passes while the code is wrong",
+        "Reports that `DevicePage.vue` reads the device only in `onMounted`, so a changed `id` param on the same component shows the old device",
+        "Reports the contract drift for `model`: `src/api.ts` reads `model`, the Go `Device` sends `model_name` (`internal/server/server.go`), citing both sides, as a Blocker",
+        "Reports the contract drift for `added`: the TS type and normalizer take a string, the Go server sends Unix seconds as a number, citing both sides, as a Blocker",
+        "Reports `city`: the Go `Site` tags it `omitempty`, while the TS `Site` declares it always present",
+        "Reports no contract finding for `id`, `serial`, `site_id`, `last_seen`, or `name`",
+        "Names in one line each command the pass ran, as it ran it (a `grep …` or width-script invocation, not a category), and runs no Biome, vue-tsc, Vitest, Playwright, or Go tooling",
+        "Ends with a fix-first verdict, per-severity counts, and the files-reviewed count",
+        "Edits no file: the answer was `none`"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    {
+      "id": 2,
+      "name": "rule-edit-picks-biome-over-prose",
+      "expected_behavior": [
+        "Places the rule in `style/references/biome.json` as Biome's `noDefaultExport`, not as a prose line in `style/references/production.md` or `style/references/test.md`, and says why",
+        "Shows the proposed change and waits for confirmation before writing",
+        "After `yes`, the config holds `noDefaultExport` at `error` in its group and both prose rule files under `style/references/` are unchanged"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": 3,
+      "name": "fix-proves-the-leak-red-then-green",
+      "expected_behavior": [
+        "Runs `bun run check` for a green baseline before editing",
+        "Writes a test that fails on the current code because the `keydown` listener stays after unmount, and shows the red output",
+        "Removes the listener in `onBeforeUnmount`, shows the same test green, and re-runs `bun run check` green",
+        "Reports each fix as one `file:symbol — what changed` line with the gate result, prints no diff, and never commits"
+      ],
+      "blind_only": [
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  ]
+}

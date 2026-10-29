@@ -1,0 +1,111 @@
+{
+  "skill_name": "grill-me",
+  "rules": [
+    {
+      "id": "one-question-per-turn",
+      "rule": "One question per turn; sub-questions count as separate questions",
+      "must": [
+        "One question per turn, in plain prose",
+        "Sub-questions of the same topic are still separate questions"
+      ]
+    },
+    {
+      "id": "no-multiple-choice-tool",
+      "rule": "Never use AskUserQuestion multiple-choice unless the user asks",
+      "must": [
+        "Never use `AskUserQuestion` multiple-choice unless the user asks for it"
+      ]
+    },
+    {
+      "id": "no-implementation",
+      "rule": "Planning only; no code",
+      "must": [
+        "No implementation\\. Planning only; don't write code"
+      ]
+    },
+    {
+      "id": "never-assume",
+      "rule": "Ambiguity is asked, never assumed",
+      "must": [
+        "Never assume\\. If something is ambiguous, ask"
+      ]
+    },
+    {
+      "id": "conflict-hold-both",
+      "rule": "On conflicting decisions name the conflict, reopen the earlier branch, give options; never reconcile yourself",
+      "must": [
+        "name the conflict, mark the earlier branch open again, and hold both until the user picks",
+        "Reconciling them yourself would record a choice they never made"
+      ]
+    },
+    {
+      "id": "progress-count",
+      "rule": "State the count as N resolved, M open on first speaking, then as each branch closes",
+      "must": [
+        "`N resolved, M open`",
+        "the first time you speak in this interview"
+      ]
+    },
+    {
+      "id": "reaudit-on-collapse",
+      "rule": "An overturned assumption reopens every branch resting on it, named before the next question",
+      "must": [
+        "that branch reopens — and so does every other one that rested on the same assumption",
+        "name each one that reopens and why in a line"
+      ]
+    },
+    {
+      "id": "acceptance-criteria",
+      "rule": "Resolved means a pass/fail acceptance criterion can be written; the summary carries them",
+      "must": [
+        "give each resolved branch the precise acceptance criteria",
+        "a branch you cannot write a pass/fail check for is not resolved"
+      ]
+    },
+    {
+      "id": "open-branch-owner",
+      "rule": "A branch nobody present can resolve is carried open with owner and question, not closed and not blocking the summary",
+      "must": [
+        "does not block the summary and is not quietly closed either",
+        "Carry it as open with an owner and the question they must answer"
+      ]
+    },
+    {
+      "id": "persist-offer",
+      "rule": "Offer to persist via plan-smith create mode; skip the offer when another skill invoked this one",
+      "must": [
+        "Offer to persist — on yes, invoke `craft:plan-smith` in create mode",
+        "When another skill invoked this one on a subject, skip the offer"
+      ]
+    },
+    {
+      "id": "map-requested-change-only",
+      "rule": "The branch map covers only what the requested change touches",
+      "must": [
+        "every branch the requested change touches"
+      ]
+    },
+    {
+      "id": "resolved-needs-all-subparts",
+      "rule": "A branch counts as resolved only when none of its sub-parts is open",
+      "must": [
+        "resolved\\ only\\ when\\ none\\ of\\ its\\ sub\\-parts\\ is\\ still\\ open"
+      ]
+    },
+    {
+      "id": "hold-for-exposition",
+      "rule": "When the user asks to explain at length first, hold questions; ask only whether they have more to add until done",
+      "must": [
+        "When the user asks to explain at length first, hold the interview",
+        "ask only\\s+whether they have more to add"
+      ]
+    },
+    {
+      "id": "summary-edge-not-covered",
+      "rule": "An edge found at summary time leaves its branch settled; its own check still stands",
+      "must": [
+        "the pass/fail test applies to what the branch asked; an\\s+edge found while writing the summary leaves its branch settled"
+      ]
+    }
+  ]
+}

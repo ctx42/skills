@@ -1,0 +1,35 @@
+{
+  "skill_name": "doc-edit",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "glossary-entry-files-an-unconfirmable-fact",
+      "expected_behavior": [
+        "Dedups with `list_gaps` `query` before capturing, then captures a draft (`report_gap` `draft: true`) whose `doc_id` is `docs/glossary/terms.md`",
+        "Marks the captured gap `answer: deferred`",
+        "Files the gap with `submit_gap` once the user agrees",
+        "Writes the user-stated fact into the Hot-Fire Campaign entry and leaves the 06:00–10:00 claim as it was",
+        "Leaves the glossary's front matter unchanged"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "resolves-a-gap-in-the-edited-document",
+      "expected_behavior": [
+        "Lists the open gaps before the first edit",
+        "Writes the 10-working-day payout deadline into `docs/operations/scrub-refunds.md`",
+        "After the edit, calls `fill_gap` on `gap-0410` with `filled_by` `1000000105#<slug>` (the `id`, never the path) and `complete: true`",
+        "Says the edit reaches the page's source only when the user pushes it upstream",
+        "Leaves the front matter unchanged and hands nothing to `srd:kb`"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "hands-an-srd-to-edit",
+      "expected_behavior": [
+        "Invokes `srd:edit` on `initiatives/booster-turnaround/srd.md`",
+        "Writes nothing before the user answers"
+      ]
+    }
+  ]
+}

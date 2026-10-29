@@ -1,0 +1,347 @@
+---
+name: questions
+description: >
+  Reviews a Software Requirement Document (SRD) as the engineer who must
+  build it, surfacing the questions that block implementation. Use when
+  asked to review an SRD for build-readiness, ask implementation questions
+  about an SRD, check which SRD questions remain open, or bank durable
+  platform facts the current session surfaced.
+argument-hint: "<path to SRD> | learn"
+license: MIT
+---
+
+# questions
+
+## Usage
+
+```
+/srd:questions <srd>   review + walk (default): resumes open questions on re-run
+/srd:questions learn   bank platform facts this session taught into the knowledge base
+```
+
+Review an SRD from the seat of the engineer who has to build it. The question
+that drives every check: *can I implement and test this exactly as written,
+without coming back to guess?*
+
+This skill is a **thin orchestration layer**: it delegates the standard checks
+to `srd:review` and adds the **system-knowledge layer** — judging the SRD
+against the target platform as the corpus records it.
+
+## Boundaries
+
+- Role: implementation-readiness reviewer. Produce questions for the SRD
+  author; never rewrite the document.
+- Owns: `<srd>.questions.md` (the question list). No other skill writes it.
+- Must not: write or edit `<srd>.review.md` (owned by `srd:review`); edit the
+  SRD; re-implement or restate the SRD standard checks; write a knowledge-base
+  file (owned by `srd:kb`).
+- Depends on: `srd:review`, which itself reads `../create/references/*`; this
+  skill never reads the SRD standard directly. If `srd:review` is missing at
+  run time in a mode that runs it (not `learn`), stop and tell the user.
+
+## Support files
+
+- [../create/references/project-config.md](../create/references/project-config.md)
+  (eager) — the gate every mode passes first, and the project paths and
+  server it names.
+- [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
+  (eager) — how to reach the documentation corpus, how its sources rank, and
+  where an unconfirmed or undocumented fact goes (`srd:report-doc-gap`,
+  `srd:kb`).
+- [../review/SKILL.md](../review/SKILL.md) (on-demand: before invoking the
+  review layer) — this skill delegates the standard checks there and depends on
+  what that skill does to `<srd>.review.md`, so read its file lifecycle rather
+  than assuming one.
+
+## Documentation corpus
+
+The system-knowledge layer confronts the SRD against the corpus, whose
+knowledge-base source carries the platform facts earlier sessions banked. This
+skill consults it in system confrontation and before any "is this defined or
+documented?" question (step 3); a fact the walk confirms goes to `srd:kb` (see
+[Platform knowledge](#platform-knowledge)) and is written at its
+confirmation. Draft gaps are checked at step 1 and captured on discovery.
+A question or proposed answer resting on a corpus result carries its source
+line ([Citing a source](../create/references/doc-corpus.md#citing-a-source)),
+in the walk and in the question's visible text in `<srd>.questions.md`, never
+only in its bookkeeping comment.
+
+## Invocation
+
+Every mode runs the gate in
+[../create/references/project-config.md](../create/references/project-config.md)
+first. The first token is the SRD path, or a literal mode word. With no
+arguments, ask which SRD to check; fall back to the user's prose for free-form
+input.
+
+- an SRD path → **review** (default): the full flow below. Re-running on
+  an SRD that already has a `<srd>.questions.md` resumes the open questions (see
+  [Re-run](#re-run-after-an-srd-edit)).
+- `learn` → **learn**: bank durable platform facts from the current
+  session, no SRD. See [learn](#learn).
+
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
+
+## review (default)
+
+1. Start: run the draft check in the corpus reference. `srd:review` runs it at
+   its own start too; tell it the check is done and that this skill makes the
+   closing offer, so the user is not offered the same drafts twice in one run
+   and its report carries no clause of its own — this skill's covers both. The
+   check shows the user nothing, so the clause saying it ran and found nothing
+   is this skill's to write in its own report: a check that ran is otherwise
+   indistinguishable from one that never did.
+2. Get the review: run `srd:review path/to/srd.md` (default mode) and read the
+   file it leaves. That mode never rewrites an existing file — on one that
+   exists it re-verifies open findings, ticks and moves the fixed ones to
+   `## Resolved` keeping their numbers, and appends newly found defects. So an
+   author's file is refreshed, not clobbered, and a review written before the
+   last edit does not silently go stale.
+3. Build the merged question set:
+   - From the review: reframe each finding that blocks *building* into a
+     colleague-voice question. That is what "relevant" means here — a reader
+     who has to implement the SRD is stopped by a non-atomic rule, an
+     unverifiable criterion, a promised change no requirement covers, an
+     undefined term. They are not stopped by a British spelling or a stray
+     emphasis, so errata and cosmetics never become questions: they stay in
+     the review file for the author. Drop the severity tag and rule id (keep
+     the severity only to order the walk, step 5).
+   - System confrontation: confront the SRD against the corpus. `srd:review`
+     runs a facts-vs-corpus pass of its own, so the two layers can land the
+     same contradiction twice — merge them into one question rather than asking
+     the user the same thing in two voices. The merged question takes a `Qn`
+     like any other; note the review finding it came from in the question's
+     bookkeeping comment (see [Questions file](#questions-file)), never in the
+     question's text, which carries no rule ids or finding numbers. Raise a
+     question when the SRD contradicts a documented API rule, service behavior,
+     or glossary term; redefines or conflicts with another SRD; uses a term
+     undefined in the system; or cannot be built without knowing something the
+     system does not pin down ("can't build X without knowing Y").
+   - A KB section contradicting the SRD: KB and SRDs both describe the target
+     system, so one of them must change, and no `rank` says which. Ask
+     which states what will be built, naming both; an answer for the SRD's
+     side is a confirmed fact for `srd:kb`, which rewrites the section at
+     once; one for the KB's side is the author's SRD fix.
+   - Before raising any "is this defined or documented?" question, look it up
+     first: `search` the corpus, then `get_doc` the promising hit. Ask only when
+     it genuinely is not there or what you found is partial, and then say what
+     you found and what it fails to cover; a competent engineer does not ask
+     what they could have looked up. When the lookup answers a question, one
+     already in the file included, drop it and tell the user in one line, naming
+     the document that answers it by its title or path, never by its role. When
+     the lookup shows the docs themselves at fault, also hand the gap to
+     `srd:report-doc-gap`.
+   - A review finding the lookup disproves — the term the corpus does define,
+     the claim the docs confirm — is not a question and is not dropped either,
+     also when it was already a question that this run drops: the one-line
+     notice explains the drop, and the report after writing the file still
+     retires the finding. This skill cannot write `<srd>.review.md`, and only
+     `srd:review`'s `check` mode withdraws, so name the numbers in the report
+     after writing the file with what disproved each and the command that
+     retires them: `srd:review <srd> check #4,7`. Left unsaid, the finding stays
+     open and the next run raises it again.
+   - Stale citation: when a knowledge-base page cites a document that matches
+     no `list_docs` `id` or `path`, raise it as a question too and hand the
+     repair to `srd:kb` — a citation repair, not a doc gap; only a fact the
+     vanished page carried that no document now states goes to
+     `srd:report-doc-gap`. Match the way the corpus reference says: a citation
+     written as a checkout path matches nothing literally, and comparing the
+     raw strings condemns every live source on the page.
+4. Write the working file `<srd>.questions.md` (open questions only), per
+   [Questions file](#questions-file).
+5. Walk one question at a time (see [Walk](#walk)), ordered: was-blocker
+   first, then system-confrontation and was-major questions, then was-minor
+   last; a question another one settles goes right after it. No severity tags
+   or rule ids ever appear — priority is felt through order.
+
+Report tersely: no preamble or narration; state each fact once; don't restate
+output the user can already see. A short pointer ("wrote `<srd>.questions.md`, N
+open questions") is enough — do not re-list the questions you just wrote. The
+start clause, any draft note, any dropped-question line, and any
+disproved-finding line go with that pointer, before it; nothing sits between the
+pointer and the first question.
+
+Every count you report — questions written, findings the review layer holds,
+what remains open — is read back off the file, never carried in your head from
+writing it. Two files are in play here and they count different things, which
+is exactly how a question total gets reported as a finding total.
+
+## Walk
+
+Go through the questions file **one item at a time**. Never batch. For each
+question, the interaction ends in one of:
+
+- Answer: the user answers. Restate the resolution in a line, folding any
+  durable platform fact it carries into the restatement, so confirming it
+  confirms both. Then remove the item from the questions file and hand the fact
+  to `srd:kb`, which writes it to the inbox silently — never a separate "bank
+  this?" prompt (see [Platform knowledge](#platform-knowledge)).
+
+  An answer that is about this SRD rather than the platform has nowhere to go:
+  `srd:kb` takes platform facts only, this skill does not edit the SRD, and
+  removing the item drops the decision. Keep those: collect each one as
+  `<requirement id> — <the decision, in the user's terms>` and close the run by
+  listing them as edits for `srd:edit` to apply. The question leaves the file
+  because it is answered; the answer leaves the session in that list, not in
+  the transcript.
+- More context: the user explains. Restate the same way; the question may stay
+  open, get refined, or resolve.
+- Not now: a platform question the user defers, or does not know — then
+  [Who would know](../create/references/doc-corpus.md#who-would-know) first
+  — stays in the file and goes to `srd:report-doc-gap` at once, which
+  captures it as a draft gap with `answer: deferred` or `answer: unknown`
+  without asking the user; the drafts are offered together when the walk ends
+  — the file empties with the SRD, the gap outlives it. A question about this
+  SRD that the user defers stays an open `Qn`; it is never a doc gap.
+- Collaborate: together add, split, or refine questions in the file.
+
+Confirm each change to the questions file as you make it, one at a time. The
+file shrinks toward empty as the SRD becomes clear; the user can stop anytime
+and resume later.
+
+**Stay on the current question until the user says to move on.** Do not advance
+on your own — the user may want several edits to the same item first. An answer
+that resolves the question is no exception: report the outcome and stop; put the
+next question only once the user says to move on. With none left to walk — each
+answered (the last answer included: report its outcome and close in the same
+message), or deferred and still open — the walk has ended: close it at once.
+When the walk ends — no questions remain to walk, or the user stops — invoke
+`srd:report-doc-gap` to offer the drafts this run captured, if any — the review
+layer's and the walk's together. A deferred or unknown question stays an open
+`Qn` in the file: handing it to `srd:report-doc-gap` does not answer it. Only
+with no `Qn` left and no decision waiting for `srd:edit` is the SRD build-ready
+from the implementer's view. No `Qn` left but decisions waiting: report it
+build-ready once `srd:edit` applies those N decisions. Otherwise report it not
+build-ready, naming the open count.
+
+Close the walk by naming each delegate that ran and what it took, in exactly
+this form — `srd:kb: 2 facts`, `srd:report-doc-gap: 1 gap offered`, never
+reworded (`srd:kb banked 2 facts`) — and leave out the one that took nothing.
+`srd:review` is not named here: it is the review layer, and its findings already
+appear as questions. A file a delegate wrote and a file this skill wrote look
+identical afterwards; this line is the only thing that tells them apart.
+
+## Re-run after an SRD edit
+
+Re-running `/questions path/to/srd.md` when `<srd>.questions.md` already
+exists is **resume mode** — including when that file holds `No open questions.`
+and no `Qn`, which says the last walk cleared it. An absent file is the other
+state, "never checked", and takes the full flow. Step 1 of review still runs;
+then:
+
+1. Refresh the review layer: run `srd:review path/to/srd.md` in default mode —
+   it re-verifies and resolves what the edit fixed, appends what the edit
+   broke, keeps every number, and bumps `updated:`, without rewriting the file.
+   Not `check`: that mode re-verifies only and hunts no new defects, so an edit
+   that introduced a fresh blocker would reach no question at all.
+2. Re-check each open question against the current SRD and the corpus; drop
+   the ones the edit or a lookup answered, without asking them, and tell the
+   user which: for an edit, the SRD entry (its id) that now answers it; for a
+   lookup, the document (title or path) — "the glossary" or "the docs" names
+   none. Report these drops; they need no confirmation.
+3. Re-run system confrontation on the new text for fresh contradictions or gaps.
+4. Walk the refreshed open set.
+
+## learn
+
+`/questions learn` banks what the **current session** taught about the
+platform — no SRD, no walk. Use it when a conversation that was not SRD work
+(a debugging session, a design discussion, a call you are recounting) surfaced
+durable facts, before they scroll away.
+
+1. Scan this session for durable, reusable platform facts: general facts about
+   the system the user stated or confirmed, not ones specific to an SRD,
+   ticket, or review, and never something the agent inferred. Restatements of
+   an SRD in play do not qualify.
+2. Restate the candidates once, as one list; the user's confirmation is the
+   gate, and a correction corrects the list.
+3. Hand the confirmed facts to `srd:kb`; coverage checks against the corpus,
+   dedup, and the writing are its job, not this skill's.
+
+Report tersely, once: what `srd:kb` banked and what it dropped as already
+covered, named as its work (`srd:kb: 1 fact`) as the walk's close names it.
+
+## Questions file
+
+```
+# SRD Questions — <Document Title>
+
+Source: `path/to/srd.md`
+
+Open questions only. Resolved items are removed; durable facts are banked.
+
+**Q1** <problem in a sentence, then the one thing to decide — colleague voice>
+
+**Q2** <...>
+<!-- review: #4 -->
+```
+
+The HTML comment on the line below a question is this file's whole
+bookkeeping: the review findings the question was reframed from or merged with,
+comma-separated. It renders as nothing, which is what keeps finding numbers out
+of the question's own text. A question no review finding stands behind carries
+no comment.
+
+- One focused ask per question: if a requirement raises two concerns, write
+  two questions.
+- Problem only: say what is missing, ambiguous, or contradictory. Do not
+  propose the fix or write before/after rewrites.
+- Collaborative voice: "What do we want to…", "should we…", "where should
+  this live…" — frame decisions as shared, not as an interrogation.
+- Ask directly: no meta phrasing ("what did the author intend").
+- Reference the SRD's requirement ids inline (GR-4, SEC-9…) so the question
+  is actionable; keep the sentence human.
+- No tags: no severity, no rule ids, no `[type]` brackets — those guide your
+  analysis and the walk order, never the file.
+- Questions are not list items: each begins with its bold `Qn` id, separated by
+  one blank line.
+- Emptied, the file stays. Drop every `Qn`, keep the title,
+  `Source:` line and the standing note, and write `No open questions.` where
+  the questions were. A deleted file cannot be told from one nobody ever wrote,
+  and "never checked" and "all answered" are opposite states.
+- Ids are assigned in walk order the first time a question appears and never
+  change after: a survivor keeps its number, and a question added on a re-run
+  takes the next unused one. The file is therefore ordered by walk priority
+  while the ids run out of sequence — that is correct, because a `Qn` the user
+  answered yesterday must still mean the same question today. Never renumber to
+  tidy the sequence.
+
+Good:
+
+  **Q3** SEC-1c says to enforce timeouts but gives no numbers and no place they
+  live. What values are we going with, and where do they sit? QA can't test it.
+
+Bad:
+
+  - [testability] §SEC-1c — "enforce timeout policies" is not measurable.
+
+## Platform knowledge
+
+This skill reads platform knowledge and stores none: a durable, reusable
+platform fact the walk or `learn` confirms goes to `srd:kb`, the knowledge
+base's single owner, and confirmation rides on this skill's own restatement
+(see [Walk](#walk)) — never on a prompt of its own.
+
+Old pattern: a `memory.md` under a per-machine skill-data directory is the
+leftover of a retired store. Its tribal facts belong in the knowledge base
+through `srd:kb`; its documented facts are served live by the corpus.
+
+## Self-learning
+
+Obey this skill's lessons: every run, read with the file-read tool (never a
+shell), in parallel, the sibling `${CLAUDE_SKILL_DIR}/LESSONS.md` and the
+fallback `~/.agent-data/ctx42-skills/lessons/srd/questions.md` (pass `~` as is,
+the file tools expand it; no environment probe; `$AGENT_DATA_DIR` replaces
+`~/.agent-data` only when you are told it is set). The sibling wins a conflict;
+the fallback, which a read-only install writes, still counts once the checkout
+is writable; this block never moves or merges lessons. A missing file needs no
+comment. On a correction or self-caught mistake, append a one-line rule —
+general, naming nothing from the project at hand (its files, tests, tickets) —
+to the sibling when this directory is writable (creating it even when only the
+fallback holds lessons so far; both stay read), else to the fallback, creating
+it, and report where. A lesson write is not a project write: a read-only or
+no-change run still makes it.

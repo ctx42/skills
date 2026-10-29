@@ -1,0 +1,81 @@
+{
+  "skill_name": "audit",
+  "probes": [
+    {
+      "id": "style-worker",
+      "rule": "no-style-dimension",
+      "bullets": [
+        "module-audit-merges-every-dimension#b2"
+      ],
+      "prompt": "Situation: /audit ./pkg/foo with no controls; the package is small and every dimension runs.\n\nQuestion: how many workers do you dispatch for `go:style` on its own? Answer on the first line with the integer only, then one sentence why.",
+      "pass": "^\\W*0\\b",
+      "fail": "^\\W*[1-9]",
+      "class": "redundant"
+    },
+    {
+      "id": "empty-target-scope",
+      "rule": "diff-default",
+      "prompt": "Situation: /audit with no arguments in a module of 9 packages; the working diff touches only `./pkg/parse`.\n\nQuestion: which packages do the `review`, `cover`, and `doc` workers cover? Answer on the first line with exactly one of: DIFF, MODULE. Then one sentence why.",
+      "pass": "^\\W*DIFF\\b",
+      "fail": "^\\W*MODULE\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "default-libs",
+      "rule": "default-libraries",
+      "bullets": [
+        "restricted-dimensions-no-editable-library#b2"
+      ],
+      "prompt": "Situation: /audit all with no `libs=`. The module imports `github.com/acme/mustx` through `replace github.com/acme/mustx => ../mustx`, its own package `internal/util` from every other package, and `gopkg.in/yaml.v3` as an ordinary dependency.\n\nQuestion: which of them do you reshape? Answer on the first line with the comma-separated short names only (mustx, util, yaml), then one sentence why.",
+      "pass": "^\\W*mustx\\W*$|^\\W*mustx\\W*\\n",
+      "fail": "^[^\\n]*(util|yaml)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "untested-func-grade",
+      "rule": "gap-grades",
+      "bullets": [
+        "overlapping-findings-merge-once#b4"
+      ],
+      "prompt": "Situation: the `cover` worker reports that exported `Parse` has no direct tests at all, including its error path for a malformed header.\n\nQuestion: what grade does that finding get? Answer on the first line with exactly one of BLOCKER, SHOULD-FIX, NIT, then one sentence why.",
+      "pass": "^\\W*SHOULD-FIX",
+      "fail": "^\\W*(BLOCKER|NIT)",
+      "class": "redundant"
+    },
+    {
+      "id": "missing-fact-grade",
+      "rule": "gap-grades",
+      "prompt": "Situation: the `doc` worker reports checklist item 4 (missing fact: the godoc of exported `Load` does not say which errors it returns).\n\nQuestion: what grade does that finding get? Answer on the first line with exactly one of BLOCKER, SHOULD-FIX, NIT, then one sentence why.",
+      "pass": "^\\W*NIT\\b",
+      "fail": "^\\W*(BLOCKER|SHOULD-FIX)",
+      "class": "redundant"
+    },
+    {
+      "id": "nit-before-gap",
+      "rule": "fix-order",
+      "bullets": [
+        "module-audit-merges-every-dimension#b6"
+      ],
+      "prompt": "Situation: the report has two findings on `./pkg/a`: a Should-fix `cover` gap on `Load`, and a style Nit on `Load`'s receiver name.\n\nQuestion: in the Fix order, which command comes first? Answer on the first line with exactly one of STYLE, COVER, then one sentence why.",
+      "pass": "^\\W*STYLE\\b",
+      "fail": "^\\W*COVER\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "dedupe-owner-grade",
+      "rule": "dedupe",
+      "prompt": "Situation: `/go:audit all`. On `Parse` in `pkg/conf/parse.go` the `review` worker reports \"reachable error branch with no test\" as Should-fix. The `cover` worker reports the same function: the branch's statement lines are uncovered, which the audit's `cover` grades call a Nit.\n\nQuestion: what grade does the merged finding carry? Answer on the first line with exactly one of: SHOULD-FIX, NIT. Then one sentence why.",
+      "pass": "^\\W*NIT\\b",
+      "fail": "^\\W*SHOULD-FIX\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "libs-path",
+      "rule": "default-libraries",
+      "prompt": "Situation: `/go:audit all libs=../mustx`. `../mustx/go.mod` says `module github.com/acme/mustx`; the project's `go.mod` has `replace github.com/acme/mustx => ../mustx` and its packages import it.\n\nQuestion: what does the reshape dimension do with `libs=../mustx`? Answer on the first line with exactly one of: RESHAPE-MUSTX, SAY-NOT-RECOGNIZED, ASK. Then one sentence why.",
+      "pass": "^\\W*RESHAPE-MUSTX\\b",
+      "fail": "^\\W*(SAY-NOT-RECOGNIZED|ASK)\\b",
+      "class": "redundant"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: doc-edit--resolves-a-gap-in-the-edited-document
+context:
+  scaffold_script: scaffold.sh
