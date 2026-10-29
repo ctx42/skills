@@ -1,1 +1,0 @@
-- Run a new test's per-file checks (line width included) before proving it red; the commit gate is too late to catch its layout.
