@@ -75,9 +75,9 @@ Commit control:
      checks already passed. Merge two groups only when each needs the other.
      With nothing to compile, group by meaning alone.
   4. Empty the index (`git reset -q`; `git rm -r -q --cached .` before the
-     first commit), then per group stage, check, and commit in one command;
-     a part of a file is staged in its own command just before. Stage whole
-     files with `git add -- <paths>`; part of a file with
+     first commit), then per group, a lone group included, stage, check, and
+     commit in one command; a part of a file is staged in its own command just
+     before. Stage whole files with `git add -- <paths>`; part of a file with
      `printf 'y\nn\n' | git add -p -- <path>`, one answer per hunk
      `git diff -- <path> | grep '^@@'` lists, in order — counted, never guessed
      from the edits, since nearby edits share a hunk — or, when two concerns
@@ -94,7 +94,8 @@ Commit control:
   5. When a commit fails (a hook rejects it), stop: keep the landed commits,
      leave the failed group staged and the rest unstaged, and report the
      error, the landed commits, and what remains.
-  6. After the last commit, `git status --porcelain` is empty.
+  6. After the last commit, a lone one included, `git status --porcelain`
+     is empty.
 - `asis` stages everything as `apply` step 1 does and commits it as one
   commit, without asking and without asking to split it. It takes no
   commit-ish: given one, say `asis` takes no commit, commit nothing, and stop.
@@ -148,15 +149,15 @@ Commit control:
 
 1. Pick the diff source and verbosity from Input and Arguments.
 2. Draft the message per the sections below.
-3. Check each message before presenting it and before its commit runs:
-   summary ≤ 72 chars, body wrapped at 72 (measured, not eyeballed: counted
-   in characters, not bytes, by a command run before the commit command, the
-   body fed to it inline by `printf`, never a second heredoc), every sentence
-   parsing on one read — no dangling opener, no clause stranded on a
-   preposition — and passing Describe changes only, its numbers and any
-   contrast with a design the diff does not contain ("instead of …")
-   included; no process jargon, no trailer beyond the two allowed. Fix and
-   re-check.
+3. Check each message, every one of an `apply` series and not only the first,
+   before presenting it and before its commit runs: summary ≤ 72 chars, body
+   wrapped at 72 (measured, not eyeballed: counted in characters, not bytes, by
+   a command run before the commit command, the body fed to it inline by
+   `printf`, never a second heredoc), every sentence parsing on one read — no
+   dangling opener, no clause stranded on a preposition — and passing Describe
+   changes only, its numbers and any contrast with a design the diff does not
+   contain ("instead of …") included; no process jargon, no trailer beyond the
+   two allowed. Fix and re-check.
 4. Present it per Output; commit only under `apply` or `asis`.
 
 ## Describe changes only

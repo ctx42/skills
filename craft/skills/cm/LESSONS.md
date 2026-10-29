@@ -1,1 +1,0 @@
-- Measure every message of an `apply` series before its own commit command, not only the first: a later commit run without its width check is the miss.
