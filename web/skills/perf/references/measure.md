@@ -7,6 +7,7 @@ build goes to the run's scratch directory, never into the tree.
 
 - [Setup](#setup)
 - [Survey](#survey)
+- [Exploring](#exploring)
 - [Interactions and long tasks](#interactions-and-long-tasks)
 - [Layout shift](#layout-shift)
 - [Leaks](#leaks)
@@ -59,6 +60,12 @@ only picks what to measure: no finding, rank, or keep decision rests on its
 numbers, so confirm each finding, and take every before and after series, trace,
 and visible-change check, through the MCP.
 
+## Exploring
+
+Play with each view the way a user reads it: navigate, sort, filter, page,
+search, expand, scroll long lists, open and close dialogs without submitting.
+SKILL.md section 2 sets which views and which flows may write.
+
 ## Interactions and long tasks
 
 Drive each interaction with the input tools (`click`, `fill`, `press_key`),
@@ -80,6 +87,15 @@ network to go quiet, read `cls`. The trace's `CLSCulprits` insight names the
 shifting element.
 
 ## Leaks
+
+Read before the first leak cycle (SKILL.md section 2). Heap snapshots run at
+`cpuThrottlingRate: 1`, since heap size does not depend on CPU speed and a
+throttled snapshot can time out; a leak's measure names them unthrottled.
+Growth of 50 KB or less per cycle is the browser's own bookkeeping, and a heap
+that levels off is no leak. A heap snapshot then names what is retained
+(detached nodes, listeners, timers). A leak is measured by one series of 5
+cycles, before and after, taken the same way both times; a leak fix is kept
+when the after series is no longer a leak.
 
 Per view: load it, then 5 times navigate to another view and back by the
 app's own navigation. After the first visit and after each return,

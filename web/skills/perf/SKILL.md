@@ -59,17 +59,11 @@ the run stops, editing and committing nothing:
    scripts the app serves, beside a manifest or dev config (`package.json`, a
    framework or bundler config, a `Makefile` target that serves it).
 2. A dev server is reachable. Never start one, even when the config says how.
-   Take candidate URLs from the dev config (a script's `--port`,
-   `server.port`, `.env` `PORT`, compose ports, the framework's default),
-   cross-check them with the listening ports (`ss -ltnp`), and probe each with
-   `curl -sS -o /dev/null -w '%{http_code}'`. Nothing listening: stop. One
-   match: that URL. Several, or ports listening but none matching the config:
-   ask which URL in the step 9 message, not before it.
-3. Chrome DevTools MCP is available (`new_page`, `emulate`, `click`,
-   `evaluate_script`, `list_network_requests`, `take_heapsnapshot`) and its
-   window is visible: open the URL with `new_page`; a `navigator.userAgent`
-   containing `HeadlessChrome` means headless — say to restart the MCP server
-   without `--headless`.
+   Find its URL as [references/start.md](references/start.md#dev-server) says
+   (read it before this step); nothing listening: stop.
+3. Chrome DevTools MCP is available and its window is visible, checked as
+   [references/start.md](references/start.md#chrome) says; a `HeadlessChrome`
+   user agent means headless.
 4. The craft plugin is installed: `craft:cm` is in your skill list.
 
 Then:
@@ -78,94 +72,80 @@ Then:
    (`git status --porcelain`). Make a scratch directory outside the repo
    (`mktemp -d`); every build, trace, snapshot, and capture of the run goes
    there, never into the tree.
-6. Back end: the server answering the app's API (the dev config's proxy
-   target, or the origin of the API requests the page makes), if its source is
-   in this repo. Back-end edits are on only when its dev setup live-reloads
-   (air, nodemon, `node --watch`, `tsx watch`, `uvicorn --reload`, a file
-   watcher wrapping the server); otherwise every back-end idea goes to
-   Recommendations.
-7. Build: the repo's build command (a `package.json` `build` script, a
-   `Makefile` target). It runs only with its output pointed at the scratch
-   directory (`vite build --outDir <scratch>/build`, the bundler's equivalent
-   flag) — a plain build empties the project's output directory, deleting
-   tracked files and replacing what a server may embed. No build command, or no
-   way to redirect its output: skip bundle and leak findings and say so under
-   Not measured.
-8. Find the project's checks as `craft:fix-all` finds them — `AGENTS.md`,
-   `CLAUDE.md`, `CONTRIBUTING.md`, a `Makefile`, the package manifest: build,
-   test, lint, format, e2e included. The targeted checks are the static ones
-   (lint, format, typecheck, vet), each by its own command, even inside a
-   combined target, plus the tests covering the files a change touches
-   (`vitest related --run <files>`, `go test <their packages>`); the full checks
-   are all of them. Run the full checks once on the untouched tree. A check
-   already red there is known: name it in the message below and save its failing
-   test names. A known test check stays in every gate, passing while every test
-   it fails also failed at the start, never judged by its failure count; any
-   other known check stays out of every gate (run the others by name) and never
-   blocks a commit.
-9. Send one message and wait: the detected URL, open in the Chrome window,
-   whether back-end edits are on or off and why, and a request to log in there
-   if the app needs it, then reply (or give the right URL). An app with no
-   login proceeds on the reply. The start asks nothing else.
+6. Back end: the server answering the app's API
+   ([references/start.md](references/start.md#back-end)), if its source is in
+   this repo. Back-end edits are on only when its dev setup live-reloads;
+   otherwise every back-end idea goes to Recommendations.
+7. Build: the repo's build command
+   ([references/start.md](references/start.md#build)). It runs only with its
+   output pointed at the scratch directory. No build command, or no way to
+   redirect its output: skip bundle and leak findings and say so under Not
+   measured.
+8. Find the project's checks as
+   [references/start.md](references/start.md#checks) says. The targeted checks
+   are the static ones plus the tests covering the files a change touches; the
+   full checks are all of them. Run the full checks once on the untouched tree;
+   a check already red there is known, gated as that section says.
+9. Send one message and wait, as
+   [references/start.md](references/start.md#message) says. The start asks
+   nothing else.
 
 ## 2. Measure
 
-Every measurement runs under `emulate` with `cpuThrottlingRate: 4` — each
-`emulate` call replaces all settings, so pass it every time — and no network
-throttling, except heap snapshots: those run at `cpuThrottlingRate: 1`, since
-heap size does not depend on CPU speed and a throttled snapshot can time out;
-a leak's measure names them unthrottled. Interactions, a view's load (its
-long tasks and layout shift), and API calls are measured on the dev server;
-bundle size only from the scratch build, never from the dev server. How to
-take each number: [references/measure.md](references/measure.md).
+Every measurement runs under `emulate` with `cpuThrottlingRate: 4`, passed
+every time ([references/measure.md](references/measure.md#setup)), and no
+network throttling, except heap snapshots: those run at
+`cpuThrottlingRate: 1` ([references/measure.md](references/measure.md#leaks)).
+Interactions, a view's load (its long tasks and layout shift), and API calls
+are measured on the dev server; bundle size only from the scratch build, never
+from the dev server. How to take each number:
+[references/measure.md](references/measure.md).
 
 Scope: with no focus, every page reachable from the app's navigation (its
 shared header, sidebar, menus, and footer); with a focus, only the views that
-show the focused part. Play with each view the way a user reads it: navigate,
-sort, filter, page, search, expand, scroll long lists, open and close dialogs
-without submitting. Never click logout, nor trigger a write — a POST, PUT,
-PATCH, or DELETE — unless the focus names that flow. Watch the network log
-after every action; a write seen outside a named flow means that control is
-never used again this run and goes under Not measured.
+show the focused part. Play with each view the way a user reads it
+([references/measure.md](references/measure.md#exploring)). Never click
+logout, nor trigger a write — a POST, PUT, PATCH, or DELETE — unless the focus
+names that flow. Watch the network log after every action; a write seen outside
+a named flow means that control is never used again this run and goes under
+Not measured.
 
 Findings — a timed one exists only while past its threshold:
 
 - Slow interaction: INP over 200 ms.
 - Long task: over 50 ms during an interaction or a view's load.
 - Layout shift: CLS over 0.1.
-- Leak: a view whose heap size in bytes, compiled code aside
-  ([references/measure.md](references/measure.md#leaks)), after a forced GC,
-  grows by more than 50 KB on every one of 5 navigate-away-and-back cycles;
-  smaller growth is the browser's own bookkeeping, and a heap that levels off is
-  no leak. A heap snapshot then names what is retained (detached nodes,
-  listeners, timers).
+- Leak: a view whose heap size in bytes, compiled code aside, after a forced
+  GC, grows by more than 50 KB on every one of 5 navigate-away-and-back cycles;
+  read [references/measure.md](references/measure.md#leaks) before the first
+  cycle.
 
 A counted one is a finding at every instance:
 
-- A duplicate request: the same method and URL twice in one view's load.
-- Sequential independent calls: one starts after another ends though it needs
-  nothing from that response.
-- A route or library in the first-load bundle that could load lazily.
-- A library imported whole when it offers per-function entry points.
+- A duplicate request or sequential independent calls
+  ([references/measure.md](references/measure.md#network)).
+- A route or library in the first-load bundle that could load lazily, or a
+  library imported whole
+  ([references/measure.md](references/measure.md#bundle)).
 
 Noise: a timed metric is measured 5 times and its median used; a counted one
 once. A change is kept only when its after median beats the before median by
 more than the spread (max − min) of the 5 before runs; for a counted metric any
-reduction counts. A leak is measured by one series of 5 cycles, before and
-after, taken the same way both times; a leak fix is kept when the after series
-is no longer a leak. A change with a benchmark is also kept by the keep rule
-in [references/benchmarks.md](references/benchmarks.md). A change with no
-gain beyond that is discarded and listed under Dropped, "no measurable gain" —
+reduction counts. A leak fix is kept by the leak rule in
+[references/measure.md](references/measure.md#leaks). A change with a
+benchmark is also kept by the keep rule in
+[references/benchmarks.md](references/benchmarks.md). A change with no gain
+beyond that is discarded and listed under Dropped, "no measurable gain" —
 a focus instruction included.
 
 Before choosing a change, search the source for `PERF:` comments
 (`grep -rn 'PERF:'`, skipping dependency and build dirs). A `PERF:` comment is
 the only binding previous decision: it states what never to do at the code it
 sits on. Never act against one unless the focus asks for what it forbids
-(section 4); a finding it
-forbids goes to Recommendations, citing the comment. Test assertions and
-earlier commits do not bind. A `UX:` comment governs what users see, which no
-commit here changes, so it never blocks a fix (section 11 flags it).
+(section 4); a finding it forbids goes to Recommendations, citing the
+comment. Test assertions and earlier commits do not bind. A `UX:` comment
+governs what users see, which no commit here changes, so it never blocks a fix
+(section 11 flags it).
 
 Rank, top first:
 
@@ -231,9 +211,9 @@ commit; unrelated changes never share a commit. Per change:
    to Recommendations, naming the file — a focus instruction included).
 2. Before any edit, take the 5 before measurements of the finding's metric and
    the visible-change check's two before captures of each view the change will
-   touch. A focus-named visible change also prepares its pictures per
-   [references/focus-pictures.md](references/focus-pictures.md); no other
-   change writes into `dev/perf/`.
+   touch. A focus-named visible change skips that check (step 6) and takes
+   pictures as [references/focus-pictures.md](references/focus-pictures.md)
+   says.
 3. Make the smallest change that fixes the finding, with its tests and any
    benchmark (section 5).
 4. Run the targeted checks right after the edit, on exit status, never on
@@ -246,121 +226,49 @@ commit; unrelated changes never share a commit. Per change:
    files, delete its new files) and list it under Dropped, "no measurable
    gain".
 6. Run the visible-change check; a mismatch discards the change and lists the
-   idea under Recommendations as a visible change. A focus-named visible
-   change skips it and shoots its pictures instead.
+   idea under Recommendations as a visible change.
 7. Interactive: stop (section 8). `auto`: commit.
-8. Commit: unstage everything (`git restore --staged .`), stage the change's
-   files and pictures by path (`git add -f -- <paths>`, so an ignored `dev/`
-   still ships them), `git rm -q --` every tracked `dev/perf/*.png` this commit
-   did not write, and write the message (section 7). Then, in one command,
-   re-run the targeted checks, each gated on exit status
-   (`<check> ><scratch>/out 2>&1 || exit 1`), a known test check on its failing
-   test names instead (section 1, step 8), compare
-   `git diff --cached --name-only` with that list, and `git commit -F -`. A red
-   re-run commits nothing and returns to step 4, one repair per change in all.
+8. Commit as
+   [references/commit-message.md](references/commit-message.md#committing)
+   says: stage by path, then in one command re-run the targeted checks, each
+   gated on exit status, and commit. A red re-run commits nothing and returns
+   to step 4, one repair per change in all.
 
 ## 7. Commit message
 
-Invoke `craft:cm` at `mini` on the staged diff for the summary and body. After
-its body, before any footer it wrote, append the fields wrapped at 72 columns,
-continuation lines indented two spaces, as the example in
-[references/commit-message.md](references/commit-message.md) shows (read it
-before the first commit):
-
-`Perf-Finding:` the metric, its threshold, and where it breaks; `Perf-Change:`
-what changed; `Perf-Measure:` before -> after with the method, and any
-benchmark's; `Perf-Pictures:` each pair's view and state, numbered as the files,
-only on a commit carrying pictures. A `docs(perf): never …` commit carries
-`Perf-Finding:` alone. Never add a trailer beyond what `cm` allows.
+Invoke `craft:cm` at `mini` on the staged diff for the summary and body, then
+append the `Perf-` fields as
+[references/commit-message.md](references/commit-message.md) says; read it
+before the first commit. Never add a trailer beyond what `cm` allows.
 
 ## 8. Interactive stops
 
 Without `auto`, stop once per change, after building, measuring, and checking
-it. A change with no gain beyond the noise never reaches a stop; it is dropped.
-
-```
-Change 2 — Devices: search input runs a 180 ms long task per keystroke
-Change: dedupe tags with a Set instead of a nested scan
-Measure: long task 180 -> 30 ms, median of 5 at 4x CPU; bench 9.1 -> 0.4 ms/op
-Checks: pass (targeted)
-Reply: commit · drop · or say what to change
-```
-
-- `commit`: commit it (section 6, step 8). While a targeted check is red, say
-  so and stop again instead.
-- `drop`: restore the tree as it was before the change, pictures included;
-  its finding is not taken up again this run, by that change, part of it, or
-  any other fix; a user wanting a different fix replies with a prompt, not
-  `drop`. Drops are remembered for the current run only.
-- Anything else is a prompt: rework the change, re-measure, re-run the
-  visible-change check and the targeted checks (a repair already spent is
-  not renewed), and stop again, with no commit in between.
-- A reply saying "never …" also writes a `PERF: never …` comment, in the file's
-  comment syntax, at the code concerned: into that change's commit, or on a
-  drop into its own commit adding that comment alone — summary
-  `docs(perf): never <x>`, no body, `Perf-Finding:` only. That commit counts
-  toward `max` like any other; without `loop`, the drop still ends the run.
-- A reply asking to stop ends the loop: restore the tree as `drop` does, not
-  counted as a drop.
+it; read [references/stops.md](references/stops.md) before the first stop: the
+stop message and its replies (`commit`, `drop`, a prompt, "never …", stop).
 
 ## 9. Loop and stop rule
 
-With `loop`, after each commit or drop, re-measure the views the change touched
-and take the next finding. Stop when no remaining finding past its threshold,
-or counted, is one the run may fix — counting only findings not dropped, not
-forbidden, and not blocked by sections 3 to 5 or a dirty file — or when the run
-has made `max` change commits. No cap by default. Before stopping on the stop
-rule, measure the whole scope once more: a fix can move cost elsewhere, and a
-new finding there continues the loop. Without `loop`, stop after one change,
-committed, dropped, or discarded. Every stop runs the final check
-(section 10), whose repair or revert still commits, then reports.
-Once stopped, list every finding left under Recommendations, whatever kept the
-run from it; ideas dropped or discarded this run go under Dropped.
+With `loop`, go on after each commit or drop as
+[references/loop.md](references/loop.md) says (read it then), until nothing
+the run may fix is left or `max` change commits are made. Without `loop`, stop
+after one change, committed, dropped, or discarded. Every stop runs the final
+check (section 10), whose repair or revert still commits, then reports.
 
 ## 10. Final check
 
-After the last change, run the full checks on exit status, a known test check
-gated on its failing test names and any other known red check left out (section
-1, step 8); skip this when the run committed no code (a `docs(perf): never`
-commit alone is none). A check red that was green at the start is bisected to
-its commit, repaired once keeping the gain, else reverted, as
-[references/final-check.md](references/final-check.md) says.
+After the last change, run the full checks as
+[references/final-check.md](references/final-check.md) says; skip this when
+the run committed no code (a `docs(perf): never` commit alone is none). A check
+red that was green at the start is bisected to its commit, repaired once
+keeping the gain, else reverted.
 
 ## 11. Report
 
 Read every count and hash off `git log <start>..HEAD`, never from memory.
-Interactive runs end with the same report.
-
-```
-2 commits, 1 dropped; stopped: stop rule
-Checks: pass
-
-| Commit  | Summary                                       | Before -> After   |
-|---------|-----------------------------------------------|-------------------|
-| a1b2c3d | perf(devices): insert the device rows at once | INP 610 -> 140 ms |
-
-Dropped
-- Settings: memoize the form — no measurable gain
-
-Recommendations
-- External API: the asset service has no batch lookup; one call per device
-- Back end without live reload: merge /api/devices and /api/device-status
-- Visible change: virtualize the 2000-row device list (long task 120 ms)
-
-Not measured
-- Bundle: no build command
-- Settings save: a write flow, not in the focus
-```
-
-`N` counts the commits `git log <start>..HEAD` lists, the final check's included
-(Before -> After `—`); `M` counts drops, discarded failures, and reverted
-changes. The checks line is `Checks: pass` (known red checks aside),
-`Checks: red — <check>`, or `Checks: none` when the final check was skipped. The
-reason is `stop rule`, `max reached`, `single run`, or `user`. Recommendations
-group under: External API, Own API outside the merge rule, Back end without live
-reload, Visible change, Code quality (naming the rule a gain would break); one
-that contradicts a `UX:` comment names that comment's location. Size each table
-column from its longest cell before writing the table. Omit an empty section.
+Interactive runs end with the same report. Read
+[references/end-of-run.md](references/end-of-run.md) before writing it; every
+finding left goes under Recommendations.
 
 ## Self-learning
 

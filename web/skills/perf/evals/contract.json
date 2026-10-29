@@ -197,7 +197,14 @@
       "must": [
         "the full checks wait for the final check",
         "plus the tests covering the files a change\\s+touches",
-        "bisected to its commit, repaired once\\s+keeping the gain, else reverted",
+        "bisected to its commit, repaired once\\s+keeping the gain, else reverted"
+      ]
+    },
+    {
+      "id": "final-check-line",
+      "rule": "The report states the final check result on its checks line",
+      "file": "references/end-of-run.md",
+      "must": [
         "Checks: pass"
       ]
     },
@@ -223,12 +230,19 @@
     },
     {
       "id": "commit-fields",
-      "rule": "cm at mini plus Perf fields at 72 columns; pictures only when carried; no extra trailer",
+      "rule": "cm at mini plus the Perf fields; no extra trailer",
       "must": [
         "Invoke `craft:cm` at `mini`",
-        "only on a commit carrying\\s+pictures",
-        "carries `Perf-Finding:` alone",
         "Never\\s+add a trailer beyond what `cm` allows"
+      ]
+    },
+    {
+      "id": "commit-fields-ref",
+      "rule": "Perf fields at 72 columns; pictures only when carried; a never commit carries the finding alone",
+      "file": "references/commit-message.md",
+      "must": [
+        "only on a commit carrying\\s+pictures",
+        "carries `Perf-Finding:` alone"
       ]
     },
     {
@@ -239,7 +253,8 @@
         "its finding is not taken up again this run",
         "with no commit in\\s+between",
         "`docs\\(perf\\): never <x>`"
-      ]
+      ],
+      "file": "references/stops.md"
     },
     {
       "id": "stop-rule",
@@ -248,13 +263,21 @@
         "No cap by default",
         "has made `max` change commits",
         "measure the whole scope once more"
-      ]
+      ],
+      "file": "references/loop.md"
     },
     {
       "id": "report",
-      "rule": "Report opens with counts and stop reason read off git log",
+      "rule": "Report opens with counts and stop reason",
       "must": [
-        "2 commits, 1 dropped; stopped: stop rule",
+        "2 commits, 1 dropped; stopped: stop rule"
+      ],
+      "file": "references/end-of-run.md"
+    },
+    {
+      "id": "report-from-git-log",
+      "rule": "Every count and hash in the report is read off git log",
+      "must": [
         "Read every count and hash off `git log"
       ]
     },
@@ -278,7 +301,8 @@
       "rule": "A leak's before and after series are taken the same way",
       "must": [
         "after, taken the same way both times"
-      ]
+      ],
+      "file": "references/measure.md"
     },
     {
       "id": "known-red-by-names",
@@ -286,7 +310,8 @@
       "must": [
         "A\\s+known test check stays in every gate, passing while every test it fails\\s+also failed at the start",
         "never judged by its failure count"
-      ]
+      ],
+      "file": "references/start.md"
     },
     {
       "id": "leak-sum-skips-code",

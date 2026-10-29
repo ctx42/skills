@@ -12,6 +12,10 @@
     {
       "id": "no-server-never-start",
       "rule": "prerequisites-stop",
+      "context": [
+        "SKILL.md",
+        "references/start.md"
+      ],
       "prompt": "Situation: `/web:perf auto loop` in a Vite app's repo. `package.json` has `\"dev\": \"vite\"`; no port is listening.\n\nQuestion: what do you do? Answer on the first line with exactly one of: RUN-NPM-DEV, STOP, ASK-FOR-URL. Then one sentence why.",
       "pass": "^\\W*STOP\\b",
       "fail": "^\\W*(RUN-NPM-DEV|ASK-FOR-URL)\\b",
@@ -31,6 +35,10 @@
     {
       "id": "leak-needs-every-step",
       "rule": "thresholds",
+      "context": [
+        "SKILL.md",
+        "references/measure.md"
+      ],
       "prompt": "Situation: `/web:perf auto`. Heap sizes in bytes for one view, after the first visit and after each of 5 navigate-away-and-back cycles: 1875000, 2275000, 2680000, 2720000, 3120000, 3520000 — 1.6 MB of growth overall.\n\nQuestion: is this view a leak finding? Answer on the first line with exactly one of: LEAK, NO-LEAK. Then one sentence why.",
       "pass": "^\\W*NO-LEAK\\b",
       "fail": "^\\W*(LEAK)\\b",
@@ -39,6 +47,10 @@
     {
       "id": "leak-floor",
       "rule": "thresholds",
+      "context": [
+        "SKILL.md",
+        "references/measure.md"
+      ],
       "prompt": "Situation: `/web:perf auto`. Heap sizes in bytes for one view, after the first visit and after each of 5 navigate-away-and-back cycles: 4800000, 4836000, 4871000, 4907000, 4942000, 4978000 — it grows at every cycle.\n\nQuestion: is this view a leak finding? Answer on the first line with exactly one of: LEAK, NO-LEAK. Then one sentence why.",
       "pass": "^\\W*NO-LEAK\\b",
       "fail": "^\\W*(LEAK)\\b",
@@ -70,6 +82,10 @@
     {
       "id": "drop-retires-finding",
       "rule": "interactive-replies",
+      "context": [
+        "SKILL.md",
+        "references/stops.md"
+      ],
       "prompt": "Situation: `/web:perf loop`. At the first stop the change built the Devices rows in a fragment to fix the search long task (420 ms); the user replied `drop`, nothing more. The tree is restored. The search long task is still the top-ranked finding, and an unrelated technique — caching each device's lowercased search text once at load — would cut it to 40 ms without touching the rendering the user rejected.\n\nQuestion: do you build the caching fix next? Answer on the first line with exactly one of: BUILD, SKIP. Then one sentence why.",
       "pass": "^\\W*SKIP\\b",
       "fail": "^\\W*(BUILD)\\b",
@@ -102,6 +118,10 @@
     {
       "id": "targeted-tests-only",
       "rule": "final-check",
+      "context": [
+        "SKILL.md",
+        "references/start.md"
+      ],
       "prompt": "Situation: `/web:perf auto loop`. Change 2 memoizes the device table's sort in `web/src/devices/sort.ts`, with a new unit test; it beats the noise. The project's checks are `biome check .`, `vue-tsc --noEmit`, `vitest run` (400 tests across the app), and `playwright test`, all green on the untouched tree.\n\nQuestion: which tests do you run before committing change 2? Answer on the first line with exactly one of: RELATED-TESTS-ONLY, FULL-SUITE, NO-TESTS. Then one sentence why.",
       "pass": "^\\W*RELATED-TESTS-ONLY\\b",
       "fail": "^\\W*(FULL-SUITE|NO-TESTS)\\b",
@@ -130,6 +150,10 @@
     {
       "id": "report-max-reached",
       "rule": "report",
+      "context": [
+        "SKILL.md",
+        "references/end-of-run.md"
+      ],
       "prompt": "Situation: `/web:perf auto loop max=2` finished. `git log <start>..HEAD` shows 2 commits; one change before them was discarded for no measurable gain; timed findings remain.\n\nQuestion: write the report's first line exactly, and nothing else on that line.",
       "pass": "^\\W*2 commits, 1 dropped; stopped: max reached\\b",
       "fail": "^\\W*(?!2 commits, 1 dropped; stopped: max reached)",
@@ -141,6 +165,10 @@
     {
       "id": "leak-measure-line",
       "rule": "cpu-4x",
+      "context": [
+        "SKILL.md",
+        "references/measure.md"
+      ],
       "prompt": "Situation: `/web:perf auto`, no focus. The Devices view leaked a keydown listener: its heap grew about 5 MB on each of 5 navigate-away-and-back cycles. You removed the listener on unmount; the after series grows under 50 KB per cycle. The heap snapshots were taken as the skill directs.\n\nQuestion: write the commit's `Perf-Measure:` line, and nothing else.",
       "pass": "(?i)(unthrottled|1x|cpuThrottlingRate:? 1\\b|no (cpu )?throttl)",
       "fail": "(?i)^(?!.*(unthrottled|1x|cpuThrottlingRate:? 1\\b|no (cpu )?throttl))",

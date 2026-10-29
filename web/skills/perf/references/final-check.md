@@ -1,11 +1,14 @@
 # Final check
 
-What `perf` does when the end-of-run full checks (SKILL.md section 10) turn a
-check red that was green on the untouched tree. Its commits write no pictures
-and `git rm -q` every tracked `dev/perf/*.png`. They obey the focus limit and
-never touch a file the start found dirty; a repair that would counts as
-failed. A repair commits without a stop; an interactive run stops only once it
-failed (step 3).
+How `perf` runs the end-of-run full checks (SKILL.md section 10): on exit
+status, a known test check gated on its failing test names and any other known
+red check left out (SKILL.md section 1, step 8).
+
+The steps below run when a check turns red that was green on the untouched
+tree. Their commits write no pictures and `git rm -q` every tracked
+`dev/perf/*.png`. They obey the focus limit and never touch a file the start
+found dirty; a repair that would counts as failed. A repair commits without a
+stop; an interactive run stops only once it failed (step 3).
 
 1. Pin it on a commit: `git bisect start HEAD <start>`,
    `git bisect run <check>`, `git bisect reset`.
