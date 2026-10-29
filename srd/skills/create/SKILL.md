@@ -79,13 +79,13 @@ in step 1, never through a separate prompt, and reaches `srd:kb` only once that
 restatement is confirmed — the user's answer inside the branch is not the
 confirmation.
 
-Corpus content enters the draft only through the interview: each fact a
-lookup supplies, rewords, or confirms is put to the user with its source line
-([Citing a source](references/doc-corpus.md#citing-a-source)) before it can
-be drafted. A self-check lookup whose result would add to, reword, or
-contradict the text goes back as one more interview question (step 4), never
-only reported; one that found nothing leaves an unconfirmed claim (reported). The step-5 report lists every
-corpus-sourced statement in the file with its source line.
+Corpus content enters the draft only through the interview: each fact a lookup
+supplies, rewords, or confirms is put to the user with its source line ([Citing
+a source](references/doc-corpus.md#citing-a-source)) before it can be drafted. A
+self-check lookup whose result would add to, reword, or contradict the text goes
+back as one more interview question (step 4), never only reported; one that
+found nothing leaves an unconfirmed claim (reported). The step-5 report lists
+every corpus-sourced statement in the file with its source line.
 
 ## Workflow
 
