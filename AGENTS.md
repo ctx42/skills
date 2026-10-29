@@ -41,7 +41,8 @@ Skills ship no `README.md`; the repo-level one orients humans.
    trigger test re-routes requests when a description changed — cents, a
    minute or two. Agent-run cases (`./dev/eval-changed.sh --audit`) are a
    manual audit only; a blind round is a release audit, not the gate on a
-   change.
+   change. A `LESSONS.md` change is a behaviour change too: skills load it at
+   run time.
 
 ## Dev loop
 
