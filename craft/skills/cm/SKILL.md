@@ -30,28 +30,26 @@ Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
 a control, and anything else is the target. Derive the message from the diff
 alone, never from conversation context:
 
-- The target is a commit-ish (`<hash>`): run `git show <hash>` and ignore the
-  injected diff below. Hex is the common form, but `HEAD`, `HEAD~2`, a tag, and
-  a branch name all name a commit — resolve with
-  `git rev-parse --verify <tok>^{commit}` and treat any token that resolves as
-  the selector. A token that does not resolve is prose — the free text this
-  skill takes, not a failed hash or an unrecognized token.
+- The target is a commit-ish (`<hash>`): run `git show <hash>` and derive from
+  it alone. Hex is the common form, but `HEAD`, `HEAD~2`, a tag, and a branch
+  name all name a commit — resolve with `git rev-parse --verify <tok>^{commit}`
+  and treat any token that resolves as the selector. A token that does not
+  resolve is prose — the free text this skill takes, not a failed hash or an
+  unrecognized token.
 - `apply` or `asis` without a commit-ish reads the whole working tree, per
   Commit control below.
-- Otherwise use the staged diff injected below. When it is empty, run
-  `git diff` and derive from the unstaged changes instead. Confirm the index
-  is empty with `git diff --cached --quiet` before saying nothing is staged:
-  the injected stats carry no label telling index from working tree.
+- Otherwise run `git diff --cached` and derive from the staged diff. When the
+  index is empty (`git diff --cached --quiet` exits 0), run `git diff` and
+  derive from the unstaged changes instead; when that is empty too, say there
+  is nothing to describe and stop.
 
 A `key=value` that names no control here, or a word left over once the modes,
 the target, and any text the skill takes are read: say it was not recognized,
 name the ones that exist, and run with the defaults as if it were absent —
 unless dropping it would widen what the run changes; then ask. A target that
-resolves to nothing: say so and ask — never guess what to work on.
-
-!`git diff --cached --stat; echo; git diff --stat`
-
-!`git diff --cached`
+resolves to nothing: say so and ask — never guess what to work on. Here the
+only target is a commit-ish, so a token that fails to resolve is prose, never a
+target that resolves to nothing.
 
 ## Arguments
 
@@ -127,10 +125,10 @@ Commit control:
   `git show HEAD` and amend it.
 - Amending rewrites a message, not a tree. `git commit --amend` folds whatever
   is staged into the commit, so anything in the index that the message was not
-  derived from would ride along unannounced — the same content this skill just
-  ignored when reading the diff. Check the index first (`git diff --cached
-  --quiet`); when it is dirty, amend the message alone with
-  `git commit --amend --only`, and say in the reply what stayed staged.
+  derived from would ride along unannounced — content this skill never read.
+  Check the index first (`git diff --cached --quiet`); when it is dirty, amend
+  the message alone with `git commit --amend --only`, and say in the reply what
+  stayed staged.
 - Check the index in the same command as a commit that takes it (not
   `--amend --only`): the commit runs only when nothing is staged outside the
   files the message was drafted from — each one excluded by pathspec:

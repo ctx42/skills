@@ -4,7 +4,7 @@
     {
       "id": "apply-stages-unstaged",
       "rule": "apply-stages-all-regroups",
-      "prompt": "Situation: the user ran `/cm apply`. The injected staged diff is empty; `git diff` shows a fix in two modified files, and `git status` also lists an untracked `notes.txt` that nothing references and is not in `.gitignore`.\n\nQuestion: does `notes.txt` end up in one of the commits you make? Answer on the first line YES or NO, then one sentence why.",
+      "prompt": "Situation: the user ran `/cm apply`. `git diff --cached` is empty; `git diff` shows a fix in two modified files, and `git status` also lists an untracked `notes.txt` that nothing references and is not in `.gitignore`.\n\nQuestion: does `notes.txt` end up in one of the commits you make? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*YES\\b",
       "fail": "^\\W*NO\\b",
       "class": "load-bearing"
