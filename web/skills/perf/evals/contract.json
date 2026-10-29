@@ -32,7 +32,7 @@
       "must": [
         "never into the tree",
         "It runs only with its output pointed at the scratch\\s+directory",
-        "skip bundle findings and say so under Not\\s+measured"
+        "skip bundle and leak findings and say so\\s+under Not\\s+measured"
       ]
     },
     {
@@ -278,6 +278,15 @@
       "rule": "A leak's before and after series are taken the same way",
       "must": [
         "after, taken the same way both times"
+      ]
+    },
+    {
+      "id": "leak-sum-skips-code",
+      "rule": "The leak heap sum leaves out compiled code; a leak is confirmed on a production build",
+      "file": "references/measure.md",
+      "must": [
+        "The sum leaves out compiled code",
+        "growth only the\\s+dev build shows is no finding"
       ]
     }
   ]

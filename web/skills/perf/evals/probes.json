@@ -145,6 +145,18 @@
       "pass": "(?i)(unthrottled|1x|cpuThrottlingRate:? 1\\b|no (cpu )?throttl)",
       "fail": "(?i)^(?!.*(unthrottled|1x|cpuThrottlingRate:? 1\\b|no (cpu )?throttl))",
       "class": "load-bearing"
+    },
+    {
+      "id": "leak-code-growth",
+      "rule": "leak-sum-skips-code",
+      "context": [
+        "SKILL.md",
+        "references/measure.md"
+      ],
+      "prompt": "Situation: `/web:perf auto`. One view's heap snapshots, after the first visit and after each of 5 navigate-away-and-back cycles, total 5.00, 5.31, 5.60, 5.92, 6.21, 6.52 MB of self size. Diffing the first and last snapshot by node type, all of the growth is nodes of type `code`; every other type is flat.\n\nQuestion: is this view a leak finding? Answer on the first line with exactly one of: LEAK, NO-LEAK. Then one sentence why.",
+      "pass": "^\\W*NO-LEAK\\b",
+      "fail": "^\\W*LEAK\\b",
+      "class": "redundant"
     }
   ]
 }

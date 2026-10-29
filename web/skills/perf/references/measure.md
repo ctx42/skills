@@ -91,19 +91,38 @@ before the next navigation:
 ```bash
 python3 -I - <file> <<'EOF'
 import json, sys
-s = json.load(open(sys.argv[1])); f = s["snapshot"]["meta"]["node_fields"]
-print(sum(s["nodes"][f.index("self_size")::len(f)]))
+s = json.load(open(sys.argv[1])); m = s["snapshot"]["meta"]
+f = m["node_fields"]
+t, z, v = f.index("type"), f.index("self_size"), s["nodes"]
+code = m["node_types"][t].index("code")
+print(sum(v[i + z] for i in range(0, len(v), len(f)) if v[i + t] != code))
 EOF
 ```
 
+The sum leaves out compiled code (nodes of type `code`): V8 grows it by
+hundreds of KB per cycle while the JIT warms up, which is no leak.
+
 A leak: the size rises by more than 50 KB at each of the 5 steps after the
 first snapshot. The cause is in the last snapshot: compare it with the first by
-constructor (detached `HTMLElement`s, closures held by a listener or timer) and
-find the code that adds without removing. A fix's after series repeats the 5
-cycles with the before series' exact steps — the same navigation, and no
-`take_snapshot` or other call the before series did not make, since each one
-adds to the heap. A changed method needs a new before series on the unchanged
-code. The measurement is the growth from first to last snapshot.
+type and constructor (detached `HTMLElement`s, closures held by a listener or
+timer), then trace the growing objects' retainers to the code that adds
+without removing, skipping weak and WeakMap-key edges and dev-only hooks (HMR
+runtimes, devtools back-references such as Vue's `__vnode` and
+`__vueParentComponent`). Before fixing or reporting a leak, confirm the growth
+on a production build of the current tree served from the scratch directory
+(the bundler's preview, stopped by its port's PID afterwards): growth only the
+dev build shows is no finding. Find the cause of growth the production build
+shows in an unminified production build (Vite: `--minify false`) on a second
+port, since minified names hide the functions; every measurement stays on the
+minified build.
+
+A fix's before and after series both run on that minified production build, the
+after series repeating the 5 cycles with the before series' exact steps: the
+same navigation, and no `take_snapshot` or other call the before series did not
+make, since each one adds to the heap. A changed method needs a new before
+series on the unchanged code. The measurement is the growth from first to last
+snapshot; a fix is proved when the after series is no longer a leak and the
+retained objects' counts no longer rise.
 
 ## Network
 

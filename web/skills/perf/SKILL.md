@@ -81,9 +81,9 @@ Then:
    `Makefile` target). It runs only with its output pointed at the scratch
    directory (`vite build --outDir <scratch>/build`, the bundler's equivalent
    flag) — a plain build empties the project's output directory, deleting
-   tracked files and replacing what a server may embed. No build command, or
-   no way to redirect its output: skip bundle findings and say so under Not
-   measured.
+   tracked files and replacing what a server may embed. No build command, or no
+   way to redirect its output: skip bundle and leak findings and say so under
+   Not measured.
 8. Find the project's checks as `craft:fix-all` finds them — `AGENTS.md`,
    `CLAUDE.md`, `CONTRIBUTING.md`, a `Makefile`, the package manifest: build,
    test, lint, format, e2e included. The targeted checks are the static ones
@@ -124,10 +124,12 @@ Findings — a timed one exists only while past its threshold:
 - Slow interaction: INP over 200 ms.
 - Long task: over 50 ms during an interaction or a view's load.
 - Layout shift: CLS over 0.1.
-- Leak: a view whose heap size in bytes, after a forced GC, grows by more than
-  50 KB on every one of 5 navigate-away-and-back cycles; smaller growth is the
-  browser's own bookkeeping, and a heap that levels off is no leak. A heap
-  snapshot then names what is retained (detached nodes, listeners, timers).
+- Leak: a view whose heap size in bytes, compiled code aside
+  ([references/measure.md](references/measure.md#leaks)), after a forced GC,
+  grows by more than 50 KB on every one of 5 navigate-away-and-back cycles;
+  smaller growth is the browser's own bookkeeping, and a heap that levels off is
+  no leak. A heap snapshot then names what is retained (detached nodes,
+  listeners, timers).
 
 A counted one is a finding at every instance:
 
