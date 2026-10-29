@@ -23,10 +23,10 @@
     },
     {
       "id": 6,
-      "name": "module-mode-with-fanout-and-filter",
+      "name": "large-module-fans-out-with-filter",
       "expected_behavior": [
-        "The plan lists items from `svc` and `api` only; every other package is reported as skipped",
-        "Fans out one worker per in-scope package and merges their reports — each worker's per-package report survives on disk, so the fan-out is visible rather than asserted",
+        "The plan lists items from the seven named packages only; `auth`, `metrics`, `queue`, and `retry` are reported as skipped",
+        "The plan says the run will fan out and why — more than ~6 packages and ~500 lines of Go in scope — and it then fans out one worker per in-scope package, unasked, and merges their reports; each worker's per-package report survives on disk, so the fan-out is visible rather than asserted",
         "No comment anywhere claims `Router` is or is not safe for concurrent use — the absence of a mutex is not evidence either way",
         "The parent re-checks each worker's added or changed comment against the checklist before merging, and reverts any fact the code does not establish, saying so in the report",
         "Reports the Verify result in the reply — which packages were gate-checked and that `gofmt -l` and `go build` passed"

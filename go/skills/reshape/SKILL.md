@@ -7,7 +7,7 @@ description: >
   the code that uses it, for an API wishlist, or for consumer-driven API
   design.
 license: MIT
-argument-hint: "LIB [in ./pkg] [max=N]"
+argument-hint: "LIB [packages=a,b] [max=N]"
 ---
 
 # reshape
@@ -15,9 +15,9 @@ argument-hint: "LIB [in ./pkg] [max=N]"
 ## Usage
 
 ```
-/reshape github.com/x/y/must   consumer scope is the whole module (default)
-/reshape must in ./pkg/render  restrict the consumer scope to one package
-/reshape must max=5            cap proposals reported (default 8, highest impact first)
+/reshape github.com/x/y/must          consumer scope is the whole module (default)
+/reshape must packages=render         restrict the consumer scope to these packages
+/reshape must max=5                   cap proposals reported (default 8, highest impact first)
 ```
 
 Consumer-driven API review. Point it at a library the project depends on; it
@@ -39,14 +39,21 @@ Sources of truth:
 
 ## Target
 
-The first token of the invocation is the library; read the scope and control
-from the tokens after it (fall back to the user's prose if empty):
+Read the tokens in any order: a reserved word is a mode or flag, `key=value`
+is a control, and anything else is the target. The target is the library; with
+no target token, take it from the user's prose.
 
 - library — an import path (`github.com/x/y/pkg/must`), a module path, or a
   short package name the project imports. Consumer scope defaults to the current
   module.
-- `in ./pkg/foo` — restricts the consumer scope to that package (or path list).
+- `packages=a,b` — restricts the consumer scope to these packages.
 - `max=N` — caps the proposals reported (default 8), highest impact first.
+
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
 
 ## Modifiability
 

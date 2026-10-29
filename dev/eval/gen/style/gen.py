@@ -634,7 +634,7 @@ for p in NATO:
 n = "style--fanout-opposing-fixes-kept-apart"
 case(n,
      prompt_md(n, PASS_TAGS + ["needs-shell"],
-               "/go:style ./... max_issues=25 depth=standard",
+               "/go:style all max=25 depth=standard",
                max_turns=80, timeout=600,
                tools=FAN_TOOLS + ["Bash(go test:*)"], asp=APPLY_ALL),
      graders12,

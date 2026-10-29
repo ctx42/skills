@@ -32,6 +32,22 @@
       "pass": "^\\W*`?foo\\.go",
       "fail": "^\\W*`?(doc|helpers)\\.go",
       "class": "load-bearing"
+    },
+    {
+      "id": "no-target-is-diff",
+      "rule": "diff-default",
+      "prompt": "Situation: the user types `/doc` with no arguments. `git diff HEAD` changes the bodies of `Parse` in pkg/cfg/parse.go and `Load` in pkg/store/load.go; the checklist fires on both functions' comments.\n\nQuestion: do you stop for the user's approval before editing any comment? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "large-target-fans-out",
+      "rule": "auto-fan-out",
+      "prompt": "Situation: the user types `/doc all` in a module of 9 packages and about 4,000 lines of Go, and says nothing about subagents.\n\nQuestion: do you dispatch one subagent per package? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
     }
   ]
 }

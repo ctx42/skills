@@ -38,8 +38,9 @@ a `root = true` file, closer files override farther ones, later matching
 sections override earlier ones, `tab_width` falls back to `indent_size`, and
 `indent_size = tab` means `tab_width`. One setting governs the whole module —
 `.editorconfig` files below the module root are ignored whatever the target
-(diff, package, or `./...`). No `tab_width` and no numeric `indent_size` → a
-tab is 4 columns; no `max_line_length`, or `max_line_length = off` → 80.
+(diff, function, file, package, or `all`). No `tab_width` and no numeric
+`indent_size` → a tab is 4 columns; no `max_line_length`, or
+`max_line_length = off` → 80.
 
 A generated line (`DO NOT EDIT`) over the limit is an offense against the
 generator template that produced it, never against the generated file: file it

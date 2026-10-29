@@ -425,7 +425,7 @@ def case_library():
         "b4-no-write": g_never("Write"),
         "b4-no-edit": g_never("Edit"),
     }
-    write_case(name, "/go:reshape oskit in ./pkg/render", graders, files,
+    write_case(name, "/go:reshape oskit packages=render", graders, files,
                tags=["sec:reshape:usage"], extra=OSKIT_FETCH)
 
 

@@ -7,8 +7,9 @@ description: >
   a feature are complete, and to add, change, or learn style rules from
   feedback.
 license: MIT
-argument-hint: "[TARGET* | add|change|remove RULE | learn] [packages=a,b]
-  [max_issues=N] [depth=light|standard*|full] [plan_first] [fix]"
+argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all |
+  add|change|remove RULE | learn] [packages=a,b] [max=N]
+  [depth=light|standard*|full] [plan_first] [fix]"
 ---
 
 # review
@@ -17,12 +18,15 @@ argument-hint: "[TARGET* | add|change|remove RULE | learn] [packages=a,b]
 
 ```
 /review                                       check (default): review the current git diff
+/review func=Parse                            review one function (func=T.Bar: a method)
+/review pkg/foo/foo.go:42                     review the function enclosing that line
+/review pkg/foo/foo.go                        review one file
 /review ./pkg/foo                             review one package
-/review ./...                                 review the whole module
+/review all                                   review every package of the module
 /review /path/to/project                      review that module (a go.mod dir)
-/review ./... max_issues=15 depth=light       cap findings; set review depth
-/review ./... packages=parser,lexer           restrict to these packages
-/review ./... plan_first                      propose the budget, then stop for approval
+/review all max=15 depth=light                cap findings; set review depth
+/review all packages=parser,lexer             restrict to these packages
+/review all plan_first                        propose the budget, then stop for approval
 /review ./pkg/foo fix                         review, then apply the findings
 /review add "no naked returns in tests"       add a style rule
 /review change "receivers are three letters"  refine an existing style rule
@@ -30,15 +34,16 @@ argument-hint: "[TARGET* | add|change|remove RULE | learn] [packages=a,b]
 /review learn                                 mine this session's feedback into rules
 ```
 
-Done-time review for Go code. Read the invocation from the arguments and pick
-the mode from the first token:
+Done-time review for Go code. Read the tokens in any order: a reserved word is a
+mode or flag, `key=value` is a control, and anything else is the target. `func=`
+names the target, not a control. The mode:
 
-- Check (default) — a target token or empty input; audit finished code, then
-  offer the rules this session taught (Session rules).
-- Rule edit — the first token is `add`/`change`/`remove`, or the input is a
-  plain style preference.
-- Learn — the first token is `learn`; mines the current editing session (since
-  the last /clear) for convention feedback and proposes rules.
+- Check (default) — no mode word; audit the target's finished code, then offer
+  the rules this session taught (Session rules).
+- Rule edit — `add`/`change`/`remove`, everything after it being the rule text,
+  reserved words included, or input that is a plain style preference.
+- Learn — `learn`; mines the current editing session (since the last /clear)
+  for convention feedback and proposes rules.
 
 Sources of truth:
 - `go:style` (on-demand: Check mode) — owns the style rules and their
@@ -73,18 +78,23 @@ The target token is:
   from the commit before the first fix: a fix to identity, nil, or undo logic
   regresses the inputs beside it. With no commit before the first fix, the
   no-commits fallback above stands.
+- `func=NAME` or `func=T.Bar` — that function or method; `FILE:LINE` — the
+  function enclosing that line; `FILE.go` — that file. Review just that code,
+  style included; read beyond it only to verify a finding. A name matching in
+  more than one package: say which and ask.
 - a package — a path like `./pkg/foo` or an import path; review that one
   package's `.go` files.
-- a module / many packages — `./...`, a directory containing `go.mod`, or an
-  explicit "module"; review every package in the module.
+- `all` — every package in the current module. A package pattern (`./...`,
+  `./pkg/...`) or a directory holding `go.mod` stays a path target: review
+  every package it matches.
 
 State the resolved target and the exact package/file set before reviewing.
 
 ### Budget & scope
 
-Read these controls from `$ARGUMENTS` (any order, after the target):
+Controls and flags, read from `$ARGUMENTS`:
 - `packages=a,b` — restrict to these packages within the target.
-- `max_issues=N` — hard cap on findings reported (default 25); stop there,
+- `max=N` — hard cap on findings reported (default 25); stop there,
   highest severity first.
 - `depth=light|standard|full` — default `standard`. `light` reports only
   blockers and major maintainability with minimal examples; `full` reviews
@@ -95,6 +105,12 @@ Read these controls from `$ARGUMENTS` (any order, after the target):
   presented alongside the proposal have already spent it.
 - `fix` — after reviewing, apply the findings (see Applying fixes).
 
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
+
 Default to plan-first: if the target is broad and no budget was given, switch
 to `plan_first` automatically, propose defaults (the caps above, the package
 list), and ask before the full review. Broad means more than ~6 packages, or
@@ -102,8 +118,9 @@ comparable LOC in fewer. Whether a broad run fans out is a separate call made
 by size (Scale): many packages under ~500 lines of Go in all are reviewed in
 this context, and the plan-first proposal says which and why. That is the
 same threshold `go:style` uses, deliberately: the two skills share a target and
-a budget, and a `./...` that is broad to one and not to the other cannot be
-delegated coherently. A module of three small packages is `./...` and still not broad.
+a budget, and an `all` that is broad to one and not to the other cannot be
+delegated coherently. A module of three small packages is `all` and still not
+broad.
 
 ### Workflow
 
@@ -168,7 +185,7 @@ delegated coherently. A module of three small packages is `./...` and still not 
   fewer): fan out one review subagent per package, never several packages to
   one worker (each invokes `go:style` on its package for the style offenses
   and reviews correctness itself, with the `depth`), then synthesize one
-  merged report, re-ranking findings to the global `max_issues` cap. Before
+  merged report, re-ranking findings to the global `max` cap. Before
   dispatch, derive the `go:style` rule-id and tier list once (per
   `../style/references/checking.md`) and put it in every worker brief; the
   worker's `go:style` run uses that list, never ids or tiers of its own, which
@@ -220,7 +237,7 @@ End with a one-line verdict (ship / fix-first) and the per-severity counts. For
 a module, give the verdict per package plus an overall summary. Report budget
 usage: `depth`, packages/files reviewed — counted off the step-1 listing at
 report time less any skipped, never estimated — and how many findings went
-unreported past `max_issues`.
+unreported past `max`.
 
 ### Applying fixes
 

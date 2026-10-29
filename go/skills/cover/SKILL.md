@@ -5,8 +5,8 @@ description: >
   function, a line, a file, a package, or a module, or when asked to add
   missing tests for uncovered lines or branches.
 license: MIT
-argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg* | module]
-  [max_tests=N] [packages=a,b] [include=all] [fanout]"
+argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all] [max=N]
+  [packages=a,b] [include=all]"
 ---
 
 # cover
@@ -14,16 +14,17 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg* | module]
 ## Usage
 
 ```
-/cover ./pkg/foo                package (default): per function, plan-first
+/cover                          the functions the working diff touches (default)
 /cover func=Foo                 one function by name; no plan gate
 /cover func=T.Bar               one method
 /cover pkg/svc/foo.go:42        the function enclosing that line
 /cover pkg/svc/foo.go           every function in the file, plan-first
-/cover module                   every package, sequential, plan-first
-/cover ./pkg/foo max_tests=8    cap tests/cases added this run
-/cover module packages=svc,api  module mode: restrict to these packages
+/cover ./pkg/foo                one package, per function, plan-first
+/cover all                      every package of the module, plan-first
+/cover /path/to/project         that module (a go.mod dir)
+/cover ./pkg/foo max=8          cap tests/cases added this run
+/cover all packages=svc,api     restrict to these packages
 /cover func=Foo include=all     also attempt the deferred complex lines
-/cover module fanout            module mode: one subagent per package, merged
 ```
 
 Executing skill: it runs `go test -coverprofile`, reads the profile, edits and
@@ -52,61 +53,71 @@ Sources of truth:
 
 ## Target
 
-The first token of the invocation is the target; read controls from the tokens
-after it. Resolve that target to one of five execution kinds (fall back to the
-user's prose if it is not
-one of the forms below). Each fixes an order; always work it one function/method
-at a time.
+Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
+a control, and anything else is the target. `func=` names the target, not a
+control. Resolve the target to one of six execution kinds (fall back to the
+user's prose if it is not one of the forms below). Each fixes an order; always
+work it one function/method at a time.
 
+- diff (default: no target) — every function/method in a non-test `.go` file
+  whose lines the working diff adds or changes: `git diff HEAD`, or on a branch
+  with no commits, the staged then the unstaged diff. Files alphabetically;
+  within each, functions top to bottom. Plan-first when it holds more than one
+  function; one runs straight. An empty diff: say so and ask for a target.
 - function / method — `func=Foo` or `func=T.Bar`. Just that one. Run
   straight (no plan gate), then report.
 - line — `path/to/foo.go:42`. Resolve to the enclosing function/method and
   run its full per-function loop. Run straight, then report.
 - file — `path/to/foo.go`. Every function/method in the file, top to
   bottom. Plan-first.
-- package (default) — a path like `./pkg/foo` or an import path. Files
+- package — a path like `./pkg/foo` or an import path. Files
   alphabetically; within each, functions top to bottom. Plan-first.
-- module (opt-in) — `./...`, a `go.mod` dir, or an explicit "module".
-  Packages alphabetically, sequentially by default (see `fanout` in
-  Controls) — no coverage ranking; within each package, files alphabetically;
-  within each file, functions top to bottom. Plan-first.
+- module — `all` (every package of the current module), a package pattern
+  (`./...`, `./pkg/...`), or a `go.mod` dir. Packages alphabetically,
+  sequentially unless large (below) — no coverage ranking; within each
+  package, files alphabetically; within each file, functions top to bottom.
+  Plan-first.
 
 State the resolved kind and the function/file set before measuring.
 
+Fan-out is automatic, never asked for: when the target spans more than ~6
+packages and more than ~500 lines of Go in scope, dispatch one subagent per
+package (under `max=`, per package whose share is above 0; each gets the style
+Test rules and this per-function loop for its package) and merge the
+per-package reports. It keeps the main context lean; packages are independent,
+so ordering is preserved per package. The plan says it will fan out and why —
+the package and line counts that crossed the threshold.
+
 ## Controls
 
-Read from `$ARGUMENTS`, any order after the target. A token that is not one of
-these and is not the target is not a silent no-op: say it was not recognized,
-name the controls that exist, and run with the defaults rather than guessing
-what it meant.
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
 
-- `max_tests=N` — hard cap on cases added this run: count one per table row
-  or subtest, and one for a test function that holds neither. A new two-row
+- `max=N` — hard cap on cases added this run: count one per table row or
+  subtest, and one for a test function that holds neither. A new two-row
   table function is two, not three — the wrapper is not itself a case. Turning
   an existing single-case test into a table counts the rows you add, not the
   one that was already there: the cap bounds new coverage, and re-shaping a
-  case that already ran adds none. Under
-  `fanout` the cap cannot be enforced live across workers, so divide it before
-  dispatch: give each worker `N / packages` rounded down, name each worker's
-  share in the plan, and report the total actually added against `N`. Hand
-  the remainder out one at a time, most-uncovered package first, until it is
-  gone. The cap wins over coverage: a package whose share is 0 gets no
-  worker — with more packages than `N`, only the `N` most-uncovered run, one
-  case each. Once the workers report, any share left unused goes, in one
-  follow-up dispatch, to packages that still have easy lines, most-uncovered
-  first; the total still never passes `N`.
-- `packages=a,b` — module mode: restrict to these packages.
+  case that already ran adds none. Under fan-out the cap cannot be enforced
+  live across workers, so divide it before dispatch: give each worker
+  `N / packages` rounded down, name each worker's share in the plan, and
+  report the total actually added against `N`. Hand the remainder out one at
+  a time, most-uncovered package first, until it is gone. The cap wins over
+  coverage: a package whose share is 0 gets no worker — with more packages
+  than `N`, only the `N` most-uncovered run, one case each. Once the workers
+  report, any share left unused goes, in one follow-up dispatch, to packages
+  that still have easy lines, most-uncovered first; the total still never
+  passes `N`.
+- `packages=a,b` — module kind: restrict to these packages.
 - `include=all` — also attempt complex lines (build the fakes/scaffolding) in
   `*_test.go`, which is the whole of this skill's write scope. A line reachable
   only behind a seam the production code does not have stays deferred even
   under this flag: report what the seam would be and leave it to the author.
   Adding one is an API change, not a test;
   un-coverable lines stay reported, never attempted.
-- `fanout` — module mode: dispatch one subagent per package (under
-  `max_tests`, per package whose share is above 0; each gets the style Test
-  rules and this per-function loop for its package) and merge the
-  per-package reports. Use on large modules to keep the main context lean;
-  packages are independent, so ordering is preserved per package.
 
 ## Per-function loop
 
@@ -154,14 +165,14 @@ does not.
 3. Classify every uncovered line (next section). Read the style Test section
    and the package's test conventions, then add one targeted case — table row,
    subtest, or assertion — per easy line or branch (complex lines too under
-   `include=all`; stop at `max_tests`). Never attempt un-coverable lines.
+   `include=all`; stop at `max=`). Never attempt un-coverable lines.
 4. Re-measure into `tmp/cover/Foo.after`: re-run Foo's direct-test family and
    re-read the profile;
    confirm Foo's target lines went from 0 to hit. One measurement is the
    expected cost — do not re-measure per case added. If a target line did not
    rise, that is the exception: bisect it — narrow to the case meant to cover
    it, fix or drop it — and re-measure, until every coverable line of Foo is
-   hit or deferred, or `max_tests` is reached. A fixed case replaces the one
+   hit or deferred, or `max=` is reached. A fixed case replaces the one
    it fixes and does not count again; a dropped case is not added, so it
    frees its slot.
 
@@ -180,9 +191,11 @@ does not.
 - un-coverable — one of the categories below. Never attempt; report with the
   reason.
 
-## Plan (file / package / module)
+## Plan (diff / file / package / module)
 
 Run loop steps 1–2 for every function in scope, then present:
+- fan-out, when the target is large: that it will, why, and each worker's
+  `max=` share,
 - current coverage per function,
 - proposed easy cases (`file:Test_Foo` + the line each targets),
 - deferred lines (`file:line — reason`),
@@ -242,11 +255,11 @@ readers and callers scan for them.
   table rows nested under their test function, so the list counts.
 - Deferred lines: `file:line — reason`.
 - Un-coverable lines: `file:line — reason`.
-- Cases added this run, counted the way `max_tests` counts them — and under
-  `max_tests`, what is left. Report the count on every run, capped or not: it is
+- Cases added this run, counted the way `max=` counts them — and under
+  `max=`, what is left. Report the count on every run, capped or not: it is
   the number the reader checks the tests-added list against, and a run with no
   cap is exactly the run where nobody else is counting.
-- Module mode: which packages were covered and which were skipped.
+- Module kind: which packages were covered and which were skipped.
 - Never skip a line silently. Suggest running `/review` on the new tests.
 
 Every number in that report is read back off the finished artifact, never

@@ -34,19 +34,35 @@
       "class": "redundant"
     },
     {
-      "id": "fanout-cap-holds",
-      "rule": "fanout-cap-wins",
-      "prompt": "Situation: module mode with `fanout max_tests=3` over 5 packages, all with uncovered lines.\n\nQuestion: how many workers do you dispatch? Answer on the first line with the integer only, then one sentence why.",
-      "pass": "^\\W*3\\b",
-      "fail": "^\\W*5\\b",
-      "class": "load-bearing"
+      "id": "fan-out-cap-holds",
+      "rule": "fan-out-cap-wins",
+      "prompt": "Situation: `/cover all max=10` over a module of 8 packages and about 4,000 lines of Go, every package with many easy uncovered lines. pkg/a is the most uncovered package, pkg/b the next.\n\nQuestion: how many cases is pkg/a's worker allowed to add? Answer on the first line with the integer only, then one sentence why.",
+      "pass": "^\\W*2\\b",
+      "fail": "^\\W*(1|3|4|10)\\b",
+      "class": "redundant"
     },
     {
       "id": "unused-share-reassigned",
-      "rule": "fanout-cap-wins",
-      "prompt": "Situation: `/cover ./... fanout max_tests=6` over 3 packages, 2 cases each. The workers report: pkg/a added 2, pkg/b added 2, pkg/c added 0 because its only uncovered lines turned out un-coverable. pkg/a still has 3 easy lines uncovered.\n\nQuestion: do you add more cases to pkg/a in this run? Answer on the first line YES or NO, then one sentence how many and why.",
+      "rule": "fan-out-cap-wins",
+      "prompt": "Situation: `/cover all max=7` over a module of 7 packages and about 3,000 lines of Go, so the run fans out with one case per package. The workers report: pkg/a through pkg/f added 1 each, pkg/g added 0 because its only uncovered lines turned out un-coverable. pkg/a still has 3 easy lines uncovered.\n\nQuestion: do you add more cases to pkg/a in this run? Answer on the first line YES or NO, then one sentence how many and why.",
       "pass": "^\\W*YES\\b",
       "fail": "^\\W*NO",
+      "class": "load-bearing"
+    },
+    {
+      "id": "no-target-is-diff",
+      "rule": "diff-default",
+      "prompt": "Situation: the user types `/cover` with no arguments in a module of 5 packages. `git diff HEAD` changes the body of `Parse` in pkg/cfg/parse.go and nothing else.\n\nQuestion: what do you cover? Answer on the first line with exactly one of: PARSE-ONLY, PACKAGE-CFG, WHOLE-MODULE, ASK. Then one sentence why.",
+      "pass": "^\\W*PARSE-ONLY",
+      "fail": "^\\W*(PACKAGE-CFG|WHOLE-MODULE|ASK)",
+      "class": "redundant"
+    },
+    {
+      "id": "large-target-fans-out",
+      "rule": "auto-fan-out",
+      "prompt": "Situation: the user types `/cover all` in a module of 9 packages and about 4,000 lines of Go, and says nothing about subagents.\n\nQuestion: do you dispatch one subagent per package? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
       "class": "load-bearing"
     }
   ]

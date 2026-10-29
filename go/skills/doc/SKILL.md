@@ -6,8 +6,8 @@ description: >
   document, fix, correct stale or inaccurate comments, or fill missing godoc
   across a function, a line, a file, a package, or a module.
 license: MIT
-argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg* | module]
-  [max_changes=N] [packages=a,b] [only=godoc|exported] [fanout]"
+argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all] [max=N]
+  [packages=a,b] [only=godoc|exported]"
 ---
 
 # doc
@@ -15,17 +15,18 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg* | module]
 ## Usage
 
 ```
-/doc ./pkg/foo                package (default): item by item, plan-first
+/doc                          the items the working diff touches (default)
 /doc func=Foo                 one function's godoc + body comments; no plan
 /doc func=T.Bar               one method
 /doc pkg/svc/foo.go:42        the item enclosing that line; no plan
 /doc pkg/svc/foo.go           every item in the file, plan-first
-/doc module                   every package, sequential, plan-first
-/doc ./pkg/foo max_changes=8  cap comments changed this run; reports the rest
-/doc module packages=svc,api  module mode: restrict to these packages
+/doc ./pkg/foo                one package, item by item, plan-first
+/doc all                      every package of the module, plan-first
+/doc /path/to/project         that module (a go.mod dir)
+/doc ./pkg/foo max=8          cap comments changed this run; reports the rest
+/doc all packages=svc,api     restrict to these packages
 /doc ./pkg/foo only=godoc     skip inline body comments
 /doc ./pkg/foo only=exported  package comment + exported symbols only
-/doc module fanout            module mode: one subagent per package, merged
 ```
 
 Executing skill: it reads code, edits godoc and inline comments in `*.go` /
@@ -52,23 +53,29 @@ Sources of truth:
 
 ## Target
 
-The first token of the invocation is the target; read controls from the tokens
-after it. Resolve that target to one of five execution kinds (fall back to the
-user's prose if it is not
-one of the forms below). Each fixes an order; always work it one documentable
-item at a time.
+Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
+a control, and anything else is the target. `func=` names the target, not a
+control. Resolve the target to one of six execution kinds (fall back to the
+user's prose if it is not one of the forms below). Each fixes an order; always
+work it one documentable item at a time.
 
+- diff (default: no target) — every item the working diff touches
+  (`git diff HEAD`, or on a branch with no commits, the staged then the
+  unstaged diff); a change anywhere in a declaration, its body included,
+  brings both its godoc and its body's inline comments. Files alphabetically;
+  within each, items top to bottom. Plan-first when it holds more than one
+  item; one runs straight. An empty diff: say so and ask for a target.
 - function / method — `func=Foo` or `func=T.Bar`. Its godoc plus its body's
   inline comments. Run straight (no plan gate), then report.
 - line — `path/to/foo.go:42`. Resolve to the enclosing item (declaration or
   inline comment) and run its loop. Run straight, then report.
 - file — `path/to/foo.go`. Every item in the file, top to bottom. Plan-first.
-- package (default) — a path like `./pkg/foo` or an import path. Files
+- package — a path like `./pkg/foo` or an import path. Files
   alphabetically; within each, items top to bottom. Plan-first.
-- module (opt-in) — `./...`, a `go.mod` dir, or an explicit "module".
-  Packages alphabetically, sequentially by default (see `fanout` in
-  Controls); within each package, files alphabetically; within each file,
-  items top to bottom. Plan-first.
+- module — `all` (every package of the current module), a package pattern
+  (`./...`, `./pkg/...`), or a `go.mod` dir. Packages alphabetically,
+  sequentially unless large (Fan-out); within each package, files
+  alphabetically; within each file, items top to bottom. Plan-first.
 
 A documentable item is one of: the package comment (once per package), a
 top-level declaration's godoc (type, func, method, const/var block), or the
@@ -88,29 +95,41 @@ State the resolved kind and the item set before reading.
 
 ## Controls
 
-Read from `$ARGUMENTS`, any order after the target:
-- `max_changes=N` — hard cap on comments changed this run; report what is left.
-- `packages=a,b` — module mode: restrict to these packages.
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
+
+- `max=N` — hard cap on comments changed this run; report what is left.
+- `packages=a,b` — module kind: restrict to these packages.
 - `only=godoc` — skip inline body comments; touch declaration and package
   godoc only.
 - `only=exported` — touch the package comment and exported symbols only;
   skip unexported godoc and inline comments.
-- `fanout` — module mode: dispatch one subagent per package (each gets The
-  checklist, Accuracy, Never touch, and the Per-item loop, for its package) and
-  merge the per-package reports. Use on large modules to keep the main context
-  lean; packages are independent, so ordering is preserved per package.
 
-  Merging is not accepting. Before a worker's edits enter the report, re-read
-  each added or changed comment against the checklist — item 4 above all, since
-  a worker that has the seven fact categories in front of it and a whole package
-  to get through is exactly where an unsupported claim appears. Check every
-  added fact against the code that is supposed to establish it: a concurrency
-  guarantee on a type with no synchronization, an error condition no branch
-  produces, a units claim nothing converts. Revert what the code does not carry
-  and say so in the merged report: two workers given the same package and the
-  same prompt have added and declined the very same unsupported guarantee, so
-  which one you got is not something the merge can assume. The parent is the
-  last checklist pass, not a stapler.
+## Fan-out
+
+Automatic, never asked for: when the target spans more than ~6 packages and
+more than ~500 lines of Go in scope, dispatch one subagent per package (each
+gets The checklist, Accuracy, Never touch, and the Per-item loop, for its
+package) and merge the per-package reports. It keeps the main context lean;
+packages are independent, so ordering is preserved per package. The plan says
+it will fan out and why — the package and line counts that crossed the
+threshold. Under `max=`, divide the cap across workers as `go:cover` does
+(`../cover/SKILL.md`, Controls) and report the total changed against `N`.
+
+Merging is not accepting. Before a worker's edits enter the report, re-read each
+added or changed comment against the checklist — item 4 above all, since a
+worker that has the seven fact categories in front of it and a whole package to
+get through is exactly where an unsupported claim appears. Check every added
+fact against the code that is supposed to establish it: a concurrency guarantee
+on a type with no synchronization, an error condition no branch produces, a
+units claim nothing converts. Revert what the code does not carry and say so in
+the merged report: two workers given the same package and the same prompt have
+added and declined the very same unsupported guarantee, so which one you got is
+not something the merge can assume. The parent is the last checklist pass, not a
+stapler.
 
 ## The checklist
 
@@ -197,7 +216,7 @@ For each item, in strict order; never start item B until item A is written.
 4. Write the minimal edit that clears the fired checklist items — add only
    the missing fact, fix only the wrong clause; never rewrite a comment that
    needed a clause. Obey the style rules read from `../style/SKILL.md`,
-   `max_changes`, and the `only=` filter. Mirror the package's comment voice,
+   `max=`, and the `only=` filter. Mirror the package's comment voice,
    else a sibling package's. The package comment goes in the package-named
    file (style "Declarations & files"); never create a `doc.go` for it.
 
@@ -209,9 +228,10 @@ Never edit these; name them in the report when in scope:
 - generated files marked `DO NOT EDIT`.
 - a comment whose intent the code cannot confirm — flag it.
 
-## Plan (file / package / module)
+## Plan (diff / file / package / module)
 
 Before writing, present:
+- fan-out, when the target is large: that it will, and why,
 - per item in scope: which checklist items fire (`file:Symbol — item`); a
   symbol nothing fires on does not appear, so the plan stays the list of
   intended edits rather than an inventory of the package,
@@ -240,7 +260,7 @@ End of run:
   `file:Symbol — <checklist item #>: <what changed>`.
 - Flagged unverifiable: `file:Symbol — the fact left unwritten and why`.
 - Never-touched in scope: `file:Symbol — reason`.
-- Module mode: which packages were done and which were skipped.
+- Module kind: which packages were done and which were skipped.
 - Items left alone get no line; a flagged or never-touched item is never
   dropped silently. Close with a one-line pointer to run `go:review` on
   the result.

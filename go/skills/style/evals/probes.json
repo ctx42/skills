@@ -40,7 +40,7 @@
         "SKILL.md",
         "references/checking.md"
       ],
-      "prompt": "Situation: the user runs `/style ./... plan_first` on a module. You have read the style pass instructions.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: CHECK-THEN-PRESENT, PROPOSE-AND-STOP. Then one sentence why.",
+      "prompt": "Situation: the user runs `/style all plan_first` on a module. You have read the style pass instructions.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: CHECK-THEN-PRESENT, PROPOSE-AND-STOP. Then one sentence why.",
       "pass": "^\\W*PROPOSE-AND-STOP",
       "fail": "^\\W*CHECK-THEN-PRESENT",
       "class": "redundant"
@@ -51,6 +51,18 @@
       "prompt": "Situation: you are writing tests for a Go function. One error branch can only be reached through a package-level `var readFile = os.ReadFile` hook. Two other functions in the same package already use exactly this hook pattern for their tests; this function does not have one yet.\n\nQuestion: do you add the hook for this function so the test can reach the branch? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "old-cap-spelling",
+      "rule": "unknown-token-defaults",
+      "context": [
+        "SKILL.md",
+        "references/checking.md"
+      ],
+      "prompt": "Situation: the user runs `/style ./pkg/foo max_issues=5`. You have read the style pass instructions.\n\nQuestion: how many offenses do you report at most? Answer on the first line with exactly one of: FIVE, TWENTY-FIVE. Then one sentence on what you tell the user about `max_issues=5`.",
+      "pass": "^\\W*TWENTY-FIVE",
+      "fail": "^\\W*FIVE",
       "class": "redundant"
     }
   ]

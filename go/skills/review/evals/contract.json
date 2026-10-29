@@ -131,6 +131,14 @@
         "then\\s+write only\\s+what the user picks",
         "a fan-out worker never runs it"
       ]
+    },
+    {
+      "id": "unknown-token-defaults",
+      "rule": "A token that is no control, mode, or target is named as unrecognized and the run uses the defaults; an unresolvable target asks",
+      "must": [
+        "say it was not recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target that resolves to nothing: say so and ask — never guess what to work on"
+      ]
     }
   ]
 }

@@ -136,7 +136,7 @@ io_go = (
     "}\n"
 )
 io_files = {**gomod("example.com/demo"), "pkg/io/io.go": io_go}
-io_tags = ["sec:doc:plan-file-package-module", "sec:doc:never-touch"]
+io_tags = ["sec:doc:plan-diff-file-package-module", "sec:doc:never-touch"]
 write_case(
     "doc--directives-and-interface-method-godoc", "/go:doc ./pkg/io",
     io_files,
@@ -230,9 +230,14 @@ write_case(
 )
 
 # --------------------------------------------------------------------------
-# 6. module-mode-with-fanout-and-filter
+# 6. large-module-fans-out-with-filter
+# Seven packages in scope and over 500 lines of Go in them: large enough that
+# the run fans out by size, with no token asking for it. The four packages
+# left out of `packages=` must be reported skipped and stay untouched.
 OTHERS = ["auth", "cache", "config", "events", "httpx", "logx", "metrics",
           "queue", "retry"]
+SKIPPED = ["auth", "metrics", "queue", "retry"]
+IN_SCOPE = ["api", "cache", "config", "events", "httpx", "logx", "svc"]
 other_src = {
     "auth": ("// Package auth checks bearer tokens.\npackage auth\n\nimport \"strings\"\n\n"
              "func Token(header string) string {\n"
@@ -299,23 +304,33 @@ svc_go = (
     "\t// call Match\n"
     "\treturn srv.rtr.Match(path)\n}\n"
 )
-mod_files = {**gomod("example.com/mod"), "api/api.go": api_go, "svc/svc.go": svc_go}
+# One documented item, long enough to carry the in-scope line count past the
+# fan-out threshold without adding items for the workers to judge.
+ids_go = (
+    "package api\n\n"
+    "// handlerIDs maps a numeric route id to its handler name.\n"
+    "var handlerIDs = map[int]string{\n"
+    + "".join(f"\t{i}: \"h{i}\",\n" for i in range(100, 580))
+    + "}\n"
+)
+mod_files = {**gomod("example.com/mod"), "api/api.go": api_go,
+             "api/ids.go": ids_go, "svc/svc.go": svc_go}
 for p in OTHERS:
     mod_files[f"{p}/{p}.go"] = other_src[p]
-mod_tags = ["sec:doc:plan-file-package-module", "sec:doc:controls",
-            "sec:doc:verify"]
+mod_tags = ["sec:doc:plan-diff-file-package-module", "sec:doc:controls",
+            "sec:doc:fan-out", "sec:doc:verify", "fan-out"]
 write_case(
-    "doc--module-mode-with-fanout-and-filter",
-    "/go:doc module fanout packages=svc,api",
+    "doc--large-module-fans-out-with-filter",
+    "/go:doc all packages=" + ",".join(IN_SCOPE),
     mod_files,
     {
         "b1-others-reported-skipped": rx(
             "last_message",
-            "^(?=[\\s\\S]*skip)" + "".join(f"(?=[\\s\\S]*\\b{p}\\b)" for p in OTHERS),
+            "^(?=[\\s\\S]*skip)" + "".join(f"(?=[\\s\\S]*\\b{p}\\b)" for p in SKIPPED),
             flags="i"),
         "b1-auth-untouched": rx("auth/auth.go", esc(other_src["auth"])),
         "b1-metrics-untouched": rx("metrics/metrics.go", esc(other_src["metrics"])),
-        "b2-two-workers": used("Agent", 2, 2),
+        "b2-one-worker-per-package": used("Agent", len(IN_SCOPE), len(IN_SCOPE)),
         "b2-api-worker": used("Agent", 1, match=r"\bapi\b"),
         "b2-svc-worker": used("Agent", 1, match=r"\bsvc\b"),
         "b3-router-no-concurrency-claim": rx(
@@ -335,6 +350,6 @@ write_case(
             r"|\b(pass|passed|clean|ok|succeed)\w*\b[^\n]{0,20}(gofmt[^\n]*go build|go build[^\n]*gofmt)",
             flags="i"),
     },
-    tags_extra=mod_tags, agent=True, max_turns=80,
+    tags_extra=mod_tags, agent=True, max_turns=80, timeout=600,
     answers=["To the plan: \"Approved, go ahead.\""],
 )

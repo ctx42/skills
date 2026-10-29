@@ -15,4 +15,4 @@ append_system_prompt: |
      anyway; I will run the tests myself.
 ---
 
-/go:style ./... max_issues=25 depth=standard
+/go:style all max=25 depth=standard

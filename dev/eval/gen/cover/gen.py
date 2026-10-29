@@ -163,7 +163,7 @@ def case(name, fx, query, tags, graders, *, persona=False, shell=True,
 
 T = {k: f"sec:cover:{k}" for k in [
     "usage", "target", "controls", "per-function-loop",
-    "classify-each-uncovered-line", "plan-file-package-module", "write",
+    "classify-each-uncovered-line", "plan-diff-file-package-module", "write",
     "verify", "un-coverable-categories", "output", "self-learning"]}
 
 
@@ -193,7 +193,7 @@ case("single-function-in-isolation", "f1", "/go:cover func=Parse", tags(*LOOP), 
 
 # 2 -------------------------------------------------------------------------
 case("package-target-is-plan-first", "f2", "/go:cover ./pkg/svc",
-     tags(*LOOP, "plan-file-package-module"), persona=True, graders={
+     tags(*LOOP, "plan-diff-file-package-module"), persona=True, graders={
     **{f"b3-{f.lower()}-after": exists(f"tmp/cover/{f}.after")
        for f in ["Clamp", "Sign", "Pad", "Trunc"]},
     "b3-clamp-done-before-text": order(
@@ -208,7 +208,7 @@ case("package-target-is-plan-first", "f2", "/go:cover ./pkg/svc",
 })
 
 # 3 -------------------------------------------------------------------------
-NET_T = tags(*LOOP, "plan-file-package-module", "un-coverable-categories", "controls")
+NET_T = tags(*LOOP, "plan-diff-file-package-module", "un-coverable-categories", "controls")
 case("deferred-and-uncoverable-are-reported", "f3", "/go:cover ./pkg/net", NET_T, {
     "b1-easy-bad-address": regex(r"bad address|missing port", "pkg/net/dial_test.go", flags="i"),
     "b1-network-deferred": regex(r"deferred[\s\S]*dial\.go:[0-9,–\- ]*\b3[5-9]\b", flags="i"),

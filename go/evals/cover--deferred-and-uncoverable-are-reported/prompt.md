@@ -1,5 +1,5 @@
 ---
-tags: [case:cover--deferred-and-uncoverable-are-reported, skill:cover, sec:cover:target, sec:cover:per-function-loop, sec:cover:classify-each-uncovered-line, sec:cover:write, sec:cover:verify, sec:cover:output, sec:cover:plan-file-package-module, sec:cover:un-coverable-categories, sec:cover:controls, skill:style, sec:style:test, sec:style:production, needs-shell]
+tags: [case:cover--deferred-and-uncoverable-are-reported, skill:cover, sec:cover:target, sec:cover:per-function-loop, sec:cover:classify-each-uncovered-line, sec:cover:write, sec:cover:verify, sec:cover:output, sec:cover:plan-diff-file-package-module, sec:cover:un-coverable-categories, sec:cover:controls, skill:style, sec:style:test, sec:style:production, needs-shell]
 runs: 1
 max_turns: 80
 timeout_seconds: 300

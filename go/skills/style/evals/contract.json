@@ -77,8 +77,7 @@
       "rule": "Rule edits redirect to go:review, unknown targets ask",
       "file": "references/checking.md",
       "must": [
-        "redirect to `go:review`",
-        "say so and ask, do not guess a target"
+        "redirect to `go:review`"
       ]
     },
     {
@@ -88,6 +87,14 @@
       "must": [
         "propose the budget and the package list, then stop for the",
         "checking nothing until it comes"
+      ]
+    },
+    {
+      "id": "unknown-token-defaults",
+      "rule": "A token that is no control, mode, or target is named as unrecognized and the run uses the defaults; an unresolvable target asks",
+      "must": [
+        "say it was not recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target that resolves to nothing: say so and ask — never guess what to work on"
       ]
     }
   ]

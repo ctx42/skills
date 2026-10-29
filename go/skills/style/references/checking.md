@@ -4,7 +4,7 @@ Read when `style` is invoked as a command (`/style ...`). The pass checks code
 against the style rules only — formatting, naming, structure, godoc, test shape;
 bugs, edge cases, and logic errors are `go:review`'s job.
 
-Read the invocation from `$ARGUMENTS`; its first token is the target.
+SKILL.md says how to read the tokens; the target forms and controls follow.
 
 ## Contents
 
@@ -19,25 +19,28 @@ Read the invocation from `$ARGUMENTS`; its first token is the target.
 
 ## Target
 
-The first token selects what to check:
+The target selects what to check:
 - empty — run `git diff HEAD`; if that is empty, fall back to the diff vs the
   base branch (staged + unstaged).
 - not a path at all — `add`, `change`, `remove`, or prose about the rules
   themselves is a rulebook edit, not a target: redirect to `go:review`
   (see SKILL.md) rather than resolving it as a directory that does not exist.
-  Anything else unrecognized: say so and ask, do not guess a target.
+- `func=NAME` or `func=T.Bar` — that function or method; `FILE:LINE` — the
+  function enclosing that line; `FILE.go` — that file. Check just that code. A
+  name matching in more than one package: say which and ask.
 - a package — a path like `./pkg/foo` or an import path; check that package's
   `.go` files.
-- a module / many packages — `./...`, a directory containing `go.mod`, or an
-  explicit "module"; check every package in the module.
+- `all` — every package in the current module. A package pattern (`./...`,
+  `./pkg/...`) or a directory holding `go.mod` stays a path target: check
+  every package it matches.
 
 State the resolved target and the exact file set before checking.
 
 ## Budget & scope
 
-Read these from `$ARGUMENTS` (any order, after the target):
+Controls and flags:
 - `packages=a,b` — restrict to these packages within the target.
-- `max_issues=N` — cap on offenses reported (default 25).
+- `max=N` — cap on offenses reported (default 25).
 - `depth=light|standard|full` — default `standard`. `light` reports only
   high-impact offenses and skips `lines-fit-limit`, saying so in one line;
   `full` checks every rule exhaustively.
@@ -49,12 +52,12 @@ Read these from `$ARGUMENTS` (any order, after the target):
 
 Default to plan-first for a broad target with no budget: propose defaults (the
 caps above, the package list) and ask before applying anything. Either
-`packages=` or `max_issues=` is a budget; `depth=` alone is not. Broad means the
+`packages=` or `max=` is a budget; `depth=` alone is not. Broad means the
 target has more than ~6 packages, or comparable LOC in fewer — the same
 threshold as `go:review`. Whether it then fans out is a separate call made by
 size (Scale): many packages under ~500 lines of Go in all are checked in this
 context, and the proposal says which and why. A module of three small
-packages is `./...` and still not broad: check it in this context and use the
+packages is `all` and still not broad: check it in this context and use the
 normal pick step, which asks before applying anyway.
 
 Plan-first is propose-then-stop: the defaults and the package list, and no
@@ -159,7 +162,7 @@ Each offense:
 - the rule id (e.g. `wrap-errors-w`, `no-name-stutter`).
 - the trigger: the source text that makes it an offense, quoted. Not the fix
   and not a restatement of the rule — the thing on the line. An offense whose
-  trigger cannot be quoted was not located, and under `fanout` the quote is
+  trigger cannot be quoted was not located, and under fan-out the quote is
   what lets the merge re-check a package that reported nothing.
 - the minimal fix, opening with its verb — `insert`, `delete`, `rename`,
   `move`, `replace`, or `reword` — so the merge can compare directions across
@@ -228,7 +231,7 @@ limit…* → `lines-fit-limit`. *Receivers are a ~three-letter type abbreviatio
 work in `init()`; no package-level mutable state…* → `no-work-init`, one id for
 the bullet, not one per clause.
 
-Under `fanout`, the parent derives the id *and the severity* for every rule it
+Under fan-out, the parent derives the id *and the severity* for every rule it
 is dispatching against and sends that list with each worker's brief. Workers
 use the list and neither coin an id nor grade a tier; a rule they hit that is
 not on it comes back with the line quoted, no id, and no severity, for the
@@ -245,7 +248,7 @@ in some packages and one per site in others makes every count noise, and a cap
 applied to sites rather than rules spends itself on whichever rule happens to
 repeat most.
 
-Stop at `max_issues`, highest-severity first; say how many offenses went
+Stop at `max`, highest-severity first; say how many offenses went
 unreported — counted in offenses, every site of a dropped finding included,
 never in findings. End with a one-line verdict (clean / fix-first) and per-severity
 counts.
@@ -302,7 +305,7 @@ behavioral fix, with its red/green test, a separate change.
   the parent's rule-id list, and opens `rules.md` entries per need like the
   parent; the brief also has it walk every `--- Given ---`/`--- Then ---` block
   subject by subject for the topic rule, which a read-through misses most),
-  then merge into one report re-ranked to the global `max_issues`. The id list
+  then merge into one report re-ranked to the global `max`. The id list
   is every rule the depth puts in scope, which at `standard` and `full` is the
   whole rulebook —
   one id per bullet, bar the few bullets step 5 folds onto a shared id. That
@@ -312,7 +315,7 @@ behavioral fix, with its red/green test, a separate change.
   Report which packages were checked and which were skipped; never silently
   truncate.
 
-  Workers do not get a share of `max_issues` — they report every offense they
+  Workers do not get a share of `max` — they report every offense they
   find, and the cap is applied once, at the merge, across the whole set. A
   per-worker budget drops findings before anything can rank them, so a package
   with many nits evicts another package's blocker while the global cap still
@@ -320,7 +323,7 @@ behavioral fix, with its red/green test, a separate change.
 
   The merge folds by rule id before it cuts: one rule broken in twelve packages
   is one finding listing twelve packages, not twelve findings. Cut at
-  `max_issues` after folding. Unfolded, two blockers repeated across a module
+  `max` after folding. Unfolded, two blockers repeated across a module
   consumed a whole default cap of 25 while the rule broken in *every* package
   fell outside it — the worst finding in the run, unreported.
 
@@ -352,7 +355,7 @@ behavioral fix, with its red/green test, a separate change.
   The merge is only performable if workers agree on ids and severity, which is
   what the rubric and the id rule above are for: merging means concatenating,
   sorting by severity then rule id, collapsing exact duplicates, and cutting at
-  `max_issues`. The verdict line always carries that raw total and the
+  `max`. The verdict line always carries that raw total and the
   unreported count, zero included ("38 offenses across 8 packages, 0
   unreported"). Sum the raw total from the worker reports when you write it
   down — a fan-out's "N offenses across M packages, K unreported" is the one

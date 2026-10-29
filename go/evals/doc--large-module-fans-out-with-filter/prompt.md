@@ -1,8 +1,8 @@
 ---
-tags: [case:doc--module-mode-with-fanout-and-filter, skill:doc, sec:doc:usage, sec:doc:target, sec:doc:the-checklist, sec:doc:accuracy, sec:doc:per-item-loop, sec:doc:output, sec:style:production, sec:doc:plan-file-package-module, sec:doc:controls, sec:doc:verify, needs-shell]
+tags: [case:doc--large-module-fans-out-with-filter, skill:doc, sec:doc:usage, sec:doc:target, sec:doc:the-checklist, sec:doc:accuracy, sec:doc:per-item-loop, sec:doc:output, sec:style:production, sec:doc:plan-diff-file-package-module, sec:doc:controls, sec:doc:fan-out, sec:doc:verify, fan-out, needs-shell]
 runs: 1
 max_turns: 80
-timeout_seconds: 300
+timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, LSP, Agent, Bash(go:*), Bash(gofmt:*)]
 append_system_prompt: |
   The user writes English; reply in English.
@@ -14,4 +14,4 @@ append_system_prompt: |
   1. To the plan: "Approved, go ahead."
 ---
 
-/go:doc module fanout packages=svc,api
+/go:doc all packages=api,cache,config,events,httpx,logx,svc

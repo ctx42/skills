@@ -1,6 +1,6 @@
 ---
 type: tool_used
 tool: Agent
-min: 2
-max: 2
+min: 7
+max: 7
 ---

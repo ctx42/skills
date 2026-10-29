@@ -4,11 +4,11 @@ description: >
   Enforced Go coding style for this project (production and test code): the
   rulebook to read before writing or editing any .go file, however small, and
   a runnable style-only pass that lists style offenses across a diff, package,
-  or module and proposes fixes to apply. Use before touching Go, or to check or fix Go
-  style; adding or changing a rule belongs to go:review.
+  or module and proposes fixes to apply. Use before touching Go, or to check
+  or fix Go style; adding or changing a rule belongs to go:review.
 license: MIT
-argument-hint: "[TARGET] [packages=a,b] [max_issues=N]
-  [depth=light|standard*|full] [plan_first] [fix]"
+argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all]
+  [packages=a,b] [max=N] [depth=light|standard*|full] [plan_first] [fix]"
 ---
 
 # style
@@ -16,14 +16,17 @@ argument-hint: "[TARGET] [packages=a,b] [max_issues=N]
 ## Usage
 
 ```
-/style                                  style-check the current git diff (default)
-/style ./pkg/foo                        style-check one package
-/style ./...                            check the whole module
-/style /path/to/project                 check that module (a go.mod dir)
-/style ./pkg/foo fix                    apply every offense's fix without asking
-/style ./... plan_first                 propose the budget, then stop
-/style ./... packages=a,b               restrict a module check to these packages
-/style ./... max_issues=15 depth=light  cap offenses; set depth
+/style                             style-check the current git diff (default)
+/style func=Parse                  check one function (func=T.Bar: a method)
+/style pkg/foo/foo.go:42           check the function enclosing that line
+/style pkg/foo/foo.go              check one file
+/style ./pkg/foo                   check one package
+/style all                         check every package of the module
+/style /path/to/project            check that module (a go.mod dir)
+/style ./pkg/foo fix               apply every offense's fix without asking
+/style all plan_first              propose the budget, then stop
+/style all packages=a,b            restrict a module check to these packages
+/style all max=15 depth=light      cap offenses; set depth
 ```
 
 Authoritative Go style rules and the style-only pass that enforces them. Two
@@ -36,6 +39,14 @@ uses:
   these rules and propose fixes. Read
   [references/checking.md](references/checking.md) and follow it; per-rule
   detection detail lives in [rules.md](rules.md), opened one entry at a time.
+
+Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
+a control, and anything else is the target. `func=` names the target, not a
+control. A `key=value` that names no control here, or a word left over once the
+modes, the target, and any text the skill takes are read: say it was not
+recognized, name the ones that exist, and run with the defaults as if it were
+absent — unless dropping it would widen what the run changes; then ask. A target
+that resolves to nothing: say so and ask — never guess what to work on.
 
 Change the rules only through `go:review` (state a preference, or
 `go:review learn` to mine an editing session); never hand-edit them.

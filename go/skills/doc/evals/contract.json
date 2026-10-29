@@ -57,10 +57,43 @@
     },
     {
       "id": "plan-gate",
-      "rule": "File/package/module plan then wait for approval",
+      "rule": "Diff/file/package/module plan then wait for approval",
       "must": [
         "Wait for approval, then run the per-item loop and Verify",
         "Run straight \\(no plan gate\\), then report"
+      ]
+    },
+    {
+      "id": "diff-default",
+      "rule": "No target works the items the working diff touches; an empty diff asks",
+      "must": [
+        "diff \\(default: no target\\) \u2014 every item the working diff touches",
+        "a change anywhere in a declaration, its body included, brings both its godoc and its body's inline comments",
+        "An empty diff: say so and ask for a target"
+      ]
+    },
+    {
+      "id": "auto-fan-out",
+      "rule": "Fan-out is automatic by size, announced in the plan",
+      "must": [
+        "Automatic, never asked for: when the target spans more than ~6 packages and more than ~500 lines of Go in scope",
+        "The plan says it will fan out and why"
+      ]
+    },
+    {
+      "id": "unknown-tokens",
+      "rule": "Unrecognized tokens are named and defaults run; an empty target resolution asks",
+      "must": [
+        "Read the tokens in any order: a reserved word is a mode or flag, `key=value` is a control, and anything else is the target",
+        "say it was not recognized, name the ones that exist, and run with the defaults as if it were absent",
+        "A target that resolves to nothing: say so and ask \u2014 never guess what to work on"
+      ]
+    },
+    {
+      "id": "max-cap",
+      "rule": "max= is a hard cap on comments changed; what is left is reported",
+      "must": [
+        "`max=N` \u2014 hard cap on comments changed this run; report what is left"
       ]
     },
     {
@@ -72,7 +105,7 @@
       ]
     },
     {
-      "id": "fanout-reread",
+      "id": "fan-out-reread",
       "rule": "Parent re-reads workers' edits against the checklist and reverts unsupported",
       "must": [
         "Merging is not accepting",

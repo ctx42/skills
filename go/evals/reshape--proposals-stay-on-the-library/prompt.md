@@ -8,4 +8,4 @@ append_system_prompt: |
   The user writes English; reply in English.
 ---
 
-/go:reshape oskit in ./pkg/render
+/go:reshape oskit packages=render

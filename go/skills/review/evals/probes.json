@@ -12,7 +12,7 @@
     {
       "id": "plan-first-flag",
       "rule": "plan-first-stops",
-      "prompt": "Situation: the user runs `/review ./... plan_first` on a module of 3 small packages.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: REVIEW-THEN-PRESENT, PROPOSE-AND-STOP. Then one sentence why.",
+      "prompt": "Situation: the user runs `/review all plan_first` on a module of 3 small packages.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: REVIEW-THEN-PRESENT, PROPOSE-AND-STOP. Then one sentence why.",
       "pass": "^\\W*PROPOSE-AND-STOP",
       "fail": "^\\W*REVIEW-THEN-PRESENT",
       "class": "redundant"
@@ -28,7 +28,7 @@
     {
       "id": "worker-cap",
       "rule": "fanout-cap-at-merge",
-      "prompt": "Situation: `/review ./... max_issues=10` on a large module; you fan out one subagent per package, 12 packages.\n\nQuestion: what cap do you give each worker? Answer on the first line with exactly one of: NONE, ONE-TENTH, TEN. Then one sentence why.",
+      "prompt": "Situation: `/review all max=10` on a large module; you fan out one subagent per package, 12 packages.\n\nQuestion: what cap do you give each worker? Answer on the first line with exactly one of: NONE, ONE-TENTH, TEN. Then one sentence why.",
       "pass": "^\\W*NONE\\b",
       "fail": "^\\W*(TEN|ONE-TENTH)",
       "class": "redundant"
@@ -52,10 +52,10 @@
     {
       "id": "merge-regrade-blocker",
       "rule": "merge-regrade-blocker",
-      "prompt": "Situation: `/review ./...` fanned out over 9 packages, one worker each. All workers have returned, each with its findings already graded Blocker / Should-fix / Nit; together they report 14 correctness Blockers. You are writing the merged report.\n\nQuestion: what do you do with the workers' Blocker grades? Answer on the first line with exactly one of: KEEP-WORKER-GRADES, REGRADE-EACH-BLOCKER. Then one sentence why.",
+      "prompt": "Situation: `/review all` fanned out over 9 packages, one worker each. All workers have returned, each with its findings already graded Blocker / Should-fix / Nit; together they report 14 correctness Blockers. You are writing the merged report.\n\nQuestion: what do you do with the workers' Blocker grades? Answer on the first line with exactly one of: KEEP-WORKER-GRADES, REGRADE-EACH-BLOCKER. Then one sentence why.",
       "pass": "^\\W*REGRADE-EACH-BLOCKER",
       "fail": "^\\W*KEEP-WORKER-GRADES",
-      "class": "load-bearing"
+      "class": "redundant"
     },
     {
       "id": "dirty-manifest-baseline",
@@ -76,6 +76,14 @@
       "pass": "^\\W*B\\b",
       "fail": "^\\W*[AC]\\b",
       "class": "load-bearing"
+    },
+    {
+      "id": "old-cap-spelling",
+      "rule": "unknown-token-defaults",
+      "prompt": "Situation: the user runs `/review ./pkg/foo max_issues=5`.\n\nQuestion: how many findings do you report at most? Answer on the first line with exactly one of: FIVE, TWENTY-FIVE. Then one sentence on what you tell the user about `max_issues=5`.",
+      "pass": "^\\W*TWENTY-FIVE",
+      "fail": "^\\W*FIVE",
+      "class": "redundant"
     }
   ]
 }

@@ -1,5 +1,5 @@
 ---
-tags: [case:doc--directives-and-interface-method-godoc, skill:doc, sec:doc:usage, sec:doc:target, sec:doc:the-checklist, sec:doc:accuracy, sec:doc:per-item-loop, sec:doc:output, sec:style:production, sec:doc:plan-file-package-module, sec:doc:never-touch, needs-shell]
+tags: [case:doc--directives-and-interface-method-godoc, skill:doc, sec:doc:usage, sec:doc:target, sec:doc:the-checklist, sec:doc:accuracy, sec:doc:per-item-loop, sec:doc:output, sec:style:production, sec:doc:plan-diff-file-package-module, sec:doc:never-touch, needs-shell]
 runs: 1
 max_turns: 40
 timeout_seconds: 300

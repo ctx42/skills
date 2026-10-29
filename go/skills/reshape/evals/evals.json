@@ -18,7 +18,7 @@
         "reshape"
       ],
       "setup": "`oskit` is consumed across the module, but the run is scoped to `./pkg/render`. `oskit`'s source sits in the module cache with no `replace` and no `go.work` entry, so it is external. Several call sites could be tidied without touching `oskit` at all — the tempting wrong answer.",
-      "query": "/reshape oskit in ./pkg/render",
+      "query": "/reshape oskit packages=render",
       "files": []
     },
     {
