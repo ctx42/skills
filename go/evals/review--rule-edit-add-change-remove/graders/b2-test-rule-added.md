@@ -1,6 +1,6 @@
 ---
 type: regex
-target: {source: file, path: go/skills/style/SKILL.md}
+target: {source: file, path: go/skills/style/references/test.md}
 flags: "i"
 ---
-\n## Test\n[\s\S]*\n- (?=[^\n]*naked return)[^\n]{1,100}\n
+\n- (?=[^\n]*naked return)[^\n]{1,100}\n

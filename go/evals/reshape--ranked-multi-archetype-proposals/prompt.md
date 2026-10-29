@@ -1,5 +1,5 @@
 ---
-tags: [case:reshape--ranked-multi-archetype-proposals, skill:reshape, sec:reshape:target, sec:reshape:modifiability, sec:reshape:workflow, sec:reshape:change-archetypes, sec:reshape:impact-rubric, sec:reshape:output, sec:reshape:self-learning, ref:reshape/change-catalog, sec:style:production]
+tags: [case:reshape--ranked-multi-archetype-proposals, skill:reshape, sec:reshape:target, sec:reshape:modifiability, sec:reshape:workflow, sec:reshape:change-archetypes, sec:reshape:impact-rubric, sec:reshape:output, sec:reshape:self-learning, ref:reshape/change-catalog, ref:style/production]
 runs: 1
 max_turns: 60
 timeout_seconds: 300

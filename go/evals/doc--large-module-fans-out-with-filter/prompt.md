@@ -1,5 +1,5 @@
 ---
-tags: [case:doc--large-module-fans-out-with-filter, skill:doc, sec:doc:usage, sec:doc:target, sec:doc:the-checklist, sec:doc:accuracy, sec:doc:per-item-loop, sec:doc:output, sec:style:production, sec:doc:plan-diff-file-package-module, sec:doc:controls, sec:doc:fan-out, sec:doc:verify, fan-out, needs-shell]
+tags: [case:doc--large-module-fans-out-with-filter, skill:doc, sec:doc:usage, sec:doc:target, sec:doc:the-checklist, sec:doc:accuracy, sec:doc:per-item-loop, sec:doc:output, ref:style/production, sec:doc:plan-diff-file-package-module, sec:doc:controls, sec:doc:fan-out, sec:doc:verify, fan-out, needs-shell]
 runs: 1
 max_turns: 80
 timeout_seconds: 600

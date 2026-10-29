@@ -42,12 +42,12 @@ comment looks short. The documentable item — never the file — is the unit of
 work.
 
 Sources of truth:
-- `../style/SKILL.md` (on-demand: before the first comment is written — read
-  its Production "Godoc & comments" and "Naming" sections, plus "Formatting"
-  and "Declarations & files", which the Verify step and the package-comment
-  rule below both cite) — obey it in every comment written; it is the rule
-  spec, do not restate it. Checklist item 7 is the one place this skill
-  departs from it.
+- `../style/references/production.md` (on-demand: before the first comment is
+  written — read its "Godoc & comments" and "Naming" sections, plus
+  "Formatting" and "Declarations & files", which the Verify step and the
+  package-comment rule below both cite) — obey it in every comment written;
+  it is the rule spec, do not restate it. Checklist item 7 is the one place
+  this skill departs from it.
 - The package's own comment conventions, then a sibling package's (on-demand:
   when writing) — for voice and cross-reference style.
 
@@ -215,10 +215,11 @@ For each item, in strict order; never start item B until item A is written.
    flag.
 4. Write the minimal edit that clears the fired checklist items — add only
    the missing fact, fix only the wrong clause; never rewrite a comment that
-   needed a clause. Obey the style rules read from `../style/SKILL.md`,
-   `max=`, and the `only=` filter. Mirror the package's comment voice,
-   else a sibling package's. The package comment goes in the package-named
-   file (style "Declarations & files"); never create a `doc.go` for it.
+   needed a clause. Obey the style rules read from
+   `../style/references/production.md`, `max=`, and the `only=` filter.
+   Mirror the package's comment voice, else a sibling package's. The package
+   comment goes in the package-named file (style "Declarations & files");
+   never create a `doc.go` for it.
 
 ## Never touch
 

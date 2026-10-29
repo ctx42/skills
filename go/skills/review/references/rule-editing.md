@@ -1,7 +1,10 @@
 # review rule editing
 
-Read when Rule-edit or Learn mode triggers. Both modes write rules to
-`../style/SKILL.md` and, when non-obvious, `../style/rules.md`.
+Read when Rule-edit or Learn mode triggers. Both modes write Production rules
+to `../style/references/production.md`, Test rules to
+`../style/references/test.md`, and, when non-obvious, a keyed entry to
+`../style/rules.md`. Never write a rule into `../style/SKILL.md`: it only
+routes to those files.
 
 ## Writes must reach the repo
 
@@ -14,14 +17,14 @@ before writing.
 
 ## Rule-edit mode
 
-1. Read `../style/SKILL.md`.
+1. Read `../style/references/production.md` and `../style/references/test.md`.
 2. Turn the input into rule entries shaped per How a rule entry should look
    (below). If the scope is ambiguous, ask one quick question.
 3. Detect duplicate or conflicting rules; show them and the proposed change,
    then wait for confirmation before writing. Never silently overwrite a
    conflicting rule.
-4. Check the write location (above), then write: `add` inserts the
-   `../style/SKILL.md` line (plus a keyed `../style/rules.md` entry when
+4. Check the write location (above), then write: `add` inserts the rule line
+   in the file of its section (plus a keyed `../style/rules.md` entry when
    warranted); `change` rewrites the existing line and entry in place;
    `remove` deletes the line and, if present, its keyed entry and Contents
    row.
@@ -43,28 +46,29 @@ rules.
    site. Drop task-specific instructions (one-off logic, a lone rename with no
    pattern). When unsure, keep it as a candidate and let the user cut it.
 3. Distill each into a terse rule per How a rule entry should look, using the
-   paired hunk as its before/after example; dedupe against the existing
-   `../style/SKILL.md` rules.
+   paired hunk as its before/after example; dedupe against the existing rules
+   in both rule files.
 4. Present candidates as a list — each with its provenance (the session moment
    that prompted it), flagging duplicates/conflicts. Wait for the user to pick
    which to keep; never write unpicked or conflicting rules.
 
    When every candidate dedupes away, that is a result, not an empty run: say
    in one line that the session's corrections are already rules, name which
-   ones, and stop. A session spent re-learning what `../style/SKILL.md` already
-   says means the rules are not reaching the work — worth the user knowing, and
+   ones, and stop. A session spent re-learning what the rule files already
+   say means the rules are not reaching the work — worth the user knowing, and
    never worth restating as a "new" rule to have something to show.
 5. Write the chosen rules via Rule-edit steps 4–5.
 
 ## How a rule entry should look
 
-- One rule = one concept = one dense imperative line in `../style/SKILL.md`.
+- One rule = one concept = one dense imperative line in a rule file.
 - State it generically: name the construct, not the site — no project
   identifiers, domain nouns, or file names in the prose (`the receiver`, not
   `page`).
 - Cut every word the rule survives without.
-- Scope it Production (`*.go`), Test (`*_test.go`), or both; place it in that
-  section, grouped near related rules.
+- Scope it Production (`*.go`) or Test (`*_test.go`); place it in that file
+  (`production.md` or `test.md`), in the section that holds related rules. A
+  rule for both goes in `production.md`, which Test inherits.
 - Prefer no example; add one only when the rule is ambiguous without it, using
   only generic Go syntax (`ErrXxx`, `[Type]`, `//nolint:name`).
 - Keyed `../style/rules.md` entry only when non-obvious: match the shape of

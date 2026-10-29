@@ -1,5 +1,5 @@
 ---
-tags: [case:style--production-rules-while-writing, skill:style, sec:style:production, sec:style:self-learning]
+tags: [case:style--production-rules-while-writing, skill:style, ref:style/production, sec:style:self-learning]
 runs: 1
 max_turns: 30
 timeout_seconds: 300

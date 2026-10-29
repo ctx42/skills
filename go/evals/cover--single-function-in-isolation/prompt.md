@@ -1,5 +1,5 @@
 ---
-tags: [case:cover--single-function-in-isolation, skill:cover, sec:cover:target, sec:cover:per-function-loop, sec:cover:classify-each-uncovered-line, sec:cover:write, sec:cover:verify, sec:cover:output, skill:style, sec:style:test, sec:style:production, needs-shell]
+tags: [case:cover--single-function-in-isolation, skill:cover, sec:cover:target, sec:cover:per-function-loop, sec:cover:classify-each-uncovered-line, sec:cover:write, sec:cover:verify, sec:cover:output, skill:style, ref:style/test, ref:style/production, needs-shell]
 runs: 1
 max_turns: 80
 timeout_seconds: 300

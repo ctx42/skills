@@ -135,8 +135,9 @@ reference each other with relative paths from their own directory:
   `backlog` read `../create/references/*`; every srd skill runs the gate in
   `../create/references/project-config.md` first.
 - `backlog` reads `../kb/references/retrieval-authoring.md`, which `kb` owns.
-- `cover` and `doc` read `../style/SKILL.md`; `review` invokes `go:style`
-  for the style pass and writes rule edits to `../style/SKILL.md` +
+- `cover`, `doc`, and `reshape` read the rule files under
+  `../style/references/` (`production.md`, `test.md`); `review` invokes
+  `go:style` for the style pass and writes rule edits to those files +
   `../style/rules.md`.
 
 Keep these skills within the same plugin so the `../sibling` paths resolve.

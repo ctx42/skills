@@ -48,8 +48,9 @@ names the target, not a control. The mode:
 Sources of truth:
 - `go:style` (on-demand: Check mode) — owns the style rules and their
   detection; the whole style dimension is delegated to it.
-- `../style/SKILL.md`, `../style/rules.md` (on-demand: Rule-edit/Learn) — the
-  terse rules and their keyed detection detail; those modes write here.
+- `../style/references/production.md`, `../style/references/test.md`,
+  `../style/rules.md` (on-demand: Rule-edit/Learn) — the terse Production and
+  Test rules and their keyed detection detail; those modes write here.
 
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
@@ -130,12 +131,12 @@ broad.
    offense list as the style findings; do not re-derive style rules here.
 
    On the fan-out path each subagent invokes it for its own package, which keeps
-   the rulebook out of this context. Reviewing in-context there is no separate
-   process to delegate to: loading the skill — the Skill tool or reading
-   `../style/SKILL.md` and its `references/checking.md` — brings the rules in
-   here, so read them once, take the offenses, and do not consult them again
-   while judging correctness — the two dimensions stay separate in the report
-   even when they share a context.
+   the rulebook out of this context. Reviewing in-context, invoke `go:style`
+   with the Skill tool all the same and let its pass read the rule files; never
+   read them here as well. The rules its pass reads land in this context: take
+   the offenses and do not consult the rules again while judging correctness —
+   the two dimensions stay separate in the report even when they share a
+   context.
 
    One defect can be both. A `%v` wrap is a style offense and, where it breaks
    an error chain a caller unwraps, a correctness bug. Report it once, under

@@ -1,6 +1,6 @@
 ---
 type: regex
-target: {source: file, path: go/skills/style/SKILL.md}
+target: {source: file, path: go/skills/style/references/production.md}
 flags: "i"
 ---
-\n## Production\n[\s\S]*(time\.After|timer)[\s\S]*\n## Test\n
+time\.After|timer

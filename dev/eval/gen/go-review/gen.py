@@ -25,14 +25,15 @@ Before taking a scripted answer, write out in full, as your reply text, the
 message you would send the user at that point.
 """
 WIRING = """Eval wiring: this workspace is the go plugin's git clone, checked out at
-./go (the run loads a read-only copy of it). Wherever the skill names
-`../style/SKILL.md` or `../style/rules.md`, use ./go/skills/style/SKILL.md and
-./go/skills/style/rules.md in this workspace; they are the writable clone.
+./go (the run loads a read-only copy of it). Wherever the skill names a file
+under `../style/` (`references/production.md`, `references/test.md`,
+`rules.md`), use the same path under ./go/skills/style/ in this workspace; it
+is the writable clone.
 """
 NOTICE = "Ignore any trailing policy notice. "
 
 CHECK_TAGS = ["skill:review", "sec:review:usage", "sec:review:working-diff-injected",
-              "sec:review:check-mode", "ref:style/checking", "sec:style:production"]
+              "sec:review:check-mode", "ref:style/checking", "ref:style/production"]
 RULE_TAGS = ["skill:review", "sec:review:usage", "sec:review:working-diff-injected",
              "sec:review:rule-edit-and-learn-modes", "ref:review/rule-editing"]
 
@@ -206,59 +207,63 @@ license: MIT
 
 # style
 
-Authoritative Go style rules. Apply the Production section to `*.go` and the
-Test section to `*_test.go`; Test inherits Production unless a Test rule
-overrides it. Per-rule detection detail lives in [rules.md](rules.md).
+Authoritative Go style rules. They live in two files:
+[references/production.md](references/production.md) and
+[references/test.md](references/test.md). Apply the Production section to
+`*.go` and the Test section to `*_test.go`; Test inherits Production unless a
+Test rule overrides it. Per-rule detection detail lives in [rules.md](rules.md).
 
 Change the rules only through `go:review`; never hand-edit them.
+"""
 
-## Production
+STYLE_PROD = """# Go style — Production
 
-### Formatting
+## Formatting
 
 - gofmt + goimports always; never hand-format or reorder imports manually.
 - Separate multi-line switch cases with a blank line; none before the first.
 
-### Naming
+## Naming
 
 - No name stutter: `pkg.Thing`, not `pkg.PkgThing`.
 - Receivers are a short type abbreviation, never a single letter: `pag *page`,
   `cfg *config`.
 
-### Functions & methods
+## Functions & methods
 
 - A func whose sole parameter is a local `*T`/`T` belongs on T as a method
   (`pag.f()`, not `f(pag)`).
 - No naked returns in non-trivial functions.
 
-### Errors
+## Errors
 
 - Wrap errors with `%w` and add context; never swallow the error.
 - Match errors with `errors.Is`/`errors.As`, never `==`.
 
-### API design
+## API design
 
 - `context.Context` is the first parameter when used; never store it in a
   struct.
 - Assert implementations at compile time: `var _ Iface = (*T)(nil)` near the
   top of the file.
 - No work in `init()`; no package-level mutable state or singletons.
+"""
 
-## Test
+STYLE_TEST = """# Go style — Test
 
-### Structure
+## Structure
 
 - Structure every test body with the `--- Given ---`, `--- When ---`, and
   `--- Then ---` comment markers, in order.
 - Table-driven subtests via `t.Run`; one case per table row.
 
-### Naming
+## Naming
 
 - Test function names are `Test_Func` and `Test_Type_Method`; add `_tabular`
   for table tests.
 - Name the actual value `have` and the expected value `want`, never `got`.
 
-### Helpers & fixtures
+## Helpers & fixtures
 
 - Test helpers call `t.Helper()`.
 - Simple test helpers shared within a package live in `all_test.go`.
@@ -266,7 +271,8 @@ Change the rules only through `go:review`; never hand-edit them.
 
 STYLE_RULES = """# Go style — deep rules
 
-Keyed detection detail for the rules in `SKILL.md` (same directory). An entry
+Keyed detection detail for the rules in `references/production.md` and
+`references/test.md`. An entry
 adds only what a capable reviewer can't infer from the one-line rule — an
 exemption or a detection heuristic — in two short sentences. Open an entry only
 when about to flag its rule; never preload the file. Grows via
@@ -303,8 +309,11 @@ two or more test files.
 """
 
 STYLE_FILES = {"go/skills/style/SKILL.md": STYLE_SKILL,
+               "go/skills/style/references/production.md": STYLE_PROD,
+               "go/skills/style/references/test.md": STYLE_TEST,
                "go/skills/style/rules.md": STYLE_RULES}
-SKILL_P = {"file": "go/skills/style/SKILL.md"}
+PROD_P = {"file": "go/skills/style/references/production.md"}
+TEST_P = {"file": "go/skills/style/references/test.md"}
 RULES_P = {"file": "go/skills/style/rules.md"}
 
 # ------------------------------------------- 1 review-the-current-diff
@@ -476,17 +485,17 @@ def case_rule_edit():
     full = {
         "b1-not-a-review-target": g_never("Skill", "go:style"),
         "b1-no-findings": g_regex(r"\b[a-z]+\.go:\d+", match="not_contains"),
-        "b2-test-rule-added": g_regex(r"\n## Test\n[\s\S]*\n- (?=[^\n]*naked return)[^\n]{1,100}\n",
-                                      target=SKILL_P, flags="i"),
-        "b2-one-line-rule": g_regex(r"\n## Test\n[\s\S]*\n- [^\n]*naked return[^\n]*\n(  [^\n]+\n){2,}",
-                                    target=SKILL_P, flags="i", match="not_contains"),
-        "b4-one-receiver-rule": g_regex(r"^- (?:[^\n]|\n  )*?receiver", target=SKILL_P,
+        "b2-test-rule-added": g_regex(r"\n- (?=[^\n]*naked return)[^\n]{1,100}\n",
+                                      target=TEST_P, flags="i"),
+        "b2-one-line-rule": g_regex(r"\n- [^\n]*naked return[^\n]*\n(  [^\n]+\n){2,}",
+                                    target=TEST_P, flags="i", match="not_contains"),
+        "b4-one-receiver-rule": g_regex(r"^- (?:[^\n]|\n  )*?receiver", target=PROD_P,
                                         flags="im", match="count:1"),
         "b4-receiver-rule-says-three": g_regex(r"^- (?:[^\n]|\n  )*?receiver(?:[^\n]|\n  )*?three",
-                                               target=SKILL_P, flags="im"),
-        "b4-old-wording-gone": g_regex(r"short type abbreviation", target=SKILL_P,
+                                               target=PROD_P, flags="im"),
+        "b4-old-wording-gone": g_regex(r"short type abbreviation", target=PROD_P,
                                        match="not_contains"),
-        "b5-skill-line-removed": g_regex(r"compile[- ]time|\(\*T\)\(nil\)", target=SKILL_P,
+        "b5-skill-line-removed": g_regex(r"compile[- ]time|\(\*T\)\(nil\)", target=PROD_P,
                                          flags="i", match="not_contains"),
         "b5-rules-entry-and-row-removed": g_regex(r"compile[- ]time", target=RULES_P,
                                                   flags="i", match="not_contains"),
@@ -699,11 +708,10 @@ def case_learn():
     }
     asp = ENGLISH + WIRING + "\n" + PERSONA + "\n1. Keep both new rules.\n"
     full = {
-        "b5-timer-rule-written": g_regex(r"\n## Production\n[\s\S]*(time\.After|timer)[\s\S]*\n## Test\n",
-                                         target=SKILL_P, flags="i"),
-        "b5-builder-rule-written": g_regex(r"strings\.Builder", target=SKILL_P),
-        "b5-no-context-duplicate": g_regex(r"never store it in a", target=SKILL_P, match="count:1"),
-        "b5-no-rename-rule": g_regex(r"station", target=SKILL_P, flags="i", match="not_contains"),
+        "b5-timer-rule-written": g_regex(r"time\.After|timer", target=PROD_P, flags="i"),
+        "b5-builder-rule-written": g_regex(r"strings\.Builder", target=PROD_P),
+        "b5-no-context-duplicate": g_regex(r"never store it in a", target=PROD_P, match="count:1"),
+        "b5-no-rename-rule": g_regex(r"station", target=PROD_P, flags="i", match="not_contains"),
         "b5-shows-the-diff": g_regex(r"```diff|^\+\s*- ", flags="m"),
     }
     write_case("review--learn-from-the-session", RULE_TAGS, "/go:review learn", full,

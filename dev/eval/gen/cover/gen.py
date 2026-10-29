@@ -20,7 +20,7 @@ message you would send the user at that point.
 
 SHELL = ["Bash(go:*)", "Bash(gofmt:*)", "Bash(mkdir:*)", "Bash(awk:*)", "Bash(rm:*)"]
 BASE = ["Read", "Glob", "Grep", "Skill", "Write", "Edit"]
-STYLE = ["skill:style", "sec:style:test", "sec:style:production"]
+STYLE = ["skill:style", "ref:style/test", "ref:style/production"]
 
 
 def scaffold(fx):

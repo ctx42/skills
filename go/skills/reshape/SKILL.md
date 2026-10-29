@@ -30,8 +30,8 @@ the *payoff* shown in before/after, not the change itself — never propose
 refactoring only the call sites with the API left as-is.
 
 Sources of truth:
-- `../style/SKILL.md` (on-demand: when drafting a proposal — its Naming,
-  Errors, and API design sections) — the Go idioms every proposed signature
+- `../style/references/production.md` (on-demand: when drafting a proposal —
+  its Naming, Errors, and API design sections) — the Go idioms every proposed signature
   must respect; do not restate them.
 - [references/change-catalog.md](references/change-catalog.md) (on-demand: the
   entry for the archetype being drafted) — detection cue, API shape, and a Go

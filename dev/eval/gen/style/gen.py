@@ -29,8 +29,8 @@ GOMOD_NODEP = """module example.com/{mod}
 go 1.26
 """
 
-PASS_TAGS = ["skill:style", "sec:style:usage", "sec:style:production",
-             "sec:style:test", "sec:style:self-learning", "ref:style/checking"]
+PASS_TAGS = ["skill:style", "sec:style:usage", "ref:style/production",
+             "ref:style/test", "sec:style:self-learning", "ref:style/checking"]
 PASS_TOOLS = ["Read", "Glob", "Grep", "Skill", "LSP", "Write", "Edit"]
 FAN_TOOLS = PASS_TOOLS + ["Agent", "Task"]
 
@@ -364,7 +364,7 @@ LOAD_STYLE = ("This project's Go conventions live in the go:style skill; "
 
 n = "style--production-rules-while-writing"
 case(n,
-     prompt_md(n, ["skill:style", "sec:style:production",
+     prompt_md(n, ["skill:style", "ref:style/production",
                    "sec:style:self-learning"],
                "Add a Close method to the Service type in service.go",
                max_turns=30, tools=["Read", "Glob", "Grep", "Skill", "LSP",

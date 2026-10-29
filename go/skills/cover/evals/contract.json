@@ -92,7 +92,7 @@
       "id": "test-style",
       "rule": "Tests obey go:style Test and inherited Production rules",
       "must": [
-        "obey it in every test written",
+        "obey them in every test\\s+written",
         "Test does not replace Production, it adds to it"
       ]
     },

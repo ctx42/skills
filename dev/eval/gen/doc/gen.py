@@ -9,7 +9,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../go/e
 BASE_TAGS = [
     "skill:doc", "sec:doc:usage", "sec:doc:target", "sec:doc:the-checklist",
     "sec:doc:accuracy", "sec:doc:per-item-loop", "sec:doc:output",
-    "sec:style:production",
+    "ref:style/production",
 ]
 SHELL_TOOLS = ["Bash(go:*)", "Bash(gofmt:*)"]
 BASE_TOOLS = ["Read", "Glob", "Grep", "Skill", "Write", "Edit", "LSP"]

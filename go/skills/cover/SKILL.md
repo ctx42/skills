@@ -39,12 +39,13 @@ whole-suite run does not count. The function — never the package — is the
 unit of work.
 
 Sources of truth:
-- `../style/SKILL.md` (on-demand: before writing a test — read its Test
-  section and the Production rules Test inherits, Formatting and Naming
-  above all) — obey it in every test written; it is the rule spec, do not
-  restate it. Test does not replace Production, it adds to it: a run that
-  reads Test alone writes tests that break the line-limit rule, and `gofmt -l`
-  does not measure line length, so Verify passes them.
+- `../style/references/test.md` and `../style/references/production.md`
+  (on-demand: before writing a test — read both files whole, since Test inherits
+  every Production rule; Formatting and Naming are the ones tests break most) —
+  obey them in every test written; they are the rule spec, do not restate them.
+  Test does not replace Production, it adds to it: a run that reads Test alone
+  writes tests that break the line-limit rule, and `gofmt -l` does not measure
+  line length, so Verify passes them.
 - The package's own tests, then a sibling package (on-demand: when writing) —
   for the assertion library and helper conventions the style rules defer to.
   Test *names* are not among them: style fixes those outright, so a package
@@ -82,11 +83,12 @@ State the resolved kind and the function/file set before measuring.
 
 Fan-out is automatic, never asked for: when the target spans more than ~6
 packages and more than ~500 lines of Go in scope, dispatch one subagent per
-package (under `max=`, per package whose share is above 0; each gets the style
-Test rules and this per-function loop for its package) and merge the
-per-package reports. It keeps the main context lean; packages are independent,
-so ordering is preserved per package. The plan says it will fan out and why —
-the package and line counts that crossed the threshold.
+package (under `max=`, per package whose share is above 0; each gets the paths
+of both style rule files, read once before its first test, and this per-function
+loop for its package) and merge the per-package reports. It keeps the main
+context lean; packages are independent, so ordering is preserved per package.
+The plan says it will fan out and why — the package and line counts that crossed
+the threshold.
 
 ## Controls
 
@@ -162,10 +164,11 @@ does not.
    that matches nothing prints `no tests to run` and still exits 0 — that is
    an uncovered function, not a clean one, so check the family exists before
    reading a 0% as a measurement.
-3. Classify every uncovered line (next section). Read the style Test section
-   and the package's test conventions, then add one targeted case — table row,
-   subtest, or assertion — per easy line or branch (complex lines too under
-   `include=all`; stop at `max=`). Never attempt un-coverable lines.
+3. Classify every uncovered line (next section). Read the style rule files
+   (Sources of truth) once per run, just before the first test it writes, and
+   the package's test conventions once per package, then add one targeted case —
+   table row, subtest, or assertion — per easy line or branch (complex lines too
+   under `include=all`; stop at `max=`). Never attempt un-coverable lines.
 4. Re-measure into `tmp/cover/Foo.after`: re-run Foo's direct-test family and
    re-read the profile;
    confirm Foo's target lines went from 0 to hit. One measurement is the

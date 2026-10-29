@@ -1,5 +1,5 @@
 ---
-tags: [case:doc--line-target-resolves-to-its-item, skill:doc, sec:doc:usage, sec:doc:target, sec:doc:the-checklist, sec:doc:accuracy, sec:doc:per-item-loop, sec:doc:output, sec:style:production, needs-shell]
+tags: [case:doc--line-target-resolves-to-its-item, skill:doc, sec:doc:usage, sec:doc:target, sec:doc:the-checklist, sec:doc:accuracy, sec:doc:per-item-loop, sec:doc:output, ref:style/production, needs-shell]
 runs: 1
 max_turns: 40
 timeout_seconds: 300

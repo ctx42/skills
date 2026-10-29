@@ -66,8 +66,8 @@ spends the whole run before the budget it is asking about has been agreed.
 
 ## Principles
 
-Reason from these while checking; they generalize the `SKILL.md` rules to cases
-no single line spells out.
+Reason from these while checking; they generalize the rulebook's rules to
+cases no single line spells out.
 
 1. Earn every token: flag text the signature, the reader, or the rule already
    carries — godoc paraphrasing the name or params, a doc comment duplicating
@@ -95,9 +95,10 @@ no single line spells out.
    and `tab_width` from the module root's `.editorconfig`, else 80 and 4,
    resolved once for the whole run; open the `rules.md` entry only when that
    file does not settle them. List the packages/files in scope.
-2. Check each file against the rules in `SKILL.md` — Production for `*.go`,
-   Test for `*_test.go` — reasoning from the Principles above. Open a keyed
-   `rules.md` entry only when about to flag its rule; never preload the file.
+2. Check each file against the rules in `production.md` and `test.md` (this
+   directory) — Production for `*.go`, Production plus Test for `*_test.go` —
+   reasoning from the Principles above. Open a keyed `rules.md` entry only when
+   about to flag its rule; never preload the file.
    Read the entry, not the file: `grep -n` its Contents key to find the line,
    then read that range. `cat rules.md` is the thing this rule exists to
    prevent — it is the single largest file the pass can pull in, most of it
@@ -175,7 +176,7 @@ asked for one, twelve workers turned the same `%w` rule into
 Derive it in these steps, which every worker must apply identically or the
 merge cannot fold:
 
-1. Take the rule's whole `SKILL.md` bullet. One bullet is one rule is one id:
+1. Take the rule's whole rulebook bullet. One bullet is one rule is one id:
    never split it, and in particular never split on `;`. Most rulebook bullets
    carry a semicolon, and it almost always joins a rule to its negative half or
    its elaboration (*gofmt + goimports always; never hand-format*, *Wrap errors
@@ -300,9 +301,9 @@ behavioral fix, with its red/green test, a separate change.
 - Larger module (> ~6 packages and over ~500 lines, or comparable LOC in
   fewer): fan out — even when the packages look alike, since near-identical
   packages are what the merge's reconcile step is for — one subagent per
-  package (each gets
-  the paths of `SKILL.md` and this reference, not their text, the `depth`, and
-  the parent's rule-id list, and opens `rules.md` entries per need like the
+  package (each gets the paths of `SKILL.md`, this reference, `production.md`,
+  and `test.md`, not their text, the `depth`, and the parent's rule-id list,
+  and opens `rules.md` entries per need like the
   parent; the brief also has it walk every `--- Given ---`/`--- Then ---` block
   subject by subject for the topic rule, which a read-through misses most),
   then merge into one report re-ranked to the global `max`. The id list

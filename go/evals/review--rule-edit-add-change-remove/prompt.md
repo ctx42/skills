@@ -7,9 +7,10 @@ allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(git:*)]
 append_system_prompt: |
   The user writes English; reply in English.
   Eval wiring: this workspace is the go plugin's git clone, checked out at
-  ./go (the run loads a read-only copy of it). Wherever the skill names
-  `../style/SKILL.md` or `../style/rules.md`, use ./go/skills/style/SKILL.md and
-  ./go/skills/style/rules.md in this workspace; they are the writable clone.
+  ./go (the run loads a read-only copy of it). Wherever the skill names a file
+  under `../style/` (`references/production.md`, `references/test.md`,
+  `rules.md`), use the same path under ./go/skills/style/ in this workspace; it
+  is the writable clone.
 
   Automated eval: the user is absent. Whenever the skill would stop and wait
   for the user, take the next scripted answer below as the reply and continue

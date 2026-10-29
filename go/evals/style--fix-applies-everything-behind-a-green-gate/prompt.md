@@ -1,5 +1,5 @@
 ---
-tags: [case:style--fix-applies-everything-behind-a-green-gate, skill:style, sec:style:usage, sec:style:production, sec:style:test, sec:style:self-learning, ref:style/checking, needs-shell]
+tags: [case:style--fix-applies-everything-behind-a-green-gate, skill:style, sec:style:usage, ref:style/production, ref:style/test, sec:style:self-learning, ref:style/checking, needs-shell]
 runs: 1
 max_turns: 60
 timeout_seconds: 300

@@ -14,7 +14,7 @@ BASE_TAGS = ["skill:reshape", "sec:reshape:target", "sec:reshape:modifiability",
              "sec:reshape:workflow", "sec:reshape:change-archetypes",
              "sec:reshape:impact-rubric", "sec:reshape:output",
              "sec:reshape:self-learning", "ref:reshape/change-catalog",
-             "sec:style:production"]
+             "ref:style/production"]
 ALLOWED = ["Read", "Glob", "Grep", "Skill", "LSP", "Write", "Edit"]
 
 # ---------------------------------------------------------------- helpers

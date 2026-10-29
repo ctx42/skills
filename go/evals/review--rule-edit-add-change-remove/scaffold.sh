@@ -15,68 +15,75 @@ license: MIT
 
 # style
 
-Authoritative Go style rules. Apply the Production section to `*.go` and the
-Test section to `*_test.go`; Test inherits Production unless a Test rule
-overrides it. Per-rule detection detail lives in [rules.md](rules.md).
+Authoritative Go style rules. They live in two files:
+[references/production.md](references/production.md) and
+[references/test.md](references/test.md). Apply the Production section to
+`*.go` and the Test section to `*_test.go`; Test inherits Production unless a
+Test rule overrides it. Per-rule detection detail lives in [rules.md](rules.md).
 
 Change the rules only through `go:review`; never hand-edit them.
+EOF_0
+mkdir -p go/skills/style/references
+cat > go/skills/style/references/production.md <<'EOF_1'
+# Go style — Production
 
-## Production
-
-### Formatting
+## Formatting
 
 - gofmt + goimports always; never hand-format or reorder imports manually.
 - Separate multi-line switch cases with a blank line; none before the first.
 
-### Naming
+## Naming
 
 - No name stutter: `pkg.Thing`, not `pkg.PkgThing`.
 - Receivers are a short type abbreviation, never a single letter: `pag *page`,
   `cfg *config`.
 
-### Functions & methods
+## Functions & methods
 
 - A func whose sole parameter is a local `*T`/`T` belongs on T as a method
   (`pag.f()`, not `f(pag)`).
 - No naked returns in non-trivial functions.
 
-### Errors
+## Errors
 
 - Wrap errors with `%w` and add context; never swallow the error.
 - Match errors with `errors.Is`/`errors.As`, never `==`.
 
-### API design
+## API design
 
 - `context.Context` is the first parameter when used; never store it in a
   struct.
 - Assert implementations at compile time: `var _ Iface = (*T)(nil)` near the
   top of the file.
 - No work in `init()`; no package-level mutable state or singletons.
+EOF_1
+mkdir -p go/skills/style/references
+cat > go/skills/style/references/test.md <<'EOF_2'
+# Go style — Test
 
-## Test
-
-### Structure
+## Structure
 
 - Structure every test body with the `--- Given ---`, `--- When ---`, and
   `--- Then ---` comment markers, in order.
 - Table-driven subtests via `t.Run`; one case per table row.
 
-### Naming
+## Naming
 
 - Test function names are `Test_Func` and `Test_Type_Method`; add `_tabular`
   for table tests.
 - Name the actual value `have` and the expected value `want`, never `got`.
 
-### Helpers & fixtures
+## Helpers & fixtures
 
 - Test helpers call `t.Helper()`.
 - Simple test helpers shared within a package live in `all_test.go`.
-EOF_0
+EOF_2
 mkdir -p go/skills/style
-cat > go/skills/style/rules.md <<'EOF_1'
+cat > go/skills/style/rules.md <<'EOF_3'
 # Go style — deep rules
 
-Keyed detection detail for the rules in `SKILL.md` (same directory). An entry
+Keyed detection detail for the rules in `references/production.md` and
+`references/test.md`. An entry
 adds only what a capable reviewer can't infer from the one-line rule — an
 exemption or a detection heuristic — in two short sentences. Open an entry only
 when about to flag its rule; never preload the file. Grows via
@@ -110,6 +117,6 @@ a type passed as an interface with no `var _ Iface = (*T)(nil)` in its file.
 Exemption: a helper used by one test file only may stay beside it. Detect: a
 helper declared in a `_test.go` file other than `all_test.go` and called from
 two or more test files.
-EOF_1
+EOF_3
 git add -A
 git commit -qm 'initial'

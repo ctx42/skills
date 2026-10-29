@@ -15,12 +15,14 @@
       "rule": "Reference mode applies Production to .go and Test to _test.go; Test inherits Production",
       "must": [
         "apply the Production section to `\\*\\.go` and the Test section to `\\*_test\\.go`",
-        "Test inherits Production unless a Test rule overrides it"
+        "Test inherits Production unless a Test rule overrides it",
+        "before editing a `\\*_test\\.go` file,\\s+read `references/test\\.md` and `references/production\\.md` both"
       ]
     },
     {
       "id": "errors-wrapped",
       "rule": "Wrap errors with %w; never swallow",
+      "file": "references/production.md",
       "must": [
         "Wrap errors with `%w` and add context; never swallow the error",
         "never `==`"
@@ -29,21 +31,31 @@
     {
       "id": "no-library-output",
       "rule": "Library functions never write to stdout/stderr",
+      "file": "references/production.md",
       "must": [
         "Never write output \\(errors included\\) to stdout/stderr from library"
       ]
     },
     {
       "id": "env-via-ring",
-      "rule": "Env vars via ring, never os.Getenv / t.Setenv",
+      "rule": "Production reads env vars via ring, never os.Getenv",
+      "file": "references/production.md",
       "must": [
-        "reads it via `rng\\.EnvGet`/`EnvLookup`; never `os\\.Getenv`",
+        "reads it via `rng\\.EnvGet`/`EnvLookup`; never `os\\.Getenv`"
+      ]
+    },
+    {
+      "id": "test-env-via-ring",
+      "rule": "Tests set env vars via rng.EnvSet, never t.Setenv",
+      "file": "references/test.md",
+      "must": [
         "Set an environment variable for code under test with `rng\\.EnvSet`, never `t\\.Setenv`"
       ]
     },
     {
       "id": "multiline-strings",
       "rule": "Multi-line string literals are segmented with +, never raw backticks",
+      "file": "references/production.md",
       "must": [
         "never use a raw backtick string for multi-line content",
         "joined with `\\+`"
@@ -52,6 +64,7 @@
     {
       "id": "test-markers",
       "rule": "Tests use Given/When/Then markers; single action under When",
+      "file": "references/test.md",
       "must": [
         "`--- Given ---` arranges, `--- When ---` performs the single action under test",
         "never move the call under test out of `--- When ---`"
@@ -60,6 +73,7 @@
     {
       "id": "test-naming",
       "rule": "have/want never got; t.Context never context.Background",
+      "file": "references/test.md",
       "must": [
         "Name the actual value `have` and the expected value `want`, never `got`",
         "Use `t\\.Context\\(\\)`, never `context\\.Background\\(\\)`"
@@ -68,6 +82,7 @@
     {
       "id": "no-coverage-chasing",
       "rule": "Never add production overrides only for a test",
+      "file": "references/test.md",
       "must": [
         "never add a production override \\(env var, hook, parameter\\) only so a test can reach a branch"
       ]
