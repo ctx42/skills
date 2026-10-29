@@ -1,5 +1,5 @@
 ---
-tags: [case:backlog--ask-writes-one-message-per-person--gate, skill:backlog, sec:backlog:usage, sec:backlog:boundaries, sec:backlog:sources-of-truth, sec:backlog:backends, sec:backlog:workflow, ref:create/project-config, ref:create/doc-corpus]
+tags: [case:backlog--ask-writes-one-message-per-person--gate, skill:backlog, sec:backlog:usage, sec:backlog:boundaries, sec:backlog:sources-of-truth, sec:backlog:backends, sec:backlog:workflow, ref:create/project-config, ref:create/doc-corpus, ref:backlog/ask]
 runs: 1
 max_turns: 30
 timeout_seconds: 300

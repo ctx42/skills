@@ -75,11 +75,11 @@ touches ids.
    per [decision-log.md](decision-log.md). The batch path owes the log exactly
    what the loop owes it: this procedure covers finding and applying the
    fixes, not the whole of what the mode owes.
-7. When anything landed, hand off to `review <srd> check #n…` scoped to exactly
-   the applied errata numbers, so `review` moves them to `## Resolved` and
-   leaves other findings untouched. Hand off by naming that exact command for
-   the user to run: `edit` never invokes `review`, which owns the review file.
-   Skip the hand-off if nothing landed.
+7. When anything landed, hand off to `review <srd> check #n,n…` scoped to
+   exactly the applied errata numbers, so `review` moves them to `## Resolved`
+   and leaves other findings untouched. Hand off by naming that exact command
+   for the user to run: `edit` never invokes `review`, which owns the review
+   file. Skip the hand-off if nothing landed.
 8. Session end (`SKILL.md`) runs without its step 1 (surface-only fixes) and
    invokes no delegate in its step 2 (autofix attests no fact and captures no
    gap; a prior session's drafts were checked at session start). Its step 3

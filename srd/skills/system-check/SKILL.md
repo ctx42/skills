@@ -80,6 +80,12 @@ input.
 - `learn` → **learn**: bank durable platform facts from the current
   session, no SRD. See [learn](#learn).
 
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
+
 ## review (default)
 
 1. Start: run the draft check in the corpus reference. `srd:review` runs it at

@@ -183,8 +183,9 @@ Every mode runs the gate in
 [../create/references/project-config.md](../create/references/project-config.md)
 first. The review file path is auto-derived, never passed as an argument. The
 first token is the SRD path; the next selects the mode (default review when
-omitted). With no arguments, ask which SRD to review; fall back to the user's
-prose for free-form input.
+omitted). Reserved words and `key=value` controls may appear anywhere; the
+remaining tokens keep their documented order. With no arguments, ask which SRD
+to review; fall back to the user's prose for free-form input.
 
 - the SRD path only → review (default): read the whole SRD, write the review file.
 - path + `walk` → walk: interactive, section by section; record only findings
@@ -196,6 +197,12 @@ prose for free-form input.
   sit in `## Errata`. Reclassify only; hunts no new defects.
 - path + `feedback` → feedback: emit a terse plain-text issue list of open
   tasks for an email or ticket. No file write.
+
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
 
 A file-writing run closes with one task-oriented line — e.g. "4 of 15 tasks
 resolved, 2 withdrawn; 1 blocker still open." — plus the per-severity count of
@@ -273,10 +280,9 @@ Re-verify only — hunt no new defects. Keep every number; bump `updated:` only
 if something else in the file changed (review-file.md).
 
 Trailing finding numbers scope the pass to those findings; the rest stay
-untouched. Accept them comma- or space-separated, `#` optional — `check #4,6`,
-`check #4 #6`, `check 4,6` all name #4 and #6. Report any listed number that is
-absent or already resolved/withdrawn, and check the rest. Omitted, check every
-open finding.
+untouched. Write them `#n,n` — `check #4,6` names #4 and #6; any other form: say
+so and ask. Report any listed number that is absent or already
+resolved/withdrawn, and check the rest. Omitted, check every open finding.
 
 1. Judge each finding in scope against the current text:
    - fixed → tick `[x]` and move to `## Resolved`.

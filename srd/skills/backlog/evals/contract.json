@@ -152,6 +152,7 @@
     },
     {
       "id": "ask-confirmed-only",
+      "file": "references/ask.md",
       "rule": "ask mode sets asked only on the user's confirmation, on gaps whose blocks all went out",
       "must": [
         "Only\\ on\\ the\\ user's\\ confirmation:\\ `update_gap`\\ `asked`\\ today's\\ date\\ on\\ every\\ gap\\ whose\\ blocks\\ all\\ went\\ out",
@@ -160,6 +161,7 @@
     },
     {
       "id": "ask-block-shape",
+      "file": "references/ask.md",
       "rule": "One paste-ready block per person; a gap naming two people sits in both; no gap ids or @-mentions in a block",
       "must": [
         "A\\ gap\\ naming\\ two\\ people\\ sits\\ in\\ both\\ groups",
@@ -184,6 +186,7 @@
     },
     {
       "id": "ask-selects",
+      "file": "references/ask.md",
       "rule": "ask mode compiles only open deferred gaps that name someone; a draft is never asked",
       "must": [
         "keep\\ `answer:\\ deferred`\\ gaps\\ with\\ a\\ non\\-empty\\ `ask`",

@@ -783,7 +783,7 @@ def in_block(pat):
 
 case7_common = dict(
     prompt="/srd:backlog ask",
-    tags=BASE_TAGS + CORPUS_TAGS,
+    tags=BASE_TAGS + CORPUS_TAGS + ["ref:backlog/ask"],
     max_turns=30,
     mocks={"list_gaps": WORLD_7, "update_gap": WORLD_7},
 )

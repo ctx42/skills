@@ -2,4 +2,4 @@
 type: regex
 target: last_message
 ---
-review specs/login\.md check (#4 #7|#7 #4)(?! #)
+review specs/login\.md check #(4,7|7,4)(?![,\d])

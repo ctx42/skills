@@ -9,7 +9,7 @@
         "Runs neither the glossary resolution nor the approval gate — errata touch neither ids nor terms — so no approval-gate `Status` line and no glossary question reach the user, and no `glossary_terms` call is made; the closing manifest's Status follow-up is not a gate line",
         "Lists the three substitutions and takes one confirmation for the whole batch, not the per-change loop",
         "Verifies each `old` at its anchor, applies the two that match exactly once, and reports the third as stale rather than guessing where it belongs",
-        "Writes no review file and invokes no `review` run; prints the exact hand-off command `review specs/login.md check #n #n`, scoped to the two applied errata, for the user to run",
+        "Writes no review file and invokes no `review` run; prints the exact hand-off command `review specs/login.md check #n,n`, scoped to the two applied errata, for the user to run",
         "Closes with a manifest naming what was applied, what was skipped and why, and the findings handed to `check` — not what `check` later did with them"
       ],
       "blind_only": [3]
@@ -42,7 +42,7 @@
       "expected_behavior": [
         "Inserts the template notice exactly once, directly below the metadata block and after the `[[TOC]]` macro that follows it, ahead of `## Introduction`",
         "Applies the ordinary substitution in the same batch",
-        "Hands the insertion to `check` with the other applied finding: `review specs/login.md check #4 #10`"
+        "Hands the insertion to `check` with the other applied finding: `review specs/login.md check #4,10`"
       ]
     },
     {

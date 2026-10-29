@@ -296,7 +296,7 @@ pair("autofix-bulk-applies-errata", AUTOFIX, "/srd:edit specs/login.md autofix",
          "b5-review-not-edited": g_never("Edit", '"file_path":"[^"]*login\\.review\\.md"'),
          "b5-review-not-written": g_never("Write", '"file_path":"[^"]*login\\.review\\.md"'),
          "b5-review-not-invoked": g_never("Skill", '"skill":"(srd:)?review'),
-         "b5-handoff-command": g_last(r"review specs/login\.md check (#4 #7|#7 #4)(?! #)"),
+         "b5-handoff-command": g_last(r"review specs/login\.md check #(4,7|7,4)(?![,\d])"),
          "b6-manifest-names-all": g_last(r"^(?=.*#4)(?=.*#7)(?=.*#9)(?=.*\bcheck\b)", "s"),
          "b6-no-check-outcome": g_last(r"(check|review) (has |have )?(moved|resolved|ticked|closed)|(were|are|have been) (moved|ticked|closed)|now (sit |are )?(in|under) `?## Resolved", "i", "not_contains"),
      },
@@ -449,7 +449,7 @@ write_case("edit--autofix-inserts-missing-notice", AUTOFIX, "/srd:edit specs/log
                "b1-exactly-once": g_regex("{source: file, path: specs/login.md}",
                                           NOTICE_RE + ".*" + NOTICE_RE, "s", "not_contains"),
                "b2-applied-gr1": g_file("specs/login.md", r"\*\*GR-1:\*\* The system MUST reject an unauthorized API request"),
-               "b3-handoff-command": g_last(r"review specs/login\.md check (#4 #10|#10 #4)(?! #)"),
+               "b3-handoff-command": g_last(r"review specs/login\.md check #(4,10|10,4)(?![,\d])"),
            },
            ["To the batch confirmation: \"Yes\"."])
 
@@ -461,7 +461,7 @@ write_case("edit--autofix-misplaced-notice-is-stale", AUTOFIX, "/srd:edit specs/
                "b1-not-inserted-after-toc": g_regex("{source: file, path: specs/login.md}", AFTER_TOC, None, "not_contains"),
                "b2-reported-stale": g_last(r"#10.{0,300}(stale|already|present|exists|misplaced|not (inserted|applied)|skipp)", "is"),
                "b3-applied-gr1": g_file("specs/login.md", r"\*\*GR-1:\*\* The system MUST reject an unauthorized API request"),
-               "b3-handoff-command": g_last(r"review specs/login\.md check #4(?! #)"),
+               "b3-handoff-command": g_last(r"review specs/login\.md check #4(?![,\d])"),
            },
            ["To the batch confirmation: \"Yes\"."])
 

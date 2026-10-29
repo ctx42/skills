@@ -123,15 +123,10 @@ Otherwise three steps, no questions of its own.
 
 ### Glossary (on the first term)
 
-Nothing about the glossary happens at session start: a run that reaches no term
-never calls `glossary_terms`. The procedure in
-[../create/references/srd-procedures.md](../create/references/srd-procedures.md)
-waits for the first thing that needs a term settled and lands before it: the
-first proposal that introduces, renames or rests on a possibly company-defined
-term, or in `interactive` the step-1 summary, which promises every issue found
-and so owes GLO-3 too. A term put to the user against an unloaded term set is a
-GLO-3 miss. Hold the set for the session; `polish` and `autofix` reach it
-only for a GLO-4 first-use link. This skill asks no setup question.
+Nothing about the glossary happens at session start, and this skill asks no
+setup question. When the term set loads is in
+[references/proposals.md](references/proposals.md#glossary); `polish` and
+`autofix` reach it only for a GLO-4 first-use link.
 
 ## Id rules
 
@@ -253,8 +248,9 @@ on your own.
 
 ## Modes
 
-The first token is the SRD path; the next selects the mode, load when omitted.
-With no arguments, ask which SRD to edit.
+The SRD path comes first; a mode word may sit anywhere after it, the rest keep
+their documented order, and no mode means load. With no arguments, ask which
+SRD to edit.
 
 Prose after the path is feedback when it is a list of findings, targeted when
 it names one entry and what to do to it ("fix the vague 'fast' requirement").
@@ -273,6 +269,12 @@ with a confirmation and expects no review file.
 - path + `summary`, optionally `today`, a date, or a date and time → summary.
 - path + anything else (an id plus a change, a glossary term, quoted
   text, description) → targeted.
+
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
 
 ### load (default)
 

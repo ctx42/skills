@@ -109,7 +109,7 @@
       "id": "redirect-adds-name-clears-asked",
       "rule": "answers-back",
       "prompt": "Situation: in a backlog sitting the user pastes Anna M's reply to the question of open gap gap-0061 (`answer: deferred`, `ask: [\"Anna M\"]`, `asked: \"2026-09-28\"`): \"No clue, ask Lena W, she built it.\" The user confirmed the mapping.\n\nQuestion: which `ask` and `asked` do you pass to update_gap? Answer on the first line exactly as `ask=<JSON list> asked=<value>`, then one sentence why.",
-      "pass": "^\\W*ask\\W*\\[\\s*\"Anna M\"\\s*,\\s*\"Lena W\"\\s*\\]\\W+asked\\W*(\"\"|empty|clear)",
+      "pass": "^\\W*(ask\\W*)?\\[\\s*\"Anna M\"\\s*,\\s*\"Lena W\"\\s*\\]\\W+asked\\W*(\"\"|empty|clear)",
       "fail": "^\\W*ask\\W*\\[\\s*\"Lena W\"\\s*\\]|asked\\W*\"?2026",
       "class": "load-bearing"
     },

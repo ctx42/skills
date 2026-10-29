@@ -72,3 +72,13 @@ Only on the user's explicit ask: remove the `> [!comment]` callout and its
 `[^…]` footnote reference from the requirement together, and log the removal.
 A requirement removed with a comment on it follows
 [id-rules.md](id-rules.md#removal-and-comment-blocks).
+
+## Glossary
+
+A run that reaches no term never calls `glossary_terms`. The procedure in
+[../../create/references/srd-procedures.md](../../create/references/srd-procedures.md)
+waits for the first thing that needs a term settled and lands before it: the
+first proposal that introduces, renames or rests on a possibly company-defined
+term, or in `interactive` the step-1 summary, which promises every issue found
+and so owes GLO-3 too. A term put to the user against an unloaded term set is a
+GLO-3 miss. Hold the set for the session.

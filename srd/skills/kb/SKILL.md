@@ -113,22 +113,26 @@ result, never by folder. Three consequences for KB writes:
 
 ## Invocation
 
-Every mode runs the gate first. The first token is a mode word; the next is the
-SRD path when one is in play. Callers pass both. With no arguments, default to
-capture.
+Every mode runs the gate first. A mode word and, when one is in play, an SRD
+path, in any order; callers pass both. With no arguments, default to capture.
 
 An SRD path the conversation states counts as named. With no SRD named and
 no caller to name one, the session itself is the source:
 take what this conversation attested and attest it to the session rather than
 to an SRD — do not infer an id from the conversation to fill the slot, which
-invents a provenance nobody can check. The `*` in the argument hint marks the
-default, here and in every skill that carries one.
+invents a provenance nobody can check.
 
 - `capture` (default) — confirm and write what the session surfaced. The flow
   below.
 - `file` — move inbox facts into topic pages. See [File](#file).
 - `restructure` — reorganize the KB and repair every reference. See
   [Restructure](#restructure).
+
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
 
 ## Workflow
 

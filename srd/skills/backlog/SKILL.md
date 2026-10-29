@@ -67,6 +67,8 @@ nothing they cannot open.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
   (on-demand: the first corpus lookup) — the server's tools and how to use
   them. `srd:create` owns it.
+- [references/ask.md](references/ask.md) (on-demand: `ask`) — one message per
+  person, and when `asked` is set.
 
 ## Backends
 
@@ -95,8 +97,13 @@ never in this backlog.
 
 ## Workflow
 
-The first token names one list, or `all` (default); `ask` runs the gate and
-step 7 only. Copy this checklist and tick it off:
+A list word names one list, or `all` (default); `ask` runs the gate and step 7
+only. A `key=value` that names no control here, or a word left over once the
+modes, the target, and any text the skill takes are read: say it was not
+recognized, name the ones that exist, and run with the defaults as if it were
+absent — unless dropping it would widen what the run changes; then ask. A target
+that resolves to nothing: say so and ask — never guess what to work on. Copy
+this checklist and tick it off:
 
 - [ ] 0. Pass the gate. Always, before anything below.
 - [ ] 1. Sweep `REJECTED` SRDs. Always, any list named.
@@ -292,35 +299,8 @@ publishes a page that states it: the KB holds only what the docs do not. Once
 ### 7. ask
 
 Turns the deferred gaps that name someone into one message per person for the
-user to send. No sweep, no re-check, no counts line.
-
-1. `list_gaps` `status: open`, `asked: false`; keep `answer: deferred` gaps
-   with a non-empty `ask`. `ask reminders`: `asked: true` instead. Count the
-   other kind too, and drafts naming someone (`status: draft`): a draft is
-   never asked; it is filed first (`/report-doc-gap <srd>`).
-2. Group by person, each name as typed (case-only variants are one person,
-   first spelling). A gap naming two people sits in both groups.
-3. Per person: the name, then one fenced `text` block ready to paste into a
-   chat:
-   - One greeting line: `Hi <name>, a few questions for our documentation —
-     could you answer when you have a moment?` A reminder says it follows up;
-     each of its questions ends with the date it went out (`asked`).
-   - A numbered list, oldest `created` first: per gap one self-contained
-     plain-language question built from `topic`, `detail`, and
-     `target_claim`, then one indented line of context from `demand`.
-   - No gap ids, SRD folders, tool or field names in the block; the plain
-     name, never an @-mention.
-
-   Under the block, outside it, one mapping line: `1 gap-0042 · 2 gap-0047`.
-4. One closing line: the other kind's count (already asked, oldest `asked`
-   date, and `/backlog ask reminders`; or not yet asked and `/backlog ask`),
-   plus the draft count when non-zero. Nothing to send: say so in that line.
-5. Ask which blocks went out. Only on the user's confirmation: `update_gap`
-   `asked` today's date on every gap whose blocks all went out, one call per
-   gap. Never before, never for a person not confirmed, never on "will send
-   later". A gap also in an unsent block stays unasked, so the next `/backlog
-   ask` still carries it; say so. A confirmed reminder moves `asked` to today
-   as well: it holds the last send.
+user to send. No sweep, no re-check, no counts line. Read
+[references/ask.md](references/ask.md) *(on-demand: `ask` only)* and follow it.
 
 ### 8. Answers back
 
