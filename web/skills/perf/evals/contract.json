@@ -281,6 +281,14 @@
       ]
     },
     {
+      "id": "known-red-by-names",
+      "rule": "A known-red test check stays gated, passing while every test it fails also failed at the start; other known checks stay out of gates",
+      "must": [
+        "A\\s+known test check stays in every gate, passing while every test it fails\\s+also failed at the start",
+        "never judged by its failure count"
+      ]
+    },
+    {
       "id": "leak-sum-skips-code",
       "rule": "The leak heap sum leaves out compiled code; a leak is confirmed on a production build",
       "file": "references/measure.md",

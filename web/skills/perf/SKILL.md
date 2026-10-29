@@ -88,12 +88,14 @@ Then:
    `CLAUDE.md`, `CONTRIBUTING.md`, a `Makefile`, the package manifest: build,
    test, lint, format, e2e included. The targeted checks are the static ones
    (lint, format, typecheck, vet), each by its own command, even inside a
-   combined target, plus the tests covering the files a change
-   touches (`vitest related --run <files>`, `go test <their packages>`); the
-   full checks are all of them. Run the full checks once on
-   the untouched tree. A check already red there is known: name it in the
-   message below, and leave it out of every gate (run the others by name) —
-   it never blocks a commit.
+   combined target, plus the tests covering the files a change touches
+   (`vitest related --run <files>`, `go test <their packages>`); the full checks
+   are all of them. Run the full checks once on the untouched tree. A check
+   already red there is known: name it in the message below and save its failing
+   test names. A known test check stays in every gate, passing while every test
+   it fails also failed at the start, never judged by its failure count; any
+   other known check stays out of every gate (run the others by name) and never
+   blocks a commit.
 9. Send one message and wait: the detected URL, open in the Chrome window,
    whether back-end edits are on or off and why, and a request to log in there
    if the app needs it, then reply (or give the right URL). An app with no
@@ -246,7 +248,8 @@ commit; unrelated changes never share a commit. Per change:
    still ships them), `git rm -q --` every tracked `dev/perf/*.png` this commit
    did not write, and write the message (section 7). Then, in one command,
    re-run the targeted checks, each gated on exit status
-   (`<check> ><scratch>/out 2>&1 || exit 1`), compare
+   (`<check> ><scratch>/out 2>&1 || exit 1`), a known test check on its failing
+   test names instead (section 1, step 8), compare
    `git diff --cached --name-only` with that list, and `git commit -F -`. A red
    re-run commits nothing and returns to step 4, one repair per change in all.
 
@@ -322,11 +325,12 @@ run from it; ideas dropped or discarded this run go under Dropped.
 
 ## 10. Final check
 
-After the last change, run the full checks, known red ones aside, on exit
-status; skip this when the run committed no code (a
-`docs(perf): never` commit alone is none). A check red that was green at the
-start is bisected to its commit, repaired once keeping the gain, else
-reverted, as [references/final-check.md](references/final-check.md) says.
+After the last change, run the full checks on exit status, a known test check
+gated on its failing test names and any other known red check left out (section
+1, step 8); skip this when the run committed no code (a `docs(perf): never`
+commit alone is none). A check red that was green at the start is bisected to
+its commit, repaired once keeping the gain, else reverted, as
+[references/final-check.md](references/final-check.md) says.
 
 ## 11. Report
 
