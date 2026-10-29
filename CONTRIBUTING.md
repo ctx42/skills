@@ -175,6 +175,9 @@ rules:
   round, no new scenario for a guard that has never fired.
 - Freeze `expectations.json` while a loop runs: batch the defects a grader
   finds and apply them after it ends, so no round grades a moved target.
+- The go-ahead for a round covers it end to end, the re-runs its fixes need
+  included: finish without asking again, report once, and batch the real design
+  questions at the end.
 
 Without these rules, three consecutive `go:style` rounds passed every bullet,
 yet cost about a million tokens, because each runner's new ambiguity list was
