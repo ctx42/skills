@@ -14,17 +14,17 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all] [max=N]
 ## Usage
 
 ```
-/cover                          the functions the working diff touches (default)
-/cover func=Foo                 one function by name; no plan gate
-/cover func=T.Bar               one method
-/cover pkg/svc/foo.go:42        the function enclosing that line
-/cover pkg/svc/foo.go           every function in the file, plan-first
-/cover ./pkg/foo                one package, per function, plan-first
-/cover all                      every package of the module, plan-first
-/cover /path/to/project         that module (a go.mod dir)
-/cover ./pkg/foo max=8          cap tests/cases added this run
-/cover all packages=svc,api     restrict to these packages
-/cover func=Foo include=all     also attempt the deferred complex lines
+/go:cover                          the functions the working diff touches (default)
+/go:cover func=Foo                 one function by name; no plan gate
+/go:cover func=T.Bar               one method
+/go:cover pkg/svc/foo.go:42        the function enclosing that line
+/go:cover pkg/svc/foo.go           every function in the file, plan-first
+/go:cover ./pkg/foo                one package, per function, plan-first
+/go:cover all                      every package of the module, plan-first
+/go:cover /path/to/project         that module (a go.mod dir)
+/go:cover ./pkg/foo max=8          cap tests/cases added this run
+/go:cover all packages=svc,api     restrict to these packages
+/go:cover func=Foo include=all     also attempt the deferred complex lines
 ```
 
 Executing skill: it runs `go test -coverprofile`, reads the profile, edits and

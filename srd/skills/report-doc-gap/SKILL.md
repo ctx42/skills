@@ -16,7 +16,7 @@ license: MIT
 ## Usage
 
 ```
-/report-doc-gap <srd>  work <srd>'s draft doc gaps: grill, confirm, file each (default)
+/srd:report-doc-gap <srd>  work <srd>'s draft doc gaps: grill, confirm, file each (default)
 ```
 
 Rarely invoked by hand: `create`, `edit`, `doc-edit`, `review`, and

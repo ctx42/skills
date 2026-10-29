@@ -16,17 +16,17 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all]
 ## Usage
 
 ```
-/style                             style-check the current git diff (default)
-/style func=Parse                  check one function (func=T.Bar: a method)
-/style pkg/foo/foo.go:42           check the function enclosing that line
-/style pkg/foo/foo.go              check one file
-/style ./pkg/foo                   check one package
-/style all                         check every package of the module
-/style /path/to/project            check that module (a go.mod dir)
-/style ./pkg/foo fix               apply every offense's fix without asking
-/style all plan_first              propose the budget, then stop
-/style all packages=a,b            restrict a module check to these packages
-/style all max=15 depth=light      cap offenses; set depth
+/go:style                             style-check the current git diff (default)
+/go:style func=Parse                  check one function (func=T.Bar: a method)
+/go:style pkg/foo/foo.go:42           check the function enclosing that line
+/go:style pkg/foo/foo.go              check one file
+/go:style ./pkg/foo                   check one package
+/go:style all                         check every package of the module
+/go:style /path/to/project            check that module (a go.mod dir)
+/go:style ./pkg/foo fix               apply every offense's fix without asking
+/go:style all plan_first              propose the budget, then stop
+/go:style all packages=a,b            restrict a module check to these packages
+/go:style all max=15 depth=light      cap offenses; set depth
 ```
 
 Authoritative Go style rules and the style-only pass that enforces them. The

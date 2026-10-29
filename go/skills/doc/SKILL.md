@@ -15,18 +15,18 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all] [max=N]
 ## Usage
 
 ```
-/doc                          the items the working diff touches (default)
-/doc func=Foo                 one function's godoc + body comments; no plan
-/doc func=T.Bar               one method
-/doc pkg/svc/foo.go:42        the item enclosing that line; no plan
-/doc pkg/svc/foo.go           every item in the file, plan-first
-/doc ./pkg/foo                one package, item by item, plan-first
-/doc all                      every package of the module, plan-first
-/doc /path/to/project         that module (a go.mod dir)
-/doc ./pkg/foo max=8          cap comments changed this run; reports the rest
-/doc all packages=svc,api     restrict to these packages
-/doc ./pkg/foo only=godoc     skip inline body comments
-/doc ./pkg/foo only=exported  package comment + exported symbols only
+/go:doc                          the items the working diff touches (default)
+/go:doc func=Foo                 one function's godoc + body comments; no plan
+/go:doc func=T.Bar               one method
+/go:doc pkg/svc/foo.go:42        the item enclosing that line; no plan
+/go:doc pkg/svc/foo.go           every item in the file, plan-first
+/go:doc ./pkg/foo                one package, item by item, plan-first
+/go:doc all                      every package of the module, plan-first
+/go:doc /path/to/project         that module (a go.mod dir)
+/go:doc ./pkg/foo max=8          cap comments changed this run; reports the rest
+/go:doc all packages=svc,api     restrict to these packages
+/go:doc ./pkg/foo only=godoc     skip inline body comments
+/go:doc ./pkg/foo only=exported  package comment + exported symbols only
 ```
 
 Executing skill: it reads code, edits godoc and inline comments in `*.go` /

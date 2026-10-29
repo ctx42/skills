@@ -17,21 +17,21 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all |
 ## Usage
 
 ```
-/review                                       check (default): review the current git diff
-/review func=Parse                            review one function (func=T.Bar: a method)
-/review pkg/foo/foo.go:42                     review the function enclosing that line
-/review pkg/foo/foo.go                        review one file
-/review ./pkg/foo                             review one package
-/review all                                   review every package of the module
-/review /path/to/project                      review that module (a go.mod dir)
-/review all max=15 depth=light                cap findings; set review depth
-/review all packages=parser,lexer             restrict to these packages
-/review all plan_first                        propose the budget, then stop for approval
-/review ./pkg/foo fix                         review, then apply the findings
-/review add "no naked returns in tests"       add a style rule
-/review change "receivers are three letters"  refine an existing style rule
-/review remove "the compile-time check rule"  remove a style rule
-/review learn                                 mine this session's feedback into rules
+/go:review                                       check (default): review the current git diff
+/go:review func=Parse                            review one function (func=T.Bar: a method)
+/go:review pkg/foo/foo.go:42                     review the function enclosing that line
+/go:review pkg/foo/foo.go                        review one file
+/go:review ./pkg/foo                             review one package
+/go:review all                                   review every package of the module
+/go:review /path/to/project                      review that module (a go.mod dir)
+/go:review all max=15 depth=light                cap findings; set review depth
+/go:review all packages=parser,lexer             restrict to these packages
+/go:review all plan_first                        propose the budget, then stop for approval
+/go:review ./pkg/foo fix                         review, then apply the findings
+/go:review add "no naked returns in tests"       add a style rule
+/go:review change "receivers are three letters"  refine an existing style rule
+/go:review remove "the compile-time check rule"  remove a style rule
+/go:review learn                                 mine this session's feedback into rules
 ```
 
 Done-time review for Go code. Read the tokens in any order: a reserved word is a

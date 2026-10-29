@@ -14,9 +14,9 @@ license: MIT
 ## Usage
 
 ```
-/readme-smith <request>               infer create vs audit from the request (default)
-/readme-smith create [<readme-path>]  scan the repo and draft a new README from real code
-/readme-smith audit <readme-path>     audit an existing README; fix on confirmation
+/craft:readme-smith <request>               infer create vs audit from the request (default)
+/craft:readme-smith create [<readme-path>]  scan the repo and draft a new README from real code
+/craft:readme-smith audit <readme-path>     audit an existing README; fix on confirmation
 ```
 
 Create and improve a project's `README.md`. Read the tokens in any order: a

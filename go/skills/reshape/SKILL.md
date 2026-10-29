@@ -15,9 +15,9 @@ argument-hint: "LIB [packages=a,b] [max=N]"
 ## Usage
 
 ```
-/reshape github.com/x/y/must          consumer scope is the whole module (default)
-/reshape must packages=render         restrict the consumer scope to these packages
-/reshape must max=5                   cap proposals reported (default 8, highest impact first)
+/go:reshape github.com/x/y/must          consumer scope is the whole module (default)
+/go:reshape must packages=render         restrict the consumer scope to these packages
+/go:reshape must max=5                   cap proposals reported (default 8, highest impact first)
 ```
 
 Consumer-driven API review. Point it at a library the project depends on; it

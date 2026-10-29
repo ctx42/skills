@@ -16,8 +16,8 @@ license: MIT
 ## Usage
 
 ```
-/doc-edit <doc> <change>  make the asked change, one confirmed edit at a time
-/doc-edit <doc>           ask what to change, then as above
+/srd:doc-edit <doc> <change>  make the asked change, one confirmed edit at a time
+/srd:doc-edit <doc>           ask what to change, then as above
 ```
 
 Edits one corpus document and keeps the gap store in step with it: a fact

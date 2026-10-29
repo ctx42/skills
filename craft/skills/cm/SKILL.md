@@ -15,12 +15,12 @@ license: MIT
 ## Usage
 
 ```
-/cm         mini message from the staged diff (default): summary + one why paragraph, not committed
-/cm micro   summary line only, no body
-/cm full    full multi-paragraph kernel-style body
-/cm apply   stage the whole working tree, split it into logical commits, commit each, no confirm (combines, e.g. micro apply)
-/cm asis    stage the whole working tree and commit it as one commit, no confirm
-/cm <hash>  derive the message from that commit's diff instead of the staged diff (with apply: amend HEAD's message)
+/craft:cm         mini message from the staged diff (default): summary + one why paragraph, not committed
+/craft:cm micro   summary line only, no body
+/craft:cm full    full multi-paragraph kernel-style body
+/craft:cm apply   stage the whole working tree, split it into logical commits, commit each, no confirm (combines, e.g. micro apply)
+/craft:cm asis    stage the whole working tree and commit it as one commit, no confirm
+/craft:cm <hash>  derive the message from that commit's diff instead of the staged diff (with apply: amend HEAD's message)
 ```
 
 ## Input

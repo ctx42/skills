@@ -16,11 +16,11 @@ license: MIT
 ## Usage
 
 ```
-/doc-smith <file>...         audit (default): report findings by severity, edit nothing until approved
-/doc-smith create <desc>     draft a new document or section from scratch
-/doc-smith audit <file>...   the default, named explicitly
-/doc-smith proof <file>...   fix in place: grammar, clarity, consistency; flag what it can't decide
-/doc-smith walk <file>...    work through the doc with the user, one unit at a time
+/craft:doc-smith <file>...         audit (default): report findings by severity, edit nothing until approved
+/craft:doc-smith create <desc>     draft a new document or section from scratch
+/craft:doc-smith audit <file>...   the default, named explicitly
+/craft:doc-smith proof <file>...   fix in place: grammar, clarity, consistency; flag what it can't decide
+/craft:doc-smith walk <file>...    work through the doc with the user, one unit at a time
 ```
 
 Create, audit, proof, and walk through technical documentation and user manuals;

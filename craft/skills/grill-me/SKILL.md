@@ -15,8 +15,8 @@ license: MIT
 ## Usage
 
 ```
-/grill-me                             interview about the plan described so far in the conversation (default)
-/grill-me <plan, approach, or topic>  interrogate the subject given as the argument
+/craft:grill-me                             interview about the plan described so far in the conversation (default)
+/craft:grill-me <plan, approach, or topic>  interrogate the subject given as the argument
 ```
 
 When invoked, switch into interviewer mode: question the user relentlessly,

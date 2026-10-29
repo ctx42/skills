@@ -15,8 +15,8 @@ license: MIT
 ## Usage
 
 ```
-/enhance-skills          harvest this conversation's lessons into the skills used (default)
-/enhance-skills <skill>  retrofit the ## Self-learning block into that skill's SKILL.md
+/craft:enhance-skills          harvest this conversation's lessons into the skills used (default)
+/craft:enhance-skills <skill>  retrofit the ## Self-learning block into that skill's SKILL.md
 ```
 
 Turn corrections into durable skill improvements. An argument naming a skill

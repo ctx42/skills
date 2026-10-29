@@ -15,8 +15,8 @@ license: MIT
 ## Usage
 
 ```
-/system-check <srd>   review + walk (default): resumes open questions on re-run
-/system-check learn   bank platform facts this session taught into the knowledge base
+/srd:system-check <srd>   review + walk (default): resumes open questions on re-run
+/srd:system-check learn   bank platform facts this session taught into the knowledge base
 ```
 
 Review an SRD from the seat of the engineer who has to build it. The question

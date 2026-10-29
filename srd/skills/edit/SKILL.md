@@ -14,16 +14,16 @@ license: MIT
 ## Usage
 
 ```
-/edit <srd>                  load (default): read the SRD, its decision log and review, then wait for edit prompts
-/edit <srd> walk             interactive: front-load issues, then walk entry by entry
-/edit <srd> 123              interactive from line 123: resolve to the nearest entry, walk from there
-/edit <srd> MAP-5            interactive from MAP-5: walk from that requirement or scope entry
-/edit <srd> <srd>.review.md  feedback: apply a review file or pasted feedback, Scope last, blocker → major → minor
-/edit <srd> #2               feedback from finding #2, then next by number or jump to any number
-/edit <srd> autofix          bulk-apply the review's ## Errata block behind one confirmation
-/edit <srd> polish           mechanical-only cleanup (spelling, numbering, keywords), confirm each
-/edit <srd> summary [today]  read-only: newest decision-log block (or a day; `<date> <HH:MM>` one block) as a chat message
-/edit <srd> GR-3a <change>   targeted: edit one entry by id plus the change, quoted text, or description
+/srd:edit <srd>                  load (default): read the SRD, its decision log and review, then wait for edit prompts
+/srd:edit <srd> walk             interactive: front-load issues, then walk entry by entry
+/srd:edit <srd> 123              interactive from line 123: resolve to the nearest entry, walk from there
+/srd:edit <srd> MAP-5            interactive from MAP-5: walk from that requirement or scope entry
+/srd:edit <srd> <srd>.review.md  feedback: apply a review file or pasted feedback, Scope last, blocker → major → minor
+/srd:edit <srd> #2               feedback from finding #2, then next by number or jump to any number
+/srd:edit <srd> autofix          bulk-apply the review's ## Errata block behind one confirmation
+/srd:edit <srd> polish           mechanical-only cleanup (spelling, numbering, keywords), confirm each
+/srd:edit <srd> summary [today]  read-only: newest decision-log block (or a day; `<date> <HH:MM>` one block) as a chat message
+/srd:edit <srd> GR-3a <change>   targeted: edit one entry by id plus the change, quoted text, or description
 ```
 
 Drive an existing SRD toward the SRD standard by editing the source in place.

@@ -15,12 +15,12 @@ license: MIT
 ## Usage
 
 ```
-/backlog                all three lists, cheap wins first (default)
-/backlog deferred       questions someone knows the answer to; closed by asking
-/backlog unknowns       things nobody has pinned down; triage, not answering
-/backlog gaps           reported gaps; drafts the fix, fills from the corpus
-/backlog ask            one paste-ready message per person a deferred gap names
-/backlog ask reminders  the same for questions already sent
+/srd:backlog                all three lists, cheap wins first (default)
+/srd:backlog deferred       questions someone knows the answer to; closed by asking
+/srd:backlog unknowns       things nobody has pinned down; triage, not answering
+/srd:backlog gaps           reported gaps; drafts the fix, fills from the corpus
+/srd:backlog ask            one paste-ready message per person a deferred gap names
+/srd:backlog ask reminders  the same for questions already sent
 ```
 
 One sitting over the three lists the SRD skills fill as a byproduct, cheap wins

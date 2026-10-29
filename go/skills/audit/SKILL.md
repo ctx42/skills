@@ -16,16 +16,16 @@ argument-hint: "[TARGET | all] [packages=a,b] [only=review,cover,doc,reshape]
 ## Usage
 
 ```
-/audit                          the working diff (default)
-/audit all                      the current module
-/audit /path/to/project         that module (a go.mod dir)
-/audit ./pkg/foo                one package
-/audit all packages=a,b         restrict to these packages
-/audit all only=review,doc      restrict to these dimensions
-/audit all libs=must            reshape only these libraries
-/audit all max=60               cap findings reported (default 40)
-/audit all depth=light          review depth, passed through
-/audit all plan_first           propose the budget, then stop
+/go:audit                          the working diff (default)
+/go:audit all                      the current module
+/go:audit /path/to/project         that module (a go.mod dir)
+/go:audit ./pkg/foo                one package
+/go:audit all packages=a,b         restrict to these packages
+/go:audit all only=review,doc      restrict to these dimensions
+/go:audit all libs=must            reshape only these libraries
+/go:audit all max=60               cap findings reported (default 40)
+/go:audit all depth=light          review depth, passed through
+/go:audit all plan_first           propose the budget, then stop
 ```
 
 Whole-project Go audit. Runs every dimension through the sibling skill that

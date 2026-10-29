@@ -13,8 +13,8 @@ license: MIT
 ## Usage
 
 ```
-/create                           author a new SRD by interview (default)
-/create <what it should specify>  seed the opening Objective, then interview
+/srd:create                           author a new SRD by interview (default)
+/srd:create <what it should specify>  seed the opening Objective, then interview
 ```
 
 Author a brand-new SRD by interviewing the user, drafting against the SRD

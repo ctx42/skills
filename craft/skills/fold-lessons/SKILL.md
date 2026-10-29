@@ -15,9 +15,9 @@ license: MIT
 ## Usage
 
 ```
-/fold-lessons                 every LESSONS.md and every uncommitted skill edit
-/fold-lessons <skill>...      only the named skills (name or path)
-/fold-lessons base=<ref>      also vet skill edits committed since <ref>
+/craft:fold-lessons                 every LESSONS.md and every uncommitted skill edit
+/craft:fold-lessons <skill>...      only the named skills (name or path)
+/craft:fold-lessons base=<ref>      also vet skill edits committed since <ref>
 ```
 
 Read the tokens in any order: a reserved word is a mode or flag, `key=value` is

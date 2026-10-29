@@ -16,8 +16,8 @@ license: MIT
 ## Usage
 
 ```
-/fix-all             fix every finding in the conversation, one commit each
-/fix-all skip #3,7   the same, leaving findings #3 and #7 untouched
+/craft:fix-all             fix every finding in the conversation, one commit each
+/craft:fix-all skip #3,7   the same, leaving findings #3 and #7 untouched
 ```
 
 Turn the findings already in the conversation into commits without

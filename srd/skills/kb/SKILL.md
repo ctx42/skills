@@ -15,10 +15,10 @@ license: MIT
 ## Usage
 
 ```
-/kb                 capture (default): confirm, write to the inbox
-/kb capture <srd>   capture for one SRD, by its path
-/kb file            file inbox facts into topic pages
-/kb restructure     reorganize pages and repair every reference
+/srd:kb                 capture (default): confirm, write to the inbox
+/srd:kb capture <srd>   capture for one SRD, by its path
+/srd:kb file            file inbox facts into topic pages
+/srd:kb restructure     reorganize pages and repair every reference
 ```
 
 Rarely invoked by hand: `srd:create` and `srd:edit` call it themselves,
