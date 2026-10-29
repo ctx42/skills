@@ -4,4 +4,4 @@ target: {source: file, path: specs/login.md}
 match: not_contains
 flags: "s"
 ---
-The keywords "MUST".*The keywords "MUST"
+The key words "MUST".*The key words "MUST"

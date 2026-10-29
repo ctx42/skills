@@ -11,7 +11,7 @@ PROJECT_CONFIG = """---
 mcp-server: srd
 kb: kb
 initiatives: initiatives
-srd-standard: docs/guidelines_for_software_requirements_documents.md
+srd-standard: docs/srd-standard.md
 glossary: docs/glossary
 precedence:
   - kb
@@ -174,30 +174,30 @@ KB_EDIT = r'"file_path":"[^"]*kb/'
 QUESTIONS_1 = [
     ("gap-0003", "Project archive and Tags", "Does a Project archive keep its Tags?", "deferred",
      "2026-08-11", 1),
-    ("gap-0006", "Infobar flow unit", "Which unit does the Infobar use for flow?", "deferred",
+    ("gap-0006", "Infobar price currency", "Which currency does the Infobar show prices in?", "deferred",
      "2026-08-27", 4),
     ("gap-0009", "Renaming an EXAMPLE Instance", "Can a Customer rename an EXAMPLE Instance?", "deferred",
      "2026-09-14", 1),
-    ("gap-0004", "Per-sensor-type propagation speed", "Is a per-sensor-type propagation speed needed?",
+    ("gap-0004", "Per-region shipping rate", "Is a per-region shipping rate needed?",
      "unknown", "2026-08-19", 4),
-    ("gap-0010", "LoRa mote readings across a reboot", "Do LoRa motes keep readings across a reboot?",
+    ("gap-0010", "Reader bookmarks across a reset", "Do Reader devices keep bookmarks across a reset?",
      "unknown", "2026-09-17", 1),
 ]
 GAPS_1 = [
-    gap("gap-0011", "Sound File retention period", "sound-export",
-        ["sound file retention"], "The docs do not say how long a Sound File is kept."),
-    gap("gap-0014", "How long recordings are kept", "leak-archive",
-        ["recording retention"], "Nowhere states when recordings are deleted."),
+    gap("gap-0011", "E-book file retention period", "ebook-export",
+        ["ebook file retention"], "The docs do not say how long an uploaded e-book file is kept."),
+    gap("gap-0014", "How long uploaded e-books are kept", "ebook-archive",
+        ["ebook retention"], "Nowhere states when uploaded e-book files are deleted."),
     gap("gap-0016", "Infobar for a Device without location", "device-map",
         ["infobar no location"], "The Infobar page does not cover a Device with no location."),
     gap("gap-0018", "Tag name length limit", "tag-import",
         ["tag name length"], "No maximum length for a Tag node name is documented."),
-    gap("gap-0019", "Leak Instance merge rules", "leak-merge",
-        ["merge leak instances"], "The docs do not say when two Leak Instances merge."),
+    gap("gap-0019", "Album merge rules", "album-merge",
+        ["merge albums"], "The docs do not say when two Albums merge."),
 ]
 for g in GAPS_1:
     g["created"] = "2026-09-10T08:00:00Z"
-GAPS_1 += [gap(i, t, "sound-export", [], q, answer=a, hits=h, created=c + "T09:00:00Z")
+GAPS_1 += [gap(i, t, "ebook-export", [], q, answer=a, hits=h, created=c + "T09:00:00Z")
            for i, t, q, a, c, h in QUESTIONS_1]
 
 
@@ -235,11 +235,11 @@ write_case(
 # --- 3. reclassifies-rather-than-skipping ---------------------------------
 
 BATTERY_PAGE = """---
-title: Logger battery
+title: Reader battery
 last_verified: 2026-09-12
 ---
 
-# Logger battery
+# Reader battery
 
 ## Battery reporting
 
@@ -247,7 +247,7 @@ last_verified: 2026-09-12
 
 > Open: gap-0042.
 
-An ALTECNO logger reports its battery voltage with every upload.
+A Reader device reports its battery level with every sync.
 
 ## Provenance
 
@@ -257,20 +257,20 @@ Where each section of this page comes from.
 |-------------------|--------------------|
 | Battery reporting | Session 2026-09-12 |
 """
-GAPS_3 = [gap("gap-0042", "ALTECNO logger default battery-low threshold", "session 2026-09-12",
-              ["altecno battery low threshold"],
-              "What battery-low threshold does an ALTECNO logger use by default?",
-              doc_id="kb/logger-battery.md", heading=["Logger battery", "Battery reporting"],
+GAPS_3 = [gap("gap-0042", "Reader device default low-battery warning level", "session 2026-09-12",
+              ["reader low battery warning level"],
+              "At what battery level does a Reader device warn by default?",
+              doc_id="kb/reader-battery.md", heading=["Reader battery", "Battery reporting"],
               answer="deferred", created="2026-09-12T15:30:00Z")]
 write_case(
     "backlog--reclassifies-rather-than-skipping",
     prompt="/srd:backlog deferred",
     tags=BASE_TAGS + ["ref:backlog/ask"],
     max_turns=50,
-    answers=['To the battery-low threshold question: "Actually nobody knows that yet — no one has '
+    answers=['To the low-battery warning level question: "Actually nobody knows that yet — no one has '
              'measured it on the current cells."',
              'To any offer of another list: "No, that\'s all for today."'],
-    files={"kb/logger-battery.md": BATTERY_PAGE},
+    files={"kb/reader-battery.md": BATTERY_PAGE},
     mocks={"list_gaps": gaps_world(GAPS_3)},
     graders={
         "b1-answer-now-unknown": used("mcp__srd__update_gap", '"answer":"unknown"'),
@@ -292,23 +292,23 @@ write_case(
 HK_DOC = "docs/operations/storage-housekeeping.md"
 HK_ID = "1882030917"  # synced page: its front-matter id, not its path, is the identity
 GAPS_4 = [
-    gap("gap-0021", "How long raw Sound Files are kept", "sound-export",
-        ["sound file retention", "how long are sound files kept", "delete sound files"],
-        "The docs do not say how long a raw Sound File is kept before it is deleted, nor who can change that period.",
+    gap("gap-0021", "How long uploaded e-book files are kept", "ebook-export",
+        ["ebook file retention", "how long are ebook files kept", "delete ebook files"],
+        "The docs do not say how long an uploaded e-book file is kept before it is deleted, nor who can change that period.",
         doc_id=HK_ID, heading=["Storage housekeeping", "Cold storage"],
         created="2026-09-08T10:12:00Z"),
     gap("gap-0027", "Infobar for a Device without a location", "device-map",
         ["infobar device without location"], "The docs do not say what the Infobar shows for a Device with no location.",
         created="2026-09-15T14:40:00Z"),
-    gap("gap-0034", "When recorded Sound Files are deleted", "leak-archive",
-        ["sound file deletion", "recording retention period"],
-        "Nowhere states when recorded Sound Files are deleted.", created="2026-09-22T09:05:00Z"),
+    gap("gap-0034", "When uploaded e-book files are deleted", "ebook-archive",
+        ["ebook file deletion", "ebook retention period"],
+        "Nowhere states when uploaded e-book files are deleted.", created="2026-09-22T09:05:00Z"),
 ]
 LIST_DOCS_4 = json.dumps({"docs": [
     {"id": i, "path": p, "rank": r, "title": t} for i, p, r, t in [
-        ("docs/guidelines_for_software_requirements_documents.md",
-         "docs/guidelines_for_software_requirements_documents.md", 6,
-         "Guidelines for Software Requirements Documents"),
+        ("docs/srd-standard.md",
+         "docs/srd-standard.md", 6,
+         "Requirements Specification Standard"),
         ("docs/glossary/main_glossary.md", "docs/glossary/main_glossary.md", 5, "Main Glossary"),
         ("docs/glossary/user_interface_glossary.md", "docs/glossary/user_interface_glossary.md", 5,
          "User Interface Glossary"),
@@ -324,13 +324,13 @@ For the id `{HK_ID}` or the path `{HK_DOC}` answer with this document:
 
 ## Nightly jobs
 
-The housekeeping job runs at 02:00 Instance time and compacts the time-series
-store.
+The housekeeping job runs at 02:00 Instance time and compacts the order
+database.
 
 ## Cold storage
 
-Recordings older than 90 days move to the archive tier. Archived recordings
-stay playable but load more slowly.
+Uploaded e-book files older than 90 days move to the archive tier. Archived
+files stay downloadable but load more slowly.
 
 For any other id answer {{"error":"document not found"}}.
 """
@@ -348,18 +348,18 @@ case4_common = dict(
     mocks={"list_gaps": gaps_world(GAPS_4), "get_doc": GET_DOC_4, "list_docs": LIST_DOCS_4},
 )
 URL_4 = "https://docs.example.com/operations/storage-housekeeping"
-DRAFT_4 = r'"file_path":"[^"]*drafts/sound-file-retention\.md"'
+DRAFT_4 = r'"file_path":"[^"]*drafts/ebook-file-retention\.md"'
 CORPUS_WRITE = r'"file_path":"[^"]*/(kb|docs)/(?!_inbox)'
 
 
 write_case(
     "backlog--clusters-gaps-and-drafts-outside-the-corpus",
     max_turns=80,
-    answers=['To which cluster to work: "The Sound File retention one."',
-             'To any question about the fact the page must state: "Raw Sound Files are deleted 400 days '
+    answers=['To which cluster to work: "The e-book file retention one."',
+             'To any question about the fact the page must state: "Uploaded e-book files are deleted 400 days '
              'after upload, archived or not. Only an EXAMPLE administrator can change that period, and only '
              'for a whole EXAMPLE Instance. The 90-day move to the archive tier stays as documented."',
-             'To where the draft goes: "Put it at `drafts/sound-file-retention.md`."',
+             'To where the draft goes: "Put it at `drafts/ebook-file-retention.md`."',
              f'Once the draft is ready: "I\'ve published it: {URL_4} — the docs pull runs tonight."',
              'To any offer of another cluster or list: "No, that\'s all for today."'],
     graders={
@@ -367,10 +367,10 @@ write_case(
         "b2-reads-cited-page-before-drafting": order(("mcp__srd__get_doc", "storage-housekeeping|" + HK_ID),
                                                      ("Write", DRAFT_4)),
         "b2-draft-fixes-unranked-structurally": file_rx(
-            "drafts/sound-file-retention.md",
+            "drafts/ebook-file-retention.md",
             r"^aliases:[^\n]*(retention|delet)|^#+ [^\n]*(retention|delet)", flags="im"),
-        "b2-draft-adds-absent-prose": file_rx("drafts/sound-file-retention.md", r"400 days"),
-        "b3-draft-written": ("type: file_exists\npath: drafts/sound-file-retention.md\nexists: true", ""),
+        "b2-draft-adds-absent-prose": file_rx("drafts/ebook-file-retention.md", r"400 days"),
+        "b3-draft-written": ("type: file_exists\npath: drafts/ebook-file-retention.md\nexists: true", ""),
         "b3-no-write-into-a-source": never("Write", CORPUS_WRITE),
         "b3-no-edit-into-a-source": never("Edit", CORPUS_WRITE),
         "b4-no-fill": never("mcp__srd__fill_gap"),
@@ -381,7 +381,7 @@ write_case(
     **case4_common,
 )
 
-# --- 5. sweeps-a-rejected-srd ---------------------------------------------
+# --- 5. sweeps-an-abandoned-srd ------------------------------------------
 
 REJ, CO = "wishlist-v2", "gift-cards"
 
@@ -437,35 +437,66 @@ Where each section of this page comes from.
 {PROV_5}"""
 
 
-def srd_doc(title, objective, status):
-    return f"""# SRD: {title}
+def srd_doc(title, summary, lifecycle, code, included, req):
+    head = table(["Field", "Value"], [
+        ["Summary", summary],
+        ["Maintainer", "Ada Brook"],
+        ["Reviewers", "Lev Ortiz"],
+        ["Tracking", f"[BOOK-{len(title)}](https://tickets.example.com/browse/BOOK-{len(title)})"],
+        ["Lifecycle", lifecycle],
+        ["Mockups", "none"],
+    ])
+    return f"""# {title}
 
-- **Objective:** {objective}
-- **Owners:** Ada Brook (primary), Lev Ortiz (secondary)
-- **Initiative:** https://tickets.example.com/browse/BOOK-{len(title)}
-- **Status:** {status}
-- **Designs:** N/A
+{head}
+## Introduction
+
+Purpose: {summary[0].lower() + summary[1:]}
+
+This document covers only that change; the Boundaries section lists what it
+leaves out.
+
+## Conventions
 
 The key words "MUST", "MUST NOT", "SHOULD", and "MAY" in this document are to
-be interpreted as described in RFC 2119 and RFC 8174.
+be interpreted as described in RFC 2119 and RFC 8174 when, and only when, they
+appear in all capitals.
+
+## Boundaries
+
+### Included
+
+- {included}
+
+### Excluded
+
+- Changes to payment processing.
+
+## Requirements
+
+- `{code}-1` {req}
 """
 
 
 SRDS_5 = {
-    f"initiatives/{REJ}/srd.md": srd_doc("Wishlist sharing v2", "Let a reader share a wishlist by link.",
-                                         "REJECTED"),
-    f"initiatives/{CO}/srd.md": srd_doc("Gift cards", "Let a reader buy a gift card for a wishlist title.",
-                                        "ACCEPTED"),
+    f"initiatives/{REJ}/srd.md": srd_doc(
+        "Wishlist sharing v2", "Let a reader share a wishlist by link.", "WITHDRAWN", "WL",
+        "Sharing a wishlist by link.",
+        "The store MUST let a reader create a read-only link to one wishlist."),
+    f"initiatives/{CO}/srd.md": srd_doc(
+        "Gift cards", "Let a reader buy a gift card for a wishlist title.", "APPROVED", "GC",
+        "Buying a gift card for a wishlist title.",
+        "The store MUST let a reader buy a gift card for a title on a wishlist."),
 }
 LIST_DOCS_5 = json.dumps({"docs": [
     {"id": i, "path": i, "rank": r, "title": t} for i, r, t in [
-        ("docs/guidelines_for_software_requirements_documents.md", 6,
-         "Guidelines for Software Requirements Documents"),
+        ("docs/srd-standard.md", 6,
+         "Requirements Specification Standard"),
         ("docs/glossary/main_glossary.md", 5, "Main Glossary"),
         ("kb/wishlists.md", 1, "Wishlists"),
         ("kb/_inbox.md", 1, "Knowledge base inbox"),
-        (f"initiatives/{REJ}/srd.md", None, "SRD: Wishlist sharing v2"),
-        (f"initiatives/{CO}/srd.md", None, "SRD: Gift cards"),
+        (f"initiatives/{REJ}/srd.md", None, "Wishlist sharing v2"),
+        (f"initiatives/{CO}/srd.md", None, "Gift cards"),
     ]]}, separators=(",", ":")).replace(',"rank":null', "")
 GET_DOC_5 = "---\ntype: agent\n---\nAnswer each id or path with its document below, verbatim.\n\n" + "".join(
     f"For `{i}`:\n\n````markdown\n{b.rstrip()}\n````\n\n" for i, b in
@@ -508,8 +539,8 @@ store as those calls left it.
 """
 
 
-REVERT_5 = gap("gap-0040", f"Wishlist size limit rests on rejected SRD {REJ}", REJ, ["wishlist size limit"],
-               f"Abandoned SRD {REJ} (REJECTED) attested this section; no other SRD attests it.",
+REVERT_5 = gap("gap-0040", f"Wishlist size limit rests on abandoned SRD {REJ}", REJ, ["wishlist size limit"],
+               f"Abandoned SRD {REJ} (Lifecycle WITHDRAWN) attested this section; no other SRD attests it.",
                doc_id="kb/wishlists.md", heading=["Wishlists", "Wishlist size limit"],
                created="2026-09-28T09:00:00Z")
 REVERT_5["kind"] = "wrong"
@@ -524,7 +555,7 @@ WORLD_5 = store_world(GAPS_5)
 RG = "mcp__srd__report_gap"
 
 write_case(
-    "backlog--sweeps-a-rejected-srd",
+    "backlog--sweeps-an-abandoned-srd",
     prompt="/srd:backlog",
     tags=BASE_TAGS + CORPUS_TAGS + ["skill:report-doc-gap", "sec:report-doc-gap:the-gap-tools",
                                     "sec:report-doc-gap:the-gap-record", "sec:report-doc-gap:workflow"],
@@ -543,7 +574,7 @@ write_case(
         "b2-detail-names-co-attester": used(RG, r'"detail":"(?:[^"\\]|\\.)*' + CO, 1, 1),
         "b3-none-for-covered-section": never(RG, "[Ss]ize [Ll]imit"),
         "b3-no-hit-on-covered-gap": never("mcp__srd__update_gap", "gap-0040"),
-        "b4-sweep-in-opening": rx(rf"{REJ}[^\n]*(reject|\b2\b|two)|reject[^\n]*{REJ}", flags="i"),
+        "b4-sweep-in-opening": rx(rf"{REJ}[^\n]*(abandon|withdrawn|\b2\b|two)|(abandon|withdrawn)[^\n]*{REJ}", flags="i"),
         "b4-no-kb-write": never("Write", KB_EDIT),
         "b4-no-kb-edit": never("Edit", KB_EDIT),
     },
@@ -585,13 +616,13 @@ HK_PAGE_6 = """# Storage housekeeping
 
 ## Nightly jobs
 
-The housekeeping job runs at 02:00 Instance time and compacts the time-series
-store.
+The housekeeping job runs at 02:00 Instance time and compacts the order
+database.
 
 ## Archive tier
 
-Recordings older than 90 days move to the archive tier. Archived recordings
-stay playable but load more slowly.
+Uploaded e-book files older than 90 days move to the archive tier. Archived
+files stay downloadable but load more slowly.
 """
 H_OLD = ["9f2c4e1a7b3d5f60812a4c6e8b0d2f4a6c8e0a2b4d6f8a0c2e4a6b8d0f2a4c6e",
          "1b3d5f7092a4c6e8f0b2d4a6c8e0f2b4d6a8c0e2f4b6d8a0c2e4f6b8d0a2c4e6",
@@ -616,10 +647,10 @@ GAPS_6 = [
                claim="A gift card never expires.", doc_id=GC, heading=["Gift cards", "Gift card expiry"],
                created="2026-09-20T11:05:00Z"),
            [{"ref": f"{GC}#gift-card-expiry", "hash": H_OLD[1]}], [(f"{GC}#gift-card-expiry", "changed")]),
-    filled(gap("gap-0052", "When recordings move to the archive tier", "leak-archive",
-               ["recording archive tier", "recordings older than 90 days"],
-               "Nowhere states when recordings leave hot storage.",
-               claim="Recordings older than 90 days move to the archive tier.", doc_id=HK_ID,
+    filled(gap("gap-0052", "When e-book files move to the archive tier", "ebook-archive",
+               ["ebook archive tier", "ebook files older than 90 days"],
+               "Nowhere states when uploaded e-book files leave hot storage.",
+               claim="Uploaded e-book files older than 90 days move to the archive tier.", doc_id=HK_ID,
                heading=["Storage housekeeping", "Cold storage"], created="2026-09-08T10:12:00Z"),
            [{"ref": f"{HK_ID}#cold-storage", "hash": H_OLD[2]}], [(f"{HK_ID}#cold-storage", "vanished")]),
     gap("gap-0055", "Tag name length limit", "tag-import", ["tag name length"],
@@ -665,9 +696,9 @@ exactly: {", ".join(f"`{x}`" for x in SECTIONS_6)} (`{HK_DOC}` is accepted for
 """
 LIST_DOCS_6 = json.dumps({"docs": [
     {"id": i, "path": p, "rank": r, "title": t} for i, p, r, t in [
-        ("docs/guidelines_for_software_requirements_documents.md",
-         "docs/guidelines_for_software_requirements_documents.md", 6,
-         "Guidelines for Software Requirements Documents"),
+        ("docs/srd-standard.md",
+         "docs/srd-standard.md", 6,
+         "Requirements Specification Standard"),
         ("docs/glossary/main_glossary.md", "docs/glossary/main_glossary.md", 5, "Main Glossary"),
         (HK_ID, HK_DOC, 4, "Storage housekeeping"),
         (GC, GC, 1, "Gift cards"),
@@ -686,13 +717,13 @@ ones whose text or heading shares a word (ignoring case and plurals) with the
 query, best match first; none matching answers {{"results":[]}}:
 
 - id `{HK_ID}`, path `{HK_DOC}`, rank 4, title "Storage housekeeping",
-  heading_path ["Storage housekeeping", "Archive tier"], text "Recordings
-  older than 90 days move to the archive tier. Archived recordings stay
-  playable but load more slowly."
+  heading_path ["Storage housekeeping", "Archive tier"], text "Uploaded
+  e-book files older than 90 days move to the archive tier. Archived files
+  stay downloadable but load more slowly."
 - id `{HK_ID}`, path `{HK_DOC}`, rank 4, title "Storage housekeeping",
   heading_path ["Storage housekeeping", "Nightly jobs"], text "The
-  housekeeping job runs at 02:00 Instance time and compacts the time-series
-  store."
+  housekeeping job runs at 02:00 Instance time and compacts the order
+  database."
 - id `{GC}`, path `{GC}`, rank 1, title "Gift cards", heading_path
   ["Gift cards", "Refund window"], text "A buyer may return an unused gift
   card for a full refund during the first 14 days after purchase. Later
@@ -739,7 +770,7 @@ write_case(
 GAPS_7 = [
     gap("gap-0061", "Shared wishlist link expiry", "wishlist-sharing", ["wishlist link expiry"],
         "Does a shared wishlist link expire, and after how long?", answer="deferred",
-        created="2026-09-20T10:00:00Z", ask=["Anna M", "Piotr K"]),
+        created="2026-09-20T10:00:00Z", ask=["Anna M", "Oliver K"]),
     gap("gap-0062", "Gift card refund window", "gift-cards", ["gift card refund"],
         "How many days after purchase can a gift card still be refunded?", answer="deferred",
         created="2026-09-21T10:00:00Z", ask=["Anna M"], asked="2026-09-28"),
@@ -791,7 +822,7 @@ write_case(
     "backlog--ask-writes-one-message-per-person--gate",
     graders={
         "b1-anna-block": rx(in_block(r"Anna M(?:(?!```)[\s\S])*?expir")),
-        "b1-piotr-block": rx(in_block(r"Piotr K(?:(?!```)[\s\S])*?expir")),
+        "b1-oliver-block": rx(in_block(r"Oliver K(?:(?!```)[\s\S])*?expir")),
         "b1-two-blocks": rx("```", match="count:4"),
         "b2-no-refund-question": rx(in_block("refund"), flags="i", match="not_contains"),
         "b2-no-size-question": rx(in_block(r"how many titles|size limit"), flags="i", match="not_contains"),

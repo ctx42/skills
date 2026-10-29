@@ -17,7 +17,7 @@ append_system_prompt: |
   1. To any offer about draft documentation gaps: "Keep them as drafts for
      later."
   2. To the first question you put, if it is about GR-7's lookup speed: "300 ms
-     at the 95th percentile, for a Project holding up to 500,000 Sound Files."
+     at the 95th percentile, for a Project holding up to 500,000 Photos."
   3. To the first question you put, if it is about GR-4's Tag name separator:
      "Use the comma-separated form the Tags page documents."
   After your reply to that first answer, the user sends nothing more: end the

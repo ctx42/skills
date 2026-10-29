@@ -15,17 +15,19 @@ append_system_prompt: |
   only in thinking.
 
   Scripted answers (pick the one that fits the question):
-  1. Objective, or a restatement of it: "Yes: the export API limits how many
-     export requests each Project may start. Put the SRD at
-     initiatives/export-rate-limit/srd.md."
+  1. Purpose or summary, or a restatement of it: "Yes: the export API
+     limits how many export requests each Project may start. Put the SRD
+     at initiatives/export-rate-limit/srd.md."
   2. UI change: "No."
-  3. In Scope: "Defer it; derive it from the requirements."
-  4. Out of Scope: "Limits on any API other than the export API."
+  3. What the SRD delivers (in scope): "Defer it; derive it from the
+     requirements."
+  4. What it excludes (out of scope): "Limits on any API other than the
+     export API."
   5. Requirements: "The export API accepts at most 10 export requests per
      Project per hour. Over the limit, it rejects the request with HTTP 429."
   6. Any further rule: "Nothing else; only what I said."
   7. Any restatement or summary to confirm: "Yes, correct."
-  8. A proposed requirement grouping or prefixes: "Fine, use those."
+  8. A proposed requirement grouping or group codes: "Fine, use those."
   9. A self-check blocker: "Leave it."
 ---
 

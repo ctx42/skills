@@ -1,6 +1,6 @@
 ---
 type: regex
-target: {source: file, path: kb/correlation.md}
+target: {source: file, path: kb/shipping-quotes.md}
 flags: "s"
 ---
-^(?=.*## What correlation is in EXAMPLE)(?=.*## Logger pairs eligible for correlation)(?=.*## Correlation of stereo recordings)(?=.*## Correlation result statuses)(?=.*## Correlation re-runs after network edits)
+^(?=.*## What a shipping quote is in EXAMPLE)(?=.*## Carriers eligible for a quote)(?=.*## Quotes for split parcels)(?=.*## Quote statuses)(?=.*## Quote recalculation after rate edits)

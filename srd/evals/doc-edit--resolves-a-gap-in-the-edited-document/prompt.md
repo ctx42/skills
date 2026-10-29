@@ -16,4 +16,4 @@ append_system_prompt: |
   2. Anything else: "That's all — close the session."
 ---
 
-/srd:doc-edit docs/operations/correlation.md add the minimum overlap: a correlation run needs at least 30 minutes of overlapping recording from both Loggers
+/srd:doc-edit docs/operations/reconciliation.md add the minimum overlap: a reconciliation run needs at least 30 minutes of overlapping postings from both Ledgers

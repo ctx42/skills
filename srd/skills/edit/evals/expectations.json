@@ -6,7 +6,7 @@
       "name": "autofix-bulk-applies-errata",
       "expected_behavior": [
         "Acts on nothing outside the `## Errata` block: no mechanical issue absent from it is fixed, and the SRD is not re-scanned for new ones",
-        "Runs neither the glossary resolution nor the approval gate — errata touch neither ids nor terms — so no approval-gate `Status` line and no glossary question reach the user, and no `glossary_terms` call is made; the closing manifest's Status follow-up is not a gate line",
+        "Runs neither the glossary resolution nor the approval gate — errata touch neither ids nor terms — so no approval-gate status line and no glossary question reach the user, and no `glossary_terms` call is made; the closing manifest's status follow-up is not a gate line",
         "Lists the three substitutions and takes one confirmation for the whole batch, not the per-change loop",
         "Verifies each `old` at its anchor, applies the two that match exactly once, and reports the third as stale rather than guessing where it belongs",
         "Writes no review file and invokes no `review` run; prints the exact hand-off command `review specs/login.md check #n,n`, scoped to the two applied errata, for the user to run",
@@ -40,7 +40,7 @@
       "id": 20,
       "name": "autofix-inserts-missing-notice",
       "expected_behavior": [
-        "Inserts the template notice exactly once, directly below the metadata block and after the `[[TOC]]` macro that follows it, ahead of `## Introduction`",
+        "Inserts the Conventions section with the notice exactly once, where the standard places it: directly after the Introduction and ahead of `## Boundaries`, not below the header table",
         "Applies the ordinary substitution in the same batch",
         "Hands the insertion to `check` with the other applied finding: `review specs/login.md check #4,10`"
       ]
@@ -49,7 +49,7 @@
       "id": 21,
       "name": "autofix-misplaced-notice-is-stale",
       "expected_behavior": [
-        "Inserts no second notice: the SRD still holds exactly one keyword notice, and none is added below the metadata block",
+        "Inserts no second notice and adds no Conventions section: the SRD still holds exactly one notice, left where it was below the header table",
         "Reports `#10` as stale — a notice already exists, and moving a misplaced one is not errata",
         "Applies `#4` and hands only it to `check`: `review specs/login.md check #4`"
       ]
@@ -58,10 +58,10 @@
       "id": 22,
       "name": "summary-default-newest-block",
       "expected_behavior": [
-        "Covers only the newest block: the 15-minute unlock and the 30-second grace appear, the earlier block's GR-1 change does not",
+        "Covers only the newest block: the 15-minute unlock and the 30-second grace appear, the earlier block's GW-1 change does not",
         "Links the LCK-2 line to #8 in trailing parentheses and never names #3, the older finding on the same id",
         "Lists withdrawn #9 (stamped inside the newest block's span) and neither #4 (stamped in the earlier block's span) nor the unstamped #2",
-        "Puts the GR-3 rewording only in a closing `Wording` section, after every group of changes in meaning",
+        "Puts the GW-3 rewording only in a closing `Wording` section, after every group of changes in meaning",
         "Opens with the header line `Login Token Validation: changes 2026-09-30 15:20` and uses no Markdown: no asterisks, backticks, or `#` headings",
         "Writes no file: no Write or Edit call, the decision log and review file included",
         "Groups the changes under the SRD's own requirement group names, `Gateway Rules` and `Account Lockout`, each on its own line",
@@ -73,8 +73,8 @@
       "name": "summary-merges-a-day",
       "expected_behavior": [
         "Opens with the header line `Login Token Validation: changes 2026-09-30`, with no time",
-        "Covers both 2026-09-30 blocks: the GR-1 change and the 15-minute unlock both appear",
-        "Reports GR-2 once, by its end state: the 30-second grace appears once and the 60-second grace not at all",
+        "Covers both 2026-09-30 blocks: the GW-1 change and the 15-minute unlock both appear",
+        "Reports GW-2 once, by its end state: the 30-second grace appears once and the 60-second grace not at all",
         "Lists withdrawn #4 and #9, both stamped on 2026-09-30, and not the unstamped #2",
         "Leaves out the 2026-09-29 block: #3 is not named",
         "Writes no file: no Write or Edit call"

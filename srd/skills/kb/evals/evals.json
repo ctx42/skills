@@ -7,7 +7,7 @@
       "skills": [
         "kb"
       ],
-      "setup": "`kb/_inbox.md` holds a confirmed fact that correlation uses a per-material propagation speed. A knowledge-base page on correlation already exists and is long enough to look worth splitting.",
+      "setup": "`kb/_inbox.md` holds a confirmed fact that shipping quotes use a per-zone weight step. A knowledge-base page on shipping quotes already exists and is long enough to look worth splitting.",
       "query": "/kb file",
       "files": []
     },

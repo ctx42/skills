@@ -2,4 +2,4 @@
 type: regex
 target: last_message
 ---
-correlation\.md
+shipping-quotes\.md

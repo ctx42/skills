@@ -5,11 +5,11 @@
       "id": 1,
       "name": "author-from-a-vague-idea",
       "expected_behavior": [
-        "Loads the Company Glossary's term set with `glossary_terms` before drafting",
-        "Interviews one branch at a time — objective, UI change, in/out of scope, the rules — rather than drafting straight from the one-line idea",
-        "Rewrites a vague requirement (\"resets must be secure\") into a verifiable one per REQ-6 — a measurable threshold, its figure supplied by the user when asked rather than made up",
-        "Keeps each requirement atomic per REQ-1",
-        "Produces the sections in this order — the metadata block, `[[TOC]]`, the RFC 2119 / RFC 8174 keyword notice, `## Introduction`, `## Glossary` (only if a term needs defining), `## Scope` holding `### In Scope` then `### Out of Scope`, `## Requirements` — with Status `IN PROGRESS` and marked TODO placeholders for Owners, Initiative, and Designs",
+        "Loads the shared glossary's term set (the standard's Shared Terms) with `glossary_terms` before drafting",
+        "Interviews one branch at a time — purpose, UI change, what the SRD includes and excludes, the rules — rather than drafting straight from the one-line idea",
+        "Rewrites a vague requirement (\"resets must be secure\") into a checkable one per RQT-6 — an acceptance signal, its figure supplied by the user when asked rather than made up",
+        "Keeps each requirement atomic per RQT-1",
+        "Lays the SRD out by the standard the server served, not by any remembered one: a two-column Field/Value header table holding Summary, Maintainer, Reviewers, Tracking, Lifecycle, and Mockups (DOC-1); then `## Introduction`, `## Conventions` quoting the RFC 2119 / RFC 8174 notice (DOC-9), `## Boundaries` holding an Included then an Excluded list (DOC-10), `## Terms` only if a term needs defining and never before Boundaries, and `## Requirements` (DOC-13); Lifecycle `DRAFT` (LIF-1); marked TODO placeholders for Maintainer, Reviewers, Tracking, and Mockups (the UI changes); every requirement a list item opening with its identifier in backticks (RQT-2), none in any other identifier format",
         "Every count the reply states — the requirement-group counts at least — matches the SRD it describes"
       ],
       "blind_only": [2]
@@ -33,7 +33,8 @@
       "expected_behavior": [
         "Passes the gate and, with no SRD path named, runs no draft check and invokes neither `srd:report-doc-gap` nor `srd:kb` at step 0",
         "Calls no `glossary_terms` before the interview opens, and loads the term set once the first term surfaces — at the latest with the user's first answer, and always before drafting",
-        "Restates the seed as the opening Objective and asks the next branch, rather than narrating a startup sequence"
+        "Restates the seed as the opening purpose and asks the next branch, rather than narrating a startup sequence",
+        "The SRD it writes takes its header values from the standard the server served: Mockups `none`, since the UI does not change (DOC-7), and Lifecycle `DRAFT` (LIF-1)"
       ],
       "blind_only": [1, 3]
     }

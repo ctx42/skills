@@ -3,7 +3,7 @@ type: agent
 ---
 Answer with the full text of the document whose id or path the call names.
 
-- `docs/guidelines_for_software_requirements_documents.md`:
+- `docs/srd-standard.md`:
   answer with exactly the text between the BEGIN and END marker lines below,
   verbatim and complete, the marker lines themselves left out.
 - `1774485611` or `docs/concepts/tags.md`: answer with exactly this text:
@@ -11,11 +11,11 @@ Answer with the full text of the document whose id or path the call names.
 
 ## Tag names
 
-Tag names represent a hierarchical structure expressed as a dot-separated series of Tag node names, for example `site.zone.pump`. Each Tag node name MUST start with a letter a-z. Every Tag Definition carries a Tag Kind besides its name: `string`, `number`, or `boolean`; a Tag cannot be created without one."
+Tag names represent a hierarchical structure expressed as a dot-separated series of Tag node names, for example `travel.europe.lisbon`. Each Tag node name MUST start with a letter a-z. Every Tag Definition carries a Tag Kind besides its name: `string`, `number`, or `boolean`; a Tag cannot be created without one."
 - `docs/glossary/main_glossary.md`: answer with exactly the
   text between the GLOSSARY-BEGIN and GLOSSARY-END marker lines below.
-- `docs/formats/sound_file_documentation.md`: answer with
-  exactly this text: "# Sound File Documentation\n\n## meta chunk\n\nThe `meta` chunk carries the sub-type `tags`. Each tag is one sub-chunk of the `meta` chunk: the sub-chunk ID names the tag and its data holds the value."
+- `docs/formats/photo_format.md`: answer with
+  exactly this text: "# Photo Format\n\n## meta block\n\nThe `meta` block carries the sub-type `tags`. Each tag is one entry of the `meta` block: the entry key names the tag and its data holds the value."
 - Any other id: answer `{"error":"no document with id <the id>"}`.
 
 BEGIN
@@ -49,9 +49,9 @@ A paying organization with access to the platform. A Customer has zero or more P
 
 A single, self-contained deployment of the EXAMPLE platform operating independently with its own data store, services, and configuration.
 
-## Sound File (SND)
+## Photo (PHO)
 
-A binary audio recording in WAV (RIFF) format that may contain one or more Sound Channels and custom metadata.
+A still image in JPEG format that may carry one or more Layers and custom metadata.
 
 ## Namespace (NS)
 
@@ -59,7 +59,7 @@ A named grouping that scopes Tag Definitions within a Project. Each Namespace ha
 
 ## Tag (TAG)
 
-A named label attached to a platform object such as a Sound File. A Tag's name is a series of Tag node names.
+A named label attached to a platform object such as a Photo. A Tag's name is a series of Tag node names.
 
 ## Date
 

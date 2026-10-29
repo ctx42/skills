@@ -5,7 +5,7 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd
 kb: kb
 initiatives: initiatives
-srd-standard: docs/guidelines_for_software_requirements_documents.md
+srd-standard: docs/srd-standard.md
 glossary: docs/glossary
 precedence:
   - kb
@@ -26,13 +26,22 @@ mkdir -p specs
 cat > specs/login.md <<'EOF_F0'
 # Login Lockout
 
-|                |                                                                           |
-|----------------|---------------------------------------------------------------------------|
-| **Objective**  | Define how the system locks a user account after repeated failed log-ins. |
-| **Initiative** | [INT-412](https://jira.example.com/browse/INT-412)                        |
-| **Owners**     | @alice, @bob                                                              |
-| **Status**     | IN PROGRESS                                                               |
-| **Designs**    | N/A                                                                       |
+| Field      | Value                                                                     |
+|------------|---------------------------------------------------------------------------|
+| Summary    | Define how the system locks a user account after repeated failed log-ins. |
+| Maintainer | @alice                                                                    |
+| Reviewers  | @bob                                                                      |
+| Tracking   | [WORK-412](https://tracker.example.com/WORK-412)                          |
+| Lifecycle  | DRAFT                                                                     |
+| Mockups    | none                                                                      |
+
+## Introduction
+
+This document specifies how the system protects user accounts against
+repeated failed log-in attemps: counting failed attempts, locking an account,
+and releasing it again. It does not change how users reset a password.
+
+## Conventions
 
 > [!INFO]
 > The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
@@ -42,50 +51,42 @@ cat > specs/login.md <<'EOF_F0'
 > [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) when, and only when, they
 > appear in all capitals, as shown here.
 
-## Introduction
+## Boundaries
 
-This document specifies how the system protects user accounts against
-repeated failed log-in attemps: counting failed attempts, locking an account,
-and releasing it again.
+### Included
 
-## Glossary
+- Counting failed log-in attempts per user account.
+- Putting an account into Lockout.
+- Releasing an account from Lockout.
+
+### Excluded
+
+- Password reset.
+
+## Terms
 
 ### Lockout
 
 The state of a user account that cannot log in until it is released.
 
-## Scope
-
-### In Scope
-
-**SC-1:** Counting failed log-in attempts per user account.
-
-**SC-2:** Putting an account into Lockout.
-
-**SC-3:** Releasing an account from Lockout.
-
-### Out of Scope
-
-**OSC-1:** Password reset.
-
 ## Requirements
 
-### General (GR)
+---
 
-**GR-1:** The system MUST count each failed log-in attempt against the user
-account it names.
+### Lockout (LCK)
 
-**GR-2:** The system MUST reset an account's failed-attempt count to zero
-after a succesful log-in.
+- `LCK-1` The system MUST count each failed log-in attempt against the user
+  account it names.
+- `LCK-2` The system MUST reset an account's failed-attempt count to zero
+  after a succesful log-in.
+- `LCK-3` The system MUST put an account into Lockout after five consecutive
+  failed log-in attempts.
+- `LCK-4` An account in Lockout MUST be released 30 minutes after it entered
+  Lockout, and the system MUST email the user when it releases the account.
+- `LCK-5` An account's failed-attempt count MUST be reset to zero when the
+  account is released from Lockout, whatever the client's behaviour.
 
-**GR-3:** The system MUST put an account into Lockout after five consecutive
-failed log-in attempts.
-
-**GR-4:** An account in Lockout MUST be released 30 minutes after it entered
-Lockout, and the system MUST email the user when it releases the account.
-
-**GR-5:** An account's failed-attempt count MUST be reset to zero when the
-account is released from Lockout, whatever the client's behaviour.
+---
 EOF_F0
 cat > specs/login.review.md <<'EOF_F1'
 ---
@@ -99,24 +100,24 @@ source: specs/login.md
 ## Introduction
 
 - [ ] #1 [minor, linguistic] Introduction ("repeated failed log-in attemps"):
-  misspelling — `attemps` → `attempts`. (SRD:LANG-2)
+  misspelling — `attemps` → `attempts`. (SRD:house)
 
 ## Requirements
 
-- [ ] #2 [minor, linguistic] GR-2 misspells a word in "after a succesful
-  log-in" — fix the spelling. (SRD:LANG-2)
+- [ ] #2 [minor, linguistic] LCK-2 misspells a word in "after a succesful
+  log-in" — fix the spelling. (SRD:house)
 
-- [ ] #3 [blocker, atomicity] GR-4: states two rules (release after 30 minutes
-  and email the user) — split into one rule each. (SRD:REQ-1)
+- [ ] #3 [blocker, atomicity] LCK-4: states two rules (release after 30
+  minutes and email the user) — split into one rule each. (SRD:RQT-1)
 
-- [ ] #4 [major, linguistic] GR-5 uses the British spelling "behaviour" and the
-  passive voice — change it to "behavior" and restate GR-5 with the system as
-  its subject. (SRD:LANG-1)
+- [ ] #4 [major, linguistic] LCK-5 uses the British spelling "behaviour" and
+  the passive voice — change it to "behavior" and restate LCK-5 with the
+  system as its subject. (SRD:CLR-1)
 
 ---
 
 ## Resolved
 
-- [x] #5 [blocker, structure] Metadata (Owners): only one owner was listed —
-  added @bob. (SRD:STR-2)
+- [x] #5 [blocker, structure] Header (Reviewers): no reviewer other than the
+  maintainer was listed — added @bob. (SRD:DOC-2)
 EOF_F1

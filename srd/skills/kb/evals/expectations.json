@@ -5,8 +5,8 @@
       "id": 1,
       "name": "appends-instead-of-fragmenting",
       "expected_behavior": [
-        "Finds the existing correlation page and proposes moving the inbox section there before touching a file",
-        "Moves it as a `##` section on that page, with its attestation line and provenance row, rather than creating a second correlation page",
+        "Finds the existing shipping-quotes page and proposes moving the inbox section there before touching a file",
+        "Moves it as a `##` section on that page, with its attestation line and provenance row, rather than creating a second shipping-quotes page",
         "Does not split the existing page to make room",
         "Reports a pointer to what was written, not the page's contents"
       ],

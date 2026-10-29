@@ -3,4 +3,4 @@ type: regex
 target: last_message
 match: not_contains
 ---
-quickly|REQ-6|LANG-4|GR-2|GR-3
+quickly|RQT-6|CLR-4|GW-2|GW-3

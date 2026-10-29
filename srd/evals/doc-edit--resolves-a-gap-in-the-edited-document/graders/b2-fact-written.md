@@ -1,5 +1,5 @@
 ---
 type: regex
-target: {source: file, path: docs/operations/correlation.md}
+target: {source: file, path: docs/operations/reconciliation.md}
 ---
 30\s+minutes

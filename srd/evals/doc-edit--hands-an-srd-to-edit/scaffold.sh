@@ -5,7 +5,7 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd
 kb: kb
 initiatives: initiatives
-srd-standard: docs/guidelines_for_software_requirements_documents.md
+srd-standard: docs/srd-standard.md
 glossary: docs/glossary
 precedence:
   - kb
@@ -24,32 +24,45 @@ In an eval run, `srd/evals/mocks/srd/fixtures/srd-standard.md` stands in for the
 EOF_PC
 mkdir -p initiatives/autoco
 cat > initiatives/autoco/srd.md <<'EOF_0'
-# Automated Correlation
+# Automated Reconciliation
 
-|                |                                                       |
-|----------------|-------------------------------------------------------|
-| **Objective**  | Run correlations without an operator.                 |
-| **Initiative** | [INT-640](https://tickets.example.com/browse/INT-640) |
-| **Owners**     | @anna.keller                                          |
-| **Status**     | IN PROGRESS                                           |
-| **Designs**    | N/A                                                   |
+| Field      | Value                                                 |
+|------------|-------------------------------------------------------|
+| Summary    | Run reconciliations without an operator.              |
+| Maintainer | @anna.keller                                          |
+| Reviewers  | @marek.nowak                                          |
+| Tracking   | [ABC-640](https://tickets.example.com/browse/ABC-640) |
+| Lifecycle  | DRAFT                                                 |
+| Mockups    | none                                                  |
 
 ## Introduction
 
-This document specifies how the platform starts correlation runs on its own.
+This document specifies how the platform starts reconciliation runs on its own.
+The system will start runs without an operator; it will not change how a run
+compares postings.
 
-## Scope
+## Conventions
 
-### In Scope
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in RFC 2119 and RFC 8174 when, and only when, they
+appear in all capitals, as shown here.
 
-**SC-1:** Starting correlation runs without an operator.
+## Boundaries
+
+### Included
+
+- Starting reconciliation runs without an operator.
+
+### Excluded
+
+- Changing how a run compares postings.
 
 ## Requirements
 
 ### Automation (AC)
 
-**AC-1:** The system MUST start a correlation run each night.
-
-**AC-2:** The system should kind of pick Loggers that are near enough to each
-other, more or less.
+- `AC-1` The system MUST start a reconciliation run each night.
+- `AC-2` The system should kind of pick Ledgers that are close enough to each
+  other, more or less.
 EOF_0

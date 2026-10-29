@@ -5,14 +5,13 @@ For the id `docs/glossary/main_glossary.md` or the path `docs/glossary/main_glos
 
 # Main Glossary
 
-## Logger
+## Ledger
 
-A battery-powered Device that records hydrophone audio at a fixed point on a
-water main.
+An account book that records every payment posted to one merchant account.
 
-## Correlation
+## Reconciliation
 
-The comparison of two Loggers' simultaneous recordings to locate a leak
-between them. A correlation run uses recordings taken between 02:00 and 04:00.
+The comparison of two Ledgers' postings to find a payment mismatch between
+them. A reconciliation run uses postings made between 02:00 and 04:00.
 
 For any other id answer {"error":"document not found"}.

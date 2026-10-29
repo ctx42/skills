@@ -7,7 +7,7 @@
       "skills": [
         "create"
       ],
-      "setup": "A project with a Company Glossary directory and no SRD for the feature. The user opens with one line and nothing else pinned down.",
+      "setup": "A project whose `project-config.md` names a shared glossary directory and an SRD standard the server serves; no SRD exists for the feature. The user opens with one line and nothing else pinned down.",
       "query": "/create — we need an SRD for a password reset feature",
       "files": []
     },
@@ -29,7 +29,7 @@
       "skills": [
         "create"
       ],
-      "setup": "A fresh project: `project-config.md` at its root names the server, the knowledge base, and a Company Glossary. No SRD exists yet, and the user has not named a path for the document.",
+      "setup": "A fresh project: `project-config.md` at its root names the server, the knowledge base, a shared glossary, and an SRD standard the server serves. No SRD exists yet, and the user has not named a path for the document.",
       "query": "/create a rate limit for the export API",
       "files": []
     }

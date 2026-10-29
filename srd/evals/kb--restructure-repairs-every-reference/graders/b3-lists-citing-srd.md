@@ -2,4 +2,4 @@
 type: regex
 target: last_message
 ---
-initiatives/gw-firmware/srd\.md
+initiatives/kiosk-firmware/srd\.md

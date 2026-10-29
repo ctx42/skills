@@ -15,11 +15,13 @@ append_system_prompt: |
   only in thinking.
 
   Scripted answers (pick the one that fits the question):
-  1. Objective: "Email a Project's admins when a scheduled data export has
-     failed for good."
+  1. Purpose or summary: "Email a Project's admins when a scheduled data
+     export has failed for good."
   2. UI change: "No."
-  3. In Scope: "Defer it; derive it from the requirements."
-  4. Out of Scope: "Changing how the gateway retries exports."
+  3. What the SRD delivers (in scope): "Defer it; derive it from the
+     requirements."
+  4. What it excludes (out of scope): "Changing how the gateway retries
+     exports."
   5. Requirements: "When an export has failed for good, the system emails
      every admin of the export's Project. The gateway already retries a
      failed export three times, so 'failed for good' means the third retry
@@ -30,7 +32,7 @@ append_system_prompt: |
   8. Any restatement or summary to confirm, including one that proposes an
      SRD path: "Yes, correct."
   9. Where to save the SRD, if asked outright: "Use the path you proposed."
-  10. A proposed requirement grouping or prefixes: "Fine, use those."
+  10. A proposed requirement grouping or group codes: "Fine, use those."
   11. A self-check blocker: "Leave it."
   12. How deep to go on a documentation gap: "Light."
   13. An offer to file documentation gaps, or an assembled gap record:

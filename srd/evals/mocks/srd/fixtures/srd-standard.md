@@ -1,272 +1,228 @@
-# SRD Standard
+# Requirements Specification Standard
 
 <!-- EVAL TEST DATA ONLY — never a runtime source. The srd skills read the
-     live standard through the MCP server (`get_doc` with the `srd-standard`
-     id from project-config.md). This frozen copy (upstream revision 19,
-     trimmed for agent use) stands in for that `get_doc` result in eval runs,
-     so a scenario grades against fixed rules. Do not update it to track the
-     live page; change it only together with the scenarios graded on it. -->
+     project's standard through the MCP server (`get_doc` with the
+     `srd-standard` id from project-config.md). This neutral standard was
+     written for these evals and belongs to no organization. It deliberately
+     differs from real standards in its identifiers, fields, values, and
+     layout, so a skill that hardcodes rules instead of reading them fails.
+     Change it only together with the scenarios graded on it. -->
 
-The rule set every SRD must satisfy. An SRD states what a system or feature
-must do — clearly enough that an engineer can build it and a reviewer can
-verify it. `create` authors against these rules, `edit` edits against them,
-and `review` reviews against them; each rule is a checkable statement and
-keeps its identifier so a finding can cite it, and each skill applies its own
-action policy on a finding. Check in document-section order (metadata,
-Introduction, Glossary, Scope, Requirements); for cross-cutting checks run the
-consistency pass in
-[authoring-guide.md](../../../../skills/create/references/authoring-guide.md), which
-also holds the house additions (US English, sub-numbering, one term per
-concept).
+This standard defines what a Software Requirement Document (SRD) must contain
+and how its requirements are written. Every rule below is a checkable
+statement with a stable identifier, so a finding can name the rule it breaks.
+Check a document in layout order: header, Introduction, Conventions,
+Boundaries, Terms, Requirements.
 
 ## Contents
 
-- Glossary
-- Requirements: Document Structure (`STR`), Status and Changes (`STA`),
-  Language and Style (`LANG`), Requirement Form (`REQ`), Glossary Discipline
-  (`GLO`), Scope Discipline (`SCO`)
-- Quality Bar
+- Terms
+- Rules: Document Layout (`DOC`), Lifecycle (`LIF`), Clarity (`CLR`),
+  Requirement Shape (`RQT`), Terminology (`TRM`), Boundaries (`BND`)
+- Acceptance Gate
 
-Two things belong to the standard and MUST NOT be copied into the SRD being
-written:
+The identifiers of these rules (`DOC-*`, `RQT-*`, and so on) belong to this
+standard. An SRD never quotes them as its own requirements, and it never
+contains worked examples of good or bad wording.
 
-- The rule identifiers (`STR-*`, `REQ-*`, …) name this standard's own rules, so
-  never carry them into an SRD as if they were its requirements. The letter
-  codes are not reserved: an SRD MAY number its own requirements `REQ-1`,
-  `REQ-2`, … if that suits the document.
-- A real SRD carries no `Example` / `Don't` / `Do` annotations. They are a
-  teaching device only (REQ-7); the Bad→Good examples live in
-  [authoring-guide.md](../../../../skills/create/references/authoring-guide.md).
+# Terms
 
-> The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-> "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in an
-> SRD are to be interpreted as described in
-> [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and
-> [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) when, and only when, they
-> appear in all capitals, as shown here.
+## Specification
 
-# Glossary
-
-## SRD (Software Requirement Document)
-
-A written document that states what a system or feature must do. It is organized
-so that each rule can be built and checked.
+An SRD: a document that states what a system or feature must do, precisely
+enough to build and to check.
 
 ## Requirement
 
-A single numbered statement of one rule, behavior, or limit that the system must
-meet.
+One identified statement of a behavior, rule, or limit the system must meet.
 
-## Atomic Requirement
+## Single-Rule Requirement
 
-A requirement that states exactly one rule, behavior, or limit.
+A requirement that states one behavior, rule, or limit and nothing else.
 
-## Normative Keyword
+## Obligation Word
 
-A keyword from the set defined in RFC 2119 and RFC 8174: MUST, MUST NOT,
-REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, RECOMMENDED, MAY, and OPTIONAL.
-It shows how strong a rule is. It carries this meaning only when written in
-capital letters.
+One of the words MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD
+NOT, RECOMMENDED, MAY, and OPTIONAL, with the meaning RFC 2119 and RFC 8174
+give it when written in capitals.
 
-## Verifiable
+## Checkable
 
-A quality of a requirement that can be checked. A practical method exists to
-confirm it: a test, an inspection, a demonstration, or an analysis.
+Able to be confirmed by a test, an inspection, a demonstration, or an
+analysis.
 
-## Verifiable Criteria
+## Acceptance Signal
 
-Clear, testable conditions that make a quality or behavior measurable, not a
-matter of opinion.
+A measurable condition that turns a quality into a pass-or-fail check.
 
-## In Scope
+## Included Item
 
-A statement of something the document will define or deliver.
+One line in the Boundaries section naming a change the SRD delivers.
 
-## Out of Scope
+## Excluded Item
 
-A statement of something the document does not cover on purpose.
+One line in the Boundaries section naming a change the SRD deliberately does
+not deliver.
 
-## Company Glossary
+## Shared Terms
 
-The shared glossary that defines terms used across EXAMPLE documents. It is
-kept outside any single SRD.
+The term list shared by every specification of the organization. It lives
+outside any single SRD.
 
-## Quality Bar
+## Acceptance Gate
 
-The lowest standard an SRD must meet to be accepted.
+The checks an SRD must pass before it can be approved.
 
-# Requirements
+# Rules
 
-## Document Structure
+## Document Layout
 
-**STR-1:** An SRD MUST have a metadata block at the top. A metadata block is a
-short list of key facts about the document. It MUST include at least the
-"Objective", "Owners", "Initiative", "Status", and "Designs" fields.
+**DOC-1:** An SRD MUST open with a header table of two columns, "Field" and
+"Value", holding the fields "Summary", "Maintainer", "Reviewers", "Tracking",
+"Lifecycle", and "Mockups".
 
-**STR-2:** The "Owners" field MUST list at least two owners: a primary owner and
-a secondary owner. The secondary owner takes over when the primary owner is
-away, for example, during illness or another absence.
+**DOC-2:** "Maintainer" MUST name exactly one person, and "Reviewers" MUST name
+at least one person other than the maintainer.
 
-**STR-3:** The "Initiative" field in the metadata block MUST link to the
-matching initiative in the ticketing system.
+**DOC-3:** "Tracking" MUST link to the SRD's work item in the issue tracker.
 
-**STR-4:** The matching initiative MUST link back to the SRD.
+**DOC-4:** The work item MUST link back to the SRD.
 
-**STR-5:** When an SRD changes the user interface (UI), its "Designs" field MUST
-link to the approved design in the design tool.
+**DOC-5:** When the SRD changes what users see, "Mockups" MUST link to the
+mockup set for the change.
 
-**STR-6:** The approved design MUST link back to the SRD.
+**DOC-6:** The mockup set MUST link back to the SRD.
 
-**STR-7:** When an SRD does not change the UI, its "Designs" field MUST contain
-the value "N/A" (not applicable).
+**DOC-7:** When the SRD changes nothing users see, "Mockups" MUST hold the value
+"none".
 
-**STR-8:** Every SRD MUST place the RFC 2119 and RFC 8174 keyword notice
-directly below the metadata block.
+**DOC-8:** An "Introduction" section MUST follow the header and state the
+document's purpose and, in outline, what the system will and will not do.
 
-**STR-9:** An SRD MUST have an introduction. The introduction MUST state the
-purpose of the document, and at a high level, what the system will and will not
-do.
+**DOC-9:** A "Conventions" section MUST follow the Introduction and quote the
+RFC 2119 and RFC 8174 notice on obligation words.
 
-**STR-10:** When an SRD uses terms that need a definition and are not in the
-Company Glossary, it MUST have a glossary that defines them.
+**DOC-10:** An SRD MUST have exactly one "Boundaries" section, holding an
+"Included" list and an "Excluded" list.
 
-**STR-11:** An SRD MUST have exactly one Scope section. The Scope section MUST
-contain an "In Scope" part and an "Out of Scope" part.
+**DOC-11:** An SRD MUST have a "Terms" section when it uses a term that needs a
+definition and is missing from Shared Terms.
 
-**STR-12:** An SRD MUST have a "Requirements" section. This section MUST contain
-every numbered requirement.
+**DOC-12:** An SRD MUST have a "Requirements" section holding every requirement.
 
-**STR-13:** An SRD MUST keep these sections in this order relative to each
-other, when they are present: the metadata block, "Introduction", "Glossary",
-"Scope", and then "Requirements".
+**DOC-13:** The sections MUST appear in this order when present: header,
+Introduction, Conventions, Boundaries, Terms, Requirements.
 
-**STR-14:** An SRD MAY add other sections, placed between or after the required
-sections.
+**DOC-14:** Additional sections MAY appear only after the Requirements section.
 
-## Status and Changes
+## Lifecycle
 
-**STA-1:** The "Status" field MUST be one of: "IN PROGRESS", "PROPOSED",
-"ACCEPTED", or "REJECTED".
+**LIF-1:** "Lifecycle" MUST hold one of "DRAFT", "IN REVIEW", "APPROVED", or
+"WITHDRAWN".
 
-**STA-2:** An SRD that requires changes to the UI MUST NOT have a "Status" of
-"ACCEPTED" unless the linked design is also approved.
+**LIF-2:** An SRD whose "Mockups" is not "none" MUST NOT be "APPROVED" before
+its mockup set is signed off.
 
-**STA-3:** An SRD MUST NOT have a "Status" of "ACCEPTED" unless it meets the
-Quality Bar.
+**LIF-3:** An SRD MUST NOT be "APPROVED" before it passes the Acceptance Gate.
 
-**STA-4:** After an SRD is "ACCEPTED", an edit MUST NOT add, remove, or change a
-requirement, unless the approving authority agrees to the change.
+**LIF-4:** While an SRD is "DRAFT", its requirement identifiers MAY be
+renumbered.
 
-**STA-5:** An "ACCEPTED" SRD MAY receive edits that do not change its
-requirements, such as fixing a typo or making a statement or requirement
-clearer.
+**LIF-5:** Once an SRD is "IN REVIEW" or later, its requirement identifiers
+MUST NOT be renumbered.
 
-**STA-6:** Before an SRD is "ACCEPTED", the author MAY renumber its requirements
-freely.
+**LIF-6:** Once an SRD is "APPROVED", a change to the meaning of a requirement
+MUST be signed off by its reviewers and recorded in a "Change Log" section.
 
-**STA-7:** After an SRD is "ACCEPTED", the author MUST NOT renumber its
-requirements.
+**LIF-7:** Once an SRD is "APPROVED", a wording fix that keeps every
+requirement's meaning MAY be made without sign-off.
 
-**STA-8:** After an SRD is "ACCEPTED", the author MUST show a removed
-requirement with strikethrough (crossed-out text) and MUST keep its identifier.
+**LIF-8:** A requirement removed once the SRD is "IN REVIEW" or later MUST keep
+its identifier, and its text MUST start with "(withdrawn)".
 
-## Language and Style
+## Clarity
 
-**LANG-1:** An SRD document MUST use active voice with "the system" as the
-subject of most requirements.
+**CLR-1:** A requirement MUST be in the present tense and active voice, with
+the acting component as its subject.
 
-**LANG-2:** An SRD document SHOULD keep sentences as short and direct as the
-meaning allows. The goal is to be succinct.
+**CLR-2:** A requirement SHOULD be one sentence of at most 30 words.
 
-**LANG-3:** A normative keyword MUST appear only inside the "Requirements"
-section, except when it is named in the keyword notice or defined in the
-glossary.
+**CLR-3:** Obligation words MUST carry their RFC meaning only in the
+Requirements section; elsewhere they are written in lowercase, except in the
+Conventions notice.
 
-**LANG-4:** A normative keyword MUST be written in all capitals when it carries
-its RFC 8174 meaning.
+**CLR-4:** An obligation word MUST be in capitals when it carries its RFC
+meaning.
 
-**LANG-5:** A requirement SHOULD describe what the system does, not how the user
-interface looks or where its elements are placed. It MAY state appearance,
-placement, or color only when that detail is itself a requirement.
+**CLR-5:** A requirement SHOULD state behavior, not layout or color, unless the
+layout or color is itself the requirement.
 
-**LANG-6:** A requirement SHOULD state its rule in a positive form, not as a
-double negative.
+**CLR-6:** A requirement MUST NOT use a double negative.
 
-**LANG-7:** A requirement MUST NOT use open-ended phrases, such as "including
-but not limited to", that leave a list unfinished. The only exception is when
-the list is meant to grow and the test method allows for it.
+**CLR-7:** A requirement MUST NOT end a list with an open phrase such as "etc.",
+"and so on", or "including but not limited to".
 
-## Requirement Form
+## Requirement Shape
 
-**REQ-1:** Each requirement MUST state exactly one rule, behavior, or limit.
+**RQT-1:** A requirement MUST state exactly one behavior, rule, or limit.
 
-**REQ-2:** Each requirement MUST start with a bold identifier, for example
-`**GR-1:**`, followed by a space.
+**RQT-2:** A requirement MUST be a list item that starts with its identifier in
+backticks followed by one space, as in "- `PAY-3` The service …".
 
-**REQ-3:** Each requirement identifier MUST be unique within the document.
+**RQT-3:** A requirement identifier MUST be unique in the document.
 
-**REQ-4:** Requirement identifiers MUST run in number order within their group.
+**RQT-4:** Identifiers in a group MUST increase by one, with no gaps.
 
-**REQ-5:** Each requirement MUST be verifiable by a test, inspection,
-demonstration, or analysis.
+**RQT-5:** A requirement MUST be checkable.
 
-**REQ-6:** A requirement MUST NOT rely on a vague quality such as "secure",
-"fast", or "user-friendly". It MUST state verifiable criteria instead.
+**RQT-6:** A requirement MUST NOT rest on a vague quality such as "fast",
+"robust", or "intuitive"; it MUST give an acceptance signal instead.
 
-**REQ-7:** A requirement MUST NOT carry an example, a note, or any other extra
-text. It MUST be the rule and nothing more.
+**RQT-7:** A requirement MUST NOT contain an example or a note. Reasons go in a
+"Rationale" list placed after the requirement group.
 
-**REQ-8:** A requirement identifier's letter prefix (its code) SHOULD be three
-or four letters long. A code of another length MAY be used only when no clear
-three- or four-letter code fits the group.
+**RQT-8:** An identifier's group code MUST be two to five capital letters.
 
-## Glossary Discipline
+## Terminology
 
-**GLO-1:** A glossary entry MUST only define a term. It MUST NOT describe system
-behavior, rules, or required actions.
+**TRM-1:** A Terms entry MUST only define its term and MUST NOT state behavior
+or obligations.
 
-**GLO-2:** A behavior statement that appears in a glossary entry MUST be moved
-to the "Requirements" section. If it repeats another rule, it MUST be removed
-instead.
+**TRM-2:** A behavior found in a Terms entry MUST move to the Requirements
+section, or be deleted when a requirement already states it.
 
-**GLO-3:** Every term used in a requirement that needs a definition MUST be
-defined, either in the SRD's "Glossary" section or in the Company Glossary.
-Proper names — product, service, tool, and device names — do not need a
-definition.
+**TRM-3:** Every term in a requirement that needs a definition MUST be defined,
+in the Terms section or in Shared Terms. Product, service, and device names
+need no definition.
 
-**GLO-4:** An SRD SHOULD link a term that the Company Glossary defines to its
-definition, on the term's first use in the document. Later uses of the same term
-need no link.
+**TRM-4:** The first use of a term defined in Shared Terms MUST link to its
+Shared Terms entry.
 
-**GLO-5:** A link to a Company Glossary definition MUST point to the entry
-itself, not to the glossary document alone.
+**TRM-5:** A link to Shared Terms MUST point at the term's own entry, not at the
+list as a whole.
 
-**GLO-6:** An SRD MAY use a proper name without a link to the Company Glossary,
-even when the Company Glossary defines that name.
+**TRM-6:** A product, service, or device name MAY appear without a link, even
+when Shared Terms lists it.
 
-**GLO-7:** A term defined in the SRD's own "Glossary" section MAY be used
-without a link to that definition.
+**TRM-7:** A term defined in the SRD's own Terms section needs no link.
 
-## Scope Discipline
+## Boundaries
 
-**SCO-1:** Each scope item MUST give a high-level overview of one change the SRD
-requests.
+**BND-1:** Each Included and Excluded item MUST name one change in one line.
 
-**SCO-2:** Every "In Scope" item MUST be covered by at least one requirement.
+**BND-2:** Every Included item MUST be covered by at least one requirement.
 
-**SCO-3:** A requirement MUST NOT go against an "Out of Scope" item.
+**BND-3:** No requirement MAY contradict an Excluded item.
 
-# Quality Bar
+# Acceptance Gate
 
-An SRD is acceptable when all of these are true:
+An SRD passes the gate when all of these hold:
 
-1. An engineer who is new to the topic can read the introduction, glossary (if
-   present), scope, and one requirements group, and then describe correctly
-   what the system must do.
-2. Every "In Scope" item is covered by the requirements, with no conflict.
-3. A reviewer can write a test or check for every requirement, without asking
-   the author for help.
-4. The document hides no rules in its glossary or metadata.
-5. The numbering is unique and easy to read, with no repeats and no large gaps.
-6. The text reads as clear technical writing: short sentences, active voice,
-   defined terms, and exact verbs.
+1. A reader new to the topic can read the Introduction, Boundaries, Terms, and
+   one requirement group, and then explain correctly what the system must do.
+2. Every Included item is covered, and no requirement contradicts an Excluded
+   item.
+3. A tester can write a check for every requirement without asking the
+   maintainer.
+4. No rule hides in the header or in the Terms section.
+5. Identifiers are unique and run without gaps in every group.

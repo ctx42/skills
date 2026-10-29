@@ -4,4 +4,4 @@ target: last_message
 match: not_contains
 flags: "i"
 ---
-IN PROGRESS|draft|Decision log|manifest
+Lifecycle|draft|Decision log|manifest

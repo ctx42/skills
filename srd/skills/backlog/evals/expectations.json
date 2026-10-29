@@ -36,7 +36,7 @@
     },
     {
       "id": 5,
-      "name": "sweeps-a-rejected-srd",
+      "name": "sweeps-an-abandoned-srd",
       "expected_behavior": [
         "Before the counts, files exactly one `wrong` gap per uncovered section citing `wishlist-v2` — two `report_gap` calls, each submitted open without asking",
         "The \"Wishlist visibility\" gap's `detail` names the co-attesting SRD folder `gift-cards`",
@@ -58,7 +58,7 @@
       "id": 7,
       "name": "ask-writes-one-message-per-person",
       "expected_behavior": [
-        "Prints one paste-ready block per person, Anna M and Piotr K, each holding the shared-link expiry question",
+        "Prints one paste-ready block per person, Anna M and Oliver K, each holding the shared-link expiry question",
         "Leaves the already-asked gap and the gap naming nobody out of every block; counts the already-asked one and offers `ask reminders`",
         "Keeps gap ids and @-mentions out of the blocks",
         "Sets `asked` only after the user confirms the sends: no `update_gap` before, then one with a date on `gap-0061` and none on the other two"

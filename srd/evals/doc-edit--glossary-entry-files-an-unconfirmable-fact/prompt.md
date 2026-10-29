@@ -12,10 +12,10 @@ append_system_prompt: |
   plausible answer and continue.
 
   Scripted answers (pick the one that fits the question):
-  1. Asked whether the 02:00–04:00 recording window is right, or to confirm it: "I can't confirm that window — the acoustics team would know. Leave it as it is."
-  2. To a proposal adding the same-water-main fact to the Correlation entry: "Y".
+  1. Asked whether the 02:00–04:00 posting window is right, or to confirm it: "I can't confirm that window — the finance team would know. Leave it as it is."
+  2. To a proposal adding the same-currency fact to the Reconciliation entry: "Y".
   3. To an offer to file, change, or drop a documentation gap: "File it."
   4. Anything else: "That's all — close the session."
 ---
 
-/srd:doc-edit docs/glossary/main_glossary.md add to the Correlation entry that a correlation run needs two Loggers on the same water main
+/srd:doc-edit docs/glossary/main_glossary.md add to the Reconciliation entry that a reconciliation run needs two Ledgers in the same currency

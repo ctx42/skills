@@ -15,9 +15,9 @@ append_system_prompt: |
 
   Session so far, before the user typed the command:
 
-  User: The gateway firmware fact in the inbox has its own subject, LoRa
-  Gateway firmware. Pull it out of the inbox onto a page of its own,
-  `kb/lora-gateway-firmware.md`.
+  User: The kiosk firmware fact in the inbox has its own subject, Print
+  Kiosk firmware. Pull it out of the inbox onto a page of its own,
+  `kb/print-kiosk-firmware.md`.
 
   Scripted answers:
   1. To the proposed moves: "Yes, go ahead."

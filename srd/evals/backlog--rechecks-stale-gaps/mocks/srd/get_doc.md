@@ -10,13 +10,13 @@ For `1882030917` or `docs/operations/storage-housekeeping.md`:
 
 ## Nightly jobs
 
-The housekeeping job runs at 02:00 Instance time and compacts the time-series
-store.
+The housekeeping job runs at 02:00 Instance time and compacts the order
+database.
 
 ## Archive tier
 
-Recordings older than 90 days move to the archive tier. Archived recordings
-stay playable but load more slowly.
+Uploaded e-book files older than 90 days move to the archive tier. Archived
+files stay downloadable but load more slowly.
 ````
 
 For `kb/gift-cards.md`:

@@ -1,6 +1,6 @@
 ---
 type: regex
-target: {source: file, path: kb/correlation.md}
+target: {source: file, path: kb/shipping-quotes.md}
 flags: "is"
 ---
-## Provenance.*\|[^\n]*propagation speed[^\n]*\|[^\n]*leak-correlation/srd\.md
+## Provenance.*\|[^\n]*weight step[^\n]*\|[^\n]*parcel-quotes/srd\.md

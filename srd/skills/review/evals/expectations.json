@@ -6,10 +6,10 @@
       "name": "default-review-of-a-flawed-srd",
       "expected_behavior": [
         "Reads the whole SRD, then writes `specs/login.review.md` — and makes no edit to `login.md`",
-        "Groups findings by document section",
-        "Tags the two-rule requirement `[blocker, atomicity]` citing REQ-1, and the uncovered scope item `[blocker, coverage]` citing SCO-2",
+        "Groups findings by document section under the section names the standard's layout gives (`## Boundaries` before `## Requirements`)",
+        "Tags the two-rule requirement `[blocker, atomicity]` citing RQT-1, and the uncovered Included item `[blocker, coverage]` citing BND-2 — the identifiers the fetched standard gives those rules",
         "Collects the British spelling into the `## Errata` block at the top, tagged `[minor, linguistic]` citing `(SRD:house)`, stated as the substitution `` `behaviour` → `behavior` ``",
-        "Closes with a per-severity count and whether a blocker stands between the SRD and the Quality Bar",
+        "Closes with a per-severity count and whether a blocker stands between the SRD and the standard's Acceptance Gate",
         "The closing per-severity counts match what the review file actually contains — a tally is a claim about the file, and a wrong one sends the author to the wrong findings"
       ]
     },

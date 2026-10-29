@@ -68,9 +68,9 @@ Authors a new Software Requirement Document (SRD) to the SRD standard.
 1. Load the SRD standard from the srd server (`get_doc`) and obey every
    rule it states.
 2. Interview the user for the gaps.
-3. Write the SRD. Set the header `Status` to one of the standard's STA-1
+3. Write the SRD. Set the header `Lifecycle` to one of the standard's LIF-1
    values, written exactly as the standard spells them; a new SRD starts at
-   `IN PROGRESS`.
+   `DRAFT`.
 
 ## Output
 
@@ -95,9 +95,9 @@ cat > srd/evals/mocks/srd/fixtures/srd-standard.md <<'EOF_2'
 
 ## Header
 
-**STA-1:** The "Status" field MUST be one of: "IN PROGRESS", "PROPOSED",
-"ACCEPTED", or "REJECTED".
+**LIF-1:** "Lifecycle" MUST hold one of "DRAFT", "IN REVIEW", "APPROVED", or
+"WITHDRAWN".
 
-**STA-2:** An SRD that requires changes to the UI MUST NOT have a "Status" of
-"ACCEPTED" until its designs are linked.
+**LIF-2:** An SRD whose "Mockups" is not "none" MUST NOT be "APPROVED" before
+its mockup set is signed off.
 EOF_2

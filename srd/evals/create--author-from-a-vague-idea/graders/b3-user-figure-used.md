@@ -1,6 +1,6 @@
 ---
 type: regex
 target: {source: file, path: initiatives/password-reset/srd.md}
-flags: "i"
+flags: "im"
 ---
-\*\*[A-Z]+-\d+[a-z]?:\*\*[^*]*\b30\s*minutes
+^- `[A-Z]+-\d+[a-z]?`(?:(?!\n\s*\n|\n- )[\s\S])*?\b30\s*minutes

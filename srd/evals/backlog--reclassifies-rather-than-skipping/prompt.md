@@ -13,7 +13,7 @@ append_system_prompt: |
   Before taking a scripted answer, write out in full, as your reply text, the
   message you would send the user at that point.
 
-  1. To the battery-low threshold question: "Actually nobody knows that yet — no one has measured it on the current cells."
+  1. To the low-battery warning level question: "Actually nobody knows that yet — no one has measured it on the current cells."
   2. To any offer of another list: "No, that's all for today."
 ---
 

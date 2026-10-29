@@ -17,9 +17,9 @@ append_system_prompt: |
   change whose proposal you have not written out this way.
 
   Scripted answers (pick the one that fits the question):
-  1. To a proposal for GR-2 that states three retries: "YN".
+  1. To a proposal for GW-2 that states three retries: "YN".
   2. To an offer to file or work documentation gaps: "File it."
   3. Anything else: "That's all — close the session."
 ---
 
-/srd:edit specs/login.md GR-2 the gateway retries a failed token check three times, that is what it does today; make GR-2 say so
+/srd:edit specs/login.md GW-2 the gateway retries a failed token check three times, that is what it does today; make GW-2 say so

@@ -1,19 +1,19 @@
 ---
 type: agent
 ---
-For the id `2215906431` or the path `docs/operations/correlation.md` answer with this document:
+For the id `2215906431` or the path `docs/operations/reconciliation.md` answer with this document:
 
-# Correlation
+# Reconciliation
 
-A correlation run compares the recordings of two Loggers to locate a leak on
-the water main between them.
+A reconciliation run compares the postings of two Ledgers to find a payment
+mismatch between them.
 
 ## Prerequisites
 
-Both Loggers sit on the same water main and record at the same sample rate.
+Both Ledgers use the same currency and close at the same cut-off.
 
 ## Results
 
-A run reports the leak position as a distance from the first Logger.
+A run reports each mismatch as an amount and the pair of postings behind it.
 
 For any other id answer {"error":"document not found"}.

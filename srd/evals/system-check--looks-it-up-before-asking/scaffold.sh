@@ -5,7 +5,7 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd
 kb: kb
 initiatives: initiatives
-srd-standard: docs/guidelines_for_software_requirements_documents.md
+srd-standard: docs/srd-standard.md
 glossary: docs/glossary
 precedence:
   - kb
@@ -24,91 +24,80 @@ In an eval run, `srd/evals/mocks/srd/fixtures/srd-standard.md` stands in for the
 EOF_PC
 mkdir -p specs kb
 cat > specs/labeling.md <<'EOF_SRD'
-# Sound File Labeling
+# Photo Labeling
 
-|                |                                                                         |
-|----------------|-------------------------------------------------------------------------|
-| **Objective**  | Let users attach labels to recordings and record who attached each one. |
-| **Initiative** | [INT-512](https://jira.example.com/browse/INT-512)                      |
-| **Owners**     | @anna.keller, @marek.nowak                                              |
-| **Status**     | IN PROGRESS                                                             |
-| **Designs**    | N/A                                                                     |
-
-> [!INFO]
-> The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-> "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
-> document are to be interpreted as described in
-> [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and
-> [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) when, and only when, they
-> appear in all capitals, as shown here.
+| Field      | Value                                                               |
+|------------|---------------------------------------------------------------------|
+| Summary    | Let users attach labels to photos and record who attached each one. |
+| Maintainer | @ada.brook                                                          |
+| Reviewers  | @lev.ortiz                                                          |
+| Tracking   | [PIX-512](https://tickets.example.com/browse/PIX-512)               |
+| Lifecycle  | DRAFT                                                               |
+| Mockups    | none                                                                |
 
 ## Introduction
 
 This document specifies how the platform stores
 [Labels](<../docs/glossary/machine_learning_glossary.md#label>)
-on a [Sound File](<../docs/glossary/main_glossary.md#sound-file-snd>).
-The system will let a user assign Labels to a Sound File, remove them, and look
+on a [Photo](<../docs/glossary/main_glossary.md#photo-pho>).
+The system will let a user assign Labels to a Photo, remove them, and look
 them up. Each Label is kept as a
 [Tag](<../docs/glossary/main_glossary.md#tag-tag>), and every
-assignment records who made it and when.
+assignment records who made it and when. It will not train models on labeled
+Photos.
 
-## Glossary
+## Conventions
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in
+[RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and
+[RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) when, and only when, they
+appear in all capitals, as shown here.
+
+## Boundaries
+
+### Included
+
+- `IN-1` Assigning Labels to Photos.
+- `IN-2` Removing Label Assignments.
+- `IN-3` Recording who made each Label Assignment and when.
+- `IN-4` Looking up the Label Assignments of a Photo.
+
+### Excluded
+
+- `EX-1` Training machine learning models on labeled Photos.
+- `EX-2` Managing the set of Labels a Project defines.
+
+## Terms
 
 ### Label Assignment
 
-The association of one Label with one Sound File.
-
-## Scope
-
-### In Scope
-
-**SC-1:** Assigning Labels to Sound Files.
-
-**SC-2:** Removing Label Assignments.
-
-**SC-3:** Recording who made each Label Assignment and when.
-
-**SC-4:** Looking up the Label Assignments of a Sound File.
-
-### Out of Scope
-
-**OSC-1:** Training machine learning models on labeled Sound Files.
-
-**OSC-2:** Managing the set of Labels a Project defines.
+The association of one Label with one Photo.
 
 ## Requirements
 
 ### General (GR)
 
-**GR-1:** The system MUST allow a user to assign a Label to a Sound File in a
-[Project](<../docs/glossary/main_glossary.md#project-prj>) the
-user belongs to.
-
-**GR-2:** The system MUST store each Label as a Tag.
-
-**GR-3:** The system MUST reject a Label Assignment whose Label the Sound File's
-Project does not define.
-
-**GR-4:** The system MUST write each Tag name as a dot-separated series of Tag
-node names.
-
-**GR-5:** The system MUST allow a user to remove a Label Assignment.
-
-**GR-6:** The system MUST record the user and the
-[Date](<../docs/glossary/main_glossary.md#date>) of each Label
-Assignment.
-
-**GR-7:** The system MUST answer a Tag lookup within 300 ms at the 95th
-percentile for a Project holding up to 100 000 Tags.
-
-**GR-8:** The system MUST let a user list every Label Assignment of a Sound
-File.
-
-**GR-9:** The system MUST place each Label's Tag in a Namespace of the Sound
-File's Project.
+- `GR-1` The system MUST allow a user to assign a Label to a Photo in a
+  [Project](<../docs/glossary/main_glossary.md#project-prj>) the user belongs
+  to.
+- `GR-2` The system MUST store each Label as a Tag.
+- `GR-3` The system MUST reject a Label Assignment whose Label the Photo's
+  Project does not define.
+- `GR-4` The system MUST write each Tag name as a dot-separated series of Tag
+  node names.
+- `GR-5` The system MUST allow a user to remove a Label Assignment.
+- `GR-6` The system MUST record the user and the
+  [Date](<../docs/glossary/main_glossary.md#date>) of each Label Assignment.
+- `GR-7` The system MUST answer a Tag lookup within 300 ms at the 95th
+  percentile for a Project holding up to 100 000 Tags.
+- `GR-8` The system MUST let a user list every Label Assignment of a Photo.
+- `GR-9` The system MUST place each Label's Tag in a Namespace of the Photo's
+  Project.
 EOF_SRD
 cat > specs/labeling.questions.md <<'EOF_Q'
-# SRD Questions — Sound File Labeling
+# SRD Questions — Photo Labeling
 
 Source: `specs/labeling.md`
 
@@ -129,10 +118,10 @@ updated: 2026-09-30 09:20
 source: specs/labeling.md
 ---
 
-# SRD Review — Sound File Labeling
+# SRD Review — Photo Labeling
 
 ## Requirements
 
 - [ ] #1 [blocker, terminology] GR-9: "Namespace" is used but defined neither
-  in the Glossary nor in the Company Glossary — define it. (SRD:GLO-3)
+  in the Terms section nor in Shared Terms — define it. (SRD:TRM-3)
 EOF_R

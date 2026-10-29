@@ -5,7 +5,7 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd
 kb: kb
 initiatives: initiatives
-srd-standard: docs/guidelines_for_software_requirements_documents.md
+srd-standard: docs/srd-standard.md
 glossary: docs/glossary
 precedence:
   - kb
@@ -31,156 +31,148 @@ last_verified: 2026-09-29
 
 # Knowledge base inbox
 
-## Correlation uses a per-material propagation speed
+## Shipping quotes use a per-zone weight step
 
-> Not in the platform docs. Attested leak-correlation
+> Not in the platform docs. Attested parcel-quotes
 > interview 2026-09-29.
 
-Correlation uses a per-material propagation speed. When EXAMPLE correlates
-two recordings, the speed of sound it uses for each pipe segment between the
-two loggers is the speed for that segment's pipe material, not one speed for
-the whole network.
+Shipping quotes use a per-zone weight step. When EXAMPLE quotes a parcel, it
+rounds the parcel's weight up to the weight step of the destination zone, not
+to one step for the whole catalog.
 
 ## Provenance
 
 Where each section of this inbox comes from.
 
-| Section                                           | Source                                |
-|---------------------------------------------------|---------------------------------------|
-| Correlation uses a per-material propagation speed | leak-correlation interview 2026-09-29 |
+| Section                                    | Source                             |
+|--------------------------------------------|------------------------------------|
+| Shipping quotes use a per-zone weight step | parcel-quotes interview 2026-09-29 |
 EOF_INBOX
-cat > kb/correlation.md <<'EOF_CORR'
+cat > kb/shipping-quotes.md <<'EOF_CORR'
 ---
-title: Leak Noise Correlation
-aliases: [cross-correlation, correlator, AUTOCO correlation]
+title: Shipping Quotes
+aliases: [rate quote, quote engine, RATES quote]
 attested: 2026-09-10
-srd_ref: autoco
+srd_ref: rates
 last_verified: 2026-09-20
 ---
 
-# Leak Noise Correlation
+# Shipping Quotes
 
-How EXAMPLE correlates the recordings of two loggers to place a leak: which
-loggers pair, which recordings are used, what a result carries, and how results
-are shown and handled.
+How EXAMPLE quotes the shipping price of a parcel: which carriers are asked,
+which price list is used, what a quote carries, and how quotes are shown and
+handled.
 
-## What correlation is in EXAMPLE
+## What a shipping quote is in EXAMPLE
 
-> Not in the platform docs. Attested autoco interview
+> Not in the platform docs. Attested rates interview
 > 2026-09-10.
 
-Correlation compares the recordings of two loggers that sit on the same pipe
-network and estimates where between them a leak noise originates. EXAMPLE
-runs it on the recordings the loggers transfer each day. A correlation result
-names the logger pair, the estimated leak position along the pipe path, and a
-quality value.
+A shipping quote is the price EXAMPLE offers a buyer for delivering one parcel
+with one carrier. EXAMPLE computes it from the carrier price lists it loads
+each day. A quote names the carrier, the price, and a confidence value.
 
-## Logger pairs eligible for correlation
+## Carriers eligible for a quote
 
-> Not in the platform docs. Attested autoco interview
+> Not in the platform docs. Attested rates interview
 > 2026-09-10.
 
-Only loggers of the same Project are paired. A pair must be joined by mapped
-pipe; loggers with no mapped pipe between them are never paired. A logger may
-belong to several pairs at once.
+Only carriers enabled for the shop are asked. A carrier must serve the
+destination zone; carriers with no rate for that zone are never asked. A
+parcel may receive quotes from several carriers at once.
 
-## Recording window used for correlation
+## Price list used for a quote
 
-> Not in the platform docs. Attested autoco interview
+> Not in the platform docs. Attested rates interview
 > 2026-09-10.
 
-Correlation uses the recordings both loggers made in the same nightly recording
-window. Recordings from different nights are never correlated against each
-other.
+A quote uses the price list the carrier published for the current day.
+Price lists from different days are never mixed within one quote.
 
-## Correlation quality value
+## Quote confidence value
 
-> Not in the platform docs. Attested autoco interview
+> Not in the platform docs. Attested rates interview
 > 2026-09-10.
 
-Every correlation result carries a quality value from 0 to 100. The value
-expresses how clearly one peak stands out in the cross-correlation function. A
-result below 30 is shown greyed out in the result list.
+Every quote carries a confidence value from 0 to 100. The value expresses
+how closely the parcel matches the carrier's size classes. A quote below 30 is
+shown greyed out in the quote list.
 
-## Correlation result position along the pipe path
+## Quote delivery estimate
 
-> Not in the platform docs. Attested autoco interview
+> Not in the platform docs. Attested rates interview
 > 2026-09-10.
 
-The leak position is stated as a distance from the first logger of the pair,
-measured along the mapped pipe path between the two loggers, not as a straight-
-line distance.
+The delivery estimate is stated as a number of working days from dispatch,
+counted in the destination zone's calendar, not as a calendar date.
 
-## Correlation results on the map
+## Quotes at checkout
 
-> Not in the platform docs. Attested autoco interview
+> Not in the platform docs. Attested rates interview
 > 2026-09-10.
 
-A correlation result is drawn on the map as a marker on the pipe path at its
-estimated position. Selecting the marker opens the result's details, including
-both loggers and the quality value.
+A quote is shown at checkout as one row per carrier, cheapest first.
+Selecting the row opens the quote's details, including the carrier and the
+confidence value.
 
-## Manual correlation from the device picker
+## Manual quotes from the order screen
 
-> Not in the platform docs. Attested autoco interview
+> Not in the platform docs. Attested rates interview
 > 2026-09-10.
 
-A user can start a correlation by hand by picking two loggers on the map. A
-manual correlation uses the most recent common recording window of the two
-loggers. Its result is stored beside the automated results and marked as
-manual.
+A clerk can request a quote by hand by picking a carrier on the order
+screen. A manual quote uses the latest price list of that carrier. Its result
+is stored beside the automated quotes and marked as manual.
 
-## Correlation of stereo recordings
+## Quotes for split parcels
 
-> Not in the platform docs. Attested autoco interview
+> Not in the platform docs. Attested rates interview
 > 2026-09-10.
 
-A stereo recording from a correlator such as LOG3000 BT is correlated channel
-against channel within the one file. That correlation is separate from the
-logger-pair correlation described above.
+An order shipped as several parcels is quoted parcel by parcel. That
+quote is separate from the single-parcel quote described above.
 
-## Correlation and pipe data quality
+## Quotes and address data quality
 
-> Not in the platform docs. Attested autoco interview
+> Not in the platform docs. Attested rates interview
 > 2026-09-10.
 
-Correlation depends on the mapped pipe network. Pipe length and pipe material
-come from the Project's network data; a pipe segment with no material set is
-shown in violet on the map and must be corrected before results along it can be
-trusted.
+Quoting depends on the destination address. Postcode and country come from
+the buyer's address book; an address with no postcode is shown in violet on
+the order screen and must be corrected before its quotes can be trusted.
 
-## Correlation result statuses
+## Quote statuses
 
-> Not in the platform docs. Attested autoco interview
+> Not in the platform docs. Attested rates interview
 > 2026-09-10.
 
-A correlation result is New when it is produced. A user can set it to To check,
-Confirmed, or Dismissed. Setting an AUTOCO detection to To check is what
-creates a Leak Instance.
+A quote is New when it is produced. A clerk can set it to To check,
+Confirmed, or Dismissed. Setting an automated quote to To check is what opens a
+pricing review.
 
-## Correlation re-runs after network edits
+## Quote recalculation after rate edits
 
-> Not in the platform docs. Attested autoco interview
+> Not in the platform docs. Attested rates interview
 > 2026-09-10.
 
-Editing pipe length or pipe material does not re-run past correlations. Only
-recordings correlated after the edit use the changed network data.
+Editing a carrier rate does not recalculate past quotes. Only quotes
+computed after the edit use the changed rate.
 
 ## Provenance
 
 Where each section of this page comes from.
 
-| Section                                         | Source                      |
-|-------------------------------------------------|-----------------------------|
-| What correlation is in EXAMPLE                  | autoco interview 2026-09-10 |
-| Logger pairs eligible for correlation           | autoco interview 2026-09-10 |
-| Recording window used for correlation           | autoco interview 2026-09-10 |
-| Correlation quality value                       | autoco interview 2026-09-10 |
-| Correlation result position along the pipe path | autoco interview 2026-09-10 |
-| Correlation results on the map                  | autoco interview 2026-09-10 |
-| Manual correlation from the device picker       | autoco interview 2026-09-10 |
-| Correlation of stereo recordings                | autoco interview 2026-09-10 |
-| Correlation and pipe data quality               | autoco interview 2026-09-10 |
-| Correlation result statuses                     | autoco interview 2026-09-10 |
-| Correlation re-runs after network edits         | autoco interview 2026-09-10 |
+| Section                              | Source                     |
+|--------------------------------------|----------------------------|
+| What a shipping quote is in EXAMPLE  | rates interview 2026-09-10 |
+| Carriers eligible for a quote        | rates interview 2026-09-10 |
+| Price list used for a quote          | rates interview 2026-09-10 |
+| Quote confidence value               | rates interview 2026-09-10 |
+| Quote delivery estimate              | rates interview 2026-09-10 |
+| Quotes at checkout                   | rates interview 2026-09-10 |
+| Manual quotes from the order screen  | rates interview 2026-09-10 |
+| Quotes for split parcels             | rates interview 2026-09-10 |
+| Quotes and address data quality      | rates interview 2026-09-10 |
+| Quote statuses                       | rates interview 2026-09-10 |
+| Quote recalculation after rate edits | rates interview 2026-09-10 |
 EOF_CORR

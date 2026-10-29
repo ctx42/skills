@@ -237,9 +237,9 @@ SRD_CREATE_BODY = """Authors a new Software Requirement Document (SRD) to the SR
 1. Load the SRD standard from the srd server (`get_doc`) and obey every
    rule it states.
 2. Interview the user for the gaps.
-3. Write the SRD. Set the header `Status` to one of the standard's STA-1
+3. Write the SRD. Set the header `Lifecycle` to one of the standard's LIF-1
    values, written exactly as the standard spells them; a new SRD starts at
-   `IN PROGRESS`.
+   `DRAFT`.
 
 ## Output
 
@@ -249,11 +249,11 @@ SRD_STANDARD = """# SRD standard (frozen eval copy)
 
 ## Header
 
-**STA-1:** The "Status" field MUST be one of: "IN PROGRESS", "PROPOSED",
-"ACCEPTED", or "REJECTED".
+**LIF-1:** "Lifecycle" MUST hold one of "DRAFT", "IN REVIEW", "APPROVED", or
+"WITHDRAWN".
 
-**STA-2:** An SRD that requires changes to the UI MUST NOT have a "Status" of
-"ACCEPTED" until its designs are linked.
+**LIF-2:** An SRD whose "Mockups" is not "none" MUST NOT be "APPROVED" before
+its mockup set is signed off.
 """
 
 
@@ -442,9 +442,9 @@ def attribution_history():
     h.say("```\nrefactor(api): rename export handler\n\n"
           "Rename `ListExports` to `Exports` to match the other handlers.\n```")
     h.command("srd:create", "specs/export.md", base="./srd/skills/create")
-    h.say("Wrote specs/export.md with header `Status: in progress`.")
-    h.user("Status values are uppercase — IN PROGRESS, not in progress.")
-    h.say("Fixed: `Status: IN PROGRESS`.")
+    h.say("Wrote specs/export.md with header `Lifecycle: draft`.")
+    h.user("Lifecycle values are uppercase — DRAFT, not draft.")
+    h.say("Fixed: `Lifecycle: DRAFT`.")
     return h
 
 
@@ -470,7 +470,7 @@ def case_attribution():
             "b2-no-srd-agent-data": g_exists(".agent-data/ctx42-skills/lessons/srd/create.md", False),
             "b3-no-srd-write": g_never("Write", "srd/"),
             "b3-no-srd-edit": g_never("Edit", "srd/"),
-            "b3-no-status-in-cm": g_not(r"status|uppercase|lowercase", cm, flags="i"),
+            "b3-no-lifecycle-in-cm": g_not(r"lifecycle|uppercase|lowercase", cm, flags="i"),
             "b4-no-push-in-cm": g_not(r"push", cm, flags="i"),
             "b4-no-push-in-cm-body": g_not(r"push", "file:craft/skills/cm/SKILL.md", flags="i"),
         },

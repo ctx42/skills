@@ -14,11 +14,11 @@ append_system_prompt: |
   message you would send the user at that point.
 
   Scripted answers (pick the one that fits the question):
-  1. Objective: "Per-client request rate limiting at the API Gateway for
-     external API clients. Put the SRD at specs/gateway.md."
-  2. UI change: "No."
-  3. In Scope: "Defer it; derive it from the requirements."
-  4. Out of Scope: "Per-endpoint limits, billing and quotas, and internal
+  1. Summary or purpose: "Per-client request rate limiting at the API Gateway
+     for external API clients. Put the SRD at specs/gateway.md."
+  2. Whether it changes what users see: "No."
+  3. Included items: "Defer it; derive them from the requirements."
+  4. Excluded items: "Per-endpoint limits, billing and quotas, and internal
      clients (the front-end application and the mobile apps), which do not use
      API keys."
   5. Requirements: "Each external API client gets at most 600 requests per

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Generate vague-idea's b6 grader: every requirement-group count the reply
-states equals that group's `**<PFX>-n:**` entries in the SRD the run wrote.
+states equals that group's requirement entries in the SRD the run wrote, in the
+eval standard's format: a list item opening with the backticked identifier,
+"- `<PFX>-n` ...".
 not_contains: matches a stated count whose group has a different number in
 the file. Enumerated, since a regex cannot compare counts; create has no case
 generator, so this owns one file."""
@@ -16,7 +18,9 @@ WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
 
 def file_has(n):
     # The SRD Write holds exactly n entries of the group captured as \1.
-    entry = r"\*\*\1-\d+[a-z]?:\*\*"
+    # A list item at a line start; the Write content is JSON, so the newline
+    # before it is the two characters backslash and n.
+    entry = r"\\n- `\1-\d+[a-z]?`"
     other = rf"(?:(?!{entry}){CH})*"
     return rf"{WRITE}{other}(?:{entry}{other}){{{n}}}\""
 
@@ -34,6 +38,6 @@ pattern = (r'"result":"' + CH + r'*?\b`?([A-Z]{2,6})`?\b(?:' + "|".join(alts) + 
 open(os.path.join(D, "b6-counts-stated.md"), "w").write(
     "---\ntype: regex\ntarget: last_message\nflags: \"i\"\n---\n"
     r"`?\b[A-Z]{2,6}\b`?\)?[^\n]{0,60}\b(\d+|one|two|three|four|five|six)\s+requirements?\b"
-    r"|`[A-Z]{2,6}`\)?(\*\*)?:?(\*\*)?\s*\|?\s*\d+\b" "\n")
+    r"|`[A-Z]{2,6}`\)?(\*\*)?:?(\*\*)?\s*\|?\s*\(?\d+\b" "\n")
 open(os.path.join(D, "b6-counts-match.md"), "w").write(
     "---\ntype: regex\ntarget: trace\nmatch: not_contains\n---\n" + pattern + "\n")

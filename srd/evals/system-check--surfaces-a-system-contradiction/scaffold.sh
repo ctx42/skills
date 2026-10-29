@@ -5,7 +5,7 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd
 kb: kb
 initiatives: initiatives
-srd-standard: docs/guidelines_for_software_requirements_documents.md
+srd-standard: docs/srd-standard.md
 glossary: docs/glossary
 precedence:
   - kb
@@ -24,70 +24,63 @@ In an eval run, `srd/evals/mocks/srd/fixtures/srd-standard.md` stands in for the
 EOF_PC
 mkdir -p specs kb
 cat > specs/labeling.md <<'EOF_SRD'
-# Sound File Labeling
+# Photo Tagging
 
-|                  |                                                                           |
-|------------------|---------------------------------------------------------------------------|
-| **Objective**    | Let API clients label Sound Files with Tags and find Sound Files by Tag.  |
-| **Initiative**   | [INT-512](https://jira.example.com/browse/INT-512)                        |
-| **Owners**       | @anna.keller (primary), @marek.nowak (secondary)                          |
-| **Status**       | IN PROGRESS                                                               |
-| **Designs**      | N/A                                                                       |
-
-> [!INFO]
-> The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-> "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
-> document are to be interpreted as described in
-> [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and
-> [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) when, and only when, they
-> appear in all capitals, as shown here.
+| Field      | Value                                                        |
+|------------|--------------------------------------------------------------|
+| Summary    | Let API clients tag Photos with Tags and find Photos by Tag. |
+| Maintainer | @ada.brook                                                   |
+| Reviewers  | @lev.ortiz                                                   |
+| Tracking   | [PIX-512](https://tickets.example.com/browse/PIX-512)        |
+| Lifecycle  | DRAFT                                                        |
+| Mockups    | none                                                         |
 
 ## Introduction
 
-This document defines how API clients label a
-[Sound File](../docs/glossary/main_glossary.md#sound-file-snd)
+This document defines how API clients tag a
+[Photo](../docs/glossary/main_glossary.md#photo-pho)
 with existing [Tags](../docs/glossary/main_glossary.md#tag-tag)
-and how they find Sound Files by Tag. The system will let an API client attach
-a Tag to a Sound File, remove it again, and look up the Sound Files of a
-[Project](../docs/glossary/main_glossary.md#project-prj) that
-carry a given Tag.
+and how they find Photos by Tag. The system will let an API client attach a
+Tag to a Photo, remove it again, and look up the Photos of a
+[Project](../docs/glossary/main_glossary.md#project-prj) that carry a given
+Tag. It will not change the web user interface or manage the Tags themselves.
 
-## Scope
+## Conventions
 
-### In Scope
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in
+[RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and
+[RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) when, and only when, they
+appear in all capitals, as shown here.
 
-**SC-1:** Attaching a Tag to a Sound File through the API.
+## Boundaries
 
-**SC-2:** Removing a Tag from a Sound File through the API.
+### Included
 
-**SC-3:** Looking up the Sound Files that carry a Tag through the API.
+- `IN-1` Attaching a Tag to a Photo through the API.
+- `IN-2` Removing a Tag from a Photo through the API.
+- `IN-3` Looking up the Photos that carry a Tag through the API.
 
-### Out of Scope
+### Excluded
 
-**OSC-1:** Changes to the web user interface.
-
-**OSC-2:** Creating, renaming, or deleting Tags.
+- `EX-1` Changes to the web user interface.
+- `EX-2` Creating, renaming, or deleting Tags.
 
 ## Requirements
 
 ### General (GR)
 
-**GR-1:** The system MUST let an API client attach an existing Tag to a Sound
-File of the same Project.
-
-**GR-2:** The system MUST reject a request to attach a Tag that does not exist
-in the Sound File's Project.
-
-**GR-3:** The system MUST let an API client remove a Tag from a Sound File.
-
-**GR-4:** The system MUST write each Tag name in API requests and responses as
-a slash-separated path.
-
-**GR-5:** The system MUST return, for a lookup by Tag name, every Sound File in
-the Project that carries that Tag.
-
-**GR-6:** The system MUST order the Sound Files of a Tag lookup by Sound File
-name, ascending.
-
-**GR-7:** The system MUST answer Tag lookups fast.
+- `GR-1` The system MUST let an API client attach an existing Tag to a Photo
+  of the same Project.
+- `GR-2` The system MUST reject a request to attach a Tag that does not exist
+  in the Photo's Project.
+- `GR-3` The system MUST let an API client remove a Tag from a Photo.
+- `GR-4` The system MUST write each Tag name in API requests and responses as
+  a slash-separated path.
+- `GR-5` The system MUST return, for a lookup by Tag name, every Photo in the
+  Project that carries that Tag.
+- `GR-6` The system MUST order the Photos of a Tag lookup by Photo name,
+  ascending.
+- `GR-7` The system MUST answer Tag lookups fast.
 EOF_SRD

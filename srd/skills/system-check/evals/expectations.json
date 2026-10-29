@@ -19,7 +19,7 @@
       "expected_behavior": [
         "Refreshes the review layer with `srd:review` in default mode, which resolves what the edit fixed and appends what it broke — not `check`, which re-verifies only, so the two new blockers would reach no question",
         "Leaves the author's review file intact — every finding number survives and nothing is renumbered — because the default mode updates in place rather than rewriting",
-        "Turns both new defects — `GR-12`'s unmeasurable quality and the In Scope item `SC-4` that no requirement covers — into questions in the refreshed set",
+        "Turns both new defects — `GR-12`'s unmeasurable quality and the Included item `IN-4` that no requirement covers — into questions in the refreshed set",
         "Drops the open questions the edit answered and names which ones went",
         "Walks only the refreshed open set"
       ]

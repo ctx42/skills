@@ -6,84 +6,98 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../srd/
 
 PC = open(os.path.join(ROOT, "fixtures/project-config.md")).read()
 
-NOTICE = """> [!INFO]
-> The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-> "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
-> document are to be interpreted as described in
+NOTICE = """> The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+> "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+> "OPTIONAL" in this document are to be interpreted as described in BCP 14
 > [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and
 > [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) when, and only when, they
 > appear in all capitals, as shown here."""
+CONVENTIONS = "## Conventions\n\n" + NOTICE
 
 INTRO = ("This document specifies how the API Gateway checks the Login Token that "
          "accompanies each API request, and how it locks a user account after "
          "repeated failed sign-in attempts. It does not cover how Login Tokens are "
          "issued or refreshed.")
 
-GLOSSARY = [("Login Token",
-             "A signed credential that identifies a signed-in user for a limited time.")]
+TERMS = [("Login Token",
+          "A signed credential that identifies a signed-in user for a limited time.")]
 
-INSCOPE = ["Validation of the Login Token on every API request.",
-           "Lockout of a user account after repeated failed sign-in attempts."]
-OSC = ["Issuing and refreshing Login Tokens."]
+INCLUDED = ["Validation of the Login Token on every API request.",
+            "Lockout of a user account after repeated failed sign-in attempts."]
+EXCLUDED = ["Issuing and refreshing Login Tokens."]
 
-GR = [("GR-1", "The system MUST reject an API request that carries no Login Token with HTTP status 401."),
-      ("GR-2", "The system MUST reject an API request whose Login Token has expired with HTTP status 401."),
-      ("GR-3", "The system MUST reject an API request whose Login Token signature is invalid with HTTP status 401.")]
+GW = [("GW-1", "The system MUST reject an API request that carries no Login Token with HTTP status 401."),
+      ("GW-2", "The system MUST reject an API request whose Login Token has expired with HTTP status 401."),
+      ("GW-3", "The system MUST reject an API request whose Login Token signature is invalid with HTTP status 401.")]
 LCK = [("LCK-1", "The system MUST lock a user account after 5 consecutive failed sign-in attempts."),
        ("LCK-2", "The system MUST unlock a locked user account 15 minutes after it was locked.")]
 
 
-def wrap(s, w=80):
-    return "\n".join(textwrap.wrap(s, w, break_on_hyphens=False))
+def wrap(s, w=80, indent=""):
+    return "\n".join(textwrap.wrap(s, w, break_on_hyphens=False, subsequent_indent=indent))
 
 
 def table(rows):
+    rows = [("Field", "Value")] + rows
     w0 = max(len(a) for a, _ in rows)
     w1 = max(len(b) for _, b in rows)
-    out = ["| " + " " * w0 + " | " + " " * w1 + " |",
-           "|" + "-" * (w0 + 2) + "|" + "-" * (w1 + 2) + "|"]
-    for a, b in rows:
+    out = []
+    for i, (a, b) in enumerate(rows):
         out.append("| " + a.ljust(w0) + " | " + b.ljust(w1) + " |")
+        if i == 0:
+            out.append("|" + "-" * (w0 + 2) + "|" + "-" * (w1 + 2) + "|")
     return "\n".join(out)
 
 
-def srd(status="IN PROGRESS", initiative="[INT-512](https://tickets.example.com/browse/INT-512)",
-        owners="@anna.keller, @marco.rossi", designs="N/A", intro=INTRO, glossary=GLOSSARY,
-        inscope=INSCOPE, osc=OSC, groups=None, tail="", title="Login Token Validation",
-        notice="top"):
+def req(rid, text):
+    return wrap(f"- `{rid}` {text}", indent="  ")
+
+
+def srd(lifecycle="DRAFT", tracking="[WRK-512](https://tickets.example.com/browse/WRK-512)",
+        maintainer="@dev.lead", reviewers="@qa.lead, @sec.lead", mockups="none", intro=INTRO,
+        terms=TERMS, included=INCLUDED, excluded=EXCLUDED, groups=None, tail="",
+        title="Login Token Validation", notice="std"):
+    # notice: "std" = Conventions section after the Introduction (where the
+    # eval standard puts it); "none" = absent; "header" = the bare notice
+    # directly below the header table, misplaced.
     if groups is None:
-        groups = [("Gateway Rules", GR), ("Account Lockout", LCK)]
-    color = {"ACCEPTED": "green"}.get(status, "blue")
-    rows = [("**Objective**", "Specify how the API Gateway validates Login Tokens."),
-            ("**Initiative**", initiative),
-            ("**Owners**", owners),
-            ("**Status**", f"[[!{status}\\|color={color};style=bold]]"),
-            ("**Designs**", designs)]
-    p = [f"# {title}", table(rows), "[[TOC]]"] + ([NOTICE] if notice == "top" else [])
-    p += ["## Introduction", wrap(intro)] + ([NOTICE] if notice == "intro" else [])
-    if glossary:
-        p.append("## Glossary")
-        for t, d in glossary:
-            p += [f"### {t}", wrap(d)]
-    p += ["## Scope", "### In Scope"]
-    if inscope == "TODO":
-        p += ["""<!-- In Scope derives from the requirements. Leave the `--- TODO ---` marker
-     below until the requirements settle, then replace it with SC-n items — one
-     per delivered capability, e.g. `**SC-1:** <An atomic, verifiable thing this
-     SRD delivers.>`. Resolve the marker before Status becomes ACCEPTED. -->""",
+        groups = [("Gateway Rules", GW), ("Account Lockout", LCK)]
+    rows = [("Summary", "Specify how the API Gateway validates Login Tokens."),
+            ("Maintainer", maintainer),
+            ("Reviewers", reviewers),
+            ("Tracking", tracking),
+            ("Lifecycle", lifecycle),
+            ("Mockups", mockups)]
+    p = [f"# {title}", table(rows), "[[TOC]]"] + ([NOTICE] if notice == "header" else [])
+    p += ["## Introduction", wrap(intro)] + ([CONVENTIONS] if notice == "std" else [])
+    p += ["## Boundaries", "### Included"]
+    if included == "TODO":
+        p += ["""<!-- Included derives from the requirements. Leave the `--- TODO ---` marker
+     below until the requirements settle, then replace it with one line per
+     change this SRD delivers. Resolve the marker before the SRD leaves DRAFT. -->""",
               "--- TODO ---"]
     else:
-        p += [f"**SC-{i}:** {wrap(s)}" for i, s in enumerate(inscope, 1)]
-    p.append("### Out of Scope")
-    p += [wrap(f"**OSC-{i}:** {s}") for i, s in enumerate(osc, 1)]
+        p.append("\n".join(wrap(f"- {s}", indent="  ") for s in included))
+    p.append("### Excluded")
+    p.append("\n".join(wrap(f"- {s}", indent="  ") for s in excluded))
+    if terms:
+        p.append("## Terms")
+        for t, d in terms:
+            p += [f"### {t}", wrap(d)]
     p.append("## Requirements")
     for name, reqs in groups:
         p.append(f"### {name}")
+        items = []
         for item in reqs:
             if isinstance(item, str):  # raw block (comment)
+                if items:
+                    p.append("\n".join(items))
+                    items = []
                 p.append(item)
             else:
-                p.append(wrap(f"**{item[0]}:** {item[1]}"))
+                items.append(req(*item))
+        if items:
+            p.append("\n".join(items))
     out = "\n\n".join(p) + "\n"
     if tail:
         out += "\n" + tail.strip("\n") + "\n"
@@ -256,27 +270,27 @@ REVIEW = ["ref:review/review-file"]
 # ---------------------------------------------------------------- 8
 s8 = srd(intro=INTRO.replace("checks the Login Token", "authorises each API request by checking the Login Token"),
          groups=[("Gateway Rules", [
-             ("GR-1", "The system MUST reject an unauthorised API request with HTTP status 401."),
-             GR[1],
-             ("GR-3", "The system MUST reject an API request whose Login Token can not be verified with HTTP status 401.")]),
+             ("GW-1", "The system MUST reject an unauthorised API request with HTTP status 401."),
+             GW[1],
+             ("GW-3", "The system MUST reject an API request whose Login Token can not be verified with HTTP status 401.")]),
              ("Account Lockout", [LCK[0], ("LCK-2", "The system MUST unlock a locked user account after a short while.")])])
 r8 = review("""## Errata
 
-- [ ] #4 [minor, linguistic] GR-1 uses British spelling: `unauthorised` →
+- [ ] #4 [minor, linguistic] GW-1 uses British spelling: `unauthorised` →
   `unauthorized`. (SRD:house)
 
-- [ ] #7 [minor, linguistic] GR-3 uses an open form: `can not` → `cannot`.
-  (SRD:LANG-2)
+- [ ] #7 [minor, linguistic] GW-3 uses an open form: `can not` → `cannot`.
+  (SRD:house)
 
-- [ ] #9 [minor, linguistic] GR-2 misspells a word: `recieves` → `receives`.
-  (SRD:LANG-2)
+- [ ] #9 [minor, linguistic] GW-2 misspells a word: `recieves` → `receives`.
+  (SRD:house)
 
 ---
 
 ## Requirements
 
 - [ ] #5 [major, verifiability] LCK-2: "after a short while" is vague — state
-  the unlock delay. (SRD:REQ-6)""")
+  the unlock delay. (SRD:RQT-6)""")
 AUTOFIX = REVIEW + DLOG + ["ref:edit/autofix", "ref:create/errata"]
 pair("autofix-bulk-applies-errata", AUTOFIX, "/srd:edit specs/login.md autofix",
      {"specs/login.md": s8, "specs/login.review.md": r8},
@@ -289,9 +303,9 @@ pair("autofix-bulk-applies-errata", AUTOFIX, "/srd:edit specs/login.md autofix",
          "b1-unlisted-spelling-kept": g_file("specs/login.md", r"authorises"),
          "b1-non-errata-finding-kept": g_file("specs/login.md", r"a short\s+while"),
          "b2-no-glossary-call": g_never("mcp__srd__glossary_terms"),
-         "b2-no-gate-line": g_trace(r'"type":"text","text":"[^"]{0,200}(approval gate|Status (is )?`?(ACCEPTED|IN PROGRESS)|(is|it\'s) (approved|in progress|in-progress))', "i", "not_contains"),
-         "b4-applied-gr1": g_file("specs/login.md", r"\*\*GR-1:\*\* The system MUST reject an unauthorized API request"),
-         "b4-applied-gr3": g_file("specs/login.md", r"Login Token\s+cannot\s+be\s+verified"),
+         "b2-no-gate-line": g_trace(r'"type":"text","text":"[^"]{0,200}(approval gate|Lifecycle (is )?`?(DRAFT|IN REVIEW|APPROVED|WITHDRAWN)|(is|it\'s) (approved|frozen|under sign-off|in progress|in-progress|a draft|in draft))', "i", "not_contains"),
+         "b4-applied-gw1": g_file("specs/login.md", r"- `GW-1` The system MUST reject an unauthorized API request"),
+         "b4-applied-gw3": g_file("specs/login.md", r"Login Token\s+cannot\s+be\s+verified"),
          "b4-third-reported-stale": g_last(r"#9.{0,300}(stale|no longer|not found|absent|reworded|zero|0 occurrences|does not (appear|occur|contain)|doesn't|isn't|not in)", "is"),
          "b5-review-not-edited": g_never("Edit", '"file_path":"[^"]*login\\.review\\.md"'),
          "b5-review-not-written": g_never("Write", '"file_path":"[^"]*login\\.review\\.md"'),
@@ -303,67 +317,21 @@ pair("autofix-bulk-applies-errata", AUTOFIX, "/srd:edit specs/login.md autofix",
      ["To the batch confirmation: \"Yes\"."])
 
 # ---------------------------------------------------------------- 9
-AUD_FIELDS = ["the user identifier", "the time in UTC", "the source IP address", "the user agent string",
-              "the result code", "the Login Token identifier", "the request path", "the HTTP method",
-              "the response status", "the client application identifier", "the API Gateway node name",
-              "the request identifier", "the tenant identifier", "the session identifier",
-              "the failure reason", "the token issuer", "the token audience", "the token expiry time",
-              "the signing key identifier", "the request size in bytes", "the response time in milliseconds",
-              "the TLS protocol version", "the client certificate fingerprint", "the geographic region of the source IP address",
-              "the number of the attempt within the current lockout window", "the API version requested",
-              "the identity provider name", "the authentication method", "the correlation identifier",
-              "the forwarding proxy address", "the account lock state", "the count of prior failures",
-              "the time the Login Token was issued", "the scope list of the Login Token", "the device identifier",
-              "the operating system name", "the locale of the request", "the referring host", "the retry counter",
-              "the audit schema version", "the build number of the API Gateway", "the data center name",
-              "the network zone of the source", "the rate limit bucket", "the consent version", "the password age in days",
-              "the multi-factor method used", "the time zone of the user", "the queue latency", "the cache hit flag",
-              "the replica identifier", "the region of the identity service"]
-
-
-def s9_build(n):
-    aud = []
-    for i in range(n):
-        f = AUD_FIELDS[i]
-        txt = f"The system MUST include {f} in the Audit Record of each sign-in attempt."
-        if i == 2:
-            txt = f"The system MUST include {f} in the Audit Record of each authorisation attempt."
-        aud.append((f"AUD-{i+1}", txt))
-    gr = [GR[0], GR[1], GR[2],
-          ("GR-4a", "The system MUST check the Login Token signature against the current signing key of the identity service."),
-          ("GR-4b", "The system MUST fetch a new signing key from the identity service promptly whenever the identity service publishes one, so that a Login Token signed with the new key is accepted by the API Gateway from the moment it is first presented by any client application on any API Gateway node."),
-          ("GR-5", "The system must reject an API request whose Login Token was revoked with HTTP status 401.")]
-    lck = [LCK[0], ("LCK-2", "The system MUST unlock a locked user account after a reasonable time.")]
-    glossary = GLOSSARY + [("Audit Record", "A stored entry that describes one sign-in attempt for later inspection.")]
-    return srd(glossary=glossary, inscope=INSCOPE + ["An Audit Record for every sign-in attempt."],
-               groups=[("Audit", aud), ("Gateway Rules", gr), ("Account Lockout", lck)])
-
-
-for n in range(10, len(AUD_FIELDS) + 1):
-    t9 = s9_build(n)
-    lines = t9.split("\n")
-    start = next(i for i, l in enumerate(lines, 1) if l.startswith("**GR-4b:**"))
-    end = next(i for i, l in enumerate(lines, 1) if l.startswith("**GR-5:**")) - 2
-    if start + 1 <= 210 <= end:
-        break
-else:
-    raise SystemExit("could not place line 210 in GR-4b")
-print("case 9: GR-4b spans lines", start, "-", end)
 
 # ---------------------------------------------------------------- 10
 
 # ---------------------------------------------------------------- 11
 s11 = srd(groups=[("Gateway Rules", [
-    GR[0],
-    ("GR-2", "The API Gateway retries a failed token check against the identity service before it rejects the API request."),
-    GR[2]]),
+    GW[0],
+    ("GW-2", "The API Gateway retries a failed token check against the identity service before it rejects the API request."),
+    GW[2]]),
     ("Account Lockout", LCK)])
 # The proposal is a pause, which scripted runs answer silently: the gate ends
 # there and grades it; the full case grades what follows the user's YN.
 CG_TAGS = DLOG + ["ref:edit/modes", "ref:edit/corpus-edits",
                   "skill:report-doc-gap", "skill:kb"]
-CG_QUERY = ("/srd:edit specs/login.md GR-2 the gateway retries a failed token check three "
-            "times, that is what it does today; make GR-2 say so")
+CG_QUERY = ("/srd:edit specs/login.md GW-2 the gateway retries a failed token check three "
+            "times, that is what it does today; make GW-2 say so")
 write_case("edit--corpus-grounded-edit-routes-the-unconfirmable--gate", CG_TAGS, CG_QUERY,
            {"specs/login.md": s11},
            {
@@ -383,7 +351,7 @@ write_case("edit--corpus-grounded-edit-routes-the-unconfirmable", CG_TAGS, CG_QU
                "b5-gap-skill-invoked": g_used("Skill", '"skill":"srd:report-doc-gap"', 1),
                "b5-fact-in-kb": g_file("kb/_inbox.md", r"(three|\b3\b)[\s\S]{0,80}retr|retr[\s\S]{0,80}(three|\b3\b)", "i"),
            },
-           ["To a proposal for GR-2 that states three retries: \"YN\".",
+           ["To a proposal for GW-2 that states three retries: \"YN\".",
             "To an offer to file or work documentation gaps: \"File it.\"",
             "Anything else: \"That's all — close the session.\""])
 
@@ -406,70 +374,77 @@ write_case("edit--corpus-grounded-edit-routes-the-unconfirmable", CG_TAGS, CG_QU
 
 # ---------------------------------------------------------------- 19
 s19 = srd(groups=[("Gateway Rules", [
-    GR[0],
-    ("GR-2", "The system MUST validate the Login Token quickly."),
-    ("GR-3", "The system must reject an API request whose Login Token signature is invalid with HTTP status 401.")]),
+    GW[0],
+    ("GW-2", "The system MUST validate the Login Token quickly."),
+    ("GW-3", "The system must reject an API request whose Login Token signature is invalid with HTTP status 401.")]),
     ("Account Lockout", LCK)])
 write_case("edit--feedback-without-a-review-file", REVIEW + ["ref:edit/modes"], "/srd:edit specs/login.md #2",
            {"specs/login.md": s19},
            {
                "b1-names-missing-file": g_last(r"login\.review\.md"),
-               "b2-no-findings-invented": g_last(r"quickly|REQ-6|LANG-4|GR-2|GR-3", None, "not_contains"),
+               "b2-no-findings-invented": g_last(r"quickly|RQT-6|CLR-4|GW-2|GW-3", None, "not_contains"),
                "b3-no-edit": g_never("Edit"),
                "b3-no-write": g_never("Write"),
                "b3-no-decision-log": g_exists("specs/login.decisions.md", False),
                "b4-no-draft-check": g_never("mcp__srd__list_gaps"),
-               "b4-no-start-report": g_last(r"IN PROGRESS|draft|Decision log|manifest", "i", "not_contains"),
+               "b4-no-start-report": g_last(r"Lifecycle|draft|Decision log|manifest", "i", "not_contains"),
                "b4-at-most-two-lines": g_last(r"(?:^(?!.*(?:policy|directive|approval))[^\n]*\S[^\n]*$[\s\S]*?){3}", "m", "not_contains"),
                "b5-no-menu": g_last(r"srd:review|\b(run|use|try)\s+`?/?(srd:)?review\b|paste|drop(ping)?\s+(the|`#)|without\s+(the\s+)?`?#|re-?run", "i", "not_contains"),
            },
            max_turns=20)
 # ---------------------------------------------------------------- 20, 21
-GR1_UK = ("GR-1", "The system MUST reject an unauthorised API request with HTTP status 401.")
-NOTICE_GROUPS = [("Gateway Rules", [GR1_UK, GR[1], GR[2]]), ("Account Lockout", LCK)]
+GW1_UK = ("GW-1", "The system MUST reject an unauthorised API request with HTTP status 401.")
+NOTICE_GROUPS = [("Gateway Rules", [GW1_UK, GW[1], GW[2]]), ("Account Lockout", LCK)]
 r_notice = review("""## Errata
 
-- [ ] #4 [minor, linguistic] GR-1 uses British spelling: `unauthorised` →
+- [ ] #4 [minor, linguistic] GW-1 uses British spelling: `unauthorised` →
   `unauthorized`. (SRD:house)
 
-- [ ] #10 [minor, structure] Metadata: the STR-8 keyword notice is missing:
-  `(missing)` →
+- [ ] #10 [minor, structure] Conventions: the section quoting the
+  obligation-word notice is missing: `(missing)` →
 
-""" + "\n".join("  " + l for l in NOTICE.splitlines()) + """
+""" + "\n".join(("  " + l).rstrip() for l in CONVENTIONS.splitlines()) + """
 
-  (SRD:STR-8)""")
-NOTICE_RE = r'The keywords "MUST"'
-AFTER_TOC = r"\[\[TOC\]\]\s*\n> \[!INFO\]"
+  (SRD:DOC-9)""")
+NOTICE_RE = r'The key words "MUST"'
+BELOW_HEADER = r"\[\[TOC\]\]\s*\n(## Conventions|> The key words)"
+GW1_FIXED = r"- `GW-1` The system MUST reject an unauthorized API request"
 
 write_case("edit--autofix-inserts-missing-notice", AUTOFIX, "/srd:edit specs/login.md autofix",
            {"specs/login.md": srd(groups=NOTICE_GROUPS, notice="none"), "specs/login.review.md": r_notice},
            {
-               "b1-inserted-after-toc": g_regex("{source: file, path: specs/login.md}",
-                                                AFTER_TOC + r"\n> The keywords \"MUST\".{0,600}?shown here\.\s*\n## Introduction", "s"),
+               "b1-inserted-after-introduction": g_regex(
+                   "{source: file, path: specs/login.md}",
+                   r"## Introduction\s*\n[^#]*?\n## Conventions\s*\n+" + NOTICE_RE
+                   + r".{0,600}?shown here\.\s*\n## Boundaries", "s"),
+               "b1-not-below-header": g_regex("{source: file, path: specs/login.md}", BELOW_HEADER, None,
+                                              "not_contains"),
                "b1-exactly-once": g_regex("{source: file, path: specs/login.md}",
                                           NOTICE_RE + ".*" + NOTICE_RE, "s", "not_contains"),
-               "b2-applied-gr1": g_file("specs/login.md", r"\*\*GR-1:\*\* The system MUST reject an unauthorized API request"),
+               "b2-applied-gw1": g_file("specs/login.md", GW1_FIXED),
                "b3-handoff-command": g_last(r"review specs/login\.md check #(4,10|10,4)(?![,\d])"),
            },
            ["To the batch confirmation: \"Yes\"."])
 
 write_case("edit--autofix-misplaced-notice-is-stale", AUTOFIX, "/srd:edit specs/login.md autofix",
-           {"specs/login.md": srd(groups=NOTICE_GROUPS, notice="intro"), "specs/login.review.md": r_notice},
+           {"specs/login.md": srd(groups=NOTICE_GROUPS, notice="header"), "specs/login.review.md": r_notice},
            {
                "b1-no-second-notice": g_regex("{source: file, path: specs/login.md}",
                                               NOTICE_RE + ".*" + NOTICE_RE, "s", "not_contains"),
-               "b1-not-inserted-after-toc": g_regex("{source: file, path: specs/login.md}", AFTER_TOC, None, "not_contains"),
+               "b1-no-conventions-added": g_regex("{source: file, path: specs/login.md}", r"^## Conventions", "m",
+                                                  "not_contains"),
+               "b1-left-in-place": g_regex("{source: file, path: specs/login.md}", BELOW_HEADER),
                "b2-reported-stale": g_last(r"#10.{0,300}(stale|already|present|exists|misplaced|not (inserted|applied)|skipp)", "is"),
-               "b3-applied-gr1": g_file("specs/login.md", r"\*\*GR-1:\*\* The system MUST reject an unauthorized API request"),
+               "b3-applied-gw1": g_file("specs/login.md", GW1_FIXED),
                "b3-handoff-command": g_last(r"review specs/login\.md check #4(?![,\d])"),
            },
            ["To the batch confirmation: \"Yes\"."])
 
 # ---------------------------------------------------------------- 22, 23
 s_sum = srd(groups=[("Gateway Rules", [
-    GR[0],
-    ("GR-2", "The system MUST reject an API request whose Login Token expired more than 30 seconds ago with HTTP status 401."),
-    GR[2]]),
+    GW[0],
+    ("GW-2", "The system MUST reject an API request whose Login Token expired more than 30 seconds ago with HTTP status 401."),
+    GW[2]]),
     ("Account Lockout", LCK)])
 d_sum = """# Changes — Login Token Validation
 
@@ -481,11 +456,11 @@ LCK-2 now unlocks a locked user account 15 minutes after it was locked,
 instead of "after a short while".
 Reason: "a tester can wait 15 minutes and check."
 
-GR-2 now rejects a Login Token that expired more than 30 seconds ago, instead
+GW-2 now rejects a Login Token that expired more than 30 seconds ago, instead
 of 60 seconds.
 Reason: "security asked for a shorter grace."
 
-GR-3 now has the system as its subject: "The system MUST reject …" instead of
+GW-3 now has the system as its subject: "The system MUST reject …" instead of
 "An API request … MUST be rejected".
 Reason: "this makes the system the subject."
 
@@ -493,11 +468,11 @@ Reason: "this makes the system the subject."
 
 ### Requirements
 
-GR-1 now rejects an API request that carries no Login Token, instead of "an
+GW-1 now rejects an API request that carries no Login Token, instead of "an
 unauthorised API request".
 Reason: "names a condition a tester can create."
 
-GR-2 now rejects a Login Token only once it expired more than 60 seconds ago.
+GW-2 now rejects a Login Token only once it expired more than 60 seconds ago.
 Reason: "client clocks drift."
 
 ## 2026-09-29
@@ -510,28 +485,28 @@ Reason: "accounts must not stay locked forever."
 r_sum = review("""## Requirements
 
 - [ ] #12 [major, verifiability] LCK-1: "consecutive" does not say whether a
-  successful sign-in resets the count — state it. (SRD:REQ-5)
+  successful sign-in resets the count — state it. (SRD:RQT-5)
 
 ---
 
 ## Resolved
 
-- [x] #3 [blocker, coverage] SC-2: no requirement says when a locked account
-  unlocks — add one. (SRD:SCO-2) — added LCK-2.
+- [x] #3 [blocker, coverage] Boundaries, Included: no requirement says when a
+  locked account unlocks — add one. (SRD:BND-2) — added LCK-2.
 
-- [x] #5 [blocker, verifiability] GR-1: "unauthorised" names no condition a
-  tester can create — state it. (SRD:REQ-5) — GR-1 now names a request with no
+- [x] #5 [blocker, verifiability] GW-1: "unauthorised" names no condition a
+  tester can create — state it. (SRD:RQT-5) — GW-1 now names a request with no
   Login Token.
 
-- [x] #6 [major, logical] GR-2: a client whose clock runs behind sees fresh
-  Login Tokens rejected — state the tolerance. (SRD:consistency) — GR-2 now
+- [x] #6 [major, logical] GW-2: a client whose clock runs behind sees fresh
+  Login Tokens rejected — state the tolerance. (SRD:consistency) — GW-2 now
   allows a grace period after expiry.
 
 - [x] #8 [major, verifiability] LCK-2: "after a short while" is vague — state
-  the unlock delay. (SRD:REQ-6) — LCK-2 now unlocks after 15 minutes.
+  the unlock delay. (SRD:RQT-6) — LCK-2 now unlocks after 15 minutes.
 
-- [x] #10 [major, linguistic] GR-3: "MUST be rejected" is passive — rewrite with
-  "the system" as subject. (SRD:LANG-1) — GR-3 now has the system as subject.
+- [x] #10 [major, linguistic] GW-3: "MUST be rejected" is passive — rewrite with
+  "the system" as subject. (SRD:CLR-1) — GW-3 now has the system as subject.
 
 ---
 
@@ -540,7 +515,7 @@ r_sum = review("""## Requirements
 - #2 [minor, terminology] Login Token is defined twice (withdrawn: one entry,
   confirmed by author).
 
-- #4 [major, redundancy] GR-1 and GR-2 overlap (withdrawn 2026-09-30 09:30:
+- #4 [major, redundancy] GW-1 and GW-2 overlap (withdrawn 2026-09-30 09:30:
   distinct conditions, confirmed by author).
 
 - #9 [minor, format] LCK-1: a trailing space after the word "attempts"
@@ -558,8 +533,8 @@ write_case("edit--summary-default-newest-block", SUM_TAGS, "/srd:edit specs/logi
                "b3-lists-9": g_last(r"#9\b"),
                "b3-not-4": g_last(r"#4\b", None, "not_contains"),
                "b3-not-2": g_last(r"#2\b", None, "not_contains"),
-               "b4-wording-section": g_last(r"^Wording:?\s*$[\s\S]*(GR-3|#10)", "m"),
-               "b4-wording-last": g_last(r"(GR-3|#10)[\s\S]*^Wording:?\s*$", "m", "not_contains"),
+               "b4-wording-section": g_last(r"^Wording:?\s*$[\s\S]*(GW-3|#10)", "m"),
+               "b4-wording-last": g_last(r"(GW-3|#10)[\s\S]*^Wording:?\s*$", "m", "not_contains"),
                "b5-header": g_last(r"^Login Token Validation: changes 2026-09-30 15:20\s*$", "m"),
                "b5-no-markdown": g_last(NO_MD, "m", "not_contains"),
                "b6-no-write": g_never("Write"),

@@ -5,7 +5,7 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd
 kb: kb
 initiatives: initiatives
-srd-standard: docs/guidelines_for_software_requirements_documents.md
+srd-standard: docs/srd-standard.md
 glossary: docs/glossary
 precedence:
   - kb
@@ -23,13 +23,13 @@ In an eval run, `srd/evals/mocks/srd/fixtures/srd-standard.md` stands in for the
 `get_doc` result of `srd-standard` — see `dev/eval/blind-runner-prompt.md`.
 EOF_PC
 mkdir -p kb
-cat > kb/logger-battery.md <<'EOF_0'
+cat > kb/reader-battery.md <<'EOF_0'
 ---
-title: Logger battery
+title: Reader battery
 last_verified: 2026-09-12
 ---
 
-# Logger battery
+# Reader battery
 
 ## Battery reporting
 
@@ -37,7 +37,7 @@ last_verified: 2026-09-12
 
 > Open: gap-0042.
 
-An ALTECNO logger reports its battery voltage with every upload.
+A Reader device reports its battery level with every sync.
 
 ## Provenance
 

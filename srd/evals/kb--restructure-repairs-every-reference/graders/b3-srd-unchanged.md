@@ -1,5 +1,5 @@
 ---
 type: regex
-target: {source: file, path: initiatives/gw-firmware/srd.md}
+target: {source: file, path: initiatives/kiosk-firmware/srd.md}
 ---
-\(\[knowledge base\]\(\.\./\.\./kb/_inbox\.md#gateway-firmware-updates-run-only-at-night\)\)
+\(\[knowledge base\]\(\.\./\.\./kb/_inbox\.md#kiosk-firmware-updates-run-only-at-night\)\)

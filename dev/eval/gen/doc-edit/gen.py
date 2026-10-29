@@ -32,78 +32,90 @@ title: Main Glossary
 
 # Main Glossary
 
-## Logger
+## Ledger
 
-A battery-powered Device that records hydrophone audio at a fixed point on a
-water main.
+An account book that records every payment posted to one merchant account.
 
-## Correlation
+## Reconciliation
 
-The comparison of two Loggers' simultaneous recordings to locate a leak
-between them. A correlation run uses recordings taken between 02:00 and 04:00.
+The comparison of two Ledgers' postings to find a payment mismatch between
+them. A reconciliation run uses postings made between 02:00 and 04:00.
 """
 
-CORRELATION = """---
+RECONCILIATION = """---
 id: 2215906431
-title: Correlation
+title: Reconciliation
 url: https://wiki.example.com/pages/2215906431
 ---
 
-# Correlation
+# Reconciliation
 
-A correlation run compares the recordings of two Loggers to locate a leak on
-the water main between them.
+A reconciliation run compares the postings of two Ledgers to find a payment
+mismatch between them.
 
 ## Prerequisites
 
-Both Loggers sit on the same water main and record at the same sample rate.
+Both Ledgers use the same currency and close at the same cut-off.
 
 ## Results
 
-A run reports the leak position as a distance from the first Logger.
+A run reports each mismatch as an amount and the pair of postings behind it.
 """
 
-SRD = """# Automated Correlation
+SRD = """# Automated Reconciliation
 
-|                |                                                       |
-|----------------|-------------------------------------------------------|
-| **Objective**  | Run correlations without an operator.                 |
-| **Initiative** | [INT-640](https://tickets.example.com/browse/INT-640) |
-| **Owners**     | @anna.keller                                          |
-| **Status**     | IN PROGRESS                                           |
-| **Designs**    | N/A                                                   |
+| Field      | Value                                                 |
+|------------|-------------------------------------------------------|
+| Summary    | Run reconciliations without an operator.              |
+| Maintainer | @anna.keller                                          |
+| Reviewers  | @marek.nowak                                          |
+| Tracking   | [ABC-640](https://tickets.example.com/browse/ABC-640) |
+| Lifecycle  | DRAFT                                                 |
+| Mockups    | none                                                  |
 
 ## Introduction
 
-This document specifies how the platform starts correlation runs on its own.
+This document specifies how the platform starts reconciliation runs on its own.
+The system will start runs without an operator; it will not change how a run
+compares postings.
 
-## Scope
+## Conventions
 
-### In Scope
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in RFC 2119 and RFC 8174 when, and only when, they
+appear in all capitals, as shown here.
 
-**SC-1:** Starting correlation runs without an operator.
+## Boundaries
+
+### Included
+
+- Starting reconciliation runs without an operator.
+
+### Excluded
+
+- Changing how a run compares postings.
 
 ## Requirements
 
 ### Automation (AC)
 
-**AC-1:** The system MUST start a correlation run each night.
-
-**AC-2:** The system should kind of pick Loggers that are near enough to each
-other, more or less.
+- `AC-1` The system MUST start a reconciliation run each night.
+- `AC-2` The system should kind of pick Ledgers that are close enough to each
+  other, more or less.
 """
 
 GAP_0410 = {
     "id": "gap-0410", "status": "open", "kind": "missing", "answer": "",
     "ask": [], "asked": "",
-    "srd_ref": "autoco", "doc_id": "2215906431", "heading_path": ["Correlation"],
-    "search_terms": ["correlation minimum overlap"], "hits": 2,
+    "srd_ref": "autoco", "doc_id": "2215906431", "heading_path": ["Reconciliation"],
+    "search_terms": ["reconciliation minimum overlap"], "hits": 2,
     "created": "2026-09-20T09:00:00Z", "filled_by": [],
-    "topic": "Minimum recording overlap for a correlation run",
+    "topic": "Minimum posting overlap for a reconciliation run",
     "demand": "AC-1 needs the overlap a nightly run must schedule",
-    "detail": "No corpus page states how many minutes two Loggers' recordings "
-              "must overlap for a correlation run.",
-    "target_claim": "", "file": "gap-0410-minimum-recording-overlap-for-a-correlation-run.md",
+    "detail": "No corpus page states how many minutes two Ledgers' postings "
+              "must overlap for a reconciliation run.",
+    "target_claim": "", "file": "gap-0410-minimum-posting-overlap-for-a-reconciliation-run.md",
 }
 
 
@@ -247,22 +259,22 @@ def case(name, prompt, files, graders, tags=(), answers=None, mocks=None, max_tu
 
 
 GLO = "docs/glossary/main_glossary.md"
-COR = "docs/operations/correlation.md"
+REC = "docs/operations/reconciliation.md"
 RDG = ["skill:report-doc-gap", "sec:report-doc-gap:invocation", "sec:report-doc-gap:workflow",
        "sec:report-doc-gap:the-gap-tools", "sec:report-doc-gap:the-gap-record"]
 
 # 1 ------------------------------------------------------------------------
 case(
     "glossary-entry-files-an-unconfirmable-fact",
-    f"/srd:doc-edit {GLO} add to the Correlation entry that a correlation run "
-    "needs two Loggers on the same water main",
+    f"/srd:doc-edit {GLO} add to the Reconciliation entry that a reconciliation "
+    "run needs two Ledgers in the same currency",
     {GLO: GLOSSARY},
     tags=RDG,
     mocks={**gap_mocks([]), "get_doc.md": get_doc(GLO, GLO, GLOSSARY)},
     answers=[
-        "Asked whether the 02:00–04:00 recording window is right, or to confirm it: "
-        "\"I can't confirm that window — the acoustics team would know. Leave it as it is.\"",
-        "To a proposal adding the same-water-main fact to the Correlation entry: \"Y\".",
+        "Asked whether the 02:00–04:00 posting window is right, or to confirm it: "
+        "\"I can't confirm that window — the finance team would know. Leave it as it is.\"",
+        "To a proposal adding the same-currency fact to the Reconciliation entry: \"Y\".",
         "To an offer to file, change, or drop a documentation gap: \"File it.\"",
         "Anything else: \"That's all — close the session.\"",
     ],
@@ -277,41 +289,41 @@ case(
             "mock_calls",
             r'^(?=[^\n]*"tool":"[^"]*(report_gap|update_gap)")[^\n]*"answer":"deferred"', "m"),
         "b3-gap-filed": g_used("mcp__srd__submit_gap", "gap-0901", 1),
-        "b4-fact-written": g_file(GLO, r"## Correlation[\s\S]*same\s+water\s+main"),
+        "b4-fact-written": g_file(GLO, r"## Reconciliation[\s\S]*same\s+currency"),
         "b4-window-kept": g_file(GLO, r"between\s+02:00\s+and\s+04:00"),
         "b5-front-matter-kept": g_file(GLO, r"^---\ntitle: Main Glossary\n---\n"),
     },
 )
 
 # 2 ------------------------------------------------------------------------
-docs2 = SUITE_DOCS + [{"id": "2215906431", "path": COR, "rank": 3, "title": "Correlation"}]
+docs2 = SUITE_DOCS + [{"id": "2215906431", "path": REC, "rank": 3, "title": "Reconciliation"}]
 case(
     "resolves-a-gap-in-the-edited-document",
-    f"/srd:doc-edit {COR} add the minimum overlap: a correlation run needs at "
-    "least 30 minutes of overlapping recording from both Loggers",
-    {COR: CORRELATION},
+    f"/srd:doc-edit {REC} add the minimum overlap: a reconciliation run needs at "
+    "least 30 minutes of overlapping postings from both Ledgers",
+    {REC: RECONCILIATION},
     tags=["sec:doc-edit:resolving-a-gap"],
     mocks={**gap_mocks([GAP_0410]),
            "list_docs.md": json.dumps({"docs": docs2}, separators=(",", ":")) + "\n",
-           "get_doc.md": get_doc("2215906431", COR, CORRELATION)},
+           "get_doc.md": get_doc("2215906431", REC, RECONCILIATION)},
     answers=[
         "To a proposal that adds the 30-minute minimum overlap: \"Y\".",
         "Anything else: \"That's all — close the session.\"",
     ],
     graders={
         "b1-open-gaps-before-edit": g_order("mcp__srd__list_gaps", '"status":"open"',
-                                            "Edit", '"file_path":"[^"]*correlation\\.md"'),
-        "b2-fact-written": g_file(COR, r"30\s+minutes"),
+                                            "Edit", '"file_path":"[^"]*reconciliation\\.md"'),
+        "b2-fact-written": g_file(REC, r"30\s+minutes"),
         "b3-filled-by-id": g_regex(
             "mock_calls",
             r'^(?=[^\n]*"tool":"[^"]*fill_gap")(?=[^\n]*"gap_id":"gap-0410")'
             r'(?=[^\n]*"filled_by":\["2215906431#[a-z0-9-]+"\])(?=[^\n]*"complete":true)[^\n]*$', "m"),
         "b3-never-by-path": g_never("mcp__srd__fill_gap", "docs/operations"),
-        "b3-edit-before-fill": g_order("Edit", '"file_path":"[^"]*correlation\\.md"',
+        "b3-edit-before-fill": g_order("Edit", '"file_path":"[^"]*reconciliation\\.md"',
                                        "mcp__srd__fill_gap", None),
         "b4-upstream-is-users": g_regex("last_message", r"upstream|\bpush", "i"),
         "b5-front-matter-kept": g_file(
-            COR, r"^---\nid: 2215906431\ntitle: Correlation\n"
+            REC, r"^---\nid: 2215906431\ntitle: Reconciliation\n"
                  r"url: https://wiki\.example\.com/pages/2215906431\n---\n"),
         "b5-no-kb-handoff": g_never("Skill", '"skill":"(srd:)?kb"'),
     },

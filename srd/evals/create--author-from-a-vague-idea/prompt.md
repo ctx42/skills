@@ -15,14 +15,15 @@ append_system_prompt: |
   only in thinking.
 
   Scripted answers (pick the one that fits the question):
-  1. Objective, or a restatement of it: "Yes: a user who forgot their
-     password resets it themselves through a link emailed to their account
-     address. Put the SRD at initiatives/password-reset/srd.md."
+  1. Purpose or summary, or a restatement of it: "Yes: a user who forgot
+     their password resets it themselves through a link emailed to their
+     account address. Put the SRD at initiatives/password-reset/srd.md."
   2. UI change: "Yes: a 'Forgot password?' link on the Log In Page and a page
      where the user sets the new password."
-  3. In Scope: "Defer it; derive it from the requirements."
-  4. Out of Scope: "Resets by SMS, and resets an administrator starts for a
-     user."
+  3. What the SRD delivers (in scope): "Defer it; derive it from the
+     requirements."
+  4. What it excludes (out of scope): "Resets by SMS, and resets an
+     administrator starts for a user."
   5. Requirements: "When a user requests a reset, the system emails a reset
      link to the account's address and signs the user out of every other
      session. Resets must be secure."
@@ -33,7 +34,7 @@ append_system_prompt: |
   8. A term to define: "Reset Link: the link emailed to a user that opens the
      page where they set a new password."
   9. Any restatement or summary to confirm: "Yes, correct."
-  10. A proposed requirement grouping or prefixes: "Fine, use those."
+  10. A proposed requirement grouping or group codes: "Fine, use those."
   11. A self-check blocker: "Leave it."
 ---
 

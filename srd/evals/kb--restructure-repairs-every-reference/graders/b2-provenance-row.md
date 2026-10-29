@@ -1,6 +1,6 @@
 ---
 type: regex
-target: {source: file, path: kb/lora-gateway-firmware.md}
+target: {source: file, path: kb/print-kiosk-firmware.md}
 flags: "s"
 ---
-## Provenance.*\n\|[^\n]*\bgw-firmware\b
+## Provenance.*\n\|[^\n]*\bkiosk-firmware\b

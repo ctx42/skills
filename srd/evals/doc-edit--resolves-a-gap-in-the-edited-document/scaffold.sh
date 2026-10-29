@@ -5,7 +5,7 @@ cat > project-config.md <<'EOF_PC'
 mcp-server: srd
 kb: kb
 initiatives: initiatives
-srd-standard: docs/guidelines_for_software_requirements_documents.md
+srd-standard: docs/srd-standard.md
 glossary: docs/glossary
 precedence:
   - kb
@@ -23,23 +23,23 @@ In an eval run, `srd/evals/mocks/srd/fixtures/srd-standard.md` stands in for the
 `get_doc` result of `srd-standard` — see `dev/eval/blind-runner-prompt.md`.
 EOF_PC
 mkdir -p docs/operations
-cat > docs/operations/correlation.md <<'EOF_0'
+cat > docs/operations/reconciliation.md <<'EOF_0'
 ---
 id: 2215906431
-title: Correlation
+title: Reconciliation
 url: https://wiki.example.com/pages/2215906431
 ---
 
-# Correlation
+# Reconciliation
 
-A correlation run compares the recordings of two Loggers to locate a leak on
-the water main between them.
+A reconciliation run compares the postings of two Ledgers to find a payment
+mismatch between them.
 
 ## Prerequisites
 
-Both Loggers sit on the same water main and record at the same sample rate.
+Both Ledgers use the same currency and close at the same cut-off.
 
 ## Results
 
-A run reports the leak position as a distance from the first Logger.
+A run reports each mismatch as an amount and the pair of postings behind it.
 EOF_0

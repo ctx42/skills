@@ -8,4 +8,4 @@ append_system_prompt: |
   The user writes English; reply in English.
 ---
 
-/srd:edit specs/login.md GR-2 the gateway retries a failed token check three times, that is what it does today; make GR-2 say so
+/srd:edit specs/login.md GW-2 the gateway retries a failed token check three times, that is what it does today; make GW-2 say so

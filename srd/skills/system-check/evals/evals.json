@@ -19,7 +19,7 @@
         "system-check",
         "review"
       ],
-      "setup": "A re-run after the author edited the SRD. Both `specs/labeling.questions.md` and `specs/labeling.review.md` already exist, the latter written by the author's own review pass. The edit fixed six findings and introduced two new blockers: `GR-12` states a vague quality attribute with no measurable criterion (REQ-6), and the In Scope item `SC-4` is covered by no requirement (SCO-2). After the refreshed set is put, the user answers the first question and says \"next\".",
+      "setup": "A re-run after the author edited the SRD. Both `specs/labeling.questions.md` and `specs/labeling.review.md` already exist, the latter written by the author's own review pass. The edit fixed six findings and introduced two new blockers: `GR-12` states a vague quality attribute with no measurable criterion (RQT-6), and the Included item `IN-4` is covered by no requirement (BND-2). After the refreshed set is put, the user answers the first question and says \"next\".",
       "query": "/system-check specs/labeling.md",
       "files": []
     },
@@ -30,7 +30,7 @@
         "system-check",
         "kb"
       ],
-      "setup": "An open question asks whether \"Namespace\" is a defined term — the Glossary does define it. Later in the walk, the user adds \"remember that sessions can't span tenants.\"",
+      "setup": "An open question asks whether \"Namespace\" is a defined term — the project glossary (`docs/glossary/main_glossary.md`) does define it. Later in the walk, the user adds \"remember that sessions can't span tenants.\"",
       "query": "/system-check specs/labeling.md",
       "files": []
     }
