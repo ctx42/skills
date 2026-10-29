@@ -283,6 +283,10 @@ its full text.
 - Hoist a multi-line structured-data literal (JSON, YAML) passed to a call into
   a pretty-printed backtick raw-string local; don't inline it or split it across
   `+`-joined segments to fit the line limit.
+- Compare a time carrying an offset but no named zone with `assert.Time`
+  against a named-zone `time.Date`, never `assert.Exact`, which compares zone
+  names; give `assert.Exact` a string `want` only for UTC, as it parses strings
+  to UTC.
 
 ### Helpers & fixtures
 
@@ -308,6 +312,16 @@ its full text.
   (nor `os.ReadFile` plus error handling and a `string(...)` conversion).
 - Set an environment variable for code under test with `rng.EnvSet`, never
   `t.Setenv`.
+- Build fixed test times with `time.Date`, never by parsing a string literal;
+  table rows hold `time.Time` fields, not strings the loop body parses.
+- Use named zones (`Europe/Warsaw`) for non-UTC test times: the package's
+  exported zones when it has them, else ones defined in `all_test.go`
+  (`var waw = must.Value(time.LoadLocation("Europe/Warsaw"))`);
+  `time.FixedZone` only when no named zone fits.
+- Define trivial fixtures (`errTest = errors.New("test error")`, a zone)
+  unexported in the package's `all_test.go`, exported only for an external
+  `_test` package; import one from another module only when a helper returns
+  it and the test asserts on it.
 
 ### Coverage
 
