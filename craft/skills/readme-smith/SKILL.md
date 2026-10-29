@@ -184,6 +184,9 @@ Dynamic:
       reply and leave the README alone: no "not published" note, which
       outlives the release it waits for, and never warn the reader about your
       sandbox.
+- [ ] A verified command that writes files (a generator, a formatter) can
+      rewrite tracked files: check `git status` after it and restore what the
+      run alone changed.
 
 ## Self-application
 
