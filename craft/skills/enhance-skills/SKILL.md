@@ -76,9 +76,18 @@ otherwise stay stranded there.
    - A fact about this project or this task: a name, a path, a version, a
      number. It outlives nothing, and the project's own instructions are its
      home.
-   - A correction that landed while no skill was driving. It belongs to the
-     agent's standing instructions and has no skill to own it.
+   - A correction that landed while no skill was driving and routes nowhere
+     (below). It belongs to the agent's standing instructions.
    - Praise, a restated requirement, or the skill working as designed.
+
+   Two kinds route to the skill that owns them, whichever skill was driving,
+   or none — a lesson about how a skill ran stays a lesson:
+
+   - A convention for Go or frontend (`.vue`/`.ts`) code the user asked for —
+     naming, layout, a construct to use or avoid — is a style rule: route it
+     to `go:review learn` or `web:review learn`.
+   - A durable fact about the platform the user stated or confirmed is
+     knowledge: route it to `srd:system-check learn`.
 
    One correction yields one rule. When two come out of one correction, the
    second is usually the first restated — keep the one that names the
@@ -89,15 +98,19 @@ otherwise stay stranded there.
    [lessons store](#lessons-store). Ask when the path is unknown or ambiguous.
 
 4. Propose: per skill, the resolved target file, the one-line rules to add, and
-   the merge offer when a stranded external file exists. Name in one line each
-   correction you mined and did not file, and why — the user asked for their
-   corrections to be recorded, so a silent drop is the one outcome they cannot
-   overrule. Wait for confirmation before writing.
+   the merge offer when a stranded external file exists; then each routed
+   correction under its destination. Name in one line each correction you
+   mined and did not file, and why — the user asked for their corrections to
+   be recorded, so a silent drop is the one outcome they cannot overrule. Wait
+   for confirmation before writing.
 
 5. Write: on approval, per skill, retrofit the block if the in-place `SKILL.md`
    lacks it, then append each new rule to the store per
    [Lesson format](#lesson-format), deduplicating against lines already there;
-   merge the external file if accepted.
+   merge the external file if accepted. Then invoke each destination with
+   `learn` through the Skill tool; its own candidate list and confirmation
+   gate its writes. A destination missing from your skill list leaves its
+   corrections unfiled: name them and the plugin to install.
 
 6. Report per [Output](#output).
 

@@ -142,7 +142,9 @@ Keep these skills within the same plugin so the `../sibling` paths resolve.
 
 A skill may invoke another plugin's skill by name, never by path: `web:improve`
 calls `craft:cm` through the Skill tool and checks at start that the craft
-plugin is installed; `web:perf` does the same.
+plugin is installed; `web:perf` does the same. `craft:enhance-skills` hands
+routed corrections to `go:review learn`, `web:review learn`, and
+`srd:system-check learn`, naming any whose plugin is missing.
 
 A path written in a `references/` file needs one more `..` than the same path
 in a `SKILL.md`, since it sits a directory deeper — `../../create/references/`

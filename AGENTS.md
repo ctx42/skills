@@ -102,7 +102,8 @@ source of truth.
 - `doc-smith` — writes, audits, proofs, and collaboratively revises
   technical docs and user manuals; models the whole document to catch
   contradictions, drift, and gaps, and re-checks each edit against the rest.
-- `enhance-skills` — harvests session corrections into per-skill lessons;
+- `enhance-skills` — harvests session corrections into per-skill lessons,
+  routing style rules and platform facts to the `learn` modes that own them;
   retrofits the `## Self-learning` block.
 - `fold-lessons` — folds `LESSONS.md` rules and pending skill edits into the
   skills, keeping only what generalizes; validates, lints, and evals each.

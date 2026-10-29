@@ -44,6 +44,14 @@
       "pass": "^\\W*1\\b",
       "fail": "^\\W*[2-9]",
       "class": "redundant"
+    },
+    {
+      "id": "style-correction-routes",
+      "rule": "route-to-learn",
+      "prompt": "Situation: `/enhance-skills`. Only `plan-smith` was invoked in this conversation. Separately, while you edited Go code with no skill driving, the user corrected you: 'always name the receiver with one letter'. The go plugin is installed.\n\nQuestion: where does that correction go? A) a lesson in plan-smith's LESSONS.md; B) handed to `go:review learn`; C) not filed, named as a correction no skill owns. Answer on the first line with the letter only, then one sentence why.",
+      "pass": "^\\W*B\\b",
+      "fail": "^\\W*[AC]\\b",
+      "class": "load-bearing"
     }
   ]
 }
