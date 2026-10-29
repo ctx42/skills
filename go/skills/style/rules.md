@@ -12,6 +12,7 @@ when about to flag its rule; never preload the file. Grows via
 - No name stutter (Production)
 - Method over a single-receiver-arg func (Production)
 - Name a helper for behavior, not its caller (Production)
+- Service interface naming (Production)
 - On interface-implementing methods, never restate the interface's contract (Production)
 - Use godoc cross-references (Production)
 - Example functions for public APIs (Production)
@@ -68,6 +69,13 @@ Boolean predicates read third-person singular (`fileExists`, not `fileExist`);
 generalize incidental wrap text too ("checking cache file" → "checking file").
 Detect: a helper named for its caller or domain (`cached`, `writeConfig`) whose
 body touches only stdlib fs/string/math ops and no domain type.
+
+## Service interface naming (Production)
+
+The service layer is the type that holds a store and is held by HTTP endpoints
+or the CLI wiring. An adapter interface (auth, a client wrapper) is not a
+service and keeps its name. Detect: an interface named `Itf` or another
+non-`Service` name whose implementation holds a store.
 
 ## On interface-implementing methods, never restate the interface's contract (Production)
 

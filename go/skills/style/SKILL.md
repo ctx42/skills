@@ -94,6 +94,24 @@ its full text.
   qualify, `HasXxx` when one part suffices; an empty value fails an `IsXxx`
   check.
 
+### Component names
+
+- SQL query functions end in `Qry` (`XxxQry`, `XxxInsertQry`); a filter or
+  query-parameter struct ends in `Query`, never `Qry`.
+- Name the aggregate store interface `DataStore` and a per-entity one
+  `<Entity>Store`.
+- Name a service-layer interface `Service` and its implementation `Svc`.
+- An HTTP API area's constructor is `NewEndpoints`, its handler methods
+  `XxxHandler`, and each route has an exported `HN<Name>` name constant.
+- A generated mock's file is `<snake_iface>_mock.go`; a test-support package
+  is the package name plus `test` (`foo` → `footest`).
+- A CLI command is a constructor `XxxCmd()` in `xxx_cmd.go` with an exported
+  handler named `Xxx`, the constructor's name minus `Cmd`; shared flag helpers
+  are `FlgXxx`; program-wide constants are `ProgramName`, `CfgFilePath`, and
+  `CfgKeyPrefix`.
+- Name a package's config key constants `Cfg<Name>`, its struct `Config`, and
+  its constructor `NewConfig`.
+
 ### Functions & methods
 
 - A func whose sole parameter is a local `*T`/`T` belongs on T as a method
