@@ -7,7 +7,7 @@ description: >
   fix that changes an API contract, breaks backward compatibility, or cannot be
   done without the user. Use when asked to fix all of them, fix everything
   found, work through the findings and commit, or clear the review unattended.
-argument-hint: "[skip <n,n…>]"
+argument-hint: "[skip #<n,n…>]"
 license: MIT
 ---
 
@@ -16,14 +16,20 @@ license: MIT
 ## Usage
 
 ```
-/fix-all            fix every finding in the conversation, one commit each
-/fix-all skip 3,7   the same, leaving findings 3 and 7 untouched
+/fix-all             fix every finding in the conversation, one commit each
+/fix-all skip #3,7   the same, leaving findings #3 and #7 untouched
 ```
 
 Turn the findings already in the conversation into commits without
 supervision. All the user's attention is spent in one round at the start; after
 it, the run never asks again. Report tersely: no preamble or narration; state
 each fact once.
+
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
 
 The findings are the ones this conversation already produced or the user
 pasted into it. Never re-review the code to add findings, and never fix

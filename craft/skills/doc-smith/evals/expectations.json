@@ -24,9 +24,9 @@
     },
     {
       "id": 6,
-      "name": "revise-keeps-the-whole-coherent",
+      "name": "walk-keeps-the-whole-coherent",
       "expected_behavior": [
-        "Infers revise mode and moves in document order, one unit at a time, applying only what the user agrees to",
+        "Infers walk mode and moves in document order, one unit at a time, applying only what the user agrees to",
         "Applies the rename to the unit under discussion only, rather than sweeping the document on its own initiative",
         "Runs the coherence check and reports the later occurrences as now-inconsistent, with their locations, before moving on",
         "Sweeps the rest only once the user asks for it, which is the difference between a batch edit and an agreed one",

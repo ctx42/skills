@@ -3,12 +3,12 @@
   "evals": [
     {
       "id": 1,
-      "name": "write-from-brief",
+      "name": "create-from-brief",
       "skills": [
         "plan-smith"
       ],
       "setup": "Cold open. No prior conversation — this is the user's first message. The working directory is a Go web service repository.",
-      "query": "/plan-smith write plan the work to add SSO: provider config, login flow, session storage, and a page in the operator docs.",
+      "query": "/plan-smith create the work to add SSO: provider config, login flow, session storage, and a page in the operator docs.",
       "files": []
     },
     {

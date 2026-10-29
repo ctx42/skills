@@ -4,14 +4,14 @@
     {
       "id": "report-line-shape",
       "rule": "report-shape",
-      "prompt": "Situation: `/plan-smith write` for a billing migration. You wrote tmp/billing-plan.md with 3 work items plus the closing 'Remove this plan' item (4 table rows); every row is `N`.\n\nQuestion: write the exact one-line report you give after writing, and nothing else on the first line. Then one sentence on what else the reply may contain.",
+      "prompt": "Situation: `/plan-smith create` for a billing migration. You wrote tmp/billing-plan.md with 3 work items plus the closing 'Remove this plan' item (4 table rows); every row is `N`.\n\nQuestion: write the exact one-line report you give after writing, and nothing else on the first line. Then one sentence on what else the reply may contain.",
       "pass": "^\\W*`?wrote tmp/billing-plan\\.md — 0 Y / 4 N / 0 X",
       "class": "load-bearing"
     },
     {
       "id": "no-unasked-tests-item",
       "rule": "no-unasked-items",
-      "prompt": "Situation: `/plan-smith write` with the brief: 'Plan: 1) add CSV export endpoint, 2) add export button to the UI.' Both items are fully specified. A test suite for the endpoint would obviously be sensible.\n\nQuestion: how many numbered item sections does the plan file have? Answer on the first line with the integer only, then one sentence listing them.",
+      "prompt": "Situation: `/plan-smith create` with the brief: 'Plan: 1) add CSV export endpoint, 2) add export button to the UI.' Both items are fully specified. A test suite for the endpoint would obviously be sensible.\n\nQuestion: how many numbered item sections does the plan file have? Answer on the first line with the integer only, then one sentence listing them.",
       "pass": "^\\W*3\\b",
       "fail": "^\\W*[24]\\b",
       "class": "redundant"

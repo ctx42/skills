@@ -3,7 +3,7 @@
   "expectations": [
     {
       "id": 1,
-      "name": "write-from-brief",
+      "name": "create-from-brief",
       "expected_behavior": [
         "Writes one file containing a `## Summary` table with the Y/N/X legend and one numbered section per item, each heading carrying a checkbox",
         "Carries exactly the four pieces of work the brief named, plus the closing `Remove this plan` item last — no invented items such as tests, CI, monitoring, rollout, or migration, which the user did not ask for",

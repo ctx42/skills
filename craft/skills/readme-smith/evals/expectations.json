@@ -15,7 +15,7 @@
     },
     {
       "id": 3,
-      "name": "improve-member-readme",
+      "name": "audit-member-readme",
       "expected_behavior": [
         "Reports the badges row, the `## License` section, and the `## Contributing` section as findings — the root README and the dedicated files own those",
         "Each finding names the template section it comes from — Badges, Nav, Quickstart, License — so the reader can look the rule up without being told it",

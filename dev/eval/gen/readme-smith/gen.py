@@ -28,7 +28,7 @@ T = ["skill:readme-smith", "sec:readme-smith:usage",
      "sec:readme-smith:non-negotiables-both-modes", "sec:readme-smith:verify",
      "sec:readme-smith:self-learning", "ref:readme-smith/template"]
 CREATE = T + ["sec:readme-smith:create-mode"]
-IMPROVE = T + ["sec:readme-smith:improve-mode"]
+AUDIT = T + ["sec:readme-smith:audit-mode"]
 GOMAKE = ["sec:readme-smith:go-example-injection-gomake", "ref:readme-smith/gomake"]
 
 # ---------------------------------------------------------------- fixtures
@@ -1128,10 +1128,10 @@ def main():
         "b5-not-past-100": g_regex(r"^[A-Za-z`*][^\n]{100,}$", R, "m", "not_contains"),
     }, answers=[POS_PORTCHECK])
 
-    # 3 improve-member-readme -------------------------------------------
+    # 3 audit-member-readme ---------------------------------------------
     f = kit_store()
     M = "pkg/store/README.md"
-    case(pfx + "improve-member-readme", IMPROVE + SHELL, "/craft:readme-smith improve pkg/store/README.md", f, {
+    case(pfx + "audit-member-readme", AUDIT + SHELL, "/craft:readme-smith audit pkg/store/README.md", f, {
         "b4-no-badges": g_regex(r"^\[!\[", M, "m", "not_contains"),
         "b4-no-license": g_regex(r"^##+ License", M, "m", "not_contains"),
         "b4-no-contributing": g_regex(r"^##+ Contributing", M, "m", "not_contains"),

@@ -71,9 +71,9 @@ branch by branch, until you both share one understanding of the subject.
    branch: ask it. The summary is then honest about what is settled, which is
    the point of producing one.
 
-7. Offer to persist — on yes, invoke `craft:plan-smith` in write mode with the
-   summary as the brief, so a plan file exists rather than an intention to make
-   one; it records the branches as a tracked plan (checkbox items + status
+7. Offer to persist — on yes, invoke `craft:plan-smith` in create mode with
+   the summary as the brief, so a plan file exists rather than an intention to
+   make one; it records the branches as a tracked plan (checkbox items + status
    table). A branch carried open with an owner does belong in the brief, as the
    one thing about it that is checkable: getting the answer. The item is
    "<owner> answers <the question>", its acceptance criterion is that the answer

@@ -23,7 +23,7 @@ FMT = ["sec:plan-smith:format", "sec:plan-smith:summary",
        "sec:plan-smith:1-item-name-x",
        "sec:plan-smith:3-item-name-x-rejected-one-line-reason",
        "sec:plan-smith:n-remove-this-plan"]
-WRITE = BASE + FMT + ["sec:plan-smith:write-mode"]
+CREATE = BASE + FMT + ["sec:plan-smith:create-mode"]
 TOOLS = ["Read", "Glob", "Grep", "Skill", "Write", "Edit"]
 
 
@@ -224,7 +224,7 @@ def plan_write_graders(path, n_items, named_heads):
     return g
 
 
-# ------------------------------------------------------- 1 write-from-brief
+# ------------------------------------------------------ 1 create-from-brief
 
 sh = Sh()
 sh.file("go.mod", GO_SERVICE_MOD)
@@ -244,8 +244,8 @@ g["b7-path-and-counts-one-line"] = regex(
     r"sso-plan\.md[^\n]*" + counts(0, 5, 0) + "|" + counts(0, 5, 0) + r"[^\n]*sso-plan\.md",
     "last_message", "i")
 g["b7-leave-outs-short"] = regex(r"^\s*[-*] [^\n]{111,}", "last_message", "m", "not_contains")
-case("write-from-brief", WRITE,
-     "/craft:plan-smith write plan the work to add SSO: provider config, login flow, "
+case("create-from-brief", CREATE,
+     "/craft:plan-smith create the work to add SSO: provider config, login flow, "
      "session storage, and a page in the operator docs.",
      g, scaffold=sh.text(),
      answers=["Those choices are not made yet — leave them open and write the plan now."])
@@ -277,7 +277,7 @@ g["b5-dependency-stated"] = regex(
     r"(depend\w*|block\w*|requires?|needs?|after|once|until|first|cannot start|can only|using|uses|builds? on|from|with)[^\n]{0,120}(item\s*#?\d|#\d|\bsplit|per[- ]entity|own file)"
     r"|(item\s*#?\d|#\d)[^\n]{0,40}(depends?|is blocked|needs|requires)",
     f"file:{P2}", "i")
-case("bundled-brief", WRITE, BUNDLED, g,
+case("bundled-brief", CREATE, BUNDLED, g,
      answers=["'Not tying out' means the per-entity daily totals in the export differ "
               "from the dashboard's totals for the same day. The files should go to the "
               "shared object store (s3://finance-exports) instead of the app server's "
@@ -365,5 +365,5 @@ g["b5-path-and-counts"] = regex(
     "last_message", "i")
 g["b5-no-summary-replay"] = regex(
     r"RFC 4180|\bBOM\b|100,001|exactly the filtered rows", "last_message", "i", "not_contains")
-case("grill-me-handoff", WRITE, "Yes, turn it into a plan.", g,
+case("grill-me-handoff", CREATE, "Yes, turn it into a plan.", g,
      history=history(TURNS, "7d1e2c4a-3b5f-4e8a-9c21-6a0f5e3d2b10"))

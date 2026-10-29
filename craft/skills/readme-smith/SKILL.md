@@ -5,7 +5,7 @@ description: >
   the actual repo — never fabricates facts and verifies the commands it
   ships. Use when asked to create, write, draft, review, or improve a README
   or a project's front-page documentation.
-argument-hint: "[create|improve] [<readme-path>]"
+argument-hint: "[create|audit] [<readme-path>]"
 license: MIT
 ---
 
@@ -14,19 +14,25 @@ license: MIT
 ## Usage
 
 ```
-/readme-smith <request>               infer create vs improve from the request (default)
+/readme-smith <request>               infer create vs audit from the request (default)
 /readme-smith create [<readme-path>]  scan the repo and draft a new README from real code
-/readme-smith improve <readme-path>   audit an existing README; fix on confirmation
+/readme-smith audit <readme-path>     audit an existing README; fix on confirmation
 ```
 
-Create and improve a project's `README.md`. Pick the mode from the first token
-of the invocation when it is a mode word, else from the request; the next token
-(or the request) names the README path:
+Create and improve a project's `README.md`. Read the tokens in any order: a
+reserved word is a mode or flag, `key=value` is a control, and anything else is
+the target. The modes are `create` and `audit`; with neither, pick the mode
+from the request. The target (or the request) names the README path:
 
 - Create — no usable README exists, or the user asks for a new/rewritten one.
-- Improve — the user names an existing README to review or upgrade.
+- Audit — the user names an existing README to review or upgrade.
 
-If ambiguous, ask one question: create new or improve existing?
+If ambiguous, ask one question: create new or audit existing? A `key=value` that
+names no control here, or a word left over once the modes, the target, and any
+text the skill takes are read: say it was not recognized, name the ones that
+exist, and run with the defaults as if it were absent — unless dropping it would
+widen what the run changes; then ask. A target that resolves to nothing: say so
+and ask — never guess what to work on.
 
 Structure and style come from
 [`references/template.md`](references/template.md) *(eager: read once per
@@ -85,7 +91,7 @@ test suite, CI, coverage, and the diff. Nobody asking for a README asked for
 that, so it gets its own yes — the approval covering the README does not reach
 it. Ask once per run, after the README work and before writing any `.go` file:
 name each file, the functions going in it, and that it becomes part of the test
-suite. On a no, hand-write the examples in create mode, or in improve mode
+suite. On a no, hand-write the examples in create mode, or in audit mode
 leave that finding reported and its fence untouched — never write the file and
 mention it afterwards. The no declines the Go source, not the run: every other
 approved fix still applies.
@@ -122,7 +128,7 @@ unnoticed defect.
 5. Write `README.md` at the repo root (or the path the user gave). State the
    path and any remaining `TODO` markers.
 
-## Improve mode
+## Audit mode
 
 No edits until the user approves the findings.
 
@@ -144,7 +150,7 @@ No edits until the user approves the findings.
    location, the problem in one line, the `references/template.md` rule it
    breaks, and a minimal fix. A gap only the user can close (the minimum
    runtime, which remote is real) is a finding like any other, asked in its
-   own line — improve mode has no separate question round. The Go-source gate
+   own line — audit mode has no separate question round. The Go-source gate
    is the exception, and it is not a question about the README: it comes after
    approval, immediately before any `.go` file is written, because until the
    fixes are approved there may be no example to write. End with a one-line

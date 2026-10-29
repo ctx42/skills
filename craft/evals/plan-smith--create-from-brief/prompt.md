@@ -1,5 +1,5 @@
 ---
-tags: [case:plan-smith--write-from-brief, skill:plan-smith, sec:plan-smith:usage, sec:plan-smith:self-learning, sec:plan-smith:format, sec:plan-smith:summary, sec:plan-smith:1-item-name-x, sec:plan-smith:3-item-name-x-rejected-one-line-reason, sec:plan-smith:n-remove-this-plan, sec:plan-smith:write-mode]
+tags: [case:plan-smith--create-from-brief, skill:plan-smith, sec:plan-smith:usage, sec:plan-smith:self-learning, sec:plan-smith:format, sec:plan-smith:summary, sec:plan-smith:1-item-name-x, sec:plan-smith:3-item-name-x-rejected-one-line-reason, sec:plan-smith:n-remove-this-plan, sec:plan-smith:create-mode]
 runs: 1
 max_turns: 40
 timeout_seconds: 300
@@ -17,4 +17,4 @@ append_system_prompt: |
   1. Those choices are not made yet — leave them open and write the plan now.
 ---
 
-/craft:plan-smith write plan the work to add SSO: provider config, login flow, session storage, and a page in the operator docs.
+/craft:plan-smith create the work to add SSO: provider config, login flow, session storage, and a page in the operator docs.

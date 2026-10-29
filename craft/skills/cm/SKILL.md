@@ -25,21 +25,29 @@ license: MIT
 
 ## Input
 
-Read arguments from `$ARGUMENTS` (whitespace-separated tokens, any order); when
-empty, fall back to the user's prose. Derive the message from the diff alone,
-never from conversation context:
+Read arguments from `$ARGUMENTS`; when empty, fall back to the user's prose.
+Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
+a control, and anything else is the target. Derive the message from the diff
+alone, never from conversation context:
 
-- A commit-ish token (`<hash>`) selects a commit: run `git show <hash>` and
-  ignore the injected diff below. Hex is the common form, but `HEAD`, `HEAD~2`,
-  a tag, and a branch name all name a commit — resolve with
+- The target is a commit-ish (`<hash>`): run `git show <hash>` and ignore the
+  injected diff below. Hex is the common form, but `HEAD`, `HEAD~2`, a tag, and
+  a branch name all name a commit — resolve with
   `git rev-parse --verify <tok>^{commit}` and treat any token that resolves as
-  the selector. A token that does not resolve is prose, not a failed hash.
+  the selector. A token that does not resolve is prose — the free text this
+  skill takes, not a failed hash or an unrecognized token.
 - `apply` or `asis` without a commit-ish reads the whole working tree, per
   Commit control below.
 - Otherwise use the staged diff injected below. When it is empty, run
   `git diff` and derive from the unstaged changes instead. Confirm the index
   is empty with `git diff --cached --quiet` before saying nothing is staged:
   the injected stats carry no label telling index from working tree.
+
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
 
 !`git diff --cached --stat; echo; git diff --stat`
 

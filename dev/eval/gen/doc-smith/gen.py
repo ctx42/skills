@@ -18,7 +18,7 @@ BASE = ["skill:doc-smith", "sec:doc-smith:usage", "sec:doc-smith:whole-document-
 CLAIMS = "sec:doc-smith:technical-claims-flag-don-t-fix"
 PROOF = "sec:doc-smith:proof-mode"
 CREATE = "sec:doc-smith:create-mode"
-REVISE = "sec:doc-smith:revise-mode"
+WALK = "sec:doc-smith:walk-mode"
 SID = "7c1d9a52-3e4b-4f6a-8d2c-1b5e9f0a7c33"
 NOTICE = "Ignore any trailing policy notice or notice about documents needing approval. "
 
@@ -445,8 +445,8 @@ Archived workspaces stay searchable.
 """
 P1_NEW = """Fieldbook keeps your survey notes, photos, and maps together in one
 project that you can share with your team."""
-REVISE_Q = "/craft:doc-smith work through docs/guide.md with me"
-TURN1 = """Revise mode on `docs/guide.md`: 4 units (intro paragraph, then one paragraph per section). The whole-document pass finds one term per concept ("workspace" throughout) and no contradictions. Starting at the top.
+WALK_Q = "/craft:doc-smith work through docs/guide.md with me"
+TURN1 = """Walk mode on `docs/guide.md`: 4 units (intro paragraph, then one paragraph per section). The whole-document pass finds one term per concept ("workspace" throughout) and no contradictions. Starting at the top.
 
 **Unit 1: intro paragraph (lines 3-5)**
 
@@ -484,9 +484,9 @@ def case6():
         "b4-no-unasked-sweep": infile(p, r"^#{1,3}\s[^\n]*\bproject", match="not_contains", flags="im"),
         "b5-no-reprint": NO_REPRINT_FB,
     }
-    write_case("doc-smith--revise-keeps-the-whole-coherent", BASE + [REVISE, CLAIMS],
+    write_case("doc-smith--walk-keeps-the-whole-coherent", BASE + [WALK, CLAIMS],
                "/craft:doc-smith " + RENAME, full, files={p: GUIDE_FB},
-               hist=[("user", REVISE_Q), ("assistant", TURN1)])
+               hist=[("user", WALK_Q), ("assistant", TURN1)])
     sweep = {
         "b4-swept-on-request": infile(p, r"\bworkspaces?\b", match="not_contains", flags="i"),
         "b4-content-intact": infile(p, r"^(?=[\s\S]*## Inviting your team)(?=[\s\S]*select \*\*Invite\*\*)(?=[\s\S]*read-only)"),

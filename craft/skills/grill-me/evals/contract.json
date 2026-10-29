@@ -72,9 +72,9 @@
     },
     {
       "id": "persist-offer",
-      "rule": "Offer to persist via plan-smith write mode; skip the offer when another skill invoked this one",
+      "rule": "Offer to persist via plan-smith create mode; skip the offer when another skill invoked this one",
       "must": [
-        "Offer to persist — on yes, invoke `craft:plan-smith` in write mode",
+        "Offer to persist — on yes, invoke `craft:plan-smith` in create mode",
         "When another skill invoked this one on a subject, skip the offer"
       ]
     },

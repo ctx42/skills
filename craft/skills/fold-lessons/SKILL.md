@@ -6,7 +6,7 @@ description: >
   that taught them; validates each against the skill and the repo's authoring
   rules, then lints and evals it. Use to fold, absorb, or bake in skill
   lessons, or to vet uncommitted skill edits.
-argument-hint: "[<skill>...] [--base <ref>]"
+argument-hint: "[<skill>...] [base=<ref>]"
 license: MIT
 ---
 
@@ -17,15 +17,23 @@ license: MIT
 ```
 /fold-lessons                 every LESSONS.md and every uncommitted skill edit
 /fold-lessons <skill>...      only the named skills (name or path)
-/fold-lessons --base <ref>    also vet skill edits committed since <ref>
+/fold-lessons base=<ref>      also vet skill edits committed since <ref>
 ```
+
+Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
+a control, and anything else is the target. A `key=value` that names no control
+here, or a word left over once the modes, the target, and any text the skill
+takes are read: say it was not recognized, name the ones that exist, and run
+with the defaults as if it were absent — unless dropping it would widen what the
+run changes; then ask. A target that resolves to nothing: say so and ask — never
+guess what to work on.
 
 Two inputs, one gate. A `LESSONS.md` is a holding area every run of its skill
 reads; folding moves each rule into the step it governs. A pending edit is a
-diff hunk under `<group>/skills/` against the base (default `HEAD`, working
-tree included); vetting judges what it adds. Lessons arrive through each
-skill's `## Self-learning` block and `../enhance-skills/`; this skill consumes
-them. Work in a writable source checkout only — never under
+diff hunk under `<group>/skills/` against the base (`base=`, default `HEAD`,
+working tree included); vetting judges what it adds. Lessons arrive through
+each skill's `## Self-learning` block and `../enhance-skills/`; this skill
+consumes them. Work in a writable source checkout only — never under
 `.../plugins/cache/`. A store under `~/.agent-data/` is the user's own: fold it
 only when the user names it.
 

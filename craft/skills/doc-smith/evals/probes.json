@@ -36,9 +36,9 @@
     {
       "id": "ambiguous-request-mode",
       "rule": "default-mode-audit",
-      "prompt": "Situation: the user invokes `/doc-smith docs/manual.md` with the prose 'this manual needs some love'. No mode word.\n\nQuestion: which mode do you run? Answer on the first line with exactly one of: CREATE, AUDIT, PROOF, REVISE. Then one sentence why.",
+      "prompt": "Situation: the user invokes `/doc-smith docs/manual.md` with the prose 'this manual needs some love'. No mode word.\n\nQuestion: what do you do first? Answer on the first line with exactly one of: CREATE, AUDIT, PROOF, WALK, ASK-WHICH-MODE. Then one sentence why.",
       "pass": "^\\W*AUDIT\\b",
-      "fail": "^\\W*(CREATE|PROOF|REVISE)",
+      "fail": "^\\W*(CREATE|PROOF|WALK|ASK)",
       "class": "redundant"
     },
     {

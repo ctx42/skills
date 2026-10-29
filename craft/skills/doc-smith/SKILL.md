@@ -7,7 +7,7 @@ description: >
   asked to create, audit, review, proof, proofread, check, or work through
   technical docs, a user manual, an operator or admin guide, or product
   documentation.
-argument-hint: "[create|audit*|proof|revise] [<file>... | <desc>]"
+argument-hint: "[create|audit*|proof|walk] [<file>... | <desc>]"
 license: MIT
 ---
 
@@ -20,20 +20,28 @@ license: MIT
 /doc-smith create <desc>     draft a new document or section from scratch
 /doc-smith audit <file>...   the default, named explicitly
 /doc-smith proof <file>...   fix in place: grammar, clarity, consistency; flag what it can't decide
-/doc-smith revise <file>...  work through the doc with the user, one unit at a time
+/doc-smith walk <file>...    work through the doc with the user, one unit at a time
 ```
 
-Create, audit, proof, and revise technical documentation and user manuals;
-Markdown is the assumed format. The mode is the first token of the invocation
-when that token is a mode word, else
-inferred from the request; when the request does not settle it, default to
-audit (it edits nothing). The remaining arguments name the target file(s);
-with no target and no clear intent, ask which mode.
+Create, audit, proof, and walk through technical documentation and user manuals;
+Markdown is the assumed format. Read the tokens in any order: a reserved word is
+a mode or flag, `key=value` is a control, and anything else is the target. The
+mode is `create`, `audit`, `proof`, or `walk`; with none, infer it from the
+request; when the request does not settle it, default to audit (it edits
+nothing). The target names the file(s), or for create the description, free text
+to the end whose reserved words are text; with no target and no clear intent,
+ask which mode.
 
 - Create — draft a new document or section from scratch.
 - Audit — report findings on an existing doc; edit nothing until approved.
 - Proof — fix an existing doc in place; flag what has no single right answer.
-- Revise — work through the doc with the user, one unit at a time.
+- Walk — work through the doc with the user, one unit at a time.
+
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
 
 Scope a run to the file — or the named set/directory — the user gives, and
 treat it as **one document**: consistency is judged across all of it. Flag a
@@ -145,7 +153,7 @@ Fix in place. Reserve edits for what has one right answer; flag the rest.
    here is waiting to be triaged, the edits are already in the file, and what
    is left is a question list the user works through.
 
-## Revise mode
+## Walk mode
 
 Work through the document with the user, one unit at a time — a paragraph,
 or the smallest thing that can be judged whole where a paragraph is not it: a

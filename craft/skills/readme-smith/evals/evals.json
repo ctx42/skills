@@ -13,12 +13,12 @@
     },
     {
       "id": 3,
-      "name": "improve-member-readme",
+      "name": "audit-member-readme",
       "skills": [
         "readme-smith"
       ],
       "setup": "A multi-package Go repo whose root `README.md` carries the badges and the Packages table. `pkg/store/README.md` is a member README that carries its own badges row, a `## License` section repeating the MIT text, two code fences with no language, a nav line whose `#usage` anchor points at a heading that was renamed, and a `## Contributing` section duplicating `CONTRIBUTING.md`.",
-      "query": "/readme-smith improve pkg/store/README.md",
+      "query": "/readme-smith audit pkg/store/README.md",
       "files": []
     },
     {

@@ -5,7 +5,7 @@ description: >
   summary table (Y implemented, N not yet, X rejected), and updates that table
   over time. Use when asked to write, draft, structure, track, or update a
   plan, task list, or implementation checklist.
-argument-hint: "[write <brief> | update <plan-file>]"
+argument-hint: "[create <brief> | update <plan-file>]"
 license: MIT
 ---
 
@@ -14,24 +14,31 @@ license: MIT
 ## Usage
 
 ```
-/plan-smith <request>           infer write vs. update from the request (default)
-/plan-smith write <brief>       write a tracked plan from a brief or a grill-me summary
+/plan-smith <request>           infer create vs. update from the request (default)
+/plan-smith create <brief>      write a tracked plan from a brief or a grill-me summary
 /plan-smith update <plan-file>  refresh each item's checkbox and status
 ```
 
-Turn a brief into a tracked plan, and keep its status current. The first token
-of the invocation is the mode when given — `write` (the rest is the brief) or
-`update` (the rest is the plan-file path); else infer the mode from the
-request:
+Turn a brief into a tracked plan, and keep its status current. Read the tokens
+in any order: a reserved word is a mode or flag, `key=value` is a control, and
+anything else is the target. The modes are `create` (the target is the brief,
+free text to the end whose reserved words are text) and `update` (the target is
+the plan-file path); with neither, infer the mode from the request:
 
-- Write — a new plan from a description, a spec, or a shared understanding
+- Create — a new plan from a description, a spec, or a shared understanding
   reached with `grill-me`.
 
 - Update — re-read an existing plan and refresh each item's checkbox and status
   from what has since happened.
 
-If the request is ambiguous, ask one question, as the reply's first line: write
-a new plan or update an existing one?
+If the request is ambiguous, ask one question, as the reply's first line:
+create a new plan or update an existing one?
+
+A `key=value` that names no control here, or a word left over once the modes,
+the target, and any text the skill takes are read: say it was not recognized,
+name the ones that exist, and run with the defaults as if it were absent —
+unless dropping it would widen what the run changes; then ask. A target that
+resolves to nothing: say so and ask — never guess what to work on.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. After writing, point to the file and give the
@@ -127,7 +134,7 @@ change: it moves down when work is appended, so it stays last. A finished plan
 left on disk reads as live work; asking once, at the end, keeps that the user's
 call.
 
-## Write mode
+## Create mode
 
 1. Gather the items. From the brief (or a `grill-me` summary), list the
    distinct, independently-checkable pieces of work — one item = one outcome;
@@ -207,7 +214,7 @@ call.
    work item with fresh numbers, status `N`, and the same shape as the rest;
    the closing item moves down one number per new item and stays last. Take
    their acceptance criteria from what was stated; an open choice inside one
-   goes to the report's leave-outs, as in write step 3. Never renumber
+   goes to the report's leave-outs, as in create step 3. Never renumber
    anything else to slot one into the middle — the numbers are how the table
    and the sections stay married. A plan with no closing item (written before
    it existed) gets one appended.

@@ -1,5 +1,5 @@
 ---
-tags: [case:readme-smith--improve-member-readme, skill:readme-smith, sec:readme-smith:usage, sec:readme-smith:non-negotiables-both-modes, sec:readme-smith:verify, sec:readme-smith:self-learning, ref:readme-smith/template, sec:readme-smith:improve-mode, needs-shell]
+tags: [case:readme-smith--audit-member-readme, skill:readme-smith, sec:readme-smith:usage, sec:readme-smith:non-negotiables-both-modes, sec:readme-smith:verify, sec:readme-smith:self-learning, ref:readme-smith/template, sec:readme-smith:audit-mode, needs-shell]
 runs: 1
 max_turns: 60
 timeout_seconds: 300
@@ -17,4 +17,4 @@ append_system_prompt: |
   2. To any other question: "No, leave it."
 ---
 
-/craft:readme-smith improve pkg/store/README.md
+/craft:readme-smith audit pkg/store/README.md

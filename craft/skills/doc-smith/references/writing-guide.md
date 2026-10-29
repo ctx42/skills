@@ -130,7 +130,7 @@ Register example — the same facts, sub-B1 fragments raised to fluent B1:
 
 ## Defect taxonomy
 
-What every mode judges against; audit and revise flag, proof fixes. Detection
+What every mode judges against; audit and walk flag, proof fixes. Detection
 heuristic per class:
 
 - Contradiction — two claims about the same entity that can't both hold. Detect

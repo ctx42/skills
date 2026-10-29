@@ -65,8 +65,8 @@
       ]
     },
     {
-      "id": "improve-no-edits-before-approval",
-      "rule": "Improve mode reports findings only and edits nothing until approved",
+      "id": "audit-no-edits-before-approval",
+      "rule": "Audit mode reports findings only and edits nothing until approved",
       "must": [
         "No edits until the user approves the findings",
         "Report only\\."
