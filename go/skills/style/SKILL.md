@@ -79,6 +79,9 @@ its full text.
   receiver that rule is fixing.
 - Name a helper for what it does, not its one caller: a domain-agnostic body
   gets a domain-agnostic name and error text (`fileExists`, not `cached`).
+- Name a predicate for the test it makes: `IsXxx` when the whole value must
+  qualify, `HasXxx` when one part suffices; an empty value fails an `IsXxx`
+  check.
 
 ### Functions & methods
 
