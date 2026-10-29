@@ -29,8 +29,8 @@
       "id": "dependency-lands-first",
       "rule": "split-compiles-no-build",
       "prompt": "Situation: the user ran `/cm apply`. The working tree holds three concerns: A adds an exported `token.Issue` in `token/token.go` (nothing calls it yet); B adds a new `handler/login.go` whose `Login` calls `token.Issue`; C fixes a typo in `README.md`. You plan three commits.\n\nQuestion: give the commit order on the first line as the three letters separated by commas, then one sentence why.",
-      "pass": "^[^\\n]*A[^\\n]*B",
-      "fail": "^[^\\n]*B[^\\n]*A",
+      "pass": "^\\W*A\\b[^\\n]*\\bB\\b",
+      "fail": "^\\W*B\\b",
       "class": "load-bearing"
     },
     {

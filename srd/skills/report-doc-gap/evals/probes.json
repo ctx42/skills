@@ -78,7 +78,7 @@
       "rule": "doc-id-is-identity",
       "prompt": "Situation: while reviewing initiatives/int384-hydrophone/srd.md, a lookup exposed a gap about the Tag name length limit. The relevant search hit was {\"id\":\"1774485611\",\"path\":\"docs/concepts/tags.md\",\"rank\":2,\"title\":\"Tags\",\"heading_path\":[\"Tags\",\"Tag names\"]}. The SRD links that page as `../../docs/concepts/tags.md`, and the user reads gap records by file path. You now capture a draft gap with report_gap.\n\nQuestion: what exact value do you pass as doc_id? Answer on the first line with only that value, then one sentence why.",
       "pass": "^\\W*1774485611\\b",
-      "fail": "docs/concepts/tags\\.md\\W*$|^\\W*docs/",
+      "fail": "^\\W*`?docs/",
       "class": "load-bearing"
     },
     {

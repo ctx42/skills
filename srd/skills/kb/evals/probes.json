@@ -49,7 +49,7 @@
         "references/page-anatomy.md"
       ],
       "prompt": "Situation: an SRD interview reaches a platform question the user cannot answer now: \"does a logger keep readings across a reboot?\". A `list_gaps` query shows it is already on file as open gap `gap-0051` with `answer: deferred`. The topic page kb/logger.md concerns it.\n\nQuestion: what do you do with the question? Answer on the first line with exactly one of: FILE-NEW-GAP, BUMP-HIT-ON-GAP-0051, ADD-QUESTION-TO-PAGE. Then one sentence on what, if anything, the topic page carries about it.",
-      "pass": "^\\W*BUMP-HIT-ON-GAP-0051.*gap-0051",
+      "pass": "^\\W*BUMP-HIT-ON-GAP-0051\\b",
       "fail": "^\\W*(FILE|ADD)",
       "class": "load-bearing"
     },
