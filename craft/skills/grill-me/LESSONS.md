@@ -1,0 +1,1 @@
+- After adding a branch mid-interview, recount resolved and open from the full map on every later turn; the added branch changes the total.
