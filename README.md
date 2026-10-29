@@ -24,7 +24,7 @@ skills — it ships only desktop-notification hooks:
 │
 ├── go/
 │   ├── .claude-plugin/plugin.json
-│   └── skills/{style,review,cover,doc,reshape}/
+│   └── skills/{style,review,cover,doc,reshape,audit}/
 ├── srd/
 │   ├── .claude-plugin/plugin.json
 │   └── skills/{create,review,edit,doc-edit,system-check,report-doc-gap,backlog,kb}/
@@ -41,7 +41,7 @@ skills — it ships only desktop-notification hooks:
 
 | Plugin   | Skills                                                                                                   | Purpose                                                                                                                    |
 |----------|----------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| `go`     | `style`, `review`, `cover`, `doc`, `reshape`                                                             | Go style (write + check), done-time review, test coverage, doc fixing, API proposals                                       |
+| `go`     | `style`, `review`, `cover`, `doc`, `reshape`, `audit`                                                    | Go style (write + check), done-time review, test coverage, doc fixing, API proposals, one-report audit                     |
 | `srd`    | `create`, `review`, `edit`, `doc-edit`, `system-check`, `report-doc-gap`, `backlog`, `kb`                | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base                                          |
 | `craft`  | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `enhance-skills`, `fold-lessons`, `fix-all` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning, lesson folding, unattended fixing |
 | `web`    | `style`, `review`, `cover`, `doc`, `e2e`, `improve`, `perf`                                              | Vue/TS style, review, unit and e2e coverage, docs; UX and speed fixes in a visible Chrome                                  |

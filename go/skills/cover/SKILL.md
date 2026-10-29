@@ -205,6 +205,29 @@ Wait for approval, then run steps 3–4 function by function: `Foo.after` is
 measured before any test for the next function is written, even when one batch
 would be quicker.
 
+## Delegated by go:audit
+
+Delegation is recognized from the invocation, never guessed: `go:audit` says
+it is invoking for gaps only and passes the target. A run not told so is not
+delegated, and runs its target kind as usual.
+
+Resolve the target, run loop steps 1–2 for every function in scope, classify
+each uncovered line, and return, then stop:
+- per function with a coverable uncovered line: `file:line Func — covered/total
+  stmts`, or `0/total — no direct tests` for an empty family; then each such
+  line as `file:line — easy|complex (reason) — error-path|branch|statement`.
+  A line deferred behind a missing seam is listed here as complex, reason
+  `seam`, never counted as un-coverable.
+  error-path: reached only when an error is returned or handled; branch:
+  reached only on one arm of an `if`, `switch`, or `select`; statement:
+  anything else. Fully covered functions get no line;
+- un-coverable lines, counted per package;
+- every command run.
+
+No plan gate, no test written, no Verify, no fan-out — the audit already split
+the work, and a worker cannot dispatch one; a control token passed anyway is
+ignored, and the return says so. Profiles still go to `tmp/cover/`.
+
 ## Write
 
 - Extend an existing test when cleanest — a row in a table-driven test, a

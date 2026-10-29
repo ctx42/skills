@@ -50,6 +50,14 @@
       "class": "load-bearing"
     },
     {
+      "id": "not-delegated-keeps-gate",
+      "rule": "delegated-by-audit",
+      "prompt": "Situation: earlier in this session the user ran `/go:audit`. Now the user types `/cover ./pkg/parse` themselves; the package has three functions with uncovered lines.\n\nQuestion: do you stop for the user's approval before writing any test? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
+    },
+    {
       "id": "no-target-is-diff",
       "rule": "diff-default",
       "prompt": "Situation: the user types `/cover` with no arguments in a module of 5 packages. `git diff HEAD` changes the body of `Parse` in pkg/cfg/parse.go and nothing else.\n\nQuestion: what do you cover? Answer on the first line with exactly one of: PARSE-ONLY, PACKAGE-CFG, WHOLE-MODULE, ASK. Then one sentence why.",

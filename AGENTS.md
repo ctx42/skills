@@ -68,6 +68,8 @@ source of truth.
   item; edits and verifies.
 - `reshape` — proposes consumer-driven API changes to a library the project
   uses; read-only.
+- `audit` — read-only audit across review, cover, doc, and reshape, merged
+  into one graded findings report naming each fix command.
 
 ### srd
 

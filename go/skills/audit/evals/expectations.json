@@ -1,0 +1,43 @@
+{
+  "skill_name": "audit",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "module-audit-merges-every-dimension",
+      "expected_behavior": [
+        "States the target, the three packages, the four dimensions, `mustx` as the only library to reshape, and the worker count before dispatching",
+        "Dispatches no separate `go:style` worker; style offenses arrive through `review`",
+        "Grades the nil dereference in `svc.Run` a Blocker, and the untested truncated-header path and the stale `config.Load` godoc Should-fix",
+        "Every finding cites `file:line` and names a fix command of its owning skill (`/go:review ./svc fix`, `/go:cover parse/…:<line>`, `/go:doc config/…:<line>`)",
+        "Lists the `mustx` proposals in a Library API section apart from the severity tiers, and names `gopkg.in/yaml.v3` as not reshaped",
+        "Gives a Fix order that puts library API changes and `review` correctness before style, `doc`, and `cover`",
+        "Edits no source file and writes no plan file; the `Ran:` line names `cover`'s `go test` runs",
+        "Report is terse: no preamble or narration, and a verdict with per-severity counts that match the findings listed"
+      ],
+      "blind_only": [1, 3, 4, 5, 7, 8]
+    },
+    {
+      "id": 2,
+      "name": "overlapping-findings-merge-once",
+      "expected_behavior": [
+        "Reports the untested empty-input branch in `Decode` once, as `cover`'s finding, not also as `review`'s",
+        "Reports the `ErrShort`/`ErrTruncated` godoc mismatch once, as a Should-fix naming both the `doc` and style dimensions",
+        "Grades `Split`'s uncovered statement lines Nit",
+        "Grades no `cover` or `doc` finding a Blocker",
+        "Says the reshape dimension had nothing to run because no imported module is editable"
+      ],
+      "blind_only": [1, 2, 3, 5]
+    },
+    {
+      "id": 3,
+      "name": "restricted-dimensions-no-editable-library",
+      "expected_behavior": [
+        "Runs no `cover` worker and reports no coverage findings",
+        "Reshapes no library by default, never `internal/util`, and names `cobra`, `yaml.v3`, and `x/sync` as not reshaped",
+        "Grades the `%v` wrap a Blocker under correctness, naming the style rule it also breaks, once",
+        "Says the reshape dimension had nothing to run"
+      ],
+      "blind_only": [1, 3, 4]
+    }
+  ]
+}

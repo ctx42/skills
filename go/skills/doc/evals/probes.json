@@ -34,6 +34,14 @@
       "class": "load-bearing"
     },
     {
+      "id": "not-delegated-keeps-gate",
+      "rule": "delegated-by-audit",
+      "prompt": "Situation: earlier in this session the user ran `/go:audit`. Now the user types `/doc ./pkg/parse` themselves; the checklist fires on four items.\n\nQuestion: do you stop for the user's approval before editing any comment? Answer YES or NO on the first line, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "class": "redundant"
+    },
+    {
       "id": "no-target-is-diff",
       "rule": "diff-default",
       "prompt": "Situation: the user types `/doc` with no arguments. `git diff HEAD` changes the bodies of `Parse` in pkg/cfg/parse.go and `Load` in pkg/store/load.go; the checklist fires on both functions' comments.\n\nQuestion: do you stop for the user's approval before editing any comment? Answer YES or NO on the first line, then one sentence why.",

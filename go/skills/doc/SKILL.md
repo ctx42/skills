@@ -240,6 +240,22 @@ Before writing, present:
 
 Wait for approval, then run the per-item loop and Verify.
 
+## Delegated by go:audit
+
+Delegation is recognized from the invocation, never guessed: `go:audit` says
+it is invoking for gaps only and passes the target. A run not told so is not
+delegated, and runs its target kind as usual.
+
+Resolve the target, run per-item loop steps 1–3 for every item in scope (the
+`only=` filter applies), and return the Plan's three lists, then stop. Every
+line of all three carries the line the item starts on — the first line of its
+doc comment when it has one — as `file:line Symbol — item #: what is wrong`,
+`file:line Symbol — the unconfirmable fact`, and `file:line Symbol — reason`,
+so the audit can cite and deduplicate it.
+
+No approval gate, no edit, no Verify, no fan-out — the audit already split the
+work, and a worker cannot dispatch one.
+
 ## Verify
 
 End of run:

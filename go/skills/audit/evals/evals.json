@@ -1,0 +1,51 @@
+{
+  "skill_name": "audit",
+  "evals": [
+    {
+      "id": 1,
+      "name": "module-audit-merges-every-dimension",
+      "skills": [
+        "audit",
+        "review",
+        "style",
+        "cover",
+        "doc",
+        "reshape"
+      ],
+      "setup": "A module of three small packages (`config`, `parse`, `svc`, ~400 lines of Go in all). `svc.Run` dereferences a nil `*Config` when `Load` fails; `parse.Header` has an error path for a truncated header that no test reaches; `config.Load`'s godoc names a parameter that was renamed; `parse` wraps an error with `%v`. The module requires `github.com/acme/mustx` through `replace github.com/acme/mustx => ../mustx` and calls `mustx.Value` at nine sites, each followed by the same error-drop; it also imports `gopkg.in/yaml.v3` as an ordinary dependency.",
+      "query": "/audit all",
+      "files": [],
+      "requires": "Subagent dispatch (the Agent tool), a Go toolchain with the fixture's modules cached for `cover`'s `go test`, and the go sibling skills loadable by path. A run dispatches four workers that each load a sibling skill, past the native-case turn and time limits. A stand-in that audits in one context does not establish the dispatch, the delegation briefs, or the merge."
+    },
+    {
+      "id": 2,
+      "name": "overlapping-findings-merge-once",
+      "skills": [
+        "audit",
+        "review",
+        "style",
+        "cover",
+        "doc"
+      ],
+      "setup": "One package `./pkg/parse`. `Decode` has a branch for an empty input that no test reaches, which `review` reports as a reachable branch with no test and `cover` measures as uncovered. `Decode`'s godoc says it returns `ErrShort` but the code returns `ErrTruncated`, which both `go:style`'s godoc rules and `doc`'s checklist item 3 flag. `Split` has two uncovered statement lines and no uncovered branch. No editable libraries.",
+      "query": "/audit ./pkg/parse",
+      "files": [],
+      "requires": "Subagent dispatch (the Agent tool), a Go toolchain for `cover`'s `go test`, and the go sibling skills loadable by path. A stand-in that audits in one context does not establish the dispatch or the cross-dimension merge."
+    },
+    {
+      "id": 3,
+      "name": "restricted-dimensions-no-editable-library",
+      "skills": [
+        "audit",
+        "review",
+        "style",
+        "doc",
+        "reshape"
+      ],
+      "setup": "A module of four packages whose every dependency is an ordinary module (no `replace`, no `go.work`): `github.com/spf13/cobra` imported in 11 files, `gopkg.in/yaml.v3` in 4, `golang.org/x/sync` in 1. `internal/util` is imported by every other package. `review` finds one `%v` error wrap that breaks an `errors.Is` check a caller makes.",
+      "query": "/audit all only=review,doc,reshape",
+      "files": [],
+      "requires": "Subagent dispatch (the Agent tool) and the go sibling skills loadable by path. A stand-in that audits in one context does not establish the dispatch or the dimension restriction across workers."
+    }
+  ]
+}

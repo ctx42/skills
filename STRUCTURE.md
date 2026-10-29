@@ -44,7 +44,8 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       ├── review/              # Done-time Go review (delegates style) + rule editing
 │       ├── cover/               # Per-function Go test coverage improvement
 │       ├── doc/                 # Per-item godoc + comment fix and completion
-│       └── reshape/             # Consumer-driven library API-change proposals
+│       ├── reshape/             # Consumer-driven library API-change proposals
+│       └── audit/               # Read-only all-dimension audit, one graded report
 ├── srd/                            # Plugin: SRD lifecycle
 │   ├── .claude-plugin/plugin.json
 │   ├── evals/                      # Native eval cases (<skill>--<scenario>/), srd mocks

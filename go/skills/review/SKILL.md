@@ -258,6 +258,17 @@ stays a lesson. No feedback, or none surviving step 2, adds nothing to the
 report. A `plan_first` stop is not a completed run, and a fan-out worker never
 runs it; the session is not its own.
 
+### Delegated by go:audit
+
+Delegation is recognized from the invocation, never guessed: `go:audit` says
+it is invoking for findings only and passes the target, `depth`, and, when it
+splits the review across workers, the pinned `go:style` rule-id list to use.
+Run Check on that target and return the findings in Output's shape, uncapped —
+the audit applies `max` once, at its merge — plus every command run,
+then stop: no `plan_first` stop (the audit agreed the budget), no `fix`, no
+Session rules, and no fan-out (the audit already split the work, and a worker
+cannot dispatch one).
+
 ## Rule-edit and Learn modes
 
 When either mode triggers, read
