@@ -326,10 +326,12 @@ check_marketplace() {
     # Every shipped skill must sit under exactly one plugin source's skills/
     # dir. Skills under .claude/skills/ are project-local maintainer tools (not
     # shipped via the marketplace), so they are exempt from this rule but still
-    # get every per-skill quality check above.
+    # get every per-skill quality check above. A git-ignored skill is a local,
+    # unshipped plugin and is exempt the same way.
     local sp hits
     for sp in "${SKILL_PATHS[@]}"; do
         case "$sp" in .claude/skills/*) continue ;; esac
+        git -C "$SKILLS_SRC" check-ignore -q "$sp" && continue
         hits=0
         for src in "${sources[@]}"; do
             case "$sp" in "$src"/skills/*) hits=$((hits + 1)) ;; esac
