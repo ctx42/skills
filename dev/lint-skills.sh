@@ -201,6 +201,24 @@ lint_skill() {
     [ -n "$posarg" ] && err "$rel: positional argument placeholder (\$N) in:
        $(echo "$posarg" | tr '\n' ' ')— name the token in prose instead"
 
+    # Argument conventions (CONTRIBUTING.md, Arguments): bare flags, never
+    # --flag; one cap key, max=N; a skill taking modes or controls carries the
+    # unknown-token sentence, so no token is silently dropped or guessed at.
+    local hint
+    hint="$(awk '
+        /^argument-hint:/ { h = 1; sub(/^argument-hint:[[:space:]]*/, ""); printf "%s ", $0; next }
+        h && /^[a-zA-Z_-]+:/ { h = 0 }
+        h { sub(/^[[:space:]]+/, ""); printf "%s ", $0 }
+    ' <<<"$fm")"
+    grep -qE '(^|[^-])--[a-z]' <<<"$hint" \
+        && err "$rel: argument-hint uses a --flag; use a bare word or key=value"
+    grep -qE 'max_[a-z]+=|max <' <<<"$hint" \
+        && err "$rel: argument-hint caps with something other than max=N"
+    if grep -qE '[=|]' <<<"$hint"; then
+        tr -s '[:space:]' ' ' <"$skill_md" | grep -q 'say it was not recognized' \
+            || err "$rel: takes modes or controls but lacks the unknown-token sentence"
+    fi
+
     # Eval scenarios exist in evals/evals.json, pass criteria in
     # evals/expectations.json. They are separate files so a run can be handed a
     # scenario without the rubric it will be graded on; keeping both in one

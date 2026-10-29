@@ -238,6 +238,39 @@ in words ("the first token", "the tokens after it"). Do not write `$N` in a
 skill body, and do not write about `$ARGUMENTS` in prose that must survive
 substitution — say "with no arguments", not "with no `$ARGUMENTS`".
 
+### Arguments
+
+One idea has one spelling in every skill; no old spelling lives on as an
+alias.
+
+- Order: reserved words (modes, flags) and `key=value` controls go anywhere;
+  anything else is the target — so is a unit selector (`func=`, `component=`,
+  `route=`, `flow=`). Positional tails (an SRD path, then a line or an id) keep
+  their documented order.
+- Free text a skill takes (a rule, a brief, a focus, a description) runs to the
+  end of the input; a reserved word inside it is text.
+- Flags are bare words, never `--flag`; values are `key=value`, never
+  `key value`; lists are `a,b` without spaces; finding numbers carry `#`
+  (`#4,6`).
+- Unknown input, verbatim in every skill that takes modes or controls: "A
+  `key=value` that names no control here, or a word left over once the modes,
+  the target, and any text the skill takes are read: say it was not
+  recognized, name the ones that exist, and run with the defaults as if it
+  were absent — unless dropping it would widen what the run changes; then ask.
+  A target that resolves to nothing: say so and ask — never guess what to work
+  on."
+- `argument-hint` marks the default with `*`; the first Usage line is the
+  default.
+
+Shared spellings: `max=N` caps one run, in the skill's own unit; `all` is the
+whole project; no target in a code skill is the working diff; `packages=`
+(go) and `dirs=` (web) restrict scope; `depth=light|standard|full`;
+`plan_first` proposes the budget and stops; `fix` applies findings; `only=`
+filters kinds; `func=`/`component=`/`route=`/`flow=` and `FILE:LINE` name one
+unit; `create`, `audit`, `walk`, `learn` are the mode words for new, check,
+work-through-together, and mine-the-session. Fan-out is decided by size,
+never by a flag. `dev/lint-skills.sh` checks the mechanical parts.
+
 ```markdown
 ---
 name: my-skill-name
