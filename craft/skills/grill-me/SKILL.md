@@ -100,6 +100,10 @@ branch by branch, until you both share one understanding of the subject.
   next turn. Never use
   `AskUserQuestion` multiple-choice unless the user asks for it.
 
+- When the user asks to explain at length first, hold the interview — questions,
+  pushback, a conflict you spot, and the branch count alike — until they say
+  they are done: after each part, ask only whether they have more to add.
+
 - Push back. If a decision seems risky or contradictory, say so. When two
   decisions genuinely conflict, name the conflict, mark the earlier branch
   open again, and hold both until the user picks. Reconciling them yourself

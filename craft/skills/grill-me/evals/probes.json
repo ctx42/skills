@@ -44,6 +44,14 @@
       "pass": "^\\W*1\\b",
       "fail": "^\\W*[2-9]",
       "class": "redundant"
+    },
+    {
+      "id": "hold-for-exposition",
+      "rule": "hold-for-exposition",
+      "prompt": "Situation: `/grill-me`. The user writes: 'Before you start, I want to walk you through the whole design — it'll take a few messages.' Their next message describes the storage layer and leaves two obvious gaps: retention, and who may delete records.\n\nQuestion: what does your reply ask? A) the highest-impact gap, retention; B) only whether they have more to add; C) both gaps in one turn. Answer on the first line with the letter only, then one sentence why.",
+      "pass": "^\\W*B\\b",
+      "fail": "^\\W*[AC]\\b",
+      "class": "load-bearing"
     }
   ]
 }

@@ -91,6 +91,14 @@
       "must": [
         "resolved\\ only\\ when\\ none\\ of\\ its\\ sub\\-parts\\ is\\ still\\ open"
       ]
+    },
+    {
+      "id": "hold-for-exposition",
+      "rule": "When the user asks to explain at length first, hold questions; ask only whether they have more to add until done",
+      "must": [
+        "When the user asks to explain at length first, hold the interview",
+        "ask only\\s+whether they have more to add"
+      ]
     }
   ]
 }
