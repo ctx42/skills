@@ -8,3 +8,6 @@
 /*/evals/results/
 # Session files the eval harness drops beside a history_file on each run.
 /*/evals/*/*-*-*-*-*.jsonl
+
+# Private plugins, kept off GitHub for now.
+/vr/
