@@ -80,6 +80,15 @@
       "must": [
         "never write a rule without confirmation"
       ]
+    },
+    {
+      "id": "session-rules-close",
+      "rule": "Every Check run closes with Learn's scan of the session's feedback, writing only what the user picks; fan-out workers never run it",
+      "must": [
+        "Close every completed Check run with Learn mode's scan",
+        "then\\s+write only\\s+what the user picks",
+        "a fan-out worker never runs it"
+      ]
     }
   ]
 }
