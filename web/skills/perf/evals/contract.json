@@ -136,7 +136,8 @@
         "It beats a `PERF:` comment, which the\\s+same commit removes",
         "It may require a visible change it\\s+names explicitly",
         "no commit touches code outside the focused part"
-      ]
+      ],
+      "file": "references/focus.md"
     },
     {
       "id": "no-visible-change",

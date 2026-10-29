@@ -183,16 +183,10 @@ measuring.
 
 ## 4. Focus
 
-A focus — any text after the keywords — names a part of the UI or shows it in a
-screenshot, with what the user wants; one naming only a part measures that
-part. The description is an instruction. It beats a `PERF:` comment, which the
-same commit removes, its body saying so. It may require a visible change it
-names explicitly (pagination, virtualization, a debounce), which then carries
-picture pairs ([references/focus-pictures.md](references/focus-pictures.md)).
-The instruction is the run's first change; with `loop`, the run then keeps
-improving that part by the normal rules. With a focus, no commit touches code
-outside the focused part and what serves it; a fix that would goes to
-Recommendations.
+A focus — any text after the keywords — is an instruction about one part of
+the UI; with one, read [references/focus.md](references/focus.md) before the
+first change: it beats a `PERF:` comment, may name a visible change, and keeps
+every commit to that part.
 
 ## 5. What a change may be
 
