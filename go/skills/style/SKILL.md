@@ -174,6 +174,8 @@ its full text.
 - Export sentinel errors as `ErrXxx`; unexported as `errXxx`.
 - Keep wrap context short and meaningful; no `failed to ...` prefixes.
 - Match errors with `errors.Is`/`errors.As`, never `==`.
+- SQL query functions wrap driver errors with `xrr.Wrap` and an `aux` metadata
+  field naming `<pkg>.<Func>`, in place of a `%w` wrap, never both.
 
 ### Output & environment
 
