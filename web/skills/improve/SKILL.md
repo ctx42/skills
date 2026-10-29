@@ -158,11 +158,13 @@ a picture pair per place; unrelated changes never share a commit. Per change:
    and list it under Dropped with the failing check; interactive, show the
    failure at the stop.
 5. Reload each view bypassing the cache (`navigate_page` `type: "reload"`,
-   `ignoreCache: true`; a navigation by URL can keep the old file), confirm
-   the page runs the change, re-run the measurement that found the defect —
-   it must pass now — and shoot the same views, widths, state, and
-   `fullPage` setting to the `after` files. A pair whose files are
-   byte-identical (`cmp`) shows nothing: re-shoot both so the defect shows.
+   `ignoreCache: true`; a navigation by URL can keep the old file), confirm the
+   page runs the change, re-run the measurement that found the defect, which
+   must pass now — after a wrapping or width fix, on every element sharing the
+   space it changed, since freeing room for one can push the defect into its
+   neighbour — and shoot the same views, widths, state, and `fullPage` setting
+   to the `after` files. A pair whose files are byte-identical (`cmp`) shows
+   nothing: re-shoot both so the defect shows.
 6. Interactive: stop (section 6). `auto`: commit.
 7. Commit: unstage everything (`git restore --staged .`), stage the change's
    code with a plain `git add -- <paths>`, never `-f`, then its pictures by
