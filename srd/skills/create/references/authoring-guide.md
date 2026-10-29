@@ -1,9 +1,9 @@
 # SRD Authoring Guide — House Extensions and Defect Classes
 
-Practical guidance that extends the SRD standard, read live through the
-server ([project-config.md](project-config.md)). The standard's rules are
-normative; the items here are this project's additions plus worked examples
-that help the agent draft well and recognize defects during the self-check.
+Practical guidance that extends the SRD standard, read live through the server
+(`project-config.md`). The standard's rules are normative; the items here are
+this project's additions plus worked examples that help the agent draft well and
+recognize defects during the self-check.
 
 **These examples never go into an SRD.** Every `Bad`/`Good` pair below is
 authoring guidance only. A real SRD carries the rule and nothing more (REQ-7).
@@ -94,15 +94,15 @@ rules the standard states count as the project's casing rules.
   another, nor rests on another SRD's content ("changes covered by INT-491").
   Name the change itself; a related initiative's link goes in Related Materials.
   A violation is a finding.
-- In Scope MAY be deferred: In Scope items derive from the requirements
-  (SCO-2), so an SRD MAY leave `### In Scope` holding a single `--- TODO ---`
-  marker line while the requirements are still in flux. While the marker stands,
-  the In-Scope-coverage checks (SCO-2, Quality Bar 2) are suspended — In Scope
-  is knowingly pending, not defective. Replace the marker with real `SC-n` items
+- In Scope MAY be deferred: In Scope items derive from the requirements (SCO-2),
+  so an SRD MAY leave `### In Scope` holding a single `--- TODO ---` marker line
+  while the requirements are still in flux. While the marker stands, the
+  In-Scope-coverage checks (SCO-2, Quality Bar 2) are suspended — In Scope is
+  knowingly pending, not defective. Replace the marker with real `SC-n` items
   derived from the settled requirements (see the derivation procedure in
-  [srd-procedures.md](srd-procedures.md)) before the SRD is `ACCEPTED`. An
-  unresolved marker is a house blocker for acceptance: always flag it, never
-  keep it silently, and never remove it without deriving the items.
+  `srd-procedures.md`) before the SRD is `ACCEPTED`. An unresolved marker is a
+  house blocker for acceptance: always flag it, never keep it silently, and
+  never remove it without deriving the items.
 - `## TODO` scaffold: an SRD MAY carry a `## TODO` section as its last
   section (after Requirements; STR-14) — a numbered list of open authoring
   issues the human must return to. These are working notes, not requirements:
@@ -111,8 +111,8 @@ rules the standard states count as the project's casing rules.
   non-empty `## TODO` is a house blocker for acceptance and is always flagged.
 - Errata class: a defect whose fix changes only surface form, never what a
   requirement *says*. Classified against the gate, allowlist, and exclusions in
-  [errata.md](errata.md); `review` groups errata for bulk fixing, `edit autofix`
-  applies them.
+  `errata.md`; `review` groups errata for bulk fixing, `edit autofix` applies
+  them.
 
 ## Consistency pass
 
@@ -159,15 +159,21 @@ Good — definition only; the behavior moves to a requirement:
 <!-- expand: (follows GLO-4) -->
 
 Bad:
-> The Acoustic Channel carries the signal. Each
-> [Acoustic Channel](glossary/main_glossary.md#acoustic-channel) is sampled
-> independently, and an [Acoustic Channel](glossary/main_glossary.md#acoustic-channel)
-> with no sensor is skipped.
+
+```markdown
+The Acoustic Channel carries the signal. Each
+[Acoustic Channel](glossary/main_glossary.md#acoustic-channel) is sampled
+independently, and an [Acoustic Channel](glossary/main_glossary.md#acoustic-channel)
+with no sensor is skipped.
+```
 
 Good — linked on first use, bare after that:
-> The [Acoustic Channel](glossary/main_glossary.md#acoustic-channel) carries the
-> signal. Each Acoustic Channel is sampled independently, and an Acoustic
-> Channel with no sensor is skipped.
+
+```markdown
+The [Acoustic Channel](glossary/main_glossary.md#acoustic-channel) carries the
+signal. Each Acoustic Channel is sampled independently, and an Acoustic
+Channel with no sensor is skipped.
+```
 
 GLO-4 is a SHOULD, and the link is owed once per document, not once per section
 — a term linked again three pages later has not broken the rule so much as made

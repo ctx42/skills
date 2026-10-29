@@ -67,19 +67,19 @@ Nothing outside this list is errata.
   `# System requirements → # Requirements`. Errata only when no heading already
   carries the canonical name and the variant is the only candidate for it;
   heading level stays as found.
-- Boilerplate the standard fixes verbatim: the STR-8 keyword notice. This is
-  the one entry that cannot meet the 40-character rule above — the notice is a
+- Boilerplate the standard fixes verbatim: the STR-8 keyword notice. This is the
+  one entry that cannot meet the 40-character rule above — the notice is a
   multi-line block with two URLs — so it is quoted as the whole block and
   applied by replacing it entire: both `old` and `new` quoted in full, every
   line verbatim with its leading `>` and the callout header line included, or
   applying it unreviewed breaks the callout. That works because the standard
-  fixes its text: there is exactly one correct form to replace it with, which
-  is what makes the substitution safe to apply unreviewed. No other long fix
+  fixes its text: there is exactly one correct form to replace it with, which is
+  what makes the substitution safe to apply unreviewed. No other long fix
   inherits this exemption. The one correct form is the notice in
-  [../assets/srd-template.md](../assets/srd-template.md) (`[!INFO]` callout, "in
-  this document"); the one in the SRD standard describes the standard itself
-  and is never the replacement. Its anchor is the notice block itself, which
-  appears once; cite `Metadata` as the location.
+  `srd-template.md` (`[!INFO]` callout, "in this document"); the one in the SRD
+  standard describes the standard itself and is never the replacement. Its
+  anchor is the notice block itself, which appears once; cite `Metadata` as the
+  location.
 - A missing STR-8 notice: an insertion the class admits, since its text
   and place are both fixed. `old` is `(missing)`, `new` the template notice
   quoted in full; it goes directly below the metadata block, after a TOC macro

@@ -1,5 +1,5 @@
 ---
-tags: [case:kb--restructure-repairs-every-reference, skill:kb, sec:kb:boundaries, sec:kb:the-kb-folder, sec:kb:invocation, sec:kb:page-anatomy, sec:kb:open-questions, sec:kb:restructure, sec:kb:output, ref:kb/restructure, ref:kb/retrieval-authoring, ref:create/project-config, ref:create/doc-corpus]
+tags: [case:kb--restructure-repairs-every-reference, skill:kb, sec:kb:boundaries, sec:kb:the-kb-folder, sec:kb:invocation, ref:kb/page-anatomy, ref:kb/restructure, sec:kb:output, ref:kb/retrieval-authoring, ref:create/project-config, ref:create/doc-corpus]
 runs: 1
 max_turns: 50
 timeout_seconds: 300

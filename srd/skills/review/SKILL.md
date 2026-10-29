@@ -56,6 +56,9 @@ and tell the user.
 - [../create/references/errata.md](../create/references/errata.md) (on-demand:
   classifying a finding as errata) — the gate, allowlist, and exclusions of the
   bulk-fix errata class.
+- [../create/assets/srd-template.md](../create/assets/srd-template.md)
+  (on-demand: an errata finding on the STR-8 keyword notice, missing or wrong)
+  — the one correct notice text `errata.md` names as its fix.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
   (on-demand: the facts-vs-corpus pass, which only `review` and `walk` run) —
   how to reach the documentation corpus, how its sources rank, and where an
@@ -93,89 +96,14 @@ continuation line, whatever fixes it offers: it is the user's notice of the
 source, so `fix-all` asks no second time about it.
 `srd:kb` is not invoked: a review confirms no platform facts with the user.
 
-## Severity
+## Severity and category
 
-Tag each finding:
-
-- `blocker` — breaks Quality-Bar acceptance: non-atomic (REQ-1), unverifiable
-  (REQ-5/6), uncovered In Scope item (SCO-2; suspended while the In Scope
-  `--- TODO ---` marker stands), requirement contradicting Out of Scope
-  (SCO-3), undefined term (GLO-3/STR-10), rule hidden in a glossary entry or
-  metadata (GLO-1/2), duplicate or out-of-order id (REQ-3/4), missing forward
-  link (STR-2/3/5/7), a missing or altered RFC 2119 / RFC 8174 keyword notice
-  (STR-8), invalid or over-claimed Status (STA-*), an unresolved
-  draft scaffold — the In Scope `--- TODO ---` marker or a non-empty `## TODO`
-  section (house additions).
-- `major` — real defect, does not block: style (LANG-1/2/5/6/7), terminology
-  drift, overlapping or duplicate requirements, a normative keyword in the
-  wrong case or the wrong section (LANG-3/4), and any `reference` finding —
-  a wrong link, ticket id, or claim about the live system — since a reader
-  acting on it is misled without the SRD being unacceptable.
-- `minor` — cosmetic: British spelling, spacing, punctuation.
-
-The rows are the common cases — STR-9/11-13, STA-4-8 and REQ-2/7/8 have
-none. Place an unlisted rule by what breaking it costs: the Quality Bar
-(blocker), a reader who must still act (major), the eye alone (minor). Say
-which tier and why, so the next run lands in the same place. Never a fourth.
-
-## Category
-
-Also tag each finding with one category — two only when it genuinely carries
-two — inside the same bracket as the severity, comma-separated, severity first
-and the primary category next: `[major, logical, redundancy]`. Lowercase,
-mandatory on every finding in every section, never a third category. One
-bracket only: adjacent `][` is CommonMark reference-link syntax and renders as
-a broken link in Obsidian.
-
-Categories in precedence order — when a finding fits more than one, the higher
-entry leads and the lower becomes the second tag:
-
-- `structure` — a required part of the document is absent or malformed, or its
-  lifecycle state is invalid (STR-*, STA-*).
-- `logical` — two rules conflict, a case no rule covers, precedence between
-  rules unstated.
-- `coverage` — an In Scope item no requirement covers, a requirement
-  contradicting Out of Scope, or a rule stated where rules do not live: a
-  glossary entry, the metadata, a Note, the Introduction (SCO-2, SCO-3,
-  GLO-1/2).
-- `reference` — a link, ticket id, or claim about the live system that is
-  wrong or stale, or a claim a KB section contradicts. The standard forbids
-  no such error, so this finding cites evidence where others cite a rule: the
-  corpus doc id and heading that contradict it, or the dead link.
-- `redundancy` — two rules state the same thing, or one subsumes the other.
-- `verifiability` — a vague quality, an unmeasurable criterion, an open-ended
-  list (REQ-5, REQ-6, LANG-7). Judge REQ-5 against every method it names, not
-  test alone: a rule no finite test proves ("MUST NOT limit X") may still pass
-  by inspection or analysis.
-- `atomicity` — one item carrying more than one rule, an example or note
-  inside a rule, a rule stating appearance instead of behavior (REQ-1, REQ-7,
-  LANG-5, SCO-1).
-- `terminology` — one concept under many names, an undefined term, casing that
-  drifts from the glossary (GLO-3), a local Glossary entry for a term the
-  Company Glossary defines (link its first use instead, GLO-4): check every
-  local entry against that term set. GLO-4's first use counts from the
-  Introduction on: a use in the metadata block, Objective included, owes no
-  link. Casing drift is a finding only where the project's casing rules fix
-  running-text casing: read them before writing one; when they leave it free,
-  a casing-only difference is no finding. A rule *hidden* in a glossary entry
-  is `coverage`, not this: the defect is a requirement in the wrong place, not
-  a word in the wrong form. Two names that may differ in meaning are
-  `logical`, asking which is meant, never drift asking to "use one name".
-- `linguistic` — grammar, spelling, a missing word, the wrong subject or
-  voice, a misplaced or lowercase normative keyword (LANG-1, LANG-2, LANG-3,
-  LANG-4, LANG-6).
-- `format` — markup, bold identifiers, id numbering, punctuation, spacing
-  (REQ-2, REQ-3, REQ-4, REQ-8).
-
-`reference` covers a wrong pointer or fact, `terminology` a diverging word
-choice: an SRD that renames an existing platform concept is `terminology`.
-Category is orthogonal to `## Errata`: an errata finding is `format` or
-`linguistic` — `structure` for the STR-8 notice, `terminology` for a GLO-4 link
-or casing fix, `reference` for a dead anchor — yet not every such finding is
-errata. A normative keyword in the Introduction is `coverage` when its sentence
-states a rule, `linguistic` (LANG-3) when it does not. A duplicate id's fix in
-an `ACCEPTED` SRD gives the later item a fresh id and renumbers nothing
-(STA-7).
+Tag every new finding with one severity (`blocker`, `major`, `minor`; never a
+fourth) and one category — two only when it genuinely carries two — in one
+bracket, severity first: `[major, logical, redundancy]`. The tiers, the
+categories in precedence order, and how to place each defect are in
+[references/finding-tags.md](references/finding-tags.md) (on-demand: before
+the first finding `review` or `walk` writes).
 
 ## Modes
 
@@ -209,6 +137,7 @@ resolved, 2 withdrawn; 1 blocker still open." — plus the per-severity count of
 open findings and whether a blocker stands between the SRD and the Quality Bar.
 The findings live in the file the user is pointed to: the reply never lists
 them — one per line, by group, or in a table — nor quotes their trigger text.
+The one exception is `check`'s status table, which its procedure requires.
 `errata` is a file-writing run and owes it too: its own "which numbers moved"
 line says what the re-sort did, not what the file now holds.
 
@@ -276,33 +205,11 @@ After the last section, close as in review step 5.
 
 ## check
 
-Re-verify only — hunt no new defects. Keep every number; bump `updated:` only
-if something else in the file changed (review-file.md).
-
-Trailing finding numbers scope the pass to those findings; the rest stay
-untouched. Write them `#n,n` — `check #4,6` names #4 and #6; any other form: say
-so and ask. Report any listed number that is absent or already
-resolved/withdrawn, and check the rest. Omitted, check every open finding.
-
-1. Judge each finding in scope against the current text:
-   - fixed → tick `[x]` and move to `## Resolved`.
-   - partial → stays `[ ]` in its section with `*(Partial — …)*` appended;
-     never ticks.
-   - not addressed → stays `[ ]`, untouched — once the KB pages whose
-     `srd_ref` names the SRD are read: an author answer banked there that
-     invalidates the finding withdraws it (step 2), citing that page.
-2. Withdrawal is check-only: a finding that proves invalid (mistaken, the
-   author justified the text, or it cites a rule absent from the standard such
-   as a defunct `MD-*`) moves to `## Withdrawn` with a reason, stamped with
-   this run's `updated:` time (review-file.md). Never carry a
-   non-enforceable finding open. No other mode withdraws — which is why this
-   mode is where another skill's invalidity report lands: `srd:system-check`
-   cannot write the review file, so it names the numbers its corpus lookups
-   disproved and the user runs `check #n…` over them. Re-verify such a number
-   like any other and withdraw it on the evidence, never on the report alone.
-3. Close with both, in this order: the status table — number, current state,
-   assessment — then the task-oriented line (Modes) beneath it. The table says
-   what this pass did to each finding; the line says where the SRD now stands.
+Re-verify only — hunt no new defects. Withdrawal is check-only — no other mode
+withdraws. The procedure — scoping by `#n,n`, judging each finding,
+withdrawing, and the status-table close — is in
+[references/check-mode.md](references/check-mode.md); read it when this mode
+runs.
 
 ## errata
 
@@ -313,31 +220,9 @@ mode runs.
 
 ## feedback
 
-Emit plain text for an email or ticket — no file write:
-
-- Title: `<Document Title> — Review Feedback`.
-- Group by section name as a plain heading (no markdown symbols). `## Errata`
-  is one such group — list it first, as `Errata`, when it holds open findings.
-  An errata finding keeps its substitution in prose, not markdown, and a
-  casing fix its excluded terms in full, however long the bullet wraps:
-  `#4 GR-2: "behaviour" should read "behavior"`.
-- One bullet per open finding, blank-line separated. Keep the finding number
-  and the SRD's own requirement id (`#7 GR-3a:`), then a one-line
-  problem-and-fix. A finding against text with no id of its own — a metadata
-  field, an Introduction sentence — is anchored the way the review file anchors
-  it: the section name, and a short quote when the section holds more than one
-  candidate. `#2 Metadata (Owners): only one owner is listed; add a secondary
-  owner.` `#5 Introduction ("the system handles all remaining cases"): states a
-  rule outside Requirements; move it or drop it.` A project instruction
-  limiting author-facing lists to what is wrong and where overrides this:
-  drop the fix from every ordinary bullet; an errata bullet keeps its
-  substitution and excluded terms, which state what is wrong. Drop the
-  checkbox, the severity tag, the category tag, and the rule-id citation;
-  keep a source line, as the bullet's last sentence. No bold. One
-  bullet is one paragraph — it wraps like any prose, and "no multi-line
-  bullets" means no sub-bullets and no blank line inside a bullet, not a
-  bullet that fits on one physical line.
-- Open findings only — omit Resolved and Withdrawn.
+Emit plain text for an email or ticket — no file write: open findings only, in
+the format of [references/feedback-mode.md](references/feedback-mode.md); read
+it when this mode runs.
 
 ## Self-learning
 

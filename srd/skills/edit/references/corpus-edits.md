@@ -5,7 +5,7 @@ attests. Read before the first proposal that changes a requirement's meaning
 or removes a requirement; a run that does neither needs none of it.
 
 The corpus itself — backends, trust, and where a lookup's outcome goes — is in
-[../../create/references/doc-corpus.md](../../create/references/doc-corpus.md).
+`doc-corpus.md`.
 
 ## The lookup lands before the proposal
 
@@ -14,13 +14,12 @@ dictates mid-walk included — `search` the corpus and grep the knowledge base,
 `<kb>/_inbox.md` included, for the fact it changes **before the proposal is
 put** (loop step 1); a KB section stating the old fact is named in the proposal,
 never found after the `Y`. State what the lookup found in the proposal, each
-result it rests on as a source line ([Citing a
-source](../../create/references/doc-corpus.md#citing-a-source)) — a lookup that
-only confirms the text included; one that found nothing says so and gives none,
-nor does its log entry: attestation works on the first reading, so the fact and
-where it came from have to be in front of the user when they press the key.
-Step 3 re-validates only what the edit touched and never returns to the corpus
-for a claim the proposal already carried.
+result it rests on as a source line ("Citing a source" in `doc-corpus.md`) — a
+lookup that only confirms the text included; one that found nothing says so and
+gives none, nor does its log entry: attestation works on the first reading, so
+the fact and where it came from have to be in front of the user when they press
+the key. Step 3 re-validates only what the edit touched and never returns to the
+corpus for a claim the proposal already carried.
 
 ## Set versus reported
 
@@ -35,14 +34,12 @@ overturn it. Never a second question.
 
 A proposal resting on a platform fact states it, so `Y`/`YN`/`E` attests the
 fact and `S` withholds it — an attested fact goes to `srd:kb` at once, which
-writes it to the inbox; `srd:kb` may only sharpen a fact the edit already
-put in play. A deferred platform question goes to `srd:report-doc-gap` as a
-gap with `answer: deferred`, not to `edit`'s own `## Open questions`, which
-tracks questions about this SRD and empties with the session. A user who does
-not know a fact the proposal rests on answers it as `S`: nothing applies,
-nothing goes to `srd:kb`, and
-[Who would know](../../create/references/doc-corpus.md#who-would-know) sets
-the gap's `answer`.
+writes it to the inbox; `srd:kb` may only sharpen a fact the edit already put in
+play. A deferred platform question goes to `srd:report-doc-gap` as a gap with
+`answer: deferred`, not to `edit`'s own `## Open questions`, which tracks
+questions about this SRD and empties with the session. A user who does not know
+a fact the proposal rests on answers it as `S`: nothing applies, nothing goes to
+`srd:kb`, and "Who would know" in `doc-corpus.md` sets the gap's `answer`.
 
 ## A KB section contradicts the change
 
@@ -70,3 +67,11 @@ attestation line names. Never edit the KB section: the gap carries it to
 `srd:backlog`. A section whose fact a surviving requirement of this SRD still
 asserts gets no gap: the cut did not make it wrong. The manifest lists each
 gap id beside its cut.
+
+## Session end
+
+Session end step 2 invokes `srd:report-doc-gap` to offer the draft gaps this
+session captured, only when there are any. The start check covers what a
+*prior* session left; this covers what *this* session produced. `srd:kb`
+already wrote each attested fact, and every cut's `wrong` gaps were filed, at
+its confirmation.

@@ -1,5 +1,5 @@
 ---
-tags: [case:backlog--clusters-gaps-and-drafts-outside-the-corpus, skill:backlog, sec:backlog:usage, sec:backlog:boundaries, sec:backlog:sources-of-truth, sec:backlog:backends, sec:backlog:workflow, ref:create/project-config, ref:create/doc-corpus, ref:kb/retrieval-authoring]
+tags: [case:backlog--clusters-gaps-and-drafts-outside-the-corpus, skill:backlog, sec:backlog:usage, sec:backlog:boundaries, sec:backlog:sources-of-truth, sec:backlog:backends, sec:backlog:workflow, ref:create/project-config, ref:create/doc-corpus, ref:kb/retrieval-authoring, ref:backlog/gaps]
 runs: 1
 max_turns: 80
 timeout_seconds: 300

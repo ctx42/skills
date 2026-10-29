@@ -88,28 +88,12 @@ missing. And **search returns sections, not pages**: a `##` section arrives at
 an agent alone, stripped of the rest of its file. Anything a reader must know
 to trust a fact has to sit inside the same section.
 
-### Authority
-
-The shared corpus reference settles conflicting sources by the `rank` on each
-result, never by folder. Three consequences for KB writes:
-
-- A conflict is a finding, never a silent tie-break. When an attested fact
-  contradicts a platform document (not a KB section — see below), either the
-  document is stale or the KB is wrong. Surface it; hand a stale document to
-  `srd:report-doc-gap`. Before surfacing a UI observation as a conflict,
-  check a second record with different data, or ask the user to: a field shown
-  or hidden can depend on the record (an address present or absent). Once the
-  conflict stands, a fact the user confirmed against the document is written
-  without a further question, its attestation line opening
-  ``> Contradicts `<identity>`.`` (the document's `id`) in place of
-  `> Not in the platform docs.` — whether the conflict was known at
-  confirmation or turned up after it, at write time: a fact written while a
-  document says otherwise always carries the line.
-- A KB page links to a glossary term; it never redefines one.
-- A KB section and an SRD never contradict, and no `rank` settles one that
-  does: an SRD has none. A confirmed fact rewrites the section it contradicts
-  at once (step C.1): the KB changes on confirmation, not when other SRDs
-  agree.
+Conflicting sources settle by `rank`, never by folder, and a conflict is a
+finding, never a silent tie-break; a confirmed fact rewrites a KB section it
+contradicts at once. A KB page links to a glossary term; it never redefines
+one. [references/conflicts.md](references/conflicts.md) (on-demand: a fact
+contradicts a platform document, a KB section, or an SRD; a caller hands over
+a stale citation) — the `> Contradicts` line, SRD conflicts, citation repair.
 
 ## Invocation
 
@@ -124,9 +108,17 @@ invents a provenance nobody can check.
 
 - `capture` (default) — confirm and write what the session surfaced. The flow
   below.
-- `file` — move inbox facts into topic pages. See [File](#file).
-- `restructure` — reorganize the KB and repair every reference. See
-  [Restructure](#restructure).
+- `file` — move inbox facts into topic pages; offer it whenever the inbox
+  holds a fact a topic page would take. Append by default, never split a page
+  for size, and give no single fact a page of its own:
+  [references/restructure.md](references/restructure.md) `## File`
+  (on-demand: `file` mode).
+- `restructure` — reorganize the KB. Splitting a page, moving a section
+  between pages, or renaming a subject is a restructure: confirm it first,
+  then repair every reference it breaks — links, heading slugs, and gap-store
+  `doc_id` and `filled_by` values. The procedure is in
+  [references/restructure.md](references/restructure.md), read in this mode
+  and when a write would restructure rather than append.
 
 A `key=value` that names no control here, or a word left over once the modes,
 the target, and any text the skill takes are read: say it was not recognized,
@@ -181,16 +173,14 @@ interview already opened, never open a new one**. A fact that would round out
 the KB nicely, on a subject this SRD never went near, is not a reason to ask.
 
 The user may wave off any such question with a word. Nothing is lost: hand it
-to `srd:report-doc-gap` as a gap with `answer: deferred` (see
-[Open questions](#open-questions)) and move on immediately. Never re-ask in the
-same session.
+to `srd:report-doc-gap` as a gap with `answer: deferred` and move on
+immediately. Never re-ask in the same session. Filing it: `## Open questions`
+in [references/page-anatomy.md](references/page-anatomy.md).
 
 ### C. Write to the inbox
 
-A caller may also hand over a stale citation: a KB page citing an identity no
-`list_docs` `id` or `path` matches. Repair it in place (re-find the document by
-`search` and cite its `id`, or drop the citation and mark the fact as attested
-only) and report the page.
+A caller may also hand over a stale citation; repair it per
+[references/conflicts.md](references/conflicts.md) and report the page.
 
 For each confirmed fact, in order:
 
@@ -213,155 +203,19 @@ For each confirmed fact, in order:
      `srd_ref`, in the inbox also update its `## Provenance` row.
    - Otherwise it is new.
 2. Append it to `<kb>/_inbox.md` as its own `##` section: a subject-titled
-   heading, the attestation line (see [Page anatomy](#page-anatomy)), the
-   fact — and its row in the inbox's `## Provenance` table. The inbox's front
-   matter carries `title` and `last_verified`
-   (each write bumps it), never `srd_ref`: each section's attestation line
-   names its source. Create the file that way when missing.
+   heading, the attestation line, the fact — and its row in the inbox's
+   `## Provenance` table. The inbox's front matter carries `title` and
+   `last_verified` (each write bumps it), never `srd_ref`: each section's
+   attestation line names its source. Create the file that way when missing.
    Never to a topic page or a category invented at this moment: filing is
-   [File](#file)'s job. The inbox is indexed and retrievable, so nothing waits
+   `file` mode's job. The inbox is indexed and retrievable, so nothing waits
    on a filing decision.
 3. Write per [references/retrieval-authoring.md](references/retrieval-authoring.md)
-   and the body rules in [Page anatomy](#page-anatomy).
-
-## File
-
-`/kb file` moves inbox facts to where they rank. A fact in the inbox inherits
-the inbox's title field, which says nothing about its subject, so it ranks far
-below the same fact on a subject-titled page (a fact absent from the top 10 for
-its own query reaches rank 1 after promotion). Offer it whenever the inbox
-holds a fact a topic page would take.
-
-1. For each inbox section, find the topic page whose subject contains it; when
-   one does, propose moving the section there.
-2. When **two or more** inbox facts share a subject no page covers, propose
-   creating the top-level page and moving them in. A single fact never earns a
-   page — it stays in the inbox, better found under a subject heading than
-   alone on a page of its own. That rule governs filing only, not
-   [Restructure](#restructure), which moves sections that already have a home
-   because the home turned out wrong; there, one section may be exactly what
-   moves.
-3. Show the proposed moves and get confirmation before touching anything.
-4. Move each section with everything bound to it and repair every reference
-   the move breaks, as [references/restructure.md](references/restructure.md)
-   steps 2–3 say: a moved section's identity changes (a KB page's identity is
-   its path), and gap `doc_id` values and `filled_by` refs may point at it.
-5. Report what moved where, counted.
-
-Append by default. Two half-pages on one subject are strictly worse than one
-fat page: scattered names split matches, so both rank below where one would.
-When in doubt, append.
-
-Never split a page to fix its size. A KB page's identity is its path, so a
-split breaks every citation to it. A page that has grown large is fine; the next
-related subject gets a sibling page instead.
-
-## Page anatomy
-
-One page per subject, many `##` sections per page. Only `#` and `##` start a new
-chunk, so `##` is the unit that reaches an agent alone.
-
-Front matter:
-
-```yaml
----
-title: Acoustic Leak Detection
-aliases: [AUTOCO, automated cross-correlation]
-attested: 2026-09-11
-srd_ref: int384-hydrophone, autoco
-last_verified: 2026-09-11
----
-```
-
-`srd_ref` accumulates: a page attested across several SRDs lists their SRD
-references (folder names, per the gate reference) comma-separated,
-earliest first, and a write appends rather than replaces.
-`attested` stays the first date; `last_verified` moves.
-
-`title` is always explicit — without it the indexer falls back to the file name.
-`aliases` carry abbreviations and synonyms; they index at the title's boost on
-every section of the page, so a search for the short form finds it. The
-remaining keys are for humans and staleness sweeps; the indexer ignores them.
-
-Body rules:
-
-- The body states attested facts only. Anything the agent concluded but the
-  user did not confirm never enters it — that is an open question, not a fact.
-  This rule alone keeps a large KB trustworthy. After each write, re-read the
-  page and delete every sentence no attested statement says, a consequence or
-  generalization of the fact included; a sentence meant to be cut is cut only
-  once the file no longer holds it.
-- Mark tribal sections in place. A section carrying something the platform
-  docs do not state opens with one line under its heading, so the mark travels
-  inside the chunk:
-
-  ```
-  > Not in the platform docs. Attested int384-hydrophone interview
-  > 2026-09-11 · `gap-0019`.
-  ```
-
-  The source (the SRD reference) and the date are required; a document the
-  line cites is an inline-code identity (`` `1774485611#tag-names` ``), never
-  a path the document only has today; the `· gap-NNNN` is there only when
-  `srd:report-doc-gap` actually filed one and returned an id. Most captures
-  have none — a fact can be missing from the docs without anyone reporting
-  that as a gap — so omit the segment rather than inventing a number or
-  holding the write until a gap exists. When a gap for the fact is filed
-  later in the same session, add its id to the line then. Where there is no
-  SRD in play (a bare capture, a `/backlog` sitting), name the session
-  instead: `Attested session 2026-09-11`.
-
-  A page-level provenance table cannot do this job: it is its own chunk, and an
-  agent reading a fact never receives it.
-
-- `## Provenance` closes the page as a human-facing roll-up — which areas
-  rest on documents, which on a conversation. An index, not the mechanism.
-  Every write adds or updates its row there, whether the write creates the
-  page or appends a section to one: a roll-up nobody maintains indexes a page
-  that has moved on. A citation repair updates the row of the fact it
-  repairs; it adds none. A page with no `## Provenance` yet gets one on the
-  first write that touches it. The inbox keeps one too, and a section filed
-  out of it carries its row along. When it holds more than one table, address
-  the target by its header row, never every `|` line after the heading.
-- A page states no open question: what its subject leaves unanswered is a gap.
-  See [Open questions](#open-questions) below.
-
-## Open questions
-
-A question SRD work leaves open is a gap in the server's store, never a KB
-write. Its `answer` says which kind: `deferred` — someone knows, the session
-did not take it; closable in seconds. `unknown` — nobody has pinned it down; it
-needs deciding or finding out.
-
-A guess of your own that the user never confirmed is `deferred`, not `unknown`:
-the user was there and could have settled it, and calling it an unknown puts
-the agent's inference on the same footing as a fact nobody in the organization
-has. State it as the question it answers ("does evidence expire, and after how
-long?"), never as the inference wearing a question mark.
-
-A user who does not know the answer:
-[Who would know](../create/references/doc-corpus.md#who-would-know).
-
-File it through `srd:report-doc-gap` with `answer` set; it dedups with
-`list_gaps` `query`, and a question already on file gets a hit
-(`update_gap` `add_hit: true`), never a second record. Repeats are a priority
-signal.
-
-A KB page, the inbox included, keeps at most a point-of-use warning: one line
-after the attestation line of the section the question concerns,
-`> Open: gap-0042.`, naming the filed gap's id — never the question's wording,
-which lives on the gap alone. Add it only once the gap is filed (a draft's id
-can vanish); delete it when the section comes to state the answer.
-
-`srd:backlog` works these gaps and hands each answer here like any caller.
-
-## Restructure
-
-Splitting a page, moving a section between pages, or renaming a subject is a
-restructure: confirm it first, then repair every reference it breaks — links,
-heading slugs, and gap-store `doc_id` and `filled_by` values. The
-procedure is in [references/restructure.md](references/restructure.md), read
-when a write would restructure rather than append.
+   and [references/page-anatomy.md](references/page-anatomy.md) (on-demand:
+   before every write, and when a question stays open) — front matter, the
+   attestation line every section opens with, the `## Provenance` row, the
+   `> Open:` warning, filing an open question; the body holds only what the
+   user attested.
 
 ## Output
 

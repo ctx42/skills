@@ -1,5 +1,5 @@
 ---
-tags: [case:create--undocumented-platform-fact, skill:create, skill:report-doc-gap, skill:kb, sec:create:usage, sec:create:sources-of-truth, sec:create:documentation-corpus, sec:create:workflow, ref:create/project-config, ref:create/doc-corpus, ref:create/srd-procedures, ref:create/authoring-guide, sec:report-doc-gap:invocation, sec:report-doc-gap:workflow, sec:report-doc-gap:the-gap-tools, sec:report-doc-gap:the-gap-record, sec:kb:invocation, sec:kb:workflow, sec:kb:the-kb-folder, sec:kb:page-anatomy, sec:kb:boundaries, ref:kb/retrieval-authoring]
+tags: [case:create--undocumented-platform-fact, skill:create, skill:report-doc-gap, skill:kb, sec:create:usage, sec:create:sources-of-truth, sec:create:documentation-corpus, sec:create:workflow, ref:create/project-config, ref:create/doc-corpus, ref:create/srd-procedures, ref:create/authoring-guide, sec:report-doc-gap:invocation, sec:report-doc-gap:workflow, sec:report-doc-gap:the-gap-tools, sec:report-doc-gap:the-gap-record, sec:kb:invocation, sec:kb:workflow, sec:kb:the-kb-folder, ref:kb/page-anatomy, sec:kb:boundaries, ref:kb/retrieval-authoring]
 runs: 1
 max_turns: 80
 timeout_seconds: 300

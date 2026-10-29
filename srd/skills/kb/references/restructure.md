@@ -1,8 +1,42 @@
-# Restructuring the knowledge base
+# Filing and restructuring the knowledge base
 
-Splitting a page, moving a section, renaming a subject — and repairing every
-reference the move breaks. Read when a write would restructure rather than
-append; an ordinary append never needs it.
+Moving inbox facts onto topic pages; splitting a page, moving a section,
+renaming a subject — and repairing every reference the move breaks. Read in
+`file` mode, in `restructure` mode, and when a write would restructure rather
+than append; an ordinary append never needs it.
+
+## File
+
+`/kb file` moves inbox facts to where they rank. A fact in the inbox inherits
+the inbox's title field, which says nothing about its subject, so it ranks far
+below the same fact on a subject-titled page (a fact absent from the top 10 for
+its own query reaches rank 1 after promotion).
+
+1. For each inbox section, find the topic page whose subject contains it; when
+   one does, propose moving the section there.
+2. When **two or more** inbox facts share a subject no page covers, propose
+   creating the top-level page and moving them in. A single fact never earns a
+   page — it stays in the inbox, better found under a subject heading than
+   alone on a page of its own. That rule governs filing only, not
+   `## Restructure` below, which moves sections that already have a home
+   because the home turned out wrong; there, one section may be exactly what
+   moves.
+3. Show the proposed moves and get confirmation before touching anything.
+4. Move each section with everything bound to it and repair every reference
+   the move breaks, as `## Restructure` steps 2–3 below say: a moved section's
+   identity changes (a KB page's identity is its path), and gap `doc_id` values
+   and `filled_by` refs may point at it.
+5. Report what moved where, counted.
+
+Append by default. Two half-pages on one subject are strictly worse than one
+fat page: scattered names split matches, so both rank below where one would.
+When in doubt, append.
+
+Never split a page to fix its size. A KB page's identity is its path, so a
+split breaks every citation to it. A page that has grown large is fine; the next
+related subject gets a sibling page instead.
+
+## Restructure
 
 `restructure` reorganizes the KB. Because a KB page's identity **is** its path
 (it carries no `id`), every move breaks references — so this is a deliberate

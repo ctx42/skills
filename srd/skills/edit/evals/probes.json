@@ -12,6 +12,10 @@
     {
       "id": "y-stays-on-entry",
       "rule": "y-does-not-advance",
+      "context": [
+        "SKILL.md",
+        "references/proposals.md"
+      ],
       "prompt": "Situation: in the interactive walk you proposed a change on GR-3, the user answered Y, and you applied it. GR-3 has no further issues. GR-4 does have an issue you already know about.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: PROPOSE-GR-4-NOW, STOP-AND-WAIT. Then one sentence why.",
       "pass": "^\\W*STOP-AND-WAIT",
       "fail": "^\\W*PROPOSE",
@@ -76,6 +80,10 @@
     {
       "id": "path-only-loads-and-waits",
       "rule": "load-default",
+      "context": [
+        "SKILL.md",
+        "references/modes.md"
+      ],
       "prompt": "Situation: the user runs `/edit specs/gw.md` with nothing after the path. specs/gw.md is IN PROGRESS; reading it you noticed GR-4 says the gateway answers \"fast\", an untestable adjective. No review file exists.\n\nQuestion: what does your reply contain? Answer on the first line with exactly one of: ONE-LINE-STATUS-THEN-WAIT, ISSUE-SUMMARY, PROPOSAL-FOR-GR-4, ASK-WHICH-MODE. Then one sentence why.",
       "pass": "^\\W*ONE-LINE-STATUS",
       "fail": "^\\W*(ISSUE|PROPOSAL|ASK)",

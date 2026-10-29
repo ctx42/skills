@@ -360,7 +360,7 @@ s11 = srd(groups=[("Gateway Rules", [
     ("Account Lockout", LCK)])
 # The proposal is a pause, which scripted runs answer silently: the gate ends
 # there and grades it; the full case grades what follows the user's YN.
-CG_TAGS = DLOG + ["ref:edit/modes", "sec:edit:documentation-corpus", "ref:edit/corpus-edits",
+CG_TAGS = DLOG + ["ref:edit/modes", "ref:edit/corpus-edits",
                   "skill:report-doc-gap", "skill:kb"]
 CG_QUERY = ("/srd:edit specs/login.md GR-2 the gateway retries a failed token check three "
             "times, that is what it does today; make GR-2 say so")

@@ -1,5 +1,5 @@
 ---
-tags: [case:backlog--reclassifies-rather-than-skipping, skill:backlog, sec:backlog:usage, sec:backlog:boundaries, sec:backlog:sources-of-truth, sec:backlog:backends, sec:backlog:workflow, ref:create/project-config]
+tags: [case:backlog--reclassifies-rather-than-skipping, skill:backlog, sec:backlog:usage, sec:backlog:boundaries, sec:backlog:sources-of-truth, sec:backlog:backends, sec:backlog:workflow, ref:create/project-config, ref:backlog/ask]
 runs: 1
 max_turns: 50
 timeout_seconds: 300

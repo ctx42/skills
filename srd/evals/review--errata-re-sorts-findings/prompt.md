@@ -1,5 +1,5 @@
 ---
-tags: [case:review--errata-re-sorts-findings, skill:review, sec:review:usage, sec:review:boundaries, sec:review:sources-of-truth, sec:review:modes, ref:create/project-config, sec:review:category, sec:review:review-file-format, ref:review/review-file, sec:review:errata, ref:review/errata-mode, ref:create/errata]
+tags: [case:review--errata-re-sorts-findings, skill:review, sec:review:usage, sec:review:boundaries, sec:review:sources-of-truth, sec:review:modes, ref:create/project-config, sec:review:severity-and-category, ref:review/finding-tags, sec:review:review-file-format, ref:review/review-file, sec:review:errata, ref:review/errata-mode, ref:create/errata]
 runs: 1
 max_turns: 40
 timeout_seconds: 300

@@ -67,8 +67,11 @@ nothing they cannot open.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
   (on-demand: the first corpus lookup) — the server's tools and how to use
   them. `srd:create` owns it.
-- [references/ask.md](references/ask.md) (on-demand: `ask`) — one message per
-  person, and when `asked` is set.
+- [references/ask.md](references/ask.md) (on-demand: `deferred`, `ask`,
+  replies pasted) — asking the user, one message per person, when `asked` is
+  set, mapping replies.
+- [references/gaps.md](references/gaps.md) (on-demand: `gaps`, or filling any
+  gap) — cluster, check, grill, write the fix, fill, wontfix, reopen.
 
 ## Backends
 
@@ -191,24 +194,10 @@ say the backlog is clear and stop.
 
 ### 4. deferred
 
-Take the deferred gaps one at a time, oldest `created` first. Ask the question
-its `detail` words. Ask one closed question per turn, never an either/or a bare
-"yes" cannot answer; ask the second half next turn.
-
-- Answered: a numeric rule (threshold, tolerance, its base) first gets asked
-  whether code implements it, and that code read — a "yes" to a leading
-  question can confirm a wrong base. Hand the fact to `srd:kb` with the
-  gap's id, then `update_gap` `answer: ""` — asked and answered, it owes only a
-  corpus section now and joins `gaps`. `srd:kb` writes to its inbox, never a
-  fill target: offer `/kb file`, and fill as step 6 of `gaps` says once a topic
-  page states it.
-- "Still not now": leave it; do not re-ask it this sitting.
-- The user does not know:
-  [Who would know](../create/references/doc-corpus.md#who-would-know); names
-  merge into `ask` as `srd:report-doc-gap` merges them (a new name clears
-  `asked`), with `update_gap`.
-- No answer exists: it is an unknown, not a skip — `update_gap` with
-  `answer: unknown`, and say so.
+Ask each deferred gap's question, one closed question per turn; an answer goes
+to `srd:kb` and clears `answer`; no answer exists makes it an unknown. Read
+"deferred" in [references/ask.md](references/ask.md) *(on-demand: working
+`deferred`)* and follow it.
 
 ### 5. unknowns
 
@@ -222,7 +211,8 @@ For each unknown gap:
 - Answered since (a decision was taken, or someone found out): handled as an
   answered deferred gap — the fact goes to `srd:kb`, then `answer: ""`.
 - The user confirms a corpus hit states the answer: no `srd:kb` hand-off —
-  `fill_gap` on that section per step 6 of `gaps`; its `answer` needs no reset.
+  `fill_gap` on that section per step 6 of
+  [references/gaps.md](references/gaps.md); its `answer` needs no reset.
 - Still open: confirm and move on. Bump nothing — `hits` tracks encounters
   during SRD work, not reviews.
 - Moot (the feature changed, the subject went away): on the user's word,
@@ -233,94 +223,25 @@ closed with a guess is a fact the corpus will serve as truth.
 
 ### 6. gaps
 
-Get each gap's fact into a corpus section, then record the section on the gap.
-
-1. List open gaps with empty `answer` (`list_gaps` with `status: open`). A
-   partly filled one owes only what its `detail` says remains.
-2. Cluster the gaps one section would fill — same `doc_id`, same
-   `heading_path`, or one topic phrased differently. Rank by cluster size and
-   `hits`: repeated reports and encounters mean higher priority. The user picks
-   one; work one at a time.
-3. Check the corpus: `search` each gap's `search_terms`, `get_doc` any cited
-   `doc_id`. Genuinely absent content needs new prose — added to the existing
-   page when it is partly present there; present-but-unranked content needs a
-   structural edit to the existing page, never a duplicate (the reference's
-   "Absent vs unfindable"). A section already stating the whole fact fills the
-   cluster now (step 6), with no draft.
-4. Extract what the section must state. A record says what is missing, not what
-   is true — but some were grilled at depth when filed and already carry
-   knowledge in `detail` and `target_claim`. Spot them by a populated
-   `target_claim`, read those first as a starting point, not gospel.
-   Run `craft:grill-me` on the cluster to fill what the record leaves open,
-   never re-asking what it answers. Do not draft from guesses: every sentence
-   of the draft is something the user confirmed or the corpus states — a
-   gap's own claim is the reporter's word until the user confirms it, and a
-   draft states no consequence or summary neither source gave. A sentence
-   the corpus states is shown to the user with its source line
-   ([Citing a source](../create/references/doc-corpus.md#citing-a-source))
-   before the draft or the `srd:kb` hand-off; a section that fills a gap, in
-   the question that asks the user to confirm the fill.
-5. Write the fix where the user picks:
-   - KB: hand the confirmed fact to `srd:kb`, which writes it to its inbox; it
-     fills only once `srd:kb` files it into a topic page.
-   - Doc page: draft one page (or the edit to an existing one) against
-     [../kb/references/retrieval-authoring.md](../kb/references/retrieval-authoring.md),
-     to a neutral drafts location the user names, outside every corpus source
-     — the `kb` folder included: a draft inside a source is clobbered by the
-     next sync and pollutes the index. The sources are the top-level folders
-     the `list_docs` paths start with; unsure whether a path is outside them,
-     ask. A human publishes it; it fills only once pulled into the corpus.
-6. Fill once a corpus section states the fact and `get_doc` shows it:
-   `fill_gap` for every gap in the cluster, `filled_by` each stating section
-   as `<identity>#<slug>` (`kb/users-and-access.md#customer-and-project-timezones`,
-   `1882030917#cold-storage`) — the identity is the result's `id` from
-   `search` or `list_docs`, copied as is, never its `path`; the slug is the
-   section's heading slug. `complete: true` when the sections state the
-   whole fact; when they state part, `complete: false` with `remaining` saying
-   what is still missing, and the gap stays open. A URL never fills a gap. When
-   the page is published but not yet pulled, or nobody can publish in this
-   sitting, fill nothing: say where the draft is and that the gaps stay `open`
-   until the pull brings the page into the corpus, plus a server restart
-   unless the server watches its sources. Never fill against `_inbox.md`: its
-   heading slugs break on the next `/kb file`. Never fill against an unconfirmed
-   fact.
-7. Wontfix only on the user's decision that the corpus will not carry the fact
-   (out of product scope, superseded): `wontfix_gap` for every gap in the
-   cluster, `reason` that decision. Never to clear the list.
-8. Reopen a `filled` gap whose sections no longer state its fact — the user
-   says so, or a lookup shows it: `reopen_gap` with `reason` what changed. It
-   rejoins the open list with its `filled_by` kept, to fill again with a
-   corrected list.
-
-A platform fact the grill surfaces also goes to `srd:kb`, unless this sitting
-publishes a page that states it: the KB holds only what the docs do not. Once
-`srd:kb` files it into a topic page, that section fills the gap.
+Get each gap's fact into a corpus section, then record the section on the gap;
+fill only from a section `get_doc` shows. Read
+[references/gaps.md](references/gaps.md) *(on-demand: working `gaps`, or
+filling any gap)* and follow it.
 
 ### 7. ask
 
 Turns the deferred gaps that name someone into one message per person for the
-user to send. No sweep, no re-check, no counts line. Read
+user to send. No sweep, no re-check, no counts line. Read "ask" in
 [references/ask.md](references/ask.md) *(on-demand: `ask` only)* and follow it.
 
 ### 8. Answers back
 
-Replies the user pastes, in any sitting:
+Replies the user pastes, in any sitting: map each to its gap on the user's yes,
+one outcome per gap. Read "Answers back" in
+[references/ask.md](references/ask.md) *(on-demand: replies pasted)* and follow
+it.
 
-1. Map each reply to its gap: by the mapping line when this sitting printed
-   it, else `list_gaps` `status: open`, `ask` the sender's name, by content.
-   Show the mapping (`Anna M 1 → gap-0042`) and act on the user's yes. A
-   reply matching no gap is asked about, never guessed.
-2. One outcome per gap; `ask` and `asked` stay as history:
-   - Answered: as an answered deferred gap (step 4) — the fact goes to
-     `srd:kb`, or through `srd:doc-edit` when the user wants it on a doc page;
-     fill as step 6 of `gaps` says once a section states it.
-   - Partly answered: the answered part goes the same way; `update_gap`
-     `detail` to what is still owed, `answer` stays `deferred`. Once a section
-     states the part: `fill_gap` `complete: false`, `remaining` what is still
-     owed.
-   - "Don't know, ask Y": `update_gap` `ask` the existing names plus Y,
-     `asked: ""`.
-   - Nobody knows: `update_gap` `answer: unknown`.
+### Report
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. Counts and what closed are enough — never

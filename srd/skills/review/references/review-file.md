@@ -80,29 +80,25 @@ line of the STR-8 notice inside its erratum, may overflow. A
 In order:
 
 1. `## Errata` first — every open finding that passes the gate and allowlist of
-   the errata class in
-   [../../create/references/errata.md](../../create/references/errata.md),
-   grouped here instead of under its document section so the author can
-   bulk-apply the block via `edit autofix`. The
+   the errata class in `errata.md`, grouped here instead of under its document
+   section so the author can bulk-apply the block via `edit autofix`. The
    literal heading `## Errata` is the anchor `edit autofix` locates; never
    rename it. Errata findings keep their global number, category, and citation,
    and carry the severity the rule gives them — usually `[minor]`, but the
    allowlist admits the STR-8 keyword notice, whose severity is blocker, and a
-   dead anchor, which stays `major` like every `reference` finding. The
-   class decides whether a finding can be bulk-applied; it does not decide how
-   bad the finding is, and a blocker filed as `[minor]` because of where it sits
-   would drop out of the count that gates the Quality Bar. Each states its fix
-   as the exact substitution the class requires — literal `` `old` → `new` ``,
-   or for whitespace and glyph classes the class plus a neighboring word
-   (`autofix` derives the fix), or for a missing STR-8 notice
-   `` `(missing)` → `` the full notice, or for a requirement-group divider
-   (`[minor, format]`, never `structure`: markup, even under an `STR` rule)
-   the heading plus
-   `` `(missing)` → `---` `` or `` `---` → `(none)` `` — and a
-   substitution repeated across sites lists every site so `autofix` can verify
-   the count; a casing fix also names, in the same finding, the terms it
-   excludes. Two different substitutions are two findings. Omit the section
-   when empty.
+   dead anchor, which stays `major` like every `reference` finding. The class
+   decides whether a finding can be bulk-applied; it does not decide how bad the
+   finding is, and a blocker filed as `[minor]` because of where it sits would
+   drop out of the count that gates the Quality Bar. Each states its fix as the
+   exact substitution the class requires — literal `` `old` → `new` ``, or for
+   whitespace and glyph classes the class plus a neighboring word (`autofix`
+   derives the fix), or for a missing STR-8 notice `` `(missing)` → `` the full
+   notice, or for a requirement-group divider (`[minor, format]`, never
+   `structure`: markup, even under an `STR` rule) the heading plus
+   `` `(missing)` → `---` `` or `` `---` → `(none)` `` — and a substitution
+   repeated across sites lists every site so `autofix` can verify the count; a
+   casing fix also names, in the same finding, the terms it excludes. Two
+   different substitutions are two findings. Omit the section when empty.
 2. Open findings, grouped by document section: Metadata, Introduction,
    Glossary, Scope, Requirements. Omit a section with no open findings. An
    errata finding lives in `## Errata`, never also under its document section.

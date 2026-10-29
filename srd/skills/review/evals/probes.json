@@ -12,6 +12,10 @@
     {
       "id": "check-hunts-nothing-new",
       "rule": "check-no-new-defects",
+      "context": [
+        "SKILL.md",
+        "references/check-mode.md"
+      ],
       "prompt": "Situation: you are running `/review specs/gw.md check`. While re-verifying finding #2 you notice a new defect: a term used in GW-7 is undefined. It is not in the review file.\n\nQuestion: do you add it to the review file? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
@@ -64,6 +68,10 @@
     {
       "id": "casing-only-no-finding",
       "rule": "casing-free-no-finding",
+      "context": [
+        "SKILL.md",
+        "references/finding-tags.md"
+      ],
       "prompt": "Situation: the user asks for a strict terminology pass over specs/gw.md. The SRD's Glossary defines \"Tag Node\" (Title Case heading); GR-7 says \"the tag node MUST be unique\" in lowercase, meaning the defined term. Nothing else about GR-7 is wrong.\n\nQuestion: is GR-7's lowercase \"tag node\" a terminology finding? Answer on the first line with exactly one of: FINDING, NO-FINDING, DEPENDS. Then one sentence on what it depends on, or why.",
       "pass": "^\\W*(DEPENDS|NO-FINDING)\\b",
       "fail": "^\\W*FINDING",
@@ -72,6 +80,10 @@
     {
       "id": "req5-not-test-alone",
       "rule": "req5-all-methods",
+      "context": [
+        "SKILL.md",
+        "references/finding-tags.md"
+      ],
       "prompt": "Situation: reviewing specs/gw.md. GR-9 says \"The gateway MUST NOT limit the number of tag subscriptions per client.\" Drafting its acceptance test, you find no finite test can prove the absence of every limit: any test only shows that some number of subscriptions succeeded. Nothing else about GR-9 is wrong.\n\nQuestion: do you record GR-9 as an unverifiable (REQ-5) `verifiability` blocker? Answer on the first line with exactly one of: FINDING, NO-FINDING. Then one sentence on why.",
       "pass": "^\\W*NO-FINDING\\b",
       "fail": "^\\W*FINDING\\b",
@@ -82,7 +94,8 @@
       "rule": "withdrawal-stamped",
       "context": [
         "SKILL.md",
-        "references/review-file.md"
+        "references/review-file.md",
+        "references/check-mode.md"
       ],
       "prompt": "Situation: `/review specs/gw.md check`. This run will set the review file's `updated:` to 2026-10-01 16:20. Finding #4 \"[major, redundancy] GR-5 overlaps GR-6\" proves mistaken: the author showed the triggers differ.\n\nQuestion: write the `## Withdrawn` line for #4 exactly as it goes in the file, on one line.",
       "pass": "\\(withdrawn 2026-10-01 16:20:",

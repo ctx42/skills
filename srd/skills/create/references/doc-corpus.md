@@ -3,7 +3,7 @@
 How the SRD skills ground claims about the existing platform in its live
 documentation, and where what a lookup teaches goes. Shared by `create`,
 `review`, `edit`, `doc-edit`, and `system-check`: each skill says *when* it
-consults the corpus, this file says *how*. The gate in [project-config.md](project-config.md)
+consults the corpus, this file says *how*. The gate in `project-config.md`
 guarantees the server answers before any skill starts. An assertion about
 existing system behavior that no lookup confirms stays unconfirmed and is
 flagged as such; silently accepting a platform claim is the one outcome this
@@ -49,10 +49,9 @@ path.
   is, never its `path`, a checkout path, or a URL. A section is
   `<identity>#<slug>`: the heading slug, the GitHub-style slug of the heading
   text (a repeated heading takes `-1`, `-2`, … in order).
-- Document references: gap `doc_id` and `filled_by`, a KB inline-code
-  citation (`` `1774485611#tag-names` ``), a `> Contradicts` line. An SRD
-  reference is its folder name instead
-  ([project-config.md](project-config.md#4-use-what-it-names)).
+- Document references: gap `doc_id` and `filled_by`, a KB inline-code citation
+  (`` `1774485611#tag-names` ``), a `> Contradicts` line. An SRD reference is
+  its folder name instead (`project-config.md`, "4. Use what it names").
 - A Markdown link stays a relative path built from `path`: it is navigation,
   not a reference.
 - A citation is stale only when it matches no `list_docs` `id` or `path`; one
@@ -170,7 +169,7 @@ knowledge-base phase, no separate questions, no "bank this?" prompt.
 Confirmation of a platform fact rides on the calling skill's own confirmation
 step, and `srd:kb` may ask only to deepen a subject that step already opened,
 never to open a new one. An SRD reference is the SRD's folder name
-([project-config.md](project-config.md#4-use-what-it-names)); never invent one.
+(`project-config.md`, "4. Use what it names"); never invent one.
 
 ### Who would know
 

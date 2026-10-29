@@ -12,6 +12,10 @@
     {
       "id": "inbox-is-not-a-fill-target",
       "rule": "fill-rules",
+      "context": [
+        "SKILL.md",
+        "references/gaps.md"
+      ],
       "prompt": "Situation: working `gaps`, the user decides the fact belongs in the KB. srd:kb has just written the confirmed fact, and it sits only in kb/_inbox.md, not on any topic page.\n\nQuestion: what do you do with the gap? Answer on the first line with exactly one of: FILL-FROM-INBOX, LEAVE-OPEN-UNTIL-TOPIC-PAGE, WONTFIX. Then one sentence why.",
       "pass": "^\\W*LEAVE-OPEN-UNTIL-TOPIC-PAGE",
       "fail": "^\\W*(FILL|WONTFIX)",
@@ -20,6 +24,10 @@
     {
       "id": "draft-outside-every-source",
       "rule": "draft-outside-sources",
+      "context": [
+        "SKILL.md",
+        "references/gaps.md"
+      ],
       "prompt": "Situation: working `gaps`, the user says: \"just put the draft at kb/drafts/retry-policy.md, that is handy\".\n\nQuestion: do you write the draft there? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
@@ -28,6 +36,10 @@
     {
       "id": "published-url-is-not-a-fill",
       "rule": "fill-from-corpus-only",
+      "context": [
+        "SKILL.md",
+        "references/gaps.md"
+      ],
       "prompt": "Situation: working `gaps`, you drafted the page for a two-gap cluster outside the corpus. The user says: \"Published it: https://docs.example.com/operations/sound-file-retention — the docs pull runs tonight.\"\n\nQuestion: what do you do with the two gaps now? Answer on the first line with exactly one of: FILL-WITH-URL, LEAVE-OPEN-UNTIL-PULLED, WONTFIX. Then one sentence why.",
       "pass": "^\\W*LEAVE-OPEN-UNTIL-PULLED",
       "fail": "^\\W*(FILL|WONTFIX)",
@@ -36,6 +48,10 @@
     {
       "id": "no-answer-reclassifies",
       "rule": "deferred-no-answer-is-unknown",
+      "context": [
+        "SKILL.md",
+        "references/ask.md"
+      ],
       "prompt": "Situation: working `deferred`, you ask the question of open gap `gap-0042` (`answer: deferred`): \"what battery-low threshold does an ALTECNO logger use by default?\" The user says: \"Actually nobody knows that yet — no one has measured it.\"\n\nQuestion: what do you do with gap-0042? Answer on the first line with exactly one of: SKIP-IT, SET-ANSWER-UNKNOWN, HAND-TO-KB, FILE-NEW-GAP, WONTFIX. Then one sentence naming the call you make, if any.",
       "pass": "^\\W*SET-ANSWER-UNKNOWN.*update_gap",
       "fail": "^\\W*(SKIP|HAND|FILE|WONTFIX)",
@@ -44,6 +60,11 @@
     {
       "id": "answered-deferred-waits-for-a-topic-page",
       "rule": "deferred-answered",
+      "context": [
+        "SKILL.md",
+        "references/ask.md",
+        "references/gaps.md"
+      ],
       "prompt": "Situation: working `deferred`, the user answers open gap `gap-0042` (`answer: deferred`): \"3.4 V\". You hand the fact to srd:kb, which writes it to kb/_inbox.md; no topic page states it yet.\n\nQuestion: what happens to gap-0042 now? Answer on the first line with exactly one of: FILL-FROM-INBOX, CLEAR-ANSWER-KEEP-OPEN, KEEP-DEFERRED, WONTFIX. Then one sentence why.",
       "pass": "^\\W*CLEAR-ANSWER-KEEP-OPEN",
       "fail": "^\\W*(FILL|KEEP-DEFERRED|WONTFIX)",
@@ -52,6 +73,10 @@
     {
       "id": "filled-by-uses-id",
       "rule": "filled-by-identity",
+      "context": [
+        "SKILL.md",
+        "references/gaps.md"
+      ],
       "prompt": "Situation: working a gaps cluster, the page now states the fact and get_doc returned {\"id\":\"1882030917\",\"path\":\"docs/operations/storage-housekeeping.md\",\"rank\":4,\"title\":\"Storage housekeeping\"}; the section stating it is the heading \"Cold storage\" (anchor cold-storage). The user confirmed the fact and wants the gap filled; people browse the corpus by file path.\n\nQuestion: what exact filled_by entry do you pass to fill_gap? Answer on the first line with only that entry, then one sentence why.",
       "pass": "^\\W*1882030917#cold-storage\\b",
       "fail": "^\\W*docs/",
@@ -108,6 +133,10 @@
     {
       "id": "redirect-adds-name-clears-asked",
       "rule": "answers-back",
+      "context": [
+        "SKILL.md",
+        "references/ask.md"
+      ],
       "prompt": "Situation: in a backlog sitting the user pastes Anna M's reply to the question of open gap gap-0061 (`answer: deferred`, `ask: [\"Anna M\"]`, `asked: \"2026-09-28\"`): \"No clue, ask Lena W, she built it.\" The user confirmed the mapping.\n\nQuestion: which `ask` and `asked` do you pass to update_gap? Answer on the first line exactly as `ask=<JSON list> asked=<value>`, then one sentence why.",
       "pass": "^\\W*(ask\\W*)?\\[\\s*\"Anna M\"\\s*,\\s*\"Lena W\"\\s*\\]\\W+asked\\W*(\"\"|empty|clear)",
       "fail": "^\\W*ask\\W*\\[\\s*\"Lena W\"\\s*\\]|asked\\W*\"?2026",
@@ -126,6 +155,7 @@
       "rule": "deferred-who-would-know",
       "context": [
         "SKILL.md",
+        "references/ask.md",
         "../create/references/doc-corpus.md"
       ],
       "prompt": "Situation: working `deferred`, the user did not know the answer to open gap gap-0042 (`answer: deferred`, no `ask`): \"what battery-low threshold does an ALTECNO logger use by default?\" You asked \"Who would know?\". The user says: \"Hmm, maybe someone in hardware? Not sure.\"\n\nQuestion: what do you do next? Answer on the first line with exactly one of: ASK-WHO-IN-HARDWARE, SET-ANSWER-UNKNOWN, ADD-HARDWARE-TO-ASK. Then one sentence why.",

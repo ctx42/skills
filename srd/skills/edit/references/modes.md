@@ -1,9 +1,35 @@
 # Mode procedures
 
-The procedures for `walk`, `feedback`, `polish`, `targeted`, and the start
-points (an interactive start line or id, a feedback `#n`). Read when the run is
-one of those; `load` is in `SKILL.md`, and `autofix` is in
-[autofix.md](autofix.md).
+The procedures for `load`, `walk`, `feedback`, `polish`, `targeted`, and the
+start points (an interactive start line or id, a feedback `#n`). Read when the
+run is one of those; `autofix` is in `autofix.md`.
+
+## Contents
+
+- load (default)
+- interactive (`walk`)
+- interactive start point (path + line or id)
+- feedback
+- feedback start point (path + `#n`)
+- polish
+- targeted
+
+## load (default)
+
+Open the SRD for the user's own edit prompts; find and propose nothing.
+
+1. Read the whole SRD, `<srd>.decisions.md` and `<srd>.review.md`, each when
+   present — nothing else: no draft check, standard, glossary, reference file
+   beyond this one, or corpus lookup.
+2. Reply in one line — the SRD, its `Status` (approved or in-progress), the
+   open review findings by number, the open comment blocks by entry id — then
+   wait. No issue summary, finding, or proposal.
+3. Run each later prompt as the mode it would select after the path (an entry
+   and a change → targeted, a list of findings → feedback, `walk` →
+   interactive), reusing these reads; session-start steps not yet run land
+   before its first proposal.
+4. Session end runs once, when the user says they are done — never after each
+   prompt, targeted included.
 
 ## interactive (`walk`)
 
@@ -40,7 +66,10 @@ outcome.
    order — blocker → major → minor — using the review's tags and numbers; judge
    untagged pasted feedback from the rule.
 3. Run the loop per finding; reference findings by number in the closing
-   manifest.
+   manifest. The unit is the review's finding, not the entry, so `Y` proposes
+   the next finding on that entry and stops when the review has no more —
+   never an issue the review did not raise. Applying a review means applying
+   that review.
 4. Close by pointing the user to `review <srd> check` to reclassify what
    landed.
 
@@ -55,6 +84,9 @@ instead of the passes and severity order; after each finding, default to the
 next by number or jump to any number the user names. The explicit `#n` sets the
 order for the rest of the run: walk ascending from `n` to the end, then come
 back for the lowest still open; a jump re-anchors the walk the same way.
+A finding outside the mandate (`SKILL.md`, "Boundaries") is reported as the
+author's to fix, not looped, even when the run entered at it: a feedback run
+starting at a metadata `#2` says so and advances to `#3`.
 
 ## polish
 

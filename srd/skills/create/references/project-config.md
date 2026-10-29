@@ -51,7 +51,7 @@ then re-run. Never fall back to a REST call, a local checkout, or offline work.
 - A document's **identity** is its front-matter `id`, else its path from the
   project root; every result carries both as `id` and `path`. A KB page has no
   `id`, so `<kb>/_inbox.md` is both its file and its identity. Store and pass
-  identities per [doc-corpus.md](doc-corpus.md#identity).
+  identities per `doc-corpus.md` ("Identity").
 - Read only the front-matter keys `id`, `title`, `url`, and `aliases` of a
   corpus document. Never add, remove, or change a front-matter key or marker
   no srd skill defines, in any file — a key another tool owns stays as found.
@@ -61,7 +61,7 @@ then re-run. Never fall back to a REST call, a local checkout, or offline work.
   stored or remembered copy. A not-found identity stops the run like a gate
   failure: `srd-standard` names no document (`<value>`).
 - The standard's "Company Glossary" is the `glossary` location; its terms come
-  from the server ([srd-procedures.md](srd-procedures.md)).
+  from the server (`srd-procedures.md`).
 - An SRD reference (gap `srd_ref`, KB `srd_ref`, attestation lines) is the
   SRD's folder name under `initiatives` (`int384-hydrophone`); an SRD outside
   `initiatives` uses its path from the project root. Never a document

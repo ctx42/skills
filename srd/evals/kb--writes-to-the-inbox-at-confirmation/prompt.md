@@ -1,5 +1,5 @@
 ---
-tags: [case:kb--writes-to-the-inbox-at-confirmation, skill:kb, skill:create, sec:kb:boundaries, sec:kb:the-kb-folder, sec:kb:invocation, sec:kb:workflow, sec:kb:page-anatomy, sec:kb:output, ref:kb/retrieval-authoring, sec:create:documentation-corpus, sec:create:workflow, ref:create/project-config, ref:create/doc-corpus, ref:create/srd-procedures, ref:create/authoring-guide]
+tags: [case:kb--writes-to-the-inbox-at-confirmation, skill:kb, skill:create, sec:kb:boundaries, sec:kb:the-kb-folder, sec:kb:invocation, sec:kb:workflow, ref:kb/page-anatomy, sec:kb:output, ref:kb/retrieval-authoring, sec:create:documentation-corpus, sec:create:workflow, ref:create/project-config, ref:create/doc-corpus, ref:create/srd-procedures, ref:create/authoring-guide]
 runs: 1
 max_turns: 80
 timeout_seconds: 300

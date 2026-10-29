@@ -1,10 +1,9 @@
 # SRD Shared Procedures
 
 Operating procedures shared by the SRD skills. These are not rules (the SRD
-standard, read through the server per [project-config.md](project-config.md))
-and not drafting aids ([authoring-guide.md](authoring-guide.md)) — they are
-steps a skill runs. `create` and `edit` cite this file instead of restating the
-steps.
+standard, read through the server per `project-config.md`) and not drafting aids
+(`authoring-guide.md`) — they are steps a skill runs. `create` and `edit` cite
+this file instead of restating the steps.
 
 ## Resolve the Company Glossary
 

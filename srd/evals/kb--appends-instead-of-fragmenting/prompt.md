@@ -1,5 +1,5 @@
 ---
-tags: [case:kb--appends-instead-of-fragmenting, skill:kb, sec:kb:boundaries, sec:kb:the-kb-folder, sec:kb:invocation, sec:kb:file, sec:kb:page-anatomy, sec:kb:output, ref:kb/restructure, ref:kb/retrieval-authoring, ref:create/project-config, ref:create/doc-corpus]
+tags: [case:kb--appends-instead-of-fragmenting, skill:kb, sec:kb:boundaries, sec:kb:the-kb-folder, sec:kb:invocation, ref:kb/restructure, ref:kb/page-anatomy, sec:kb:output, ref:kb/retrieval-authoring, ref:create/project-config, ref:create/doc-corpus]
 runs: 1
 max_turns: 40
 timeout_seconds: 300

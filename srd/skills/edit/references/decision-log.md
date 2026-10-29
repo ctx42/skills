@@ -9,12 +9,13 @@ Read before writing the first entry of a session; no mode needs it earlier.
 formed the same way.
 
 `autofix` is a bulk path through the same gate, not an exception to it: every
-substitution it applies is an applied edit and owes its entry, and
-[`autofix.md`](autofix.md) is the procedure for finding and
-applying them, not the whole of what the mode owes.
+substitution it applies is an applied edit and owes its entry, and `autofix.md`
+is the procedure for finding and applying them, not the whole of what the mode
+owes.
 
 Record every applied edit in `<srd>.decisions.md` beside the source — the
 author-facing account of what changed and why, which a diff cannot carry.
+`edit` owns the file; no other skill writes it.
 
 - Write after each applied edit, never batched to session end: a session that
   clears mid-flow must lose nothing.
@@ -57,6 +58,18 @@ author-facing account of what changed and why, which a diff cannot carry.
 - Write for the SRD's author, not a reviewer: name the surface in the SRD's own
   words; cite a rule id only where the user did.
 - Create the file on the first write, title included.
+
+## The manifest line
+
+The closing manifest's decision-log line, with the block's real heading:
+
+```
+Decision log: <srd>.decisions.md — /edit <srd> summary turns its newest block, ## <date> <HH:MM>, into a chat message
+```
+
+Omitted when nothing was applied, since the file does not exist.
+
+## Example
 
 Example of the file after one session — the date, heading, ids, and prose are
 illustrative, not boilerplate to copy:

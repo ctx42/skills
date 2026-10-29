@@ -63,6 +63,7 @@
     },
     {
       "id": "draft-not-guessed",
+      "file": "references/gaps.md",
       "rule": "Every sentence of a draft is user-confirmed or corpus-stated",
       "must": [
         "Do\\ not\\ draft\\ from\\ guesses",
@@ -71,6 +72,7 @@
     },
     {
       "id": "draft-outside-sources",
+      "file": "references/gaps.md",
       "rule": "Drafts go outside every corpus source, kb included",
       "must": [
         "outside\\ every\\ corpus\\ source",
@@ -79,6 +81,7 @@
     },
     {
       "id": "fill-from-corpus-only",
+      "file": "references/gaps.md",
       "rule": "Fill only from a corpus section get_doc shows; a URL or unpulled draft fills nothing",
       "must": [
         "Fill\\ once\\ a\\ corpus\\ section\\ states\\ the\\ fact\\ and\\ `get_doc`\\ shows\\ it",
@@ -88,6 +91,7 @@
     },
     {
       "id": "fill-rules",
+      "file": "references/gaps.md",
       "rule": "Never fill against _inbox.md or an unconfirmed fact; part of the fact is a partial fill",
       "must": [
         "Never\\ fill\\ against\\ `_inbox\\.md`",
@@ -97,6 +101,7 @@
     },
     {
       "id": "wontfix-user-decides",
+      "file": "references/gaps.md",
       "rule": "Wontfix only on the user's decision, never to clear the list",
       "must": [
         "Wontfix\\ only\\ on\\ the\\ user's\\ decision",
@@ -105,6 +110,7 @@
     },
     {
       "id": "deferred-no-answer-is-unknown",
+      "file": "references/ask.md",
       "rule": "A deferred gap with no answer becomes an unknown via update_gap, not a skip",
       "must": [
         "No\\ answer\\ exists:\\ it\\ is\\ an\\ unknown,\\ not\\ a\\ skip\\ —\\ `update_gap`\\ with\\ `answer:\\ unknown`"
@@ -112,6 +118,7 @@
     },
     {
       "id": "deferred-answered",
+      "file": "references/ask.md",
       "rule": "An answered deferred gap goes to srd:kb, loses its answer mark, and fills only once a topic page states it",
       "must": [
         "hand\\ the\\ fact\\ to\\ `srd:kb`\\ with\\ the\\ gap's\\ id,\\ then\\ `update_gap`\\ `answer:\\ \"\"`",
@@ -135,6 +142,7 @@
     },
     {
       "id": "filled-by-identity",
+      "file": "references/gaps.md",
       "rule": "filled_by entries use the result's id copied as is, never its path",
       "must": [
         "the\\ identity\\ is\\ the\\ result's\\ `id`\\ from\\ `search`\\ or\\ `list_docs`,\\ copied\\ as\\ is,\\ never\\ its\\ `path`"
@@ -142,6 +150,28 @@
     },
     {
       "id": "no-hardcoded-trust",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "\\bdoc/[a-z_]+/",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust-gaps",
+      "file": "references/gaps.md",
+      "rule": "No hard-coded trust order or folder name",
+      "must_not": [
+        "\\bdoc/[a-z_]+/",
+        "\\buser[ _](docs|manual)\\b",
+        "\\bleads on\\b",
+        "trust order (settles|says)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-trust-ask",
+      "file": "references/ask.md",
       "rule": "No hard-coded trust order or folder name",
       "must_not": [
         "\\bdoc/[a-z_]+/",
@@ -170,6 +200,7 @@
     },
     {
       "id": "answers-back",
+      "file": "references/ask.md",
       "rule": "Pasted replies are mapped and confirmed; a redirect adds the new name and clears asked; ask and asked stay as history",
       "must": [
         "Show\\ the\\ mapping\\ \\(`Anna\\ M\\ 1\\ →\\ gap\\-0042`\\)\\ and\\ act\\ on\\ the\\ user's\\ yes",
@@ -179,9 +210,10 @@
     },
     {
       "id": "deferred-who-would-know",
+      "file": "references/ask.md",
       "rule": "A user who does not know a deferred gap's answer gets Who would know; names merge into ask",
       "must": [
-        "The\\ user\\ does\\ not\\ know:\\ \\[Who\\ would\\ know\\]\\(\\.\\./create/references/doc\\-corpus\\.md\\#who\\-would\\-know\\);\\ names\\ merge\\ into\\ `ask`"
+        "The\\ user\\ does\\ not\\ know:\\ \"Who\\ would\\ know\"\\ in\\ `doc\\-corpus\\.md`;\\ names\\ merge\\ into\\ `ask`"
       ]
     },
     {

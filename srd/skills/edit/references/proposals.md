@@ -1,10 +1,23 @@
-# Finding and wording a change
+# Finding, wording, and confirming a change
 
-What counts as a finding, and how a proposal words its fix. Read before the
-interactive summary or the first proposal, whichever comes first; `autofix`
-never needs it.
+What counts as a finding, how a proposal words its fix, and how the user
+confirms it. Read before the interactive summary or the first proposal,
+whichever comes first; `autofix` never needs it.
+
+## Contents
+
+- Findings
+- Wording
+- The confirmation
+- Open questions
+- Fixes that skip the loop
+- Resolving a comment block
+- Glossary
 
 ## Findings
+
+When listing the issues found before the loop, keep only findings that survive
+scrutiny — a real rule violation, not a preference.
 
 - Requirements that read as overlapping are often independently testable (a
   disabled control vs a grayed one; a length cap vs its truncation format); a
@@ -17,8 +30,8 @@ never needs it.
   glossaries and the requirements it summarizes; an undefined pseudo-name is a
   finding.
 - Before merging two names for one thing, check they mean the same; when they
-  differ in meaning, never pick one — put the question to the user
-  ([Who would know](../../create/references/doc-corpus.md#who-would-know)).
+  differ in meaning, never pick one — put the question to the user ("Who would
+  know" in `doc-corpus.md`).
 - Before proposing, look for a prior ruling on what the change touches: grep
   `<srd>.decisions.md` and the knowledge base for the text it changes and for
   each entry id, matching the ranges and lists that span it ("GR-3 to GR-5",
@@ -32,6 +45,10 @@ never needs it.
 
 ## Wording
 
+- Name the location the way the user can find it in the file — the
+  requirement, scope, or glossary id, and for prose that has none the line
+  number. Never an ordinal the user would have to count out ("paragraph
+  three"); this holds for what comes next as much as for the proposal itself.
 - Keep each requirement standalone: never resolve a conflict by having one
   requirement cite others by id ("apply GR-6 through GR-10 only …"); put the
   condition in each rule, through a glossary term when it is long.
@@ -66,19 +83,63 @@ never needs it.
 - Proposals asked for to paste elsewhere carry only the before and after text:
   no rationale, headers, framing, or follow-up notes.
 
+## The confirmation
+
+The keys that close a proposal (loop step 2 in `SKILL.md`):
+
+- `Y` (Yes): apply, then stay on the current entry and propose its next issue;
+  when that entry has no more, say so and name the way on ("nothing further on
+  GR-3 — next entry, or name one"), then stop. `Y` never advances the walk, and
+  the user should not have to guess what does. In `feedback` the unit is the
+  review's finding (`modes.md`).
+- `YN` (Yes Next): apply and move to the next entry, leaving its remaining
+  issues flagged.
+- `S` (Skip): change nothing; leave the issue flagged. Like `Y`, it does not
+  advance the walk, even when it was the entry's last issue.
+- `E` (Edit): apply the user's amended text in place of the proposal.
+
+Ask one question at a time — the confirmation *is* that question. Never widen
+it into a menu of variants (`E1`/`E2`), never pair it with an open design
+question or an offer to do something else, and never put the held-over
+questions to the user as a set. When a proposal has two defensible wordings,
+pick one and propose it; `E` is how the user takes the other.
+
+## Open questions
+
+Anything held over goes in an `## Open questions` numbered list — one line
+each, no rationale — that you carry silently and draw from one item at a time,
+in the order the user set. That list is terminal output, not a section of the
+SRD: it belongs to this session and empties with it. Show it only when the user
+asks what is still open, renumbered from 1 each time so answered items leave no
+holes; what remains at the end goes in the closing manifest: numbered from 1,
+one line each — the list itself, never a bare count.
+
+## Fixes that skip the loop
+
+Both apply, log, report in one line, and go on — never ask (`autofix` takes
+them only as errata).
+
+- A GLO-4 first-use link: when an edit, a finding, or the session-end check
+  finds a Company Glossary term unlinked at its first use in document order (an
+  entry added earlier takes that use over), link that use per srd-procedures
+  step 2 and unlink a later use that carried the link. A proper name (GLO-6) or
+  a use that may mean the generic sense goes through the loop instead. Text,
+  case, and comment blocks stay as found.
+- A heading off its siblings' title case, the case fix the errata allowlist
+  covers.
+
 ## Resolving a comment block
 
 Only on the user's explicit ask: remove the `> [!comment]` callout and its
-`[^…]` footnote reference from the requirement together, and log the removal.
-A requirement removed with a comment on it follows
-[id-rules.md](id-rules.md#removal-and-comment-blocks).
+`[^…]` footnote reference from the requirement together, and log the removal. A
+requirement removed with a comment on it follows `id-rules.md` ("Removal and
+comment blocks").
 
 ## Glossary
 
 A run that reaches no term never calls `glossary_terms`. The procedure in
-[../../create/references/srd-procedures.md](../../create/references/srd-procedures.md)
-waits for the first thing that needs a term settled and lands before it: the
-first proposal that introduces, renames or rests on a possibly company-defined
-term, or in `interactive` the step-1 summary, which promises every issue found
-and so owes GLO-3 too. A term put to the user against an unloaded term set is a
-GLO-3 miss. Hold the set for the session.
+`srd-procedures.md` waits for the first thing that needs a term settled and
+lands before it: the first proposal that introduces, renames or rests on a
+possibly company-defined term, or in `interactive` the step-1 summary, which
+promises every issue found and so owes GLO-3 too. A term put to the user against
+an unloaded term set is a GLO-3 miss. Hold the set for the session.

@@ -265,7 +265,7 @@ GAPS_3 = [gap("gap-0042", "ALTECNO logger default battery-low threshold", "sessi
 write_case(
     "backlog--reclassifies-rather-than-skipping",
     prompt="/srd:backlog deferred",
-    tags=BASE_TAGS,
+    tags=BASE_TAGS + ["ref:backlog/ask"],
     max_turns=50,
     answers=['To the battery-low threshold question: "Actually nobody knows that yet — no one has '
              'measured it on the current cells."',
@@ -343,7 +343,7 @@ last_verified: 2026-09-01
 """
 case4_common = dict(
     prompt="/srd:backlog gaps",
-    tags=BASE_TAGS + CORPUS_TAGS + DRAFT_TAGS,
+    tags=BASE_TAGS + CORPUS_TAGS + DRAFT_TAGS + ["ref:backlog/gaps"],
     files={"kb/_inbox.md": INBOX},
     mocks={"list_gaps": gaps_world(GAPS_4), "get_doc": GET_DOC_4, "list_docs": LIST_DOCS_4},
 )

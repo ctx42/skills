@@ -10,6 +10,7 @@
     },
     {
       "id": "todo-scaffold-blocks",
+      "file": "references/finding-tags.md",
       "rule": "An unresolved In Scope TODO marker or non-empty ## TODO section is a blocker",
       "must": [
         "an\\ unresolved\\ draft\\ scaffold\\ —\\ the\\ In\\ Scope\\ `\\-\\-\\-\\ TODO\\ \\-\\-\\-`\\ marker\\ or\\ a\\ non\\-empty\\ `\\#\\#\\ TODO`\\ section"
@@ -118,6 +119,7 @@
     },
     {
       "id": "casing-free-no-finding",
+      "file": "references/finding-tags.md",
       "rule": "A casing-only terminology finding needs a project casing rule; none, no finding",
       "must": [
         "Casing\\ drift\\ is\\ a\\ finding\\ only\\ where\\ the\\ project's\\ casing\\ rules\\ fix\\ running\\-text\\ casing",
@@ -133,6 +135,7 @@
     },
     {
       "id": "req5-all-methods",
+      "file": "references/finding-tags.md",
       "rule": "REQ-5 is judged against every verification method it names, not test alone",
       "must": [
         "Judge\\ REQ\\-5\\ against\\ every\\ method\\ it\\ names,\\ not",
@@ -141,6 +144,7 @@
     },
     {
       "id": "withdrawal-stamped",
+      "file": "references/check-mode.md",
       "rule": "check stamps each withdrawal with the run's updated: time",
       "must": [
         "moves\\ to\\ `\\#\\#\\ Withdrawn`\\ with\\ a\\ reason,\\ stamped\\ with\\ this\\ run's\\ `updated:`\\ time"
@@ -148,9 +152,16 @@
     },
     {
       "id": "check-reads-kb-by-srd-ref",
+      "file": "references/check-mode.md",
       "rule": "check reads the KB pages naming the SRD before keeping a finding open; a banked author answer withdraws it",
       "must": [
-        "once\\s+the\\s+KB\\s+pages\\s+whose\\s+`srd_ref`\\s+names\\s+the\\s+SRD\\s+are\\s+read",
+        "once\\s+the\\s+KB\\s+pages\\s+whose\\s+`srd_ref`\\s+names\\s+the\\s+SRD\\s+are\\s+read"
+      ]
+    },
+    {
+      "id": "check-kb-scope-by-srd-ref",
+      "rule": "check's corpus reach is only the KB pages whose srd_ref names the SRD",
+      "must": [
         "`check`\\s+reads\\s+only\\s+the\\s+KB\\s+pages\\s+whose\\s+`srd_ref`"
       ]
     }

@@ -18,7 +18,7 @@ not know the review, so every line must read on its own.
 ## Select
 
 The tokens after `summary` pick the blocks of `<srd>.decisions.md`
-([decision-log.md](decision-log.md)):
+(`decision-log.md`):
 
 - none → the newest block.
 - `today`, or a date (`2026-10-23`) → every block headed with that date,
@@ -84,6 +84,5 @@ section names are plain lines.
 ## Close
 
 The reply is the message alone: no preamble, no closing line, no offer. The
-session's next applied edit opens a new decision-log block
-([decision-log.md](decision-log.md)), so a later `summary` covers only what
-came after this one.
+session's next applied edit opens a new decision-log block (`decision-log.md`),
+so a later `summary` covers only what came after this one.

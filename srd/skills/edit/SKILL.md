@@ -36,20 +36,16 @@ counterpart to the read-only `review`. It never invents or restates rules
 never edits metadata (Owners, Initiative, Designs), sets back-links, or changes
 `Status`; it flags those gaps (STR-2/3/5/7, STA-*). A finding outside that
 mandate is reported as the author's to fix, not looped — even when the run
-entered at it: a feedback run starting at a metadata `#2` says so and advances
-to `#3`. It never proposes a Status transition (flag only a malformed `STA-*`
-value) and never proposes pushing, publishing, or syncing the SRD as a
-follow-up. Comment blocks are read-only:
-a source of information about the SRD, never edited, answered, or rewritten,
-even when they hold stale references, unless the user explicitly asks to
-resolve one. Back-links (STR-4/6) are
-external: check that the forward Initiative and Designs links are present and
-never flag a back-link gap. Acceptance is a human decision. It maintains the
-two [draft scaffolds](#draft-scaffolds) and resolves them only on the user's
-signal. It never writes `<srd>.review.md` — `review` owns that file; `edit`
-reads it and hands off to `review <srd> check` to update it. It owns
-`<srd>.decisions.md` (see [Decision log](#decision-log)); no other skill writes
-that file.
+entered at it ([references/modes.md](references/modes.md)). It never proposes
+a Status transition (flag only a malformed `STA-*` value) and never proposes
+pushing, publishing, or syncing the SRD as a follow-up. Comment blocks are
+read-only: a source of information about the SRD, never edited, answered, or
+rewritten, even when they hold stale references, unless the user explicitly
+asks to resolve one. Back-links (STR-4/6) are external: check that the forward
+Initiative and Designs links are present and never flag a back-link gap.
+Acceptance is a human decision. It never writes `<srd>.review.md` — `review`
+owns that file; `edit` reads it and hands off to `review <srd> check` to update
+it. It owns `<srd>.decisions.md` (see [Decision log](#decision-log)).
 
 ## Sources of truth
 
@@ -69,13 +65,8 @@ is missing at run time, stop and tell the user.**
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md) and
   [references/corpus-edits.md](references/corpus-edits.md) (on-demand: the
   first edit that changes a requirement's meaning or removes one) — how to
-  reach the corpus and where an unconfirmed fact goes, and when this skill
-  looks, what it states in the proposal, and what the confirmation attests.
-- [references/proposals.md](references/proposals.md) (on-demand: the
-  interactive summary or first proposal) — what counts as a finding and how a
-  fix is worded.
-- [references/modes.md](references/modes.md) (on-demand: `walk`, `feedback`,
-  `polish`, `targeted`, a start line or id) — those procedures.
+  reach the corpus and where an unconfirmed fact goes, and how this skill
+  uses it.
 - [../review/references/review-file.md](../review/references/review-file.md)
   (on-demand: feedback, autofix) — how `<srd>.review.md` is numbered, cited and
   laid out. Never infer the shape.
@@ -87,15 +78,6 @@ is missing at run time, stop and tell the user.**
 - [../create/assets/srd-template.md](../create/assets/srd-template.md)
   (on-demand: restructuring) — the required section order.
 
-## Documentation corpus
-
-Procedure, trust, and where an outcome goes:
-[../create/references/doc-corpus.md](../create/references/doc-corpus.md). When
-*this skill* consults it — the lookup before the proposal, the
-set-versus-reported reading, what a confirmation attests, where a deferred
-platform question goes — is in
-[references/corpus-edits.md](references/corpus-edits.md).
-
 ## Session start (every mode)
 
 Spend nothing this run does not need before the user's first question or
@@ -104,7 +86,7 @@ proposal. Run the project gate first
 then resolve the mode ([Modes](#modes)): one that cannot run — `#n` or
 `autofix` with no `<srd>.review.md` — says so and stops before step 1: a run
 that will do nothing has nothing to read or check. `load` runs the gate and
-its own reads ([load](#load-default)), nothing below.
+its own reads ([load](references/modes.md#load-default)), nothing below.
 Otherwise three steps, no questions of its own.
 
 1. Read the whole SRD top to bottom — every mode, however narrow the target: a
@@ -139,10 +121,6 @@ proposal on an approved SRD or any proposal touching an id.
 
 ## Edit discipline
 
-When listing the issues found before the loop, keep only findings that survive
-scrutiny — a real rule violation, not a preference
-([references/proposals.md](references/proposals.md)).
-
 Every mode but `autofix` runs this loop per change:
 
 1. Propose exactly one change: its location, the problem (cite the rule id), the
@@ -153,69 +131,34 @@ Every mode but `autofix` runs this loop per change:
    HTML tag). Fix only what the finding names, with the smallest wording change
    that settles it; never add a fact, condition, permission, or platform detail
    the SRD lacks unless the user asks. A change to a requirement's meaning — one
-   the user dictates mid-walk included — gets its corpus lookup here, before the
-   proposal is put, and the proposal states what it found with its source line —
-   a KB section it contradicts included, as a finding no `rank` settles
-   ([references/corpus-edits.md](references/corpus-edits.md)). A removal gets
-   one too: each KB section only the cut requirement asserted for this SRD gets
-   a `wrong` gap on the cut's confirmation. Name the location the way the user
-   can find it in the file — the requirement, scope, or glossary id, and for
-   prose that has none the line number. Never an ordinal the user would have to
-   count out ("paragraph three"); this holds for what comes next as much as for
-   the proposal itself.
+   the user dictates mid-walk included — or a removal gets its corpus lookup
+   here, before the proposal is put
+   ([references/corpus-edits.md](references/corpus-edits.md)).
 2. Close the proposal with the choices (Yes / Yes Next / Skip / Edit) — the
    capital letter is the key — and apply only on explicit approval. If the
    file changed on disk since the approval gate, re-read `Status` first: an
-   `ACCEPTED` there puts the edit under STA-4, asked before it lands. The keys:
-   - `Y` (Yes): apply, then stay on the current entry and propose its next
-     issue; when that entry has no more, say so and name the way on ("nothing
-     further on GR-3 — next entry, or name one"), then stop. `Y` never advances
-     the walk, and the user should not have to guess what does. In
-     `feedback` the unit is the review's finding, not the entry, so `Y`
-     proposes the next finding on that entry and stops when the review has no
-     more — never an issue the review did not raise. Applying a review means
-     applying that review.
-   - `YN` (Yes Next): apply and move to the next entry, leaving its remaining
-     issues flagged.
-   - `S` (Skip): change nothing; leave the issue flagged. Like `Y`, it does not
-     advance the walk, even when it was the entry's last issue.
-   - `E` (Edit): apply the user's amended text in place of the proposal.
-   Advance to the next entry only on `YN` or an explicit ask — never on `Y`,
-   `E` or `S`, however little the entry has left; once an entry is resolved,
-   stop and wait, never walking ahead even for a read-only look. Never batch
-   unrelated changes; never edit without confirmation. Ask one question at a
-   time — the confirmation *is* that question. Never widen it into a menu of
-   variants (`E1`/`E2`), never pair it with an open design question or an offer
-   to do something else, and never put the held-over questions to the user as a
-   set. When a proposal has two defensible wordings, pick one and propose it;
-   `E` is how the user takes the other. Anything held over goes in an `## Open
-   questions` numbered list — one line each, no rationale — that you carry
-   silently and draw from one item at a time, in the order the user set. That
-   list is terminal output, not a section of the SRD: it belongs to this
-   session and empties with it. Show it only
-   when the user asks what is still open, renumbered from 1 each time so
-   answered items leave no holes; what remains at the end goes in the closing
-   manifest.
+   `ACCEPTED` there puts the edit under STA-4, asked before it lands. What
+   counts as a finding, how a fix is worded, what each key does, and where
+   held-over questions go are in
+   [references/proposals.md](references/proposals.md), read before the
+   interactive summary or the first proposal. Advance to the next entry only
+   on `YN` or an explicit ask — never on `Y`, `E` or `S`, however little the
+   entry has left; once an entry is resolved, stop and wait, never walking
+   ahead even for a read-only look. Never batch unrelated changes; never edit
+   without confirmation.
 3. Re-validate what the applied edit touched, against the standard: scope
    coverage (SCO-2/3, suspended while the In Scope `--- TODO ---` marker
    stands), id uniqueness/order (REQ-3/4), term use (GLO-3), and anything
    referencing or referenced by the edit. Report a problem the fix introduced.
-   No corpus lookup happens here: step 1 already did it
-   ([references/corpus-edits.md](references/corpus-edits.md)).
 4. Log the change in `<srd>.decisions.md` before proposing the next one (see
    [Decision log](#decision-log)).
 
-Two fixes skip the loop in every mode (`autofix` takes them only as errata):
-apply, log, report in one line, and go on — never ask.
-
-- A GLO-4 first-use link: when an edit, a finding, or the session-end check
-  finds a Company Glossary term unlinked at its first use in document order (an
-  entry added earlier takes that use over), link that use per srd-procedures
-  step 2 and unlink a later use that carried the link. A proper name (GLO-6) or
-  a use that may mean the generic sense goes through the loop instead. Text,
-  case, and comment blocks stay as found.
-- A heading off its siblings' title case, the case fix the errata allowlist
-  covers.
+Two fixes skip the loop in every mode (`autofix` takes them only as errata) —
+a GLO-4 first-use link and a heading off its siblings' title case: apply, log,
+report in one line, and go on — never ask. What each covers and what goes
+through the loop instead:
+[references/proposals.md](references/proposals.md#fixes-that-skip-the-loop)
+(on-demand: the first such fix).
 
 Write every edit to the LANG and REQ rules and the authoring guide (US English,
 one term per concept); a restructuring edit follows the template's order.
@@ -229,22 +172,13 @@ writing the session's first entry.
 
 ## Draft scaffolds
 
-Two working scaffolds live in a draft SRD (House additions in the authoring
-guide). Maintain them across every mode and never remove either silently; both
-block `ACCEPTED` and are reported as follow-ups at session end.
-
-- In Scope `--- TODO ---` marker: while `### In Scope` holds only this marker,
-  In Scope is knowingly pending — suppress every SCO-2 / In-Scope-coverage
-  complaint (issue summary, re-validation, consistency pass) and do not
-  fabricate `SC-n` items.
-- `## TODO` section: a numbered list of open issues the human must return to,
-  kept as the document's last section.
-
-On "Add X to TODO", or on the user's signal that the requirements are complete
-(or an ask to fill In Scope), follow
-[references/draft-scaffolds.md](references/draft-scaffolds.md), which carries
-both procedures and what each may touch. Never trigger the In Scope derivation
-on your own.
+A draft SRD may hold two working scaffolds: the In Scope `--- TODO ---` marker
+and a `## TODO` section. Maintain them across every mode and never remove either
+silently; both block `ACCEPTED` and are reported as follow-ups at session end.
+When the SRD holds either, on "Add X to TODO", or on the signal to fill In
+Scope, read [references/draft-scaffolds.md](references/draft-scaffolds.md)
+(on-demand) — what each scaffold suppresses, and both procedures. Never trigger
+the In Scope derivation on your own.
 
 ## Modes
 
@@ -276,46 +210,24 @@ name the ones that exist, and run with the defaults as if it were absent —
 unless dropping it would widen what the run changes; then ask. A target that
 resolves to nothing: say so and ask — never guess what to work on.
 
-### load (default)
+### Mode procedures
 
-Open the SRD for the user's own edit prompts; find and propose nothing.
+Read the mode's procedure before it does anything *(on-demand: that mode
+only)*:
 
-1. Read the whole SRD, `<srd>.decisions.md` and `<srd>.review.md`, each when
-   present — nothing else: no draft check, standard, glossary, reference file,
-   or corpus lookup.
-2. Reply in one line — the SRD, its `Status` (approved or in-progress), the
-   open review findings by number, the open comment blocks by entry id — then
-   wait. No issue summary, finding, or proposal.
-3. Run each later prompt as the mode it would select after the path (an entry
-   and a change → targeted, a list of findings → feedback, `walk` →
-   interactive), reusing these reads; session-start steps not yet run land
-   before its first proposal.
-4. Session end runs once, when the user says they are done — never after each
-   prompt, targeted included.
-
-### interactive (`walk`)
-
-A grouped issue summary, then the loop entry by entry in document order, Scope
-last: read [references/modes.md](references/modes.md) *(on-demand: this mode)*
-before the summary.
-
-### autofix
-
-Bulk-apply the `## Errata` block of `<srd>.review.md` behind one batch
-confirmation — never the edit loop, never a re-scan of the SRD. The full
-procedure is in [references/autofix.md](references/autofix.md) *(on-demand:
-this mode only)*: read it before applying anything.
-
-### summary
-
-Read-only, writing no file: read
-[references/summary.md](references/summary.md) *(on-demand: this mode only)*.
-
-### feedback, polish, targeted
-
-Findings from a review or pasted feedback, mechanical-only cleanup, or one
-entry the user points to with the change wanted: read [references/modes.md](references/modes.md)
-before the first proposal.
+- load (default): open the SRD for the user's own edit prompts; find and
+  propose nothing —
+  [references/modes.md](references/modes.md#load-default).
+- interactive (`walk`): a grouped issue summary, then the loop entry by entry
+  in document order, Scope last — [references/modes.md](references/modes.md).
+- feedback, polish, targeted: findings from a review or pasted feedback,
+  mechanical-only cleanup, or one entry the user points to with the change
+  wanted — [references/modes.md](references/modes.md).
+- autofix: bulk-apply the `## Errata` block of `<srd>.review.md` behind one
+  batch confirmation — never the edit loop, never a re-scan of the SRD —
+  [references/autofix.md](references/autofix.md).
+- summary: read-only, writing no file —
+  [references/summary.md](references/summary.md).
 
 ## Session end (every mode)
 
@@ -324,23 +236,20 @@ before the first proposal.
    covers only terms this session already settled: a session that never loaded
    the term set does not load it here.
 2. Invoke `srd:report-doc-gap` to offer the draft gaps this session captured,
-   only when there are any. The start check covers what a *prior* session
-   left; this covers what *this* session produced. `srd:kb` already wrote each
-   attested fact, and every cut's `wrong` gaps were filed, at its
-   confirmation.
+   only when there are any
+   ([references/corpus-edits.md](references/corpus-edits.md#session-end)).
 3. Close with the manifest — approved edits, not a re-narration of diffs the
    user already saw:
-   - What changed: entry/id, one line each; a cut carries the ids of the
-     `wrong` gaps it filed.
+   - What changed: entry/id, one line each; a cut carries its `wrong` gap ids
+     ([references/corpus-edits.md](references/corpus-edits.md)).
    - What was flagged and left (frozen-id conflicts, metadata gaps, anything
      the user declined).
    - Outstanding human follow-ups: placeholders, Status, and either draft
      scaffold left standing — by name and item count, not its items.
-   - `## Open questions`: what remains of the held-over list, numbered from 1,
-     one line each — the list itself, never a bare count.
-   - `Decision log: <srd>.decisions.md — /edit <srd> summary turns its newest
-     block, ## <date> <HH:MM>, into a chat message`, with the block's real
-     heading; omitted when nothing was applied, since the file does not exist.
+   - `## Open questions`, when any remain
+     ([references/proposals.md](references/proposals.md#open-questions)).
+   - The decision-log line, only when anything was applied
+     ([references/decision-log.md](references/decision-log.md#the-manifest-line)).
    - One start clause: what the draft check found, which delegates ran,
      whether the glossary resolved.
 
