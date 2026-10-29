@@ -10,8 +10,20 @@
       "class": "load-bearing"
     },
     {
+      "id": "test-edit-reads",
+      "rule": "reference-vs-pass",
+      "prompt": "Situation: you are about to change one assertion in `src/stores/devices.test.ts`. You have the style skill loaded and have read none of its rule files yet.\n\nQuestion: which rule files do you read before the edit? Answer on the first line with exactly one of: TEST-ONLY, TEST-AND-PRODUCTION, NONE. Then one sentence why.",
+      "pass": "^\\W*TEST-AND-PRODUCTION",
+      "fail": "^\\W*(TEST-ONLY|NONE)",
+      "class": "load-bearing"
+    },
+    {
       "id": "page-read-state",
       "rule": "shared-read-helper",
+      "context": [
+        "SKILL.md",
+        "references/production.md"
+      ],
       "prompt": "Situation: a new page must load the device models and show a spinner while loading and an error with a retry button when it fails. The project has `src/read.ts` exporting `useRead`.\n\nQuestion: where does the page hold the loading and error state? Answer on the first line with exactly one of: OWN-REFS, SHARED-HELPER. Then one sentence why.",
       "pass": "^\\W*SHARED-HELPER",
       "fail": "^\\W*OWN-REFS",
@@ -20,6 +32,11 @@
     {
       "id": "fake-fetch-key",
       "rule": "fetch-fake-keys",
+      "context": [
+        "SKILL.md",
+        "references/test.md",
+        "references/production.md"
+      ],
       "prompt": "Situation: a Vitest test fakes the network for a page that reads `/api/sites`.\n\nQuestion: write the key the canned answer is stored under and nothing else.",
       "pass": "GET /api/sites",
       "fail": "^\\W*[\"'`]?/api/sites[\"'`]?\\s*$",

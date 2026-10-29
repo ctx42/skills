@@ -42,8 +42,10 @@ Report tersely: no preamble or narration; state each fact once. Committing
 each kept change is this skill's job, whatever rule forbids an agent to
 commit; never push, amend, rebase, or touch a commit the run did not make.
 
-Write every code change to `../style/SKILL.md`, read once before the first
-edit; the project's checks stay the gate, and no `web:style` pass runs here.
+Write every code change to `../style/references/production.md`, plus
+`../style/references/test.md` for a test, an e2e spec, or a benchmark, each
+read once before the first edit it governs, a comment-only edit included;
+the project's checks stay the gate, and no `web:style` pass runs here.
 
 The goal is code that runs faster or uses less memory, never at the cost of
 architecture, readability, or testability (section 5).

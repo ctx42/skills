@@ -39,9 +39,9 @@
       "id": 2,
       "name": "rule-edit-picks-biome-over-prose",
       "expected_behavior": [
-        "Places the rule in `style/references/biome.json` as Biome's `noDefaultExport`, not as a prose line in `style/SKILL.md`, and says why",
+        "Places the rule in `style/references/biome.json` as Biome's `noDefaultExport`, not as a prose line in `style/references/production.md` or `style/references/test.md`, and says why",
         "Shows the proposed change and waits for confirmation before writing",
-        "After `yes`, the config holds `noDefaultExport` at `error` in its group and `style/SKILL.md` is unchanged"
+        "After `yes`, the config holds `noDefaultExport` at `error` in its group and both prose rule files under `style/references/` are unchanged"
       ],
       "blind_only": [
         1,

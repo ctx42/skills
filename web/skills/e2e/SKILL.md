@@ -37,9 +37,10 @@ effect. A route a spec only passes through, or a control it never operates,
 is a gap. The route — never the spec file — is the unit of work.
 
 Sources of truth:
-- `../style/SKILL.md` (on-demand: before writing a spec — its Test section,
-  "End-to-end (Playwright)" above all, and the Production rules Test
-  inherits) — obey it in every spec; do not restate it.
+- `../style/references/test.md` and `../style/references/production.md`
+  (on-demand: before writing a spec — read both files whole: the Test rules,
+  "End-to-end (Playwright)" above all, and every Production rule Test
+  inherits) — obey them in every spec; do not restate them.
 - `go:style`, invoked as a skill (on-demand: before editing any `.go` file of
   the fake) — obey it in every Go change and its tests.
 - The Playwright config and the existing specs — the projects, servers,

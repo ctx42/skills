@@ -76,7 +76,7 @@ propose-then-stop: no check until the user answers.
 
 ## Principles
 
-Reason from these while checking; they generalize the `SKILL.md` rules to
+Reason from these while checking; they generalize the rulebook's rules to
 cases no single line spells out.
 
 1. One way to do each thing: where the project has a shared helper (reads,
@@ -102,9 +102,11 @@ cases no single line spells out.
    and options, the `html.formatter`, and the overrides. Each rule missing or
    weaker is one site of the Tooling offense; quote its absence as
    `<group>/<rule>: absent` or the weaker setting.
-3. Check each file against the rules in `SKILL.md` — Production for `.vue`
-   and `.ts`, Test for `*.test.ts` and `e2e/*.spec.ts` — reasoning from the
-   Principles. Read a whole SFC: script, template, and style each carry rules.
+3. Check each file against the rules in `production.md` and `test.md` (this
+   directory) — Production for `.vue` and `.ts`, Production plus Test for
+   tests, e2e specs, and test support (`src/testing.ts`, benchmarks) —
+   reasoning from the Principles. Read a whole SFC: script, template, and
+   style each carry rules.
 4. Before reporting an offense whose truth reaches beyond the file (a
    duplicated helper, a rename's call sites, an unused export), confirm it with
    the `LSP` tool or grep across the root rather than asserting from the
@@ -153,7 +155,7 @@ Each offense:
 
 Rule ids are derived, never coined, in these steps:
 
-1. Take the rule's whole `SKILL.md` bullet; one bullet is one id, never split
+1. Take the rule's whole rulebook bullet; one bullet is one id, never split
    on `;`.
 2. Drop backticks; split a backtick span on whitespace, cut each token at its
    opening parenthesis, then: a token with a file extension contributes
@@ -210,9 +212,10 @@ the gate is the proof.
 
 - Up to ~40 files or ~3000 lines in scope: check in this context.
 - Larger: fan out one subagent per directory (`components`, `pages`,
-  `stores`, top-level `src`, `e2e`), each given the paths of `SKILL.md` and
-  this file — not their text — the `depth`, and the parent's list of rule ids
-  and severities, derived once for every rule in scope. Workers neither coin
+  `stores`, top-level `src`, `e2e`), each given the paths of `SKILL.md`, this
+  file, `production.md`, and `test.md` — not their text — the `depth`, and
+  the parent's list of rule ids and severities, derived once for every rule in
+  scope. Workers neither coin
   an id nor grade a tier; a rule missing from the list comes back with the line
   quoted, no id, no severity. Workers get no share of `max`: the cap applies
   once, at the merge.

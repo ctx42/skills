@@ -1,8 +1,10 @@
 # review rule editing
 
 Read when Rule-edit or Learn mode triggers. Both modes write to the
-`web:style` rulebook: `../style/SKILL.md` for rules a tool cannot check,
-`../style/references/biome.json` for rules Biome can.
+`web:style` rulebook: `../style/references/production.md` and
+`../style/references/test.md` for rules a tool cannot check,
+`../style/references/biome.json` for rules Biome can. Never write a rule into
+`../style/SKILL.md`: it only routes to those files.
 
 ## Writes must reach the repo
 
@@ -24,16 +26,18 @@ them re-run from the clone before writing.
 2. Biome checks only part of what the rule asks (some cases, not others): the
    part Biome checks goes in the config, and the prose line keeps only what it
    cannot.
-3. Otherwise: one line in `../style/SKILL.md`.
+3. Otherwise: one line in `../style/references/production.md` or
+   `../style/references/test.md`, by its scope.
 
 Say which of the three it is, and why, in the confirmation.
 
 ## Rule-edit mode
 
-1. Read `../style/SKILL.md` and `../style/references/biome.json`.
+1. Read `../style/references/production.md`, `../style/references/test.md`,
+   and `../style/references/biome.json`.
 2. Turn the input into rule entries shaped per How a rule entry should look,
    placed per Where a rule goes. If the scope is ambiguous, ask one question.
-3. Detect duplicate or conflicting rules in both files; show them and the
+3. Detect duplicate or conflicting rules in all three files; show them and the
    proposed change, then wait for confirmation before writing. Never silently
    overwrite a conflicting rule.
 4. Check the write location (above), then write: `add` inserts the line or
@@ -53,7 +57,7 @@ durable rules.
 2. Keep only convention that applies beyond the one site; drop one-off
    instructions. When unsure, keep it as a candidate for the user to cut.
 3. Distill each into a rule per How a rule entry should look, placed per
-   Where a rule goes, and dedupe against both files.
+   Where a rule goes, and dedupe against all three files.
 4. Present candidates as a list, each with its provenance and its placement,
    flagging duplicates and conflicts; wait for the user to pick. When every
    candidate dedupes away, say in one line which existing rules already cover
@@ -62,8 +66,9 @@ durable rules.
 
 ## How a rule entry should look
 
-- One rule = one concept = one dense imperative line, in the Production or
-  Test section (`*.test.ts` and `e2e/*.spec.ts` are Test), near related rules.
+- One rule = one concept = one dense imperative line, in `production.md` or
+  `test.md` (`*.test.ts` and `e2e/*.spec.ts` are Test; a rule for both goes in
+  `production.md`, which Test inherits), in the section of related rules.
 - State it generically: name the construct, not the site — no project
   identifiers, domain nouns, or file names.
 - Cut every word the rule survives without; prefer no example, and use only

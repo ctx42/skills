@@ -53,9 +53,10 @@ Sources of truth:
 - `web:style` (on-demand: Check mode) — owns the style rules, the reference
   Biome config, and their detection; the whole style dimension is delegated to
   it.
-- `../style/SKILL.md`, `../style/references/biome.json` (on-demand:
-  Rule-edit/Learn) — the prose rules and the reference config; those modes
-  write here.
+- `../style/references/production.md`, `../style/references/test.md`,
+  `../style/references/biome.json` (on-demand: Rule-edit/Learn) — the prose
+  Production and Test rules and the reference config; those modes write
+  here.
 - [references/correctness.md](references/correctness.md) (on-demand: Check
   mode) — what to look for beyond style.
 - [references/contract.md](references/contract.md) (on-demand: Check mode,
@@ -104,8 +105,10 @@ the two agree on one target.
 2. Style dimension — invoke `web:style` with the resolved target and budget,
    saying it is delegated for offenses only. Take its offense list as the
    style findings; never re-derive style rules here. Reviewing in this
-   context, the rules are then loaded: do not consult them again while
-   judging correctness. One defect that is both (a listener `onMounted` adds
+   context, invoke `web:style` with the Skill tool all the same and let its
+   pass read the rule files; never read them here as well. The rules its pass
+   reads land in this context: do not consult them again while judging
+   correctness. One defect that is both (a listener `onMounted` adds
    and nothing removes) is reported once, under correctness, with the higher
    grade, naming the style rule id it also breaks.
 3. Correctness — read [references/correctness.md](references/correctness.md)

@@ -43,9 +43,10 @@ directory — is the unit of work. Never lower the project's coverage
 thresholds.
 
 Sources of truth:
-- `../style/SKILL.md` (on-demand: before writing a test — its Test section
-  and the Production rules Test inherits) — obey it in every test written; do
-  not restate it.
+- `../style/references/test.md` and `../style/references/production.md`
+  (on-demand: before writing a test — read both files whole, since Test
+  inherits every Production rule) — obey them in every test written; do not
+  restate them.
 - `src/testing.ts` and the unit's existing tests (on-demand: when writing) —
   the fakes, factories, and mount helper the tests must reuse rather than
   rebuild.
@@ -95,11 +96,11 @@ resolves to nothing: say so and ask — never guess what to work on.
   scaffolding than `src/testing.ts` offers, built in the test file. A line
   only a production change could reach stays deferred.
 
-Fan-out is automatic: a target spanning several directories with more than
-~40 files or ~3000 lines of `.vue`/`.ts` in scope (the threshold `web:style`
-and `web:review` use) runs one subagent per directory, each given this file's
-path and `../style/SKILL.md`'s, merged into one report; a smaller target runs
-sequentially.
+Fan-out is automatic: a target spanning several directories with more than ~40
+files or ~3000 lines of `.vue`/`.ts` in scope (the threshold `web:style` and
+`web:review` use) runs one subagent per directory, each given this file's path
+and the two style rule files' paths, merged into one report; a smaller target
+runs sequentially.
 
 ## Per-unit loop
 

@@ -140,9 +140,9 @@
     },
     {
       "id": "style-read-no-gate",
-      "rule": "Code changes follow ../style/SKILL.md, read once; no web:style gate",
+      "rule": "Code changes follow the web:style rule files, read once; no web:style gate",
       "must": [
-        "Write every code change to `\\.\\./style/SKILL\\.md`",
+        "Write every code change to `\\.\\./style/references/production\\.md`",
         "no `web:style` pass runs here"
       ]
     },

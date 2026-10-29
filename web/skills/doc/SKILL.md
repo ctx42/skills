@@ -40,10 +40,10 @@ that clears the checklist items that fire. A comment that passes is left alone,
 however short. The documentable item — never the file — is the unit of work.
 
 Sources of truth:
-- `../style/SKILL.md` (on-demand: before the first comment is written — its
-  "SFC structure", "Stores and reads", "Naming", and "TSDoc and comments"
-  sections) — obey it in every comment written; it is the rule spec, do not
-  restate it.
+- `../style/references/production.md` (on-demand: before the first comment is
+  written — its "SFC structure", "Stores and reads", "Naming", and "TSDoc and
+  comments" sections) — obey it in every comment written; it is the rule spec,
+  do not restate it.
 - The project's own comment voice, from the neighbouring modules (on-demand:
   when writing).
 
@@ -91,13 +91,13 @@ resolves to nothing: say so and ask — never guess what to work on.
 - `only=exported` — module headers, component headers, and exported symbols
   only.
 
-Fan-out is automatic: a target spanning several directories with more than
-~40 files or ~3000 lines of `.vue`/`.ts` in scope (the threshold `web:style`
-and `web:review` use) runs one subagent per directory, each given this file's
-path and `../style/SKILL.md`'s; a smaller target runs sequentially. Merging
-is not accepting: re-read every added or changed comment against checklist
-item 4 and the code before it enters the report, and revert a fact the code
-does not carry.
+Fan-out is automatic: a target spanning several directories with more than ~40
+files or ~3000 lines of `.vue`/`.ts` in scope (the threshold `web:style` and
+`web:review` use) runs one subagent per directory, each given this file's path
+and `../style/references/production.md`'s; a smaller target runs sequentially.
+Merging is not accepting: re-read every added or changed comment against
+checklist item 4 and the code before it enters the report, and revert a fact the
+code does not carry.
 
 ## The checklist
 
@@ -151,7 +151,8 @@ For each item, in strict order; never start item B until item A is written.
 3. Confirm each fact you will write; demote the unverifiable to a flag.
 4. Write the minimal edit that clears the fired items — add only the missing
    fact, fix only the wrong clause; never rewrite a comment that needed a
-   clause. Obey `../style/SKILL.md`, `max`, and the `only=` filter.
+   clause. Obey `../style/references/production.md`, `max`, and the `only=`
+   filter.
 
 ## Never touch
 
