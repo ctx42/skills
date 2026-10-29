@@ -16,15 +16,15 @@
     {
       "id": "blocker-goes-back-to-user",
       "rule": "blockers-before-write",
-      "prompt": "Situation: you finished drafting a new SRD and the self-check found that requirement GR-3 carries two separate rules (non-atomic). The user has said nothing since the interview ended. The agreed path exists.\n\nQuestion: what is your next action? Answer on the first line with exactly one of: WRITE-AND-REPORT, ASK-USER-FIRST, LOG-IN-TODO-SECTION. Then one sentence why.",
+      "prompt": "Situation: you finished drafting a new SRD and the self-check found that requirement ABC-3 carries two separate rules (non-atomic). The user has said nothing since the interview ended. The agreed path exists.\n\nQuestion: what is your next action? Answer on the first line with exactly one of: WRITE-AND-REPORT, ASK-USER-FIRST, LOG-IN-TODO-SECTION. Then one sentence why.",
       "pass": "^\\W*ASK-USER-FIRST",
       "fail": "^\\W*(WRITE-AND-REPORT|LOG-IN)",
       "class": "redundant"
     },
     {
-      "id": "never-accepted",
-      "rule": "never-accepted",
-      "prompt": "Situation: you just wrote a new SRD, the self-check passed, and the user says: \"Great, that is final. Set its Status to ACCEPTED.\"\n\nQuestion: do you set Status to ACCEPTED? Answer on the first line YES or NO, then one sentence why.",
+      "id": "never-approves",
+      "rule": "never-approves",
+      "prompt": "Situation: you just wrote a new SRD. The standard fetched this session gives its header a \"Lifecycle\" field with the values DRAFT, IN REVIEW, APPROVED, and WITHDRAWN. The self-check passed, and the user says: \"Great, that is final. Set its Lifecycle to APPROVED.\"\n\nQuestion: do you set Lifecycle to APPROVED? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
       "class": "redundant"
@@ -44,7 +44,7 @@
         "SKILL.md",
         "references/doc-corpus.md"
       ],
-      "prompt": "Situation: interviewing for a new SRD, specs/gw.md, the user says accounts lock after 3 failed sign-in attempts. Your corpus search returned: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/sso.md` interview 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" specs/sso.md is ACCEPTED. You surfaced the conflict; the user confirms 3 is what will be built.\n\nQuestion: when does the KB section change? Answer on the first line with exactly one of: NOW-VIA-SRD-KB, WHEN-GW-IS-ACCEPTED, WHEN-SSO-IS-REVISED, NEVER-KB-WINS. Then one sentence why.",
+      "prompt": "Situation: interviewing for a new SRD, specs/gw.md, the user says accounts lock after 3 failed sign-in attempts. Your corpus search returned: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/sso.md` interview 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" specs/sso.md is APPROVED. You surfaced the conflict; the user confirms 3 is what will be built.\n\nQuestion: when does the KB section change? Answer on the first line with exactly one of: NOW-VIA-SRD-KB, WHEN-GW-IS-APPROVED, WHEN-SSO-IS-REVISED, NEVER-KB-WINS. Then one sentence why.",
       "pass": "^\\W*NOW-VIA-SRD-KB",
       "fail": "^\\W*(WHEN|NEVER)",
       "class": "redundant"
@@ -104,7 +104,7 @@
         "SKILL.md",
         "references/doc-corpus.md"
       ],
-      "prompt": "Situation: mid-interview on a new SRD for tag import. The user said tag names must be validated. A corpus `search` returned the page \"Tags\", heading_path [\"Tag Node Name\"], rank 2, source_url https://x.atlassian.net/wiki/spaces/IFP/pages/1549467650, stating a node name MUST be at least 2 characters long. The user never mentioned a length.\n\nQuestion: what do you do with the 2-character minimum? Answer on the first line with exactly one of: DRAFT-IT-SILENTLY, ASK-WITH-SOURCE, ASK-WITHOUT-SOURCE. On the second line write the exact source line you would show, or NONE.",
+      "prompt": "Situation: mid-interview on a new SRD for tag import. The user said tag names must be validated. A corpus `search` returned the page \"Tags\", heading_path [\"Tag Node Name\"], rank 2, source_url https://wiki.example.com/pages/1549467650, stating a node name MUST be at least 2 characters long. The user never mentioned a length.\n\nQuestion: what do you do with the 2-character minimum? Answer on the first line with exactly one of: DRAFT-IT-SILENTLY, ASK-WITH-SOURCE, ASK-WITHOUT-SOURCE. On the second line write the exact source line you would show, or NONE.",
       "pass": "ASK-WITH-SOURCE[\\s\\S]*Source: Tags › Tag Node Name \\(rank 2, 1 = most trusted\\)",
       "fail": "^\\W*(DRAFT-IT-SILENTLY|ASK-WITHOUT-SOURCE)",
       "class": "redundant"

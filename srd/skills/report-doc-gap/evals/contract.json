@@ -38,7 +38,7 @@
       "rule": "An SRD gap is never filed as a doc gap",
       "must": [
         "file\\ an\\ SRD\\ gap",
-        "An\\ SRD\\ gap\\ \\(unmet\\ `STR\\-\\*`/`STA\\-\\*`\\ rules"
+        "An\\ SRD\\ gap\\ \\(unmet\\ SRD\\-standard\\ rules"
       ]
     },
     {
@@ -118,12 +118,12 @@
     },
     {
       "id": "cut-gap-filed-at-once",
-      "rule": "A cut requirement's or REJECTED SRD's KB-section gap arrives confirmed: kind wrong, submitted at once, no grill",
+      "rule": "A cut requirement's or abandoned SRD's KB-section gap arrives confirmed: kind wrong, submitted at once, no grill",
       "must": [
-        "A\\ KB\\ section\\ left\\ behind\\ by\\ a\\ cut\\ requirement\\ \\(or\\ an\\ abandoned\\ SRD\\)\\ arrives\\ confirmed",
+        "A\\ KB\\ section\\ left\\ behind\\ by\\ a\\ cut\\ requirement\\ \\(or\\ an\\ abandoned\\ SRD:",
         "`kind:\\ wrong`",
         "then\\ file\\ at\\ once\\ —\\ no\\ grill,\\ no\\ phase\\ D",
-        "from\\ `srd:backlog`'s\\ sweep,\\ by\\ the\\ SRD's\\ `REJECTED`\\ Status"
+        "from\\ `srd:backlog`'s\\ sweep,\\ by\\ the\\ SRD's\\ abandoned\\ state"
       ]
     },
     {

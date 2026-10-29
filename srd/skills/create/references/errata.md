@@ -46,13 +46,14 @@ Nothing outside this list is errata.
   `standardised → standardized`, `cancelled → canceled`, and `dialogue →
   dialog` for a UI element.
 - Whitespace: trailing spaces; two consecutive spaces where one belongs; a
-  space trapped inside a bold identifier; a space directly inside an opening or
-  closing quotation mark.
+  space trapped inside an identifier's markup; a space directly inside an
+  opening or closing quotation mark.
 - Glyph: a curly quote closing with the wrong direction; a hyphen where a
   parenthetical dash belongs; a stray backslash or other leftover markup glyph.
-- Emphasis markers: unbalanced or stray `**`; bold leaking into the middle of a
-  sentence; a bolded section heading; a malformed bold identifier
-  (`**AC-3: ** → **AC-3:** `).
+- Emphasis and code markers: unbalanced or stray `**` or backticks; bold
+  leaking into the middle of a sentence; a bolded section heading; an
+  identifier whose markup breaks the format the standard sets by a misplaced
+  marker or space alone (the one repair is moving it).
 - Missing terminal period on a requirement.
 - Closed-form orthography: `can not → cannot`, and like joins or splits where
   the part of speech leaves one correct form.
@@ -61,61 +62,67 @@ Nothing outside this list is errata.
   grammatical repair (`force users re-authenticate → force users to
   re-authenticate`). If more than one insertion works, it is not errata.
 - Heading case matched to the document's own convention:
-  `## In scope → ## In Scope` when every sibling heading is title-cased.
-- A required section under a variant name, renamed to the one the standard
-  fixes (Introduction, Glossary, Scope, In Scope, Out of Scope, Requirements):
-  `# System requirements → # Requirements`. Errata only when no heading already
-  carries the canonical name and the variant is the only candidate for it;
-  heading level stays as found.
-- Boilerplate the standard fixes verbatim: the STR-8 keyword notice. This is the
-  one entry that cannot meet the 40-character rule above — the notice is a
-  multi-line block with two URLs — so it is quoted as the whole block and
-  applied by replacing it entire: both `old` and `new` quoted in full, every
-  line verbatim with its leading `>` and the callout header line included, or
-  applying it unreviewed breaks the callout. That works because the standard
-  fixes its text: there is exactly one correct form to replace it with, which is
-  what makes the substitution safe to apply unreviewed. No other long fix
-  inherits this exemption. The one correct form is the notice in
-  `srd-template.md` (`[!INFO]` callout, "in this document"); the one in the SRD
-  standard describes the standard itself and is never the replacement. Its
-  anchor is the notice block itself, which appears once; cite `Metadata` as the
-  location.
-- A missing STR-8 notice: an insertion the class admits, since its text
-  and place are both fixed. `old` is `(missing)`, `new` the template notice
-  quoted in full; it goes directly below the metadata block, after a TOC macro
-  or block that follows the table. Errata only when no keyword notice appears
-  anywhere in the SRD; a misplaced one is a move, not errata. Cite `Metadata`.
-- A missing GLO-4 first-use link: the one coded fix outside whitespace and
-  glyph, since a link target cannot meet the 40-character rule but
-  `glossary_terms` fixes it. State it as "link *term* to its Company Glossary
-  entry" plus the anchor id holding the first use; `edit` derives the link, and
-  the text and its case stay as found. Errata only when the term occurs nowhere
-  before that anchor in any sense or form (plural, case), linked or not, no
-  later use carries the link, the site means the defined term beyond doubt,
-  and the term is no proper name (GLO-6); otherwise an ordinary finding. Cite
-  `(SRD:GLO-4)`. A finding anchored past the term's first use qualifies once
-  re-anchored there: the same defect, its site corrected.
+  `## Open issues → ## Open Issues` when every sibling heading is title-cased.
+- A required section under a variant name, renamed to the name the standard
+  sets for it: `## <variant> → ## <the standard's name>`. Errata only when no
+  heading already carries the canonical name and the variant is the only
+  candidate for it; heading level stays as found.
+- Boilerplate with one fixed form: the keyword notice the standard requires.
+  This is the one entry that cannot meet the 40-character rule above — the
+  notice is a multi-line block with two URLs — so it is quoted as the whole
+  block and applied by replacing it entire: both `old` and `new` quoted in
+  full, every line verbatim with its leading `>` and the callout header line
+  included, or applying it unreviewed breaks the callout. That works because
+  its text is fixed: there is exactly one correct form to replace it with,
+  which is what makes the substitution safe to apply unreviewed. No other long fix
+  inherits this exemption. The one correct form is the notice text the
+  standard fixes for an SRD, else the default notice in `srd-template.md`
+  (`[!INFO]` callout, "in this document"); notice text in the standard that
+  describes the standard itself is never the replacement. Its anchor is the
+  notice block itself, which appears once; its location is the SRD section
+  that holds it, named as the review file names sections (the block above the
+  first section by the name the standard gives it).
+- A missing keyword notice: an insertion the class admits, since its text
+  and place are both fixed. `old` is `(missing)`, `new` the correct notice
+  (above) quoted in full, preceded by the heading of the section the standard
+  puts it in when that section is missing too; it goes where the standard
+  places it, after a TOC macro that directly precedes that place. Errata only
+  when no keyword notice appears anywhere in the SRD and the standard fixes
+  the place; a misplaced one is a move, not errata. Its location is the
+  section the standard places it in, named as for a wrong notice.
+- A missing first-use link to the shared glossary: the one coded fix outside
+  whitespace and glyph, since a link target cannot meet the 40-character rule
+  but `glossary_terms` fixes it. State it as "link *term* to its shared
+  glossary entry" plus the anchor id holding the first use; `edit` derives the
+  link, and the text and its case stay as found. Errata only when the standard
+  asks for a first-use link, the term occurs nowhere before that anchor in any
+  sense or form (plural, case), linked or not, no later use carries the link,
+  the site means the defined term beyond doubt, and the term is no proper name
+  the standard exempts from linking; otherwise an ordinary finding. Cite the
+  standard's first-use link rule by its identifier. A finding anchored past
+  the term's first use qualifies once re-anchored there: the same defect, its
+  site corrected.
 - A dead same-document anchor: a link whose `#anchor` matches no heading of the
   document, when exactly one heading is its evident target — it shares the
   anchor's distinctive words and no other heading does. `#old` → that
   heading's anchor, in the form the document's working links use; every site
   named. It keeps its `[major, reference]` tag and its `(SRD:ref …)` citation.
 - A requirement-group divider (authoring guide): a missing `---` before a
-  group heading under Requirements or after the last group, or a stray `---`
-  elsewhere in the body. Coded: `(missing)` → `---` or `---` → `(none)`, a
-  blank line kept on each side, anchored to the verbatim heading directly
-  below the line (blank lines aside), or `(end of document)` when no heading
-  follows the last group; a stray `---` with no heading directly below it is
-  an ordinary finding. Never a front-matter fence or a line inside a code
-  block or callout. One finding per direction, each heading one of its sites,
-  as the gate's repeated-fix rule allows. Cite the standard's divider rule,
-  else `(SRD:house)`.
+  group heading in the requirements section or after the last group, or a
+  stray `---` elsewhere in the body. Coded: `(missing)` → `---` or `---` →
+  `(none)`, a blank line kept on each side, anchored to the verbatim heading
+  directly below the line (blank lines aside), or `(end of document)` when no
+  heading follows the last group; a stray `---` with no heading directly
+  below it is an ordinary finding. Never a front-matter fence or a line
+  inside a code block or callout. One finding per direction, each heading
+  one of its sites, as the gate's repeated-fix rule allows. Cite the
+  standard's divider rule, else `(SRD:house)`.
 - Running-text casing the project's casing rules fix: a term those rules write
   lowercase in running text, capitalized mid-sentence (`Project` → `project`).
   Errata only when the rules lowercase it whatever its sense, so no site needs
   judgment; never at a sentence start, in a heading, glossary entry heading,
   quoted UI string, code span, or anchor. Every site named with its count.
-  A local Glossary term or user-interface component whose name contains the
+  A local terms entry or user-interface component whose name contains the
   word (`Order Status` for `Order`) is no site and costs no judgment: name each
   as excluded (`excluding Order Status, Order Tabs`), and the finding still
   qualifies. Any other capitalized phrase holding the word (a proper name, a
@@ -123,10 +130,10 @@ Nothing outside this list is errata.
   into errata and ordinary parts. Cite the standard's
   casing rule, else `(SRD:house)`.
 
-The GLO-4 link and casing entries are `[minor]` and `terminology`: a missing
-link or a case slip is cosmetic, never the terminology drift `major` covers. A
-divider is `[minor, format]`: markup, not a missing part, even when the
-standard files its rule under `STR`.
+The first-use link and casing entries are `[minor]` and `terminology`: a
+missing link or a case slip is cosmetic, never the terminology drift `major`
+covers. A divider is `[minor, format]`: markup, not a missing part, even when
+the standard files its rule among its document-structure rules.
 
 ## Exclusions
 
@@ -142,7 +149,7 @@ These stay out of `## Errata` even when a literal substitution exists:
 - Any change to a requirement identifier: its spelling, number, prefix, or
   order.
 - Subject, voice, or mood: passive → active, or "the user interface MUST" →
-  "the system MUST" (LANG-1). These are rewrites, not surface form.
+  "the system MUST". These are rewrites, not surface form.
 - Capitalizing a term to its glossary form, or lowercasing one the project's
   casing rules do not lowercase in every sense. Whether the site means the
   defined term or the generic sense is author judgment, not surface form.

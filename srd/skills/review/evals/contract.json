@@ -11,9 +11,9 @@
     {
       "id": "todo-scaffold-blocks",
       "file": "references/finding-tags.md",
-      "rule": "An unresolved In Scope TODO marker or non-empty ## TODO section is a blocker",
+      "rule": "An unresolved in-scope TODO marker or non-empty ## TODO section is a blocker",
       "must": [
-        "an\\ unresolved\\ draft\\ scaffold\\ —\\ the\\ In\\ Scope\\ `\\-\\-\\-\\ TODO\\ \\-\\-\\-`\\ marker\\ or\\ a\\ non\\-empty\\ `\\#\\#\\ TODO`\\ section"
+        "an\\ unresolved\\ draft\\ scaffold\\ —\\ the\\ in\\-scope\\ list's\\ `\\-\\-\\-\\ TODO\\ \\-\\-\\-`\\ marker\\ or\\ a\\ non\\-empty\\ `\\#\\#\\ TODO`\\ section"
       ]
     },
     {
@@ -80,7 +80,7 @@
     },
     {
       "id": "no-back-link-finding",
-      "rule": "Back-links STR-4/6 never raise a finding",
+      "rule": "A rule that an external artifact link back to the SRD never raises a finding",
       "must": [
         "never\\ raise\\ a\\ back\\-link\\ finding"
       ]
@@ -134,11 +134,11 @@
       ]
     },
     {
-      "id": "req5-all-methods",
+      "id": "checkable-all-methods",
       "file": "references/finding-tags.md",
-      "rule": "REQ-5 is judged against every verification method it names, not test alone",
+      "rule": "A checkability rule is judged against every verification method the standard names, not test alone",
       "must": [
-        "Judge\\ REQ\\-5\\ against\\ every\\ method\\ it\\ names,\\ not",
+        "Judge\\ a\\ checkability\\ rule\\ against\\ every\\ verification\\ method\\ the\\ standard\\ names,\\ not\\ test\\ alone",
         "may\\ still\\ pass"
       ]
     },
@@ -163,6 +163,65 @@
       "rule": "check's corpus reach is only the KB pages whose srd_ref names the SRD",
       "must": [
         "`check`\\s+reads\\s+only\\s+the\\s+KB\\s+pages\\s+whose\\s+`srd_ref`"
+      ]
+    },
+    {
+      "id": "cites-the-fetched-standard",
+      "file": "references/review-file.md",
+      "rule": "A finding cites the rule identifier as the fetched standard writes it; the skill hardcodes no standard's identifiers",
+      "must": [
+        "Close\\ each\\ finding\\ with\\ the\\ identifier\\ of\\ the\\ rule\\ it\\ breaks,\\ as\\ the\\ fetched\\ standard\\ writes\\ it",
+        "Cite\\ only\\ identifiers\\ that\\ standard\\ states"
+      ],
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-rule-ids-skill",
+      "file": "SKILL.md",
+      "rule": "No rule-identifier citation other than house, consistency, ref, or the ABC- placeholder",
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-rule-ids-finding-tags",
+      "file": "references/finding-tags.md",
+      "rule": "No rule-identifier citation other than house, consistency, ref, or the ABC- placeholder",
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-rule-ids-feedback-mode",
+      "file": "references/feedback-mode.md",
+      "rule": "No rule-identifier citation other than house, consistency, ref, or the ABC- placeholder",
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-rule-ids-check-mode",
+      "file": "references/check-mode.md",
+      "rule": "No rule-identifier citation other than house, consistency, ref, or the ABC- placeholder",
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "no-hardcoded-rule-ids-errata-mode",
+      "file": "references/errata-mode.md",
+      "rule": "No rule-identifier citation other than house, consistency, ref, or the ABC- placeholder",
+      "must_not": [
+        "\\(SRD:(?!house\\)|consistency\\)|ref\\b|ABC-\\d)[^)]*\\)"
+      ]
+    },
+    {
+      "id": "order-by-standard-layout",
+      "rule": "Findings are numbered and grouped in the standard's own section order, not a fixed one",
+      "must": [
+        "document\\ order\\ \\(the\\ standard's\\ section\\ order,\\ and\\ by\\ position\\ within\\ each\\)"
       ]
     }
   ]

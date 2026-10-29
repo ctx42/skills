@@ -15,7 +15,7 @@ license: MIT
 
 ```
 /srd:create                           author a new SRD by interview (default)
-/srd:create <what it should specify>  seed the opening Objective, then interview
+/srd:create <what it should specify>  seed the opening purpose, then interview
 ```
 
 Author a brand-new SRD by interviewing the user, drafting against the SRD
@@ -27,8 +27,8 @@ standard, and self-checking the draft before saving it.
 author of new SRDs (interview → draft → self-check). It owns the shared files
 under `references/` and `assets/`; the other SRD skills read them.
 It never reviews or audits an SRD written elsewhere (that is `review`), never
-edits an existing SRD as a service (that is `edit`), and never marks an SRD
-`ACCEPTED`: acceptance is a human decision (STA-3).
+edits an existing SRD as a service (that is `edit`), and never sets an SRD to
+the standard's approval status: approval is a human decision.
 
 ## Sources of truth
 
@@ -40,23 +40,26 @@ edits an existing SRD as a service (that is `edit`), and never marks an SRD
   platform documentation corpus, how its sources rank, how a corpus-backed
   question cites its source, and where an unconfirmed or undocumented fact
   goes (`srd:report-doc-gap`, `srd:kb`).
-- The SRD standard (on-demand: steps 3–4) — the rule set (`STR`, `STA`,
-  `LANG`, `REQ`, `GLO`, `SCO`, Quality Bar), fetched live through the server
-  per [references/project-config.md](references/project-config.md). Fetch it
-  before drafting; not needed for the glossary or the interview.
+- The SRD standard (on-demand: steps 3–4) — every rule this skill applies:
+  the metadata fields, status values, sections and their order, notice,
+  identifier format, wording rules, and approval checks. Fetched live through
+  the server per [references/project-config.md](references/project-config.md)
+  before drafting; not needed for the glossary or the interview. Act only on
+  what it states, and cite a rule by the identifier it writes; the rule
+  descriptions below name no standard's ids.
 - [references/authoring-guide.md](references/authoring-guide.md) (on-demand:
   steps 2–4) — house extensions (US English, sub-numbering, one term per
   concept, the consistency pass) and Bad→Good defect examples to draft against
-  and check for. Its examples never go into the SRD (REQ-7).
+  and check for. Its examples never go into the SRD.
 - [references/errata.md](references/errata.md) (not read here) — the bulk-fix
   errata class `review` and `edit` apply; kept here because `create` owns the
   shared references.
 - [references/srd-procedures.md](references/srd-procedures.md) (on-demand: the
-  first term the interview surfaces) — shared procedures: glossary resolution,
-  In Scope derivation.
-- [assets/srd-template.md](assets/srd-template.md) (on-demand: step 3) — the
-  SRD skeleton in the required section order with the keyword notice. Fill it;
-  do not restructure it.
+  first term the interview surfaces) — shared procedures: shared-glossary
+  resolution, in-scope derivation.
+- [assets/srd-template.md](assets/srd-template.md) (on-demand: step 3) — how
+  to build the SRD skeleton from the standard, and the default keyword notice.
+  Build from it; never reorder what the standard orders.
 
 ## Documentation corpus
 
@@ -114,35 +117,37 @@ first interview question.
 Resolve the glossary when the first term surfaces (branch 6 at the latest, and
 always before drafting; a seed's term surfaces with the user's first answer),
 not here: [references/srd-procedures.md](references/srd-procedures.md). The
-term set lets the SRD satisfy GLO-3 / STR-10 without redefining known terms, so
-it must be loaded before any term is checked against it, never after.
+term set lets the SRD meet the standard's term-definition rules without
+redefining terms the shared glossary defines, so it must be loaded before any
+term is checked against it, never after.
 
 ### 1. Interview
 
-When the invocation carries a seed, treat it as the user's opening Objective:
+When the invocation carries a seed, treat it as the user's opening purpose:
 restate it and ask the next branch in the same turn, so the answer confirms or
 corrects the restatement, instead of asking cold; with no seed, open with the
-Objective question.
+purpose question.
 
 Drive the conversation; do not wait to be fed content. Ask one branch at a
 time, in this order, and restate each resolved branch before moving on, folding
 any platform facts that branch surfaced into the restatement in natural prose,
 so confirming it confirms both the SRD and the knowledge base:
 
-1. Objective: what this SRD specifies, in one or two sentences.
-2. UI change? Yes sets `Designs` to a TODO link placeholder; no sets it to
-   `N/A` (STR-5, STR-7).
-3. In Scope: a high-level overview of each change it requests (SCO-1). MAY be
-   deferred: because In Scope derives from the requirements, the user may leave
-   the `--- TODO ---` marker and derive `SC-n` items after the requirements
-   settle (derivation procedure in
+1. Purpose: what this SRD specifies, in one or two sentences; it fills the
+   summary field the standard's metadata requires, if any.
+2. UI change? Yes leaves the standard's design-link field a marked TODO
+   placeholder; no gives it the value the standard sets for no UI change.
+3. In scope: a high-level overview of each change it delivers (the standard's
+   in-scope list). MAY be deferred: because it derives from the requirements,
+   the user may leave the `--- TODO ---` marker and derive its items after the
+   requirements settle (derivation procedure in
    [references/srd-procedures.md](references/srd-procedures.md)).
-4. Out of Scope: what it deliberately excludes (STR-11). Requirements must not
-   contradict these (SCO-3).
-5. Requirements: pull out the actual rules. For each, push until it is atomic
-   (REQ-1), about what *the system* does (LANG-1, LANG-5), and verifiable with
-   concrete criteria: reject vague qualities like "secure" or "fast" and ask
-   for the measurable form (REQ-5, REQ-6). When the user states a fact about
+4. Out of scope: what it deliberately excludes (the standard's out-of-scope
+   list). Requirements must not contradict these.
+5. Requirements: pull out the actual rules. For each, push until it is atomic,
+   about what *the system* does, and verifiable with concrete criteria: reject
+   vague qualities like "secure" or "fast" and ask for the measurable form.
+   When the user states a fact about
    the existing system ("the system already does X", "the API returns Y"),
    `search` the corpus before accepting it; surface any contradiction at once
    in interview voice, never silently accept or fix — a KB section's included,
@@ -151,87 +156,94 @@ so confirming it confirms both the SRD and the knowledge base:
    per [Documentation corpus](#documentation-corpus).
 6. Terms: resolve the glossary now if no term has yet forced it (step 0), then
    check each term that surfaces against its term set and mark it as already
-   defined (link to it) or needing a local Glossary entry.
+   defined (link to it) or needing a local terms entry.
    `search` the corpus before asking the user to define a term: it may already
    define it, or name the same concept differently (a naming conflict to
    surface). What the corpus returns is meaning, not coverage — only the
-   Company Glossary satisfies GLO-3, so a term the corpus defines and
-   `glossary_terms` lacks still needs a local entry
+   shared glossary satisfies the standard's definition rule, so a term the
+   corpus defines and `glossary_terms` lacks still needs a local entry
    ([references/srd-procedures.md](references/srd-procedures.md)). A definition
    the user supplies because no glossary carries it goes to `srd:kb` when it
    names a platform concept — one that exists whether or not this SRD ships;
    one this SRD introduces gets its local entry only.
 
-Do not collect Owners, Initiative links, or Designs links; those are left as
-marked placeholders (the skill fetches no such links). Status is always
-`IN PROGRESS` for a new draft.
+Do not collect the metadata fields that name people or link outside the SRD
+(owners or reviewers, a tracking link, a design link); each stays a marked
+placeholder (the skill fetches no such links). The status field always holds
+the standard's initial status, the value it gives a document still being
+written.
 
 Interview style: relentless, focused, no bundled questions; push back on
 contradictions; surface a decision that blocks another before continuing.
 
 ### 2. Group and number
 
-Cluster the requirements into logical groups. Propose an uppercase prefix per
-group, three or four letters where one fits (REQ-8, e.g. `AUTH`, `DATA`,
-`VIEW`). Show the grouping and prefixes and let the user rename or merge. Then
-number each group from 1 in order (REQ-2 `**PFX-1:**`, REQ-3 unique, REQ-4 in
-order). Do the same for scope items (`SC-`, `OSC-`). Default to flat numbers;
-use one-letter sub-numbering (`**GR-1a:**`, `**GR-1b:**`) only for a tight
-cluster of related rules (authoring guide).
+Cluster the requirements into logical groups. Propose a group code per group
+that the standard's identifier rule allows (e.g. `AUTH`, `DATA`, `VIEW`). Show
+the grouping and codes and let the user rename or merge. Then number each group
+from 1 in order, unique, in the identifier format the standard sets; number
+scope items the same way when the standard gives them identifiers. Default to
+flat numbers; use one-letter sub-numbering (`ABC-1a`, `ABC-1b`) only for a
+tight cluster of related rules (authoring guide) and only where the standard's
+numbering rule allows it.
 
 ### 3. Draft
 
-Fill `assets/srd-template.md` in its section order (STR-13), writing against
-the standard and the authoring guide. Decisions specific to a new draft:
+Build the skeleton per `assets/srd-template.md`, in the section order the
+standard sets, writing against the standard and the authoring guide. Decisions
+specific to a new draft:
 
-- Metadata: a real `Objective`; `Status` `IN PROGRESS`; `Owners`, `Initiative`,
-  and (when the UI changes) `Designs` as clearly marked `<TODO: …>`
-  placeholders; `Designs` `N/A` otherwise.
-- In Scope MAY keep the `--- TODO ---` marker instead of `SC-n` items when
-  deferred; derive them from the requirements before acceptance.
+- Metadata: every field the standard requires; the summary field from the
+  purpose; the status field at its initial status; people fields, the
+  tracking link, and (when the UI changes) the design link as clearly marked
+  `<TODO: …>` placeholders; the design-link field at the standard's no-UI
+  value otherwise.
+- The in-scope list MAY keep the `--- TODO ---` marker instead of items when
+  deferred; derive them from the requirements before approval.
 - Add a `## TODO` section as the last section only when open authoring issues
   need tracking.
-- Local Glossary entries only for terms `glossary_terms` lacks.
+- Local terms entries only for terms `glossary_terms` lacks.
 
 ### 4. Self-check
 
 Check the draft against every rule in the standard fetched through the server,
-in document-section order (metadata → Introduction → Glossary → Scope →
-Requirements), recognizing the defect classes in
+in the order the standard says to check, else its section order, recognizing
+the defect classes in
 [references/authoring-guide.md](references/authoring-guide.md). Loop until the
 mechanical checks all pass. This is `create`'s action policy on a finding:
 
-1. Auto-fix the mechanical checks (no judgment): section order (STR-13),
-   keyword notice placement (STR-8), identifier format/uniqueness/order
-   (REQ-2/3/4), keyword capitalization (LANG-4), stray example or note text
-   (REQ-7), valid Markdown, requirement-group dividers (authoring guide),
-   Status defaulting to `IN PROGRESS`, Designs `N/A`
-   when the user said no UI change, British → US spelling. These apply even
+1. Auto-fix the mechanical checks (no judgment): section order, keyword-notice
+   text and placement, identifier format/uniqueness/order, keyword
+   capitalization, example or note text where the standard forbids it, valid
+   Markdown, requirement-group dividers (authoring guide), the status field at
+   its initial status, the design-link field at its no-UI value when the user
+   said no UI change, British → US spelling. These apply even
    where the user declined a rewording in the interview: a refusal there is
    about meaning, and a keyword's case or a stray example carries none.
 2. Consistency pass: run the pass in
    [references/authoring-guide.md](references/authoring-guide.md), re-reading
    the whole draft top to bottom. Repeat after any fix.
-3. Collect the judgment checks, each with its rule id and location — the
-   Quality-Bar blockers among them go to step 4, everything else to the step-5
-   report: missing/placeholder Owners, Initiative, Designs (STR-2/3/5/7; the
-   back-links STR-4/6 are external and not reported); intro gaps (STR-9);
-   undefined terms (STR-10/GLO-3); style (LANG-1/2/3/5/6/7); non-atomic or
-   unverifiable requirements (REQ-1/5/6); glossary discipline (GLO-1/2); scope
-   coverage and conflicts, every In Scope item needing ≥ 1 requirement and none
-   contradicting Out of Scope (SCO-2/3); duplicate or overlapping requirements
-   and terminology drift (authoring guide); any Quality Bar item not yet met.
+3. Collect the judgment checks, each with the identifier of the rule it
+   breaks, as the standard writes it, and its location — the blockers among
+   them go to step 4, everything else to the step-5 report: missing or
+   placeholder people and link fields (back-links the standard requires live
+   outside the SRD and are not reported); intro gaps; undefined terms; wording
+   style; non-atomic or unverifiable requirements; terms-section discipline
+   (definitions only, no behavior); scope coverage and conflicts, every
+   in-scope item needing ≥ 1 requirement and none contradicting the
+   out-of-scope list; duplicate or overlapping requirements and terminology
+   drift (authoring guide); any approval check the standard lists not yet met.
    Also flag any requirement whose claim about existing system behavior went
    unconfirmed — a facts gap distinct from the format checks. It routes per
    [Documentation corpus](#documentation-corpus) and is flagged, never assumed
    true.
-   Marked placeholders (Initiative, Designs, Owners, an unresolved In Scope
+   Marked placeholders (people and link fields, an unresolved in-scope
    `--- TODO ---` marker, any non-empty `## TODO` section) are always
    outstanding human follow-ups.
-4. Settle the Quality-Bar blockers before writing: a non-atomic requirement
-   (REQ-1), an unverifiable one (REQ-5/6), an In Scope item no requirement
-   covers (SCO-2 — suspended, and so nothing to walk, while the In Scope
-   `--- TODO ---` marker stands). Each goes back to the user as one more
+4. Settle the blockers before writing: a non-atomic requirement, an
+   unverifiable one, an in-scope item no requirement covers (suspended, and so
+   nothing to walk, while the in-scope `--- TODO ---` marker stands). Each
+   goes back to the user as one more
    interview question — one at a time, the current text and the proposed fix
    shown, the same discipline as branch 5 — and the answer is drafted in. An
    authoring skill does not knowingly write a defect it has already named; the
@@ -242,8 +254,9 @@ mechanical checks all pass. This is `create`'s action policy on a finding:
    placeholders, style, intro gaps, terminology drift, an unconfirmed platform
    claim (the lookup found nothing) — is reported, never walked.
 
-Do not mark the draft acceptable: a new SRD is `IN PROGRESS` and acceptance
-(STA-3, Quality Bar) is a human decision.
+Do not mark the draft acceptable: a new SRD holds the standard's initial
+status, and approval, with the standard's approval checks, is a human
+decision.
 
 ### 5. Write
 

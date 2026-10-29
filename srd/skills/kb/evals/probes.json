@@ -8,7 +8,7 @@
         "SKILL.md",
         "references/page-anatomy.md"
       ],
-      "prompt": "Situation: during an SRD interview the user explained how leak instances accumulate evidence. From that you inferred that evidence is kept for 90 days; the user never said so. You are now writing the section on leak-instance evidence.\n\nQuestion: does the 90-day retention period go into the section body? Answer on the first line YES or NO, then in one sentence say where, if anywhere, it is recorded instead.",
+      "prompt": "Situation: during an SRD interview the user explained how Albums accumulate shared photos. From that you inferred that a shared photo is kept for 90 days; the user never said so. You are now writing the section on Album sharing.\n\nQuestion: does the 90-day retention period go into the section body? Answer on the first line YES or NO, then in one sentence say where, if anywhere, it is recorded instead.",
       "pass": "^\\W*NO\\b.*(gap|deferred)",
       "fail": "^\\W*YES",
       "class": "redundant"
@@ -16,18 +16,18 @@
     {
       "id": "confirmed-fact-to-inbox",
       "rule": "inbox-first",
-      "prompt": "Situation: the user just confirmed a restatement that includes a new platform fact: Sound Files are compressed with FLAC before archiving. The corpus does not state it, and the knowledge base already has a page kb/sound-files.md on a related subject.\n\nQuestion: which single file do you write the fact to now? Answer on the first line with the file path only, then one sentence why.",
+      "prompt": "Situation: the user just confirmed a restatement that includes a new platform fact: Photos are compressed with WebP before archiving. The corpus does not state it, and the knowledge base already has a page kb/photos.md on a related subject.\n\nQuestion: which single file do you write the fact to now? Answer on the first line with the file path only, then one sentence why.",
       "pass": "^\\W*`?(kb/)?_inbox\\.md",
-      "fail": "^\\W*`?(kb/)?sound-files\\.md",
+      "fail": "^\\W*`?(kb/)?photos\\.md",
       "class": "redundant"
     },
     {
       "id": "skip-routes-deferred",
       "rule": "no-new-subjects",
-      "prompt": "Situation: in an SRD interview about hydrophone sensor types, you asked whether the sensor-type field may be empty, to make a fact worth writing. The user answered: \"skip that for now\".\n\nQuestion: what happens to that question? Answer on the first line with exactly one of: ASK-AGAIN-LATER, DROP-IT, WRITE-TO-KB-PAGE, FILE-AS-GAP. Then one sentence naming where it goes and with which `answer` value, if any.",
-      "pass": "^\\W*FILE-AS-GAP.*\\bdeferred\\b",
-      "fail": "^\\W*(ASK-AGAIN|DROP|WRITE)",
-      "class": "redundant"
+      "prompt": "Situation: in an SRD interview about camera device types, you asked whether the device-type field may be empty, to make a fact worth writing. The user answered: \"skip that for now\". This interview, like every one, closes with a wrap-up round in about ten minutes where skipped points can be raised again.\n\nQuestion: what happens to that question? Answer on the first line with exactly one of: RAISE-AT-WRAP-UP, DROP-IT, NOTE-ON-KB-PAGE, FILE-GAP-DEFERRED, FILE-GAP-UNKNOWN. Then one sentence why.",
+      "pass": "^\\W*FILE-GAP-DEFERRED",
+      "fail": "^\\W*(RAISE|DROP|NOTE|FILE-GAP-UNKNOWN)",
+      "class": "load-bearing"
     },
     {
       "id": "bare-capture-provenance",
@@ -48,9 +48,9 @@
         "SKILL.md",
         "references/page-anatomy.md"
       ],
-      "prompt": "Situation: an SRD interview reaches a platform question the user cannot answer now: \"does a logger keep readings across a reboot?\". A `list_gaps` query shows it is already on file as open gap `gap-0051` with `answer: deferred`. The topic page kb/logger.md concerns it.\n\nQuestion: what do you do with the question? Answer on the first line with exactly one of: FILE-NEW-GAP, BUMP-HIT-ON-GAP-0051, ADD-QUESTION-TO-PAGE. Then one sentence on what, if anything, the topic page carries about it.",
-      "pass": "^\\W*BUMP-HIT-ON-GAP-0051\\b",
-      "fail": "^\\W*(FILE|ADD)",
+      "prompt": "Situation: an SRD interview for `camera-firmware-v3` reaches a platform question the user cannot answer now: \"does a camera keep queued uploads across a reboot?\". A `list_gaps` query shows the same question already on file as open gap `gap-0051`, `answer: deferred`, `hits: 2`, filed months ago from a different SRD (`srd_ref` `upload-queue-v1`). The topic page kb/camera.md concerns it.\n\nQuestion: which single gap-store call records this encounter? Answer on the first line with only the call, as `tool(arg=value, ...)`, or NONE if no call is made. Then one sentence on what, if anything, the topic page carries about it.",
+      "pass": "^\\W*update_gap\\b[^\\n]*gap-0051[^\\n]*add_hit",
+      "fail": "^\\W*(report_gap|NONE)",
       "class": "load-bearing"
     },
     {
@@ -60,7 +60,7 @@
         "SKILL.md",
         "references/conflicts.md"
       ],
-      "prompt": "Situation: srd:edit hands you a fact the user just confirmed for specs/gw.md: \"A user account locks after 3 consecutive failed sign-in attempts.\" Your search before writing finds: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/gw.md` interview 2026-08-02; `specs/sso.md` 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" specs/sso.md is ACCEPTED and still says 5.\n\nQuestion: what do you write? Answer on the first line with exactly one of: REWRITE-THE-SECTION-NOW, LEAVE-THE-SECTION-UNTIL-SSO-IS-REVISED, ASK-THE-USER-TO-RECONCILE-FIRST, APPEND-NEW-FACT-TO-INBOX-BESIDE-IT. Then one sentence why.",
+      "prompt": "Situation: srd:edit hands you a fact the user just confirmed for specs/gw.md: \"A user account locks after 3 consecutive failed sign-in attempts.\" Your search before writing finds: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/gw.md` interview 2026-08-02; `specs/sso.md` 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" specs/sso.md is approved and still says 5.\n\nQuestion: what do you write? Answer on the first line with exactly one of: REWRITE-THE-SECTION-NOW, LEAVE-THE-SECTION-UNTIL-SSO-IS-REVISED, ASK-THE-USER-TO-RECONCILE-FIRST, APPEND-NEW-FACT-TO-INBOX-BESIDE-IT. Then one sentence why.",
       "pass": "^\\W*REWRITE-THE-SECTION-NOW",
       "fail": "^\\W*(APPEND|LEAVE|ASK)",
       "class": "redundant"
@@ -73,9 +73,9 @@
         "references/page-anatomy.md",
         "../create/references/project-config.md"
       ],
-      "prompt": "Situation: srd:create hands you a confirmed platform fact for the SRD at initiatives/int384-hydrophone/srd.md. That SRD's front matter has `id: 1774485505` and its title is \"INT-384 Hydrophone Sensors\". The fact goes to the inbox as a new section with its attestation line.\n\nQuestion: write that attestation line exactly, dated 2026-10-27, on the first line, then one sentence why.",
-      "pass": "^[^\\n]*Attested\\W+int384-hydrophone\\b",
-      "fail": "^[^\\n]*Attested\\W+(1774485505|initiatives/|INT-384)",
+      "prompt": "Situation: srd:create hands you a confirmed platform fact for the SRD at initiatives/abc-photo-albums/srd.md. That SRD's front matter has `id: 1774485505` and its title is \"ABC-384 Photo Albums\". The fact goes to the inbox as a new section with its attestation line.\n\nQuestion: write that attestation line exactly, dated 2026-10-27, on the first line, then one sentence why.",
+      "pass": "^[^\\n]*Attested\\W+abc-photo-albums\\b",
+      "fail": "^[^\\n]*Attested\\W+(1774485505|initiatives/|ABC-384)",
       "class": "redundant"
     },
     {

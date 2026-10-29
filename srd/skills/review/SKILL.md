@@ -47,8 +47,11 @@ and tell the user.
   (eager) — the gate every mode passes first, and the project paths,
   standard, and server it names.
 - The SRD standard (fetched live per that file; every mode but `feedback`,
-  which only lists findings already in the file) — the rules (`STR`, `STA`,
-  `LANG`, `REQ`, `GLO`, `SCO`, Quality Bar). The review checks every rule.
+  which only lists findings already in the file) — every rule with the
+  identifier and group it gives it, the section layout and order, the
+  lifecycle values, and the acceptance criteria. The review checks every rule
+  it states and no rule it does not; this skill names defects by kind, never
+  by another standard's identifiers.
 - [../create/references/authoring-guide.md](../create/references/authoring-guide.md)
   (eager) — house additions (US English, sub-numbering, draft scaffolds,
   terminology consistency), the consistency pass, and the Bad→Good defect
@@ -57,24 +60,24 @@ and tell the user.
   classifying a finding as errata) — the gate, allowlist, and exclusions of the
   bulk-fix errata class.
 - [../create/assets/srd-template.md](../create/assets/srd-template.md)
-  (on-demand: an errata finding on the STR-8 keyword notice, missing or wrong)
-  — the one correct notice text `errata.md` names as its fix.
+  (on-demand: an errata finding on the obligation-keyword notice the standard
+  requires, missing or wrong) — the one correct notice text `errata.md` names
+  as its fix.
 - [../create/references/doc-corpus.md](../create/references/doc-corpus.md)
   (on-demand: the facts-vs-corpus pass, which only `review` and `walk` run) —
   how to reach the documentation corpus, how its sources rank, and where an
   unconfirmed claim goes. `check` reads only the KB pages whose `srd_ref`
   names the SRD (check step 1); `errata` and `feedback` never reach it.
 - [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
-  (on-demand: the first GLO-3, GLO-4, or STR-10 check) — the Company
-  Glossary's term set, from the server.
+  (on-demand: the first check of whether a term needs a definition or a link
+  to the shared term list) — that list's term set, from the server.
 
-Apply the full rule set. `create` leaves STR-2..7 (≥ 2 owners, Initiative
-link, Designs link or `N/A` when no UI change) and STA-* (valid Status; not
-`ACCEPTED` without an approved design or the Quality Bar) as placeholders; a
-finished SRD under review must satisfy them — flag every gap. Exception: the
-back-links (STR-4, STR-6) live in the external ticket and design tool, so check
-only that the forward Initiative and Designs links are present and never raise
-a back-link finding.
+Apply the full rule set. `create` leaves the header values that need outside
+facts (people, tracking and design links, the lifecycle value) as
+placeholders; a finished SRD under review must satisfy every rule on them —
+flag every gap. Exception: a rule that an external artifact (a work item, a
+design set) link back to the SRD lives outside the SRD, so check only that the
+forward link is present and never raise a back-link finding.
 
 ## Documentation corpus
 
@@ -134,7 +137,8 @@ resolves to nothing: say so and ask — never guess what to work on.
 
 A file-writing run closes with one task-oriented line — e.g. "4 of 15 tasks
 resolved, 2 withdrawn; 1 blocker still open." — plus the per-severity count of
-open findings and whether a blocker stands between the SRD and the Quality Bar.
+open findings and whether a blocker stands between the SRD and the standard's
+acceptance criteria.
 The findings live in the file the user is pointed to: the reply never lists
 them — one per line, by group, or in a table — nor quotes their trigger text.
 The one exception is `check`'s status table, which its procedure requires.
@@ -158,9 +162,9 @@ in full.
 1. Run the draft check; on a draft, `srd:report-doc-gap` drains what a prior
    session left unfiled — every draft filed, kept, or discarded — before any
    corpus search. Read the entire SRD top to bottom.
-2. Check it against every rule in the standard, in document-section order,
-   including the consistency pass and the house additions of the authoring
-   guide. Also run the facts-vs-corpus pass
+2. Check it against every rule in the standard, in the section order the
+   standard's layout gives, including the consistency pass and the house
+   additions of the authoring guide. Also run the facts-vs-corpus pass
    ([Documentation corpus](#documentation-corpus)), handing each doc gap to
    `srd:report-doc-gap` on discovery.
 3. If the review file does not exist, create it and write all findings with
@@ -169,9 +173,9 @@ in full.
 4. If it exists, do not rewrite it. First resolve: re-verify open findings and
    tick+move each fixed one to `## Resolved` (a regression moves back, same
    number). Then append newly found defects with fresh numbers, assigned in
-   document order (Metadata → Introduction → Glossary → Scope → Requirements,
-   and by position within each), so two runs over the same defects number them
-   the same way — errata to `## Errata`, the rest to their document section.
+   document order (the standard's section order, and by position within each),
+   so two runs over the same defects number them the same way — errata to
+   `## Errata`, the rest to their document section.
    Bump `updated:` only if something else in the file changed (review-file.md):
    a pass that resolves nothing and appends nothing writes nothing.
 5. Close with the task-oriented line (Modes) and one start clause naming what

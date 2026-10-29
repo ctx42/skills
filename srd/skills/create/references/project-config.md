@@ -18,7 +18,7 @@ skill that passed the gate this session reuses that result.
 | `kb`           | knowledge-base folder; confirmed facts land in `<kb>/_inbox.md`            |
 | `initiatives`  | SRD folder, one folder per SRD; the server gives its documents no `rank`   |
 | `srd-standard` | identity of the SRD standard, read with `get_doc`                          |
-| `glossary`     | Company Glossary location; GLO-4/5 links must point under it               |
+| `glossary`     | shared glossary location; glossary links must point under it               |
 | `gaps`         | server's gap folder, one `gap-NNNN-<slug>.md` per gap; reach it via tools  |
 | `precedence`   | server's trust order: folders, most trusted first; drives each `rank`      |
 
@@ -56,14 +56,18 @@ then re-run. Never fall back to a REST call, a local checkout, or offline work.
   corpus document. Never add, remove, or change a front-matter key or marker
   no srd skill defines, in any file — a key another tool owns stays as found.
 - The SRD standard is `get_doc` on the `srd-standard` identity, fetched once
-  per session before the first rule check; it is the only source of the `STR`,
-  `STA`, `LANG`, `REQ`, `GLO`, `SCO` rules and the Quality Bar. Never use a
-  stored or remembered copy. A not-found identity stops the run like a gate
-  failure: `srd-standard` names no document (`<value>`).
-- The standard's "Company Glossary" is the `glossary` location; its terms come
-  from the server (`srd-procedures.md`).
+  per session before the first rule check; it is the only source of SRD
+  rules — metadata fields, status values, sections and their order, notice,
+  identifier format, wording and term rules, approval checks — and a finding
+  cites a rule by the identifier the standard writes. Never use a stored or
+  remembered copy, and never apply a rule it does not state. A not-found
+  identity stops the run like a gate failure: `srd-standard` names no
+  document (`<value>`).
+- The shared glossary the standard refers to, under whatever name it gives
+  it, is the `glossary` location; its terms come from the server
+  (`srd-procedures.md`).
 - An SRD reference (gap `srd_ref`, KB `srd_ref`, attestation lines) is the
-  SRD's folder name under `initiatives` (`int384-hydrophone`); an SRD outside
+  SRD's folder name under `initiatives` (`export-rate-limit`); an SRD outside
   `initiatives` uses its path from the project root. Never a document
   identity, never an invented id.
 - Project data lives in the project or on the server — `<kb>/`, server-side

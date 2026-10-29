@@ -100,7 +100,7 @@ corpus result names each result it rests on, one line per source:
   nothing.
 - Ask before the content lands: the user's confirmation of the proposal is
   the ask, so the line sits in it. Nothing the user stated and no lookup
-  touched carries one; errata (formatting, a GLO-4 link) add no content and
+  touched carries one; errata (formatting, a glossary link) add no content and
   carry none.
 
 ## Gaps
@@ -151,7 +151,8 @@ have an owner; the calling skill only spots them and delegates:
   introduced gets one `wrong` gap through `srd:report-doc-gap`, its `detail`
   naming the cut requirement and every other SRD attesting the section. The
   KB section stays until the gap is worked. `srd:backlog` sweeps abandoned
-  (`REJECTED`) SRDs at every run; no other skill files their gaps.
+  SRDs (the standard's rejected or withdrawn status) at every run; no other
+  skill files their gaps.
 
 **Draft check at start.** A calling skill with an SRD calls `list_gaps` with
 `status: draft` and `srd_ref` the SRD reference, and invokes
@@ -178,11 +179,11 @@ The user says they do not know a platform answer: ask exactly one follow-up,
 track.
 
 - Names: `answer: deferred`, `ask` each person's name exactly as typed, the
-  name alone (`piotr k`, not `piotr k from billing`) — no @, no completion,
+  name alone (`dana k`, not `dana k from billing`) — no @, no completion,
   no correction.
 - "Nobody", "not sure", or no person's name (a team or role, "someone in
   hardware"): `answer: unknown`, no `ask`.
-- Names volunteered unprompted ("Piotr knows"): recorded the same way; skip
+- Names volunteered unprompted ("Dana knows"): recorded the same way; skip
   the question.
 - The user knows but defers ("not now"): `answer: deferred`, no `ask`, no
   question.

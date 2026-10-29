@@ -40,10 +40,10 @@
     {
       "id": "back-links-not-flagged",
       "rule": "no-back-link-finding",
-      "prompt": "Situation: reviewing an SRD whose Initiative field links to ticket PLAT-212. The standard says the ticket links back to the SRD (STR-4). The SRD itself cannot show whether PLAT-212 does.\n\nQuestion: do you raise a finding that the back-link is missing or unverified? Answer on the first line YES or NO, then one sentence why.",
+      "prompt": "Situation: the user asks for a full review of specs/gw.md against every rule of the fetched standard. The SRD's Tracking field links to work item PLAT-212. The standard's DOC-4 says \"The work item MUST link back to the SRD.\" The user adds: \"I checked PLAT-212 this morning, it has no link to the SRD.\"\n\nQuestion: do you raise a DOC-4 finding in the review file? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
-      "class": "redundant"
+      "class": "load-bearing"
     },
     {
       "id": "kb-contradiction-both-sides",
@@ -60,7 +60,7 @@
         "SKILL.md",
         "../create/references/doc-corpus.md"
       ],
-      "prompt": "Situation: reviewing specs/gw.md, GR-4 says tag node names may be 1 character. A corpus `search` returned page \"Tags\", heading_path [\"Tag Node Name\"], rank 2, source_url https://x.atlassian.net/wiki/spaces/IFP/pages/1549467650, stating at least 2 characters. You write the `reference` finding with the fix \"raise the minimum to 2\".\n\nQuestion: besides the `(SRD:ref …)` citation, does the finding carry any other line? Answer on the first line with exactly one of: NO-OTHER-LINE, SOURCE-LINE. On the second line write that line, or NONE.",
+      "prompt": "Situation: reviewing specs/gw.md, GR-4 says tag node names may be 1 character. A corpus `search` returned page \"Tags\", heading_path [\"Tag Node Name\"], rank 2, source_url https://docs.example.com/tags/1549467650, stating at least 2 characters. You write the `reference` finding with the fix \"raise the minimum to 2\".\n\nQuestion: besides the `(SRD:ref …)` citation, does the finding carry any other line? Answer on the first line with exactly one of: NO-OTHER-LINE, SOURCE-LINE. On the second line write that line, or NONE.",
       "pass": "SOURCE-LINE[\\s\\S]*Source: Tags › Tag Node Name \\(rank 2, 1 = most trusted\\)",
       "fail": "^\\W*NO-OTHER-LINE",
       "class": "redundant"
@@ -72,19 +72,19 @@
         "SKILL.md",
         "references/finding-tags.md"
       ],
-      "prompt": "Situation: the user asks for a strict terminology pass over specs/gw.md. The SRD's Glossary defines \"Tag Node\" (Title Case heading); GR-7 says \"the tag node MUST be unique\" in lowercase, meaning the defined term. Nothing else about GR-7 is wrong.\n\nQuestion: is GR-7's lowercase \"tag node\" a terminology finding? Answer on the first line with exactly one of: FINDING, NO-FINDING, DEPENDS. Then one sentence on what it depends on, or why.",
+      "prompt": "Situation: the user asks for a strict terminology pass over specs/gw.md. The SRD's Terms section defines \"Tag Node\" (Title Case heading); GR-7 says \"the tag node MUST be unique\" in lowercase, meaning the defined term. Nothing else about GR-7 is wrong.\n\nQuestion: is GR-7's lowercase \"tag node\" a terminology finding? Answer on the first line with exactly one of: FINDING, NO-FINDING, DEPENDS. Then one sentence on what it depends on, or why.",
       "pass": "^\\W*(DEPENDS|NO-FINDING)\\b",
       "fail": "^\\W*FINDING",
       "class": "load-bearing"
     },
     {
-      "id": "req5-not-test-alone",
-      "rule": "req5-all-methods",
+      "id": "checkable-not-test-alone",
+      "rule": "checkable-all-methods",
       "context": [
         "SKILL.md",
         "references/finding-tags.md"
       ],
-      "prompt": "Situation: reviewing specs/gw.md. GR-9 says \"The gateway MUST NOT limit the number of tag subscriptions per client.\" Drafting its acceptance test, you find no finite test can prove the absence of every limit: any test only shows that some number of subscriptions succeeded. Nothing else about GR-9 is wrong.\n\nQuestion: do you record GR-9 as an unverifiable (REQ-5) `verifiability` blocker? Answer on the first line with exactly one of: FINDING, NO-FINDING. Then one sentence on why.",
+      "prompt": "Situation: reviewing specs/gw.md. The fetched standard's RQT-5 says \"A requirement MUST be checkable.\" GR-9 says \"The gateway MUST NOT limit the number of tag subscriptions per client.\" Drafting its acceptance test, you find no finite test can prove the absence of every limit: any test only shows that some number of subscriptions succeeded. Nothing else about GR-9 is wrong.\n\nQuestion: do you record GR-9 as an unverifiable (RQT-5) `verifiability` blocker? Answer on the first line with exactly one of: FINDING, NO-FINDING. Then one sentence on why.",
       "pass": "^\\W*NO-FINDING\\b",
       "fail": "^\\W*FINDING\\b",
       "class": "load-bearing"

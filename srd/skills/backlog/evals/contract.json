@@ -25,13 +25,14 @@
       ]
     },
     {
-      "id": "rejected-sweep",
-      "rule": "Every run sweeps REJECTED SRDs: one wrong gap per citing KB section through srd:report-doc-gap, filed at once, skipping a section an open revert gap covers",
+      "id": "abandoned-sweep",
+      "rule": "Every run sweeps abandoned SRDs (lifecycle value from the standard): one wrong gap per citing KB section through srd:report-doc-gap, filed at once, skipping a section an open revert gap covers",
       "must": [
-        "1\\.\\ Sweep\\ `REJECTED`\\ SRDs\\.\\ Always,\\ any\\ list\\ named\\.",
+        "1\\.\\ Sweep\\ abandoned\\ SRDs\\.\\ Always,\\ any\\ list\\ named\\.",
+        "Take\\ the\\ field's\\ name\\ and\\ that\\ value\\ from\\ the\\s+standard",
         "already\\ reverts\\ it\\ —\\ skip\\ the\\ section,\\ no\\ hit",
-        "`REJECTED`\\ Status\\ is\\ the\\ confirmation:\\ no\\ proposal,\\ no\\ grill",
-        "naming\\ the\\ rejected\\ SRD\\ and\\ every\\ other\\ SRD\\ the\\ attestation\\ line\\ names"
+        "The\\ abandoning\\ value\\ is\\ the\\ confirmation:\\ no\\ proposal,\\ no\\ grill",
+        "naming\\ the\\ abandoned\\ SRD\\ and\\ every\\ other\\ SRD\\ the\\ attestation\\ line\\ names"
       ]
     },
     {

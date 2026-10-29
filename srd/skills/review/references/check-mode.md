@@ -19,8 +19,8 @@ resolved/withdrawn, and check the rest. Omitted, check every open finding.
      `srd_ref` names the SRD are read: an author answer banked there that
      invalidates the finding withdraws it (step 2), citing that page.
 2. Withdrawal is check-only: a finding that proves invalid (mistaken, the
-   author justified the text, or it cites a rule absent from the standard such
-   as a defunct `MD-*`) moves to `## Withdrawn` with a reason, stamped with
+   author justified the text, or it cites a rule identifier the fetched
+   standard does not state) moves to `## Withdrawn` with a reason, stamped with
    this run's `updated:` time (review-file.md). Never carry a
    non-enforceable finding open. No other mode withdraws — which is why this
    mode is where another skill's invalidity report lands: `srd:system-check`

@@ -6,19 +6,21 @@ runs. Every other mode can ignore this file.
 Emit plain text for an email or ticket — no file write:
 
 - Title: `<Document Title> — Review Feedback`.
-- Group by section name as a plain heading (no markdown symbols). `## Errata`
-  is one such group — list it first, as `Errata`, when it holds open findings.
-  An errata finding keeps its substitution in prose, not markdown, and a
-  casing fix its excluded terms in full, however long the bullet wraps:
-  `#4 GR-2: "behaviour" should read "behavior"`.
+- Group by section name as a plain heading (no markdown symbols), in the
+  order the review file holds them. `## Errata` is one such group — list it
+  first, as `Errata`, when it holds open findings. An errata finding keeps its
+  substitution in prose, not markdown, and a casing fix its excluded terms in
+  full, however long the bullet wraps:
+  `#4 XY-2: "behaviour" should read "behavior"`.
 - One bullet per open finding, blank-line separated. Keep the finding number
-  and the SRD's own requirement id (`#7 GR-3a:`), then a one-line
-  problem-and-fix. A finding against text with no id of its own — a metadata
-  field, an Introduction sentence — is anchored the way the review file anchors
-  it: the section name, and a short quote when the section holds more than one
-  candidate. `#2 Metadata (Owners): only one owner is listed; add a secondary
-  owner.` `#5 Introduction ("the system handles all remaining cases"): states a
-  rule outside Requirements; move it or drop it.` A project instruction
+  and the SRD's own requirement id (`#7 XY-3a:`), then a one-line
+  problem-and-fix. A finding against text with no id of its own — a header
+  field, an introductory sentence — is anchored the way the review file
+  anchors it: the section name (plus the field name for a header field), and
+  a short quote when the section holds more than one candidate.
+  `#2 Header (<field>): the field is empty; fill it.` `#5 <section> ("the
+  system handles all remaining cases"): states a rule outside the
+  requirements; move it or drop it.` A project instruction
   limiting author-facing lists to what is wrong and where overrides this:
   drop the fix from every ordinary bullet; an errata bullet keeps its
   substitution and excluded terms, which state what is wrong. Drop the

@@ -20,7 +20,7 @@
     {
       "id": "srd-defect-is-not-a-doc-gap",
       "rule": "srd-gap-not-filed",
-      "prompt": "Situation: a caller hands you this gap: \"The SRD's metadata lists no Owners.\"\n\nQuestion: is this a doc gap you capture as a draft? Answer on the first line YES or NO, then one sentence why.",
+      "prompt": "Situation: srd:review, mid-review of initiatives/hold-period/srd.md, hands you this gap to capture: \"The SRD uses the term 'hold period' in four requirements and never defines it anywhere in the document.\"\n\nQuestion: is this a doc gap you capture as a draft? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
       "class": "redundant"
@@ -66,9 +66,9 @@
       "class": "load-bearing"
     },
     {
-      "id": "rejected-srd-gap-submitted",
+      "id": "abandoned-srd-gap-submitted",
       "rule": "cut-gap-filed-at-once",
-      "prompt": "Situation: srd:backlog's start-of-run sweep hands you the KB section kb/wishlists.md#shared-wishlist-links: the SRD it cites, wishlist-v2, now has Status REJECTED. Nobody proposed this gap to the user or confirmed it. list_gaps finds no matching gap.\n\nQuestion: what do you do? Answer on the first line with exactly one of: CAPTURE-DRAFT-AND-RETURN, GRILL-THEN-CONFIRM, REPORT-AND-SUBMIT-NOW. Then one sentence why.",
+      "prompt": "Situation: srd:backlog's start-of-run sweep hands you the KB section kb/wishlists.md#shared-wishlist-links: the SRD it cites, wishlist-v2, now has Lifecycle WITHDRAWN, the standard's value for a document that will not be built. Nobody proposed this gap to the user or confirmed it. list_gaps finds no matching gap.\n\nQuestion: what do you do? Answer on the first line with exactly one of: CAPTURE-DRAFT-AND-RETURN, GRILL-THEN-CONFIRM, REPORT-AND-SUBMIT-NOW. Then one sentence why.",
       "pass": "^\\W*REPORT-AND-SUBMIT-NOW",
       "fail": "^\\W*(CAPTURE|GRILL)",
       "class": "load-bearing"
@@ -76,17 +76,17 @@
     {
       "id": "doc-id-stores-id-not-path",
       "rule": "doc-id-is-identity",
-      "prompt": "Situation: while reviewing initiatives/int384-hydrophone/srd.md, a lookup exposed a gap about the Tag name length limit. The relevant search hit was {\"id\":\"1774485611\",\"path\":\"docs/concepts/tags.md\",\"rank\":2,\"title\":\"Tags\",\"heading_path\":[\"Tags\",\"Tag names\"]}. The SRD links that page as `../../docs/concepts/tags.md`, and the user reads gap records by file path. You now capture a draft gap with report_gap.\n\nQuestion: what exact value do you pass as doc_id? Answer on the first line with only that value, then one sentence why.",
+      "prompt": "Situation: while reviewing initiatives/abc-photo-albums/srd.md, a lookup exposed a gap about the Tag name length limit. The relevant search hit was {\"id\":\"1774485611\",\"path\":\"docs/concepts/tags.md\",\"rank\":2,\"title\":\"Tags\",\"heading_path\":[\"Tags\",\"Tag names\"]}. The SRD links that page as `../../docs/concepts/tags.md`, and the user reads gap records by file path. You now capture a draft gap with report_gap.\n\nQuestion: what exact value do you pass as doc_id? Answer on the first line with only that value, then one sentence why.",
       "pass": "^\\W*1774485611\\b",
       "fail": "^\\W*`?docs/",
-      "class": "load-bearing"
+      "class": "redundant"
     },
     {
       "id": "merge-ask-on-open-match",
       "rule": "ask-merge",
-      "prompt": "Situation: a caller hands over a capture: question \"does a shared wishlist link expire?\", `answer: deferred`, `ask: [\"Piotr K\"]`. The dedup `list_gaps` query matches open gap gap-0061 on the same fact, which holds `answer: deferred`, `ask: [\"Anna M\"]`, `asked: \"2026-09-28\"`.\n\nQuestion: which `ask` and `asked` do you pass to update_gap on gap-0061? Answer on the first line exactly as `ask=<JSON list> asked=<value or KEEP>`, then one sentence why.",
-      "pass": "^\\W*ask\\W*\\[\\s*\"Anna M\"\\s*,\\s*\"Piotr K\"\\s*\\]\\W+asked\\W*(\"\"|empty|clear)",
-      "fail": "^\\W*ask\\W*\\[\\s*\"Piotr K\"\\s*\\]|asked\\W*(KEEP|\"?2026)",
+      "prompt": "Situation: a caller hands over a capture: question \"does a shared wishlist link expire?\", `answer: deferred`, `ask: [\"Oliver K\"]`. The dedup `list_gaps` query matches open gap gap-0061 on the same fact, which holds `answer: deferred`, `ask: [\"Anna M\"]`, `asked: \"2026-09-28\"`.\n\nQuestion: which `ask` and `asked` do you pass to update_gap on gap-0061? Answer on the first line exactly as `ask=<JSON list> asked=<value or KEEP>`, then one sentence why.",
+      "pass": "^\\W*ask\\W*\\[\\s*\"Anna M\"\\s*,\\s*\"Oliver K\"\\s*\\]\\W+asked\\W*(\"\"|empty|clear)",
+      "fail": "^\\W*ask\\W*\\[\\s*\"Oliver K\"\\s*\\]|asked\\W*(KEEP|\"?2026)",
       "class": "load-bearing"
     }
   ]

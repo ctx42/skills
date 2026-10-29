@@ -59,8 +59,9 @@ meaning absorbs its own wording edits and their finding numbers.
    selected; the title is the SRD's front-matter `title`, else its H1.
 2. Groups, in document order: each requirement group name — the SRD's own
    group heading — on its own line, then one `- ` line per change in meaning
-   to an entry of that group. Glossary, Scope, and Introduction changes take
-   groups named after their section.
+   to an entry of that group. A change outside the requirements (a term, a
+   scope item, the introduction) takes a group named after the SRD's own
+   heading for its section.
 3. Each line says what the rule now does, in plain words, without the
    decision log's reasons. The linked finding numbers trail it in parentheses,
    `(#104, #111)`, never worded into the sentence: deleting them leaves a
@@ -73,7 +74,7 @@ meaning absorbs its own wording edits and their finding numbers.
 4. `Withdrawn`: one `- ` line per withdrawn finding, its number then a short
    reason. Omitted when none.
 5. `Wording`, last: one `- ` line per kind of wording edit, its ids then its
-   numbers — `- Reworded GR-3 and GR-7 with the system as subject (#107,
+   numbers — `- Reworded ABC-3 and ABC-7 with the system as subject (#107,
    #112)`, `- Fixed stray whitespace (#116)`. Omitted when none.
 
 Never: a still-open or status line, a finding the selection did not touch, a

@@ -4,30 +4,40 @@ How to tag each new finding `[severity, category]`, read on demand before the
 first finding `review` or `walk` writes. Modes that only move, re-check, or
 list findings keep the tags already written.
 
+Defects below are named by kind, never by rule identifier: the fetched
+standard decides which rule each one breaks and what that rule is called. A
+kind the standard states no rule for is no finding, unless a house addition of
+the authoring guide states it.
+
 ## Severity
 
 Tag each finding:
 
-- `blocker` — breaks Quality-Bar acceptance: non-atomic (REQ-1), unverifiable
-  (REQ-5/6), uncovered In Scope item (SCO-2; suspended while the In Scope
-  `--- TODO ---` marker stands), requirement contradicting Out of Scope
-  (SCO-3), undefined term (GLO-3/STR-10), rule hidden in a glossary entry or
-  metadata (GLO-1/2), duplicate or out-of-order id (REQ-3/4), missing forward
-  link (STR-2/3/5/7), a missing or altered RFC 2119 / RFC 8174 keyword notice
-  (STR-8), invalid or over-claimed Status (STA-*), an unresolved
-  draft scaffold — the In Scope `--- TODO ---` marker or a non-empty `## TODO`
-  section (house additions).
-- `major` — real defect, does not block: style (LANG-1/2/5/6/7), terminology
-  drift, overlapping or duplicate requirements, a normative keyword in the
-  wrong case or the wrong section (LANG-3/4), and any `reference` finding —
-  a wrong link, ticket id, or claim about the live system — since a reader
-  acting on it is misled without the SRD being unacceptable.
+- `blocker` — breaks the standard's acceptance criteria (its gate, bar, or
+  checklist for the final lifecycle state, by whatever name it uses): a
+  requirement stating more than one rule; an uncheckable requirement or one
+  resting on a vague quality; an in-scope item no requirement covers
+  (suspended while the in-scope list holds only the draft `--- TODO ---`
+  marker); a requirement contradicting an out-of-scope item; an undefined
+  term; a rule hidden in a term definition or the header; a duplicate or
+  out-of-order requirement identifier; a missing forward link or required
+  header value; a missing or altered obligation-keyword notice the standard
+  requires; an invalid or over-claimed lifecycle value; an unresolved draft
+  scaffold — the in-scope list's `--- TODO ---` marker or a non-empty
+  `## TODO` section (house additions).
+- `major` — real defect, does not block: style (tense, voice, sentence
+  length, appearance stated instead of behavior, a double negative, an
+  open-ended list), terminology drift, overlapping or duplicate requirements,
+  an obligation keyword in the wrong case or the wrong section, and any
+  `reference` finding — a wrong link, ticket id, or claim about the live
+  system — since a reader acting on it is misled without the SRD being
+  unacceptable.
 - `minor` — cosmetic: British spelling, spacing, punctuation.
 
-The rows are the common cases — STR-9/11-13, STA-4-8 and REQ-2/7/8 have
-none. Place an unlisted rule by what breaking it costs: the Quality Bar
-(blocker), a reader who must still act (major), the eye alone (minor). Say
-which tier and why, so the next run lands in the same place. Never a fourth.
+The rows are the common cases, not every rule the standard states. Place an
+unlisted rule by what breaking it costs: the acceptance criteria (blocker), a
+reader who must still act (major), the eye alone (minor). Say which tier and
+why, so the next run lands in the same place. Never a fourth.
 
 ## Category
 
@@ -41,49 +51,48 @@ a broken link in Obsidian.
 Categories in precedence order — when a finding fits more than one, the higher
 entry leads and the lower becomes the second tag:
 
-- `structure` — a required part of the document is absent or malformed, or its
-  lifecycle state is invalid (STR-*, STA-*).
+- `structure` — a part the standard's layout rules require is absent,
+  malformed, or out of order, or the lifecycle value is invalid.
 - `logical` — two rules conflict, a case no rule covers, precedence between
   rules unstated.
-- `coverage` — an In Scope item no requirement covers, a requirement
-  contradicting Out of Scope, or a rule stated where rules do not live: a
-  glossary entry, the metadata, a Note, the Introduction (SCO-2, SCO-3,
-  GLO-1/2).
+- `coverage` — an in-scope item no requirement covers, a requirement
+  contradicting an out-of-scope item, or a rule stated where rules do not
+  live: a term definition, the header, a note, the introduction.
 - `reference` — a link, ticket id, or claim about the live system that is
   wrong or stale, or a claim a KB section contradicts. The standard forbids
   no such error, so this finding cites evidence where others cite a rule: the
   corpus doc id and heading that contradict it, or the dead link.
 - `redundancy` — two rules state the same thing, or one subsumes the other.
 - `verifiability` — a vague quality, an unmeasurable criterion, an open-ended
-  list (REQ-5, REQ-6, LANG-7). Judge REQ-5 against every method it names, not
-  test alone: a rule no finite test proves ("MUST NOT limit X") may still pass
-  by inspection or analysis.
+  list. Judge a checkability rule against every verification method the
+  standard names, not test alone: a rule no finite test proves ("MUST NOT
+  limit X") may still pass by inspection or analysis.
 - `atomicity` — one item carrying more than one rule, an example or note
-  inside a rule, a rule stating appearance instead of behavior (REQ-1, REQ-7,
-  LANG-5, SCO-1).
+  inside a rule where the standard forbids one, a rule stating appearance
+  instead of behavior, a scope item naming more than one change.
 - `terminology` — one concept under many names, an undefined term, casing that
-  drifts from the glossary (GLO-3), a local Glossary entry for a term the
-  Company Glossary defines (link its first use instead, GLO-4): check every
-  local entry against that term set. GLO-4's first use counts from the
-  Introduction on: a use in the metadata block, Objective included, owes no
-  link. Casing drift is a finding only where the project's casing rules fix
-  running-text casing: read them before writing one; when they leave it free,
-  a casing-only difference is no finding. A rule *hidden* in a glossary entry
-  is `coverage`, not this: the defect is a requirement in the wrong place, not
-  a word in the wrong form. Two names that may differ in meaning are
-  `logical`, asking which is meant, never drift asking to "use one name".
+  drifts from the term's definition, a local definition of a term the shared
+  term list defines where the standard says to link it instead: check every
+  local entry against that term set. A first-use link rule counts from where
+  the standard says; when it says nothing, from the first section after the
+  header — a use in the header owes no link. Casing drift is a finding only
+  where the project's casing rules fix running-text casing: read them before
+  writing one; when they leave it free, a casing-only difference is no
+  finding. A rule *hidden* in a term definition is `coverage`, not this: the
+  defect is a requirement in the wrong place, not a word in the wrong form.
+  Two names that may differ in meaning are `logical`, asking which is meant,
+  never drift asking to "use one name".
 - `linguistic` — grammar, spelling, a missing word, the wrong subject or
-  voice, a misplaced or lowercase normative keyword (LANG-1, LANG-2, LANG-3,
-  LANG-4, LANG-6).
-- `format` — markup, bold identifiers, id numbering, punctuation, spacing
-  (REQ-2, REQ-3, REQ-4, REQ-8).
+  voice, a misplaced or lowercase obligation keyword.
+- `format` — markup, the requirement-identifier form the standard fixes, id
+  numbering, punctuation, spacing.
 
 `reference` covers a wrong pointer or fact, `terminology` a diverging word
 choice: an SRD that renames an existing platform concept is `terminology`.
 Category is orthogonal to `## Errata`: an errata finding is `format` or
-`linguistic` — `structure` for the STR-8 notice, `terminology` for a GLO-4 link
-or casing fix, `reference` for a dead anchor — yet not every such finding is
-errata. A normative keyword in the Introduction is `coverage` when its sentence
-states a rule, `linguistic` (LANG-3) when it does not. A duplicate id's fix in
-an `ACCEPTED` SRD gives the later item a fresh id and renumbers nothing
-(STA-7).
+`linguistic` — `structure` for the obligation-keyword notice, `terminology`
+for a shared-term link or casing fix, `reference` for a dead anchor — yet not
+every such finding is errata. An obligation keyword in the introduction is
+`coverage` when its sentence states a rule, `linguistic` when it does not. A
+duplicate id's fix in an SRD past the lifecycle point where the standard
+forbids renumbering gives the later item a fresh id and renumbers nothing.

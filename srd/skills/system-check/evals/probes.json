@@ -4,7 +4,7 @@
     {
       "id": "disproved-finding-named",
       "rule": "disproved-findings-named",
-      "prompt": "Situation: review finding #4 says the term Leak Instance is undefined. During system confrontation, a corpus lookup shows the Company Glossary defines it. You cannot write specs/gw.review.md.\n\nQuestion: on the first line, give the exact command your closing report tells the user to run about #4, or NONE. Then one sentence why.",
+      "prompt": "Situation: review finding #4 says the term Album is undefined. During system confrontation, a corpus lookup shows the project glossary defines it. You cannot write specs/gw.review.md.\n\nQuestion: on the first line, give the exact command your closing report tells the user to run about #4, or NONE. Then one sentence why.",
       "pass": "^[^\\n]*review[^\\n]*check",
       "fail": "^\\W*NONE",
       "class": "load-bearing"

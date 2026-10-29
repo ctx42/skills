@@ -34,11 +34,10 @@ filing; the caller owns only its primary flow. A captured gap is a server-side
   moment a caller finds one, grill the finder for context, file it on their
   yes.
 - Must not: file silently (every record is confirmed first — in phase D, or
-  for [a cut requirement](#a-cut-requirement) by the caller's proposal or a
-  `REJECTED` Status; the
-  backlog is human-curated, so noise is the enemy); author or edit the
-  corpus; draft the fix, fill a gap, or close it as wontfix (that is
-  `srd:backlog`); file an SRD gap (see
+  for [a cut requirement](#a-cut-requirement) by the caller's proposal or an
+  abandoned SRD; the backlog is human-curated, so noise is the enemy); author
+  or edit the corpus; draft the fix, fill a gap, or close it as wontfix (that
+  is `srd:backlog`); file an SRD gap (see
   [The boundary](#the-doc-gap-vs-srd-gap-boundary)).
 - Depends on: the gap tools of the server named in `project-config.md`, which
   the gate in
@@ -59,11 +58,12 @@ filing; the caller owns only its primary flow. A captured gap is a server-side
 Only corpus deficiencies belong here: a fact the SRD work needs that pulled docs
 or the `kb` folder do not supply reliably — missing, wrong, incomplete, or
 ambiguous. A gap closes only when a corpus section (a KB topic page or a pulled
-doc page) states the fact, never on a URL. An SRD gap (unmet `STR-*`/`STA-*`
-rules, undefined terms, missing owners, logical holes in the document under
-work) stays in the caller's own findings:
+doc page) states the fact, never on a URL. An SRD gap (unmet SRD-standard
+rules, undefined terms, a missing required field, logical holes in the document
+under work) stays in the caller's own findings:
 
-- "The SRD's §4 has no owner list": SRD gap; the caller reports it.
+- "The SRD's header lacks a field the standard requires": SRD gap; the caller
+  reports it.
 - "The SRD claims the gateway retries 3×, but no corpus doc states the retry
   count": doc gap; hand it here.
 
@@ -134,7 +134,7 @@ write the corpus section without this session:
 - `search_terms` — the queries tried, so a reviewer can tell genuinely absent
   content from content that exists but does not rank.
 - `srd_ref` — the SRD reference: its folder name under `initiatives`
-  (`int384-hydrophone`), per the gate reference. One gap blocking two SRDs
+  (`abc-photo-albums`), per the gate reference. One gap blocking two SRDs
   lists both, comma-separated. Empty only between a `create` gap's capture and
   the branch restatement that agrees the path; set it with `update_gap` then.
   Never invent an id.
@@ -241,17 +241,19 @@ Repeats are a priority signal the reviewer reads, not new gaps.
 
 #### A cut requirement
 
-A KB section left behind by a cut requirement (or an abandoned SRD) arrives
-confirmed: by the user's key on the caller's proposal naming the gap, or, from
-`srd:backlog`'s sweep, by the SRD's `REJECTED` Status. Per section, dedup as
-above, then file at once — no grill, no phase D: an `open` match takes its hit
-as above; a `draft` match is merged, then `submit_gap`; a `filled` match is
-`reopen_gap` at once, `reason` the cut requirement or the rejected SRD — the
-handover is the confirmation — then takes the `open` repeat as above; a
-`wontfix` match only returns its id; no match is `report_gap` with `draft:
-true`, `kind: wrong`, `doc_id` and `heading_path` the section, `srd_ref` the
-SRD, `detail` naming the cut requirement (or the rejected SRD) and every other
-SRD attesting the section, then `submit_gap`. Return each id to the caller.
+A KB section left behind by a cut requirement (or an abandoned SRD: its
+lifecycle field holds the value the SRD standard gives a document that will not
+be built) arrives confirmed: by the user's key on the caller's proposal naming
+the gap, or, from `srd:backlog`'s sweep, by the SRD's abandoned state. Per
+section, dedup as above, then file at once — no grill, no phase D: an `open`
+match takes its hit as above; a `draft` match is merged, then `submit_gap`; a
+`filled` match is `reopen_gap` at once, `reason` the cut requirement or the
+abandoned SRD — the handover is the confirmation — then takes the `open` repeat
+as above; a `wontfix` match only returns its id; no match is `report_gap` with
+`draft: true`, `kind: wrong`, `doc_id` and `heading_path` the section,
+`srd_ref` the SRD, `detail` naming the cut requirement (or the abandoned SRD)
+and every other SRD attesting the section, then `submit_gap`. Return each id to
+the caller.
 
 ### C. Grill at chosen depth
 

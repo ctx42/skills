@@ -48,17 +48,20 @@ touches ids.
    canonical fix for that class. Absent or ambiguous behaves as above. A
    whitespace fix a sync restores is a no-op: report it, never re-apply it
    (`proposals.md`, "Findings"). A missing-notice finding (`old` is `(missing)`
-   and `new` the notice, per `errata.md`) has nothing to count in an anchor:
-   count keyword notices in the whole SRD. Zero → insert `new` directly below
-   the metadata block, after a TOC macro or block that follows the table; one or
-   more → stale, as above. A GLO-4 link finding is verified by its term: it must
-   occur unlinked in the anchor, nowhere earlier in the document, and linked
-   nowhere later; then wrap that one occurrence in the link `glossary_terms`
-   gives. Otherwise stale. A divider finding (`new` or `old` is `---`) is
-   verified just above its heading, outside the heading's range (or at the
-   document's end for `(end of document)`): blank lines aside, an insertion
-   needs no `---` line there, a removal exactly one; insert or delete that one
-   line, adding a blank line on any side that lacks one. Otherwise stale. A
+   and `new` the notice, with the heading of its own section when the standard
+   gives it one, per `errata.md`) has nothing to count in an anchor: count
+   obligation-word notices in the whole SRD. Zero → insert `new` exactly where
+   the standard places the notice — directly after the element it names, ahead
+   of the next heading, and after a TOC macro or block that follows that
+   element; one or more → stale, as above, wherever it sits. A first-use link
+   finding is verified by its term: it must occur unlinked in the anchor,
+   nowhere earlier in the document, and linked nowhere later; then wrap that
+   one occurrence in the link `glossary_terms` gives. Otherwise stale. A
+   divider finding (`new` or `old` is `---`) is verified just above its
+   heading, outside the heading's range (or at the document's end for
+   `(end of document)`): blank lines aside, an insertion needs no `---` line
+   there, a removal exactly one; insert or delete that one line, adding a
+   blank line on any side that lacks one. Otherwise stale. A
    casing finding is counted and applied only on running-text occurrences of
    `old`: skip its named excluded terms and every place `errata.md`'s casing
    entry rules out. A multi-site finding is verified per site and applies only

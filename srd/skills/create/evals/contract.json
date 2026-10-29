@@ -20,23 +20,24 @@
     },
     {
       "id": "standard-live",
-      "rule": "The SRD standard is fetched live, never a stored copy",
+      "rule": "The SRD standard is fetched live, never a stored copy, and is the only source of SRD rules",
       "file": "../create/references/project-config.md",
       "must": [
-        "Never\\ use\\ a\\ stored\\ or\\ remembered\\ copy"
+        "Never\\ use\\ a\\ stored\\ or\\ remembered\\ copy",
+        "never\\ apply\\ a\\ rule\\ it\\ does\\ not\\ state"
       ]
     },
     {
-      "id": "never-accepted",
-      "rule": "Never marks an SRD ACCEPTED; acceptance is human",
+      "id": "never-approves",
+      "rule": "Never sets the standard's approval status; approval is human",
       "must": [
-        "never\\ marks\\ an\\ SRD\\ `ACCEPTED`:\\ acceptance\\ is\\ a\\ human\\ decision",
+        "never\\ sets\\ an\\ SRD\\ to\\ the\\ standard's\\ approval\\ status:\\ approval\\ is\\ a\\ human\\ decision",
         "Do\\ not\\ mark\\ the\\ draft\\ acceptable"
       ]
     },
     {
       "id": "blockers-before-write",
-      "rule": "No file is written until every Quality-Bar blocker is settled with the user",
+      "rule": "No file is written until every self-check blocker is settled with the user",
       "must": [
         "Write\\ only\\ once\\ step\\ 4\\ has\\ settled\\ every\\ blocker",
         "An\\ authoring\\ skill\\ does\\ not\\ knowingly\\ write\\ a\\ defect\\ it\\ has\\ already\\ named"
@@ -76,10 +77,10 @@
     },
     {
       "id": "placeholders-not-collected",
-      "rule": "Owners, Initiative, Designs are placeholders; Status is IN PROGRESS",
+      "rule": "People and link fields stay placeholders; the status field holds the standard's initial status",
       "must": [
-        "Do\\ not\\ collect\\ Owners,\\ Initiative\\ links,\\ or\\ Designs\\ links",
-        "Status\\ is\\ always\\ `IN\\ PROGRESS`\\ for\\ a\\ new\\ draft"
+        "Do\\ not\\ collect\\ the\\ metadata\\ fields\\ that\\ name\\ people\\ or\\ link\\ outside\\ the\\ SRD",
+        "status\\ field\\ always\\ holds\\ the\\ standard's\\ initial\\ status"
       ]
     },
     {
@@ -169,7 +170,7 @@
         "Names:\\ `answer:\\ deferred`,\\ `ask`\\ each\\ person's\\ name\\ exactly\\ as\\ typed,\\ the\\ name\\ alone",
         "\"Nobody\",\\ \"not\\ sure\",\\ or\\ no\\ person's\\ name",
         "\"someone\\s+in\\s+hardware\"\\):\\ `answer:\\ unknown`,\\ no\\ `ask`",
-        "Names\\ volunteered\\ unprompted\\ \\(\"Piotr\\ knows\"\\):\\ recorded\\ the\\ same\\ way;\\ skip\\ the\\ question"
+        "Names\\ volunteered\\ unprompted\\ \\(\"Dana\\ knows\"\\):\\ recorded\\ the\\ same\\ way;\\ skip\\ the\\ question"
       ]
     },
     {
@@ -188,6 +189,51 @@
       "must": [
         "Corpus\\ content\\ enters\\ the\\ draft\\ only\\ through\\ the\\ interview",
         "lists\\ every corpus\\-sourced\\ statement\\ in\\ the\\ file\\ with\\ its\\ source\\ line"
+      ]
+    },
+    {
+      "id": "generic-standard-skill",
+      "rule": "Names no rule identifier of any standard; illustrations use the ABC/XYZ placeholders",
+      "must_not": [
+        "(?-i:\\b(?!ABC-|XYZ-)[A-Z]{2,5}-\\d+[a-z]?\\b)"
+      ],
+      "must": [
+        "Act\\ only\\ on\\ what\\ it\\ states,\\ and\\ cite\\ a\\ rule\\ by\\ the\\ identifier\\ it\\ writes"
+      ]
+    },
+    {
+      "id": "generic-standard-guide",
+      "rule": "Names no rule identifier of any standard; illustrations use the ABC/XYZ placeholders",
+      "must_not": [
+        "(?-i:\\b(?!ABC-|XYZ-)[A-Z]{2,5}-\\d+[a-z]?\\b)"
+      ],
+      "file": "references/authoring-guide.md"
+    },
+    {
+      "id": "generic-standard-errata",
+      "rule": "Names no rule identifier of any standard; illustrations use the ABC/XYZ placeholders",
+      "must_not": [
+        "(?-i:\\b(?!ABC-|XYZ-)[A-Z]{2,5}-\\d+[a-z]?\\b)"
+      ],
+      "file": "references/errata.md"
+    },
+    {
+      "id": "generic-standard-procedures",
+      "rule": "Names no rule identifier of any standard; illustrations use the ABC/XYZ placeholders",
+      "must_not": [
+        "(?-i:\\b(?!ABC-|XYZ-)[A-Z]{2,5}-\\d+[a-z]?\\b)"
+      ],
+      "file": "references/srd-procedures.md"
+    },
+    {
+      "id": "generic-standard-template",
+      "rule": "Names no rule identifier of any standard; illustrations use the ABC/XYZ placeholders",
+      "must_not": [
+        "(?-i:\\b(?!ABC-|XYZ-)[A-Z]{2,5}-\\d+[a-z]?\\b)"
+      ],
+      "file": "assets/srd-template.md",
+      "must": [
+        "this\\ file\\ fixes\\ none\\ of\\ them"
       ]
     }
   ]

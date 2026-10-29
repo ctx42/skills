@@ -105,11 +105,11 @@ resolves to nothing: say so and ask — never guess what to work on.
    - From the review: reframe each finding that blocks *building* into a
      colleague-voice question. That is what "relevant" means here — a reader
      who has to implement the SRD is stopped by a non-atomic rule, an
-     unverifiable criterion, an uncovered scope item, an undefined term. They
-     are not stopped by a British spelling or a stray emphasis, so errata and
-     cosmetics never become questions: they stay in the review file for the
-     author. Drop the severity tag and rule id (keep the severity only to order
-     the walk, step 5).
+     unverifiable criterion, a promised change no requirement covers, an
+     undefined term. They are not stopped by a British spelling or a stray
+     emphasis, so errata and cosmetics never become questions: they stay in
+     the review file for the author. Drop the severity tag and rule id (keep
+     the severity only to order the walk, step 5).
    - System confrontation: confront the SRD against the corpus. `srd:review`
      runs a facts-vs-corpus pass of its own, so the two layers can land the
      same contradiction twice — merge them into one question rather than asking

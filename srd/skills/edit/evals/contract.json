@@ -20,10 +20,10 @@
     },
     {
       "id": "no-metadata-no-status",
-      "rule": "Never edits metadata or Status, never proposes a Status transition",
+      "rule": "Never edits the standard's header fields or the status field, never proposes a status transition",
       "must": [
-        "never\\ edits\\ metadata\\ \\(Owners,\\ Initiative,\\ Designs\\),\\ sets\\ back\\-links,\\ or\\ changes\\ `Status`",
-        "never\\ proposes\\ a\\ Status\\ transition"
+        "never\\ edits\\ the\\ header\\ fields\\ the\\ standard\\ defines,\\ sets\\ back\\-links,\\ or\\ changes\\ the\\ status\\ field",
+        "never\\ proposes\\ a\\ status\\ transition"
       ]
     },
     {
@@ -36,9 +36,9 @@
     },
     {
       "id": "frozen-ids",
-      "rule": "Approved SRD ids frozen; any id change stated and approved in the loop",
+      "rule": "Ids frozen when the standard forbids renumbering at the SRD's status; any id change stated and approved in the loop",
       "must": [
-        "on\\ an\\ approved\\ SRD\\ ids\\ are\\ frozen",
+        "on\\ a\\ frozen\\ SRD\\ ids\\ are\\ frozen",
         "any\\ id\\ change\\ is\\ stated\\ and\\ approved\\ in\\ the\\ loop's\\ confirmation,\\ never\\ applied\\ quietly"
       ]
     },
@@ -82,10 +82,10 @@
     },
     {
       "id": "scaffolds-not-removed",
-      "rule": "Draft scaffolds never removed silently; In Scope derivation never self-triggered",
+      "rule": "Draft scaffolds never removed silently; in-scope derivation never self-triggered",
       "must": [
         "never\\ remove\\ either\\ silently",
-        "Never\\ trigger\\ the\\ In\\ Scope\\ derivation\\ on\\ your\\ own"
+        "Never\\ trigger\\ the\\ in\\-scope\\ derivation\\ on\\ your\\ own"
       ]
     },
     {
@@ -96,11 +96,36 @@
       ]
     },
     {
+      "id": "rules-from-standard",
+      "rule": "Rules come only from the project's standard, read at run time; no rule id, field, status value, or section is hardcoded",
+      "must": [
+        "the\\ only\\ source\\ of\\ rules",
+        "Act\\ only\\ on\\ what\\ it\\ states",
+        "cites\\ the\\ identifier\\ of\\ the\\ rule\\ it\\ rests\\ on,\\ as\\ the\\ standard\\ writes\\ it"
+      ],
+      "must_not": [
+        "\\b(?!ABC-)[A-Z]{2,5}-[0-9]"
+      ]
+    },
+    {
+      "id": "removal-per-standard",
+      "file": "references/id-rules.md",
+      "rule": "A removed requirement follows the standard's rule on removed requirements; ids use the standard's format",
+      "must": [
+        "Where\\ the\\ standard's\\ rule\\ on\\ removed\\ requirements\\ applies\\ at\\ the\\ SRD's\\ status,\\ follow\\ it\\ exactly",
+        "Write\\ every\\ id\\ in\\ the\\ identifier\\ format\\ the\\ standard\\ sets"
+      ],
+      "must_not": [
+        "\\b(?!ABC-)[A-Z]{2,5}-[0-9]",
+        "~~"
+      ]
+    },
+    {
       "id": "cut-files-wrong-gap",
       "file": "references/corpus-edits.md",
       "rule": "A cut requirement files one confirmed wrong gap per KB section it introduced for this SRD; the KB section is never edited",
       "must": [
-        "A\\ removal\\ \\(deletion,\\ or\\ the\\ STA\\-8\\ strike\\)\\ in\\ any\\ mode\\ that\\ reaches\\ it\\ gets\\ a\\ lookup\\ too",
+        "A\\ removal\\ \\(deletion,\\ or\\ marking\\ it\\ removed\\ under\\ the\\ standard's\\ rule\\ on\\ removed\\ requirements\\)\\ in\\ any\\ mode\\ that\\ reaches\\ it\\ gets\\ a\\ lookup\\ too",
         "as\\ a\\ confirmed\\ `wrong`\\ gap",
         "every\\ other\\ SRD\\ the\\ attestation\\ line\\ names",
         "Never\\ edit\\ the\\ KB\\ section"
@@ -178,10 +203,10 @@
     {
       "id": "prior-ruling-check",
       "file": "references/proposals.md",
-      "rule": "Before proposing, grep the decision log and KB for the text and ids including spanning ranges, and check Out of Scope",
+      "rule": "Before proposing, grep the decision log and KB for the text and ids including spanning ranges, and check every out-of-scope item",
       "must": [
         "matching\\ the\\ ranges\\ and\\ lists\\ that\\ span\\ it",
-        "check\\ every\\ Out\\ of\\ Scope\\ item\\ against\\ each\\ surface\\ the\\ change\\ adds",
+        "check\\ every\\ out\\-of\\-scope\\ item\\ against\\ each\\ surface\\ the\\ change\\ adds",
         "one\\ that\\ excluded\\ what\\ the\\ change\\ adds\\ is\\ a\\ conflict\\ the\\ proposal\\ states"
       ]
     },
@@ -226,7 +251,7 @@
       "file": "references/proposals.md",
       "must": [
         "Never remove, or propose removing, an author's inline `\\(TBD: …\\)` reminder",
-        "recommend\\s+withdrawing a finding, REQ-7 included, that asks to drop it"
+        "recommend\\s+withdrawing a finding that asks to drop it"
       ]
     },
     {
@@ -264,9 +289,9 @@
     },
     {
       "id": "status-reread-on-disk-change",
-      "rule": "Re-read Status before applying when the file changed on disk since the gate; ACCEPTED puts the edit under STA-4",
+      "rule": "Re-read the status field before applying when the file changed on disk since the gate; a value under sign-off puts the edit under that rule",
       "must": [
-        "If\\s+the\\s+file\\s+changed\\s+on\\s+disk\\s+since\\s+the\\s+approval\\s+gate,\\s+re-read\\s+`Status`\\s+first"
+        "If\\s+the\\s+file\\s+changed\\s+on\\s+disk\\s+since\\s+the\\s+approval\\s+gate,\\s+re-read\\s+the\\s+status\\s+field\\s+first"
       ]
     }
   ]

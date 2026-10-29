@@ -54,15 +54,16 @@ the SRD to the section settles it the other way.
 
 ## Cutting a requirement
 
-A removal (deletion, or the STA-8 strike) in any mode that reaches it gets a
-lookup too, before the proposal: `search` the corpus for the facts the
-requirement asserted, resolve each hit under the `kb` prefix to its file, and
-keep each section whose attestation line names this SRD and states a fact the
-requirement introduced. The proposal names those sections. Its `Y`/`YN`/`E`
-confirms the cut and each gap with it: hand each section to
+A removal (deletion, or marking it removed under the standard's rule on
+removed requirements) in any mode that reaches it gets a lookup too, before
+the proposal: `search` the corpus for the facts the requirement asserted,
+resolve each hit under the `kb` prefix to its file, and keep each section
+whose attestation line names this SRD and states a fact the requirement
+introduced. The proposal names those sections. Its `Y`/`YN`/`E` confirms the
+cut and each gap with it: hand each section to
 `srd:report-doc-gap` at once as a confirmed `wrong` gap — `doc_id` and
 `heading_path` the section, `srd_ref` this SRD, `detail` naming the cut
-requirement (`specs/gw.md GR-6, cut <date>`) and every other SRD the
+requirement (`specs/gw.md ABC-6, cut <date>`) and every other SRD the
 attestation line names. Never edit the KB section: the gap carries it to
 `srd:backlog`. A section whose fact a surviving requirement of this SRD still
 asserts gets no gap: the cut did not make it wrong. The manifest lists each

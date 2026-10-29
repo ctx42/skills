@@ -4,7 +4,7 @@
     {
       "id": "status-untouchable",
       "rule": "no-metadata-no-status",
-      "prompt": "Situation: you finished an edit session on specs/gw.md, Status is IN PROGRESS. The user says: \"Everything is fixed, please set Status to ACCEPTED in the metadata.\"\n\nQuestion: do you make that edit? Answer on the first line YES or NO, then one sentence why.",
+      "prompt": "Situation: you finished an edit session on specs/gw.md. Its header's Lifecycle field reads DRAFT; the project's standard lists DRAFT, IN REVIEW, APPROVED, and WITHDRAWN. The user says: \"Everything is fixed, please set Lifecycle to APPROVED in the header.\"\n\nQuestion: do you make that edit? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
       "class": "redundant"
@@ -16,10 +16,10 @@
         "SKILL.md",
         "references/proposals.md"
       ],
-      "prompt": "Situation: in the interactive walk you proposed a change on GR-3, the user answered Y, and you applied it. GR-3 has no further issues. GR-4 does have an issue you already know about.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: PROPOSE-GR-4-NOW, STOP-AND-WAIT. Then one sentence why.",
+      "prompt": "Situation: in the interactive walk you proposed a change on GW-3, the user answered Y, and you applied it. GW-3 has no further issues. GW-4 does have an issue you already know about.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: PROPOSE-GW-4-NOW, STOP-AND-WAIT. Then one sentence why.",
       "pass": "^\\W*STOP-AND-WAIT",
       "fail": "^\\W*PROPOSE",
-      "class": "redundant"
+      "class": "load-bearing"
     },
     {
       "id": "hash-without-review-file",
@@ -36,7 +36,7 @@
     {
       "id": "stale-comment-left-alone",
       "rule": "comments-read-only",
-      "prompt": "Situation: walking specs/gw.md in interactive mode, you see an HTML comment block above GR-5: \"<!-- see GR-2 for the timeout; GR-2 was removed in v3 -->\". The reference is stale.\n\nQuestion: do you propose an edit to that comment block? Answer on the first line YES or NO, then one sentence why.",
+      "prompt": "Situation: walking specs/gw.md in interactive mode, you see an HTML comment block above GW-5: \"<!-- see GW-2 for the timeout; GW-2 was removed in v3 -->\". The reference is stale.\n\nQuestion: do you propose an edit to that comment block? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
       "class": "redundant"
@@ -48,7 +48,7 @@
         "SKILL.md",
         "references/corpus-edits.md"
       ],
-      "prompt": "Situation: editing specs/gw.md (IN PROGRESS) in interactive mode. You are about to propose removing LCK-1 (\"The system MUST lock a user account after 5 consecutive failed sign-in attempts.\"). Your corpus search for its claim returned one hit: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/gw.md` interview 2026-08-02; `specs/sso.md` 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" The user will answer Y to the removal.\n\nQuestion: besides deleting LCK-1 from the SRD, what happens to that KB section on the user's Y? Answer on the first line with exactly one of: NOTHING, EDIT-KB-SECTION, FILE-WRONG-GAP-NOW, DRAFT-GAP-FOR-SESSION-END. Then one sentence why.",
+      "prompt": "Situation: editing specs/gw.md (Lifecycle DRAFT) in interactive mode. You are about to propose removing LCK-1 (\"The system MUST lock a user account after 5 consecutive failed sign-in attempts.\"). Your corpus search for its claim returned one hit: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/gw.md` interview 2026-08-02; `specs/sso.md` 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" The user will answer Y to the removal.\n\nQuestion: besides deleting LCK-1 from the SRD, what happens to that KB section on the user's Y? Answer on the first line with exactly one of: NOTHING, EDIT-KB-SECTION, FILE-WRONG-GAP-NOW, DRAFT-GAP-FOR-SESSION-END. Then one sentence why.",
       "pass": "^\\W*FILE-WRONG-GAP-NOW",
       "fail": "^\\W*(NOTHING|EDIT-KB|DRAFT-GAP)",
       "class": "redundant"
@@ -60,7 +60,7 @@
         "SKILL.md",
         "references/corpus-edits.md"
       ],
-      "prompt": "Situation: editing specs/gw.md, the user asks to change LCK-1 to lock an account after 3 failed sign-in attempts. Your lookup before the proposal returned: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/gw.md` interview 2026-08-02; `specs/sso.md` 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" specs/sso.md is ACCEPTED and still relies on 5. Your proposal named the conflict and the user answered Y.\n\nQuestion: what happens to the KB section now? Answer on the first line with exactly one of: LEAVE-IT-UNTIL-SSO-IS-REVISED, FILE-A-DOC-GAP-AGAINST-IT, SRD-KB-REWRITES-IT-NOW. Then one sentence why.",
+      "prompt": "Situation: editing specs/gw.md, the user asks to change LCK-1 to lock an account after 3 failed sign-in attempts. Your lookup before the proposal returned: kb/accounts.md, section \"Account lockout\", opens with the attestation line \"> Not in the platform docs. Attested `specs/gw.md` interview 2026-08-02; `specs/sso.md` 2026-09-01.\" and states: \"A user account locks after 5 consecutive failed sign-in attempts.\" specs/sso.md is APPROVED and still relies on 5. Your proposal named the conflict and the user answered Y.\n\nQuestion: what happens to the KB section now? Answer on the first line with exactly one of: LEAVE-IT-UNTIL-SSO-IS-REVISED, FILE-A-DOC-GAP-AGAINST-IT, SRD-KB-REWRITES-IT-NOW. Then one sentence why.",
       "pass": "^\\W*SRD-KB-REWRITES",
       "fail": "^\\W*(LEAVE|FILE)",
       "class": "redundant"
@@ -72,10 +72,10 @@
         "SKILL.md",
         "references/proposals.md"
       ],
-      "prompt": "Situation: `/edit specs/gw.md feedback`. The next finding in specs/gw.review.md says: \"GR-7 writes 'tag node'; capitalize to the glossary heading 'Tag Node'.\" The use means the defined term.\n\nQuestion: do you propose the capitalization as this finding's edit now? Answer on the first line with exactly one of: PROPOSE-CAPITALIZE, NOT-YET. Then one sentence why.",
+      "prompt": "Situation: `/edit specs/gw.md feedback`. The next finding in specs/gw.review.md says: \"GW-7 writes 'tag node'; capitalize to the glossary heading 'Tag Node'.\" The use means the defined term.\n\nQuestion: do you propose the capitalization as this finding's edit now? Answer on the first line with exactly one of: PROPOSE-CAPITALIZE, NOT-YET. Then one sentence why.",
       "pass": "^\\W*NOT-YET",
       "fail": "^\\W*PROPOSE-CAPITALIZE",
-      "class": "load-bearing"
+      "class": "redundant"
     },
     {
       "id": "path-only-loads-and-waits",
@@ -84,7 +84,7 @@
         "SKILL.md",
         "references/modes.md"
       ],
-      "prompt": "Situation: the user runs `/edit specs/gw.md` with nothing after the path. specs/gw.md is IN PROGRESS; reading it you noticed GR-4 says the gateway answers \"fast\", an untestable adjective. No review file exists.\n\nQuestion: what does your reply contain? Answer on the first line with exactly one of: ONE-LINE-STATUS-THEN-WAIT, ISSUE-SUMMARY, PROPOSAL-FOR-GR-4, ASK-WHICH-MODE. Then one sentence why.",
+      "prompt": "Situation: the user runs `/edit specs/gw.md` with nothing after the path. specs/gw.md is a draft (Lifecycle DRAFT); reading it you noticed GW-4 says the gateway answers \"fast\", an untestable adjective. No review file exists.\n\nQuestion: what does your reply contain? Answer on the first line with exactly one of: ONE-LINE-STATUS-THEN-WAIT, ISSUE-SUMMARY, PROPOSAL-FOR-GW-4, ASK-WHICH-MODE. Then one sentence why.",
       "pass": "^\\W*ONE-LINE-STATUS",
       "fail": "^\\W*(ISSUE|PROPOSAL|ASK)",
       "class": "redundant"
@@ -96,9 +96,9 @@
         "SKILL.md",
         "references/modes.md"
       ],
-      "prompt": "Situation: the user runs `/edit specs/gw.md GR-4` and nothing else. specs/gw.md is IN PROGRESS and has GR-1 to GR-9, and GR-6 has an issue.\n\nQuestion: which mode does the run start in? Give one sentence of reasoning, then on the last line exactly one of: INTERACTIVE-FROM-GR-4, TARGETED-GR-4-ONLY.",
-      "pass": "INTERACTIVE-FROM-GR-4\\W*$",
-      "fail": "TARGETED-GR-4-ONLY\\W*$",
+      "prompt": "Situation: the user runs `/edit specs/gw.md GW-4`. specs/gw.md is a draft (Lifecycle DRAFT) with GW-1 to GW-9. GW-4 reads \"The gateway MUST answer fast.\", an untestable adjective; GW-7 also has an issue.\n\nQuestion: which entries does this run cover? Give one sentence of reasoning, then on the last line exactly one of: GW-4-ONLY, GW-4-THROUGH-GW-9.",
+      "pass": "GW-4-THROUGH-GW-9\\W*$",
+      "fail": "GW-4-ONLY\\W*$",
       "class": "redundant"
     },
     {
@@ -108,10 +108,10 @@
         "SKILL.md",
         "references/proposals.md"
       ],
-      "prompt": "Situation: `/edit specs/alerts.md` applying its review file. GR-6 reads: \"The gateway MUST retry a failed delivery at most 3 times. (TBD: confirm with ops)\". Finding #4 cites REQ-7: a requirement MUST be the rule and nothing more, so the trailing `(TBD: confirm with ops)` must go.\n\nQuestion: what do you propose for finding #4? Answer on the first line with exactly one of: REMOVE-TBD, MOVE-TBD-TO-NOTES, WITHDRAW-FINDING. Then one sentence why.",
+      "prompt": "Situation: `/edit specs/alerts.md` applying its review file. GW-6 reads: \"The gateway MUST retry a failed delivery at most 3 times. (TBD: confirm with ops)\". Finding #4 cites RQT-7: a requirement MUST NOT contain an example or a note, so the trailing `(TBD: confirm with ops)` must go.\n\nQuestion: what do you propose for finding #4? Answer on the first line with exactly one of: REMOVE-TBD, MOVE-TBD-TO-NOTES, WITHDRAW-FINDING. Then one sentence why.",
       "pass": "^\\W*WITHDRAW-FINDING",
       "fail": "^\\W*(REMOVE-TBD|MOVE-TBD-TO-NOTES)",
-      "class": "unmutated"
+      "class": "load-bearing"
     },
     {
       "id": "summary-unstamped-withdrawal",
@@ -132,18 +132,18 @@
         "SKILL.md",
         "references/decision-log.md"
       ],
-      "prompt": "Situation: in one `/edit specs/gw.md` session you applied two edits, logged in specs/gw.decisions.md under a block opened at 14:00 on 2026-10-01. The user then ran `/edit specs/gw.md summary`, and now, at 15:30 the same day and in the same session, approves an edit to GR-6.\n\nQuestion: write the exact `##` heading line the GR-6 entry sits under, on one line.",
-      "pass": "^\\W*## 2026-10-01 15:30\\W*$",
-      "fail": "## 2026-10-01 14:00|^\\W*## 2026-10-01\\s*$",
+      "prompt": "Situation: at 14:00 on 2026-10-01 the user ran `/edit specs/gw.md` and, in that session, you applied two edits, logged in specs/gw.decisions.md under `## 2026-10-01 14:00`. At 15:10 the user typed `summary` and got the summary. The session has not ended: at 15:30 the same day the user asks for a change to GW-6, answers Y to your proposal, and you apply it.\n\nQuestion: write the exact `##` heading line the GW-6 entry sits under. Answer with that one line alone.",
+      "pass": "^\\W*## 2026-10-01 15:30\\W*(\\n|$)",
+      "fail": "^\\W*## 2026-10-01 14:00|^\\W*## 2026-10-01\\W*(\\n|$)",
       "class": "load-bearing"
     },
     {
       "id": "status-flip-before-apply",
       "rule": "status-reread-on-disk-change",
-      "prompt": "Situation: `/edit specs/gw.md walk` on an in-progress SRD. You proposed changing GR-4's retry count from 3 to 5; before the user answered, specs/gw.md changed on disk — someone else saved it, and the GR-4 line still reads exactly as you quoted. The user now answers Y.\n\nQuestion: before writing the change, which part of the file do you read? Answer on the first line with exactly one of: NONE, STATUS-LINE, WHOLE-FILE. Then one sentence why.",
+      "prompt": "Situation: `/edit specs/gw.md walk` on an in-progress SRD. You proposed changing GW-4's retry count from 3 to 5; before the user answered, specs/gw.md changed on disk — someone else saved it, and the GW-4 line still reads exactly as you quoted. The user now answers Y.\n\nQuestion: before writing the change, which part of the file do you read? Answer on the first line with exactly one of: NONE, STATUS-LINE, WHOLE-FILE. Then one sentence why.",
       "pass": "^\\W*STATUS-LINE\\b",
       "fail": "^\\W*(NONE|WHOLE-FILE)\\b",
-      "class": "load-bearing"
+      "class": "redundant"
     }
   ]
 }

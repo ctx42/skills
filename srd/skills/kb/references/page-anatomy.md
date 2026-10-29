@@ -19,10 +19,10 @@ Front matter:
 
 ```yaml
 ---
-title: Acoustic Leak Detection
-aliases: [AUTOCO, automated cross-correlation]
+title: Photo Albums
+aliases: [ALB, shared album]
 attested: 2026-09-11
-srd_ref: int384-hydrophone, autoco
+srd_ref: abc-photo-albums, abc-sharing
 last_verified: 2026-09-11
 ---
 ```
@@ -50,7 +50,7 @@ Body rules:
   inside the chunk:
 
   ```
-  > Not in the platform docs. Attested int384-hydrophone interview
+  > Not in the platform docs. Attested abc-photo-albums interview
   > 2026-09-11 · `gap-0019`.
   ```
 

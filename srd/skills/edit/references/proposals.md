@@ -22,10 +22,11 @@ scrutiny — a real rule violation, not a preference.
 - Requirements that read as overlapping are often independently testable (a
   disabled control vs a grayed one; a length cap vs its truncation format); a
   scope item covering one capability across many surfaces is atomic; a
-  compound term whose parts are in the Company Glossary needs no entry.
+  compound term whose parts are in the project glossary needs no entry.
 - Never remove, or propose removing, an author's inline `(TBD: …)` reminder
   on a requirement, colored or not: it is the author's worklist, so recommend
-  withdrawing a finding, REQ-7 included, that asks to drop it.
+  withdrawing a finding that asks to drop it, one citing the standard's rule
+  against notes in a requirement included.
 - Check every capitalized noun phrase that reads like a name against the
   glossaries and the requirements it summarizes; an undefined pseudo-name is a
   finding.
@@ -34,8 +35,8 @@ scrutiny — a real rule violation, not a preference.
   know" in `doc-corpus.md`).
 - Before proposing, look for a prior ruling on what the change touches: grep
   `<srd>.decisions.md` and the knowledge base for the text it changes and for
-  each entry id, matching the ranges and lists that span it ("GR-3 to GR-5",
-  "GR-6, GR-8"), not the bare id alone; check every Out of Scope item against
+  each entry id, matching the ranges and lists that span it ("ABC-3 to ABC-5",
+  "ABC-6, ABC-8"), not the bare id alone; check every out-of-scope item against
   each surface the change adds, or its class. A ruling that keeps the text
   means leave it and recommend withdrawing the finding; one that excluded what
   the change adds is a conflict the proposal states.
@@ -50,7 +51,7 @@ scrutiny — a real rule violation, not a preference.
   number. Never an ordinal the user would have to count out ("paragraph
   three"); this holds for what comes next as much as for the proposal itself.
 - Keep each requirement standalone: never resolve a conflict by having one
-  requirement cite others by id ("apply GR-6 through GR-10 only …"); put the
+  requirement cite others by id ("apply ABC-6 through ABC-10 only …"); put the
   condition in each rule, through a glossary term when it is long.
 - When the user rewords a requirement to generalize it, confirm what the
   generalization means before proposing to remove siblings it seems to make
@@ -89,7 +90,7 @@ The keys that close a proposal (loop step 2 in `SKILL.md`):
 
 - `Y` (Yes): apply, then stay on the current entry and propose its next issue;
   when that entry has no more, say so and name the way on ("nothing further on
-  GR-3 — next entry, or name one"), then stop. `Y` never advances the walk, and
+  ABC-3 — next entry, or name one"), then stop. `Y` never advances the walk, and
   the user should not have to guess what does. In `feedback` the unit is the
   review's finding (`modes.md`).
 - `YN` (Yes Next): apply and move to the next entry, leaving its remaining
@@ -119,12 +120,13 @@ one line each — the list itself, never a bare count.
 Both apply, log, report in one line, and go on — never ask (`autofix` takes
 them only as errata).
 
-- A GLO-4 first-use link: when an edit, a finding, or the session-end check
-  finds a Company Glossary term unlinked at its first use in document order (an
-  entry added earlier takes that use over), link that use per srd-procedures
-  step 2 and unlink a later use that carried the link. A proper name (GLO-6) or
-  a use that may mean the generic sense goes through the loop instead. Text,
-  case, and comment blocks stay as found.
+- A first-use link the standard requires: when an edit, a finding, or the
+  session-end check finds a project-glossary term unlinked at its first use in
+  document order (an entry added earlier takes that use over), link that use
+  per srd-procedures step 2 and unlink a later use that carried the link. A
+  name the standard exempts from linking or a use that may mean the generic
+  sense goes through the loop instead. Text, case, and comment blocks stay as
+  found. A standard that requires no such link has no such fix.
 - A heading off its siblings' title case, the case fix the errata allowlist
   covers.
 
@@ -140,6 +142,7 @@ comment blocks").
 A run that reaches no term never calls `glossary_terms`. The procedure in
 `srd-procedures.md` waits for the first thing that needs a term settled and
 lands before it: the first proposal that introduces, renames or rests on a
-possibly company-defined term, or in `interactive` the step-1 summary, which
-promises every issue found and so owes GLO-3 too. A term put to the user against
-an unloaded term set is a GLO-3 miss. Hold the set for the session.
+possibly glossary-defined term, or in `interactive` the step-1 summary, which
+promises every issue found and so owes the term-definition rule too. A term put
+to the user against an unloaded term set misses that rule. Hold the set for
+the session.

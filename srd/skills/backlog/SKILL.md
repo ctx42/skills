@@ -109,7 +109,7 @@ that resolves to nothing: say so and ask — never guess what to work on. Copy
 this checklist and tick it off:
 
 - [ ] 0. Pass the gate. Always, before anything below.
-- [ ] 1. Sweep `REJECTED` SRDs. Always, any list named.
+- [ ] 1. Sweep abandoned SRDs. Always, any list named.
 - [ ] 2. Re-check stale gaps. Always, any list named.
 - [ ] 3. Open the sitting: count each list, stop for the user's pick. Skipped
       when a list was named.
@@ -126,31 +126,38 @@ next non-empty one in a line naming only that list — what closed waits for the
 closing line. Close each item through its own mechanism, one call per
 item.
 
-### 1. Sweep REJECTED SRDs
+### 1. Sweep abandoned SRDs
 
-An SRD whose `Status` is `REJECTED` is abandoned: the KB facts it attested are
-suspect until someone checks them.
+An abandoned SRD is one whose lifecycle field holds the value the SRD standard
+gives a document that will not be built: the KB facts it attested are suspect
+until someone checks them. Take the field's name and that value from the
+standard (`get_doc` on the `srd-standard` identity). A failed call is an error
+like any other: report it and stop. A project that names no standard, or a
+standard that defines no such value, is a warning: skip the sweep with one line
+("sweep skipped: <why>") and go on to step 2.
 
 1. `list_docs`; `get_doc` each SRD under the `initiatives` folder (not its
-   `.review.md` or `.questions.md` companions) and read the `Status` field of
-   its metadata block. Keep the folder of each `REJECTED` one; none, the sweep
-   ends silently.
+   `.review.md` or `.questions.md` companions) and read that field of its
+   metadata. An SRD whose field is missing or holds a value the standard does
+   not list is skipped with one warning line naming the SRD and the value.
+   Keep the folder of each abandoned one; none, the sweep ends
+   silently.
 2. `get_doc` each page under the `kb` folder; keep every section whose
-   attestation line names a rejected folder. A page whose `srd_ref` names it
+   attestation line names an abandoned folder. A page whose `srd_ref` names it
    while no attestation line does is one section: its `#` heading.
-3. Per rejected folder, `list_gaps` with `status: open` and `srd_ref` the
+3. Per abandoned folder, `list_gaps` with `status: open` and `srd_ref` the
    folder: an open `wrong` gap with the section's `doc_id` and `heading_path`
    already reverts it — skip the section, no hit.
 4. Hand each remaining section to `srd:report-doc-gap` as
    [an abandoned SRD's](../report-doc-gap/SKILL.md#a-cut-requirement) gap:
    `doc_id` and `heading_path` the section, `srd_ref` the folder, `detail`
-   naming the rejected SRD and every other SRD the attestation line names. The
-   `REJECTED` Status is the confirmation: no proposal, no grill; it files each
-   open at once. Never edit the section.
+   naming the abandoned SRD and every other SRD the attestation line names.
+   The abandoning value is the confirmation: no proposal, no grill; it files
+   each open at once. Never edit the section.
 
 The sweep is one clause of the opening counts line, or the reply's first line
-when a list was named: `wishlist-v2 REJECTED: 2 gaps filed, 1 already open`.
-No `REJECTED` SRD, no clause. Its gaps are plain open gaps: count them in
+when a list was named: `wishlist-v2 abandoned: 2 gaps filed, 1 already open`.
+No abandoned SRD, no clause. Its gaps are plain open gaps: count them in
 `gaps`.
 
 ### 2. Re-check stale gaps
@@ -249,9 +256,9 @@ re-print a drafted page or the gaps just changed.
 
 Name `srd:kb` as the writer whenever a page changed, as a count per delegate:
 this skill writes nothing under the `kb` folder. Never say what the answers
-were or where they landed, in any shape. Wrong: `srd:kb saved 2 answers (3.4 V
-threshold, 6-hour uploads)`, or "the threshold (3.4 V) is now on
-`kb/logger.md`". Right: `srd:kb: 2 answers`.
+were or where they landed, in any shape. Wrong: `srd:kb saved 2 answers
+(14-day refund window, 6-hour sync)`, or "the window (14 days) is now on
+`kb/refunds.md`". Right: `srd:kb: 2 answers`.
 
 "What closed" is said once per sitting, in the closing line — not again as each
 list finishes, and not restated in two shapes ("`gap-0010`, `gap-0015`

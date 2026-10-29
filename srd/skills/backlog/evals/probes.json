@@ -40,9 +40,9 @@
         "SKILL.md",
         "references/gaps.md"
       ],
-      "prompt": "Situation: working `gaps`, you drafted the page for a two-gap cluster outside the corpus. The user says: \"Published it: https://docs.example.com/operations/sound-file-retention — the docs pull runs tonight.\"\n\nQuestion: what do you do with the two gaps now? Answer on the first line with exactly one of: FILL-WITH-URL, LEAVE-OPEN-UNTIL-PULLED, WONTFIX. Then one sentence why.",
-      "pass": "^\\W*LEAVE-OPEN-UNTIL-PULLED",
-      "fail": "^\\W*(FILL|WONTFIX)",
+      "prompt": "Situation: working `gaps`, you drafted the page for a two-gap cluster outside the corpus. The user says: \"Published it: https://docs.example.com/operations/ebook-file-retention — it's live, I checked. Fill both gaps with that link so they drop off the list; the docs pull only runs tonight.\" `fill_gap` takes any string as `filled_by`.\n\nQuestion: what exact `filled_by` do you pass to `fill_gap` for the two gaps now? Answer on the first line with only that value, or NONE if you make no `fill_gap` call. Then one sentence why.",
+      "pass": "^\\W*NONE\\b",
+      "fail": "^\\W*(https?:|\\S*#)",
       "class": "redundant"
     },
     {
@@ -52,7 +52,7 @@
         "SKILL.md",
         "references/ask.md"
       ],
-      "prompt": "Situation: working `deferred`, you ask the question of open gap `gap-0042` (`answer: deferred`): \"what battery-low threshold does an ALTECNO logger use by default?\" The user says: \"Actually nobody knows that yet — no one has measured it.\"\n\nQuestion: what do you do with gap-0042? Answer on the first line with exactly one of: SKIP-IT, SET-ANSWER-UNKNOWN, HAND-TO-KB, FILE-NEW-GAP, WONTFIX. Then one sentence naming the call you make, if any.",
+      "prompt": "Situation: working `deferred`, you ask the question of open gap `gap-0042` (`answer: deferred`): \"at what battery level does a Reader device warn by default?\" The user says: \"Actually nobody knows that yet — no one has measured it.\"\n\nQuestion: what do you do with gap-0042? Answer on the first line with exactly one of: SKIP-IT, SET-ANSWER-UNKNOWN, HAND-TO-KB, FILE-NEW-GAP, WONTFIX. Then one sentence naming the call you make, if any.",
       "pass": "^\\W*SET-ANSWER-UNKNOWN.*update_gap",
       "fail": "^\\W*(SKIP|HAND|FILE|WONTFIX)",
       "class": "redundant"
@@ -65,7 +65,7 @@
         "references/ask.md",
         "references/gaps.md"
       ],
-      "prompt": "Situation: working `deferred`, the user answers open gap `gap-0042` (`answer: deferred`): \"3.4 V\". You hand the fact to srd:kb, which writes it to kb/_inbox.md; no topic page states it yet.\n\nQuestion: what happens to gap-0042 now? Answer on the first line with exactly one of: FILL-FROM-INBOX, CLEAR-ANSWER-KEEP-OPEN, KEEP-DEFERRED, WONTFIX. Then one sentence why.",
+      "prompt": "Situation: working `deferred`, the user answers open gap `gap-0042` (`answer: deferred`): \"15 percent\". You hand the fact to srd:kb, which writes it to kb/_inbox.md; no topic page states it yet.\n\nQuestion: what happens to gap-0042 now? Answer on the first line with exactly one of: FILL-FROM-INBOX, CLEAR-ANSWER-KEEP-OPEN, KEEP-DEFERRED, WONTFIX. Then one sentence why.",
       "pass": "^\\W*CLEAR-ANSWER-KEEP-OPEN",
       "fail": "^\\W*(FILL|KEEP-DEFERRED|WONTFIX)",
       "class": "redundant"
@@ -84,24 +84,24 @@
     },
     {
       "id": "second-sweep-files-nothing",
-      "rule": "rejected-sweep",
-      "prompt": "Situation: running `/backlog`, the sweep found initiatives/wishlist-v2/srd.md with Status REJECTED. kb/wishlists.md, section \"Shared wishlist links\", opens with the attestation line \"> Not in the platform docs. Attested wishlist-v2 interview 2026-09-02.\" `list_gaps` with status open and srd_ref wishlist-v2 returns gap-0041: kind wrong, doc_id kb/wishlists.md, heading_path [\"Wishlists\", \"Shared wishlist links\"], filed by last week's sweep.\n\nQuestion: what do you do for that section now? Answer on the first line with exactly one of: SKIP, ADD-HIT, FILE-NEW-GAP. Then one sentence why.",
+      "rule": "abandoned-sweep",
+      "prompt": "Situation: running `/backlog`, the sweep found initiatives/wishlist-v2/srd.md abandoned: its lifecycle field holds the value the SRD standard gives a document that will not be built. kb/wishlists.md, section \"Shared wishlist links\", opens with the attestation line \"> Not in the platform docs. Attested wishlist-v2 interview 2026-09-02; gift-lists interview 2026-10-20.\" `list_gaps` with status open and srd_ref wishlist-v2 returns gap-0041: kind wrong, doc_id kb/wishlists.md, heading_path [\"Wishlists\", \"Shared wishlist links\"], hits 1, filed by last week's sweep, its `detail` naming only wishlist-v2 — the gift-lists attestation was added since. srd:report-doc-gap answers a report that matches an already-open gap by bumping its `hits`: repeats are the backlog's priority signal.\n\nQuestion: what do you do for that section now? Answer on the first line with exactly one of: SKIP, ADD-HIT, UPDATE-GAP-DETAIL, FILE-NEW-GAP. Then one sentence why.",
       "pass": "^\\W*SKIP\\b",
-      "fail": "^\\W*(ADD-HIT|FILE)",
+      "fail": "^\\W*(ADD-HIT|UPDATE|FILE)",
       "class": "load-bearing"
     },
     {
       "id": "sweep-files-without-asking",
-      "rule": "rejected-sweep",
-      "prompt": "Situation: the user ran `/backlog deferred`. You found initiatives/wishlist-v2/srd.md with Status REJECTED. kb/wishlists.md, section \"Shared wishlist links\", opens with the attestation line \"> Not in the platform docs. Attested wishlist-v2 interview 2026-09-02.\" No open gap covers that section. The user has said nothing about wishlist-v2.\n\nQuestion: what do you do with that section? Answer on the first line with exactly one of: NOTHING-ONLY-DEFERRED-WAS-ASKED, ASK-USER-BEFORE-FILING, HAND-TO-REPORT-DOC-GAP-NOW, EDIT-KB-SECTION. Then one sentence why.",
+      "rule": "abandoned-sweep",
+      "prompt": "Situation: the user ran `/backlog deferred`. You found initiatives/wishlist-v2/srd.md with Lifecycle WITHDRAWN, the value the SRD standard gives a document that will not be built. kb/wishlists.md, section \"Shared wishlist links\", opens with the attestation line \"> Not in the platform docs. Attested wishlist-v2 interview 2026-09-02.\" No open gap covers that section. The user has said nothing about wishlist-v2.\n\nQuestion: what do you do with that section? Answer on the first line with exactly one of: NOTHING-ONLY-DEFERRED-WAS-ASKED, ASK-USER-BEFORE-FILING, HAND-TO-REPORT-DOC-GAP-NOW, EDIT-KB-SECTION. Then one sentence why.",
       "pass": "^\\W*HAND-TO-REPORT-DOC-GAP-NOW",
       "fail": "^\\W*(NOTHING|ASK|EDIT)",
-      "class": "redundant"
+      "class": "load-bearing"
     },
     {
       "id": "recheck-runs-on-a-named-list",
       "rule": "stale-recheck",
-      "prompt": "Situation: the user ran `/backlog deferred`. The REJECTED sweep found nothing. `list_gaps` with `stale: true` would return two filled gaps whose cited KB sections changed since they were filled. The user has said nothing about stale gaps.\n\nQuestion: before working `deferred`, do you re-check those two gaps? Answer on the first line YES or NO, then one sentence why.",
+      "prompt": "Situation: the user ran `/backlog deferred`. The abandoned-SRD sweep found nothing. `list_gaps` with `stale: true` would return two filled gaps whose cited KB sections changed since they were filled. The user has said nothing about stale gaps.\n\nQuestion: before working `deferred`, do you re-check those two gaps? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*YES\\b",
       "fail": "^\\W*NO\\b",
       "class": "redundant"
@@ -109,9 +109,9 @@
     {
       "id": "vanished-ref-fact-moved",
       "rule": "stale-recheck",
-      "prompt": "Situation: the stale re-check lists `gap-0052`, status `filled`, `filled_by` `1882030917#cold-storage`, `stale_refs` that ref with reason `vanished`; its target_claim is \"Recordings older than 90 days move to the archive tier.\" `get_doc` on 1882030917 shows the heading \"Cold storage\" is gone; a new heading \"Archive tier\" states exactly that sentence.\n\nQuestion: what call do you make for gap-0052? Answer on the first line with exactly one of: REOPEN, REFRESH-SAME-REFS, FILL-NEW-REF, ASK-USER, NO-CALL. Then one sentence naming the call and its arguments.",
-      "pass": "^\\W*FILL-NEW-REF.*archive-tier",
-      "fail": "^\\W*(REOPEN|REFRESH|ASK|NO-CALL)",
+      "prompt": "Situation: the stale re-check lists `gap-0052`, status `filled`, `filled_by` `1882030917#cold-storage`, `stale_refs` that ref with reason `vanished`; its target_claim is \"Uploaded e-book files older than 90 days move to the archive tier.\" `get_doc` on 1882030917 shows the heading \"Cold storage\" is gone; a new heading \"Archive tier\" states exactly that sentence. The store offers `update_gap` (`gap_id` and only the fields that change, `filled_by` included), `fill_gap` (`gap_id`, `filled_by`, `complete`), and `reopen_gap` (`gap_id`, `reason`).\n\nQuestion: which single call do you make for gap-0052? Answer on the first line with the tool name and its arguments, e.g. `tool(gap_id=..., ...)`, or NO-CALL. Then one sentence why.",
+      "pass": "^\\W*fill_gap\\b.*archive-tier",
+      "fail": "^\\W*(update_gap|reopen_gap|NO-CALL)",
       "class": "redundant"
     },
     {
@@ -125,10 +125,14 @@
     {
       "id": "asked-only-for-confirmed-person",
       "rule": "ask-confirmed-only",
-      "prompt": "Situation: `/backlog ask` printed two per-person blocks: Anna M (questions for gap-0061 and gap-0064) and Piotr K (question for gap-0065). The user says: \"Sent Anna's. Piotr is on leave, holding his.\"\n\nQuestion: which gaps get `asked` set to today? Answer on the first line with only the gap ids, comma-separated, then one sentence why.",
-      "pass": "^\\W*gap-0061\\W+gap-0064\\b(?!\\W*,\\W*gap-0065)",
-      "fail": "^\\W*(gap-\\d+\\W*,\\W*)*gap-0065",
-      "class": "load-bearing"
+      "context": [
+        "SKILL.md",
+        "references/ask.md"
+      ],
+      "prompt": "Situation: `/backlog ask` printed two per-person blocks: Anna M (questions for gap-0061 and gap-0064) and Oliver K (questions for gap-0064 and gap-0065); gap-0064's `ask` names both of them. The user says: \"Sent Anna's. Oliver is on leave, holding his.\"\n\nQuestion: which gaps get `asked` set to today? Answer on the first line with only the gap ids, comma-separated, then one sentence why.",
+      "pass": "^\\W*gap-0061\\b(?![^\\n]*gap-006[45])",
+      "fail": "^[^\\n]*gap-006[45]",
+      "class": "redundant"
     },
     {
       "id": "redirect-adds-name-clears-asked",
@@ -158,7 +162,7 @@
         "references/ask.md",
         "../create/references/doc-corpus.md"
       ],
-      "prompt": "Situation: working `deferred`, the user did not know the answer to open gap gap-0042 (`answer: deferred`, no `ask`): \"what battery-low threshold does an ALTECNO logger use by default?\" You asked \"Who would know?\". The user says: \"Hmm, maybe someone in hardware? Not sure.\"\n\nQuestion: what do you do next? Answer on the first line with exactly one of: ASK-WHO-IN-HARDWARE, SET-ANSWER-UNKNOWN, ADD-HARDWARE-TO-ASK. Then one sentence why.",
+      "prompt": "Situation: working `deferred`, the user did not know the answer to open gap gap-0042 (`answer: deferred`, no `ask`): \"at what battery level does a Reader device warn by default?\" You asked \"Who would know?\". The user says: \"Hmm, maybe someone in hardware? Not sure.\"\n\nQuestion: what do you do next? Answer on the first line with exactly one of: ASK-WHO-IN-HARDWARE, SET-ANSWER-UNKNOWN, ADD-HARDWARE-TO-ASK. Then one sentence why.",
       "pass": "^\\W*SET-ANSWER-UNKNOWN",
       "fail": "^\\W*(ASK-WHO|ADD)",
       "class": "redundant"

@@ -17,13 +17,13 @@ license: MIT
 /srd:edit <srd>                  load (default): read the SRD, its decision log and review, then wait for edit prompts
 /srd:edit <srd> walk             interactive: front-load issues, then walk entry by entry
 /srd:edit <srd> 123              interactive from line 123: resolve to the nearest entry, walk from there
-/srd:edit <srd> MAP-5            interactive from MAP-5: walk from that requirement or scope entry
-/srd:edit <srd> <srd>.review.md  feedback: apply a review file or pasted feedback, Scope last, blocker → major → minor
+/srd:edit <srd> ABC-5            interactive from ABC-5: walk from that requirement or scope entry
+/srd:edit <srd> <srd>.review.md  feedback: apply a review file or pasted feedback, scope last, blocker → major → minor
 /srd:edit <srd> #2               feedback from finding #2, then next by number or jump to any number
 /srd:edit <srd> autofix          bulk-apply the review's ## Errata block behind one confirmation
 /srd:edit <srd> polish           mechanical-only cleanup (spelling, numbering, keywords), confirm each
 /srd:edit <srd> summary [today]  read-only: newest decision-log block (or a day; `<date> <HH:MM>` one block) as a chat message
-/srd:edit <srd> GR-3a <change>   targeted: edit one entry by id plus the change, quoted text, or description
+/srd:edit <srd> ABC-3a <change>  targeted: edit one entry by id plus the change, quoted text, or description
 ```
 
 Drive an existing SRD toward the SRD standard by editing the source in place.
@@ -32,20 +32,22 @@ Drive an existing SRD toward the SRD standard by editing the source in place.
 
 The write-only editor of an existing SRD, one confirmed edit at a time — the
 counterpart to the read-only `review`. It never invents or restates rules
-(format, style, logic, and rules come from `create`'s reference files) and
-never edits metadata (Owners, Initiative, Designs), sets back-links, or changes
-`Status`; it flags those gaps (STR-2/3/5/7, STA-*). A finding outside that
-mandate is reported as the author's to fix, not looped — even when the run
-entered at it ([references/modes.md](references/modes.md)). It never proposes
-a Status transition (flag only a malformed `STA-*` value) and never proposes
-pushing, publishing, or syncing the SRD as a follow-up. Comment blocks are
-read-only: a source of information about the SRD, never edited, answered, or
-rewritten, even when they hold stale references, unless the user explicitly
-asks to resolve one. Back-links (STR-4/6) are external: check that the forward
-Initiative and Designs links are present and never flag a back-link gap.
-Acceptance is a human decision. It never writes `<srd>.review.md` — `review`
-owns that file; `edit` reads it and hands off to `review <srd> check` to update
-it. It owns `<srd>.decisions.md` (see [Decision log](#decision-log)).
+(format, style, logic, and rules come from the standard and `create`'s
+reference files) and never edits the header fields the standard defines, sets
+back-links, or changes the status field; it flags those gaps under the rules
+that govern them. A finding outside that mandate is reported as the author's
+to fix, not looped — even when the run entered at it
+([references/modes.md](references/modes.md)). It never proposes a status
+transition (flag only a value outside those the standard lists) and never
+proposes pushing, publishing, or syncing the SRD as a follow-up. Comment blocks
+are read-only: a source of information about the SRD, never edited, answered,
+or rewritten, even when they hold stale references, unless the user explicitly
+asks to resolve one. Back-links the standard requires of linked documents are
+external: check that the SRD's own forward links are present and never flag a
+back-link gap. Acceptance is a human decision. It never writes
+`<srd>.review.md` — `review` owns that file; `edit` reads it and hands off to
+`review <srd> check` to update it. It owns `<srd>.decisions.md` (see
+[Decision log](#decision-log)).
 
 ## Sources of truth
 
@@ -56,9 +58,11 @@ is missing at run time, stop and tell the user.**
 
 - [../create/references/project-config.md](../create/references/project-config.md)
   (eager) — the gate, and the project paths, standard, and server it names.
-- The SRD standard (eager, fetched live per that file) — the rules (`STR`,
-  `STA`, `LANG`, `REQ`, `GLO`, `SCO`, Quality Bar); every edit and check cites
-  these ids.
+- The SRD standard (eager, fetched live per that file) — the only source of
+  rules: sections and their order, header fields, status values, identifier
+  format, wording, terms, scope, and any acceptance checklist. Act only on what
+  it states; every edit and check cites the identifier of the rule it rests
+  on, as the standard writes it.
 - [../create/references/authoring-guide.md](../create/references/authoring-guide.md)
   (eager) — house extensions (US English, sub-numbering, one term per concept,
   the consistency pass) and the Bad→Good defect classes to fix toward.
@@ -74,9 +78,10 @@ is missing at run time, stop and tell the user.**
   autofix) — the gate, allowlist, and exclusions of the bulk-fix errata class.
 - [../create/references/srd-procedures.md](../create/references/srd-procedures.md)
   (on-demand: the first proposal that touches a term, for glossary resolution;
-  Generate In Scope for the derivation procedure).
+  its in-scope derivation procedure).
 - [../create/assets/srd-template.md](../create/assets/srd-template.md)
-  (on-demand: restructuring) — the required section order.
+  (on-demand: restructuring) — the house layout; the section order is the
+  standard's.
 
 ## Session start (every mode)
 
@@ -94,9 +99,12 @@ Otherwise three steps, no questions of its own.
 2. Run the draft check in
    [../create/references/doc-corpus.md](../create/references/doc-corpus.md);
    say nothing about an empty result as it happens — the manifest carries it.
-3. Approval gate: read `Status` — `ACCEPTED` is approved, anything else
-   in-progress — state which in one clause and go; it is the reply's only
-   setup line (no gate, standard, draft-check or glossary report). Never ask
+3. Approval gate: read the status field against the standard's lifecycle
+   rules — *frozen* when they forbid renumbering at that value, *under
+   sign-off* when a change in meaning needs sign-off there, both when both
+   hold (apply both rule sets), else in-progress — state which in one clause
+   and go; it is the reply's only setup line (no
+   gate, standard, draft-check or glossary report). Never ask
    the user to confirm it: every id change the gate governs is confirmed again
    in the loop.
 
@@ -108,16 +116,16 @@ Otherwise three steps, no questions of its own.
 Nothing about the glossary happens at session start, and this skill asks no
 setup question. When the term set loads is in
 [references/proposals.md](references/proposals.md#glossary); `polish` and
-`autofix` reach it only for a GLO-4 first-use link.
+`autofix` reach it only for a first-use link the standard requires.
 
 ## Id rules
 
-Two invariants hold without reading anything: on an approved SRD ids are frozen
-and content changes need STA-4, and any id change is stated and approved in the
-loop's confirmation, never applied quietly. The rest — sub-numbering, removal
-under STA-8, renumbering, comment blocks — is in
-[references/id-rules.md](references/id-rules.md), read before the first
-proposal on an approved SRD or any proposal touching an id.
+Two invariants hold without reading anything: on a frozen SRD ids are frozen,
+and under sign-off content changes need the sign-off the standard sets; any id
+change is stated and approved in the loop's confirmation, never applied
+quietly. The rest — sub-numbering, removed requirements, renumbering, comment
+blocks — is in [references/id-rules.md](references/id-rules.md), read before
+the first proposal on a frozen or under-sign-off SRD or any touching an id.
 
 ## Edit discipline
 
@@ -136,8 +144,9 @@ Every mode but `autofix` runs this loop per change:
    ([references/corpus-edits.md](references/corpus-edits.md)).
 2. Close the proposal with the choices (Yes / Yes Next / Skip / Edit) — the
    capital letter is the key — and apply only on explicit approval. If the
-   file changed on disk since the approval gate, re-read `Status` first: an
-   `ACCEPTED` there puts the edit under STA-4, asked before it lands. What
+   file changed on disk since the approval gate, re-read the status field
+   first: a value now under sign-off puts the edit under that rule, asked
+   before it lands. What
    counts as a finding, how a fix is worded, what each key does, and where
    held-over questions go are in
    [references/proposals.md](references/proposals.md), read before the
@@ -146,22 +155,24 @@ Every mode but `autofix` runs this loop per change:
    entry has left; once an entry is resolved, stop and wait, never walking
    ahead even for a read-only look. Never batch unrelated changes; never edit
    without confirmation.
-3. Re-validate what the applied edit touched, against the standard: scope
-   coverage (SCO-2/3, suspended while the In Scope `--- TODO ---` marker
-   stands), id uniqueness/order (REQ-3/4), term use (GLO-3), and anything
+3. Re-validate what the applied edit touched, against the standard's rules
+   on scope coverage (suspended while the in-scope `--- TODO ---` marker
+   stands), identifier uniqueness and order, and term definition, and anything
    referencing or referenced by the edit. Report a problem the fix introduced.
 4. Log the change in `<srd>.decisions.md` before proposing the next one (see
    [Decision log](#decision-log)).
 
 Two fixes skip the loop in every mode (`autofix` takes them only as errata) —
-a GLO-4 first-use link and a heading off its siblings' title case: apply, log,
+a first-use link the standard requires and a heading off its siblings' title
+case: apply, log,
 report in one line, and go on — never ask. What each covers and what goes
 through the loop instead:
 [references/proposals.md](references/proposals.md#fixes-that-skip-the-loop)
 (on-demand: the first such fix).
 
-Write every edit to the LANG and REQ rules and the authoring guide (US English,
-one term per concept); a restructuring edit follows the template's order.
+Write every edit to the standard's wording and requirement rules and the
+authoring guide (US English, one term per concept); a restructuring edit
+follows the standard's section order.
 
 ## Decision log
 
@@ -172,13 +183,14 @@ writing the session's first entry.
 
 ## Draft scaffolds
 
-A draft SRD may hold two working scaffolds: the In Scope `--- TODO ---` marker
+A draft SRD may hold two working scaffolds: the in-scope `--- TODO ---` marker
 and a `## TODO` section. Maintain them across every mode and never remove either
-silently; both block `ACCEPTED` and are reported as follow-ups at session end.
-When the SRD holds either, on "Add X to TODO", or on the signal to fill In
-Scope, read [references/draft-scaffolds.md](references/draft-scaffolds.md)
-(on-demand) — what each scaffold suppresses, and both procedures. Never trigger
-the In Scope derivation on your own.
+silently; both block approval and are reported as follow-ups at session end.
+When the SRD holds either, on "Add X to TODO", or on the signal to fill the
+in-scope list, read
+[references/draft-scaffolds.md](references/draft-scaffolds.md) (on-demand) —
+what each scaffold suppresses, and both procedures. Never trigger
+the in-scope derivation on your own.
 
 ## Modes
 
@@ -219,7 +231,7 @@ only)*:
   propose nothing —
   [references/modes.md](references/modes.md#load-default).
 - interactive (`walk`): a grouped issue summary, then the loop entry by entry
-  in document order, Scope last — [references/modes.md](references/modes.md).
+  in document order, scope last — [references/modes.md](references/modes.md).
 - feedback, polish, targeted: findings from a review or pasted feedback,
   mechanical-only cleanup, or one entry the user points to with the change
   wanted — [references/modes.md](references/modes.md).
@@ -232,9 +244,9 @@ only)*:
 ## Session end (every mode)
 
 1. Re-check the whole document against every rule in the standard plus the
-   consistency pass in the authoring guide, and report what remains. GLO-3
-   covers only terms this session already settled: a session that never loaded
-   the term set does not load it here.
+   consistency pass in the authoring guide, and report what remains. The
+   term-definition rule covers only terms this session already settled: a
+   session that never loaded the term set does not load it here.
 2. Invoke `srd:report-doc-gap` to offer the draft gaps this session captured,
    only when there are any
    ([references/corpus-edits.md](references/corpus-edits.md#session-end)).
@@ -244,7 +256,7 @@ only)*:
      ([references/corpus-edits.md](references/corpus-edits.md)).
    - What was flagged and left (frozen-id conflicts, metadata gaps, anything
      the user declined).
-   - Outstanding human follow-ups: placeholders, Status, and either draft
+   - Outstanding human follow-ups: placeholders, status, and either draft
      scaffold left standing — by name and item count, not its items.
    - `## Open questions`, when any remain
      ([references/proposals.md](references/proposals.md#open-questions)).
