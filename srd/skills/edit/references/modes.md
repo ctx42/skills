@@ -76,8 +76,8 @@ outcome.
 
 ## feedback start point (path + `#n`)
 
-Requires an existing `<srd>.review.md` (the SRD's path with `.md` replaced:
-`specs/login.md` → `specs/login.review.md`); if absent, say so and stop — one
+Requires an existing `<srd>.review.md` (the SRD's `review` working file, per
+`project-config.md`, "5. Working files"); if absent, say so and stop — one
 or two lines naming the missing file, nothing more. No approval-gate line,
 draft check, manifest, or way in — not even "run `srd:review` first": those
 report a run that happened, and this one did not. Enter at finding `#n`

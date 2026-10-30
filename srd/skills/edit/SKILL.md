@@ -176,7 +176,7 @@ follows the standard's section order.
 
 ## Decision log
 
-Every applied edit is recorded in `<srd>.decisions.md` beside the source.
+Every applied edit is recorded in the working file `<srd>.decisions.md`.
 What goes in an entry, the file's shape, and what `autofix` owes it are in
 [references/decision-log.md](references/decision-log.md) — read it before
 writing the session's first entry.

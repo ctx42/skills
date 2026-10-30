@@ -1,0 +1,37 @@
+{
+  "skill_name": "init",
+  "probes": [
+    {
+      "id": "set-value-kept",
+      "rule": "existing-lines-kept",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md sets `kb: notes/kb`. No `notes/kb` folder exists; a top-level `kb/` folder does.\n\nQuestion: what value does your proposal show for `kb`? Answer on the first line with the value only, then one sentence why.",
+      "pass": "^\\W*notes/kb",
+      "fail": "^\\W*kb\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "no-port-added",
+      "rule": "server-keys-kept",
+      "prompt": "Situation: `/srd:init` runs in a folder whose project-config.md sets `mcp-server: docs` and `sources: [conflu]` but no `mcp-port`. The doc server will not start without a port, and 7777 is free.\n\nQuestion: does your proposal add `mcp-port: 7777`? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "class": "redundant"
+    },
+    {
+      "id": "missing-standard-asks",
+      "rule": "required-blocks-write",
+      "prompt": "Situation: `/srd:init` found every value but `srd-standard`: no document's title names an SRD standard. The proposal showed it as `not found`, and the user replied \"yes, write it\".\n\nQuestion: what do you do? Answer on the first line with exactly one of: WRITE-WITHOUT-IT, WRITE-A-PLACEHOLDER, ASK-FOR-IT. Then one sentence why.",
+      "pass": "^\\W*ASK-FOR-IT",
+      "fail": "^\\W*WRITE",
+      "class": "redundant"
+    },
+    {
+      "id": "missing-key-in-the-proposal",
+      "rule": "propose-once",
+      "prompt": "Situation: `/srd:init` is finding values. No folder looks like the SRD folder, so `initiatives` has no candidate and the user must name it; every other key has one value.\n\nQuestion: what is your next message? Answer on the first line with exactly one of: ASK-FOR-INITIATIVES-FIRST, ONE-PROPOSAL-OF-ALL-KEYS. Then one sentence why.",
+      "pass": "^\\W*ONE-PROPOSAL",
+      "fail": "^\\W*ASK-FOR",
+      "class": "load-bearing"
+    }
+  ]
+}

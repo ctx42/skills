@@ -137,9 +137,10 @@ standard that defines no such value, is a warning: skip the sweep with one line
 ("sweep skipped: <why>") and go on to step 2.
 
 1. `list_docs`; `get_doc` each SRD under the `initiatives` folder (not its
-   `.review.md` or `.questions.md` companions) and read that field of its
-   metadata. An SRD whose field is missing or holds a value the standard does
-   not list is skipped with one warning line naming the SRD and the value.
+   working files, such as `.review.md` or `.questions.md`) and read that
+   field of its metadata. An SRD whose field is missing or holds a value the
+   standard does not list is skipped with one warning line naming the SRD and
+   the value.
    Keep the folder of each abandoned one; none, the sweep ends
    silently.
 2. `get_doc` each page under the `kb` folder; keep every section whose

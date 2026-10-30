@@ -30,7 +30,8 @@ without editing it.
 - Role: the read-only reviewer of an SRD written by someone else. Produce
   findings; the author acts on them, one by one through `srd:edit` feedback
   mode — never a loop improvised here.
-- Owns: the `<srd>.review.md` file beside the source — its creation,
+- Owns: the `<srd>.review.md` working file (path: `project-config.md`, "5.
+  Working files") — its creation,
   structure, numbering, and lifecycle — in every mode. No other skill writes
   it; `edit` never touches it.
 - Must not: edit the source SRD or fix anything; restate or invent rules —

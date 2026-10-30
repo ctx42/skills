@@ -1,0 +1,79 @@
+{
+  "skill_name": "init",
+  "rules": [
+    {
+      "id": "existing-lines-kept",
+      "rule": "Never changes or removes a set key, its value, or any other line",
+      "must": [
+        "Never\\ change\\ or\\ remove\\ a\\ key\\ the\\ file\\ sets,\\ its\\ value,\\ or\\ any\\ other\\ line"
+      ]
+    },
+    {
+      "id": "server-keys-kept",
+      "rule": "Server keys are kept as found and written only into a new file",
+      "must": [
+        "keep\\ `mcp\\-server`,\\ `mcp\\-port`,\\ `watch`,\\ and\\ `watch\\-debounce`\\ as\\ found,\\ and\\ write\\ them\\ only\\ into\\ a\\ new\\ file"
+      ]
+    },
+    {
+      "id": "propose-once",
+      "rule": "One proposal of the whole front matter, then one question",
+      "must": [
+        "Propose\\ once:\\ the\\ whole\\ front\\ matter\\ as\\ it\\ will\\ be",
+        "Ask\\ one\\ question:\\ write\\ it\\ as\\ shown,\\ or\\ which\\ values\\ to\\ change"
+      ]
+    },
+    {
+      "id": "required-blocks-write",
+      "rule": "A required key not found blocks the write, even after a yes",
+      "must": [
+        "still\\ `not\\ found`\\ blocks\\ the\\ write:\\ ask\\ for\\ its\\ value,\\ even\\ after\\ a\\ yes"
+      ]
+    },
+    {
+      "id": "no-gate-no-server",
+      "rule": "Skips the gate and calls no server tool",
+      "must": [
+        "Skip\\ the\\ gate",
+        "Call\\ no\\ server\\ tool,\\ start\\ no\\ server,\\ and\\ never\\ touch\\ `\\.mcp\\.json`"
+      ]
+    },
+    {
+      "id": "output-discipline",
+      "rule": "Terse report",
+      "must": [
+        "Report\\ tersely:\\ no\\ preamble\\ or\\ narration"
+      ]
+    },
+    {
+      "id": "key-reference-verbatim",
+      "rule": "The key reference is copied verbatim and appended once",
+      "must": [
+        "Copy\\ \\[assets/keys\\.md\\]\\(assets/keys\\.md\\)\\ verbatim,\\ never\\ reworded",
+        "Skip\\ it\\ when\\ the\\ body\\ already\\ has\\ a\\ `\\#\\#\\ Front\\ matter\\ keys`\\ heading\\ or\\ a\\ table\\ row\\ naming\\ `mcp\\-server`"
+      ]
+    },
+    {
+      "id": "check-read-only",
+      "rule": "check writes nothing, fixes nothing, and calls only read tools",
+      "must": [
+        "`check`\\ is\\ read\\-only:\\ it\\ writes\\ nothing\\ and\\ fixes\\ nothing\\ in\\ the\\ project"
+      ]
+    },
+    {
+      "id": "check-runs-every-check",
+      "rule": "check never stops at the first problem; without a server it reports and continues",
+      "must": [
+        "Run\\ every\\ check\\ below;\\ never\\ stop\\ at\\ the\\ first\\ problem\\.",
+        "report\\ it\\ as\\ a\\ problem,\\ and\\ report\\ the\\ lines\\ that\\ need\\ the\\ server\\ as\\ `not\\ checked`"
+      ]
+    },
+    {
+      "id": "check-counts-from-server",
+      "rule": "counts are read off the server's answers",
+      "must": [
+        "Read\\ every\\ count\\ off\\ the\\ server's\\ answers,\\ never\\ estimate\\ one\\."
+      ]
+    }
+  ]
+}

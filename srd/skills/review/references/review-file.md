@@ -1,7 +1,8 @@
 # The review file
 
-How `<srd>.review.md` (the SRD's path with `.md` replaced: `specs/login.md` →
-`specs/login.review.md`) is laid out, numbered, cited, and ordered. Read before
+How `<srd>.review.md` (the SRD's `review` working file; its path is in
+`project-config.md`, "5. Working files") is laid out, numbered, cited, and
+ordered. Read before
 writing or updating one — every mode that touches the file needs it, and no
 mode needs it before then.
 

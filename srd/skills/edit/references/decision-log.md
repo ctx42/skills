@@ -3,17 +3,18 @@
 `<srd>.decisions.md` — what it records, its shape, and what each mode owes it.
 Read before writing the first entry of a session; no mode needs it earlier.
 
-`<srd>.decisions.md` names the SRD's path with its `.md` extension replaced:
-`specs/login.md` gives `specs/login.decisions.md`, never
-`specs/login.md.decisions.md`. `<srd>.review.md` and `<srd>.questions.md` are
-formed the same way.
+`<srd>.decisions.md` is the SRD's `decisions` working file, at the path
+`project-config.md` gives ("5. Working files"): beside the SRD
+(`specs/login.md` gives `specs/login.decisions.md`), or under `srd-work` when
+the project sets it. `<srd>.review.md` and `<srd>.questions.md` are found the
+same way.
 
 `autofix` is a bulk path through the same gate, not an exception to it: every
 substitution it applies is an applied edit and owes its entry, and `autofix.md`
 is the procedure for finding and applying them, not the whole of what the mode
 owes.
 
-Record every applied edit in `<srd>.decisions.md` beside the source — the
+Record every applied edit in `<srd>.decisions.md` — the
 author-facing account of what changed and why, which a diff cannot carry.
 `edit` owns the file; no other skill writes it.
 

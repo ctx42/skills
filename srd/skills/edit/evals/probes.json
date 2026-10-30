@@ -144,6 +144,30 @@
       "pass": "^\\W*STATUS-LINE\\b",
       "fail": "^\\W*(NONE|WHOLE-FILE)\\b",
       "class": "redundant"
+    },
+    {
+      "id": "decision-log-under-srd-work",
+      "rule": "working-file-path",
+      "context": [
+        "SKILL.md",
+        "../create/references/project-config.md"
+      ],
+      "prompt": "Situation: project-config.md sets `initiatives: initiatives` and `srd-work: work`. During `/srd:edit initiatives/pay/pay-srd.md` the user confirms the first change and you apply it.\n\nQuestion: at which path do you log it? Answer on the first line with the path only, then one sentence why.",
+      "pass": "^[^\\n]*(?<![\\w/])work/pay/pay-srd\\.decisions\\.md\\b",
+      "fail": "^[^\\n]*(?<![\\w/])initiatives/[^\\n\\s`]*\\.(review|decisions|questions)\\.md",
+      "class": "redundant"
+    },
+    {
+      "id": "decision-log-beside-without-srd-work",
+      "rule": "working-file-path",
+      "context": [
+        "SKILL.md",
+        "../create/references/project-config.md"
+      ],
+      "prompt": "Situation: project-config.md has no `srd-work` key. During `/srd:edit specs/login.md` the user confirms the first change and you apply it.\n\nQuestion: at which path do you log it? Answer on the first line with the path only, then one sentence why.",
+      "pass": "^\\W*specs/login\\.decisions\\.md\\b",
+      "fail": "^\\W*(work/|specs/login\\.md\\.decisions)",
+      "class": "redundant"
     }
   ]
 }

@@ -146,7 +146,7 @@ resolves to nothing: say so and ask — never guess what to work on.
      `srd:report-doc-gap`. Match the way the corpus reference says: a citation
      written as a checkout path matches nothing literally, and comparing the
      raw strings condemns every live source on the page.
-4. Write `<srd>.questions.md` next to the SRD (open questions only), per
+4. Write the working file `<srd>.questions.md` (open questions only), per
    [Questions file](#questions-file).
 5. Walk one question at a time (see [Walk](#walk)), ordered: was-blocker
    first, then system-confrontation and was-major questions, then was-minor

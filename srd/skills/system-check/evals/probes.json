@@ -48,6 +48,18 @@
       "pass": "^\\W*ASK-WHICH",
       "fail": "^\\W*(ASK-AUTHOR|NOTHING)",
       "class": "redundant"
+    },
+    {
+      "id": "questions-file-under-srd-work",
+      "rule": "working-file-path",
+      "context": [
+        "SKILL.md",
+        "../create/references/project-config.md"
+      ],
+      "prompt": "Situation: project-config.md sets `initiatives: initiatives` and `srd-work: work`. `/srd:system-check initiatives/login/login-srd.md` has its open questions ready to write.\n\nQuestion: at which path do you write the questions file? Answer on the first line with the path only, then one sentence why.",
+      "pass": "^[^\\n]*(?<![\\w/])work/login/login-srd\\.questions\\.md\\b",
+      "fail": "^[^\\n]*(?<![\\w/])initiatives/[^\\n\\s`]*\\.(review|decisions|questions)\\.md",
+      "class": "redundant"
     }
   ]
 }

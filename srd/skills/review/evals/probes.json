@@ -101,6 +101,18 @@
       "pass": "\\(withdrawn 2026-10-01 16:20:",
       "fail": "\\(withdrawn:",
       "class": "redundant"
+    },
+    {
+      "id": "review-file-under-srd-work",
+      "rule": "working-file-path",
+      "context": [
+        "SKILL.md",
+        "../create/references/project-config.md"
+      ],
+      "prompt": "Situation: project-config.md sets `initiatives: initiatives` and `srd-work: work`. The user runs `/srd:review initiatives/login/login-srd.md`; no review file exists yet.\n\nQuestion: at which path do you write the review file? Answer on the first line with the path only, then one sentence why.",
+      "pass": "^[^\\n]*(?<![\\w/])work/login/login-srd\\.review\\.md\\b",
+      "fail": "^[^\\n]*(?<![\\w/])initiatives/[^\\n\\s`]*\\.(review|decisions|questions)\\.md",
+      "class": "redundant"
     }
   ]
 }

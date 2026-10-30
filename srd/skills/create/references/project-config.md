@@ -2,7 +2,8 @@
 
 Every srd skill runs this gate first, in every mode, before reading the SRD,
 probing anything, or asking the user anything. A delegate invoked by an srd
-skill that passed the gate this session reuses that result.
+skill that passed the gate this session reuses that result. `srd:init` alone
+skips it: it writes the file the gate reads.
 
 ## 1. Find the config
 
@@ -21,11 +22,13 @@ skill that passed the gate this session reuses that result.
 | `glossary`     | shared glossary location; glossary links must point under it               |
 | `gaps`         | server's gap folder, one `gap-NNNN-<slug>.md` per gap; reach it via tools  |
 | `precedence`   | server's trust order: folders, most trusted first; drives each `rank`      |
+| `srd-work`     | folder for SRD working files (see "5. Working files")                      |
 
 Every srd skill needs the first five: each one delegates to the others. Every
 path is relative to the project root; an absolute path is invalid. `gaps` and
 `precedence` are optional and server-validated: never read the gap folder or
 the `precedence` list directly — use the gap tools and the `rank` on results.
+`srd-work` is optional; the skills read it themselves.
 
 ## 2. Check the server
 
@@ -38,13 +41,15 @@ the `precedence` list directly — use the gap tools and the `rank` on results.
 Stop before any other work and say exactly which check failed, in one line:
 
 - `project-config.md` not found in `<start dir>` or any parent.
-- `project-config.md` has no `<key>`.
+- `project-config.md` has no `<key>` (one of the first five; an optional key
+  may be absent).
 - `<key>` is absolute (`<value>`); paths are relative to the project root.
 - No `mcp__<mcp-server>__*` tools in this session.
 - `mcp__<mcp-server>__search` failed: `<error>`.
 
-For the last two add: start the `<mcp-server>` server, run `/mcp` to connect,
-then re-run. Never fall back to a REST call, a local checkout, or offline work.
+For the first two add: run `/srd:init` in the project folder. For the last two
+add: start the `<mcp-server>` server, run `/mcp` to connect, then re-run.
+Never fall back to a REST call, a local checkout, or offline work.
 
 ## 4. Use what it names
 
@@ -72,3 +77,20 @@ then re-run. Never fall back to a REST call, a local checkout, or offline work.
   identity, never an invented id.
 - Project data lives in the project or on the server — `<kb>/`, server-side
   gaps — never in per-machine state. Only skill lessons live per machine.
+
+## 5. Working files
+
+`<srd>.<kind>.md` names an SRD's working file of one kind: `review`,
+`decisions`, `questions`, `retro`, or `notes`. Every skill reads and writes a
+working file at this path, and only there:
+
+- With `srd-work` set, for an SRD under `initiatives`:
+  `<srd-work>/<srd-folder>/<name>.<kind>.md`. `<srd-folder>` is the SRD's
+  folder under `initiatives`; `<name>` is the SRD's whole file name without
+  `.md`, never the folder name: `initiatives/login/login-srd.md` gives
+  `<srd-work>/login/login-srd.review.md`.
+  Create the folder with the first file written there.
+- Otherwise, beside the SRD: its path with `.md` replaced. `specs/login.md`
+  gives `specs/login.review.md`, never `specs/login.md.review.md`.
+
+Never look for a working file at the other place, and never move one.

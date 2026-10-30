@@ -80,6 +80,9 @@ source of truth.
 
 ### srd
 
+- `init` — sets up a folder for the srd skills: proposes the
+  `project-config.md` keys it lacks, writes them after one confirmation, and
+  creates their folders; the one srd skill that skips the gate.
 - `create` — interviews, drafts, and self-checks a new SRD; owns the shared
   SRD references, including the `project-config.md` gate every srd skill runs
   first.

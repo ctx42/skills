@@ -223,6 +223,15 @@
       "must": [
         "document\\ order\\ \\(the\\ standard's\\ section\\ order,\\ and\\ by\\ position\\ within\\ each\\)"
       ]
+    },
+    {
+      "id": "working-file-path",
+      "rule": "A working file lives under <srd-work>/<srd-folder>/ when srd-work is set, else beside the SRD",
+      "file": "../create/references/project-config.md",
+      "must": [
+        "`<srd\\-work>/<srd\\-folder>/<name>\\.<kind>\\.md`",
+        "Otherwise,\\ beside\\ the\\ SRD"
+      ]
     }
   ]
 }
