@@ -310,6 +310,13 @@
       "must": [
         "its source is the SRD's folder name,\\s+as in `Attested slot-swap interview 2026-08-02` for `initiatives/slot-swap/`"
       ]
+    },
+    {
+      "id": "notice-insert-is-errata",
+      "rule": "Inserting a missing keyword notice where the standard places it is an errata fix, not a header edit",
+      "must": [
+        "Inserting a missing keyword notice where the standard places\\s+it is an errata fix, not a header edit"
+      ]
     }
   ]
 }

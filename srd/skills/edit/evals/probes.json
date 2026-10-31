@@ -180,6 +180,15 @@
       "pass": "^\\W*initiatives/pay/pay-srd\\.decisions\\.md\\b",
       "fail": "^[^\\n]*(?<![\\w/])(none|srd-work)/",
       "class": "redundant"
+    },
+    {
+      "id": "missing-notice-is-errata",
+      "rule": "notice-insert-is-errata",
+      "prompt": "Situation: `/srd:edit specs/x.md autofix`. The review's `## Errata` block lists a missing keyword notice (`old` is `(missing)`, `new` the notice); the SRD has no keyword notice anywhere and the standard fixes where it goes, just below the header.\n\nQuestion: do you apply it as part of the errata bulk fix, or report it as a header edit for the author? Answer on the first line ERRATA or AUTHOR, then one sentence why.",
+      "pass": "^\\W*ERRATA\\b",
+      "fail": "^\\W*AUTHOR\\b",
+      "bullets": [],
+      "class": "load-bearing"
     }
   ]
 }

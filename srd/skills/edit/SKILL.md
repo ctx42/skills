@@ -35,8 +35,9 @@ counterpart to the read-only `review`. It never invents or restates rules
 (format, style, logic, and rules come from the standard and `create`'s
 reference files) and never edits the header fields the standard defines, sets
 back-links, or changes the status field; it flags those gaps under the rules
-that govern them. A finding outside that mandate is reported as the author's
-to fix, not looped — even when the run entered at it
+that govern them. Inserting a missing keyword notice where the standard places
+it is an errata fix, not a header edit. A finding outside that mandate is
+reported as the author's to fix, not looped — even when the run entered at it
 ([references/modes.md](references/modes.md)). It never proposes a status
 transition (flag only a value outside those the standard lists) and never
 proposes pushing, publishing, or syncing the SRD as a follow-up. Comment blocks
