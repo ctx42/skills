@@ -100,7 +100,10 @@ skill text:
    re-runs included, within the cap. At the cap, stop: report the cases and
    re-runs not run as open; running them needs a new yes.
 4. Re-run each failed case once. One that then passes runs twice more before
-   it counts as fixed; one that also fails at the base is flaky, not broken.
+   it counts as fixed. Every re-run, the first included, is
+   `--case <group> <name> --fresh` (the ledger would skip it) with the
+   round's `--model` and `-j`, and `--max-usd` set to what the cap has left.
+   One that also fails at the base is flaky, not broken.
 
 Blind rounds only when the user asks, after stating scope and rough cost.
 Report per tier its counts and cost, each FAIL and SPLIT with its evidence

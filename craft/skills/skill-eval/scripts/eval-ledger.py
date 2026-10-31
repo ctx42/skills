@@ -81,6 +81,9 @@ def main():
             elif r.get("passed") and not r.get("error"):
                 led[f"{group}/{c['name']}"] = key(group, c["name"], model)
             else:
+                # A finished run that did not pass is a verdict on this key:
+                # drop the old pass so the next run does not skip the case.
+                led.pop(f"{group}/{c['name']}", None)
                 print(f"FAIL {c['name']}")
     os.makedirs(os.path.dirname(LEDGER), exist_ok=True)
     with open(LEDGER, "w") as f:

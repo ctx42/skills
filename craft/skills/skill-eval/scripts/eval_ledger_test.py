@@ -70,6 +70,27 @@ class LedgerTest(unittest.TestCase):
         self.assertEqual(["LIMIT", "1"], have)
         self.assertEqual(["a"], self.pending())
 
+    def test_failed_run_clears_the_pass(self):
+        self.record("sonnet", ("a", True, None))
+
+        self.record("sonnet", ("a", False, None))
+
+        self.assertEqual(["a", "b"], self.pending())
+
+    def test_runner_error_clears_the_pass(self):
+        self.record("sonnet", ("a", True, None))
+
+        self.record("sonnet", ("a", False, "timeout after 300s"))
+
+        self.assertEqual(["a", "b"], self.pending())
+
+    def test_usage_limit_keeps_the_pass(self):
+        self.record("sonnet", ("a", True, None))
+
+        self.record("sonnet", ("a", False, "usage limit reached"))
+
+        self.assertEqual(["b"], self.pending())
+
     def test_pass_is_per_model(self):
         self.record("sonnet", ("a", True, None))
 
