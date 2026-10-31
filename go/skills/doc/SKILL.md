@@ -135,8 +135,10 @@ worker that has the seven fact categories in front of it and a whole package to
 get through is exactly where an unsupported claim appears. Check every added
 fact against the code that is supposed to establish it: a concurrency guarantee
 on a type with no synchronization, an error condition no branch produces, a
-units claim nothing converts. Revert what the code does not carry and say so in
-the merged report: two workers given the same package and the same prompt have
+units claim nothing converts. Revert what the code does not carry, or narrow it
+to what the code does, and say so in the merged report: the comment's final
+form goes under Changes made and the dropped fact under Flagged unverifiable.
+Two workers given the same package and the same prompt have
 added and declined the very same unsupported guarantee, so which one you got is
 not something the merge can assume. The parent is the last checklist pass, not a
 stapler.
@@ -290,6 +292,8 @@ End of run:
 - Never-touched in scope: `file:Symbol — reason`.
 - Module kind: a `Packages:` line, never left out, naming the packages done
   and, by name, every package `packages=` left out.
+- After a fan-out: a `Merge check:` line, never left out, saying you re-read
+  every merged edit and how many you reverted or narrowed, zero included.
 - Items left alone get no line; a flagged or never-touched item is never
   dropped silently. Close with a one-line pointer to run `go:review` on
   the result.
