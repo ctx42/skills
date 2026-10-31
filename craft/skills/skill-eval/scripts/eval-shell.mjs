@@ -10,7 +10,9 @@
 // Per case: copy the plugin read-only to <tmp>/plugin, run scaffold.sh in
 // <tmp>/home/cwd with $HOME=<tmp>/home, then `claude -p` the prompt body there
 // (project setting sources only: no user hooks, CLAUDE.md, plugins, or MCP
-// servers), and grade the trace and workspace. Grader types: regex (targets
+// servers; file edits under the real home refused), and grade the trace and
+// workspace. A case whose trace shows a file edit that reached the real home,
+// or a Bash call that names it, fails (eval-guard.mjs). Grader types: regex (targets
 // last_message, trace, {source: file, path}), tool_used, tool_order,
 // file_exists. Patterns are JavaScript regexes, as in `claude plugin eval`.
 //
@@ -37,6 +39,7 @@ import path from "node:path";
 
 import { findRoot } from "./evalroot.mjs";
 import { stripNotice } from "./eval-notice.mjs";
+import { denyHomeEdits, homeCommands, homeWrites } from "./eval-guard.mjs";
 import { mainModel } from "./eval-model.mjs";
 
 const ROOT = findRoot();
@@ -220,6 +223,8 @@ function grade(g, run) {
 
 // --- Running one case. ---
 const configDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), ".claude");
+// The runner's own home: every case runs with $HOME pointed elsewhere.
+const realHome = os.homedir();
 const goproxy = process.env.GOPROXY ||
   `file://${spawnSync("go", ["env", "GOMODCACHE"], { encoding: "utf8" }).stdout.trim()}/cache/download`;
 
@@ -260,6 +265,7 @@ async function runCase(c) {
       "--output-format", "stream-json", "--verbose"];
     if (model !== "default") args.push("--model", model);
     if (c.allowed.length) args.push("--allowedTools", ...c.allowed);
+    args.push(...denyHomeEdits(realHome, tmp));
     if (c.asp) args.push("--append-system-prompt", c.asp);
     if (c.history) {
       // Resume a recorded session: it must sit in this workspace's project dir.
@@ -282,11 +288,12 @@ async function runCase(c) {
     });
 
     const text = fs.readFileSync(result.tracePath, "utf8");
-    const toolUses = [];
+    const toolUses = [], events = [];
     let lastMessage = "", final = null;
     for (const line of text.split("\n")) {
       let e;
       try { e = JSON.parse(line); } catch { continue; }
+      events.push(e);
       if (e.type === "assistant") {
         const parts = [];
         for (const b of e.message?.content || []) {
@@ -318,6 +325,10 @@ async function runCase(c) {
     }).join("\n");
     const run = { cwd, trace: graded, lastMessage: stripNotice(lastMessage, process.env.EVAL_STRIP_NOTICE), toolUses, scaffolded };
     result.graders = c.graders.map((g) => grade(g, run));
+    const leaked = homeWrites(events, realHome, tmp);
+    if (leaked.length) result.graders.push({ name: "no-real-home-write", passed: false, evidence: `wrote into the real home: ${leaked.join(", ")}` });
+    const named = homeCommands(events, realHome);
+    if (named.length) result.graders.push({ name: "no-real-home-command", passed: false, evidence: `ran Bash on the real home: ${named.join(" | ")}` });
     result.passed = !result.error && result.graders.every((g) => g.passed);
   } catch (e) {
     result.error = result.error || e.message;

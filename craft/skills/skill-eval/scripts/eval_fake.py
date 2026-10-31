@@ -8,7 +8,10 @@ The fake `claude` answers `claude plugin eval` with the result JSON
 eval-changed.sh reads, and `claude -p` (as eval-shell.mjs calls it) with a
 stream-json trace. Each case's outcome comes from a JSON plan file named by
 $FAKE_CLAUDE_PLAN: {"<case>": {"result": "pass"|"fail"|"limit", "cost": N}},
-or "results": [...] for one outcome per run (the last repeats);
+or "results": [...] for one outcome per run (the last repeats); a
+`claude -p` case with "write": "<path>" first plays a Write call to that path,
+refused when "write_error" is true, and one with "bash": "<command>" plays a
+Bash call that succeeds.
 Every run reports its --model, else $FAKE_CLAUDE_DEFAULT_MODEL (default
 claude-default-1), as the costliest model of its modelUsage; a case run
 reports $FAKE_CLAUDE_RUN_MODEL instead when that is set (a model fallback).
@@ -109,6 +112,19 @@ if "-p" in args:
                           "result": "You've hit your usage limit", "total_cost_usd": 0}))
     else:
         reply = "OK" if kind == "pass" else "NO"
+        if plan.get(case, {}).get("write"):
+            print(json.dumps({"type": "assistant", "message": {"model": model, "content": [
+                {"type": "tool_use", "id": "w1", "name": "Write",
+                 "input": {"file_path": plan[case]["write"], "content": "x"}}]}}))
+            print(json.dumps({"type": "user", "message": {"content": [
+                {"type": "tool_result", "tool_use_id": "w1",
+                 "is_error": bool(plan[case].get("write_error"))}]}}))
+        if plan.get(case, {}).get("bash"):
+            print(json.dumps({"type": "assistant", "message": {"model": model, "content": [
+                {"type": "tool_use", "id": "b1", "name": "Bash",
+                 "input": {"command": plan[case]["bash"]}}]}}))
+            print(json.dumps({"type": "user", "message": {"content": [
+                {"type": "tool_result", "tool_use_id": "b1", "is_error": False}]}}))
         print(json.dumps({"type": "assistant", "message": {"model": model,
                           "content": [{"type": "text", "text": reply}]}}))
         print(json.dumps({"type": "result", "result": reply, "total_cost_usd": cost, "modelUsage": usage}))

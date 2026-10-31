@@ -367,6 +367,22 @@ class LedgerTest(unittest.TestCase):
 
         self.assertEqual(["b"], r.stdout.split())
 
+    def test_guard_module_is_in_the_key_of_shell_cases_only(self):
+        scripts = fake.copy_scripts(os.path.join(self.tmp.name, "scripts"))
+        fake.add_case(self.root, "b", shell=True)
+        ledger = os.path.join(scripts, "eval-ledger.py")
+        path = os.path.join(self.tmp.name, "result.json")
+        with open(path, "w") as f:
+            json.dump(result(("a", True, None), ("b", True, None)), f)
+        subprocess.run([sys.executable, ledger, "record", fake.GROUP, "m1", path], env=self.env, check=True)
+        with open(os.path.join(scripts, "eval-guard.mjs"), "a") as f:
+            f.write("// changed\n")
+
+        r = subprocess.run([sys.executable, ledger, "pending", fake.GROUP, "m1", "a", "b"],
+                           env=self.env, capture_output=True, text=True, check=True)
+
+        self.assertEqual(["b"], r.stdout.split())
+
     def test_edit_outside_the_key_keeps_the_pass(self):
         self.record("sonnet", ("a", True, None))
         fake.write(os.path.join(self.root, fake.GROUP, "skills", "other", "SKILL.md"), "# other\n")

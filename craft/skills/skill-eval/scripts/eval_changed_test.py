@@ -300,6 +300,54 @@ class EvalChangedTest(unittest.TestCase):
         self.assertEqual(0, code, out)
         self.assertEqual("claude-default-1", self.shell_results()["a"]["model"])
 
+    def home(self):
+        """Point $HOME at a fresh dir under the test's temp dir; return it."""
+        home = os.path.join(self.tmp.name, "home")
+        os.makedirs(home, exist_ok=True)
+        self.env["HOME"] = home
+        return home
+
+    def test_shell_case_that_writes_into_the_real_home_fails(self):
+        path = os.path.join(self.home(), ".agent-data", "lessons", "x.md")
+        self.repo(("a", True), plan={"a": {"write": path}})
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(1, code, out)
+        self.assertIn("FAIL  a", out)
+        self.assertIn(f"wrote into the real home: {path}", out)
+        self.assertEqual(set(), self.ledger())
+
+    def test_shell_case_that_runs_bash_on_the_real_home_fails(self):
+        cmd = f"wc -l {self.home()}/.agent-data/lessons/x.md"
+        self.repo(("a", True), plan={"a": {"bash": cmd}})
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(1, code, out)
+        self.assertIn(f"ran Bash on the real home: {cmd}", out)
+        self.assertEqual(set(), self.ledger())
+
+    def test_shell_case_whose_home_write_was_refused_passes(self):
+        path = os.path.join(self.home(), ".agent-data", "lessons", "x.md")
+        self.repo(("a", True), plan={"a": {"write": path, "write_error": True}})
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        self.assertEqual({"grp/a"}, self.ledger())
+
+    def test_shell_run_denies_edits_in_the_real_home(self):
+        home = self.home()
+        self.repo(("a", True))
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        have = [a for a in self.case_calls() if "-p" in a][0]
+        i = have.index("--disallowedTools")
+        self.assertEqual(f"Edit(/{home}/**)", have[i + 1])
+
     def commit(self):
         git = ["git", "-C", self.root, "-c", "user.name=t", "-c", "user.email=t@example.com"]
         subprocess.run(git + ["add", "-A"], check=True)

@@ -135,7 +135,7 @@ def files_under(top, skip=()):
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SHELL_RUNNER = ("eval-shell.mjs", "eval-notice.mjs")
+SHELL_RUNNER = ("eval-shell.mjs", "eval-notice.mjs", "eval-guard.mjs")
 LINK = re.compile(r"\.\./(?:\.\./)?([a-z0-9-]+)/([A-Za-z0-9_./-]*[A-Za-z0-9_])")
 
 
