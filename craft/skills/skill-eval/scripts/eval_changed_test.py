@@ -4,6 +4,7 @@
 Run: python3 -B -m unittest eval_changed_test (from scripts/). Needs bash,
 git, and node; no network, no logged-in `claude`, no model spend.
 """
+import glob
 import json
 import os
 import subprocess
@@ -218,6 +219,23 @@ class EvalChangedTest(unittest.TestCase):
         self.assertEqual(1, code, out)
         self.assertIn("not started (--max-usd 0.1 spent): b", out)
         self.assertEqual({"grp/a"}, set(self.ledger()))
+
+    def shell_results(self):
+        """Return {case: run} from every eval-shell result JSON of the runs."""
+        out = {}
+        for path in glob.glob(os.path.join(self.root, "tmp", "eval-changed", "*", "grp-shell*.json")):
+            with open(path) as f:
+                for c in json.load(f)["cases"]:
+                    out[c["name"]] = c["arms"]["with"][0]
+        return out
+
+    def test_shell_result_names_the_model_that_ran(self):
+        self.repo(("a", True))
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        self.assertEqual("claude-default-1", self.shell_results()["a"]["model"])
 
     def test_usage_limit_stops_the_run_with_exit_3(self):
         self.repo(("a", False), ("b", False), ("c", False), plan={"b": {"result": "limit"}})

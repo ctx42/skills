@@ -8,6 +8,8 @@ The fake `claude` answers `claude plugin eval` with the result JSON
 eval-changed.sh reads, and `claude -p` (as eval-shell.mjs calls it) with a
 stream-json trace. Each case's outcome comes from a JSON plan file named by
 $FAKE_CLAUDE_PLAN: {"<case>": {"result": "pass"|"fail"|"limit", "cost": N}};
+`claude -p` reports its --model, else $FAKE_CLAUDE_DEFAULT_MODEL (default
+claude-default-1), as the costliest model of its modelUsage;
 a case not in the plan passes at $0.50. Like the real one, a `plugin eval`
 call checks its --max-cost-usd before each case, leaves out the cases it
 did not start, and exits 2 once its spend passes the ceiling. Every call's argv is appended, one JSON list per line, to
@@ -72,13 +74,17 @@ if "-p" in args:
     prompt = args[args.index("-p") + 1]
     case = prompt.split("CASE:", 1)[1].split()[0] if "CASE:" in prompt else ""
     kind, cost = outcome(case)
+    model = args[args.index("--model") + 1] if "--model" in args else os.environ.get(
+        "FAKE_CLAUDE_DEFAULT_MODEL", "claude-default-1")
+    usage = {model: {"costUSD": cost}, "claude-helper-1": {"costUSD": 0.001}}
     if kind == "limit":
         print(json.dumps({"type": "result", "is_error": True,
                           "result": "You've hit your usage limit", "total_cost_usd": 0}))
     else:
         reply = "OK" if kind == "pass" else "NO"
-        print(json.dumps({"type": "assistant", "message": {"content": [{"type": "text", "text": reply}]}}))
-        print(json.dumps({"type": "result", "result": reply, "total_cost_usd": cost}))
+        print(json.dumps({"type": "assistant", "message": {"model": model,
+                          "content": [{"type": "text", "text": reply}]}}))
+        print(json.dumps({"type": "result", "result": reply, "total_cost_usd": cost, "modelUsage": usage}))
     sys.exit(0)
 
 sys.exit(2)

@@ -34,6 +34,7 @@ import path from "node:path";
 
 import { findRoot } from "./evalroot.mjs";
 import { stripNotice } from "./eval-notice.mjs";
+import { mainModel } from "./eval-model.mjs";
 
 const ROOT = findRoot();
 
@@ -241,7 +242,7 @@ async function runCase(c) {
   for (const k of Object.keys(env)) if (k.startsWith("CLAUDE_CODE_")) delete env[k];
   env.CLAUDE_CONFIG_DIR = configDir;
 
-  const result = { passed: false, error: null, graders: [], durationSeconds: 0, costUsd: 0, tracePath: path.join(out, "trace.jsonl") };
+  const result = { passed: false, error: null, graders: [], durationSeconds: 0, costUsd: 0, model: null, tracePath: path.join(out, "trace.jsonl") };
   let session = "";
   try {
     if (c.scaffold) {
@@ -293,6 +294,7 @@ async function runCase(c) {
     }
     if (final) {
       result.costUsd = final.total_cost_usd || 0;
+      result.model = mainModel(final.modelUsage);
       if (final.result) lastMessage = final.result;
       // A run cut off by the usage limit says nothing about the skill.
       if (final.is_error && /limit/i.test(final.result || "")) result.error = `usage limit: ${final.result}`;
