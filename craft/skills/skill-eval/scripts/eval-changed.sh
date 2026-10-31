@@ -328,6 +328,25 @@ for g in $groups; do
                 echo "   no cases ran (see $out/$g.err)"; rc=1; done_n=$((done_n + ${#part[@]})); continue
             fi
             done_n=$((done_n + ${#part[@]}))
+            if [ "$r" = 2 ]; then
+                # The runner left out the cases it did not start.
+                miss=$(python3 -c 'import json, sys
+got = {c["name"] for c in json.load(open(sys.argv[1]))["cases"]}
+print(" ".join(c for c in sys.argv[2:] if c not in got))' "$json" "${part[@]}")
+                [ -z "$miss" ] || echo "   not started (--max-usd $max_usd spent): $miss"
+            fi
+            [ "$r" = 0 ] || rc=1
+            # At the ceiling `claude plugin eval` still scores the free graders
+            # of the run that crossed it and skips the paid ones, so no verdict
+            # of that chunk reaches the ledger, pass or fail.
+            # Record while every run's trace still exists: the report below
+            # deletes passing workspaces and their traces.
+            rec=""
+            if [[ "$kind" == plain* ]] && [ "$r" = 2 ]; then
+                echo "   ledger unchanged for this chunk: it stopped at the ceiling"
+            else
+                rec=$(python3 "$HERE/eval-ledger.py" record "$g" "$model_name" "$json")
+            fi
             python3 - "$json" "$out/$g/failed" "$keep" <<'PY' || rc=1
 import json, os, shutil, subprocess, sys
 d = json.load(open(sys.argv[1]))
@@ -386,22 +405,6 @@ print(f"   {a['casesPassed']}/{a['casesTotal']} passed, "
       f"{d['durationSeconds']}s, ${d['costUsd']:.2f}")
 sys.exit(1 if bad else 0)
 PY
-            if [ "$r" = 2 ]; then
-                # The runner left out the cases it did not start.
-                miss=$(python3 -c 'import json, sys
-got = {c["name"] for c in json.load(open(sys.argv[1]))["cases"]}
-print(" ".join(c for c in sys.argv[2:] if c not in got))' "$json" "${part[@]}")
-                [ -z "$miss" ] || echo "   not started (--max-usd $max_usd spent): $miss"
-            fi
-            [ "$r" = 0 ] || rc=1
-            # At the ceiling `claude plugin eval` still scores the free graders
-            # of the run that crossed it and skips the paid ones, so no verdict
-            # of that chunk reaches the ledger, pass or fail.
-            if [[ "$kind" == plain* ]] && [ "$r" = 2 ]; then
-                echo "   ledger unchanged for this chunk: it stopped at the ceiling"
-                continue
-            fi
-            rec=$(python3 "$HERE/eval-ledger.py" record "$g" "$model_name" "$json")
             lim=$(printf '%s\n' "$rec" | grep '^LIMIT' || true)
             if [ -n "$lim" ]; then
                 left=$((n - done_n))
