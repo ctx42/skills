@@ -104,8 +104,9 @@ skill text:
    `--case <group> <name> --fresh` (the ledger would skip it) with the
    round's `--model` and `-j`, and `--max-usd` set to what the cap has left.
    One whose re-run fails again is reported as a FAIL with its trace and not
-   re-run further. Never run a case at the base unasked; when the user's base
-   run fails too, label that FAIL flaky, not a break the change caused.
+   re-run further. Never run a case at the base unasked. Label the FAIL by
+   the user's base run: flaky when it fails there too, a break the change
+   caused when it passes there, cause unknown without one (offer it).
 
 Blind rounds only when the user asks, after stating scope and rough cost.
 Report per tier its counts and cost, each FAIL and SPLIT with its evidence

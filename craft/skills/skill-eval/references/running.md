@@ -24,8 +24,9 @@ quality. Tiers and their tools: [tiers.md](tiers.md); mistakes past runs paid fo
 5. Rerun a fixed case once. A case that has failed and passed gets two more
    runs before it counts as fixed. One whose re-run fails again is reported
    as a FAIL with its trace and not re-run further. Never run a case at the
-   base unasked; when the user's base run fails too, label that FAIL flaky,
-   not a break the change caused.
+   base unasked. Label the FAIL by the user's base run: flaky when it fails
+   there too, a break the change caused when it passes there, cause unknown
+   without one (offer it).
 
 ## Long runs
 
