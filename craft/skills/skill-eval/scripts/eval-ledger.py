@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """Pass ledger for the agent-run cases (used by eval-changed.sh).
 
-A case's key is a sha256 over everything its run depends on: the case dir,
-every file of each skill its tags name (skill:, sec:, ref: — the skill dir
-minus evals/), the group's shared mocks/ and fixtures/, and the model. A PASS
-is recorded under that key in tmp/eval-ledger.json; while the key is
-unchanged, the case need not run again.
+A case's key is a sha256 over what its run depends on, as far as its tags
+say: the case dir; for each skill its tags name (skill:, sec:, ref:), the
+SKILL.md text above the first `## ` heading, the `## ` sections its sec: tags
+name, the references/ files its ref: tags name, and every other file of the
+skill outside SKILL.md, references/, and evals/ (LESSONS.md, assets/, ...);
+every file those hashed parts link as `../<skill>/<path>`, one level deep;
+the group's shared mocks/ and fixtures/; for a needs-shell case, the shell
+runner (eval-shell.mjs, eval-notice.mjs); and the model. A PASS is recorded
+under that key in tmp/eval-ledger.json; while the key is unchanged, the case
+need not run again.
 
   eval-ledger.py pending <group> <model> <case>...   print cases without a
                                                      PASS at their current key
@@ -122,26 +127,88 @@ def files_under(top, skip=()):
     return out
 
 
-def key(group, case, model):
-    cdir = os.path.join(ROOT, group, "evals", case)
-    with open(os.path.join(cdir, "prompt.md")) as f:
+HERE = os.path.dirname(os.path.abspath(__file__))
+SHELL_RUNNER = ("eval-shell.mjs", "eval-notice.mjs")
+LINK = re.compile(r"\.\./(?:\.\./)?([a-z0-9-]+)/([A-Za-z0-9_./-]*[A-Za-z0-9_])")
+
+
+def slug(heading):
+    """Slug a `## ` heading as eval-changed.sh does for sec: tags."""
+    return re.sub(r"[^a-z0-9]+", "-", heading.lower()).strip("-")
+
+
+def split_sections(text):
+    """Return (preamble, {slug: section text}) for a SKILL.md body."""
+    pre, sections, cur = [], {}, None
+    for line in text.splitlines(keepends=True):
+        if line.startswith("## "):
+            cur = slug(line[3:].strip())
+            sections[cur] = line
+        elif cur is None:
+            pre.append(line)
+        else:
+            sections[cur] += line
+    return "".join(pre), sections
+
+
+def case_tags(group, case):
+    with open(os.path.join(ROOT, group, "evals", case, "prompt.md")) as f:
         m = re.search(r"^tags:\s*\[([^\]]*)\]", f.read(), re.M)
-    skills = set()
-    for t in (m.group(1).split(",") if m else []):
-        t = t.strip()
-        mm = re.match(r"^(?:skill:|sec:|ref:)([a-z0-9-]+)", t)
-        if mm:
-            skills.add(mm.group(1))
-    paths = files_under(cdir)
+    return [t.strip() for t in m.group(1).split(",")] if m else []
+
+
+def read(path):
+    with open(path, "rb") as f:
+        return f.read()
+
+
+def key(group, case, model):
+    skills = {}  # skill -> (sections, refs)
+    tags = case_tags(group, case)
+    for t in tags:
+        mm = re.match(r"^(skill|sec|ref):([a-z0-9-]+)(?:[:/](.+))?$", t)
+        if not mm:
+            continue
+        kind, s, rest = mm.groups()
+        secs, refs = skills.setdefault(s, (set(), set()))
+        if kind == "sec" and rest:
+            secs.add(rest)
+        elif kind == "ref" and rest:
+            refs.add(rest)
+    parts = []  # (label, bytes)
+    cdir = os.path.join(ROOT, group, "evals", case)
+    parts += [(os.path.relpath(p, ROOT), read(p)) for p in files_under(cdir)]
     for s in sorted(skills):
-        paths += files_under(os.path.join(ROOT, group, "skills", s), skip=("evals",))
+        secs, refs = skills[s]
+        sdir = os.path.join(ROOT, group, "skills", s)
+        texts = []
+        md = os.path.join(sdir, "SKILL.md")
+        pre, sections = split_sections(read(md).decode() if os.path.isfile(md) else "")
+        texts.append((f"{group}/skills/{s}/SKILL.md#", pre))
+        texts += [(f"{group}/skills/{s}/SKILL.md#{x}", sections.get(x, "")) for x in sorted(secs)]
+        for r in sorted(refs):
+            rp = os.path.join(sdir, "references", f"{r}.md")
+            texts.append((os.path.relpath(rp, ROOT), read(rp).decode() if os.path.isfile(rp) else ""))
+        parts += [(label, t.encode()) for label, t in texts]
+        for p in files_under(sdir, skip=("evals", "references")):
+            if p != md:
+                parts.append((os.path.relpath(p, ROOT), read(p)))
+        # Files the hashed text links in sibling skills, one level deep.
+        linked = set()
+        for _, t in texts:
+            for name, rel in LINK.findall(t):
+                lp = os.path.join(ROOT, group, "skills", name, rel)
+                if os.path.isfile(lp):
+                    linked.add(lp)
+        parts += [(os.path.relpath(p, ROOT), read(p)) for p in sorted(linked)]
     for sub in ("mocks", "fixtures"):
-        paths += files_under(os.path.join(ROOT, group, "evals", sub))
+        parts += [(os.path.relpath(p, ROOT), read(p)) for p in files_under(os.path.join(ROOT, group, "evals", sub))]
+    if "needs-shell" in tags:
+        parts += [(f"runner/{n}", read(os.path.join(HERE, n))) for n in SHELL_RUNNER]
     h = hashlib.sha256(f"model={model}\n".encode())
-    for p in paths:
-        h.update(os.path.relpath(p, ROOT).encode() + b"\0")
-        with open(p, "rb") as f:
-            h.update(f.read())
+    for label, data in parts:
+        h.update(label.encode() + b"\0")
+        h.update(data)
     return h.hexdigest()
 
 
@@ -155,9 +222,7 @@ def slot(group, case, model):
 
 
 def is_fanout(group, case):
-    with open(os.path.join(ROOT, group, "evals", case, "prompt.md")) as f:
-        m = re.search(r"^tags:\s*\[([^\]]*)\]", f.read(), re.M)
-    return bool(m) and "fan-out" in [t.strip() for t in m.group(1).split(",")]
+    return "fan-out" in case_tags(group, case)
 
 
 def estimate(led, group, model, cases):

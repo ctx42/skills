@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tests for eval-ledger.py. Run: python3 -B -m unittest eval_ledger_test (from scripts/)."""
+import importlib.util
 import json
 import os
 import subprocess
@@ -241,14 +242,88 @@ class LedgerTest(unittest.TestCase):
 
         self.assertEqual(["a", "b"], have)
 
-    def test_tagged_skill_edit_makes_a_pass_pending(self):
+    def skill_file(self, *parts):
+        return os.path.join(self.root, fake.GROUP, "skills", *parts)
+
+    def edit_skill_md(self, old, new):
+        path = self.skill_file(fake.SKILL, "SKILL.md")
+        with open(path) as f:
+            text = f.read()
+        self.assertIn(old, text)
+        fake.write(path, text.replace(old, new))
+
+    def test_tagged_section_edit_makes_a_pass_pending(self):
         self.record("sonnet", ("a", True, None))
-        with open(os.path.join(self.root, fake.GROUP, "skills", fake.SKILL, "SKILL.md"), "a") as f:
-            f.write("\nMore.\n")
+        self.edit_skill_md("First.", "First, changed.")
 
         have = self.pending()
 
         self.assertEqual(["a", "b"], have)
+
+    def test_untagged_section_edit_keeps_the_pass(self):
+        self.record("sonnet", ("a", True, None))
+        self.edit_skill_md("Second.", "Second, changed.")
+
+        have = self.pending()
+
+        self.assertEqual(["b"], have)
+
+    def test_preamble_edit_makes_a_pass_pending(self):
+        self.record("sonnet", ("a", True, None))
+        self.edit_skill_md("# s1", "# s1, changed")
+
+        have = self.pending()
+
+        self.assertEqual(["a", "b"], have)
+
+    def test_lessons_edit_makes_a_pass_pending(self):
+        self.record("sonnet", ("a", True, None))
+        fake.write(self.skill_file(fake.SKILL, "LESSONS.md"), "- A lesson.\n")
+
+        have = self.pending()
+
+        self.assertEqual(["a", "b"], have)
+
+    def test_linked_sibling_file_is_in_the_key(self):
+        fake.write(self.skill_file("s2", "SKILL.md"), "# s2\n")
+        fake.write(self.skill_file("s2", "rules.md"), "Rule one.\n")
+        self.edit_skill_md("First.", "First: see `../s2/rules.md`.")
+        self.record("sonnet", ("a", True, None))
+        fake.write(self.skill_file("s2", "SKILL.md"), "# s2, changed\n")
+        self.assertEqual(["b"], self.pending())
+
+        fake.write(self.skill_file("s2", "rules.md"), "Rule one, changed.\n")
+
+        self.assertEqual(["a", "b"], self.pending())
+
+    def test_only_tagged_references_are_in_the_key(self):
+        fake.write(self.skill_file(fake.SKILL, "references", "r1.md"), "One.\n")
+        fake.write(self.skill_file(fake.SKILL, "references", "r2.md"), "Two.\n")
+        fake.write(os.path.join(self.root, fake.GROUP, "evals", "a", "prompt.md"),
+                   "---\ntags: [case:a, skill:s1, ref:s1/r1]\n---\n\nCASE:a\n")
+        self.record("sonnet", ("a", True, None))
+        fake.write(self.skill_file(fake.SKILL, "references", "r2.md"), "Two, changed.\n")
+        self.assertEqual(["b"], self.pending())
+
+        fake.write(self.skill_file(fake.SKILL, "references", "r1.md"), "One, changed.\n")
+
+        self.assertEqual(["a", "b"], self.pending())
+
+    def test_shell_runner_is_in_the_key_of_shell_cases_only(self):
+        scripts = fake.copy_scripts(os.path.join(self.tmp.name, "scripts"))
+        fake.add_case(self.root, "b", shell=True)
+        ledger = os.path.join(scripts, "eval-ledger.py")
+        path = os.path.join(self.tmp.name, "result.json")
+        with open(path, "w") as f:
+            json.dump(result(("a", True, None), ("b", True, None)), f)
+        subprocess.run([sys.executable, ledger, "record", fake.GROUP, "m1", path], env=self.env, check=True)
+        with open(os.path.join(scripts, "eval-shell.mjs"), "a") as f:
+            f.write("// changed\n")
+
+        r = subprocess.run([sys.executable, ledger, "pending", fake.GROUP, "m1", "a", "b"],
+                           env=self.env, capture_output=True, text=True, check=True)
+
+        self.assertEqual(["b"], r.stdout.split())
 
     def test_edit_outside_the_key_keeps_the_pass(self):
         self.record("sonnet", ("a", True, None))
@@ -258,6 +333,29 @@ class LedgerTest(unittest.TestCase):
         have = self.pending()
 
         self.assertEqual(["b"], have)
+
+
+class HelperTest(unittest.TestCase):
+    """Direct tests of eval-ledger.py helpers."""
+
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location("eval_ledger", LEDGER)
+        cls.m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.m)
+
+    def test_slug_matches_the_section_tags(self):
+        self.assertEqual("plan-diff-file-package-module", self.m.slug("Plan (diff, file, package, module)"))
+        self.assertEqual("usage", self.m.slug("Usage"))
+
+    def test_split_sections_keeps_subsections_in_their_section(self):
+        have = self.m.split_sections("# T\n\nIntro.\n## A b\nOne.\n### Sub\nTwo.\n## C\nThree.\n")
+
+        self.assertEqual(("# T\n\nIntro.\n", {"a-b": "## A b\nOne.\n### Sub\nTwo.\n", "c": "## C\nThree.\n"}), have)
+
+    def test_main_model_picks_the_costliest(self):
+        self.assertEqual("m2", self.m.main_model({"m1": {"costUSD": 0.1}, "m2": {"costUSD": 2}}))
+        self.assertIsNone(self.m.main_model(None))
 
 
 if __name__ == "__main__":
