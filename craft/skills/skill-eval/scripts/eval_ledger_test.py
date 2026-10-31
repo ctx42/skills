@@ -383,6 +383,15 @@ class LedgerTest(unittest.TestCase):
 
         self.assertEqual(["b"], r.stdout.split())
 
+    def test_stray_session_file_keeps_the_pass(self):
+        self.record("sonnet", ("a", True, None))
+        fake.write(os.path.join(self.root, fake.GROUP, "evals", "a",
+                                "0b5e3c1a-1d2e-4f00-9a8b-123456789abc.jsonl"), "{}\n")
+
+        have = self.pending()
+
+        self.assertEqual(["b"], have)
+
     def test_edit_outside_the_key_keeps_the_pass(self):
         self.record("sonnet", ("a", True, None))
         fake.write(os.path.join(self.root, fake.GROUP, "skills", "other", "SKILL.md"), "# other\n")

@@ -126,11 +126,18 @@ def resolve(word, cached):
     return 0, mid
 
 
+# A history_file run leaves its session (`<uuid>.jsonl`) beside the history
+# until eval-changed.sh ends; it is never an input, so no key hashes it.
+SESSION = re.compile(r"[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\.jsonl")
+
+
 def files_under(top, skip=()):
+    """Return the files under top in a stable order, leaving out the dirs
+    named in skip and stray session files."""
     out = []
     for dp, dns, fs in os.walk(top):
         dns[:] = sorted(d for d in dns if d not in skip)
-        out += [os.path.join(dp, f) for f in sorted(fs)]
+        out += [os.path.join(dp, f) for f in sorted(fs) if not SESSION.fullmatch(f)]
     return out
 
 
