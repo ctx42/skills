@@ -16,7 +16,11 @@ quality. Tiers and their tools: [tiers.md](tiers.md); mistakes past runs paid fo
 4. Agent-run cases only for what the diff reaches, on the default model:
    `scripts/eval-changed.sh --audit --model default -j 4 --max-usd <cap>`. The
    pass ledger (`tmp/eval-ledger.json`) skips cases passed on unchanged inputs.
-   A case costs \$0.25–0.80, a fan-out case \$3–9; ~50 cases ran about \$20.
+   Its key holds the model ID but not the CLI version. In the first round
+   after a CLI upgrade, add `--fresh` to both of the round's commands: the
+   listing whose case list and estimate you ask about, and the `--audit`
+   run. A case costs \$0.25–0.80, a fan-out case \$3–9; ~50 cases ran about
+   \$20.
 5. Rerun a fixed case once. A case that has failed and passed gets two more
    runs before it counts as fixed; a case that fails at the base too is flaky,
    not broken.
