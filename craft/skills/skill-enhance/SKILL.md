@@ -81,20 +81,21 @@ put skill-enhance in scope.
 
 2. Mine each for lessons: where the user corrected the agent, or the agent
    caught its own mistake, while that skill was driving. A lesson is a rule
-   that would have changed what the agent did. Four things look like lessons
+   that would have changed what the agent did. Five things look like lessons
    and are not:
 
+   - A rule that lives in project data the skill loads at run time (a
+     project's standard, its config). It is no skill's to reword or restate:
+     name where it lives and drop it, even when the skill's text points at
+     that data ("as the standard spells them") — a pointer is not the rule.
+     Check this before the next case.
    - A rule the skill already carries — read its `SKILL.md` before proposing,
      and the reference files it loads for the work in question, since a rule
      stated in a reference governs the run just as firmly as one in the body.
      It was missed, not missing, and a line repeating it costs every future run
      context while changing nothing. Point at the line (`SKILL.md:28`) and
      offer rewording it there — a skill edit, not a lesson — on the first miss
-     too: a missed rule was not clear enough to its reader. A rule that lives
-     in project data the skill loads at run time (a project's standard, its
-     config) is no skill's to reword or restate: name where it lives and drop
-     it, even when the skill's text points at that data ("as the standard
-     spells them") — a pointer is not the rule.
+     too: a missed rule was not clear enough to its reader.
    - A fact about this project or this task: a name, a path, a version, a
      number. It outlives nothing, and the project's own instructions are its
      home.
