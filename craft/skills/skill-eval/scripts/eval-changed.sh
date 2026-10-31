@@ -296,11 +296,10 @@ for g in $groups; do
         declare -n into="$kind"; into+=("$c"); unset -n into
     done
     n=$((${#plain[@]} + ${#shell[@]} + ${#plainfan[@]} + ${#shellfan[@]}))
-    nf=$((${#plainfan[@]} + ${#shellfan[@]}))
-    # The bands are Opus runs measured on 2026-10-04: $0.25-0.80 a case,
-    # $3-9 a fan-out case.
-    est="$(python3 -c "print(f'~\${round(($n - $nf) * 0.25 + $nf * 3)}-{round(($n - $nf) * 0.8 + $nf * 9)}')")"
-    echo "== $g: $total case(s), $((total - ${#todo[@]})) PASS in the ledger, $n to run, $est (Opus, measured 2026-10-04); model ${model_name:-unresolved}"
+    # Each case's last stored cost on this model, else the Opus bands
+    # measured on 2026-10-04: $0.25-0.80 a case, $3-9 a fan-out case.
+    est="$(python3 "$HERE/eval-ledger.py" estimate "$g" "$model_name" "${plain[@]}" "${shell[@]}" "${plainfan[@]}" "${shellfan[@]}")"
+    echo "== $g: $total case(s), $((total - ${#todo[@]})) PASS in the ledger, $n to run, $est; model ${model_name:-unresolved}"
     [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${plain[@]}" "${shell[@]}" "${plainfan[@]}" "${shellfan[@]}"; continue; }
     chunk=$((jobs * 2))
     done_n=0

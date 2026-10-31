@@ -13,13 +13,19 @@ unchanged, the case need not run again.
         record each PASS; print `FAIL <case>` per failed run, `MODEL <case>
         <id>` per run on another model than <model> (neither recorded nor
         cleared), and `LIMIT <n>` when n runs hit the usage limit
+  eval-ledger.py estimate <group> <model> <case>...
+        print the dollar estimate for running the cases on <model>: each
+        case's last stored cost there, else the Opus band (fan-out cases
+        their own band)
   eval-ledger.py model <word> [--cached]
         print the model ID that `--model <word>` resolves to (`default`: the
         CLI's default model) from one short `claude -p` probe, and cache it in
         tmp/eval-model.json; with --cached, print the cached ID or nothing.
         Exit 3 when the usage limit cut the probe off.
 
-<model> is a resolved model ID, so a pass is a pass on that model.
+<model> is a resolved model ID, so a pass is a pass on that model. Each
+entry is `<group>/<case>@<model>`: {"key": <key of the last pass, or null
+once a later run did not pass>, "costUsd": <cost of the last run>}.
 """
 import hashlib
 import json
@@ -139,6 +145,45 @@ def key(group, case, model):
     return h.hexdigest()
 
 
+# Per-case cost bands, measured on Opus on 2026-10-04: (low, high).
+BAND = (0.25, 0.80)
+FANOUT_BAND = (3.0, 9.0)
+
+
+def slot(group, case, model):
+    return f"{group}/{case}@{model}"
+
+
+def is_fanout(group, case):
+    with open(os.path.join(ROOT, group, "evals", case, "prompt.md")) as f:
+        m = re.search(r"^tags:\s*\[([^\]]*)\]", f.read(), re.M)
+    return bool(m) and "fan-out" in [t.strip() for t in m.group(1).split(",")]
+
+
+def estimate(led, group, model, cases):
+    """Return the estimate line for running cases on model (see the docstring)."""
+    lo = hi = 0.0
+    measured = 0
+    for c in cases:
+        e = led.get(slot(group, c, model))
+        if isinstance(e, dict) and isinstance(e.get("costUsd"), (int, float)):
+            lo += e["costUsd"]
+            hi += e["costUsd"]
+            measured += 1
+        else:
+            b = FANOUT_BAND if is_fanout(group, c) else BAND
+            lo += b[0]
+            hi += b[1]
+    rng = f"~${lo:.2f}" if lo == hi else f"~${lo:.2f}-{hi:.2f}"
+    if not cases:
+        return rng
+    if measured == len(cases):
+        return f"{rng} (measured on {model})"
+    if measured:
+        return f"{rng} ({measured} of {len(cases)} measured on {model}, the rest by the Opus band of 2026-10-04)"
+    return f"{rng} (Opus, measured 2026-10-04)"
+
+
 def main():
     if sys.argv[1] == "model":
         code, mid = resolve(sys.argv[2], "--cached" in sys.argv[3:])
@@ -149,8 +194,12 @@ def main():
     led = load_json(LEDGER)
     if cmd == "pending":
         for c in sys.argv[4:]:
-            if led.get(f"{group}/{c}") != key(group, c, model):
+            e = led.get(slot(group, c, model))
+            if not isinstance(e, dict) or e.get("key") != key(group, c, model):
                 print(c)
+        return 0
+    if cmd == "estimate":
+        print(estimate(led, group, model, sys.argv[4:]))
         return 0
     with open(sys.argv[4]) as f:
         d = json.load(f)
@@ -164,11 +213,12 @@ def main():
                 # A verdict on another model says nothing about this key.
                 print(f"MODEL {c['name']} {ran_on}")
             elif r.get("passed") and not r.get("error"):
-                led[f"{group}/{c['name']}"] = key(group, c["name"], model)
+                led[slot(group, c["name"], model)] = {
+                    "key": key(group, c["name"], model), "costUsd": r.get("costUsd") or 0}
             else:
                 # A finished run that did not pass is a verdict on this key:
                 # drop the old pass so the next run does not skip the case.
-                led.pop(f"{group}/{c['name']}", None)
+                led[slot(group, c["name"], model)] = {"key": None, "costUsd": r.get("costUsd") or 0}
                 print(f"FAIL {c['name']}")
     save_json(LEDGER, led)
     if limit:

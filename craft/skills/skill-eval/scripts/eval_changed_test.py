@@ -48,11 +48,12 @@ class EvalChangedTest(unittest.TestCase):
         return r.returncode, r.stdout + r.stderr
 
     def ledger(self):
+        """Return the cases with a pass in the ledger, as `<group>/<case>`."""
         path = os.path.join(self.root, "tmp", "eval-ledger.json")
         if not os.path.exists(path):
-            return {}
+            return set()
         with open(path) as f:
-            return json.load(f)
+            return {k.split("@")[0] for k, e in json.load(f).items() if isinstance(e, dict) and e.get("key")}
 
     def case_calls(self):
         """Return the fake `claude` calls that ran cases, leaving out the probe."""
@@ -106,7 +107,7 @@ class EvalChangedTest(unittest.TestCase):
         self.assertEqual(0, code, out)
         want = [["case:a", "case:b"], ["case:c"]]
         self.assertEqual(want, self.plugin_eval_tags())
-        self.assertEqual({"grp/a", "grp/b", "grp/c"}, set(self.ledger()))
+        self.assertEqual({"grp/a", "grp/b", "grp/c"}, self.ledger())
 
     def test_shell_case_runs_through_eval_shell(self):
         self.repo(("a", True))
@@ -119,7 +120,7 @@ class EvalChangedTest(unittest.TestCase):
         self.assertEqual(1, len(have))
         self.assertIn("CASE:a", have[0][have[0].index("-p") + 1])
         self.assertEqual([], self.plugin_eval_tags())
-        self.assertEqual({"grp/a"}, set(self.ledger()))
+        self.assertEqual({"grp/a"}, self.ledger())
 
     def test_ledger_skips_a_case_that_passed(self):
         self.repo(("a", False), ("b", True))
@@ -185,7 +186,7 @@ class EvalChangedTest(unittest.TestCase):
         code, out = self.run_changed("--all", fake.GROUP)
 
         self.assertIn("ran on claude-fallback-1, not claude-default-1", out)
-        self.assertEqual({}, self.ledger())
+        self.assertEqual(set(), self.ledger())
 
     def test_probe_cut_off_by_the_usage_limit_exits_3(self):
         self.repo(("a", False))
@@ -220,7 +221,18 @@ class EvalChangedTest(unittest.TestCase):
         code, out = self.run_changed("--all", fake.GROUP, "--dry-run")
 
         self.assertEqual(0, code, out)
-        self.assertIn("2 to run, ~$3-10 (Opus, measured 2026-10-04)", out)
+        self.assertIn("2 to run, ~$3.25-9.80 (Opus, measured 2026-10-04)", out)
+
+    def test_estimate_uses_the_cost_of_the_last_run(self):
+        self.repo(("a", False))
+        self.run_changed("--all", fake.GROUP)
+        fake.write(os.path.join(self.root, fake.GROUP, "evals", "a", "graders", "g2.md"),
+                   "---\ntype: regex\ntarget: last_message\n---\nO\n")
+
+        code, out = self.run_changed("--all", fake.GROUP, "--dry-run")
+
+        self.assertEqual(0, code, out)
+        self.assertIn("1 to run, ~$0.50 (measured on claude-default-1)", out)
 
     def test_capped_plugin_eval_chunk_records_no_pass(self):
         self.repo(("a", False))
@@ -228,7 +240,7 @@ class EvalChangedTest(unittest.TestCase):
         code, out = self.run_changed("--all", fake.GROUP, "--max-usd", "0.1")
 
         self.assertEqual(1, code, out)
-        self.assertEqual({}, self.ledger())
+        self.assertEqual(set(), self.ledger())
 
     def test_capped_plugin_eval_chunk_clears_no_pass(self):
         self.repo(("a", False))
@@ -239,7 +251,7 @@ class EvalChangedTest(unittest.TestCase):
         code, out = self.run_changed("--all", fake.GROUP, "--fresh", "--max-usd", "0.1")
 
         self.assertEqual(1, code, out)
-        self.assertEqual({"grp/a"}, set(self.ledger()))
+        self.assertEqual({"grp/a"}, self.ledger())
 
     def test_cap_before_a_chunk_names_every_unstarted_case(self):
         self.repo(("a", False), ("b", False), ("c", False), ("d", False), ("e", True))
@@ -258,7 +270,7 @@ class EvalChangedTest(unittest.TestCase):
 
         self.assertEqual(1, code, out)
         self.assertIn("not started (--max-usd 0.6 spent): c", out)
-        self.assertEqual({}, self.ledger())
+        self.assertEqual(set(), self.ledger())
 
     def test_cap_inside_a_shell_chunk_records_its_finished_passes(self):
         self.repo(("a", True), ("b", True))
@@ -267,7 +279,7 @@ class EvalChangedTest(unittest.TestCase):
 
         self.assertEqual(1, code, out)
         self.assertIn("not started (--max-usd 0.1 spent): b", out)
-        self.assertEqual({"grp/a"}, set(self.ledger()))
+        self.assertEqual({"grp/a"}, self.ledger())
 
     def shell_results(self):
         """Return {case: run} from every eval-shell result JSON of the runs."""
@@ -294,7 +306,7 @@ class EvalChangedTest(unittest.TestCase):
         self.assertEqual(3, code, out)
         self.assertIn("LIMIT: the usage limit cut off 1 run(s); 1 case(s) not started.", out)
         self.assertEqual([["case:a", "case:b"]], self.plugin_eval_tags())
-        self.assertEqual({"grp/a"}, set(self.ledger()))
+        self.assertEqual({"grp/a"}, self.ledger())
 
 
 if __name__ == "__main__":

@@ -17,10 +17,10 @@ LEDGER = os.path.join(HERE, "eval-ledger.py")
 
 def result(*runs):
     """Return a plugin-eval result JSON for (case, passed, error[, model[,
-    trace]]) runs."""
+    trace]]) runs; each run costs $0.40."""
     cases = []
     for c, p, e, *rest in runs:
-        run = {"passed": p, "error": e}
+        run = {"passed": p, "error": e, "costUsd": 0.4}
         if rest and rest[0]:
             run["model"] = rest[0]
         if len(rest) > 1:
@@ -121,6 +121,64 @@ class LedgerTest(unittest.TestCase):
 
     def pending(self, model="sonnet"):
         return self.ledger("pending", fake.GROUP, model, "a", "b")
+
+    def entries(self):
+        with open(os.path.join(self.root, "tmp", "eval-ledger.json")) as f:
+            return json.load(f)
+
+    def test_entries_are_per_case_and_model(self):
+        self.record("m1", ("a", True, None))
+        self.record("m2", ("a", True, None))
+
+        have = self.entries()
+
+        self.assertEqual({"grp/a@m1", "grp/a@m2"}, set(have))
+        self.assertEqual(0.4, have["grp/a@m1"]["costUsd"])
+        self.assertEqual([], self.ledger("pending", fake.GROUP, "m1", "a"))
+
+    def test_failed_run_keeps_its_cost(self):
+        self.record("m1", ("a", True, None))
+
+        self.record("m1", ("a", False, None))
+
+        self.assertEqual({"key": None, "costUsd": 0.4}, self.entries()["grp/a@m1"])
+
+    def test_old_format_entry_is_pending(self):
+        self.record("m1", ("a", True, None))
+        fake.write(os.path.join(self.root, "tmp", "eval-ledger.json"), json.dumps({"grp/a": "x", "grp/a@m1": "y"}))
+
+        have = self.ledger("pending", fake.GROUP, "m1", "a")
+
+        self.assertEqual(["a"], have)
+
+    def estimate(self, model, *cases):
+        r = subprocess.run([sys.executable, LEDGER, "estimate", fake.GROUP, model, *cases],
+                           env=self.env, capture_output=True, text=True, check=True)
+        return r.stdout.strip()
+
+    def test_estimate_without_stored_costs_uses_the_opus_bands(self):
+        fake.add_case(self.root, "f", True, True)
+
+        have = self.estimate("m1", "a", "f")
+
+        self.assertEqual("~$3.25-9.80 (Opus, measured 2026-10-04)", have)
+
+    def test_estimate_with_every_cost_stored(self):
+        self.record("m1", ("a", False, None), ("b", True, None))
+
+        have = self.estimate("m1", "a", "b")
+
+        self.assertEqual("~$0.80 (measured on m1)", have)
+
+    def test_estimate_mixes_stored_costs_and_bands(self):
+        self.record("m1", ("a", True, None))
+
+        have = self.estimate("m1", "a", "b")
+
+        self.assertEqual("~$0.65-1.20 (1 of 2 measured on m1, the rest by the Opus band of 2026-10-04)", have)
+
+    def test_estimate_of_nothing(self):
+        self.assertEqual("~$0.00", self.estimate("m1"))
 
     def test_pending_lists_cases_without_a_pass(self):
         have = self.pending()
