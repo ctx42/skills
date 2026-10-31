@@ -3,4 +3,4 @@ type: regex
 target: last_message
 flags: "i"
 ---
-re-?read|re-?check|revert|checked (every|each|all)
+re-?read|re-?check|revert|checked (every|each|all)|(?:checked|ran)\b[^\n]{0,80}\bmyself
