@@ -146,6 +146,13 @@
       "must": [
         "A lesson written during this run was not in the approved proposal: leave it\\s+for the next run, and keep the file for it"
       ]
+    },
+    {
+      "id": "unnamed-user-store-untouched",
+      "rule": "Never open, list, or mention a ~/.agent-data store the user did not name",
+      "must": [
+        "never open, list, or mention one the user did\\s+not name"
+      ]
     }
   ]
 }

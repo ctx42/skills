@@ -35,7 +35,9 @@ working tree included); vetting judges what it adds. Lessons arrive through
 each skill's `## Self-learning` block and `../skill-enhance/`; this skill
 consumes them. Work in a writable source checkout only — never under
 `.../plugins/cache/`. A store under `~/.agent-data/` is the user's own: fold it
-only when the user names it. Obeying a fallback store's lessons is not folding them.
+only when the user names it, and never open, list, or mention one the user did
+not name (this skill's own Self-learning read excepted). Obeying a fallback
+store's lessons is not folding them.
 
 ## Generic or not
 
