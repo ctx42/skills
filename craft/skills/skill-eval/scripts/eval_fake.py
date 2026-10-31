@@ -8,8 +8,11 @@ The fake `claude` answers `claude plugin eval` with the result JSON
 eval-changed.sh reads, and `claude -p` (as eval-shell.mjs calls it) with a
 stream-json trace. Each case's outcome comes from a JSON plan file named by
 $FAKE_CLAUDE_PLAN: {"<case>": {"result": "pass"|"fail"|"limit", "cost": N}};
-`claude -p` reports its --model, else $FAKE_CLAUDE_DEFAULT_MODEL (default
-claude-default-1), as the costliest model of its modelUsage;
+Every run reports its --model, else $FAKE_CLAUDE_DEFAULT_MODEL (default
+claude-default-1), as the costliest model of its modelUsage; a case run
+reports $FAKE_CLAUDE_RUN_MODEL instead when that is set (a model fallback).
+`claude -p --output-format json` without a case is the model probe: one
+result object, or a usage-limit error when $FAKE_CLAUDE_PROBE is "limit";
 a case not in the plan passes at $0.50. Like the real one, a `plugin eval`
 call checks its --max-cost-usd before each case, leaves out the cases it
 did not start, and exits 2 once its spend passes the ceiling. Every call's argv is appended, one JSON list per line, to
@@ -34,6 +37,12 @@ plan_path = os.environ.get("FAKE_CLAUDE_PLAN", "")
 plan = json.load(open(plan_path)) if plan_path and os.path.exists(plan_path) else {}
 
 
+def used_model():
+    if "--model" in args:
+        return args[args.index("--model") + 1]
+    return os.environ.get("FAKE_CLAUDE_DEFAULT_MODEL", "claude-default-1")
+
+
 def outcome(case):
     o = plan.get(case, {})
     return o.get("result", "pass"), o.get("cost", 0.5)
@@ -41,6 +50,7 @@ def outcome(case):
 
 if args[:2] == ["plugin", "eval"]:
     cases = [args[i + 1].split(":", 1)[1] for i, a in enumerate(args) if a == "--tag"]
+    model = os.environ.get("FAKE_CLAUDE_RUN_MODEL") or used_model()
     out = args[args.index("--json") + 1]
     cap = float(args[args.index("--max-cost-usd") + 1]) if "--max-cost-usd" in args else None
     res, spent, bad, capped = [], 0.0, 0, False
@@ -54,7 +64,8 @@ if args[:2] == ["plugin", "eval"]:
         trace = os.path.join(tmp, "out", "trace.jsonl")
         reply = "OK" if kind == "pass" else "NO"
         with open(trace, "w") as f:
-            f.write(json.dumps({"type": "result", "result": reply}) + "\n")
+            f.write(json.dumps({"type": "result", "result": reply,
+                                "modelUsage": {model: {"costUSD": cost}}}) + "\n")
         passed = kind == "pass"
         bad += not passed
         spent += cost
@@ -74,9 +85,16 @@ if "-p" in args:
     prompt = args[args.index("-p") + 1]
     case = prompt.split("CASE:", 1)[1].split()[0] if "CASE:" in prompt else ""
     kind, cost = outcome(case)
-    model = args[args.index("--model") + 1] if "--model" in args else os.environ.get(
-        "FAKE_CLAUDE_DEFAULT_MODEL", "claude-default-1")
+    model = used_model()
+    if case and os.environ.get("FAKE_CLAUDE_RUN_MODEL"):
+        model = os.environ["FAKE_CLAUDE_RUN_MODEL"]
     usage = {model: {"costUSD": cost}, "claude-helper-1": {"costUSD": 0.001}}
+    if "--output-format" in args and args[args.index("--output-format") + 1] == "json":
+        if os.environ.get("FAKE_CLAUDE_PROBE") == "limit":
+            print(json.dumps({"type": "result", "is_error": True, "result": "You've hit your usage limit"}))
+        else:
+            print(json.dumps({"type": "result", "result": "OK", "total_cost_usd": 0.02, "modelUsage": usage}))
+        sys.exit(0)
     if kind == "limit":
         print(json.dumps({"type": "result", "is_error": True,
                           "result": "You've hit your usage limit", "total_cost_usd": 0}))

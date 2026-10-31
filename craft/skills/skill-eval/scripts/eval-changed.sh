@@ -38,7 +38,10 @@
 #          ceiling), naming each case it did not start
 #   --model M  run the cases on model M (default: the CLI's default model,
 #          also spelled `default`). Sonnet runs only when passed here, and its
-#          verdicts are recorded as they are, never re-run on another model
+#          verdicts are recorded as they are, never re-run on another model.
+#          A run resolves M to a model ID first, with one short `claude -p`
+#          probe (cents); the ID keys the ledger and goes to both runners. A
+#          run that reports another model records nothing
 #   --keep keeps every run's workspace and trace (paths in the JSON); without
 #          it the workspaces are deleted after the run
 #   --fresh  ignore the pass ledger: a case whose inputs (case dir, the skills
@@ -244,7 +247,24 @@ groups="$(printf '%s\n' "${!tags[@]}" "${!whole[@]}" | sed '/^$/d' | sort -u)"
 rc=0
 out="$ROOT/tmp/eval-changed/$(date +%Y%m%dT%H%M%S)-$$"
 mkdir -p "$out"
-model_name="${model[1]:-default}"
+# Resolve the model word to its ID once: the ID keys the ledger and goes to
+# both runners as --model, so they run, and record, the same model. A dry run
+# reads the last resolved ID and makes no paid call; with none cached, it
+# lists every case as pending.
+word="${model[1]:-default}"
+if [ "$dry" = 1 ]; then
+    model_name="$(python3 "$HERE/eval-ledger.py" model "$word" --cached)"
+else
+    set +e
+    model_name="$(python3 "$HERE/eval-ledger.py" model "$word")"; mr=$?
+    set -e
+    if [ "$mr" = 3 ]; then
+        echo "eval-changed: the usage limit cut off the model probe; re-run after the reset"
+        exit 3
+    fi
+    [ -n "$model_name" ] || die "cannot resolve --model $word (see above)"
+    model=(--model "$model_name")
+fi
 for g in $groups; do
     [ -d "$g/evals" ] || { echo "== $g: no native cases (lint only)"; continue; }
     declare -a sel_cases=()
@@ -258,7 +278,7 @@ for g in $groups; do
     done
     total=${#sel_cases[@]}
     declare -a todo=()
-    if [ "$fresh" = 1 ] || [ "$total" = 0 ]; then todo=("${sel_cases[@]}")
+    if [ "$fresh" = 1 ] || [ "$total" = 0 ] || [ -z "$model_name" ]; then todo=("${sel_cases[@]}")
     else mapfile -t todo < <(python3 "$HERE/eval-ledger.py" pending "$g" "$model_name" "${sel_cases[@]}")
     fi
     # needs-shell cases run through eval-shell.mjs: `claude plugin eval`
@@ -280,7 +300,7 @@ for g in $groups; do
     # The bands are Opus runs measured on 2026-10-04: $0.25-0.80 a case,
     # $3-9 a fan-out case.
     est="$(python3 -c "print(f'~\${round(($n - $nf) * 0.25 + $nf * 3)}-{round(($n - $nf) * 0.8 + $nf * 9)}')")"
-    echo "== $g: $total case(s), $((total - ${#todo[@]})) PASS in the ledger, $n to run, $est (Opus, measured 2026-10-04)"
+    echo "== $g: $total case(s), $((total - ${#todo[@]})) PASS in the ledger, $n to run, $est (Opus, measured 2026-10-04); model ${model_name:-unresolved}"
     [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${plain[@]}" "${shell[@]}" "${plainfan[@]}" "${shellfan[@]}"; continue; }
     chunk=$((jobs * 2))
     done_n=0
@@ -405,6 +425,9 @@ print(f"   {a['casesPassed']}/{a['casesTotal']} passed, "
       f"{d['durationSeconds']}s, ${d['costUsd']:.2f}")
 sys.exit(1 if bad else 0)
 PY
+            while read -r _ c id; do
+                [ -n "$c" ] && echo "   $c ran on $id, not $model_name: not recorded"
+            done < <(printf '%s\n' "$rec" | grep '^MODEL' || true)
             lim=$(printf '%s\n' "$rec" | grep '^LIMIT' || true)
             if [ -n "$lim" ]; then
                 left=$((n - done_n))

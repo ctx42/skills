@@ -54,6 +54,11 @@ class EvalChangedTest(unittest.TestCase):
         with open(path) as f:
             return json.load(f)
 
+    def case_calls(self):
+        """Return the fake `claude` calls that ran cases, leaving out the probe."""
+        return [a for a in fake.calls(self.log)
+                if a[:2] == ["plugin", "eval"] or ("-p" in a and "CASE:" in a[a.index("-p") + 1])]
+
     def plugin_eval_tags(self):
         """Return the case tags of each `claude plugin eval` call, in order."""
         return [[a[i + 1] for i, x in enumerate(a) if x == "--tag"]
@@ -86,7 +91,7 @@ class EvalChangedTest(unittest.TestCase):
 
         self.assertEqual(0, code, out)
         have = []
-        for argv in fake.calls(self.log):
+        for argv in self.case_calls():
             if argv[:2] == ["plugin", "eval"]:
                 have += [t.split(":", 1)[1] for i, t in enumerate(argv) if argv[i - 1] == "--tag"]
             else:
@@ -110,7 +115,7 @@ class EvalChangedTest(unittest.TestCase):
 
         self.assertEqual(0, code, out)
         self.assertIn("PASS  a", out)
-        have = [a for a in fake.calls(self.log) if "-p" in a]
+        have = [a for a in self.case_calls() if "-p" in a]
         self.assertEqual(1, len(have))
         self.assertIn("CASE:a", have[0][have[0].index("-p") + 1])
         self.assertEqual([], self.plugin_eval_tags())
@@ -119,13 +124,13 @@ class EvalChangedTest(unittest.TestCase):
     def test_ledger_skips_a_case_that_passed(self):
         self.repo(("a", False), ("b", True))
         self.run_changed("--all", fake.GROUP)
-        n = len(fake.calls(self.log))
+        n = len(self.case_calls())
 
         code, out = self.run_changed("--all", fake.GROUP)
 
         self.assertEqual(0, code, out)
         self.assertIn("== grp: 2 case(s), 2 PASS in the ledger, 0 to run", out)
-        self.assertEqual(n, len(fake.calls(self.log)))
+        self.assertEqual(n, len(self.case_calls()))
 
     def test_fresh_ignores_the_ledger(self):
         self.repo(("a", False))
@@ -136,16 +141,60 @@ class EvalChangedTest(unittest.TestCase):
         self.assertEqual(0, code, out)
         self.assertEqual([["case:a"], ["case:a"]], self.plugin_eval_tags())
 
-    def test_default_run_passes_no_model_to_either_runner(self):
+    def test_default_run_resolves_the_model_for_both_runners(self):
         self.repo(("a", False), ("b", True))
 
         code, out = self.run_changed("--all", fake.GROUP)
 
         self.assertEqual(0, code, out)
-        have = fake.calls(self.log)
+        probe = fake.calls(self.log)[0]
+        self.assertIn("-p", probe)
+        self.assertNotIn("--model", probe)
+        have = self.case_calls()
         self.assertEqual(2, len(have))
         for argv in have:
-            self.assertNotIn("--model", argv)
+            self.assertEqual("claude-default-1", argv[argv.index("--model") + 1])
+        self.assertIn("model claude-default-1", out)
+
+    def test_new_default_model_reruns_passed_cases(self):
+        self.repo(("a", False))
+        self.run_changed("--all", fake.GROUP)
+        self.env["FAKE_CLAUDE_DEFAULT_MODEL"] = "claude-default-2"
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        self.assertEqual([["case:a"], ["case:a"]], self.plugin_eval_tags())
+
+    def test_dry_run_reads_the_cached_model(self):
+        self.repo(("a", False))
+        self.run_changed("--all", fake.GROUP)
+        n = len(fake.calls(self.log))
+
+        code, out = self.run_changed("--all", fake.GROUP, "--dry-run")
+
+        self.assertEqual(0, code, out)
+        self.assertIn("1 PASS in the ledger, 0 to run", out)
+        self.assertIn("model claude-default-1", out)
+        self.assertEqual(n, len(fake.calls(self.log)))
+
+    def test_run_on_a_fallback_model_records_no_pass(self):
+        self.repo(("a", False), ("b", True))
+        self.env["FAKE_CLAUDE_RUN_MODEL"] = "claude-fallback-1"
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertIn("ran on claude-fallback-1, not claude-default-1", out)
+        self.assertEqual({}, self.ledger())
+
+    def test_probe_cut_off_by_the_usage_limit_exits_3(self):
+        self.repo(("a", False))
+        self.env["FAKE_CLAUDE_PROBE"] = "limit"
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(3, code, out)
+        self.assertEqual([], self.case_calls())
 
     def test_explicit_model_reaches_both_runners(self):
         self.repo(("a", False), ("b", True))
