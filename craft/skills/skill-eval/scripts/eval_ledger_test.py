@@ -142,7 +142,8 @@ class LedgerTest(unittest.TestCase):
 
         self.record("m1", ("a", False, None))
 
-        self.assertEqual({"key": None, "costUsd": 0.4}, self.entries()["grp/a@m1"])
+        have = self.entries()["grp/a@m1"]
+        self.assertEqual((None, 0.4), (have["key"], have["costUsd"]))
 
     def test_old_format_entry_is_pending(self):
         self.record("m1", ("a", True, None))
@@ -180,6 +181,47 @@ class LedgerTest(unittest.TestCase):
 
     def test_estimate_of_nothing(self):
         self.assertEqual("~$0.00", self.estimate("m1"))
+
+    def record_runs(self, model, case, *outcomes):
+        """Record one case with several (passed, error) runs."""
+        path = os.path.join(self.tmp.name, "result.json")
+        runs = [{"passed": p, "error": e, "costUsd": 0.4} for p, e in outcomes]
+        with open(path, "w") as f:
+            json.dump({"cases": [{"name": case, "arms": {"with": runs}}]}, f)
+        return self.ledger("record", fake.GROUP, model, path)
+
+    def test_record_stores_a_pass_only_when_every_run_passed(self):
+        have = self.record_runs("m1", "a", (False, None), (True, None))
+
+        self.assertEqual(["FAIL", "a"], have)
+        self.assertEqual(["a", "b"], self.pending("m1"))
+
+    def test_record_stores_two_passing_runs(self):
+        self.record_runs("m1", "a", (True, None), (True, None))
+
+        self.assertEqual(["b"], self.pending("m1"))
+
+    def test_twice_lists_a_case_edited_since_its_last_verdict(self):
+        self.record("m1", ("a", True, None), ("b", True, None))
+        fake.write(os.path.join(self.root, fake.GROUP, "evals", "a", "graders", "g1.md"),
+                   "---\ntype: regex\ntarget: last_message\n---\n^YES\n")
+        self.edit_skill_md("First.", "First, changed.")
+
+        have = self.ledger("twice", fake.GROUP, "m1", "a", "b")
+
+        self.assertEqual(["a"], have)
+
+    def test_twice_skips_a_case_without_an_entry(self):
+        have = self.ledger("twice", fake.GROUP, "m1", "a", "b")
+
+        self.assertEqual([], have)
+
+    def test_twice_lists_a_changed_case_without_an_entry(self):
+        self.record("m1", ("a", True, None))
+
+        have = self.ledger("twice", fake.GROUP, "m1", "a", "b", "--changed", "a", "b")
+
+        self.assertEqual(["b"], have)
 
     def test_pending_lists_cases_without_a_pass(self):
         have = self.pending()

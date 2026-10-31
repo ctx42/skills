@@ -16,7 +16,10 @@
 //
 // Usage:
 //   node scripts/eval-shell.mjs <group> <case>... [--model M] [-j N]
-//        [--max-cost-usd N] [--json out.json] [--keep]
+//        [--runs N] [--max-cost-usd N] [--json out.json] [--keep]
+//
+// --runs runs each case N times (default 1); a case appears in the result
+// only once all its runs finished.
 //
 // --model defaults to `default`, the CLI's default model: no --model reaches
 // `claude`.
@@ -45,12 +48,13 @@ function die(msg) {
 
 // --- Arguments. ---
 const argv = process.argv.slice(2);
-let model = "default", jobs = 1, maxUsd = Infinity, jsonOut = "", keep = false;
+let model = "default", jobs = 1, runs = 1, maxUsd = Infinity, jsonOut = "", keep = false;
 const rest = [];
 for (let i = 0; i < argv.length; i++) {
   const a = argv[i];
   if (a === "--model") model = argv[++i];
   else if (a === "-j") jobs = Math.max(1, Number(argv[++i]));
+  else if (a === "--runs") runs = Math.max(1, Number(argv[++i]));
   else if (a === "--max-cost-usd") maxUsd = Number(argv[++i]);
   else if (a === "--json") jsonOut = argv[++i];
   else if (a === "--keep") keep = true;
@@ -333,25 +337,27 @@ async function runCase(c) {
 
 // --- Main: a pool of -j runs, stopping launches at the cost ceiling. ---
 const loaded = cases.map(loadCase);
-const results = new Array(loaded.length);
+const arms = loaded.map(() => []);
+const tasks = loaded.flatMap((c, i) => Array.from({ length: runs }, () => i));
 let spent = 0, next = 0, capped = false;
 const t0 = Date.now();
 async function worker() {
-  while (next < loaded.length) {
+  while (next < tasks.length) {
     if (spent >= maxUsd) { capped = true; return; }
-    const i = next++;
+    const i = tasks[next++];
     const c = loaded[i];
     console.error(`eval-shell: ${c.name} started (${new Date().toTimeString().slice(0, 5)})`);
     const r = await runCase(c);
     spent += r.costUsd;
-    results[i] = { name: c.name, arms: { with: [r] } };
+    arms[i].push(r);
     console.error(`eval-shell: ${c.name} ${r.passed ? "PASS" : `FAIL, trace ${r.tracePath}`} (${r.durationSeconds}s, $${r.costUsd.toFixed(2)})`);
   }
 }
-await Promise.all(Array.from({ length: Math.min(jobs, loaded.length) }, worker));
+await Promise.all(Array.from({ length: Math.min(jobs, tasks.length) }, worker));
 
-const done = results.filter(Boolean);
-const passed = done.filter((c) => c.arms.with[0].passed).length;
+// A case counts only once every run of it finished.
+const done = loaded.map((c, i) => ({ name: c.name, arms: { with: arms[i] } })).filter((c) => c.arms.with.length === runs);
+const passed = done.filter((c) => c.arms.with.every((r) => r.passed)).length;
 const agg = {
   cases: done,
   aggregates: { casesPassed: passed, casesTotal: done.length },

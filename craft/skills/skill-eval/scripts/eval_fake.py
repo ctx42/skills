@@ -7,7 +7,8 @@ real model or needs a network.
 The fake `claude` answers `claude plugin eval` with the result JSON
 eval-changed.sh reads, and `claude -p` (as eval-shell.mjs calls it) with a
 stream-json trace. Each case's outcome comes from a JSON plan file named by
-$FAKE_CLAUDE_PLAN: {"<case>": {"result": "pass"|"fail"|"limit", "cost": N}};
+$FAKE_CLAUDE_PLAN: {"<case>": {"result": "pass"|"fail"|"limit", "cost": N}},
+or "results": [...] for one outcome per run (the last repeats);
 Every run reports its --model, else $FAKE_CLAUDE_DEFAULT_MODEL (default
 claude-default-1), as the costliest model of its modelUsage; a case run
 reports $FAKE_CLAUDE_RUN_MODEL instead when that is set (a model fallback).
@@ -43,9 +44,10 @@ def used_model():
     return os.environ.get("FAKE_CLAUDE_DEFAULT_MODEL", "claude-default-1")
 
 
-def outcome(case):
+def outcome(case, run=0):
     o = plan.get(case, {})
-    return o.get("result", "pass"), o.get("cost", 0.5)
+    seq = o.get("results") or [o.get("result", "pass")]
+    return seq[min(run, len(seq) - 1)], o.get("cost", 0.5)
 
 
 if args[:2] == ["plugin", "eval"]:
@@ -53,27 +55,31 @@ if args[:2] == ["plugin", "eval"]:
     model = os.environ.get("FAKE_CLAUDE_RUN_MODEL") or used_model()
     out = args[args.index("--json") + 1]
     cap = float(args[args.index("--max-cost-usd") + 1]) if "--max-cost-usd" in args else None
+    runs = int(args[args.index("--runs") + 1]) if "--runs" in args else 1
     res, spent, bad, capped = [], 0.0, 0, False
     for c in cases:
         if cap is not None and spent >= cap:
             capped = True
             continue
-        kind, cost = outcome(c)
-        tmp = tempfile.mkdtemp(prefix="claude-eval-fake-")
-        os.makedirs(os.path.join(tmp, "out"))
-        trace = os.path.join(tmp, "out", "trace.jsonl")
-        reply = "OK" if kind == "pass" else "NO"
-        with open(trace, "w") as f:
-            f.write(json.dumps({"type": "result", "result": reply,
-                                "modelUsage": {model: {"costUSD": cost}}}) + "\n")
-        passed = kind == "pass"
-        bad += not passed
-        spent += cost
-        res.append({"name": c, "arms": {"with": [{
-            "passed": passed,
-            "error": "usage limit reached" if kind == "limit" else None,
-            "graders": [] if passed else [{"name": "g1", "passed": False, "evidence": "no match"}],
-            "durationSeconds": 1, "costUsd": cost, "tracePath": trace, "lastMessage": reply}]}})
+        arm = []
+        for i in range(runs):
+            kind, cost = outcome(c, i)
+            tmp = tempfile.mkdtemp(prefix="claude-eval-fake-")
+            os.makedirs(os.path.join(tmp, "out"))
+            trace = os.path.join(tmp, "out", "trace.jsonl")
+            reply = "OK" if kind == "pass" else "NO"
+            with open(trace, "w") as f:
+                f.write(json.dumps({"type": "result", "result": reply,
+                                    "modelUsage": {model: {"costUSD": cost}}}) + "\n")
+            passed = kind == "pass"
+            spent += cost
+            arm.append({
+                "passed": passed,
+                "error": "usage limit reached" if kind == "limit" else None,
+                "graders": [] if passed else [{"name": "g1", "passed": False, "evidence": "no match"}],
+                "durationSeconds": 1, "costUsd": cost, "tracePath": trace, "lastMessage": reply})
+        bad += not all(r["passed"] for r in arm)
+        res.append({"name": c, "arms": {"with": arm}})
     with open(out, "w") as f:
         json.dump({"cases": res, "aggregates": {"casesPassed": len(res) - bad, "casesTotal": len(res)},
                    "durationSeconds": 1, "costUsd": spent}, f)
@@ -84,7 +90,10 @@ if args[:2] == ["plugin", "eval"]:
 if "-p" in args:
     prompt = args[args.index("-p") + 1]
     case = prompt.split("CASE:", 1)[1].split()[0] if "CASE:" in prompt else ""
-    kind, cost = outcome(case)
+    # This call is already in the log: earlier calls for the case set its run.
+    with open(os.environ["FAKE_CLAUDE_LOG"]) as f:
+        seen = sum(1 for line in f if case and f"CASE:{case}" in line)
+    kind, cost = outcome(case, max(seen - 1, 0))
     model = used_model()
     if case and os.environ.get("FAKE_CLAUDE_RUN_MODEL"):
         model = os.environ["FAKE_CLAUDE_RUN_MODEL"]

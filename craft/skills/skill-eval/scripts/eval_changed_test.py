@@ -232,7 +232,9 @@ class EvalChangedTest(unittest.TestCase):
         code, out = self.run_changed("--all", fake.GROUP, "--dry-run")
 
         self.assertEqual(0, code, out)
-        self.assertIn("1 to run, ~$0.50 (measured on claude-default-1)", out)
+        # The edited case runs twice, at its stored cost each time.
+        self.assertIn("1 to run, ~$1.00 (measured on claude-default-1)", out)
+        self.assertIn("   a (2 runs)\n", out)
 
     def test_capped_plugin_eval_chunk_records_no_pass(self):
         self.repo(("a", False))
@@ -297,6 +299,74 @@ class EvalChangedTest(unittest.TestCase):
 
         self.assertEqual(0, code, out)
         self.assertEqual("claude-default-1", self.shell_results()["a"]["model"])
+
+    def commit(self):
+        git = ["git", "-C", self.root, "-c", "user.name=t", "-c", "user.email=t@example.com"]
+        subprocess.run(git + ["add", "-A"], check=True)
+        subprocess.run(git + ["commit", "-q", "-m", "edit"], check=True)
+
+    def runs_per_case(self):
+        """Return {case: --runs} over the plugin-eval calls."""
+        out = {}
+        for argv in fake.calls(self.log):
+            if argv[:2] == ["plugin", "eval"]:
+                n = int(argv[argv.index("--runs") + 1])
+                for i, t in enumerate(argv):
+                    if argv[i - 1] == "--tag":
+                        out[t.split(":", 1)[1]] = n
+        return out
+
+    def test_committed_case_without_an_entry_runs_once(self):
+        self.repo(("a", False))
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        self.assertEqual({"a": 1}, self.runs_per_case())
+
+    def test_new_uncommitted_case_runs_twice(self):
+        self.repo(("a", False))
+        fake.add_case(self.root, "n")
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        self.assertEqual({"a": 1, "n": 2}, self.runs_per_case())
+        self.assertEqual({"grp/a", "grp/n"}, self.ledger())
+
+    def test_case_edited_since_its_verdict_runs_twice(self):
+        self.repo(("a", False))
+        self.run_changed("--all", fake.GROUP)
+        fake.write(os.path.join(self.root, fake.GROUP, "evals", "a", "graders", "g2.md"),
+                   "---\ntype: regex\ntarget: last_message\n---\nO\n")
+        self.commit()
+        os.remove(self.log)
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        self.assertEqual({"a": 2}, self.runs_per_case())
+
+    def test_split_twice_run_records_no_pass(self):
+        self.repo(("a", False), plan={"n": {"results": ["pass", "fail"]}})
+        fake.add_case(self.root, "n")
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(1, code, out)
+        self.assertEqual({"grp/a"}, self.ledger())
+
+    def test_new_shell_case_runs_twice(self):
+        self.repo(("a", True))
+        fake.add_case(self.root, "n", True)
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        have = [a[a.index("-p") + 1] for a in self.case_calls() if "-p" in a]
+        self.assertEqual(1, sum("CASE:a" in p for p in have))
+        self.assertEqual(2, sum("CASE:n" in p for p in have))
+        self.assertEqual({"grp/a", "grp/n"}, self.ledger())
 
     def test_usage_limit_stops_the_run_with_exit_3(self):
         self.repo(("a", False), ("b", False), ("c", False), plan={"b": {"result": "limit"}})

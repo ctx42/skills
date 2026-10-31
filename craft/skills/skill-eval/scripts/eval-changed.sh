@@ -48,6 +48,10 @@
 #          it tags, the group's mocks and fixtures, the model) are unchanged
 #          since it last passed is otherwise skipped (tmp/eval-ledger.json)
 #
+# A case whose dir changed since its last verdict, or that has none and is
+# new or changed against the base, runs twice and passes only when both
+# runs pass.
+#
 # Cases run in chunks of 2 x -j, one `claude plugin eval` call each; passes
 # reach the ledger after every chunk. The first usage-limit cut-off stops the
 # run with exit 3: re-run the same command after the reset to resume.
@@ -286,26 +290,48 @@ for g in $groups; do
     # bwrap's, which stock Ubuntu refuses, so every Bash call there fails.
     # Never lift the host restriction instead (disabling bwrap-userns-restrict
     # broke gdm). Every other case runs in `claude plugin eval` without Bash.
+    # A case whose dir changed since its last verdict on this model, or that
+    # has no verdict and is new or changed against the base, runs twice and
+    # passes only when both runs pass: new graders are where false verdicts
+    # come from.
+    declare -A twice=()
+    if [ -n "$model_name" ] && [ ${#todo[@]} -gt 0 ]; then
+        mapfile -t changed_cases < <(changed_files | sed -nE "s#^$g/evals/([^/]+)/.*#\1#p" | sort -u)
+        while read -r c; do [ -n "$c" ] && twice[$c]=1; done < <(
+            python3 "$HERE/eval-ledger.py" twice "$g" "$model_name" "${todo[@]}" --changed "${changed_cases[@]}")
+    fi
     # Fan-out cases ($3-9 each) run after every other case, so a --max-usd
-    # cap finishes and records the cheap ones first.
-    declare -a plain=() shell=() plainfan=() shellfan=()
+    # cap finishes and records the cheap ones first; within each, once-run
+    # cases come before twice-run ones.
+    kinds=(plain plain2 shell shell2 plainfan plainfan2 shellfan shellfan2)
+    declare -a plain=() plain2=() shell=() shell2=() plainfan=() plainfan2=() shellfan=() shellfan2=()
     for c in "${todo[@]}"; do
         kind=plain
         grep -qE '^tags:.*[[ ,]needs-shell[],]' "$g/evals/$c/prompt.md" && kind=shell
         grep -qE '^tags:.*[[ ,]fan-out[],]' "$g/evals/$c/prompt.md" && kind="${kind}fan"
+        [ -n "${twice[$c]:-}" ] && kind="${kind}2"
         declare -n into="$kind"; into+=("$c"); unset -n into
     done
-    n=$((${#plain[@]} + ${#shell[@]} + ${#plainfan[@]} + ${#shellfan[@]}))
+    declare -a listing=() priced=()
+    for kind in "${kinds[@]}"; do
+        declare -n b="$kind"
+        for c in "${b[@]}"; do
+            if [[ "$kind" == *2 ]]; then listing+=("$c (2 runs)"); priced+=("$c" "$c")
+            else listing+=("$c"); priced+=("$c"); fi
+        done
+        unset -n b
+    done
+    n=${#todo[@]}
     # Each case's last stored cost on this model, else the Opus bands
     # measured on 2026-10-04: $0.25-0.80 a case, $3-9 a fan-out case.
-    est="$(python3 "$HERE/eval-ledger.py" estimate "$g" "$model_name" "${plain[@]}" "${shell[@]}" "${plainfan[@]}" "${shellfan[@]}")"
+    est="$(python3 "$HERE/eval-ledger.py" estimate "$g" "$model_name" "${priced[@]}")"
     echo "== $g: $total case(s), $((total - ${#todo[@]})) PASS in the ledger, $n to run, $est; model ${model_name:-unresolved}"
-    [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${plain[@]}" "${shell[@]}" "${plainfan[@]}" "${shellfan[@]}"; continue; }
+    [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${listing[@]}"; continue; }
     chunk=$((jobs * 2))
     done_n=0
-    kinds=(plain shell plainfan shellfan)
     for ((ki = 0; ki < ${#kinds[@]}; ki++)); do
         kind="${kinds[ki]}"
+        runs=1; [[ "$kind" == *2 ]] && runs=2
         declare -n batch="$kind"
         nb=${#batch[@]}
         for ((k = 0; k < nb; k += chunk)); do
@@ -329,10 +355,10 @@ for g in $groups; do
             echo "   $kind chunk $((k / chunk + 1))/$(((nb + chunk - 1) / chunk)): ${part[*]} ($(date +%H:%M))"
             set +e
             if [[ "$kind" == shell* ]]; then
-                node "$HERE/eval-shell.mjs" "$g" "${part[@]}" --model "$model_name" \
+                node "$HERE/eval-shell.mjs" "$g" "${part[@]}" --model "$model_name" --runs "$runs" \
                     -j "$jobs" --keep "${cap[@]}" --json "$json" >>"$out/$g.out" 2>>"$out/$g.err"
             else
-                claude plugin eval "./$g" "${sel[@]}" --runs 1 --ablation none --scaffold \
+                claude plugin eval "./$g" "${sel[@]}" --runs "$runs" --ablation none --scaffold \
                     --trust-plugin --no-publish -j "$jobs" --keep-temp "${model[@]}" \
                     "${cap[@]}" \
                     --allow-tools Write Edit LSP \

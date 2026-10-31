@@ -15,9 +15,15 @@ need not run again.
   eval-ledger.py pending <group> <model> <case>...   print cases without a
                                                      PASS at their current key
   eval-ledger.py record <group> <model> <result.json>
-        record each PASS; print `FAIL <case>` per failed run, `MODEL <case>
+        record each case whose runs all passed; print `FAIL <case>` per
+        case with a run that did not pass, `MODEL <case>
         <id>` per run on another model than <model> (neither recorded nor
         cleared), and `LIMIT <n>` when n runs hit the usage limit
+  eval-ledger.py twice <group> <model> <case>... [--changed <case>...]
+        print the cases that run twice (and pass only when both runs pass):
+        those whose case dir changed since their last verdict on <model>,
+        and those named after --changed (new or changed in git) that have
+        no verdict on <model> yet
   eval-ledger.py estimate <group> <model> <case>...
         print the dollar estimate for running the cases on <model>: each
         case's last stored cost there, else the Opus band (fan-out cases
@@ -30,7 +36,8 @@ need not run again.
 
 <model> is a resolved model ID, so a pass is a pass on that model. Each
 entry is `<group>/<case>@<model>`: {"key": <key of the last pass, or null
-once a later run did not pass>, "costUsd": <cost of the last run>}.
+once a later run did not pass>, "costUsd": <cost of one run, the last time>,
+"caseKey": <hash of the case dir at the last verdict>}.
 """
 import hashlib
 import json
@@ -212,6 +219,16 @@ def key(group, case, model):
     return h.hexdigest()
 
 
+def case_key(group, case):
+    """Return a sha256 over the case dir alone."""
+    cdir = os.path.join(ROOT, group, "evals", case)
+    h = hashlib.sha256()
+    for p in files_under(cdir):
+        h.update(os.path.relpath(p, ROOT).encode() + b"\0")
+        h.update(read(p))
+    return h.hexdigest()
+
+
 # Per-case cost bands, measured on Opus on 2026-10-04: (low, high).
 BAND = (0.25, 0.80)
 FANOUT_BAND = (3.0, 9.0)
@@ -263,6 +280,18 @@ def main():
             if not isinstance(e, dict) or e.get("key") != key(group, c, model):
                 print(c)
         return 0
+    if cmd == "twice":
+        args = sys.argv[4:]
+        cut = args.index("--changed") if "--changed" in args else len(args)
+        changed = set(args[cut + 1:])
+        for c in args[:cut]:
+            e = led.get(slot(group, c, model))
+            if isinstance(e, dict) and e.get("caseKey"):
+                if e["caseKey"] != case_key(group, c):
+                    print(c)
+            elif c in changed:
+                print(c)
+        return 0
     if cmd == "estimate":
         print(estimate(led, group, model, sys.argv[4:]))
         return 0
@@ -270,21 +299,26 @@ def main():
         d = json.load(f)
     limit = 0
     for c in d.get("cases", []):
-        for r in c["arms"]["with"]:
-            ran_on = run_model(r)
-            if "limit" in (r.get("error") or "").lower():
-                limit += 1
-            elif ran_on and ran_on != model:
-                # A verdict on another model says nothing about this key.
-                print(f"MODEL {c['name']} {ran_on}")
-            elif r.get("passed") and not r.get("error"):
-                led[slot(group, c["name"], model)] = {
-                    "key": key(group, c["name"], model), "costUsd": r.get("costUsd") or 0}
-            else:
-                # A finished run that did not pass is a verdict on this key:
-                # drop the old pass so the next run does not skip the case.
-                led[slot(group, c["name"], model)] = {"key": None, "costUsd": r.get("costUsd") or 0}
-                print(f"FAIL {c['name']}")
+        name, runs = c["name"], c["arms"]["with"]
+        limits = sum("limit" in (r.get("error") or "").lower() for r in runs)
+        if limits:
+            # A run cut off by the usage limit says nothing about the skill.
+            limit += limits
+            continue
+        other = next((m for m in map(run_model, runs) if m and m != model), None)
+        if other:
+            # A verdict on another model says nothing about this key.
+            print(f"MODEL {name} {other}")
+            continue
+        entry = {"key": None, "costUsd": sum(r.get("costUsd") or 0 for r in runs) / len(runs),
+                 "caseKey": case_key(group, name)}
+        if all(r.get("passed") and not r.get("error") for r in runs):
+            entry["key"] = key(group, name, model)
+        else:
+            # A finished run that did not pass is a verdict on this key: the
+            # null key makes the next run take the case again.
+            print(f"FAIL {name}")
+        led[slot(group, name, model)] = entry
     save_json(LEDGER, led)
     if limit:
         print(f"LIMIT {limit}")
