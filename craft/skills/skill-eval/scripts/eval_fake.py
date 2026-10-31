@@ -8,8 +8,10 @@ The fake `claude` answers `claude plugin eval` with the result JSON
 eval-changed.sh reads, and `claude -p` (as eval-shell.mjs calls it) with a
 stream-json trace. Each case's outcome comes from a JSON plan file named by
 $FAKE_CLAUDE_PLAN: {"<case>": {"result": "pass"|"fail"|"limit", "cost": N}};
-a case not in the plan passes at $0.50. Every call's argv is appended, one
-JSON list per line, to $FAKE_CLAUDE_LOG.
+a case not in the plan passes at $0.50. A `plugin eval` call whose cases
+cost more than its --max-cost-usd exits 2, as the real one does at its
+ceiling. Every call's argv is appended, one JSON list per line, to
+$FAKE_CLAUDE_LOG.
 """
 import json
 import os
@@ -58,6 +60,8 @@ if args[:2] == ["plugin", "eval"]:
     with open(out, "w") as f:
         json.dump({"cases": res, "aggregates": {"casesPassed": len(cases) - bad, "casesTotal": len(cases)},
                    "durationSeconds": 1, "costUsd": spent}, f)
+    if "--max-cost-usd" in args and spent > float(args[args.index("--max-cost-usd") + 1]):
+        sys.exit(2)
     sys.exit(1 if bad else 0)
 
 if "-p" in args:

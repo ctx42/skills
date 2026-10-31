@@ -149,6 +149,25 @@ class EvalChangedTest(unittest.TestCase):
         self.assertEqual(0, code, out)
         self.assertIn("2 to run, ~$3-10 (Opus, measured 2026-10-04)", out)
 
+    def test_capped_plugin_eval_chunk_records_no_pass(self):
+        self.repo(("a", False))
+
+        code, out = self.run_changed("--all", fake.GROUP, "--max-usd", "0.1")
+
+        self.assertEqual(1, code, out)
+        self.assertEqual({}, self.ledger())
+
+    def test_capped_plugin_eval_chunk_clears_no_pass(self):
+        self.repo(("a", False))
+        self.run_changed("--all", fake.GROUP)
+        with open(self.plan, "w") as f:
+            json.dump({"a": {"result": "fail"}}, f)
+
+        code, out = self.run_changed("--all", fake.GROUP, "--fresh", "--max-usd", "0.1")
+
+        self.assertEqual(1, code, out)
+        self.assertEqual({"grp/a"}, set(self.ledger()))
+
     def test_usage_limit_stops_the_run_with_exit_3(self):
         self.repo(("a", False), ("b", False), ("c", False), plan={"b": {"result": "limit"}})
 
