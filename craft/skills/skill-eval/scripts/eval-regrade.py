@@ -22,7 +22,10 @@ from evalroot import ROOT  # noqa: E402
 
 
 def last_message(trace):
-    text = ""
+    """Return the run's final reply: the last result event's text, as the
+    runners grade it (a fan-out trace holds one per agent), else the last
+    assistant text."""
+    text, result = "", None
     with open(trace) as f:
         for line in f:
             try:
@@ -30,13 +33,13 @@ def last_message(trace):
             except ValueError:
                 continue
             if ev.get("type") == "result" and isinstance(ev.get("result"), str):
-                return ev["result"]
+                result = ev["result"]
             if ev.get("type") == "assistant":
                 parts = [c.get("text", "") for c in ev.get("message", {}).get("content", [])
                          if c.get("type") == "text"]
                 if parts:
                     text = "\n".join(parts)
-    return text
+    return text if result is None else result
 
 
 def frontmatter(text):
