@@ -453,7 +453,7 @@ def case_review_diff():
     }
     write_case("review--review-the-current-diff",
                CHECK_TAGS, "/go:review", graders, scaffold_sh=sc,
-               allowed=["Read", "Glob", "Grep", "Skill", "Bash(git:*)"],
+               allowed=["Read", "Glob", "Grep", "Skill", "Write", "Edit", "Bash(git:*)"],
                max_turns=40, timeout=300, asp=ENGLISH)
 
 

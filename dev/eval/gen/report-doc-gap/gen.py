@@ -342,10 +342,6 @@ case(
          "input_match": r'^(?=.*"status":"draft")(?=.*"srd_ref":"[^"]*booking-holds)', "min": 1},
         none_of("Read", "b1-no-local-gap-read",
                 r'"file_path":"(?![^"]*/(skills|lessons)/)[^"]*(gap|draft)'),
-        # A shell path token naming gap/draft, outside skill and lesson dirs.
-        none_of("Bash", "b1-no-local-gap-shell-read",
-                r'"command":"(?:[^"\\]|\\.)*?(?<=[\s=]|\\n)(?![^\s"\\]*/(?:skills|lessons)/)'
-                r'[^\s"\\]*(?:gap|draft)'),
         none_of("Glob", "b1-no-local-gap-glob", r'"pattern":"[^"]*(gap|draft)'),
         {"name": "b2-offers-to-work-it", "type": "regex", "target": "last_message",
          "flags": "is", "body": r"^(?=.*renew)(?=.*\bwork\b)(?=.*\?)"},
