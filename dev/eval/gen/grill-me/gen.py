@@ -217,7 +217,10 @@ case("grill-me--branch-nobody-present-can-resolve", Q7, {
     "b5-open-item-owner-and-question": infile(
         "plans/rollout.md",
         r"^#{2,3} [^\n]*(platform team[^\n]*(concurrency|ceiling)|"
-        r"(concurrency|ceiling)[^\n]*platform team)", flags="im"),
+        r"(concurrency|ceiling)[^\n]*platform team)"
+        # or a concurrency heading whose own section names the platform team
+        r"|^#{2,3} [^\n]*(concurrency|ceiling)[^\n]*\n(?:(?!#)[^\n]*\n)*?(?!#)[^\n]*platform team",
+        flags="im"),
     "b5-what-it-blocks": infile("plans/rollout.md", r"\bblock(s|ed|ing)?\b",
                                 flags="i"),
     "b2-no-ceiling-number": infile(
