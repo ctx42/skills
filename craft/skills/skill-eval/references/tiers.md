@@ -131,4 +131,8 @@ treated as the next round's work and nothing measured what those edits bought.
 `$HOME/.agent-data/` holds the user's real lesson files, and a live server a
 skill calls may be production. Tell every eval agent so: redirect every
 `$HOME/.agent-data` path a skill resolves into the run's workspace, and call
-only a server's read tools.
+only a server's read tools. `scripts/eval-shell.mjs` also refuses every file
+edit under the real home, and fails a case whose trace shows such an edit or
+a Bash call naming the real home (`scripts/eval-guard.mjs`); cases run by
+`claude plugin eval` get neither. That FAIL is re-run like any other, and the
+report names the path or command.
