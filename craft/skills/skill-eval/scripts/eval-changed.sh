@@ -266,24 +266,25 @@ for g in $groups; do
     # bwrap's, which stock Ubuntu refuses, so every Bash call there fails.
     # Never lift the host restriction instead (disabling bwrap-userns-restrict
     # broke gdm). Every other case runs in `claude plugin eval` without Bash.
-    declare -a plain=() shell=()
+    # Fan-out cases ($3-9 each) run after every other case, so a --max-usd
+    # cap finishes and records the cheap ones first.
+    declare -a plain=() shell=() plainfan=() shellfan=()
     for c in "${todo[@]}"; do
-        if grep -qE '^tags:.*[[ ,]needs-shell[],]' "$g/evals/$c/prompt.md"; then shell+=("$c")
-        else plain+=("$c"); fi
+        kind=plain
+        grep -qE '^tags:.*[[ ,]needs-shell[],]' "$g/evals/$c/prompt.md" && kind=shell
+        grep -qE '^tags:.*[[ ,]fan-out[],]' "$g/evals/$c/prompt.md" && kind="${kind}fan"
+        declare -n into="$kind"; into+=("$c"); unset -n into
     done
-    n=$((${#plain[@]} + ${#shell[@]}))
-    nf=0
-    for c in "${plain[@]}" "${shell[@]}"; do
-        grep -qE '^tags:.*[[ ,]fan-out[],]' "$g/evals/$c/prompt.md" && nf=$((nf + 1))
-    done
+    n=$((${#plain[@]} + ${#shell[@]} + ${#plainfan[@]} + ${#shellfan[@]}))
+    nf=$((${#plainfan[@]} + ${#shellfan[@]}))
     # The bands are Opus runs measured on 2026-10-04: $0.25-0.80 a case,
     # $3-9 a fan-out case.
     est="$(python3 -c "print(f'~\${round(($n - $nf) * 0.25 + $nf * 3)}-{round(($n - $nf) * 0.8 + $nf * 9)}')")"
     echo "== $g: $total case(s), $((total - ${#todo[@]})) PASS in the ledger, $n to run, $est (Opus, measured 2026-10-04)"
-    [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${plain[@]}" "${shell[@]}"; continue; }
+    [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${plain[@]}" "${shell[@]}" "${plainfan[@]}" "${shellfan[@]}"; continue; }
     chunk=$((jobs * 2))
     done_n=0
-    for kind in plain shell; do
+    for kind in plain shell plainfan shellfan; do
         declare -n batch="$kind"
         nb=${#batch[@]}
         for ((k = 0; k < nb; k += chunk)); do
@@ -300,7 +301,7 @@ for g in $groups; do
             fi
             echo "   $kind chunk $((k / chunk + 1))/$(((nb + chunk - 1) / chunk)): ${part[*]} ($(date +%H:%M))"
             set +e
-            if [ "$kind" = shell ]; then
+            if [[ "$kind" == shell* ]]; then
                 node "$HERE/eval-shell.mjs" "$g" "${part[@]}" --model "$model_name" \
                     -j "$jobs" --keep "${cap[@]}" --json "$json" >>"$out/$g.out" 2>>"$out/$g.err"
             else
@@ -381,7 +382,7 @@ PY
             # At the ceiling `claude plugin eval` still scores the free graders
             # of the run that crossed it and skips the paid ones, so no verdict
             # of that chunk reaches the ledger, pass or fail.
-            if [ "$kind" = plain ] && [ "$r" = 2 ]; then
+            if [[ "$kind" == plain* ]] && [ "$r" = 2 ]; then
                 echo "   ledger unchanged for this chunk: it stopped at the ceiling"
                 continue
             fi

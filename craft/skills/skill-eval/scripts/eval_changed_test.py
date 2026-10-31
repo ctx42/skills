@@ -69,6 +69,29 @@ class EvalChangedTest(unittest.TestCase):
         self.assertIn("   b\n", out)
         self.assertEqual([], fake.calls(self.log))
 
+    def test_dry_run_lists_fan_out_cases_last(self):
+        self.repo(("a", True, True), ("b", True), ("c", False), ("d", False, True))
+
+        code, out = self.run_changed("--all", fake.GROUP, "--dry-run")
+
+        self.assertEqual(0, code, out)
+        have = [ln.strip() for ln in out.splitlines() if ln.startswith("   ")]
+        self.assertEqual(["c", "b", "d", "a"], have)
+
+    def test_fan_out_cases_run_last(self):
+        self.repo(("a", True, True), ("b", True), ("c", False), ("d", False, True))
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        have = []
+        for argv in fake.calls(self.log):
+            if argv[:2] == ["plugin", "eval"]:
+                have += [t.split(":", 1)[1] for i, t in enumerate(argv) if argv[i - 1] == "--tag"]
+            else:
+                have.append(argv[argv.index("-p") + 1].split("CASE:", 1)[1].strip())
+        self.assertEqual(["c", "b", "d", "a"], have)
+
     def test_plain_cases_run_in_chunks_of_twice_j(self):
         self.repo(("a", False), ("b", False), ("c", False))
 
