@@ -61,6 +61,17 @@
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES",
       "class": "redundant"
+    },
+    {
+      "id": "project-data-rule-dropped-despite-pointer",
+      "rule": "project-data-rule-dropped",
+      "prompt": "Situation: `/skill-enhance`. While `srd:create` was driving, the user corrected the agent: the SRD header `Lifecycle` must be `DRAFT` in uppercase, not `draft`. `srd:create`'s SKILL.md says to set `Lifecycle` to one of the standard's LIF-1 values, \"written exactly as the standard spells them\". The SRD standard, which srd:create loads at run time, lists the LIF-1 values in uppercase. srd:create's directory is writable.\n\nQuestion: do you offer to reword srd:create's SKILL.md (or write a lesson) for this correction? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*NO\\b",
+      "fail": "^\\W*YES",
+      "bullets": [
+        "attribute-to-the-driving-skill#b2"
+      ],
+      "class": "unmutated"
     }
   ]
 }

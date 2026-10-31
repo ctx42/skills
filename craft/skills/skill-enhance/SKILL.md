@@ -93,7 +93,8 @@ put skill-enhance in scope.
      too: a missed rule was not clear enough to its reader. A rule that lives
      in project data the skill loads at run time (a project's standard, its
      config) is no skill's to reword or restate: name where it lives and drop
-     it.
+     it, even when the skill's text points at that data ("as the standard
+     spells them") — a pointer is not the rule.
    - A fact about this project or this task: a name, a path, a version, a
      number. It outlives nothing, and the project's own instructions are its
      home.

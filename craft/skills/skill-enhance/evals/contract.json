@@ -164,6 +164,14 @@
       "must": [
         "A lesson write is not a project write: a read-only or no-change run\\s+still makes it"
       ]
+    },
+    {
+      "id": "project-data-rule-dropped",
+      "rule": "Drop a correction whose rule lives in project data the skill loads, even when the skill's text points at that data",
+      "must": [
+        "is no skill's to reword or restate",
+        "a pointer is not the rule"
+      ]
     }
   ]
 }
