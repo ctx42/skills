@@ -82,7 +82,9 @@ triggers, and the hunt in parallel — for ~\$0.15 and ~2 min per changed skill:
    by everything the case depends on, and the run stops at the first
    usage-limit cut-off (exit 3) — re-run the same command after the reset.
    Verify a grader fix offline with `scripts/eval-regrade.py <trace>`, never
-   by a paid re-run.
+   by a paid re-run. The `web` group has no agent-run cases yet, so its
+   skills are checked only by lint, contracts, probes, the hunt, and
+   triggers.
 6. *Blind round* (the repo's blind-runner and grader prompts, handed over
    verbatim). An audit before a release or after a large refactor, never the
    gate on an ordinary change; the release audit also runs
