@@ -364,6 +364,7 @@ g["b5-path-and-counts"] = regex(
     r"csv-export-plan\.md[^\n]*" + counts(0, 7, 0) + "|" + counts(0, 7, 0) + r"[^\n]*csv-export-plan\.md",
     "last_message", "i")
 g["b5-no-summary-replay"] = regex(
-    r"RFC 4180|\bBOM\b|100,001|exactly the filtered rows", "last_message", "i", "not_contains")
+    # The boundary number alone may appear in a leave-out (a boundary test).
+    r"RFC 4180|\bBOM\b|exactly the filtered rows", "last_message", "i", "not_contains")
 case("grill-me-handoff", CREATE, "Yes, turn it into a plan.", g,
      history=history(TURNS, "7d1e2c4a-3b5f-4e8a-9c21-6a0f5e3d2b10"))
