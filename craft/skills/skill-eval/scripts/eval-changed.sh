@@ -3,7 +3,8 @@
 #
 # Not the routine check. After a skill edit run scripts/eval-check.py (free,
 # seconds) and scripts/eval-probe.py (cents, under a minute). Each case here is
-# a full agent session ($0.25-0.80, up to minutes); run them only when asked.
+# a full agent session, up to minutes (Opus, measured 2026-10-04: $0.25-0.80 a
+# case, $3-9 a fan-out case); run them only when asked.
 # Without --audit, --skill, --case, or --all the script only lists what a
 # change reaches and runs nothing.
 #
@@ -34,11 +35,10 @@
 #   -j N   concurrent runs (1-8, default 2: more burns the 5-hour usage
 #          window faster); --dry-run prints, runs nothing
 #   --max-usd N  stop once this invocation has spent N dollars (default: no
-#          ceiling); a case costs $0.10-0.80, a fan-out case $3-9
-#   --model M  run the cases on model M (default sonnet; `default` = the CLI's
-#          default model). A sonnet run re-runs only its FAILs on the default
-#          model, which has the final say: sonnet matched it on 6/6 measured
-#          cases at ~half the cost (measured 2026-10-04)
+#          ceiling)
+#   --model M  run the cases on model M (default: the CLI's default model,
+#          also spelled `default`). Sonnet runs only when passed here, and its
+#          verdicts are recorded as they are, never re-run on another model
 #   --keep keeps every run's workspace and trace (paths in the JSON); without
 #          it the workspaces are deleted after the run
 #   --fresh  ignore the pass ledger: a case whose inputs (case dir, the skills
@@ -76,8 +76,7 @@ dry=0
 keep=0
 audit=0
 fresh=0
-declare -a explicit_skills=() all_groups=() case_args=() paths=() model=(--model sonnet)
-declare -a failed=()
+declare -a explicit_skills=() all_groups=() case_args=() paths=() model=()
 
 die() { echo "eval-changed: $*" >&2; exit 1; }
 
@@ -273,7 +272,14 @@ for g in $groups; do
         else plain+=("$c"); fi
     done
     n=$((${#plain[@]} + ${#shell[@]}))
-    echo "== $g: $total case(s), $((total - ${#todo[@]})) PASS in the ledger, $n to run, ~\$$(python3 -c "print(round($n*0.25))")-$(python3 -c "print(round($n*0.8))")"
+    nf=0
+    for c in "${plain[@]}" "${shell[@]}"; do
+        grep -qE '^tags:.*[[ ,]fan-out[],]' "$g/evals/$c/prompt.md" && nf=$((nf + 1))
+    done
+    # The bands are Opus runs measured on 2026-10-04: $0.25-0.80 a case,
+    # $3-9 a fan-out case.
+    est="$(python3 -c "print(f'~\${round(($n - $nf) * 0.25 + $nf * 3)}-{round(($n - $nf) * 0.8 + $nf * 9)}')")"
+    echo "== $g: $total case(s), $((total - ${#todo[@]})) PASS in the ledger, $n to run, $est (Opus, measured 2026-10-04)"
     [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${plain[@]}" "${shell[@]}"; continue; }
     chunk=$((jobs * 2))
     done_n=0
@@ -374,7 +380,6 @@ PY
             [ "$r" = 0 ] || rc=1
             rec=$(python3 "$HERE/eval-ledger.py" record "$g" "$model_name" "$json")
             lim=$(printf '%s\n' "$rec" | grep '^LIMIT' || true)
-            while read -r _ c; do [ -n "$c" ] && failed+=("$g" "$c"); done < <(printf '%s\n' "$rec" | grep '^FAIL' || true)
             if [ -n "$lim" ]; then
                 left=$((n - done_n))
                 echo "   LIMIT: the usage limit cut off ${lim#LIMIT } run(s); $left case(s) not started."
@@ -396,15 +401,4 @@ if [ "$dry" = 1 ]; then
     exit 0
 fi
 echo "results: $out"
-# Sonnet runs first (half the cost, verdicts matched the default model on
-# every case measured); only its FAILs are re-run on the default model, which
-# has the final say.
-if [ ${#failed[@]} -gt 0 ] && [ "$model_name" = sonnet ]; then
-    declare -a again=()
-    for ((i = 0; i < ${#failed[@]}; i += 2)); do again+=(--case "${failed[i]}" "${failed[i+1]}"); done
-    echo "== confirming $((${#failed[@]} / 2)) sonnet FAIL(s) on the default model"
-    declare -a pass_on=()
-    [ "$keep" = 1 ] && pass_on+=(--keep)
-    exec "$0" --model default -j "$jobs" "${again[@]}" "${pass_on[@]}"
-fi
 exit "$rc"

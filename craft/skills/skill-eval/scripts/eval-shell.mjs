@@ -18,6 +18,9 @@
 //   node scripts/eval-shell.mjs <group> <case>... [--model M] [-j N]
 //        [--max-cost-usd N] [--json out.json] [--keep]
 //
+// --model defaults to `default`, the CLI's default model: no --model reaches
+// `claude`.
+//
 // EVAL_STRIP_NOTICE, when set, is a regex: a last paragraph of the reply that
 // matches it is dropped before grading (see eval-notice.mjs).
 //
@@ -41,7 +44,7 @@ function die(msg) {
 
 // --- Arguments. ---
 const argv = process.argv.slice(2);
-let model = "sonnet", jobs = 1, maxUsd = Infinity, jsonOut = "", keep = false;
+let model = "default", jobs = 1, maxUsd = Infinity, jsonOut = "", keep = false;
 const rest = [];
 for (let i = 0; i < argv.length; i++) {
   const a = argv[i];

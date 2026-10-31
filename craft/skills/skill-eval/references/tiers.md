@@ -76,12 +76,13 @@ triggers, and the hunt in parallel — for ~\$0.15 and ~2 min per changed skill:
    ~\$0.25–0.80 a case, up to minutes). Full sessions on scripted fixtures with
    mocked MCP servers ([native-cases.md](native-cases.md)); `needs-shell` cases
    run through `scripts/eval-shell.mjs` instead. A manual audit only, when the
-   user asks; never the gate on a change. Cases run on the default model
-   (`--model default`), whose first verdict stands; skip the script's sonnet
-   pass. A pass is recorded in a ledger keyed by everything the case depends on,
-   and the run stops at the first usage-limit cut-off (exit 3) — re-run the same
-   command after the reset. Verify a grader fix offline with
-   `scripts/eval-regrade.py <trace>`, never by a paid re-run.
+   user asks; never the gate on a change. Cases run on the CLI's default
+   model, whose first verdict stands; `--model sonnet` runs them on Sonnet
+   only, never re-run on another model. A pass is recorded in a ledger keyed
+   by everything the case depends on, and the run stops at the first
+   usage-limit cut-off (exit 3) — re-run the same command after the reset.
+   Verify a grader fix offline with `scripts/eval-regrade.py <trace>`, never
+   by a paid re-run.
 6. *Blind round* (the repo's blind-runner and grader prompts, handed over
    verbatim). An audit before a release or after a large refactor, never the
    gate on an ordinary change; the release audit also runs

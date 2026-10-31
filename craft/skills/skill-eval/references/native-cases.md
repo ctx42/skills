@@ -251,8 +251,7 @@ for a go or srd case, \$3–9 for a fan-out case; a full group is \$5–20. An
 invocation has no cost ceiling unless `--max-usd N` sets one: a ceiling cuts
 graders off mid-case and leaves cases unrun. Runs draw on the user's own 5-hour
 usage window: use `-j 4`, never run a whole skill or group unasked, and re-run
-only failing or cut-off cases. Run with `--model default`: every case on the
-default model, whose first verdict stands. Without it the script runs sonnet
-first (about half the cost) and re-runs only sonnet's FAILs on the default
-model; don't use that mode. A failure is a case defect (fix the case) or a skill
+only failing or cut-off cases. Every case runs on the CLI's default model,
+whose first verdict stands; `--model sonnet` runs them on Sonnet only, never
+re-run on another model. A failure is a case defect (fix the case) or a skill
 defect (record it; a conversion never edits a skill).

@@ -89,16 +89,17 @@ def write(path, text, mode=None):
 def make_repo(root, cases):
     """Build a git repo at root with one group, one skill, and the given cases.
 
-    cases is a list of (name, shell) pairs; a shell case is tagged needs-shell.
-    Every case tags the skill and its Alpha section, and has one grader that
-    wants the reply to start with OK.
+    cases is a list of (name, shell) or (name, shell, fanout) tuples; a shell
+    case is tagged needs-shell, a fan-out case fan-out. Every case tags the
+    skill and its Alpha section, and has one grader that wants the reply to
+    start with OK.
     """
     write(os.path.join(root, GROUP, ".claude-plugin", "plugin.json"), '{"name": "grp"}\n')
     write(os.path.join(root, GROUP, "skills", SKILL, "SKILL.md"),
           "---\nname: s1\ndescription: Test skill.\n---\n\n# s1\n\n## Usage\n\nUse it.\n\n"
           "## Alpha\n\nFirst.\n\n## Beta\n\nSecond.\n")
-    for name, shell in cases:
-        add_case(root, name, shell)
+    for c in cases:
+        add_case(root, *c)
     write(os.path.join(root, ".gitignore"), "/tmp/\n")
     git = ["git", "-C", root, "-c", "user.name=t", "-c", "user.email=t@example.com"]
     subprocess.run(["git", "init", "-q", root], check=True)
@@ -106,9 +107,10 @@ def make_repo(root, cases):
     subprocess.run(git + ["commit", "-q", "-m", "init"], check=True)
 
 
-def add_case(root, name, shell=False):
+def add_case(root, name, shell=False, fanout=False):
     """Write one case directory: prompt.md with tags, and a reply grader."""
-    tags = f"case:{name}, skill:{SKILL}, sec:{SKILL}:alpha" + (", needs-shell" if shell else "")
+    tags = (f"case:{name}, skill:{SKILL}, sec:{SKILL}:alpha" + (", needs-shell" if shell else "")
+            + (", fan-out" if fanout else ""))
     allowed = "[Read, Bash(git:*)]" if shell else "[Read]"
     write(os.path.join(root, GROUP, "evals", name, "prompt.md"),
           f"---\ntags: [{tags}]\nallowed_tools: {allowed}\nmax_turns: 5\n---\n\nCASE:{name}\n")

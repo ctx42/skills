@@ -112,6 +112,43 @@ class EvalChangedTest(unittest.TestCase):
         self.assertEqual(0, code, out)
         self.assertEqual([["case:a"], ["case:a"]], self.plugin_eval_tags())
 
+    def test_default_run_passes_no_model_to_either_runner(self):
+        self.repo(("a", False), ("b", True))
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        have = fake.calls(self.log)
+        self.assertEqual(2, len(have))
+        for argv in have:
+            self.assertNotIn("--model", argv)
+
+    def test_explicit_model_reaches_both_runners(self):
+        self.repo(("a", False), ("b", True))
+
+        code, out = self.run_changed("--all", fake.GROUP, "--model", "sonnet")
+
+        self.assertEqual(0, code, out)
+        for argv in fake.calls(self.log):
+            self.assertEqual("sonnet", argv[argv.index("--model") + 1])
+
+    def test_sonnet_run_does_not_rerun_its_fails(self):
+        self.repo(("a", False), plan={"a": {"result": "fail"}})
+
+        code, out = self.run_changed("--all", fake.GROUP, "--model", "sonnet")
+
+        self.assertEqual(1, code, out)
+        self.assertEqual([["case:a"]], self.plugin_eval_tags())
+        self.assertNotIn("confirming", out)
+
+    def test_estimate_uses_the_labeled_opus_bands(self):
+        self.repo(("a", False), ("b", True, True))
+
+        code, out = self.run_changed("--all", fake.GROUP, "--dry-run")
+
+        self.assertEqual(0, code, out)
+        self.assertIn("2 to run, ~$3-10 (Opus, measured 2026-10-04)", out)
+
     def test_usage_limit_stops_the_run_with_exit_3(self):
         self.repo(("a", False), ("b", False), ("c", False), plan={"b": {"result": "limit"}})
 
