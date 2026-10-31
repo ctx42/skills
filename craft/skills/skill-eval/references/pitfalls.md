@@ -62,5 +62,9 @@ Add a line when a run teaches a new one.
   one-off lint errors.
 - Give a long run a stall watchdog and a memory cap; record cost per run.
 - An account that appends a notice to every reply can break line-sensitive
-  graders: set `EVAL_STRIP_NOTICE` (see `native-cases.md`).
+  graders: set `EVAL_STRIP_NOTICE` (see `native-cases.md`). It only drops
+  the notice paragraph from a `needs-shell` reply before grading. The
+  account's organization instructions still reach every run, probes
+  included, and no flag removes them; the user's own `CLAUDE.md` does not
+  reach a run.
 - Batch the decisions a run needs before editing, so one eval round covers all.
