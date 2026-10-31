@@ -21,6 +21,9 @@
 //     long tag,
 //   - every grader pattern (regex body, input_match) compiles as JavaScript
 //     with its flags and uses no PCRE-only anchor (\A, \Z, \z),
+//   - at least one grader asserts that something happened (a case of only
+//     not_contains, max: 0, and exists: false graders passes on an empty
+//     reply), and a tool_used max: 0 grader names a tool the run may call,
 //   - a case mock fixture that shadows a suite one (same path under mocks/,
 //     e.g. the frozen srd-standard.md) is byte-identical to it: case mocks
 //     cannot reference suite files, so the suite file is the source and the
@@ -29,6 +32,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { findRoot } from "./evalroot.mjs";
+import { asserts, canUse } from "./eval-graders.mjs";
 
 const ROOT = findRoot();
 const ENGLISH = "The user writes English; reply in English.";
@@ -188,11 +192,19 @@ function lintCase(group, dir, known) {
   if (shell && isDir(path.join(ROOT, rel, "mocks"))) err(`${rel}: needs-shell cases run through eval-shell.mjs, which serves no mocks`);
   const graders = path.join(ROOT, rel, "graders");
   if (!isDir(graders)) { err(`${rel}: no graders/`); return; }
+  const allowed = am ? am[1].match(/[A-Za-z_][\w-]*(\([^)]*\))?/g) || [] : [];
+  let positive = false;
   for (const g of fs.readdirSync(graders).filter((f) => f.endsWith(".md"))) {
     const where = `${rel}/graders/${g}`;
     const { fm: gfm, body } = split(fs.readFileSync(path.join(graders, g), "utf8"));
     const type = scalar(gfm, "type");
     if (!type) { err(`${where}: no type`); continue; }
+    const fields = { type, match: scalar(gfm, "match"), min: scalar(gfm, "min"), max: scalar(gfm, "max"), exists: scalar(gfm, "exists") };
+    if (asserts(fields)) positive = true;
+    const tool = scalar(gfm, "tool");
+    if (type === "tool_used" && tool && Number(fields.max) === 0 && fields.max !== undefined && !canUse(tool, allowed, shell)) {
+      err(`${where}: max: 0 on ${tool}, which the run cannot call, so it never fails — allow the tool or drop the grader`);
+    }
     for (const im of inputMatches(gfm)) compiles(`${where} input_match`, im);
     if (shell && !SHELL_GRADERS.has(type)) err(`${where}: needs-shell cases run through eval-shell.mjs, which grades only ${[...SHELL_GRADERS].join(", ")}`);
     if (shell && /^target:\s*mock_calls/m.test(gfm)) err(`${where}: needs-shell cases run without mocks; no mock_calls target`);
@@ -202,6 +214,7 @@ function lintCase(group, dir, known) {
       else compiles(where, pattern, scalar(gfm, "flags"));
     }
   }
+  if (!positive) err(`${rel}: no grader asserts that something happened, so an empty reply passes`);
 }
 
 for (const group of fs.readdirSync(ROOT).sort()) {
