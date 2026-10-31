@@ -271,6 +271,14 @@
       "must": [
         "sets the `srd_ref` of\\s+every draft captured without one, and offers nothing yet"
       ]
+    },
+    {
+      "id": "gate-absolute-path",
+      "rule": "An absolute srd-work stops the gate like any other path key",
+      "must": [
+        "an absolute\\s+`srd-work` stops the gate like any other path key"
+      ],
+      "file": "references/project-config.md"
     }
   ]
 }

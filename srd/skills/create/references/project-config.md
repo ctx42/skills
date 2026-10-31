@@ -28,7 +28,8 @@ Every srd skill needs the first five: each one delegates to the others. Every
 path is relative to the project root; an absolute path is invalid. `gaps` and
 `precedence` are optional and server-validated: never read the gap folder or
 the `precedence` list directly — use the gap tools and the `rank` on results.
-`srd-work` is optional; the skills read it themselves.
+`srd-work` is optional; the skills read it themselves, but an absolute
+`srd-work` stops the gate like any other path key.
 
 ## 2. Check the server
 
