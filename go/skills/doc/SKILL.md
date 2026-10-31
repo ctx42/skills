@@ -288,7 +288,8 @@ End of run:
   `file:Symbol — <checklist item #>: <what changed>`.
 - Flagged unverifiable: `file:Symbol — the fact left unwritten and why`.
 - Never-touched in scope: `file:Symbol — reason`.
-- Module kind: which packages were done and which were skipped.
+- Module kind: a `Packages:` line, never left out, naming the packages done
+  and, by name, every package `packages=` left out.
 - Items left alone get no line; a flagged or never-touched item is never
   dropped silently. Close with a one-line pointer to run `go:review` on
   the result.
