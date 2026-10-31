@@ -35,7 +35,7 @@
 #   -j N   concurrent runs (1-8, default 2: more burns the 5-hour usage
 #          window faster); --dry-run prints, runs nothing
 #   --max-usd N  stop once this invocation has spent N dollars (default: no
-#          ceiling)
+#          ceiling), naming each case it did not start
 #   --model M  run the cases on model M (default: the CLI's default model,
 #          also spelled `default`). Sonnet runs only when passed here, and its
 #          verdicts are recorded as they are, never re-run on another model
@@ -284,7 +284,9 @@ for g in $groups; do
     [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${plain[@]}" "${shell[@]}" "${plainfan[@]}" "${shellfan[@]}"; continue; }
     chunk=$((jobs * 2))
     done_n=0
-    for kind in plain shell plainfan shellfan; do
+    kinds=(plain shell plainfan shellfan)
+    for ((ki = 0; ki < ${#kinds[@]}; ki++)); do
+        kind="${kinds[ki]}"
         declare -n batch="$kind"
         nb=${#batch[@]}
         for ((k = 0; k < nb; k += chunk)); do
@@ -295,7 +297,13 @@ for g in $groups; do
             if [ -n "$max_usd" ]; then
                 left=$(python3 -c "print(round($max_usd - ${spent:-0}, 2))")
                 if python3 -c "import sys; sys.exit(0 if $left <= 0 else 1)"; then
-                    echo "   skipped: --max-usd $max_usd spent"; rc=1; break
+                    # Name every case of the group this stop leaves unrun.
+                    declare -a rest=("${batch[@]:k}")
+                    for later in "${kinds[@]:ki+1}"; do
+                        declare -n lb="$later"; rest+=("${lb[@]}"); unset -n lb
+                    done
+                    echo "   not started (--max-usd $max_usd spent): ${rest[*]}"
+                    rc=1; unset -n batch; break 2
                 fi
                 cap=(--max-cost-usd "$left")
             fi
@@ -378,6 +386,13 @@ print(f"   {a['casesPassed']}/{a['casesTotal']} passed, "
       f"{d['durationSeconds']}s, ${d['costUsd']:.2f}")
 sys.exit(1 if bad else 0)
 PY
+            if [ "$r" = 2 ]; then
+                # The runner left out the cases it did not start.
+                miss=$(python3 -c 'import json, sys
+got = {c["name"] for c in json.load(open(sys.argv[1]))["cases"]}
+print(" ".join(c for c in sys.argv[2:] if c not in got))' "$json" "${part[@]}")
+                [ -z "$miss" ] || echo "   not started (--max-usd $max_usd spent): $miss"
+            fi
             [ "$r" = 0 ] || rc=1
             # At the ceiling `claude plugin eval` still scores the free graders
             # of the run that crossed it and skips the paid ones, so no verdict

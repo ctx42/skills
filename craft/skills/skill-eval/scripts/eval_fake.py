@@ -8,9 +8,9 @@ The fake `claude` answers `claude plugin eval` with the result JSON
 eval-changed.sh reads, and `claude -p` (as eval-shell.mjs calls it) with a
 stream-json trace. Each case's outcome comes from a JSON plan file named by
 $FAKE_CLAUDE_PLAN: {"<case>": {"result": "pass"|"fail"|"limit", "cost": N}};
-a case not in the plan passes at $0.50. A `plugin eval` call whose cases
-cost more than its --max-cost-usd exits 2, as the real one does at its
-ceiling. Every call's argv is appended, one JSON list per line, to
+a case not in the plan passes at $0.50. Like the real one, a `plugin eval`
+call checks its --max-cost-usd before each case, leaves out the cases it
+did not start, and exits 2 once its spend passes the ceiling. Every call's argv is appended, one JSON list per line, to
 $FAKE_CLAUDE_LOG.
 """
 import json
@@ -40,8 +40,12 @@ def outcome(case):
 if args[:2] == ["plugin", "eval"]:
     cases = [args[i + 1].split(":", 1)[1] for i, a in enumerate(args) if a == "--tag"]
     out = args[args.index("--json") + 1]
-    res, spent, bad = [], 0.0, 0
+    cap = float(args[args.index("--max-cost-usd") + 1]) if "--max-cost-usd" in args else None
+    res, spent, bad, capped = [], 0.0, 0, False
     for c in cases:
+        if cap is not None and spent >= cap:
+            capped = True
+            continue
         kind, cost = outcome(c)
         tmp = tempfile.mkdtemp(prefix="claude-eval-fake-")
         os.makedirs(os.path.join(tmp, "out"))
@@ -58,9 +62,9 @@ if args[:2] == ["plugin", "eval"]:
             "graders": [] if passed else [{"name": "g1", "passed": False, "evidence": "no match"}],
             "durationSeconds": 1, "costUsd": cost, "tracePath": trace, "lastMessage": reply}]}})
     with open(out, "w") as f:
-        json.dump({"cases": res, "aggregates": {"casesPassed": len(cases) - bad, "casesTotal": len(cases)},
+        json.dump({"cases": res, "aggregates": {"casesPassed": len(res) - bad, "casesTotal": len(res)},
                    "durationSeconds": 1, "costUsd": spent}, f)
-    if "--max-cost-usd" in args and spent > float(args[args.index("--max-cost-usd") + 1]):
+    if capped or (cap is not None and spent > cap):
         sys.exit(2)
     sys.exit(1 if bad else 0)
 

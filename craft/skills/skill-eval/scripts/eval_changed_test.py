@@ -191,6 +191,34 @@ class EvalChangedTest(unittest.TestCase):
         self.assertEqual(1, code, out)
         self.assertEqual({"grp/a"}, set(self.ledger()))
 
+    def test_cap_before_a_chunk_names_every_unstarted_case(self):
+        self.repo(("a", False), ("b", False), ("c", False), ("d", False), ("e", True))
+
+        code, out = self.run_changed("--all", fake.GROUP, "-j", "1", "--max-usd", "1.0")
+
+        self.assertEqual(1, code, out)
+        self.assertIn("not started (--max-usd 1.0 spent): c d e", out)
+        self.assertEqual(1, out.count("not started"), out)
+        self.assertEqual([["case:a", "case:b"]], self.plugin_eval_tags())
+
+    def test_cap_inside_a_plain_chunk_names_its_unstarted_cases(self):
+        self.repo(("a", False), ("b", False), ("c", False))
+
+        code, out = self.run_changed("--all", fake.GROUP, "--max-usd", "0.6")
+
+        self.assertEqual(1, code, out)
+        self.assertIn("not started (--max-usd 0.6 spent): c", out)
+        self.assertEqual({}, self.ledger())
+
+    def test_cap_inside_a_shell_chunk_records_its_finished_passes(self):
+        self.repo(("a", True), ("b", True))
+
+        code, out = self.run_changed("--all", fake.GROUP, "-j", "1", "--max-usd", "0.1")
+
+        self.assertEqual(1, code, out)
+        self.assertIn("not started (--max-usd 0.1 spent): b", out)
+        self.assertEqual({"grp/a"}, set(self.ledger()))
+
     def test_usage_limit_stops_the_run_with_exit_3(self):
         self.repo(("a", False), ("b", False), ("c", False), plan={"b": {"result": "limit"}})
 
