@@ -160,7 +160,8 @@ standard that defines no such value, is a warning: skip the sweep with one line
 The sweep is one clause of the opening counts line, or the reply's first line
 when a list was named: `crew-seats abandoned: 2 gaps filed, 1 already open`.
 No abandoned SRD, no clause. Its gaps are plain open gaps: count them in
-`gaps`.
+`gaps`. The "sweep skipped" line and each per-SRD warning line stand on their
+own lines before the counts line, never inside it.
 
 ### 2. Re-check stale gaps
 
