@@ -22,8 +22,10 @@ quality. Tiers and their tools: [tiers.md](tiers.md); mistakes past runs paid fo
    run. A case costs \$0.25–0.80, a fan-out case \$3–9; ~50 cases ran about
    \$20.
 5. Rerun a fixed case once. A case that has failed and passed gets two more
-   runs before it counts as fixed; a case that fails at the base too is flaky,
-   not broken.
+   runs before it counts as fixed. One whose re-run fails again is reported
+   as a FAIL with its trace and not re-run further. Never run a case at the
+   base unasked; when the user's base run fails too, label that FAIL flaky,
+   not a break the change caused.
 
 ## Long runs
 

@@ -103,7 +103,9 @@ skill text:
    it counts as fixed. Every re-run, the first included, is
    `--case <group> <name> --fresh` (the ledger would skip it) with the
    round's `--model` and `-j`, and `--max-usd` set to what the cap has left.
-   One that also fails at the base is flaky, not broken.
+   One whose re-run fails again is reported as a FAIL with its trace and not
+   re-run further. Never run a case at the base unasked; when the user's base
+   run fails too, label that FAIL flaky, not a break the change caused.
 
 Blind rounds only when the user asks, after stating scope and rough cost.
 Report per tier its counts and cost, each FAIL and SPLIT with its evidence
