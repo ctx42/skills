@@ -4,8 +4,8 @@ description: >
   Done-time Go quality review: checks finished code — the current diff, a
   package, or a whole module — against the project style rules and for
   general correctness (bugs, edge cases, error handling). Use after edits or
-  a feature are complete, and to add, change, or learn style rules from
-  feedback.
+  a feature are complete. Also the skill that adds, changes, or removes a Go
+  style rule, or learns one from feedback.
 license: MIT
 argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all |
   add|change|remove RULE | learn] [packages=a,b] [max=N]
