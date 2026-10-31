@@ -4,4 +4,4 @@ target: last_message
 match: not_contains
 flags: "m"
 ---
-^(?![ \t]*>)[^\n]*\*\*Q\d+:?\*\*[^\n]*\?
+(?:300 ms|5 working days)[\s\S]*^(?![ \t]*>)[^\n]*\*\*Q\d+:?\*\*[^\n]*\?
