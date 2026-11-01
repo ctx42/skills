@@ -190,6 +190,53 @@ class LedgerTest(unittest.TestCase):
             json.dump({"cases": [{"name": case, "arms": {"with": runs}}]}, f)
         return self.ledger("record", fake.GROUP, model, path)
 
+    def flaky(self, model="m1"):
+        return self.ledger("flaky", fake.GROUP, model, "a", "b")
+
+    def test_flaky_lists_a_case_with_mixed_runs(self):
+        self.record_runs("m1", "a", (False, None))
+        self.record_runs("m1", "a", (True, None))
+        self.record_runs("m1", "a", (True, None))
+
+        have = self.flaky()
+
+        self.assertEqual(["a", "1", "3"], have)
+
+    def test_flaky_skips_a_case_that_always_passed_or_failed(self):
+        self.record_runs("m1", "a", (True, None), (True, None))
+        self.record_runs("m1", "b", (False, None))
+
+        have = self.flaky()
+
+        self.assertEqual([], have)
+
+    def test_flaky_history_resets_when_the_key_changes(self):
+        self.record_runs("m1", "a", (False, None))
+        fake.write(self.skill_file(fake.SKILL, "SKILL.md"),
+                   "---\nname: s1\ndescription: Changed.\n---\n\n# s1\n")
+        self.record_runs("m1", "a", (True, None))
+
+        have = self.flaky()
+
+        self.assertEqual([], have)
+
+    def test_flaky_history_keeps_the_last_ten_runs(self):
+        self.record_runs("m1", "a", (False, None))
+        for _ in range(10):
+            self.record_runs("m1", "a", (True, None))
+
+        have = self.flaky()
+
+        self.assertEqual([], have)
+
+    def test_flaky_ignores_runs_cut_by_the_usage_limit(self):
+        self.record_runs("m1", "a", (True, None))
+        self.record_runs("m1", "a", (False, "usage limit reached"))
+
+        have = self.flaky()
+
+        self.assertEqual([], have)
+
     def test_record_stores_a_pass_only_when_every_run_passed(self):
         have = self.record_runs("m1", "a", (False, None), (True, None))
 

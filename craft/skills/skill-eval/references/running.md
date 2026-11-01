@@ -15,7 +15,10 @@ quality. Tiers and their tools: [tiers.md](tiers.md); mistakes past runs paid fo
    most two rounds per skill; list the rest for the user.
 4. Agent-run cases only for what the diff reaches, on the default model:
    `scripts/eval-changed.sh --audit --model default -j 4 --max-usd <cap>`. The
-   pass ledger (`tmp/eval-ledger.json`) skips cases passed on unchanged inputs.
+   pass ledger (`tmp/eval-ledger.json`) skips cases passed on unchanged inputs,
+   and the listing names a case whose last ten runs there both passed and
+   failed (`flaky: <case> (1 of 3 failed)`), even when it will not run. That
+   mark is history only: step 5 labels a repeat FAIL by the base run.
    Its key holds the model ID but not the CLI version. In the first round
    after a CLI upgrade, add `--fresh` to both of the round's commands: the
    listing whose case list and estimate you ask about, and the `--audit`

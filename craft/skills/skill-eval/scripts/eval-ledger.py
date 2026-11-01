@@ -28,6 +28,9 @@ need not run again.
         print the dollar estimate for running the cases on <model>: each
         case's last stored cost there, else the Opus band (fan-out cases
         their own band)
+  eval-ledger.py flaky <group> <model> <case>...
+        print `<case> <failed> <runs>` for each case whose last runs at its
+        current key on <model> (up to ten) both passed and failed
   eval-ledger.py model <word> [--cached]
         print the model ID that `--model <word>` resolves to (`default`: the
         CLI's default model) from one short `claude -p` probe, and cache it in
@@ -37,7 +40,9 @@ need not run again.
 <model> is a resolved model ID, so a pass is a pass on that model. Each
 entry is `<group>/<case>@<model>`: {"key": <key of the last pass, or null
 once a later run did not pass>, "costUsd": <cost of one run, the last time>,
-"caseKey": <hash of the case dir at the last verdict>}.
+"caseKey": <hash of the case dir at the last verdict>, "runs": [<true per
+passed run, false per failed one, the last ten at "runsKey">], "runsKey":
+<the key those runs were recorded at>}.
 """
 import hashlib
 import json
@@ -142,6 +147,7 @@ def files_under(top, skip=()):
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+HISTORY = 10  # runs kept per entry for the flaky count
 SHELL_RUNNER = ("eval-shell.mjs", "eval-notice.mjs", "eval-guard.mjs")
 LINK = re.compile(r"\.\./(?:\.\./)?([a-z0-9-]+)/([A-Za-z0-9_./-]*[A-Za-z0-9_])")
 
@@ -302,6 +308,15 @@ def main():
     if cmd == "estimate":
         print(estimate(led, group, model, sys.argv[4:]))
         return 0
+    if cmd == "flaky":
+        for c in sys.argv[4:]:
+            e = led.get(slot(group, c, model))
+            if not isinstance(e, dict) or e.get("runsKey") != key(group, c, model):
+                continue
+            runs = e.get("runs") or []
+            if any(runs) and not all(runs):
+                print(c, runs.count(False), len(runs))
+        return 0
     with open(sys.argv[4]) as f:
         d = json.load(f)
     limit = 0
@@ -317,10 +332,14 @@ def main():
             # A verdict on another model says nothing about this key.
             print(f"MODEL {name} {other}")
             continue
+        k = key(group, name, model)
+        prev = led.get(slot(group, name, model))
+        hist = prev.get("runs") or [] if isinstance(prev, dict) and prev.get("runsKey") == k else []
+        hist = (hist + [bool(r.get("passed") and not r.get("error")) for r in runs])[-HISTORY:]
         entry = {"key": None, "costUsd": sum(r.get("costUsd") or 0 for r in runs) / len(runs),
-                 "caseKey": case_key(group, name)}
+                 "caseKey": case_key(group, name), "runs": hist, "runsKey": k}
         if all(r.get("passed") and not r.get("error") for r in runs):
-            entry["key"] = key(group, name, model)
+            entry["key"] = k
         else:
             # A finished run that did not pass is a verdict on this key: the
             # null key makes the next run take the case again.

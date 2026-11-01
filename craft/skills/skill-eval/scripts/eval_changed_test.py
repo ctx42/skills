@@ -381,6 +381,18 @@ class EvalChangedTest(unittest.TestCase):
         self.assertIn("STALL: no write for 2s", out)
         self.assertEqual(set(), self.ledger())
 
+    def test_listing_names_flaky_cases(self):
+        self.repo(("a", False), ("b", False), plan={"a": {"result": "fail"}})
+        self.run_changed("--all", fake.GROUP)
+        with open(self.plan, "w") as f:
+            json.dump({}, f)
+        self.run_changed("--all", fake.GROUP)
+
+        code, out = self.run_changed("--all", fake.GROUP, "--dry-run")
+
+        self.assertEqual(0, code, out)
+        self.assertIn("   flaky: a (1 of 2 failed)\n", out)
+
     def commit(self):
         git = ["git", "-C", self.root, "-c", "user.name=t", "-c", "user.email=t@example.com"]
         subprocess.run(git + ["add", "-A"], check=True)

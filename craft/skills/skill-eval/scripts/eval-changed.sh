@@ -64,6 +64,9 @@
 # through eval-shell.mjs (plain `claude -p`, no OS sandbox), the rest
 # through `claude plugin eval`.
 #
+# Each group line is followed by `flaky: <case> (<f> of <n> failed), ...` when
+# a selected case's last runs at its current inputs both passed and failed.
+#
 # A run whose results dir and every claude-eval-* workspace have had no write
 # for $EVAL_STALL_SECONDS (default 600) is stopped: the process tree goes to
 # <results>/stall-ps.txt, the runner is killed, and the run exits 1.
@@ -372,6 +375,13 @@ for g in $groups; do
     # measured on 2026-10-04: $0.25-0.80 a case, $3-9 a fan-out case.
     est="$(python3 "$HERE/eval-ledger.py" estimate "$g" "$model_name" "${priced[@]}")"
     echo "== $g: $total case(s), $((total - ${#todo[@]})) PASS in the ledger, $n to run, $est; model ${model_name:-unresolved}"
+    # A case whose last runs at its current inputs both passed and failed is
+    # flaky: name it even when its last run passed and it will not run.
+    if [ -n "$model_name" ] && [ "$total" -gt 0 ]; then
+        flaky="$(python3 "$HERE/eval-ledger.py" flaky "$g" "$model_name" "${sel_cases[@]}" |
+            awk '{printf "%s%s (%s of %s failed)", (NR > 1 ? ", " : ""), $1, $2, $3}')"
+        [ -n "$flaky" ] && echo "   flaky: $flaky"
+    fi
     [ "$dry" = 1 ] && { [ "$n" -gt 0 ] && printf '   %s\n' "${listing[@]}"; continue; }
     chunk=$((jobs * 2))
     done_n=0
