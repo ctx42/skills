@@ -5,52 +5,29 @@
       "id": 1,
       "name": "adds-srd-keys-to-a-starter-config",
       "expected_behavior": [
-        "Shows the whole proposed front matter and asks before writing anything",
-        "The proposal names `wiki/srd` for `initiatives` and the guidelines document for `srd-standard`",
-        "Writes `kb: kb`, `initiatives: wiki/srd`, `srd-standard: wiki/doc/process/srd-guidelines.md`, `glossary: wiki/doc/glossary`, `gaps: gap`, and `srd-work: srd-work` into `project-config.md`",
-        "Writes `precedence` as `kb` then `wiki/doc`, leaving out `wiki/srd`",
-        "Keeps `mcp-server: docs`, `mcp-port: 7791`, `watch: true`, and the body as found, and adds `kb` to `sources`",
-        "Creates `kb/.gitkeep`, `gap/.gitkeep`, and `srd-work/.gitkeep`",
-        "Appends the key reference (`## Front matter keys`, copied verbatim) after the kept body"
+        "Shows the proposed keys and asks before writing anything",
+        "The proposal names the guidelines document for `srd-standard`",
+        "Writes `kb: kb`, `srd-standard: wiki/doc/process/srd-guidelines.md`, and `srd-work: srd-work` into `project-config.md`",
+        "Keeps every key the docket plugin wrote, and the body, as found; never adds `kb` to `sources`",
+        "Reports that `kb` must be added to `sources` in the docket plugin's settings",
+        "Creates `kb/.gitkeep` and `srd-work/.gitkeep`, and no `gap/.gitkeep`",
+        "Appends the key reference (`## SRD skill keys`, copied verbatim) after the kept body"
       ]
     },
     {
       "id": 2,
-      "name": "writes-a-whole-file-without-one",
+      "name": "stops-without-a-config",
       "expected_behavior": [
-        "Writes `project-config.md` with `mcp-server: docs`, `mcp-port: 7777`, and `watch: true`",
-        "Writes `sources` as `docs` and `kb`, and `kb: kb`",
-        "Writes `initiatives: docs/initiatives`, `srd-standard: docs/standards/srd-standard.md`, and `glossary: docs/glossary.md`",
-        "Creates `gap/.gitkeep` and `srd-work/.gitkeep`, and no `kb/.gitkeep`",
-        "Gives the new file the body `# Project configuration` followed by the key reference"
+        "Writes and edits nothing",
+        "Says the docket plugin writes `project-config.md` and to turn on its MCP server first"
       ]
     },
     {
       "id": 3,
       "name": "stops-when-already-set-up",
       "expected_behavior": [
-        "Says the folder is already set up, in one or two lines",
+        "Says the vault is ready for SRD work, in one or two lines",
         "Writes nothing"
-      ]
-    },
-    {
-      "id": 4,
-      "name": "check-describes-a-sound-setup",
-      "expected_behavior": [
-        "Writes nothing",
-        "Calls `list_docs` and `list_gaps`",
-        "Gives the trust order with `kb` first, then `docs/api`",
-        "Counts 5 documents in `docs` and 1 SRD",
-        "Ends with no problems"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "check-flags-misplaced-folders",
-      "expected_behavior": [
-        "Writes nothing",
-        "Names `srd-work` in `sources` as a problem, with the fix to remove it",
-        "Names `kb` missing from `sources` as a problem, with the fix to add it"
       ]
     }
   ]

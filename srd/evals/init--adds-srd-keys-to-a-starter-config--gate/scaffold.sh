@@ -7,6 +7,11 @@ sources:
   - wiki
 watch: true
 mcp-port: 7791
+initiatives: wiki/srd
+glossary: wiki/doc/glossary
+gaps: gap
+precedence:
+  - wiki/doc
 ---
 
 # Project configuration
@@ -53,3 +58,4 @@ cat > wiki/srd/slot-swap/slot-swap-srd.md <<'EOF_F4'
 
 How a customer moves a mission to another launch slot.
 EOF_F4
+mkdir -p gap

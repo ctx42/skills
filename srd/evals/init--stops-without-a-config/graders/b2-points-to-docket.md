@@ -1,5 +1,6 @@
 ---
 type: regex
 target: last_message
+flags: "i"
 ---
-initiatives: wiki/srd\b
+docket

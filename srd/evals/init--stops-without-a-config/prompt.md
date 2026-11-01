@@ -1,5 +1,5 @@
 ---
-tags: [case:init--writes-a-whole-file-without-one, skill:init, sec:init:usage, sec:init:boundaries, sec:init:sources-of-truth, sec:init:run, sec:init:finding-values, sec:init:key-reference, sec:init:report, sec:init:self-learning, ref:create/project-config]
+tags: [case:init--stops-without-a-config, skill:init, sec:init:usage, sec:init:boundaries, sec:init:sources-of-truth, sec:init:run, sec:init:finding-values, sec:init:key-reference, sec:init:report, sec:init:self-learning, ref:create/project-config]
 runs: 1
 max_turns: 30
 timeout_seconds: 300
