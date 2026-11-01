@@ -85,9 +85,12 @@ source of truth.
 
 ### srd
 
-- `init` — sets up a folder for the srd skills: proposes the
-  `project-config.md` keys it lacks, writes them after one confirmation, and
-  creates their folders; the one srd skill that skips the gate.
+- `init` — adds the keys only the srd skills read (`kb`, `srd-standard`,
+  `srd-work`) to the `project-config.md` the docket plugin wrote, after one
+  confirmation, and creates their folders; it never writes the plugin's keys.
+- `check` — read-only check of a vault's SRD setup: every key the gate needs,
+  the doc server's connection, and what it indexes, each problem with its fix.
+  `init` and `check` are the srd skills that skip the gate.
 - `create` — interviews, drafts, and self-checks a new SRD; owns the shared
   SRD references, including the `project-config.md` gate every srd skill runs
   first.
