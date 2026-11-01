@@ -83,8 +83,8 @@ A span of days for which one assembly bay is reserved for one build order.
   order it holds.
 - `CAL-3` Every refused Bay Booking MUST be reported to the bay scheduler
   together with the Bay Booking it overlaps.
-- `CAL-4` A Bay Booking MUST be removed from the Bay Map when its build order
-  is closed.
+- `CAL-4` A Bay Booking MUST be removed from the Bay Map when it is
+  cancelled.
 - `CAL-5` The system MUST let a bay scheduler cancel a Bay Booking.
 
 ---
