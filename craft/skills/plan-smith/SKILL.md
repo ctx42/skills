@@ -173,7 +173,9 @@ call.
 5. Write the file to the format above: summary table (every item starts `N`,
    unchecked) then one section per item, closing item last. Give each item
    acceptance criteria — what proves it done — so `Y` is verifiable, not
-   asserted. Path: the name the user gives, else `tmp/<slug>-plan.md` relative
+   asserted. From a `grill-me` summary, an item's `Done when:` copies that
+   branch's verification word for word; when a branch splits into several
+   items, each copies the part of it that item covers. Path: the name the user gives, else `tmp/<slug>-plan.md` relative
    to the working directory; no need to ask, the report names it.
    If something is already there, say so and ask before overwriting.
 

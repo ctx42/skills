@@ -95,6 +95,13 @@
       "must": [
         "a commit or doc states it in words\\)\\s+— a commit that only replaces the code is no such record"
       ]
+    },
+    {
+      "id": "verification-verbatim",
+      "rule": "A grill-me branch's verification becomes its item's Done when, word for word",
+      "must": [
+        "copies that branch's verification word for word"
+      ]
     }
   ]
 }
