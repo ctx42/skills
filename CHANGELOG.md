@@ -1,3 +1,58 @@
+## v0.29.0 (Sun, 01 Nov 2026 16:29:58 UTC)
+- feat: ctx42 skill suite.
+- test(skill-eval): add tests for the pass ledger and eval-changed.sh.
+- feat(skill-eval)!: run agent cases on the CLI default model.
+- fix(skill-eval): drop a stored pass when its case stops passing.
+- fix(skill-eval): record nothing from a chunk stopped at the ceiling.
+- feat(skill-eval): run fan-out cases after every other case.
+- feat(skill-eval): name every case a --max-usd stop leaves unrun.
+- feat(skill-eval): record the model each shell case ran on.
+- refactor(skill-eval): record ledger results before deleting traces.
+- feat(skill-eval): key the pass ledger by the resolved model ID.
+- feat(skill-eval): keep one ledger entry per case and model, with cost.
+- feat(skill-eval): hash only what a case uses, plus linked siblings.
+- docs(skill-eval): re-run agent cases with --fresh after a CLI upgrade.
+- fix(evals): give three cases graders that can fail.
+- feat(skill-eval): lint graders that cannot fail.
+- feat(skill-eval): run a changed case twice before it counts.
+- docs(skill-eval): note that the web group has no agent-run cases.
+- docs(review): say the skill adds, changes, and removes Go style rules.
+- docs(skill-eval): say what to do when a case fails its re-run.
+- feat(skill-eval): keep shell-run cases out of the real home.
+- docs(skill-eval): name the real-home guard in the eval tiers.
+- fix(skill-eval): leave stray session files out of the ledger key.
+- fix(skill-eval): regrade the last result of a trace.
+- fix(evals): fail questions b5 only on a question after the answer.
+- fix(evals): accept other wordings in two go doc fan-out graders.
+- docs(skill-eval): label a repeat FAIL by the user's base run.
+- fix(evals): let grill-me b5 find the owner in the open item's section.
+- fix(evals): let srd create b3 see the timely question in thinking.
+- fix(skill-enhance): drop a project-data rule even when the skill points at it.
+- fix(skill-fold-lessons): leave an unnamed user store unopened.
+- chore: ignore Python bytecode folders.
+- docs(skill-eval): say which instructions reach an eval run.
+- fix(evals): let a plan-smith leave-out name the row boundary.
+- fix(doc): always name the packages packages= left out.
+- fix(skill-enhance): check the project-data rule before rewording.
+- fix(backlog): put sweep warnings on their own lines.
+- fix(edit): treat a missing keyword notice as an errata fix.
+- fix(create): stop the gate on an absolute srd-work.
+- fix(plan-smith): copy the counts line literally.
+- fix(doc): report the merge check after a fan-out.
+- fix(doc): count reverted and narrowed edits apart in the merge check.
+- fix(cm): stop the commit when a message line is too long.
+- docs(create): add a Contents list to the project-config reference.
+- fix(evals): keep a platform fact out of the review no-drafts fixture.
+- fix(evals): let srd create b1 accept "the corpus has nothing on".
+- fix(grill-me): recount the branches after one is added.
+- style(edit): wrap the argument hint at 80 columns.
+- feat(skill-eval): load private run settings from tmp/eval.env.
+- feat(skill-eval): stop an eval run that has stalled.
+- feat(skill-eval): name flaky cases from the ledger history.
+- docs(skill-eval): keep a skipped flaky case out of the run list.
+- fix(evals): let the plan-smith handoff graders survive a line wrap.
+- fix(plan-smith): carry a grill-me verification word for word.
+
 ## v0.28.0 (Tue, 27 Oct 2026 22:08:36 UTC)
 - docs(contributing): add rules for folding lessons into skills.
 - refactor(craft): fold recorded lessons into the skills.
