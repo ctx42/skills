@@ -289,6 +289,14 @@
       ]
     },
     {
+      "id": "precedence-list-unused",
+      "rule": "Checking that keys are set is allowed; the precedence list is not used",
+      "file": "references/project-config.md",
+      "must": [
+        "Beyond checking the keys are set, never read the gap\\s+folder or use the `precedence` list directly"
+      ]
+    },
+    {
       "id": "kb-in-sources",
       "rule": "kb must be one of the sources",
       "file": "references/project-config.md",

@@ -48,9 +48,9 @@ folder `wiki/notes` lies inside the source `wiki`), or working files are
 indexed as documents. Every path is relative to the project root; an
 absolute `srd-work`, or one leading out of it (`../`), stops the gate like any
 other path key; the gate checks only `srd-work`'s, since the server refuses
-such a value in every key it reads and does not start. Never read the gap
-folder or the `precedence` list directly — use the gap tools and the `rank` on
-results.
+such a value in every key it reads and does not start. Beyond checking the
+keys are set, never read the gap folder or use the `precedence` list
+directly — use the gap tools and the `rank` on results.
 
 ## 2. Check the server
 
