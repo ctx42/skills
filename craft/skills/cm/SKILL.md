@@ -161,12 +161,14 @@ Commit control:
 3. Check each message, every one of an `apply` series and not only the first,
    before presenting it and before its commit runs: summary ≤ 72 chars, body
    wrapped at 72 (measured, not eyeballed: counted in characters, not bytes, by
-   a command run before the commit command, the body fed to it inline by
-   `printf`, never a second heredoc), every sentence parsing on one read — no
-   dangling opener, no clause stranded on a preposition — and passing Describe
-   changes only, its numbers and any contrast with a design the diff does not
-   contain ("instead of …") included; no process jargon, no trailer beyond the
-   two allowed. Fix and re-check.
+   a check that exits non-zero on any line over 72, chained with `&&` ahead of
+   the commit in the same command — before the heredoc opener — so a long line
+   stops the commit; the body fed to it inline by `printf`, never a second
+   heredoc), every sentence parsing on one read — no dangling opener, no clause
+   stranded on a preposition — and passing Describe changes only,
+   its numbers and any contrast with a design the diff does not contain
+   ("instead of …") included; no process jargon, no trailer beyond the two
+   allowed. Fix and re-check.
 4. Present it per Output; commit only under `apply` or `asis`.
 
 ## Describe changes only
