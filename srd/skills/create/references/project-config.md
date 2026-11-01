@@ -5,6 +5,14 @@ probing anything, or asking the user anything. A delegate invoked by an srd
 skill that passed the gate this session reuses that result. `srd:init` alone
 skips it: it writes the file the gate reads.
 
+## Contents
+
+- 1. Find the config
+- 2. Check the server
+- 3. Stop on any failure
+- 4. Use what it names
+- 5. Working files
+
 ## 1. Find the config
 
 1. Walk up from the SRD's directory (the working directory when no SRD is
