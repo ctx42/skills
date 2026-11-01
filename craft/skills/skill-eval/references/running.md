@@ -18,7 +18,9 @@ quality. Tiers and their tools: [tiers.md](tiers.md); mistakes past runs paid fo
    pass ledger (`tmp/eval-ledger.json`) skips cases passed on unchanged inputs,
    and the listing names a case whose last ten runs there both passed and
    failed (`flaky: <case> (1 of 3 failed)`), even when it will not run. That
-   mark is history only: step 5 labels a repeat FAIL by the base run.
+   mark is history only: step 5 labels a repeat FAIL by the base run, and a
+   flaky case the ledger skips (its last run passed) stays out of the stated
+   case list and cost.
    Its key holds the model ID but not the CLI version. In the first round
    after a CLI upgrade, add `--fresh` to both of the round's commands: the
    listing whose case list and estimate you ask about, and the `--audit`
