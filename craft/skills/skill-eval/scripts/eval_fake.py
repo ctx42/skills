@@ -7,7 +7,8 @@ real model or needs a network.
 The fake `claude` answers `claude plugin eval` with the result JSON
 eval-changed.sh reads, and `claude -p` (as eval-shell.mjs calls it) with a
 stream-json trace. Each case's outcome comes from a JSON plan file named by
-$FAKE_CLAUDE_PLAN: {"<case>": {"result": "pass"|"fail"|"limit", "cost": N}},
+$FAKE_CLAUDE_PLAN: {"<case>": {"result": "pass"|"fail"|"limit"|"hang", "cost": N}}
+("hang" sleeps two minutes, writing nothing),
 or "results": [...] for one outcome per run (the last repeats); a
 `claude -p` case with "write": "<path>" first plays a Write call to that path,
 refused when "write_error" is true, and one with "bash": "<command>" plays a
@@ -33,7 +34,7 @@ GROUP = "grp"
 SKILL = "s1"
 
 FAKE_CLAUDE = r'''#!/usr/bin/env python3
-import json, os, sys, tempfile
+import json, os, sys, tempfile, time
 
 args = sys.argv[1:]
 with open(os.environ["FAKE_CLAUDE_LOG"], "a") as f:
@@ -59,6 +60,8 @@ def outcome(case, run=0):
 
 if args[:2] == ["plugin", "eval"]:
     cases = [args[i + 1].split(":", 1)[1] for i, a in enumerate(args) if a == "--tag"]
+    if any(outcome(c)[0] == "hang" for c in cases):
+        time.sleep(120)
     model = os.environ.get("FAKE_CLAUDE_RUN_MODEL") or used_model()
     out = args[args.index("--json") + 1]
     cap = float(args[args.index("--max-cost-usd") + 1]) if "--max-cost-usd" in args else None
@@ -101,6 +104,8 @@ if "-p" in args:
     with open(os.environ["FAKE_CLAUDE_LOG"]) as f:
         seen = sum(1 for line in f if case and f"CASE:{case}" in line)
     kind, cost = outcome(case, max(seen - 1, 0))
+    if kind == "hang":
+        time.sleep(120)
     model = used_model()
     if case and os.environ.get("FAKE_CLAUDE_RUN_MODEL"):
         model = os.environ["FAKE_CLAUDE_RUN_MODEL"]

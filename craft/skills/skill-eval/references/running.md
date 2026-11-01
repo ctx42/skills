@@ -32,9 +32,12 @@ quality. Tiers and their tools: [tiers.md](tiers.md); mistakes past runs paid fo
 
 - Cap memory: `systemd-run --user --scope -q -p MemoryMax=8G -p
   MemorySwapMax=2G -- <cmd>` (Linux).
-- Watch for stalls: when the log and every `/tmp/claude-eval-*` workspace have
-  had no write for 10 minutes, dump `ps -ef --forest` to a file and kill the
-  run's process group.
+- Stalls: `eval-changed.sh` stops a run whose results dir and every
+  `claude-eval-*` workspace had no write for 10 minutes
+  (`EVAL_STALL_SECONDS`), saving the process tree to
+  `<results>/stall-ps.txt`. Give any other run that can last over 10
+  minutes (a blind round, a long test suite) the same watchdog; the cheap
+  tiers need none.
 - Keep logs in the repo's git-ignored `tmp/`; print only fail and summary
   lines.
 - A `--keep` workspace holds a read-only Go module cache: `chmod -R u+w`

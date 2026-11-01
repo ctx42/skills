@@ -361,6 +361,26 @@ class EvalChangedTest(unittest.TestCase):
             have = [json.loads(line)["EVAL_STRIP_NOTICE"] for line in f]
         self.assertIn("Policy notice", have)
 
+    def test_stalled_plain_chunk_is_stopped(self):
+        self.repo(("a", False), plan={"a": {"result": "hang"}})
+        self.env["EVAL_STALL_SECONDS"] = "2"
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertNotEqual(0, code, out)
+        self.assertIn("STALL: no write for 2s", out)
+        self.assertEqual(1, len(glob.glob(os.path.join(self.root, "tmp", "eval-changed", "*", "stall-ps.txt"))))
+
+    def test_stalled_shell_chunk_is_stopped(self):
+        self.repo(("a", True), ("b", True), plan={"a": {"result": "hang"}})
+        self.env["EVAL_STALL_SECONDS"] = "2"
+
+        code, out = self.run_changed("--all", fake.GROUP, "-j", "1")
+
+        self.assertNotEqual(0, code, out)
+        self.assertIn("STALL: no write for 2s", out)
+        self.assertEqual(set(), self.ledger())
+
     def commit(self):
         git = ["git", "-C", self.root, "-c", "user.name=t", "-c", "user.email=t@example.com"]
         subprocess.run(git + ["add", "-A"], check=True)

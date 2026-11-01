@@ -64,6 +64,10 @@
 # through eval-shell.mjs (plain `claude -p`, no OS sandbox), the rest
 # through `claude plugin eval`.
 #
+# A run whose results dir and every claude-eval-* workspace have had no write
+# for $EVAL_STALL_SECONDS (default 600) is stopped: the process tree goes to
+# <results>/stall-ps.txt, the runner is killed, and the run exits 1.
+#
 # Private settings of this clone go in the git-ignored tmp/eval.env, sourced
 # at start: e.g. EVAL_STRIP_NOTICE='<regex>' for an account notice.
 #
@@ -86,6 +90,37 @@ if [ -f tmp/eval.env ]; then
     . tmp/eval.env
     set +a
 fi
+
+# watched CMD...: run CMD in its own process group and wait for it. When the
+# run's results dir and every claude-eval-* workspace have had no write for
+# $stall_s seconds, save the process tree to $out/stall-ps.txt, kill the
+# group, and return 124.
+stall_s="${EVAL_STALL_SECONDS:-600}"
+watched() {
+    local group=1
+    if command -v setsid >/dev/null; then setsid "$@" & else group=0; "$@" & fi
+    local pid=$! poll=30 target n=0
+    [ "$stall_s" -lt 60 ] && poll=1
+    target="$pid"
+    [ "$group" = 1 ] && target="-$pid"
+    # Check for exit every second, for a stall every $poll seconds. A finished
+    # child stays a zombie that `kill -0` still reaches; the job table does not.
+    while jobs -pr | grep -qx "$pid"; do
+        sleep 1
+        n=$((n + 1))
+        jobs -pr | grep -qx "$pid" || break
+        [ $((n % poll)) = 0 ] || continue
+        if ! python3 "$HERE/eval-recent.py" "$stall_s" "$out" "${TMPDIR:-/tmp}"; then
+            { ps -ef --forest 2>/dev/null || ps -ef; } >"$out/stall-ps.txt" 2>&1 || true
+            kill -TERM -- "$target" 2>/dev/null || true
+            sleep 2
+            kill -KILL -- "$target" 2>/dev/null || true
+            wait "$pid" 2>/dev/null || true
+            return 124
+        fi
+    done
+    wait "$pid"
+}
 
 base=""
 jobs=2
@@ -366,10 +401,10 @@ for g in $groups; do
             echo "   $kind chunk $((k / chunk + 1))/$(((nb + chunk - 1) / chunk)): ${part[*]} ($(date +%H:%M))"
             set +e
             if [[ "$kind" == shell* ]]; then
-                node "$HERE/eval-shell.mjs" "$g" "${part[@]}" --model "$model_name" --runs "$runs" \
+                watched node "$HERE/eval-shell.mjs" "$g" "${part[@]}" --model "$model_name" --runs "$runs" \
                     -j "$jobs" --keep "${cap[@]}" --json "$json" >>"$out/$g.out" 2>>"$out/$g.err"
             else
-                claude plugin eval "./$g" "${sel[@]}" --runs "$runs" --ablation none --scaffold \
+                watched claude plugin eval "./$g" "${sel[@]}" --runs "$runs" --ablation none --scaffold \
                     --trust-plugin --no-publish -j "$jobs" --keep-temp "${model[@]}" \
                     "${cap[@]}" \
                     --allow-tools Write Edit LSP \
@@ -377,6 +412,10 @@ for g in $groups; do
             fi
             r=$?
             set -e
+            if [ "$r" = 124 ]; then
+                echo "   STALL: no write for ${stall_s}s; killed the run (process tree: $out/stall-ps.txt)"
+                rc=1; unset -n batch; break 2
+            fi
             [ -s "$json" ] && spent=$(python3 -c "import json; print(${spent:-0} + json.load(open('$json')).get('costUsd', 0))")
             [ "$r" = 2 ] && echo "   stopped at the --max-usd $max_usd ceiling (partial results)"
             if [ ! -s "$json" ]; then
