@@ -348,6 +348,19 @@ class EvalChangedTest(unittest.TestCase):
         i = have.index("--disallowedTools")
         self.assertEqual(f"Edit(/{home}/**)", have[i + 1])
 
+    def test_tmp_eval_env_reaches_the_shell_runner(self):
+        self.repo(("a", True))
+        fake.write(os.path.join(self.root, "tmp", "eval.env"), "EVAL_STRIP_NOTICE='Policy notice'\n")
+        envlog = os.path.join(self.tmp.name, "env.log")
+        self.env["FAKE_CLAUDE_ENV_LOG"] = envlog
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        with open(envlog) as f:
+            have = [json.loads(line)["EVAL_STRIP_NOTICE"] for line in f]
+        self.assertIn("Policy notice", have)
+
     def commit(self):
         git = ["git", "-C", self.root, "-c", "user.name=t", "-c", "user.email=t@example.com"]
         subprocess.run(git + ["add", "-A"], check=True)

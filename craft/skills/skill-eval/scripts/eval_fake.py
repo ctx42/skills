@@ -11,7 +11,8 @@ $FAKE_CLAUDE_PLAN: {"<case>": {"result": "pass"|"fail"|"limit", "cost": N}},
 or "results": [...] for one outcome per run (the last repeats); a
 `claude -p` case with "write": "<path>" first plays a Write call to that path,
 refused when "write_error" is true, and one with "bash": "<command>" plays a
-Bash call that succeeds.
+Bash call that succeeds. With $FAKE_CLAUDE_ENV_LOG set, every call also
+appends the $EVAL_STRIP_NOTICE it saw to that file, one JSON object per line.
 Every run reports its --model, else $FAKE_CLAUDE_DEFAULT_MODEL (default
 claude-default-1), as the costliest model of its modelUsage; a case run
 reports $FAKE_CLAUDE_RUN_MODEL instead when that is set (a model fallback).
@@ -37,6 +38,9 @@ import json, os, sys, tempfile
 args = sys.argv[1:]
 with open(os.environ["FAKE_CLAUDE_LOG"], "a") as f:
     f.write(json.dumps(args) + "\n")
+if os.environ.get("FAKE_CLAUDE_ENV_LOG"):
+    with open(os.environ["FAKE_CLAUDE_ENV_LOG"], "a") as f:
+        f.write(json.dumps({"EVAL_STRIP_NOTICE": os.environ.get("EVAL_STRIP_NOTICE")}) + "\n")
 plan_path = os.environ.get("FAKE_CLAUDE_PLAN", "")
 plan = json.load(open(plan_path)) if plan_path and os.path.exists(plan_path) else {}
 

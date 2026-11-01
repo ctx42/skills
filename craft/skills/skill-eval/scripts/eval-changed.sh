@@ -64,6 +64,9 @@
 # through eval-shell.mjs (plain `claude -p`, no OS sandbox), the rest
 # through `claude plugin eval`.
 #
+# Private settings of this clone go in the git-ignored tmp/eval.env, sourced
+# at start: e.g. EVAL_STRIP_NOTICE='<regex>' for an account notice.
+#
 # Exit: 0 all selected cases pass, 1 a case failed or nothing could run,
 # 3 the usage limit stopped the run.
 
@@ -75,6 +78,14 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(realpath "${SKILL_EVAL_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}")"
 export SKILL_EVAL_ROOT="$ROOT"
 cd "$ROOT"
+# Private run settings of this clone (e.g. EVAL_STRIP_NOTICE) live in the
+# git-ignored tmp/eval.env; every variable it sets reaches both runners.
+if [ -f tmp/eval.env ]; then
+    set -a
+    # shellcheck disable=SC1091
+    . tmp/eval.env
+    set +a
+fi
 
 base=""
 jobs=2

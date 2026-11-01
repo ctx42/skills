@@ -81,8 +81,9 @@ append_system_prompt: |
   on stock Ubuntu. It grades `regex`, `tool_used`, `tool_order` and
   `file_exists`; give a `needs-shell` case no `llm` or `mock_calls` grader.
   When your account makes every reply end with a fixed notice paragraph, set
-  `EVAL_STRIP_NOTICE` to a regex for it: this runner drops a last paragraph
-  that matches before grading. `claude plugin eval` cases keep the notice.
+  `EVAL_STRIP_NOTICE` to a regex for it, in the git-ignored `tmp/eval.env`
+  that `eval-changed.sh` sources: this runner drops a last paragraph that
+  matches before grading. `claude plugin eval` cases keep the notice.
 - Interactive skills: `append_system_prompt` carries the persona's replies
   for the bullets graded after them —
   "Automated eval: the user is absent. Whenever the skill would stop and wait
