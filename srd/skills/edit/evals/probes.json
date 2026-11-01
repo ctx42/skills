@@ -158,18 +158,6 @@
       "class": "redundant"
     },
     {
-      "id": "decision-log-beside-without-srd-work",
-      "rule": "working-file-path",
-      "context": [
-        "SKILL.md",
-        "../create/references/project-config.md"
-      ],
-      "prompt": "Situation: project-config.md has no `srd-work` key. During `/srd:edit specs/login.md` the user confirms the first change and you apply it.\n\nQuestion: at which path do you log it? Answer on the first line with the path only, then one sentence why.",
-      "pass": "^\\W*specs/login\\.decisions\\.md\\b",
-      "fail": "^\\W*(work/|specs/login\\.md\\.decisions)",
-      "class": "redundant"
-    },
-    {
       "id": "decision-log-beside-with-srd-work-none",
       "rule": "working-file-path",
       "context": [

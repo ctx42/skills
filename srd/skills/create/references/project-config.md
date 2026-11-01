@@ -2,8 +2,15 @@
 
 Every srd skill runs this gate first, in every mode, before reading the SRD,
 probing anything, or asking the user anything. A delegate invoked by an srd
-skill that passed the gate this session reuses that result. `srd:init` alone
-skips it: it writes the file the gate reads.
+skill that passed the gate this session reuses that result. `srd:init` and
+`srd:check` alone skip it: one writes keys the gate reads, the other reports
+every problem the gate would stop on.
+
+The docket plugin owns `project-config.md` at the vault root, the doc server
+it runs, and `.mcp.json`; it refuses to start the server on a key the server
+cannot use. `srd:init` adds the keys only the skills read. The gate trusts a
+running server for the server's own rules and checks only what the server
+cannot know.
 
 ## Contents
 
@@ -21,47 +28,53 @@ skips it: it writes the file the gate reads.
 2. Read the file's YAML front matter; keys are flat. Ignore keys not listed
    below — they belong to the server.
 
-| Key            | Holds                                                                      |
-|----------------|----------------------------------------------------------------------------|
-| `mcp-server`   | server name; its tools are `mcp__<mcp-server>__<tool>`                     |
-| `kb`           | knowledge-base folder; confirmed facts land in `<kb>/_inbox.md`            |
-| `initiatives`  | SRD folder, one folder per SRD; the server gives its documents no `rank`   |
-| `srd-standard` | identity of the SRD standard, read with `get_doc`                          |
-| `glossary`     | shared glossary location; glossary links must point under it               |
-| `gaps`         | server's gap folder, one `gap-NNNN-<slug>.md` per gap; reach it via tools  |
-| `precedence`   | server's trust order: folders, most trusted first; drives each `rank`      |
-| `srd-work`     | folder for SRD working files, or `none` (see "5. Working files")           |
+| Key            | Holds                                                                     | Written by      |
+|----------------|---------------------------------------------------------------------------|-----------------|
+| `mcp-server`   | server name; its tools are `mcp__<mcp-server>__<tool>`                    | docket plugin   |
+| `sources`      | top-level folders the server indexes                                      | docket plugin   |
+| `initiatives`  | SRD folder, one folder per SRD; the server gives its documents no `rank`  | docket plugin   |
+| `glossary`     | shared glossary location; glossary links must point under it              | docket plugin   |
+| `gaps`         | server's gap folder, one `gap-NNNN-<slug>.md` per gap; reach it via tools | docket plugin   |
+| `precedence`   | server's trust order: folders, most trusted first; drives each `rank`     | docket plugin   |
+| `kb`           | knowledge-base folder; confirmed facts land in `<kb>/_inbox.md`           | `srd:init`      |
+| `srd-standard` | identity of the SRD standard, read with `get_doc`                         | `srd:init`      |
+| `srd-work`     | folder for SRD working files, or `none` (see "5. Working files")          | `srd:init`      |
 
-Every srd skill needs the first five: each one delegates to the others. Every
-path is relative to the project root; an absolute path is invalid. `gaps` and
-`precedence` are optional and server-validated: never read the gap folder or
+SRD work needs every key in the table set: each skill delegates to the
+others, and the gap tools, the glossary tool, and `rank` exist only with
+theirs. `kb` must also be one of the `sources`, or its facts cannot be
+searched; a `srd-work` folder must be no source and lie inside none (the
+folder `wiki/notes` lies inside the source `wiki`), or working files are
+indexed as documents. Every path is relative to the project root; an
+absolute `srd-work`, or one leading out of it (`../`), stops the gate like any
+other path key; the gate checks only `srd-work`'s, since the server refuses
+such a value in every key it reads and does not start. Never read the gap folder or
 the `precedence` list directly — use the gap tools and the `rank` on results.
-`srd-work` is optional; the skills read it themselves, but an absolute
-`srd-work` stops the gate like any other path key.
 
 ## 2. Check the server
 
-3. Confirm tools named `mcp__<mcp-server>__*` are in this session.
-4. Call `mcp__<mcp-server>__search` with a one-word query and `k` 1. Any
-   answer passes, hits or none; an error or no answer fails.
+3. Confirm tools named `mcp__<mcp-server>__*` are in this session. Make no
+   MCP call for the gate: a running server has already checked its own keys.
 
 ## 3. Stop on any failure
 
 Stop before any other work and say exactly which check failed, in one line:
 
 - `project-config.md` not found in `<start dir>` or any parent.
-- `project-config.md` has no `<key>` (one of the first five).
-- `<key>` is absolute (`<value>`); paths are relative to the project root.
+- `project-config.md` has no `<key>`.
+- `<kb>` is not in `sources`.
+- `srd-work` `<value>` lies inside source `<source>`.
+- `srd-work` is absolute or leaves the project root (`<value>`).
 - No `mcp__<mcp-server>__*` tools in this session.
-- `mcp__<mcp-server>__search` failed: `<error>`.
 
-For a missing file, or a missing `kb`, `initiatives`, `srd-standard`, or
-`glossary`, add: run `/srd:init` in the project folder. For a missing
-`mcp-server`, add: the server's host writes it, and only into a new file — add
-`mcp-server: docs` (or the name `.mcp.json` registers) yourself, then restart
-the doc server. For the last two add: start the `<mcp-server>` server, run
-`/mcp` to connect, then re-run. Never fall back to a REST call, a local
-checkout, or offline work.
+Then add the fix. A missing file: turn on the docket plugin's MCP server in
+the vault (it writes the file), then run `/srd:init`. A missing `kb`,
+`srd-standard`, or `srd-work`, or a bad `srd-work`: run `/srd:init`. A
+missing `mcp-server`, `sources`, `initiatives`, `glossary`, `gaps`, or
+`precedence`, or `kb` not in `sources`: set it in the docket plugin's
+settings. No tools: turn on the docket plugin's MCP server, run `/mcp` to
+connect, then re-run. `/srd:check` reports every problem at once. Never fall
+back to a REST call, a local checkout, or offline work.
 
 ## 4. Use what it names
 
@@ -104,6 +117,6 @@ this path, and only there:
   file written there.
 - Otherwise, beside the SRD: its path with `.md` replaced. `specs/login.md`
   gives `specs/login.review.md`, never `specs/login.md.review.md`. This covers
-  `srd-work: none`, no `srd-work` key, and an SRD outside `initiatives`.
+  `srd-work: none` and an SRD outside `initiatives`.
 
 Never look for a working file at the other place, and never move one.

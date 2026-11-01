@@ -10,6 +10,10 @@ EVALS = os.path.join(ROOT, "srd/evals")
 
 PROJECT_CONFIG = """---
 mcp-server: srd
+sources:
+  - docs
+  - initiatives
+  - kb
 kb: kb
 initiatives: initiatives
 srd-standard: docs/srd-standard.md
@@ -20,6 +24,8 @@ precedence:
   - docs/api
   - docs/operations
   - docs/glossary
+gaps: gap
+srd-work: none
 ---
 
 # Project configuration (eval fixture)

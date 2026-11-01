@@ -116,10 +116,62 @@
         "SKILL.md",
         "references/project-config.md"
       ],
-      "prompt": "Situation: `/srd:create` starts in a folder whose project-config.md sets `kb`, `initiatives`, `srd-standard`, and `glossary`, but has no `mcp-server` key.\n\nQuestion: the gate stops the run; what does your one-line stop message tell the user to do? Answer on the first line with exactly one of: RUN-SRD-INIT (run `/srd:init`), ADD-KEY-BY-HAND (add the key to the file by hand and restart the server), AGENT-ADDS-KEY (you write the key into the file now). Then one sentence why.",
-      "pass": "^\\W*ADD-KEY-BY-HAND",
+      "prompt": "Situation: `/srd:create` starts in a folder whose project-config.md sets `sources`, `kb`, `initiatives`, `srd-standard`, `glossary`, `gaps`, `precedence`, and `srd-work`, but has no `mcp-server` key.\n\nQuestion: the gate stops the run; what does your one-line stop message tell the user to do? Answer on the first line with exactly one of: RUN-SRD-INIT (run `/srd:init`), SET-IN-DOCKET (set it in the docket plugin's settings), AGENT-ADDS-KEY (you write the key into the file now). Then one sentence why.",
+      "pass": "^\\W*SET-IN-DOCKET",
       "fail": "^\\W*(RUN-SRD-INIT|AGENT-ADDS-KEY)",
-      "class": "load-bearing"
+      "class": "redundant"
+    },
+    {
+      "id": "gate-stops-without-gaps",
+      "rule": "required-set",
+      "context": [
+        "SKILL.md",
+        "references/project-config.md"
+      ],
+      "prompt": "Situation: the user runs `/srd:create` with the seed \"a retry policy for the Booking API\". The `mcp__docs__*` tools are in this session. project-config.md sets `mcp-server: docs`, `sources: [docs, kb]`, `kb: kb`, `initiatives: docs/srd`, `srd-standard: docs/srd-standard.md`, `glossary: docs/glossary`, `precedence: [kb, docs]`, `srd-work: work`; it has no `gaps` key.\n\nQuestion: what is your first output? Answer on the first line with exactly one of: START-INTERVIEW, STOP-AND-REPORT. Then one sentence why.",
+      "pass": "^\\W*STOP-AND-REPORT",
+      "fail": "^\\W*START-INTERVIEW",
+      "bullets": [],
+      "class": "redundant"
+    },
+    {
+      "id": "gate-stops-without-srd-work",
+      "rule": "required-set",
+      "context": [
+        "SKILL.md",
+        "references/project-config.md"
+      ],
+      "prompt": "Situation: the user runs `/srd:create` with the seed \"a retry policy for the Booking API\". The `mcp__docs__*` tools are in this session. project-config.md sets `mcp-server: docs`, `sources: [docs, kb]`, `kb: kb`, `initiatives: docs/srd`, `srd-standard: docs/srd-standard.md`, `glossary: docs/glossary`, `gaps: gap`, `precedence: [kb, docs]`; it has no `srd-work` key.\n\nQuestion: what is your first output? Answer on the first line with exactly one of: START-INTERVIEW, STOP-AND-REPORT. Then one sentence why.",
+      "pass": "^\\W*STOP-AND-REPORT",
+      "fail": "^\\W*START-INTERVIEW",
+      "bullets": [],
+      "class": "redundant"
+    },
+    {
+      "id": "gate-stops-kb-outside-sources",
+      "rule": "kb-in-sources",
+      "context": [
+        "SKILL.md",
+        "references/project-config.md"
+      ],
+      "prompt": "Situation: the user runs `/srd:create` with the seed \"a retry policy for the Booking API\". The `mcp__docs__*` tools are in this session. project-config.md sets `mcp-server: docs`, `sources: [docs]`, `kb: kb`, `initiatives: docs/srd`, `srd-standard: docs/srd-standard.md`, `glossary: docs/glossary`, `gaps: gap`, `precedence: [kb, docs]`, `srd-work: work`.\n\nQuestion: what is your first output? Answer on the first line with exactly one of: START-INTERVIEW, STOP-AND-REPORT. Then one sentence why.",
+      "pass": "^\\W*STOP-AND-REPORT",
+      "fail": "^\\W*START-INTERVIEW",
+      "bullets": [],
+      "class": "redundant"
+    },
+    {
+      "id": "gate-stops-srd-work-in-a-source",
+      "rule": "srd-work-outside-sources",
+      "context": [
+        "SKILL.md",
+        "references/project-config.md"
+      ],
+      "prompt": "Situation: the user runs `/srd:create` with the seed \"a retry policy for the Booking API\". The `mcp__docs__*` tools are in this session. project-config.md sets `mcp-server: docs`, `sources: [docs, kb]`, `kb: kb`, `initiatives: docs/srd`, `srd-standard: docs/srd-standard.md`, `glossary: docs/glossary`, `gaps: gap`, `precedence: [kb, docs]`, `srd-work: docs/work`.\n\nQuestion: what is your first output? Answer on the first line with exactly one of: START-INTERVIEW, STOP-AND-REPORT. Then one sentence why.",
+      "pass": "^\\W*STOP-AND-REPORT",
+      "fail": "^\\W*START-INTERVIEW",
+      "bullets": [],
+      "class": "redundant"
     }
   ]
 }

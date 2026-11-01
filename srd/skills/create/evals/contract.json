@@ -238,19 +238,19 @@
     },
     {
       "id": "gate-routes-missing-server",
-      "rule": "A missing mcp-server is sent to the server's host, not to srd:init",
+      "rule": "A missing server-side key is set in the docket plugin's settings, not by srd:init",
       "file": "references/project-config.md",
       "must": [
-        "For\\ a\\ missing\\ `mcp\\-server`,\\ add:\\ the\\ server's\\ host\\ writes\\ it"
+        "`precedence`, or `kb` not in `sources`: set it in the docket plugin's\\s+settings"
       ]
     },
     {
       "id": "srd-work-none",
-      "rule": "srd-work: none keeps working files beside the SRD, like no key",
+      "rule": "srd-work: none keeps working files beside the SRD",
       "file": "references/project-config.md",
       "must": [
         "With\\ `srd\\-work`\\ naming\\ a\\ folder",
-        "This\\ covers\\ `srd\\-work:\\ none`,\\ no\\ `srd\\-work`\\ key"
+        "This covers\\s+`srd-work: none` and an SRD outside `initiatives`"
       ]
     },
     {
@@ -276,9 +276,41 @@
       "id": "gate-absolute-path",
       "rule": "An absolute srd-work stops the gate like any other path key",
       "must": [
-        "an absolute\\s+`srd-work` stops the gate like any other path key"
+        "an\\s+absolute `srd-work`, or one leading out of it \\(`\\.\\./`\\), stops the gate like any\\s+other path key"
       ],
       "file": "references/project-config.md"
+    },
+    {
+      "id": "required-set",
+      "rule": "SRD work needs every key of the gate's table",
+      "file": "references/project-config.md",
+      "must": [
+        "SRD work needs every key in the table set"
+      ]
+    },
+    {
+      "id": "kb-in-sources",
+      "rule": "kb must be one of the sources",
+      "file": "references/project-config.md",
+      "must": [
+        "`kb` must also be one of the `sources`"
+      ]
+    },
+    {
+      "id": "srd-work-outside-sources",
+      "rule": "An srd-work folder lies outside every source",
+      "file": "references/project-config.md",
+      "must": [
+        "a `srd-work` folder must be no source and lie inside none"
+      ]
+    },
+    {
+      "id": "gate-no-mcp-call",
+      "rule": "The gate makes no MCP call",
+      "file": "references/project-config.md",
+      "must": [
+        "Make no\\s+MCP call for the gate"
+      ]
     }
   ]
 }
