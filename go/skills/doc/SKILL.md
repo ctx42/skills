@@ -293,7 +293,8 @@ End of run:
 - Module kind: a `Packages:` line, never left out, naming the packages done
   and, by name, every package `packages=` left out.
 - After a fan-out: a `Merge check:` line, never left out, saying you re-read
-  every merged edit and how many you reverted or narrowed, zero included.
+  every merged edit, then the reverted and the narrowed counts apart, zeros
+  included (`re-read all 7; 1 reverted, 2 narrowed`).
 - Items left alone get no line; a flagged or never-touched item is never
   dropped silently. Close with a one-line pointer to run `go:review` on
   the result.
