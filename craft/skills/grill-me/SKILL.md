@@ -89,7 +89,8 @@ branch by branch, until you both share one understanding of the subject.
 
 - Never assume. If something is ambiguous, ask. A count or total you state
   comes from a command run over the data, never tallied by eye from earlier
-  output.
+  output; after a branch is added mid-interview, recount resolved and open
+  branches from the full map on every later turn.
 
 - One question per turn, in plain prose — not one topic. Sub-questions of the
   same topic are still separate questions: "who writes it, when, on what, and
