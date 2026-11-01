@@ -1,0 +1,35 @@
+{
+  "skill_name": "check",
+  "evals": [
+    {
+      "id": 1,
+      "name": "describes-a-sound-setup",
+      "skills": [
+        "check"
+      ],
+      "setup": "`project-config.md` names server `srd` on port 7777, sources `docs` and `kb`, `kb: kb`, `initiatives: docs/initiatives`, `srd-standard: docs/srd-standard.md`, `glossary: docs/glossary`, `gaps: gap`, `precedence: [kb, docs/api]`, and `srd-work: srd-work`, every folder existing, and its body has the `## SRD skill keys` section. The mocked server answers `list_docs` with 5 documents under `docs` (one SRD under `docs/initiatives`) and 1 under `kb`.",
+      "query": "/check",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "flags-misplaced-folders",
+      "skills": [
+        "check"
+      ],
+      "setup": "Like the sound setup, but `sources` lists `docs` and `srd-work`, not `kb`.",
+      "query": "/check",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "reports-without-a-server",
+      "skills": [
+        "check"
+      ],
+      "setup": "`project-config.md` sets every key but `gaps`, and lists `kb` outside `sources`. No `mcp__srd__*` tools are in this session.",
+      "query": "/check",
+      "files": []
+    }
+  ]
+}

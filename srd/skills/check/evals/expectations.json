@@ -1,0 +1,36 @@
+{
+  "skill_name": "check",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "describes-a-sound-setup",
+      "expected_behavior": [
+        "Writes nothing",
+        "Calls `list_docs` and `list_gaps`",
+        "Gives the trust order with `kb` first, then `docs/api`",
+        "Counts 5 documents in `docs` and 1 SRD",
+        "Ends with no problems"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "flags-misplaced-folders",
+      "expected_behavior": [
+        "Writes nothing",
+        "Names the `srd-work` folder inside a source as a problem, with the fix `/srd:init`",
+        "Names `kb` missing from `sources` as a problem, with the fix in the docket plugin's settings"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "reports-without-a-server",
+      "expected_behavior": [
+        "Reports the missing `gaps` and `kb` outside `sources`, each with its fix in the docket plugin's settings",
+        "Reports the server as not connected, with the fix, and the lines that need the server as `not checked`"
+      ],
+      "blind_only": [
+        2
+      ]
+    }
+  ]
+}

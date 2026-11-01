@@ -1,0 +1,41 @@
+{
+  "skill_name": "check",
+  "rules": [
+    {
+      "id": "read-only",
+      "rule": "Write nothing; call only read tools",
+      "must": [
+        "Read-only: write nothing and fix nothing in the project"
+      ]
+    },
+    {
+      "id": "runs-every-check",
+      "rule": "Run every check; report what needs the server as not checked",
+      "must": [
+        "Run every check below; never stop at the first problem\\.",
+        "report the lines that need the server as `not checked`"
+      ]
+    },
+    {
+      "id": "counts-from-server",
+      "rule": "Read every count off the server",
+      "must": [
+        "Read every count off the server's answers, never estimate one\\."
+      ]
+    },
+    {
+      "id": "fix-names-owner",
+      "rule": "Each fix names the docket plugin or srd:init",
+      "must": [
+        "Each fix names\\s+one of them"
+      ]
+    },
+    {
+      "id": "output-discipline",
+      "rule": "Terse report",
+      "must": [
+        "Report tersely: no preamble or narration"
+      ]
+    }
+  ]
+}

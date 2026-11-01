@@ -1,0 +1,32 @@
+{
+  "skill_name": "check",
+  "probes": [
+    {
+      "id": "no-server-still-checks-config",
+      "rule": "runs-every-check",
+      "context": [
+        "SKILL.md"
+      ],
+      "prompt": "Situation: `/srd:check` runs; project-config.md lacks `gaps` and lists `kb` outside `sources`, and no `mcp__srd__*` tools are in this session.\n\nQuestion: does your report name the missing `gaps` and the `kb` problem? Answer on the first line YES or NO, then one sentence why.",
+      "pass": "^\\W*YES\\b",
+      "fail": "^\\W*NO\\b",
+      "bullets": [
+        "reports-without-a-server#b1"
+      ],
+      "class": "redundant"
+    },
+    {
+      "id": "kb-fix-in-docket",
+      "rule": "fix-names-owner",
+      "context": [
+        "SKILL.md",
+        "../create/references/project-config.md"
+      ],
+      "prompt": "Situation: `/srd:check` finds `kb: kb` set but `kb` missing from `sources`.\n\nQuestion: what fix does your report name? Answer on the first line with exactly one of: RUN-SRD-INIT, DOCKET-SETTINGS, EDIT-THE-FILE. Then one sentence why.",
+      "pass": "^\\W*DOCKET-SETTINGS",
+      "fail": "^\\W*(RUN-SRD-INIT|EDIT-THE-FILE)",
+      "bullets": [],
+      "class": "redundant"
+    }
+  ]
+}
