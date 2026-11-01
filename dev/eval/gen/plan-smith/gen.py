@@ -349,16 +349,18 @@ def history(turns, session):
 
 P3 = "tmp/csv-export-plan.md"
 g = plan_write_graders(P3, 7, [r"scope|filter", r"limit|size|row", r"format|csv|4180",
-                               r"deliver|download", r"permission|access", r"audit"])
+                               r"deliver|download|synchron", r"permission|access", r"audit"])
 g["b1-no-reinterview"] = regex(
     # A settled branch's term in a new question ("exports blocked by the 100k
     # limit?") is context, not a re-ask: only questions that lead with it count.
     r"^[-*\s]*(?:\*\*[^*\n]*\*\*:?\s*)?(?:should|do|does|is|are|what|which|how|can|will)\b[^\n?]{0,40}"
     r"(filtered view|whole dataset|100k|100,000|row limit|BOM|4180|encoding|synchronous|background job|email|403|viewer|grant|audit row)[^\n?]*\?",
     "last_message", "im", "not_contains")
+# Words separated by \s+: the plan wraps at 80 columns, so a phrase may span lines.
 g["b2-verifications-carried"] = regex(
-    r"^(?=[\s\S]*exactly the filtered rows)(?=[\s\S]*100,001)(?=[\s\S]*Excel[\s\S]*(round-trip|round trip|parser))"
-    r"(?=[\s\S]*job row)(?=[\s\S]*\b403\b)(?=[\s\S]*(exactly )?one audit row)",
+    r"^(?=[\s\S]*exactly\s+the\s+filtered\s+rows)(?=[\s\S]*100,001)"
+    r"(?=[\s\S]*Excel[\s\S]*(round-trip|round\s+trip|parser))"
+    r"(?=[\s\S]*job\s+row)(?=[\s\S]*\b403\b)(?=[\s\S]*(exactly\s+)?one\s+audit\s+row)",
     f"file:{P3}", "i")
 g["b5-path-and-counts"] = regex(
     r"csv-export-plan\.md[^\n]*" + counts(0, 7, 0) + "|" + counts(0, 7, 0) + r"[^\n]*csv-export-plan\.md",
