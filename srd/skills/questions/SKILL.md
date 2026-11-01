@@ -127,10 +127,11 @@ resolves to nothing: say so and ask — never guess what to work on.
      side is a confirmed fact for `srd:kb`, which rewrites the section at
      once; one for the KB's side is the author's SRD fix.
    - Before raising any "is this defined or documented?" question, look it up
-     first: `search` the corpus, then `get_doc` the promising hit. Ask only when
-     it genuinely is not there or what you found is partial, and then say what
-     you found and what it fails to cover; a competent engineer does not ask
-     what they could have looked up. When the lookup answers a question, one
+     first: `search` the corpus (for a term, `glossary_terms` too), then
+     `get_doc` the promising hit. Ask only when it genuinely is not there or
+     what you found is partial, and then say what you found and what it fails
+     to cover; a competent engineer does not ask what they could have looked
+     up. When the lookup answers a question, one
      already in the file included, drop it and tell the user in one line, naming
      the document that answers it by its title or path, never by its role —
      also when the delegated review did the lookup: that line is yours. When

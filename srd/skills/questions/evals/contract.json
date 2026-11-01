@@ -27,7 +27,7 @@
       "id": "lookup-before-asking",
       "rule": "Corpus lookup before any is-this-documented question",
       "must": [
-        "look\\ it\\ up\\ first:\\ `search`\\ the\\ corpus,\\ then\\ `get_doc`\\ the\\ promising\\ hit",
+        "look\\ it\\ up\\s+first:\\ `search`\\ the\\ corpus\\ \\(for\\ a\\ term,\\ `glossary_terms`\\ too\\),\\s+then\\s+`get_doc`\\ the\\ promising\\ hit",
         "a\\ competent\\ engineer\\ does\\ not\\ ask\\ what\\ they\\ could\\ have\\ looked\\ up"
       ]
     },

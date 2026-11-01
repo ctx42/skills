@@ -1,6 +1,5 @@
 ---
-type: tool_used
-tool: mcp__srd__search
-input_match: '[Ll]aunch [Ss]lot'
-min: 1
+type: regex
+target: trace
 ---
+"name":"mcp__srd__search","input":\{[^}]*[Ll]aunch [Ss]lot|"name":"mcp__srd__glossary_terms"
