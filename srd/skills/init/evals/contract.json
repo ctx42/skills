@@ -13,7 +13,7 @@
       "rule": "The key reference lists only the working-file kinds the skills write",
       "file": "assets/keys.md",
       "must": [
-        "Folder\\ for\\ SRD\\ working\\ files\\ \\(`review`,\\ `decisions`,\\ `questions`\\)"
+        "The folder for SRD working files \\(`review`, `decisions`, `questions`\\)"
       ],
       "must_not": [
         "`retro`",
