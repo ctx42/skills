@@ -76,7 +76,8 @@ From here on, never ask: not to confirm a fix, not to commit, not to continue.
 
 ## 2. Fix — one commit per fix
 
-Work in dependency order, else the findings' order. One commit holds one
+Work in dependency order, else the findings' order, one fix at a time; never
+fan fixes out to parallel agents in one working tree. One commit holds one
 logical fix: findings with one root cause share a commit; one finding never
 spans two unless its parts stand alone.
 
