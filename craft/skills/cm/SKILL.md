@@ -163,12 +163,12 @@ Commit control:
    wrapped at 72 (measured, not eyeballed: counted in characters, not bytes, by
    a check that exits non-zero on any line over 72, chained with `&&` ahead of
    the commit in the same command — before the heredoc opener — so a long line
-   stops the commit; the body fed to it inline by `printf`, never a second
-   heredoc), every sentence parsing on one read — no dangling opener, no clause
-   stranded on a preposition — and passing Describe changes only,
-   its numbers and any contrast with a design the diff does not contain
-   ("instead of …") included; no process jargon, no trailer beyond the two
-   allowed. Fix and re-check.
+   stops the commit; the whole message, summary and body, fed to it inline by
+   `printf`, never a second heredoc), every sentence parsing on one read — no
+   dangling opener, no clause stranded on a preposition — and passing Describe
+   changes only, its numbers and any contrast with a design the diff does not
+   contain ("instead of …") included; no process jargon, no trailer beyond the
+   two allowed. Fix and re-check.
 4. Present it per Output; commit only under `apply` or `asis`.
 
 ## Describe changes only
@@ -205,7 +205,9 @@ review; they see only the diff and the message.
   the code does after the change, not to the changed lines alone: read the
   unchanged paths around them — earlier cases of the same switch, other inputs
   that still supply the property — and narrow the claim to what they leave
-  true.
+  true. Check a claim spanning several files against each one; call a change
+  a pure rename only when every removed line, names normalized and signs
+  stripped, equals an added line.
 
 - Paraphrase only to the exact meaning: "leave X alone" is not "unset X".
   Where a synonym would shift what the change does, reuse the diff's wording.
