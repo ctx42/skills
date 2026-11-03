@@ -98,6 +98,45 @@
       "pass": "^\\W*80\\s*/\\s*4\\b",
       "fail": "^\\W*(?!80\\s*/\\s*4\\b)\\d+\\s*/\\s*\\d+",
       "class": "load-bearing"
+    },
+    {
+      "id": "rounding-fixture",
+      "rule": "off-grid-fixtures",
+      "context": [
+        "SKILL.md",
+        "references/test.md",
+        "references/production.md"
+      ],
+      "prompt": "Situation: you write the first, happy-path test for a Go function `Elapsed(d time.Duration) string` that renders a duration as whole minutes, `<N>m`.\n\nQuestion: write the input you pass and the want on the first line, exactly as `<Go duration expression> -> <want string>`, and nothing else on that line. Then one sentence why.",
+      "pass": "^\\W*(?:\\d+\\s*\\*\\s*time\\.Minute\\s*\\+\\s*\\d+\\s*\\*\\s*time\\.Second|(?!(?:60|120|180|240|300|360|420|480|540|600)\\b)\\d+\\s*\\*\\s*time\\.Second)",
+      "fail": "^\\W*(?:\\d+\\s*\\*\\s*)?time\\.(?:Minute|Hour)\\b(?!\\s*\\+)",
+      "class": "load-bearing"
+    },
+    {
+      "id": "clock-in-test",
+      "rule": "fixed-clock",
+      "context": [
+        "SKILL.md",
+        "references/test.md",
+        "references/production.md"
+      ],
+      "prompt": "Situation: a Go constructor `NewOrder(id string) *Order` sets `CreatedAt` with `time.Now()` inside its body. It takes no clock today, and no other code needs one. You write the test asserting `CreatedAt`.\n\nQuestion: how does the test check it? Answer on the first line with exactly one of: WINDOW (take `time.Now()` before and after the call in the test and assert `CreatedAt` falls between them), INJECT (give the constructor a now source, pass a fixed time in the test, and compare exactly). Then one sentence why.",
+      "pass": "^\\W*INJECT",
+      "fail": "^\\W*WINDOW",
+      "class": "load-bearing"
+    },
+    {
+      "id": "setup-path-test",
+      "rule": "production-setup",
+      "context": [
+        "SKILL.md",
+        "references/test.md",
+        "references/production.md"
+      ],
+      "prompt": "Situation: a Go server's retry behavior is turned on by a field that `NewServer(cfg)` sets from the config. Every existing test builds the server as `&Server{retry: true}`. You add a test for a new retry case.\n\nQuestion: how does the package's test suite build the server? Answer on the first line with exactly one of: LITERAL-ONLY (keep the struct literal everywhere), VIA-CONSTRUCTOR (at least one test builds it through `NewServer` with a config). Then one sentence why.",
+      "pass": "^\\W*VIA-CONSTRUCTOR",
+      "fail": "^\\W*LITERAL-ONLY",
+      "class": "load-bearing"
     }
   ]
 }

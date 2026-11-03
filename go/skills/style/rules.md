@@ -11,6 +11,7 @@ file. Grows via `go:review add`.
 - Lines fit the limit (Production + Test)
 - No name stutter (Production)
 - Method over a single-receiver-arg func (Production)
+- One copy of each formula and guard (Production)
 - Name a helper for behavior, not its caller (Production)
 - Service interface naming (Production)
 - On interface-implementing methods, never restate the interface's contract (Production)
@@ -18,6 +19,13 @@ file. Grows via `go:review add`.
 - Example functions for public APIs (Production)
 - Reusable package ships a README (Production)
 - Package godoc lives in the package-named file (Production)
+- Classify an error by its cause (Production)
+- Bound input-driven work (Production)
+- Guard input-derived arithmetic (Production)
+- Reject trailing and unknown input (Production)
+- Calendar days (Production)
+- Copy shared slices and maps (Production)
+- Release what a constructor starts (Production)
 - Output belongs to the entry point, not leaf functions (Production)
 - Read the environment through the ring (Production + Test)
 - Name the overflow (Production + Test)
@@ -25,10 +33,13 @@ file. Grows via `go:review add`.
 - Separate distinct topics with a blank line (Test)
 - Don't wrap a one-liner in a test helper (Test)
 - Assert on distinctive output, not shared tokens (Test)
+- Never read host state in tests (Test)
+- Fixture values off the grid (Test)
 - must.Value for error not under test (Test)
 - Test helpers in all_test.go (Test)
 - Test order mirrors source order (Test)
 - Field-count guard forces new-field coverage (Test)
+- Run the production setup path (Test)
 - Cover error paths and edge cases (Test)
 
 ## Lines fit the limit (Production + Test)
@@ -62,6 +73,14 @@ Exemption beyond the body's contract and typeless cases: the arg is one of
 several equals with no clear receiver. Detect: an unexported func with a single
 local-type parameter; convert it, update callers to `pag.f()`, and rename its
 test to `Test_T_f`.
+
+## One copy of each formula and guard (Production)
+
+A fix to one copy leaves the others wrong, and the tests of the fixed one stay
+green. Detect: for each condition or calculation a diff changes, grep the
+module for its old form and its operands; flag a copy the diff left as it was,
+and two live copies as one helper to extract. Report a copy outside the
+target; never edit it.
 
 ## Name a helper for behavior, not its caller (Production)
 
@@ -123,6 +142,64 @@ Relation: the README rule accepts a package-godoc overview as a README
 substitute wherever this rule puts it, so the two never conflict. Detect: a
 `doc.go` whose sole content is the package doc comment while a package-named
 file exists — move the comment there and delete `doc.go`.
+
+## Classify an error by its cause (Production)
+
+A wrapper sentinel or message prefix (`ErrRead`, "reading config") also
+carries permission, parse, and I/O failures, so a branch on it treats them all
+as the one it meant, such as "missing, use the default". Detect: a branch that
+picks behavior with `errors.Is` on a package's own wrapper or with
+`strings.Contains(err.Error(), ...)`; also `os.IsNotExist`, which does not
+unwrap, on a wrapped error.
+
+## Bound input-driven work (Production)
+
+Input is anything the program does not control: a file, a request, a flag, a
+decoded count. Detect: a `make` or loop sized by a decoded number, `io.ReadAll`
+with no `io.LimitReader` or `http.MaxBytesReader`, and recursion or retries
+whose depth comes from data; the fix checks against a named maximum and
+returns an error, never clamps in silence.
+
+## Guard input-derived arithmetic (Production)
+
+Each fails in its own way: `s[0]` and `slices.Max` panic on empty, integer
+`/ 0` panics, float `/ 0` yields ±Inf, and every comparison with NaN is false,
+so a NaN slips past `<` and `>` guards and through `math.Min`. Detect: an index,
+divisor, or extreme taken over a value from input, a filter, or a sum with no
+check on that path; test `math.IsNaN` and `math.IsInf` before range checks.
+
+## Reject trailing and unknown input (Production)
+
+The standard decoders accept more than they read: `json.Unmarshal` drops
+unknown fields, `json.Decoder.Decode` stops after the first value, and
+`fmt.Sscanf` ignores the rest of the string. Detect: a decoder without
+`DisallowUnknownFields` and a check that a second `Decode` returns `io.EOF`,
+a scan whose remainder is never checked, and a value from a file or request
+used deep in the program before any validation.
+
+## Calendar days (Production)
+
+`time.Date` normalizes `d+n` past a month end and keeps midnight across a DST
+change; `t.Add(24*time.Hour)` and `t.Truncate(24*time.Hour)` work in absolute
+time and UTC, so the wall clock drifts by an hour or lands on the wrong day.
+Detect: `Add` by a multiple of `24*time.Hour`, `Truncate` to a day, or a day
+loop that keeps the previous hour.
+
+## Copy shared slices and maps (Production)
+
+A slice or map returned from under a lock is read after the lock is released,
+racing the next writer; `append` into a slice with spare capacity writes into
+the caller's backing array. Detect: a getter returning a slice or map field it
+guards with a mutex, and `append(arg, ...)` or `append(arg[:i], ...)` on a
+parameter; fix with `slices.Clone`, `maps.Clone`, or `slices.Clip` first.
+
+## Release what a constructor starts (Production)
+
+On an error return the caller gets no value to `Close`, so what the
+constructor started is lost. Detect: a constructor that opens a file, starts a
+goroutine, or wraps a writer and then has a later `return nil, err` with no
+release before it; fix with a deferred cleanup that runs while the error is
+set, and a `Close` that stops and waits for every goroutine it owns.
 
 ## Output belongs to the entry point, not leaf functions (Production)
 
@@ -193,6 +270,21 @@ output (the program name, a shared wrapper prefix such as `"reading config"`);
 assertions against the binary or package name; a dispatch test whose asserted
 outcome more than one branch yields.
 
+## Never read host state in tests (Test)
+
+Such a test passes on one machine and fails on another, or in CI. Detect: an
+absolute or home path (`os.UserHomeDir`, `os.UserConfigDir`), `time.Local` or
+a zone-less `time.Now()` in a want, `net.Lookup*` or a dial to a host name, a
+`Listen` on a fixed port (use `:0` or `httptest`), and code under test left to
+its default config path.
+
+## Fixture values off the grid (Test)
+
+A value already on the grid gives the same result whether the code rounds,
+truncates, or does nothing, so a broken rounding still passes. Detect: whole
+minutes, hours, days, or exact multiples of a bucket or page size fed to code
+that rounds, truncates, buckets, or pages.
+
 ## must.Value for error not under test (Test)
 
 `must.Value`/`must.Values` (`ctx42/testing/pkg/must`) panic on error, failing
@@ -221,6 +313,14 @@ The guard is `assert.Fields(t, N, T{})`: it fails when `T` gains or loses a
 field so the author must update the per-field assertions. Detect: a diff that
 changes `N` (or adds a struct field) without adding an assertion referencing the
 new field in the same change.
+
+## Run the production setup path (Test)
+
+A struct literal or test-only preset skips the defaults, validation, and
+wiring the program runs, so a broken constructor still passes. Detect: a
+behavior asserted only on a value built by `&T{...}` or a test-only option
+that sets the field producing it, with no test going through `NewXxx`, the
+config load, or the command entry.
 
 ## Cover error paths and edge cases (Test)
 

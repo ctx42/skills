@@ -34,8 +34,8 @@ Authoritative Go style rules and the style-only pass that enforces them. The
 rules live in two files:
 
 - [references/production.md](references/production.md) — the Production
-  section: formatting, naming, functions, declarations, godoc, errors, output,
-  API design, and examples.
+  section: formatting, naming, functions, declarations, godoc, errors,
+  robustness, output, API design, and examples.
 - [references/test.md](references/test.md) — the Test section: structure,
   naming, assertions, helpers and fixtures, and coverage.
 

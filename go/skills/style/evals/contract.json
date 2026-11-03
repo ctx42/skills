@@ -126,6 +126,84 @@
       "must": [
         "A pass without `fix` changes no file, so a dropped control never widens\\s+it"
       ]
+    },
+    {
+      "id": "input-bounds",
+      "rule": "Input-driven loops and allocations are bounded and error past the bound",
+      "file": "references/production.md",
+      "must": [
+        "Bound every loop and allocation that input drives; return an error past the\\s+bound"
+      ]
+    },
+    {
+      "id": "calendar-days",
+      "rule": "Calendar days are built from the date, never by carrying a wall clock forward",
+      "file": "references/production.md",
+      "must": [
+        "Build calendar days from the date",
+        "never by carrying a wall clock forward"
+      ]
+    },
+    {
+      "id": "error-cause",
+      "rule": "Errors are classified by cause, never by a shared wrapper",
+      "file": "references/production.md",
+      "must": [
+        "Classify an error by its cause",
+        "never by\\s+a wrapper that several causes share"
+      ]
+    },
+    {
+      "id": "no-host-state",
+      "rule": "Tests never read host state",
+      "file": "references/test.md",
+      "must": [
+        "Never read host state in tests"
+      ]
+    },
+    {
+      "id": "off-grid-fixtures",
+      "rule": "Fixture values sit off the grid the code rounds to",
+      "file": "references/test.md",
+      "must": [
+        "Pick fixture values off the grid the code rounds or buckets to"
+      ]
+    },
+    {
+      "id": "fixed-clock",
+      "rule": "Tests fix the clock; never a second time.Now()",
+      "file": "references/test.md",
+      "must": [
+        "Fix the clock in tests",
+        "never compare against a\\s+second `time\\.Now\\(\\)`"
+      ]
+    },
+    {
+      "id": "assertion-can-fail",
+      "rule": "Each new assertion is proven to fail by breaking the code",
+      "file": "references/test.md",
+      "must": [
+        "Prove each new assertion can fail",
+        "an assertion that stays green is not a test"
+      ]
+    },
+    {
+      "id": "production-setup",
+      "rule": "One test runs the production setup path; no test-only preset produces the behavior; every path it reads points into t.TempDir()",
+      "file": "references/test.md",
+      "must": [
+        "Run the production setup path",
+        "never let a test-only preset produce the behavior under\\s+test",
+        "every path it reads pointed into `t\\.TempDir\\(\\)`"
+      ]
+    },
+    {
+      "id": "sibling-copies-reported",
+      "rule": "A copy of a changed formula or guard outside the target is reported, never edited",
+      "file": "rules.md",
+      "must": [
+        "Report a copy outside the\\s+target; never edit it"
+      ]
     }
   ]
 }

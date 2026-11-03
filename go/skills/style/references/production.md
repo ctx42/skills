@@ -13,6 +13,7 @@ a rule in `test.md` overrides one. Keyed detection detail lives in the skill's
 - Declarations & files
 - Godoc & comments
 - Errors
+- Robustness
 - Output & environment
 - API design
 - Docs & examples
@@ -85,6 +86,8 @@ a rule in `test.md` overrides one. Keyed detection detail lives in the skill's
 - A method returns only its named result; leave presentation (trailing
   newline, padding) to the caller.
 - No naked returns in non-trivial functions.
+- Keep one copy of each formula and guard; when you change one, search the
+  module for its siblings, the same check or calculation written elsewhere.
 - Order a function body so cheap, fallible checks (config reads, validation)
   run before expensive or side-effecting work; fail fast before the heavy work.
 
@@ -134,8 +137,21 @@ a rule in `test.md` overrides one. Keyed detection detail lives in the skill's
 - Export sentinel errors as `ErrXxx`; unexported as `errXxx`.
 - Keep wrap context short and meaningful; no `failed to ...` prefixes.
 - Match errors with `errors.Is`/`errors.As`, never `==`.
+- Classify an error by its cause (`errors.Is(err, fs.ErrNotExist)`), never by
+  a wrapper that several causes share.
 - SQL query functions wrap driver errors with `xrr.Wrap` and an `aux` metadata
   field naming `<pkg>.<Func>`, in place of a `%w` wrap, never both.
+
+## Robustness
+
+- Bound every loop and allocation that input drives; return an error past the
+  bound.
+- Guard every index, division, and min/max over input-derived values against
+  empty, zero, NaN, and ±Inf.
+- Reject trailing and unknown input in every parser; validate each file and
+  request where it enters the program.
+- Build calendar days from the date (`time.Date(y, m, d+n, 0, 0, 0, 0, loc)`),
+  never by carrying a wall clock forward.
 
 ## Output & environment
 
@@ -153,6 +169,10 @@ a rule in `test.md` overrides one. Keyed detection detail lives in the skill's
 - Assert implementations at compile time: `var _ Iface = (*T)(nil)` near the
   top of the file.
 - Make the zero value useful or at least safe.
+- Return a copy of a slice or map field a mutex guards; never `append` into a
+  caller's slice.
+- Release everything a constructor starts (files, goroutines, writers) on
+  every exit path, error returns included.
 - No work in `init()`; no package-level mutable state or singletons.
 
 ## Docs & examples

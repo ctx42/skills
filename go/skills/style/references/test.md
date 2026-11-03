@@ -117,10 +117,18 @@ detection detail lives in the skill's `rules.md`, opened one entry at a time.
 - Use oskit filesystem helpers in arrange/readback (`oskit.Create`, `Write`,
   `MkdirAll`, `ReadFile`/`ReadFileStr`), not `os.*` wrapped in `assert.NoError`
   (nor `os.ReadFile` plus error handling and a `string(...)` conversion).
+- Never read host state in tests: no files outside `t.TempDir()` and the
+  package's `testdata/`, no local zone (`time.Local`; named zones are fine),
+  no DNS, no fixed ports, no default config paths.
 - Set an environment variable for code under test with `rng.EnvSet`, never
   `t.Setenv`.
+- Pick fixture values off the grid the code rounds or buckets to (80s, not
+  2m), so the rounding under test changes the result.
 - Build fixed test times with `time.Date`, never by parsing a string literal;
   table rows hold `time.Time` fields, not strings the loop body parses.
+- Fix the clock in tests: pass the code under test a fixed now (an injected
+  clock is a dependency, not a test-only override); never compare against a
+  second `time.Now()`.
 - Use named zones (`Europe/Warsaw`) for non-UTC test times: the package's
   exported zones when it has them, else ones defined in `all_test.go`
   (`var waw = must.Value(time.LoadLocation("Europe/Warsaw"))`);
@@ -136,6 +144,11 @@ detection detail lives in the skill's `rules.md`, opened one entry at a time.
 - When a test guards a struct's field count, a new field must both bump the
   count and gain an assertion in the same change — never bump the count alone.
 - Cover error paths and edge cases, not just the happy path.
+- Prove each new assertion can fail: break the code it covers, watch the test
+  go red, then undo the break; an assertion that stays green is not a test.
+- Run the production setup path (constructor, config load, wiring) in at
+  least one test, every path it reads pointed into `t.TempDir()`; never let a
+  test-only preset produce the behavior under test.
 - Don't chase coverage: skip tests of `//go:build ignore` tools and of a test
   helper's trivial error branches that need platform tricks (a fake binary on
   `PATH`, `chmod 0`, a removed working directory); never add a production
