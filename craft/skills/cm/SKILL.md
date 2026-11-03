@@ -7,6 +7,7 @@ description: >
   changes into logical commits, or to describe or summarize staged changes for
   the git log.
 argument-hint: "[micro|mini*|full] [apply|asis] [<hash>]"
+effort: medium
 license: MIT
 ---
 
