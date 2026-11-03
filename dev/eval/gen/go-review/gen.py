@@ -422,7 +422,7 @@ def case_review_diff():
     graders = {
         "b1-target-is-the-diff": g_regex(r"^(?=[\s\S]*\bdiff\b)(?=[\s\S]*store\.go)", flags="i"),
         "b2-names-tools-run": g_regex(
-            r"(tools?|ran|shell|commands? run)[^\n]{0,120}(none|nothing|no (gofmt|go vet|vet|lint|tests?|shell|commands?)|LSP|grep|Read|awk)",
+            r"(tools?|ran|shell|commands? run)[^\n]{0,120}(none|nothing|no (gofmt|go vet|vet|lint|tests?|shell|commands?)|LSP|grep|Read|awk|wc|expand|width)",
             flags="i"),
         "b2-no-gofmt-vet-lint-test": g_never("Bash", r"gofmt|go vet|golangci|go test|go build|staticcheck"),
         "b3-style-from-go-style": g_regex(r"go:style"),

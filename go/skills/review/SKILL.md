@@ -160,10 +160,13 @@ broad.
      and note the reduced confidence in the finding.
 4. Reason only while reviewing: do not run gofmt, go vet, golangci-lint, or
    go test, `-cover` included — judge coverage by grepping the symbol in
-   `*_test.go`, and the rest by reading the code. A shell width measure
-   (`awk` line length) is allowed. Say so in the report: one line naming every
-   command this pass ran — the `awk` measure and a `grep` count; "none" only
-   when nothing ran — and that the style dimension came from `go:style`. A
+   `*_test.go`, and the rest by reading the code. A shell width measure is
+   allowed, in characters with tabs expanded per
+   `../style/references/checking.md` step 4 — never `awk length`, which mawk
+   counts in bytes; a fan-out brief prescribes the same. Say so in the report:
+   one line naming every command this pass ran — the width measure and a
+   `grep` count; "none" only when nothing ran — and that the style dimension
+   came from `go:style`. A
    reader cannot otherwise tell a review that honored this from one that
    shelled out, and neither can anyone checking the run afterwards. `LSP` is
    allowed (read-only navigation). This governs the review, not the fix:
