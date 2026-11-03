@@ -102,6 +102,13 @@
       "must": [
         "copies that branch's verification word for word"
       ]
+    },
+    {
+      "id": "code-items-edges",
+      "rule": "An item that changes code carries an Edges line: bounds, empty/zero/invalid inputs with their results, and the red-first test",
+      "must": [
+        "An item that changes code also carries an `Edges:` line"
+      ]
     }
   ]
 }

@@ -111,6 +111,7 @@ between them — background belongs in an item's own section or in the reply.
 ## 1. <item name> — [x]
 
 <what it is, why, acceptance criteria>
+Edges: <bounds, empty/zero/invalid inputs and their results; red-first test>
 
 ## 3. <item name> — [ ]  (X: rejected — <one-line reason>)
 
@@ -173,11 +174,14 @@ call.
 5. Write the file to the format above: summary table (every item starts `N`,
    unchecked) then one section per item, closing item last. Give each item
    acceptance criteria — what proves it done — so `Y` is verifiable, not
-   asserted. From a `grill-me` summary, an item's `Done when:` copies that
-   branch's verification word for word; when a branch splits into several
-   items, each copies the part of it that item covers. Path: the name the
-   user gives, else `tmp/<slug>-plan.md` relative to the working directory;
-   no need to ask, the report names it.
+   asserted. An item that changes code also carries an `Edges:` line: the
+   inputs at and past each bound, empty, zero and invalid, with the result
+   or error each must give, and the test proven red first. From a `grill-me`
+   summary, an item's `Done when:` copies that branch's verification word
+   for word; when a branch splits into several items, each copies the part
+   of it that item covers. Path: the name the user gives, else
+   `tmp/<slug>-plan.md` relative to the working directory; no need to ask,
+   the report names it.
    If something is already there, say so and ask before overwriting.
 
 ## Update mode

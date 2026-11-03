@@ -50,6 +50,13 @@
       "pass": "^\\W*N\\b",
       "fail": "^\\W*[XY]\\b",
       "class": "redundant"
+    },
+    {
+      "id": "code-item-edges",
+      "rule": "code-items-edges",
+      "prompt": "Situation: `/plan-smith create` with the brief: 'Plan: 1) add a `--limit N` flag to the export command that caps the rows it writes.' The item is fully specified.\n\nQuestion: write the section for item 1 exactly as it goes in the plan file, from its heading line through its last line, and nothing else.",
+      "pass": "(?m)^\\W*Edges:",
+      "class": "redundant"
     }
   ]
 }
