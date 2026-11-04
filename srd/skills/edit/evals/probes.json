@@ -177,6 +177,19 @@
       "fail": "^\\W*AUTHOR\\b",
       "bullets": [],
       "class": "load-bearing"
+    },
+    {
+      "id": "autofix-named-unlink-gone-stale",
+      "rule": "autofix-link-move",
+      "context": [
+        "SKILL.md",
+        "references/autofix.md"
+      ],
+      "prompt": "Situation: `/srd:edit specs/x.md autofix`, the user said Yes to the batch. A first-use link finding says to link a term to its shared glossary entry in TRK-1 and to unlink the later use in TRK-3. The term occurs unlinked in TRK-1 and nowhere before it, and no later use links the entry: TRK-3 shows the term as plain text.\n\nQuestion: what do you do with this finding? Answer on the first line with exactly one of: APPLY-THE-LINK, STALE, ASK-AUTHOR. Then one sentence why.",
+      "pass": "^\\W*STALE\\b",
+      "fail": "^\\W*(APPLY-THE-LINK|ASK-AUTHOR)\\b",
+      "bullets": [],
+      "class": "load-bearing"
     }
   ]
 }

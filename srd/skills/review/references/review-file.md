@@ -23,7 +23,8 @@ is self-describing.
 
 Each finding is atomic — one indivisible fix, verifiable by a single yes/no. If
 two edits can be verified or resolved separately, they are two findings, even
-when they share one root cause. No bullet says "do A and B".
+when they share one root cause. No bullet says "do A and B". A first-use link
+and the later links it unlinks are one edit.
 
 Two rules breaking on one edit is the mirror case and resolves the same way: a
 lifecycle value that violates both a prerequisite rule (say, a sign-off the
@@ -99,13 +100,14 @@ In order:
    `` `old` → `new` ``, or for whitespace and glyph classes the class plus a
    neighboring word (`autofix` derives the fix), or for a missing
    obligation-keyword notice `` `(missing)` → `` the full notice, or for a
-   requirement-group divider (`[minor, format]`, never `structure`: markup,
-   even when the standard files its rule among its layout rules) the heading
-   plus `` `(missing)` → `---` `` or `` `---` → `(none)` `` — and a
-   substitution repeated across sites lists every site so `autofix` can verify
-   the count; a casing fix also names, in the same finding, the terms it
-   excludes. Two different substitutions are two
-   findings. Omit the section when empty.
+   requirement-group divider (`[minor, format]`, never `structure`: markup, even
+   when the standard files its rule among its layout rules) the heading plus
+   `` `(missing)` → `---` `` or `` `---` → `(none)` `` — and a substitution
+   repeated across sites lists every site so `autofix` can verify the count; a
+   casing fix also names, in the same finding, the terms it excludes and the
+   sites it keeps, and a first-use link fix the later uses it unlinks — the link
+   and its unlinks are one substitution, so one finding. Two different
+   substitutions are two findings. Omit the section when empty.
 2. Open findings, grouped by document section: one `##` heading per part of
    the SRD the standard's layout defines, named as the SRD names it — the
    block above the first section under the name the standard gives it (its

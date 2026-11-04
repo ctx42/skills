@@ -24,7 +24,9 @@ touches ids.
    `review <srd> errata`. A finding's number is the review file's global `#n`,
    kept when `review` moved it under `## Errata` — never its position in that
    block, so `#7` stays `#7` whether it sits first there or third.
-3. Present the batch: every appliable finding (number, anchor, substitution).
+3. Present the batch: every appliable finding (number, anchor, substitution),
+   a casing finding's kept sites and a link finding's later uses to unlink
+   included, so the user sees each judgment the review made before `Yes`.
    Appliable means well-shaped, not yet verified: say anchors are checked on
    apply, never that every finding will land.
    The user may name numbers to exclude; default is all.
@@ -55,18 +57,22 @@ touches ids.
    of the next heading, and after a TOC macro or block that follows that
    element; one or more → stale, as above, wherever it sits. A first-use link
    finding is verified by its term: it must occur unlinked in the anchor,
-   nowhere earlier in the document, and linked nowhere later; then wrap that
-   one occurrence in the link `glossary_terms` gives. Otherwise stale. A
-   divider finding (`new` or `old` is `---`) is verified just above its
-   heading, outside the heading's range (or at the document's end for
-   `(end of document)`): blank lines aside, an insertion needs no `---` line
-   there, a removal exactly one; insert or delete that one line, adding a
-   blank line on any side that lacks one. Otherwise stale. A
-   casing finding is counted and applied only on running-text occurrences of
-   `old`: skip its named excluded terms and every place `errata.md`'s casing
-   entry rules out. A multi-site finding is verified per site and applies only
-   where it matches; report each site that did not. Never substitute by
-   whole-document search-and-replace; never widen beyond the quoted `old`.
+   nowhere earlier in the document, and link the entry later exactly at the uses
+   the finding names, no more and no fewer; then wrap that one occurrence in the
+   link `glossary_terms` gives and remove the link at each named later use,
+   keeping its text. A later link the finding does not name, or a named use that
+   holds no link, makes the whole finding stale, nothing applied. A divider
+   finding (`new` or `old` is `---`) is verified just above its heading, outside
+   the heading's range (or at the document's end for `(end of document)`): blank
+   lines aside, an insertion needs no `---` line there, a removal exactly one;
+   insert or delete that one line, adding a blank line on any side that lacks
+   one. Otherwise stale. A casing finding is counted and applied only on
+   running-text occurrences of `old`: skip its named excluded terms, every site
+   it names as kept, and every place `errata.md`'s casing entry rules out; none
+   of these counts toward the sites it names. A multi-site finding, a first-use
+   link finding aside, is verified per site and applies only where it matches;
+   report each site that did not. Never substitute by whole-document
+   search-and-replace; never widen beyond the quoted `old`.
 6. Log every applied substitution in `<srd>.decisions.md` — one entry each, per
    `decision-log.md`. The batch path owes the log exactly what the loop owes it:
    this procedure covers finding and applying the fixes, not the whole of what

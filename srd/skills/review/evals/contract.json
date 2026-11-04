@@ -239,6 +239,26 @@
       "must": [
         "plus the document a disproval report names \\(check step 2\\)"
       ]
+    },
+    {
+      "id": "casing-kept-sites-errata",
+      "file": "../create/references/errata.md",
+      "rule": "A casing erratum names every kept site with its anchor; a site in doubt makes the whole finding ordinary",
+      "must": [
+        "Errata\\s+only\\s+when\\s+the\\s+review\\s+settles\\s+every\\s+site",
+        "is\\s+named\\s+as\\s+kept\\s+with\\s+its\\s+anchor\\s+and\\s+why",
+        "A\\s+site\\s+whose\\s+sense\\s+is\\s+in\\s+doubt",
+        "makes\\s+the\\s+whole\\s+finding\\s+ordinary,\\s+never\\s+split"
+      ]
+    },
+    {
+      "id": "link-move-errata",
+      "file": "../create/references/errata.md",
+      "rule": "A first-use link erratum names every later use linking the entry; the fix unlinks it and keeps its text",
+      "must": [
+        "the\\s+fix\\s+removes\\s+that\\s+link\\s+and\\s+keeps\\s+its\\s+text",
+        "every\\s+later\\s+use\\s+linking\\s+the\\s+entry\\s+is\\s+named"
+      ]
     }
   ]
 }

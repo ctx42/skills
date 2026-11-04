@@ -317,6 +317,24 @@
       "must": [
         "Inserting a missing keyword notice where the standard places\\s+it is an errata fix, not a header edit"
       ]
+    },
+    {
+      "id": "autofix-link-move",
+      "file": "references/autofix.md",
+      "rule": "Autofix links the first use and unlinks only the later uses the finding names; any other later link is stale",
+      "must": [
+        "remove\\s+the\\s+link\\s+at\\s+each\\s+named\\s+later\\s+use",
+        "A\\s+later\\s+link\\s+the\\s+finding\\s+does\\s+not\\s+name"
+      ]
+    },
+    {
+      "id": "autofix-casing-kept",
+      "file": "references/autofix.md",
+      "rule": "Autofix skips every site a casing finding names as kept, and shows kept sites in the batch",
+      "must": [
+        "every\\s+site\\s+it\\s+names\\s+as\\s+kept",
+        "a\\s+casing\\s+finding's\\s+kept\\s+sites"
+      ]
     }
   ]
 }

@@ -92,16 +92,21 @@ Nothing outside this list is errata.
   section the standard places it in, named as for a wrong notice.
 - A missing first-use link to the shared glossary: the one coded fix outside
   whitespace and glyph, since a link target cannot meet the 40-character rule
-  but `glossary_terms` fixes it. State it as "link *term* to its shared
-  glossary entry" plus the anchor id holding the first use; `edit` derives the
-  link, and the text and its case stay as found. Errata only when the standard
-  asks for a first-use link, the term occurs nowhere before that anchor in any
-  sense or form (plural, case), linked or not, no later use carries the link,
-  the site means the defined term beyond doubt, and the term is no proper name
-  the standard exempts from linking; otherwise an ordinary finding. Cite the
-  standard's first-use link rule by its identifier. A finding anchored past
-  the term's first use qualifies once re-anchored there: the same defect, its
-  site corrected.
+  but `glossary_terms` fixes it. State it as "link *term* to its shared glossary
+  entry" plus the anchor id holding the first use; `edit` derives the link, and
+  the text and its case stay as found. A later use that already links the same
+  entry is named by its anchor ("unlink the later use in ABC-2"); the fix
+  removes that link and keeps its text, in the same finding: moving a link is
+  one substitution, never two findings. The first use stays the anchor; later
+  uses are named beside it. A later link to another entry is no part of the move
+  and stays as found. Errata only when the standard asks for a first-use link,
+  the term occurs nowhere before that anchor in any sense or form (plural,
+  case), linked or not, every later use linking the entry is named, the site
+  means the defined term beyond doubt, and the term is no proper name the
+  standard exempts from linking; otherwise an ordinary finding. Cite the
+  standard's first-use link rule by its identifier. A finding anchored past the
+  term's first use qualifies once re-anchored there: the same defect, its site
+  corrected.
 - A dead same-document anchor: a link whose `#anchor` matches no heading of the
   document, when exactly one heading is its evident target — it shares the
   anchor's distinctive words and no other heading does. `#old` → that
@@ -118,17 +123,21 @@ Nothing outside this list is errata.
   one of its sites, as the gate's repeated-fix rule allows. Cite the
   standard's divider rule, else `(SRD:house)`.
 - Running-text casing the project's casing rules fix: a term those rules write
-  lowercase in running text, capitalized mid-sentence (`Payload` → `payload`).
-  Errata only when the rules lowercase it whatever its sense, so no site needs
-  judgment; never at a sentence start, in a heading, glossary entry heading,
-  quoted UI string, code span, or anchor. Every site named with its count.
-  A local terms entry or user-interface component whose name contains the
-  word (`Payload Mass` for `Payload`) is no site and costs no judgment: name
-  each as excluded (`excluding Payload Mass, Payload Class`), and the finding
-  still qualifies. Any other capitalized phrase holding the word (a proper
-  name, a named screen) takes judgment: the whole finding is ordinary, never
-  split into errata and ordinary parts. Cite the standard's casing rule, else
-  `(SRD:house)`.
+  lowercase in running text, capitalized mid-sentence (`Payload` → `payload`). A
+  kept site never stops a finding being errata. Errata only when the review
+  settles every site; never at a sentence start, in a heading, glossary entry
+  heading, quoted UI string, code span, or anchor: those places are no sites and
+  need no naming. Every site changed is named with its count. A local terms
+  entry or user-interface component whose name contains the word (`Payload Mass`
+  for `Payload`) is no site: name each as excluded
+  (`excluding Payload Mass, Payload Class`). A site where the rules keep the
+  capital — a proper name, a named screen, a UI label such as a column name — is
+  named as kept with its anchor and why (`kept: ABC-4, the PAYLOAD column`):
+  settled, so the finding stays errata, the kept site left out of its fix. A
+  site whose sense is in doubt (the defined term or a kept name, neither beyond
+  doubt, as with a name the review cannot confirm) makes the whole finding
+  ordinary, never split into errata and ordinary parts. Cite the standard's
+  casing rule, else `(SRD:house)`.
 
 The first-use link and casing entries are `[minor]` and `terminology`: a
 missing link or a case slip is cosmetic, never the terminology drift `major`
@@ -141,18 +150,19 @@ These stay out of `## Errata` even when a literal substitution exists:
 
 - Text inside a code span, a URL, a quoted UI string, or a product, device, or
   proper name. The "misspelling" may be the real spelling. A space directly
-  inside a quotation mark is not inside the string: the Whitespace entry
-  admits it. A same-document `#anchor` is not a URL: the dead-anchor entry
-  admits it.
+  inside a quotation mark is not inside the string: the Whitespace entry admits
+  it. A same-document `#anchor` is not a URL: the dead-anchor entry admits it. A
+  casing finding's kept site is left out of its fix, so this exclusion never
+  moves that finding out of errata.
 - Inserting or deleting a content word (noun, verb, adjective) or any normative
   keyword.
 - Any change to a requirement identifier: its spelling, number, prefix, or
   order.
 - Subject, voice, or mood: passive → active, or "the user interface MUST" →
   "the system MUST". These are rewrites, not surface form.
-- Capitalizing a term to its glossary form, or lowercasing one the project's
-  casing rules do not lowercase in every sense. Whether the site means the
-  defined term or the generic sense is author judgment, not surface form.
+- Capitalizing a term to its glossary form, or lowercasing a site the casing
+  entry above leaves in doubt. Whether such a site means the defined term or
+  the generic sense is author judgment, not surface form.
 - Line wrapping or reflow.
 - Any case with two plausible corrections, or where the intended word is
   genuinely in doubt. Classify conservatively: when in doubt, not errata.
