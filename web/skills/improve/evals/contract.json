@@ -161,6 +161,13 @@
         "say it was not recognized, name the ones that\\s+exist, and run with the defaults as if it were absent",
         "A focus that resolves to nothing: say so\\s+and ask — never guess what to work on"
       ]
+    },
+    {
+      "id": "login-lost-asks",
+      "rule": "A login lost mid-run stops the run and asks the user to log in again in the same window",
+      "must": [
+        "A\\s+login\\s+lost\\s+mid-run\\s+stops\\s+the\\s+run\\s+and\\s+asks\\s+the\\s+user\\s+to\\s+log\\s+in\\s+again\\s+in\\s+the\\s+same\\s+window"
+      ]
     }
   ]
 }

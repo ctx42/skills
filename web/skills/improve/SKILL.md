@@ -82,10 +82,11 @@ Then:
    checks once on the untouched tree. A check already red there is known:
    name it in the message below, and leave it out of every gate (run the
    others by name) — it never blocks a commit.
-7. Send one message and wait: the detected URL, open in the Chrome window, and
-   a request to log in there if the app needs it, then reply (or give the right
+7. Send one message and wait: the detected URL, open in the Chrome window, and a
+   request to log in there if the app needs it, then reply (or give the right
    URL). An app with no login proceeds on the reply. The start asks nothing
-   else.
+   else. A login lost mid-run stops the run and asks the user to log in again in
+   the same window; on the reply it resumes where it stopped.
 
 ## 2. Audit
 
@@ -104,11 +105,13 @@ Per page:
   (`document.documentElement.scrollWidth` above the width set — a mobile
   viewport widens to its content, so never compare with `innerWidth`),
   clipped or overlapping content.
-- States: loading (`networkConditions` `Slow 3G`), empty, error (`Offline`
-  after load, or a failed request), long content (the longest record the data
-  holds). `emulate` reloads the page and drops an injected stub
-  (`initScript`): set the viewport first, then navigate with the stub, and
-  confirm the state before each measurement or picture.
+- States: loading (`networkConditions` `Slow 3G`), empty, error (`Offline` after
+  load, or a failed request), long content (the longest record the data holds).
+  A view needing stored data the app lacks: stub its reads with an `initScript`
+  fetch wrapper built from the server's own read-only answers, and reach other
+  views by in-app links. A reload or `emulate` drops the stub: set the viewport
+  first, then navigate with the stub, and confirm the state before each
+  measurement or picture.
 - Nielsen's 10 heuristics: a finding names the heuristic it breaks.
 
 Before choosing a change, search the source for `UX:` comments
@@ -147,14 +150,14 @@ a picture pair per place; unrelated changes never share a commit. Per change:
 1. Pick the top-ranked finding not dropped this run, not forbidden by a `UX:`
    comment, and touching no file the start found dirty (that one goes to
    Recommendations, naming the file — a focus instruction included).
-2. Before any edit, delete every untracked `dev/ux/*.png`, then shoot each view
-   the change will touch, at each width where it shows, in the state it needs
-   (`take_screenshot` with `filePath`; `fullPage: true` where the defect
-   lies outside the viewport — horizontal overflow always, since a viewport
-   shot crops it away). One pair is `dev/ux/before.png` and
-   `dev/ux/after.png`; several are `before-1.png` and `after-1.png` on,
-   numbered as in the message. A change that alters nothing on screen (an
-   accessible name, an ARIA attribute) shoots no pictures.
+2. Before any edit, delete every untracked `dev/ux/*.png`, leaving each tracked
+   one for step 7's `git rm`, then shoot each view the change will touch, at
+   each width where it shows, in the state it needs (`take_screenshot` with
+   `filePath`; `fullPage: true` where the defect lies outside the viewport —
+   horizontal overflow always, since a viewport shot crops it away). One pair is
+   `dev/ux/before.png` and `dev/ux/after.png`; several are `before-1.png` and
+   `after-1.png` on, numbered as in the message. A change that alters nothing on
+   screen (an accessible name, an ARIA attribute) shoots no pictures.
 3. Make the smallest change that fixes the finding. A behaviour change (what
    the UI does, not how it looks) gets its test in the final check
    (section 8), not here.
