@@ -1,3 +1,3 @@
-- Before rewording a line, grep the skill's `contract.json` and its eval
-  graders for every word you would drop; keep a contract phrase verbatim and
-  widen a grader that keys on the old word.
+- Grep `contract.json` for single words, never whole phrases: a stored phrase
+  can escape its spaces, so a phrase grep misses it and only lint catches the
+  break.
