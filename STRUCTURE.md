@@ -23,7 +23,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 ├── .claude/
 │   └── hooks/skill-guard.sh        # Reminds an edit in a skill of the authoring conventions
 ├── .claude-plugin/
-│   └── marketplace.json            # Marketplace catalog: the five plugins below
+│   └── marketplace.json            # Marketplace catalog: the four plugins below
 │
 ├── go/                             # Plugin: Go workflow
 │   ├── .claude-plugin/plugin.json
@@ -63,29 +63,22 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       │   ├── scripts/            # Lint, contracts, probes, hunt, triggers, cases, tokens
 │       │   └── references/         # Authoring standard, tiers, running, pitfalls, case format
 │       └── fix-all/                # Fix all findings unattended, one commit each
-├── web/                            # Plugin: web-app UX and performance
-│   ├── .claude-plugin/plugin.json
-│   ├── evals/assets/               # Shared Vue + Go fixture app every web skill's evals run on
-│   └── skills/
-│       ├── style/                  # Vue/TS rulebook + reference Biome config; style-only pass
-│       ├── review/                 # Done-time review: style via style, correctness, API contract
-│       ├── cover/                  # Raise Vitest coverage per unit, from direct tests only
-│       ├── doc/                    # Fix and complete TSDoc, header blocks, comments
-│       ├── e2e/                    # Raise Playwright coverage per route; extend the Go fake
-│       ├── improve/                # Audit a running app, commit one UX fix at a time
-│       ├── perf/                   # Measure a running app, commit one measured fix at a time
-│       └── audit/                  # Read-only all-dimension code audit, one graded report
-└── notify/                         # Plugin: desktop attention hooks (no skills)
+└── web/                            # Plugin: web-app UX and performance
     ├── .claude-plugin/plugin.json
-    └── hooks/
-        ├── hooks.json              # Registers Stop + Notification
-        ├── notify-project.sh       # The hook: parses hook JSON, dispatches
-        └── notify-monitors.py      # GTK card drawn on every monitor
+    ├── evals/assets/               # Shared Vue + Go fixture app every web skill's evals run on
+    └── skills/
+        ├── style/                  # Vue/TS rulebook + reference Biome config; style-only pass
+        ├── review/                 # Done-time review: style via style, correctness, API contract
+        ├── cover/                  # Raise Vitest coverage per unit, from direct tests only
+        ├── doc/                    # Fix and complete TSDoc, header blocks, comments
+        ├── e2e/                    # Raise Playwright coverage per route; extend the Go fake
+        ├── improve/                # Audit a running app, commit one UX fix at a time
+        ├── perf/                   # Measure a running app, commit one measured fix at a time
+        └── audit/                  # Read-only all-dimension code audit, one graded report
 ```
 
-Skills are grouped into **four plugins** (`go`, `srd`, `craft`, `web`);
-a fifth, `notify`, ships hooks instead of skills.
-Each skill plugin is a directory with a `.claude-plugin/plugin.json` manifest and
+Skills are grouped into **four plugins** (`go`, `srd`, `craft`, `web`).
+Each plugin is a directory with a `.claude-plugin/plugin.json` manifest and
 a `skills/` folder holding one directory per skill. Each skill directory has a
 `SKILL.md` (the prompt, including its `## Usage` block), an `evals/evals.json`
 (its eval scenarios), an `evals/expectations.json` (how each is graded, kept
@@ -100,18 +93,12 @@ Skills ship no `README.md` — the repo-level one orients humans.
 
 Claude consumes the skills as plugins, not as loose skill folders:
 
-- `.claude-plugin/marketplace.json` lists the five plugins, each pointing at its
+- `.claude-plugin/marketplace.json` lists the four plugins, each pointing at its
   group directory via `source` (e.g. `"./srd"`). Skills inside a group are
   discovered by the default `skills/` scan — the marketplace does not list them
   individually.
 - Each group's `.claude-plugin/plugin.json` names the plugin. That name becomes
   the skill namespace: `create` is invoked as `/srd:create`.
-- A plugin may ship no skills at all. `notify` carries only
-  `hooks/hooks.json`, whose commands resolve through `${CLAUDE_PLUGIN_ROOT}`
-  so they work from the plugin cache as well as from `--plugin-dir`. Hooks load
-  at session start, so a change there needs a restart, not `/reload-plugins`.
-  `dev/lint-skills.sh` walks only directories holding a `SKILL.md`, so a
-  skill-less plugin is checked for its manifest and version alone.
 
 Install and update commands are in [README.md](./README.md#install); the
 edit-test dev loop (`--plugin-dir` + `/reload-plugins`) is in

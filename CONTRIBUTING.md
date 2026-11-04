@@ -20,9 +20,6 @@ A skill lives at `<group>/skills/<skill-name>/`. Pick the group by purpose:
 | `craft` | Cross-cutting engineering-craft aids             |
 | `web`   | Vue/TS frontend: style, review, tests, UX, speed |
 
-The fifth plugin, `notify`, is hooks-only and holds no `skills/` directory —
-never place a skill there.
-
 Adding a skill to an existing group needs **no** marketplace change — the
 plugin's default `skills/` scan discovers it. Only a brand-new group needs its
 own `.claude-plugin/plugin.json` plus an entry in

@@ -35,13 +35,6 @@
       "description": "Web-app workflow on Vue 3 + TypeScript: the enforced style rules and a style-only pass with a reference Biome config (style), done-time review with the API contract (review), per-unit Vitest coverage (cover), TSDoc and comment fixing (doc), per-route Playwright coverage (e2e), UX improvement committed one ranked fix at a time with before/after pictures (improve), and performance fixes measured under a 4x CPU slowdown, front end and back end, without changing what the user sees (perf), and a read-only audit of the code across review, coverage, TSDoc, and route coverage in one graded report (audit).",
       "strict": true,
       "category": "development"
-    },
-    {
-      "name": "notify",
-      "source": "./notify",
-      "description": "Desktop attention signal: a sound plus a small card centred near the top of every monitor when Claude stops or asks for input. Hooks only \u2014 ships no skills.",
-      "strict": true,
-      "category": "productivity"
     }
   ]
 }

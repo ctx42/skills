@@ -3,8 +3,7 @@
 Guide for AI agents working in this repository.
 
 This repository is a collection of reusable skills for Claude. Skills ship as
-**Claude Code plugins**, grouped into `go`, `srd`, `craft`, and `web`. A
-fifth plugin, `notify`, ships desktop-attention hooks and no skills. Each skill
+**Claude Code plugins**, grouped into `go`, `srd`, `craft`, and `web`. A skill
 is a directory under a group's `skills/` folder with a `SKILL.md` (the prompt,
 including its `## Usage` block), an `evals/evals.json` (its eval scenarios), an
 `evals/expectations.json` (how each is graded — separate so a run can be
@@ -25,8 +24,7 @@ Skills ship no `README.md`; the repo-level one orients humans.
 3. **Skills live under a group.** A skill's path is `<group>/skills/<name>/`.
    Adding one to an existing group needs no marketplace edit — the default
    `skills/` scan finds it. A new group needs its own `.claude-plugin/plugin.json`
-   and a `marketplace.json` entry. Never add a skill to `notify` — it is a
-   hooks-only plugin.
+   and a `marketplace.json` entry.
 4. **Reference siblings relatively.** Skills in the same plugin resolve each other
    as `../sibling/...` (they are cached together). Cross-plugin file references do
    not resolve — keep interdependent skills in one group.
@@ -158,17 +156,6 @@ source of truth.
   by default, `auto` and `loop` for unattended runs. Needs the craft plugin.
 - `audit` — read-only audit across review, cover, doc, and e2e, merged into
   one graded findings report naming each fix command.
-
-### notify
-
-Ships no skills. `hooks/hooks.json` registers `Stop` and `Notification`, both
-running `hooks/notify-project.sh` via `${CLAUDE_PLUGIN_ROOT}`; that script reads
-the hook JSON from stdin and hands the message and project name to
-`hooks/notify-monitors.py`, which draws a GTK card on every monitor. Events
-carrying `agent_id` (fired inside a subagent) are dropped. Linux
-(X11/XWayland) and macOS only, degrading to `notify-send` and then to stderr.
-Hooks are read at session start — test a change by restarting, not with
-`/reload-plugins`.
 
 ## More Detail
 

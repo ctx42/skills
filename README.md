@@ -13,8 +13,7 @@ symlinking.
 ## Organization
 
 Skills are grouped into four plugins, one directory per plugin, each with its
-own manifest and a `skills/` folder. A fifth plugin, `notify`, carries no
-skills — it ships only desktop-notification hooks:
+own manifest and a `skills/` folder:
 
 ```
 <repo-root>/
@@ -31,21 +30,17 @@ skills — it ships only desktop-notification hooks:
 ├── craft/
 │   ├── .claude-plugin/plugin.json
 │   └── skills/{cm,grill-me,plan-smith,readme-smith,doc-smith,skill-enhance,skill-fold-lessons,skill-eval,fix-all}/
-├── web/
-│   ├── .claude-plugin/plugin.json
-│   └── skills/{style,review,cover,doc,e2e,improve,perf,audit}/
-└── notify/                              # hooks only — no skills/ folder
+└── web/
     ├── .claude-plugin/plugin.json
-    └── hooks/{hooks.json,notify-project.sh,notify-monitors.py}
+    └── skills/{style,review,cover,doc,e2e,improve,perf,audit}/
 ```
 
-| Plugin   | Skills                                                                                                                      | Purpose                                                                                                                                 |
-|----------|-----------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| `go`     | `style`, `review`, `cover`, `doc`, `reshape`, `audit`                                                                       | Go style (write + check), done-time review, test coverage, doc fixing, API proposals, one-report audit                                  |
-| `srd`    | `create`, `review`, `edit`, `doc-edit`, `questions`, `report-doc-gap`, `backlog`, `kb`                                      | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base                                                       |
-| `craft`  | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `skill-enhance`, `skill-fold-lessons`, `skill-eval`, `fix-all` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning, lesson folding, skill evals, unattended fixing |
-| `web`    | `style`, `review`, `cover`, `doc`, `e2e`, `improve`, `perf`, `audit`                                                        | Vue/TS style, review, unit and e2e coverage, docs, one-report audit; UX and speed fixes in a visible Chrome                             |
-| `notify` | — (hooks only)                                                                                                              | Sound and an on-screen card on every monitor when Claude stops or needs input                                                           |
+| Plugin  | Skills                                                                                                                      | Purpose                                                                                                                                 |
+|---------|-----------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `go`    | `style`, `review`, `cover`, `doc`, `reshape`, `audit`                                                                       | Go style (write + check), done-time review, test coverage, doc fixing, API proposals, one-report audit                                  |
+| `srd`   | `create`, `review`, `edit`, `doc-edit`, `questions`, `report-doc-gap`, `backlog`, `kb`                                      | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base                                                       |
+| `craft` | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `skill-enhance`, `skill-fold-lessons`, `skill-eval`, `fix-all` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning, lesson folding, skill evals, unattended fixing |
+| `web`   | `style`, `review`, `cover`, `doc`, `e2e`, `improve`, `perf`, `audit`                                                        | Vue/TS style, review, unit and e2e coverage, docs, one-report audit; UX and speed fixes in a visible Chrome                             |
 
 Plugin skills are **namespaced** by their plugin (e.g. `/srd:review`),
 so they never silently shadow a personal or project skill of the same name.
@@ -62,8 +57,7 @@ so they never silently shadow a personal or project skill of the same name.
 /plugin install go@ctx42-skills
 /plugin install srd@ctx42-skills
 /plugin install craft@ctx42-skills
-/plugin install web@ctx42-skills      # needs craft and Chrome DevTools MCP
-/plugin install notify@ctx42-skills   # Linux/macOS desktop only
+/plugin install web@ctx42-skills   # needs craft and Chrome DevTools MCP
 ```
 
 Update to the latest with `/plugin marketplace update ctx42-skills`.
@@ -99,7 +93,6 @@ per machine.
    claude plugin install srd@ctx42-skills
    claude plugin install craft@ctx42-skills
    claude plugin install web@ctx42-skills
-   claude plugin install notify@ctx42-skills
    ```
 
 4. **Restart Claude** (or run `/reload-plugins`), then verify with `/plugin` or
@@ -121,8 +114,7 @@ dotfiles:
     "go@ctx42-skills": true,
     "srd@ctx42-skills": true,
     "craft@ctx42-skills": true,
-    "web@ctx42-skills": true,
-    "notify@ctx42-skills": true
+    "web@ctx42-skills": true
   }
 }
 ```
