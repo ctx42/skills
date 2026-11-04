@@ -59,3 +59,6 @@ Whenever any id must change, state the change and get explicit approval as part
 of the loop's confirmation. A renumbering pass excludes every comment block from
 the substitution (comment text is verbatim history and may name an id that
 never existed); verify afterwards that no comment line carries a new-scheme id.
+After renumbering, when a review file holds open findings, say they still cite
+the old ids: `review check` leaves an unaddressed finding untouched, so never
+promise it re-points them.
