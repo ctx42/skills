@@ -65,12 +65,14 @@ something no finding names. No findings in the conversation: say so and stop.
    baseline or dirty-tree question and, when the user's instructions or the
    harness forbid committing, one asking leave to commit, answered once for
    every fix — in order, one question per question-tool call (one numbered
-   message without such a tool), each with the situation, the options, and
-   your recommendation in plain terms. Nothing to ask: say "no questions;
-   working unattended" and go on in the same turn. Ask every one and wait for
-   the answers. Each left unanswered takes the safe side: the finding is
-   skipped, a baseline failure counts as known, and without leave to commit
-   the run lists the triage, writes no Report, and stops before any edit.
+   message without such a tool), each with the situation, the options, and your
+   recommendation in plain terms. Before offering a commit layout, measure it
+   against every limit a commit hook enforces (size, review coverage). Nothing
+   to ask: say "no questions; working unattended" and go on in the same turn.
+   Ask every one and wait for the answers. Each left unanswered takes the safe
+   side: the finding is skipped, a baseline failure counts as known, and without
+   leave to commit the run lists the triage, writes no Report, and stops before
+   any edit.
 
 From here on, never ask: not to confirm a fix, not to commit, not to continue.
 
@@ -96,16 +98,20 @@ For each fix:
    applying one style rule across many sites leaves the forms another rule
    mandates; read the rulebook before it. An edit to hard-wrapped Markdown
    rewraps the whole paragraph it touches, never splitting an inline code span
-   across lines. Before proving a new test red on the old code, read what the
-   old code does with that input: shape the fixture so only the check under test
-   can fire, and run a test that shells out from the package directory (a runner
-   invoking `go test ./...`) in a temp dir, since it can recurse. Prove it red
-   as it will be committed — after it passes the per-file checks, line width
-   included — and before changing any signature it calls, which leaves the old
-   code unbuildable. A test for code already correct is proved red by mutating
-   the branch it covers; one still green under the mutation asserts a rendering
-   that hides the change (an error's text can hide its nested fields), so assert
-   the data the branch changes.
+   across lines. When a fix reads several sources (inputs, branches, both sides
+   of a check), give each a fixture value only it supplies and, beyond the red
+   on the old code, mutate each source alone once the fix is in, proving its
+   test goes red. A boundary test row holds exactly the edge value; any other
+   feature gets its own row. Before proving a new test red on the old code, read
+   what the old code does with that input: shape the fixture so only the check
+   under test can fire, and run a test that shells out from the package
+   directory (a runner invoking `go test ./...`) in a temp dir, since it can
+   recurse. Prove it red as it will be committed — after it passes the per-file
+   checks, line width included — and before changing any signature it calls,
+   which leaves the old code unbuildable. A test for code already correct is
+   proved red by mutating the branch it covers; one still green under the
+   mutation asserts a rendering that hides the change (an error's text can hide
+   its nested fields), so assert the data the branch changes.
 2. Check before committing. A fix that turns out to need a contract or compat
    change nobody foresaw is not applied: restore its files, defer it with the
    reason, and go on. A fix relying on timing or ordering (a watcher flush, a
