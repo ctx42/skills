@@ -209,6 +209,14 @@
       "must": [
         "the unknown-token rule below never applies to it"
       ]
+    },
+    {
+      "id": "index-emptied-alone",
+      "rule": "apply empties the index in its own command, and marks new files intent-to-add under a gate that compares the diff",
+      "must": [
+        "Empty the index in its own command",
+        "mark\\s+each\\s+new\\s+file\\s+`git add -N`"
+      ]
     }
   ]
 }

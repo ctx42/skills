@@ -1,1 +1,0 @@
-- Describe what a rule or guideline in the diff aims at, never what it guarantees: a rule an agent follows "keeps" or "aims to keep" something, it does not make it "cannot happen".

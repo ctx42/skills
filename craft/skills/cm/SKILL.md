@@ -81,10 +81,14 @@ Commit control:
      it calls. Judge it from the diff; never run a build or tests — the user's
      checks already passed. Merge two groups only when each needs the other.
      With nothing to compile, group by meaning alone.
-  4. Empty the index (`git reset -q`; `git rm -r -q --cached .` before the
-     first commit), then per group, a lone group included, stage, check, and
-     commit in one command; a part of a file is staged in its own command just
-     before. Stage whole files with `git add -- <paths>`; part of a file with
+  4. Empty the index in its own command (`git reset -q`;
+     `git rm -r -q --cached .` before the first commit), since a hook that
+     blocks a command skips every part of it. Only under a commit gate that
+     compares the diff, mark each new file `git add -N` in the next command, one
+     staged later by `--cacheinfo` included, or it turns untracked and changes
+     that diff. Then per group, a lone group included, stage, check, and commit
+     in one command; a part of a file is staged in its own command just before.
+     Stage whole files with `git add -- <paths>`; part of a file with
      `printf 'y\nn\n' | git add -p -- <path>`, one answer per hunk
      `git diff -- <path> | grep '^@@'` lists, in order — counted, never guessed
      from the edits, since nearby edits share a hunk — or, when two concerns
@@ -93,9 +97,9 @@ Commit control:
      `git hash-object -w --stdin` and passing the printed sha to
      `git update-index --add --cacheinfo <mode>,<sha>,<path>` (mode from
      `git ls-files -s`, `100644` for a new file) in the next command; never
-     zero-context hunks (`-U0`, `--unidiff-zero`), which land on the wrong
-     line once an earlier hunk is skipped. Draft the message from that group's
-     diff alone — the hunks step 1 read, never re-read in full — at the chosen
+     zero-context hunks (`-U0`, `--unidiff-zero`), which land on the wrong line
+     once an earlier hunk is skipped. Draft the message from that group's diff
+     alone — the hunks step 1 read, never re-read in full — at the chosen
      verbosity, its body never describing what another commit in the series
      carries.
   5. When a commit fails (a hook rejects it), stop: keep the landed commits,
@@ -208,7 +212,8 @@ review; they see only the diff and the message.
   that still supply the property — and narrow the claim to what they leave
   true. Check a claim spanning several files against each one; call a change
   a pure rename only when every removed line, names normalized and signs
-  stripped, equals an added line.
+  stripped, equals an added line. A rule or guideline in the diff aims at its
+  outcome: it "keeps" something, it never makes it "cannot happen".
 
 - Paraphrase only to the exact meaning: "leave X alone" is not "unset X".
   Where a synonym would shift what the change does, reuse the diff's wording.
@@ -217,14 +222,14 @@ review; they see only the diff and the message.
   not umbrella slogans that hide the actual edits.
 
 - Every number in the body is read off the diff, not reasoned out from it nor
-  carried from the session: a tally of the diff's own items (files, flags) and
-  a size, count, or timing measured outside the diff stay out. A message
-  describing `1<<attempt * 100ms` over `maxAttempts = 3` as backing off
-  "200ms, 400ms and 800ms" invented the third value — the third attempt is the
-  last one, so it never sleeps. Retry counts, timeouts, sizes, versions: take
-  them from the changed lines or leave them out. The reader checks the message
-  against the diff, and a wrong number there discredits the rest of a message
-  that was otherwise right.
+  carried from the session: a tally of the diff's own items (files, flags) and a
+  size, count, timing, or before/after figure measured outside the diff stay
+  out. A message describing `1<<attempt * 100ms` over `maxAttempts = 3` as
+  backing off "200ms, 400ms and 800ms" invented the third value — the third
+  attempt is the last one, so it never sleeps. Retry counts, timeouts, sizes,
+  versions: take them from the changed lines or leave them out. The reader
+  checks the message against the diff, and a wrong number there discredits the
+  rest of a message that was otherwise right.
 
 - If the diff mixes unrelated edits (e.g. IDE config + library fix), say so
   in the body and ask the user to split it into separate commits — still
