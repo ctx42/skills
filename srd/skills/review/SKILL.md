@@ -78,7 +78,10 @@ facts (people, tracking and design links, the lifecycle value) as placeholders;
 a finished SRD under review must satisfy every rule on them — flag every
 placeholder left. Exception: a rule that an external artifact (a work item, a
 design set) link back to the SRD lives outside the SRD, so check only that the
-forward link is present and never raise a back-link finding.
+forward link is present and never raise a back-link finding. A design link
+whose file name differs from the feature is no defect: a requirement may reuse
+another feature's design; flag only the rule its placement breaks and ask the
+author about the target.
 
 ## Documentation corpus
 
@@ -146,8 +149,9 @@ The one exception is `check`'s status table, which its procedure requires.
 `errata` is a file-writing run and owes it too: its own "which numbers moved"
 line says what the re-sort did, not what the file now holds.
 
-Count those from the finished file, not from memory of writing it: a wrong
-tally sends the author to the wrong findings.
+Count those from the finished file, not from memory of writing it, any Errata
+count the reply gives included: a wrong tally sends the author to the wrong
+findings.
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
 
