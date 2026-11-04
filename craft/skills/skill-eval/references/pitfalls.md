@@ -68,3 +68,6 @@ Add a line when a run teaches a new one.
   included, and no flag removes them; the user's own `CLAUDE.md` does not
   reach a run.
 - Batch the decisions a run needs before editing, so one eval round covers all.
+- Before trusting a clean diff-mode tier, compare what it read (proposed count,
+  inputs) with `git diff --name-only <base>`: a repo under test nested in
+  another git repo loses changed references silently.
