@@ -1,3 +1,34 @@
+## v0.30.0 (Fri, 06 Nov 2026 10:55:55 UTC)
+- style(plan-smith): re-wrap the create step on acceptance criteria.
+- feat(create)!: require the full SRD key set at the gate.
+- feat(check): add srd:check, a read-only check of the SRD setup.
+- feat(init)!: write only the keys the srd skills read.
+- docs: list srd:check and the narrowed srd:init in the catalog.
+- fix(evals): anchor the init sources grader per line.
+- fix(questions): report a dropped question when the review looked it up.
+- fix(questions): count a glossary lookup as looking a term up.
+- docs(init): write the SRD skill keys section as prose.
+- fix(create): let the gate check that precedence is set.
+- feat(style): add robustness and test-isolation rules.
+- fix(review): measure line width in characters, never with awk.
+- feat(plan-smith): give code-changing items an Edges line.
+- fix(cm): width-check the whole message and verify per-file claims.
+- perf(cm): run the skill at medium effort.
+- docs(cm): record a lesson on describing rules.
+- fix(fix-all): work fixes in sequence, never in parallel agents.
+- docs(skill-fold-lessons): record a lesson on rewording lines.
+- feat!: remove the notify plugin.
+- feat(srd): admit kept casing sites and link moves as errata.
+- fix(srd): say review findings keep old ids after renumbering.
+- fix(srd): stop flagging a design link by its file name.
+- feat(cm): empty the index in its own command.
+- fix(fix-all): isolate each source and edge value in tests.
+- fix(grill-me): cite the meaning of a term or field.
+- docs(skill-eval): add a pitfall on clean diff-mode tiers.
+- docs(skill-eval): record a lesson on flipping probes.
+- feat(skill-fold-lessons): check contracts before rewording.
+- fix(improve): stub missing data and ask on a lost login.
+
 ## v0.29.0 (Sun, 01 Nov 2026 16:29:58 UTC)
 - feat: ctx42 skill suite.
 - test(skill-eval): add tests for the pass ledger and eval-changed.sh.
