@@ -212,10 +212,20 @@
     },
     {
       "id": "index-emptied-alone",
-      "rule": "apply empties the index in its own command, and marks new files intent-to-add under a gate that compares the diff",
+      "rule": "apply empties the index in its own command, and marks new files intent-to-add under a gate that compares the diff, except a file the pass saw untracked",
       "must": [
         "Empty the index in its own command",
-        "mark\\s+each\\s+new\\s+file\\s+`git add -N`"
+        "mark\\s+each\\s+new\\s+file\\s+`git add -N`",
+        "skip\\s+the\\s+mark\\s+for\\s+a\\s+file\\s+the\\s+pass\\s+saw\\s+untracked"
+      ]
+    },
+    {
+      "id": "review-opt-in",
+      "rule": "review is opt-in: with apply or asis it runs the reviewer before the first commit and a Blocker commits nothing; without it no review starts before a commit",
+      "must": [
+        "`review` with `apply` or `asis` reviews first",
+        "A\\s+Blocker stops the run: commit nothing",
+        "Without `review`, never start one before a commit"
       ]
     }
   ]

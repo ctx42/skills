@@ -6,7 +6,7 @@ description: >
   commits. Use when asked to write, amend, or commit a commit message, to split
   changes into logical commits, or to describe or summarize staged changes for
   the git log.
-argument-hint: "[micro|mini*|full] [apply|asis] [<hash>]"
+argument-hint: "[micro|mini*|full] [apply|asis] [review] [<hash>]"
 effort: medium
 license: MIT
 ---
@@ -21,6 +21,7 @@ license: MIT
 /craft:cm full    full multi-paragraph kernel-style body
 /craft:cm apply   stage the whole working tree, split it into logical commits, commit each, no confirm (combines, e.g. micro apply)
 /craft:cm asis    stage the whole working tree and commit it as one commit, no confirm
+/craft:cm review  with apply or asis: review the Go changes before committing (e.g. apply review)
 /craft:cm <hash>  derive the message from that commit's diff instead of the staged diff (with apply: amend HEAD's message)
 ```
 
@@ -86,9 +87,11 @@ Commit control:
      blocks a command skips every part of it. Only under a commit gate that
      compares the diff, mark each new file `git add -N` in the next command, one
      staged later by `--cacheinfo` included, or it turns untracked and changes
-     that diff. Then per group, a lone group included, stage, check, and commit
-     in one command; a part of a file is staged in its own command just before.
-     Stage whole files with `git add -- <paths>`; part of a file with
+     that diff; skip the mark for a file the pass saw untracked, as every new
+     file under `review`, where it changes that diff instead. Then per group, a
+     lone group included, stage, check, and commit in one command; a part of a
+     file is staged in its own command just before. Stage whole files with
+     `git add -- <paths>`; part of a file with
      `printf 'y\nn\n' | git add -p -- <path>`, one answer per hunk
      `git diff -- <path> | grep '^@@'` lists, in order — counted, never guessed
      from the edits, since nearby edits share a hunk — or, when two concerns
@@ -113,6 +116,19 @@ Commit control:
 - `apply` and `asis` together contradict: say so, commit nothing, and ask
   which one; with a commit-ish too, name that in the same question (`asis`
   takes none, `apply` with it rewrites that commit's message).
+- `review` with `apply` or `asis` reviews first: before anything is staged,
+  when `.go` files changed, start the `go-change-reviewer` agent with the
+  repository path as its prompt and commit only after it records a pass, which
+  means no Blocker; name any lesser findings in the reply. A Blocker stops the
+  run: commit nothing, not even files it does not touch, and report it. No such
+  agent: say so, commit nothing, and stop. No `.go` change: carry on. Alone or
+  on an amend, `review` does nothing: say so in one line. Without `review`,
+  never start one before a commit. A gate that blocks a commit and asks for that
+  agent is no step 5 failure: start it, then retry that commit. Under a gate
+  keyed on per-file diffs, a landed commit voids the pass for later groups
+  sharing its files: within step 3's order, land groups with disjoint files back
+  to back under one pass, and expect a new pass before each group that shares a
+  file.
 - Commit with `git commit -F -` reading the message on stdin from a heredoc,
   each commit its own shell command with nothing chained after the heredoc
   opener, or `git commit --amend -F -` for an amend — `--only` as well whenever

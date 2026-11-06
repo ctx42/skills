@@ -128,6 +128,22 @@
       "pass": "^\\W*ASK\\b",
       "fail": "^\\W*(ONE-COMMIT|TWO-COMMITS)\\b",
       "class": "redundant"
+    },
+    {
+      "id": "review-before-staging",
+      "rule": "review-opt-in",
+      "prompt": "Situation: `/craft:cm apply review`. The working tree holds edits to `fetch.go`.\n\nQuestion: what do you run first? Answer on the first line with exactly one of: GIT-ADD, GIT-DIFF, SUBAGENT. Then one sentence why.",
+      "pass": "^\\W*SUBAGENT\\b",
+      "fail": "^\\W*(GIT-ADD|GIT-DIFF)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "no-mark-after-untracked-pass",
+      "rule": "index-emptied-alone",
+      "prompt": "Situation: `/craft:cm apply review` is running under a commit gate that compares the diff. The reviewer has recorded its pass, step 1 has staged everything, and you have just emptied the index in step 4. The tree holds one new file, `notes.go`, that was never in git before this run.\n\nQuestion: what do you do with `notes.go` before committing the first group? Answer on the first line with exactly one of: MARK (run `git add -N`), LEAVE. Then one sentence why.",
+      "pass": "^\\W*LEAVE\\b",
+      "fail": "^\\W*MARK\\b",
+      "class": "redundant"
     }
   ]
 }
