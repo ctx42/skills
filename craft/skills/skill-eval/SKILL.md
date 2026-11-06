@@ -89,8 +89,9 @@ skill text:
 2. `scripts/eval-routine.sh --base <base>`: probes, hunt, and triggers in
    parallel. For a target the diff does not touch, run the probes and the hunt
    with `--skill <group>/<skill>` (hunt `--full`) instead.
-3. Agent cases: `scripts/eval-changed.sh` lists the cases the diff reaches
-   (`--skill <group>/<skill>` for a named skill) with an estimate. Once the
+3. Agent cases: `scripts/eval-changed.sh` with no flag lists the cases the diff
+   reaches, with an estimate; for a named skill or group add `--dry-run` to
+   `--skill <group>/<skill>` or `--all <group>`, or they run the cases. Once the
    target is confirmed or needs no confirmation, run probes, hunt, and triggers
    without asking — they cost cents; before any agent case, state the case list,
    the count, and the estimate, and ask — whatever the size. On a yes, run
