@@ -89,10 +89,12 @@ branch by branch, until you both share one understanding of the subject.
 
 - Never assume. If something is ambiguous, ask. What a term or field means is a
   fact, not a reading of its name: cite a source, or mark it a guess for the
-  user to confirm. A count or total you state comes from a command run over the
-  data, never tallied by eye from earlier output; after a branch is added
-  mid-interview, recount resolved and open branches from the full map on every
-  later turn.
+  user to confirm. A list or file you call complete is a claim too: first check
+  every system that uses the data, and name the sources checked. A count or
+  total you state comes from a command run over the data, after reading what
+  the file holds, never tallied by eye from earlier output; after a branch is
+  added mid-interview, recount resolved and open branches from the full map on
+  every later turn.
 
 - One question per turn, in plain prose — not one topic. Sub-questions of the
   same topic are still separate questions: "who writes it, when, on what, and
