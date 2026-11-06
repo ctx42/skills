@@ -32,6 +32,9 @@ Add a line when a run teaches a new one.
 - Keep an LLM grader's rule equal to the skill's, exceptions included.
 - A fail regex must not match a pass answer by prefix: `LOCAL\b` matches
   `LOCAL-AND-…`.
+- In a scripted multi-turn case, `last_message` can hold the whole interview: a
+  judge asked how the reply ends sees every question and votes at random, so
+  anchor a regex on the end instead.
 
 ## Contracts and probes
 

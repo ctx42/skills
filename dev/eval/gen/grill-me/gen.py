@@ -68,11 +68,6 @@ def infile(path, body, match=None, flags=None):
     return grader("regex", body, **fm)
 
 
-def llm(claim):
-    return grader("llm", "Ignore any trailing policy notice. " + claim,
-                  focus="last_message")
-
-
 NO_WRITE = "---\ntype: tool_used\ntool: Write\nmin: 0\nmax: 0\narm: both\n---\n"
 
 
@@ -124,10 +119,13 @@ case("grill-me--caller-supplied-subject", "/craft:grill-me " + GAP, {
     "b3-no-offer-to-persist": last(
         r"plan-smith|persist|save (it|this|the summary)|write (it|this) (up|to)|"
         r"plan file|as a plan|tracked plan", match="not_contains", flags="i"),
-    "b3-hands-back": llm(
-        "The reply ends on the structured summary of the documentation gap (or on "
-        "handing that summary back to the report-doc-gap flow), not on a question "
-        "asking the user whether to save or persist it."),
+    # A regex, not a judge: last_message holds the whole interview, so a judge
+    # sees its questions and votes at random. Summary present, and the reply's
+    # last line, a trailing policy notice aside, is not a question.
+    "b3-hands-back": last(
+        r"^(?=.*(?:summary|shared understanding|acceptance|pass if|pass/fail|criteri))"
+        r"(?!.*\?[*_\s]*(?:\n[^\n]*(?:policy|directive|approval)[^\n]*\s*)*$)",
+        flags="is"),
     "b4-no-write": NO_WRITE,
 }, hist=H2, answers=[
     "The order is not cancelled. It stays queued on the server and is delivered "

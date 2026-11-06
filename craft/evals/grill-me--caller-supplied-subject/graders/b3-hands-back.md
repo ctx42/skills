@@ -1,5 +1,6 @@
 ---
-type: llm
-focus: last_message
+type: regex
+target: last_message
+flags: "is"
 ---
-Ignore any trailing policy notice. The reply ends on the structured summary of the documentation gap (or on handing that summary back to the report-doc-gap flow), not on a question asking the user whether to save or persist it.
+^(?=.*(?:summary|shared understanding|acceptance|pass if|pass/fail|criteri))(?!.*\?[*_\s]*(?:\n[^\n]*(?:policy|directive|approval)[^\n]*\s*)*$)
