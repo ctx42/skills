@@ -335,6 +335,16 @@
         "every\\s+site\\s+it\\s+names\\s+as\\s+kept",
         "a\\s+casing\\s+finding's\\s+kept\\s+sites"
       ]
+    },
+    {
+      "id": "autofix-runs-check",
+      "file": "references/autofix.md",
+      "rule": "Before the manifest, autofix invokes srd:review check on exactly the applied numbers; when that fails it names the command",
+      "must": [
+        "invoke\\s+`srd:review`\\s+with\\s+`<srd>\\s+check\\s+#n,n…`",
+        "scoped\\s+to\\s+exactly\\s+the\\s+applied\\s+errata\\s+numbers",
+        "name\\s+that\\s+exact\\s+command\\s+for\\s+the\\s+user\\s+to\\s+run"
+      ]
     }
   ]
 }

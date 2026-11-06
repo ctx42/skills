@@ -190,6 +190,19 @@
       "fail": "^\\W*(APPLY-THE-LINK|ASK-AUTHOR)\\b",
       "bullets": [],
       "class": "load-bearing"
+    },
+    {
+      "id": "autofix-invokes-check",
+      "rule": "autofix-runs-check",
+      "context": [
+        "SKILL.md",
+        "references/autofix.md"
+      ],
+      "prompt": "Situation: `/srd:edit specs/x.md autofix`, the user said Yes to the batch. Findings #4 and #7 were applied and logged. Nothing has been reported to the user yet.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: WRITE-MANIFEST, INVOKE-SKILL. Then one sentence why.",
+      "pass": "^\\W*INVOKE-SKILL\\b",
+      "fail": "^\\W*WRITE-MANIFEST\\b",
+      "bullets": [],
+      "class": "load-bearing"
     }
   ]
 }

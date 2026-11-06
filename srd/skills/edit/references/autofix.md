@@ -77,14 +77,14 @@ touches ids.
    `decision-log.md`. The batch path owes the log exactly what the loop owes it:
    this procedure covers finding and applying the fixes, not the whole of what
    the mode owes.
-7. When anything landed, hand off to `review <srd> check #n,n…` scoped to
-   exactly the applied errata numbers, so `review` moves them to `## Resolved`
-   and leaves other findings untouched. Hand off by naming that exact command
-   for the user to run: `edit` never invokes `review`, which owns the review
-   file. Skip the hand-off if nothing landed.
+7. When anything landed, invoke `srd:review` with `<srd> check #n,n…`, scoped
+   to exactly the applied errata numbers, so `review` moves them to
+   `## Resolved` and leaves other findings untouched. `edit` itself writes
+   nothing to the review file. When `check` cannot run, name that exact command
+   for the user to run in the manifest. Nothing landed: skip it.
 8. Session end (`SKILL.md`) runs without its step 1 (surface-only fixes) and
    invokes no delegate in its step 2 (autofix attests no fact and captures no
    gap; a prior session's drafts were checked at session start). Its step 3
-   manifest is owed like every mode's, and also names the findings handed to
-   `check` — not what `check` then did with them, which happens after this run
-   ends — and every finding skipped as stale, ambiguous, or malformed.
+   manifest is owed like every mode's and closes the run in one message: it also
+   states what `check` did with each applied finding, or that it did not run,
+   and names every finding skipped as stale, ambiguous, or malformed.

@@ -21,7 +21,7 @@ license: MIT
 /srd:edit <srd> ABC-5            interactive from ABC-5: walk from that requirement or scope entry
 /srd:edit <srd> <srd>.review.md  feedback: apply a review file or pasted feedback, scope last, blocker → major → minor
 /srd:edit <srd> #2               feedback from finding #2, then next by number or jump to any number
-/srd:edit <srd> autofix          bulk-apply the review's ## Errata block behind one confirmation
+/srd:edit <srd> autofix          bulk-apply the review's ## Errata block behind one confirmation, then run review's check on what landed
 /srd:edit <srd> polish           mechanical-only cleanup (spelling, numbering, keywords), confirm each
 /srd:edit <srd> summary [today]  read-only: newest decision-log block (or a day; `<date> <HH:MM>` one block) as a chat message
 /srd:edit <srd> ABC-3a <change>  targeted: edit one entry by id plus the change, quoted text, or description

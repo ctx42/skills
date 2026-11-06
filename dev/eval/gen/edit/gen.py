@@ -290,7 +290,7 @@ r8 = review("""## Errata
 
 - [ ] #5 [major, verifiability] SW-2: "shortly before" is vague — state the
   swap deadline. (SRD:RQT-6)""")
-AUTOFIX = REVIEW + DLOG + ["ref:edit/autofix", "ref:create/errata"]
+AUTOFIX = REVIEW + DLOG + ["ref:edit/autofix", "ref:create/errata", "ref:review/check-mode"]
 pair("autofix-bulk-applies-errata", AUTOFIX, f"/srd:edit {SRD}.md autofix",
      {f"{SRD}.md": s8, f"{SRD}.review.md": r8},
      {
@@ -306,12 +306,12 @@ pair("autofix-bulk-applies-errata", AUTOFIX, f"/srd:edit {SRD}.md autofix",
          "b4-applied-pb1": g_file(f"{SRD}.md", r"- `PB-1` The system MUST reject an unauthorized booking request"),
          "b4-applied-pb3": g_file(f"{SRD}.md", r"Mission\s+Manifest\s+cannot\s+be\s+parsed"),
          "b4-third-reported-stale": g_last(r"#9.{0,300}(stale|no longer|not found|absent|reworded|zero|0 occurrences|does not (appear|occur|contain)|doesn't|isn't|not in)", "is"),
-         "b5-review-not-edited": g_never("Edit", '"file_path":"[^"]*payload-booking/srd\\.review\\.md"'),
-         "b5-review-not-written": g_never("Write", '"file_path":"[^"]*payload-booking/srd\\.review\\.md"'),
-         "b5-review-not-invoked": g_never("Skill", '"skill":"(srd:)?review'),
-         "b5-handoff-command": g_last(rf"review {SRD_RE}\.md check #(4,7|7,4)(?![,\d])"),
-         "b6-manifest-names-all": g_last(r"^(?=.*#4)(?=.*#7)(?=.*#9)(?=.*\bcheck\b)", "s"),
-         "b6-no-check-outcome": g_last(r"(check|review) (has |have )?(moved|resolved|ticked|closed)|(were|are|have been) (moved|ticked|closed)|now (sit |are )?(in|under) `?## Resolved", "i", "not_contains"),
+         "b5-review-file-after-check": g_trace(
+             r'"name":"(Edit|Write)"[^\n]*srd\.review\.md.*"skill":"(srd:)?review', "s", "not_contains"),
+         "b5-review-invoked": g_used("Skill", '"skill":"(srd:)?review', 1),
+         "b5-check-scoped": g_used("Skill", rf"{SRD_RE}\.md check #(4,7|7,4)(?![,\d])", 1),
+         "b6-manifest-names-all": g_last(r"^(?=.*#4)(?=.*#7)(?=.*#9)", "s"),
+         "b6-states-check-outcome": g_last(r"resolved|moved to|ticked|still open", "i"),
      },
      ["To the batch confirmation: \"Yes\"."])
 
@@ -420,7 +420,7 @@ write_case("edit--autofix-inserts-missing-notice", AUTOFIX, f"/srd:edit {SRD}.md
                "b1-not-below-header": g_regex(SRD_FILE, BELOW_HEADER, None, "not_contains"),
                "b1-exactly-once": g_regex(SRD_FILE, NOTICE_RE + ".*" + NOTICE_RE, "s", "not_contains"),
                "b2-applied-pb1": g_file(f"{SRD}.md", PB1_FIXED),
-               "b3-handoff-command": g_last(rf"review {SRD_RE}\.md check #(4,10|10,4)(?![,\d])"),
+               "b3-check-scoped": g_used("Skill", rf"{SRD_RE}\.md check #(4,10|10,4)(?![,\d])", 1),
            },
            ["To the batch confirmation: \"Yes\"."])
 
@@ -432,7 +432,7 @@ write_case("edit--autofix-misplaced-notice-is-stale", AUTOFIX, f"/srd:edit {SRD}
                "b1-left-in-place": g_regex(SRD_FILE, BELOW_HEADER),
                "b2-reported-stale": g_last(r"#10.{0,300}(stale|already|present|exists|misplaced|not (inserted|applied)|skipp)", "is"),
                "b3-applied-pb1": g_file(f"{SRD}.md", PB1_FIXED),
-               "b3-handoff-command": g_last(rf"review {SRD_RE}\.md check #4(?![,\d])"),
+               "b3-check-scoped": g_used("Skill", rf"{SRD_RE}\.md check #4(?![,\d])", 1),
            },
            ["To the batch confirmation: \"Yes\"."])
 
