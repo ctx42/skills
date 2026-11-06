@@ -42,6 +42,10 @@ Add a line when a run teaches a new one.
   when it pins new behaviour.
 - A probe that splits at the base too is flaky, not broken: confirm with one
   uncached rerun on both sides before changing text.
+- Before the one fix a gate allows for a probe that fails after an unrelated
+  change, run it with a stronger `--model` and `--against` the base: a haiku
+  answer can flip on one punctuation mark, so a haiku pass at the base proves
+  nothing.
 
 ## Editing skill text
 
