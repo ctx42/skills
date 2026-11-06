@@ -78,8 +78,9 @@ check changes the verdict, never passes silently:
 - Consistent: no conflict with the body, another item, or `contract.json`;
   narrowing what the body permits is no conflict (see Hold). Before rewording a
   line, grep the skill's `contract.json` and eval graders for every word you
-  would drop; keep a contract phrase verbatim and widen a grader keyed on the
-  old word.
+  would drop, one word at a time, never a whole phrase (a stored phrase can
+  escape its spaces); keep verbatim a contract phrase the line carries, and
+  widen a grader keyed on the old word.
 - Placed: one step governs it; a rule that fits no step is not yet a rule.
 - Written to the authoring rules: one dense imperative line, stated once, in
   the surrounding text's terms, no hedging; re-flowed so the paragraph it
