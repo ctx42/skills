@@ -210,7 +210,7 @@ the gate is the proof.
 - Never print diffs: report each applied fix as one line (`file:symbol — what
   changed`) plus the gate result. Never `git commit`.
 - Big job (many changed lines or restructuring edits): write an ordered plan to
-  a scratch file kept out of git (`tmp/style-fix-plan.md`), one chunk per
+  a scratch file kept out of git (`tmp/agent-plan-style-fix.md`), one chunk per
   directory with status boxes; the pick answer is the go-ahead; gate per chunk,
   and after each changed chunk report it and ask before the next.
 

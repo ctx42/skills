@@ -14,7 +14,7 @@ append_system_prompt: |
   Before taking a scripted answer, write out in full, as your reply text, the
   message you would send the user at that point.
 
-  1. 'Not tying out' means the per-entity daily totals in the export differ from the dashboard's totals for the same day. The files should go to the shared object store (s3://finance-exports) instead of the app server's disk, and failure notices go to the #data-alerts channel. Save the plan as tmp/export-plan.md.
+  1. 'Not tying out' means the per-entity daily totals in the export differ from the dashboard's totals for the same day. The files should go to the shared object store (s3://finance-exports) instead of the app server's disk, and failure notices go to the #data-alerts channel. Save the plan as tmp/agent-plan-export.md.
 ---
 
 /craft:plan-smith we need to get the nightly export working properly — right now it dumps everything to one CSV on the app server, which fills the disk, nobody is told when it fails, and finance says the numbers do not tie out with the dashboard. The figures can only be reconciled once the export is split per entity, since today there is nothing to compare line by line. Write that up as a plan.

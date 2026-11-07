@@ -4,8 +4,8 @@
     {
       "id": "report-line-shape",
       "rule": "report-shape",
-      "prompt": "Situation: `/plan-smith create` for a billing migration. You wrote tmp/billing-plan.md with 3 work items plus the closing 'Remove this plan' item (4 table rows); every row is `N`.\n\nQuestion: write the exact one-line report you give after writing, and nothing else on the first line. Then one sentence on what else the reply may contain.",
-      "pass": "^\\W*`?wrote tmp/billing-plan\\.md — 0 Y / 4 N / 0 X",
+      "prompt": "Situation: `/plan-smith create` for a billing migration. You wrote tmp/agent-plan-billing.md with 3 work items plus the closing 'Remove this plan' item (4 table rows); every row is `N`.\n\nQuestion: write the exact one-line report you give after writing, and nothing else on the first line. Then one sentence on what else the reply may contain.",
+      "pass": "^\\W*`?wrote tmp/agent-plan-billing\\.md — 0 Y / 4 N / 0 X",
       "class": "load-bearing"
     },
     {
@@ -19,7 +19,7 @@
     {
       "id": "finished-plan-delete",
       "rule": "closing-item-ask-delete",
-      "prompt": "Situation: `/plan-smith update tmp/x-plan.md`. After your evidence check, every item but the closing 'Remove this plan' item is now `Y` or `X`. The plan file is clutter once finished.\n\nQuestion: what do you do about the file? Answer on the first line with exactly one of: DELETE, ASK, LEAVE. Then one sentence why.",
+      "prompt": "Situation: `/plan-smith update tmp/agent-plan-x.md`. After your evidence check, every item but the closing 'Remove this plan' item is now `Y` or `X`. The plan file is clutter once finished.\n\nQuestion: what do you do about the file? Answer on the first line with exactly one of: DELETE, ASK, LEAVE. Then one sentence why.",
       "pass": "^\\W*ASK\\b",
       "fail": "^\\W*(DELETE|LEAVE)",
       "class": "redundant"
@@ -46,7 +46,7 @@
     {
       "id": "replacing-commit-not-a-drop",
       "rule": "drop-needs-words",
-      "prompt": "Situation: `/plan-smith update tmp/store-plan.md`. Item 3 is \"Add a Redis cache\" at `N`. The repo has a commit titled `refactor(store): replace Redis cache with an in-memory LRU`; its body explains the LRU and says nothing about the plan. The user has said nothing about item 3.\n\nQuestion: what status does item 3 get? Answer on the first line with exactly one of: X, N, Y. Then one sentence why.",
+      "prompt": "Situation: `/plan-smith update tmp/agent-plan-store.md`. Item 3 is \"Add a Redis cache\" at `N`. The repo has a commit titled `refactor(store): replace Redis cache with an in-memory LRU`; its body explains the LRU and says nothing about the plan. The user has said nothing about item 3.\n\nQuestion: what status does item 3 get? Answer on the first line with exactly one of: X, N, Y. Then one sentence why.",
       "pass": "^\\W*N\\b",
       "fail": "^\\W*[XY]\\b",
       "class": "redundant"

@@ -35,7 +35,7 @@
     {"say": "interrogate this spec until we agree on it", "want": "craft:grill-me"},
     {"say": "grill me on the caching design", "want": "craft:grill-me"},
     {"say": "turn this into a checklist plan with a status table", "want": "craft:plan-smith"},
-    {"say": "update the status of tmp/sso-plan.md", "want": "craft:plan-smith"},
+    {"say": "update the status of tmp/agent-plan-sso.md", "want": "craft:plan-smith"},
     {"say": "write an implementation plan for the CSV export", "want": "craft:plan-smith"},
     {"say": "write a README for this repo", "want": "craft:readme-smith"},
     {"say": "improve the front page docs of this project", "want": "craft:readme-smith"},

@@ -146,6 +146,14 @@
         "say it was not recognized, name the ones that exist, and run with the defaults as if it were absent",
         "A target that resolves to nothing: say so and ask — never guess what to work on"
       ]
+    },
+    {
+      "id": "fix-plan-path",
+      "file": "references/fixing.md",
+      "rule": "The ordered fix plan goes to tmp/agent-plan-review-fix.md",
+      "must": [
+        "`tmp/agent-plan-review-fix\\.md`"
+      ]
     }
   ]
 }

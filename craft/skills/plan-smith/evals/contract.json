@@ -78,7 +78,7 @@
       "id": "report-shape",
       "rule": "After writing, report path plus counts in the fixed shape; never paste the plan back",
       "must": [
-        "`wrote tmp/sso-plan\\.md — 0 Y / 5 N / 0 X`",
+        "`wrote tmp/agent-plan-sso\\.md — 0 Y / 5 N / 0 X`",
         "never paste the plan back"
       ]
     },
@@ -108,6 +108,13 @@
       "rule": "An item that changes code carries an Edges line: bounds, empty/zero/invalid inputs with their results, and the red-first test",
       "must": [
         "An item that changes code also carries an `Edges:` line"
+      ]
+    },
+    {
+      "id": "default-path",
+      "rule": "With no path from the user, the plan goes to tmp/agent-plan-<slug>.md",
+      "must": [
+        "`tmp/agent-plan-<slug>\\.md`"
       ]
     }
   ]

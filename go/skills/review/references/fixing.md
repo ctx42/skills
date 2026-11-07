@@ -93,11 +93,11 @@ When the fix job is broad — findings span several packages or large LOC — do
 not edit straight through:
 
 1. Write an ordered plan to a gitignored scratch file
-   (`tmp/review-fix-plan.md`): one entry per chunk, each naming the package
-   (or file) it covers, the findings to fix there, and status boxes (fixed /
-   tests green). A chunk is one package; split a large package (many findings
-   or big files) into file-level chunks and note the split. Show the plan and
-   get a go-ahead before chunk 1.
+   (`tmp/agent-plan-review-fix.md`): one entry per chunk, each naming the
+   package (or file) it covers, the findings to fix there, and status boxes
+   (fixed / tests green). A chunk is one package; split a large package (many
+   findings or big files) into file-level chunks and note the split. Show the
+   plan and get a go-ahead before chunk 1.
 2. Work chunks in order. Per chunk: apply its fixes under the rules above, run
    the test gate so the chunk ends green, and tick its plan boxes.
 3. Consult after each chunk that produced edits or a decision — report what

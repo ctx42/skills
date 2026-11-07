@@ -42,11 +42,12 @@ resolves to nothing: say so and ask — never guess what to work on.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. After writing, point to the file and give the
-status counts in exactly this shape: `wrote tmp/sso-plan.md — 0 Y / 5 N / 0 X`,
-copied literally with the letters Y, N and X, never reworded into words such
-as "done" or "not yet", even for a plain-language reader; never paste the plan
-back, and don't narrate it either — the item names and the order you chose
-are in the file the user is about to open.
+status counts in exactly this shape:
+`wrote tmp/agent-plan-sso.md — 0 Y / 5 N / 0 X`, copied literally with the
+letters Y, N and X, never reworded into words such as "done" or "not yet",
+even for a plain-language reader; never paste the plan back, and don't narrate
+it either — the item names and the order you chose are in the file the user is
+about to open.
 
 What you deliberately left out of the file belongs here, and only here: an
 unpinned decision, a suggestion the brief didn't ask for. A detail inside an
@@ -180,8 +181,8 @@ call.
    summary, an item's `Done when:` copies that branch's verification word
    for word; when a branch splits into several items, each copies the part
    of it that item covers. Path: the name the user gives, else
-   `tmp/<slug>-plan.md` relative to the working directory; no need to ask,
-   the report names it.
+   `tmp/agent-plan-<slug>.md` relative to the working directory; no need to
+   ask, the report names it.
    If something is already there, say so and ask before overwriting.
 
 ## Update mode

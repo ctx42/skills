@@ -135,6 +135,14 @@
       "must": [
         "a delegated `web:style` never stops for plan-first, so the review relays no\\s+stop"
       ]
+    },
+    {
+      "id": "fix-plan-path",
+      "file": "references/fixing.md",
+      "rule": "The ordered fix plan goes to tmp/agent-plan-review-fix.md",
+      "must": [
+        "`tmp/agent-plan-review-fix\\.md`"
+      ]
     }
   ]
 }

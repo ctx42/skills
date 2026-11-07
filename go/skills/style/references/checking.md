@@ -289,9 +289,9 @@ behavioral fix, with its red/green test, a separate change.
 - Big job (the fixes are large — many changed lines or restructuring edits;
   small fixes across many packages are one aggregated change with one gate, per
   Fixing): write an ordered plan to a scratch file kept out of git
-  (`tmp/style-fix-plan.md`, gitignored or listed in `.git/info/exclude`), one
-  chunk per package with status boxes; the pick answer is the go-ahead, so do
-  not ask again before the first chunk; work chunks in order, gate per chunk,
+  (`tmp/agent-plan-style-fix.md`, gitignored or listed in `.git/info/exclude`),
+  one chunk per package with status boxes; the pick answer is the go-ahead, so
+  do not ask again before the first chunk; work chunks in order, gate per chunk,
   and after each changed chunk report it and ask before starting the next.
 
 ## Scale

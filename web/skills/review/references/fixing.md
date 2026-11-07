@@ -57,7 +57,7 @@ available but cannot be proven, say why, and let the user decide.
 ## Big fix jobs: plan, chunk, consult
 
 When the fixes span several directories or many lines, write an ordered plan
-to a gitignored scratch file (`tmp/review-fix-plan.md`), one chunk per
+to a gitignored scratch file (`tmp/agent-plan-review-fix.md`), one chunk per
 directory (the contract fixes their own chunk), with status boxes; show it and
 get a go-ahead before chunk 1. Per chunk: apply, run the gate, tick the boxes,
 report one line per fix and the result, and wait for a go-ahead. Auto-continue

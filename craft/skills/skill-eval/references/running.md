@@ -55,8 +55,9 @@ quality. Tiers and their tools: [tiers.md](tiers.md); mistakes past runs paid fo
   self-contained brief.
 - Delegate only independent work on disjoint files; never let two writers
   share a file, and lint after they finish.
-- When the context grows large, write a handoff file in `tmp/` (state, changes
-  per file, decisions, open items) and continue in a new session from it.
+- When the context grows large, write `tmp/agent-handoff-<topic>.md` (state,
+  changes per file, decisions, open items) and continue in a new session from
+  it.
 
 ## Session state
 

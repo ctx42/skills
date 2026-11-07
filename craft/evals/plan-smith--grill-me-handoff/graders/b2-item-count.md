@@ -1,6 +1,6 @@
 ---
 type: regex
-target: {source: file, path: tmp/csv-export-plan.md}
+target: {source: file, path: tmp/agent-plan-csv-export.md}
 match: "count:7"
 flags: "m"
 ---

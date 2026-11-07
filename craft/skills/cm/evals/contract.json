@@ -227,6 +227,13 @@
         "A\\s+Blocker stops the run: commit nothing",
         "Without `review`, never start one before a commit"
       ]
+    },
+    {
+      "id": "no-plan-paths",
+      "rule": "A message never names a plan file unless the diff only touches those files",
+      "must": [
+        "`tmp/agent-plan-\\*\\.md`"
+      ]
     }
   ]
 }

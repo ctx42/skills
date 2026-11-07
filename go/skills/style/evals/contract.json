@@ -204,6 +204,14 @@
       "must": [
         "Report a copy outside the\\s+target; never edit it"
       ]
+    },
+    {
+      "id": "fix-plan-path",
+      "file": "references/checking.md",
+      "rule": "The ordered fix plan goes to tmp/agent-plan-style-fix.md",
+      "must": [
+        "`tmp/agent-plan-style-fix\\.md`"
+      ]
     }
   ]
 }

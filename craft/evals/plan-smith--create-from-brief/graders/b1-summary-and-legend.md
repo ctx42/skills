@@ -1,6 +1,6 @@
 ---
 type: regex
-target: {source: file, path: tmp/sso-plan.md}
+target: {source: file, path: tmp/agent-plan-sso.md}
 flags: "m"
 ---
 ^# [^\n]+\n\n## Summary\n\n\| #[\s\S]*^Legend:[^\n]*Y[^\n]*implemented[^\n]*N[^\n]*not yet[^\n]*X[^\n]*rejected

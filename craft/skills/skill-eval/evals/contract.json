@@ -98,6 +98,14 @@
       "must": [
         "At the cap, stop: report the cases and re-runs not run as open;\\s+running them needs a new yes"
       ]
+    },
+    {
+      "id": "handoff-path",
+      "file": "references/running.md",
+      "rule": "A session handoff goes to tmp/agent-handoff-<topic>.md",
+      "must": [
+        "`tmp/agent-handoff-<topic>\\.md`"
+      ]
     }
   ]
 }

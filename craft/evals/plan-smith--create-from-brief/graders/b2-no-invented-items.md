@@ -1,6 +1,6 @@
 ---
 type: regex
-target: {source: file, path: tmp/sso-plan.md}
+target: {source: file, path: tmp/agent-plan-sso.md}
 match: "not_contains"
 flags: "im"
 ---

@@ -1,5 +1,5 @@
 ---
 type: file_exists
-path: tmp/csv-export-plan.md
+path: tmp/agent-plan-csv-export.md
 exists: true
 ---

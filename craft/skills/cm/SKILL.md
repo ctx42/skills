@@ -214,8 +214,8 @@ review; they see only the diff and the message.
 
 - Do not reference internal process the reader cannot know — remediation
   phases, review plans, skill names, "as discussed", ticket/session context,
-  project milestones ("phase 1"), or `tmp/*-plan.md` paths — unless the diff
-  itself only touches those files.
+  project milestones ("phase 1"), or `tmp/agent-plan-*.md` paths — unless the
+  diff itself only touches those files.
 
 - State only what the changed lines show. No guessed history ("a rename of X
   to Y also replaced …") and no conversation facts, even true ones (what

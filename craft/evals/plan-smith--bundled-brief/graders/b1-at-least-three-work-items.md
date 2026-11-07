@@ -1,6 +1,6 @@
 ---
 type: regex
-target: {source: file, path: tmp/export-plan.md}
+target: {source: file, path: tmp/agent-plan-export.md}
 flags: "m"
 ---
 ^## 4\. 
