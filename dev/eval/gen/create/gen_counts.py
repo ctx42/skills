@@ -30,8 +30,8 @@ for n in range(1, 13):
     num = rf"(?:{n}|{WORDS[n]})"
     # "SW … 3 requirements", "`SW`: 3", "SW, the … group: 3", or
     # "`SW` (…) has 3". The gap after the prefix never crosses another group
-    # prefix.
-    gap = r"(?:(?!\b[A-Z]{2,6}\b)[^\n\"]){0,60}?"
+    # prefix or a line break, which the JSON reply holds as backslash and n.
+    gap = r"(?:(?!\b[A-Z]{2,6}\b|\\n)[^\n\"]){0,60}?"
     stated = (rf"(?:{gap}\b{num} requirements?\b|`?\)?(?:\*\*)?:?(?:\*\*)?\s*\|?\s*{num}\b"
               rf"|`?{gap}:\s*{num}\b|{gap}\bhas\s+{num}\b)")
     alts.append(rf"{stated}(?<!{file_has(n)}[\s\S]*)")
