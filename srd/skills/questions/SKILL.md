@@ -36,8 +36,9 @@ against the target platform as the corpus records it.
   SRD; re-implement or restate the SRD standard checks; write a knowledge-base
   file (owned by `srd:kb`).
 - Depends on: `srd:review`, which itself reads `../create/references/*`; this
-  skill never reads the SRD standard directly. If `srd:review` is missing at
-  run time in a mode that runs it (not `learn`), stop and tell the user.
+  skill never reads the SRD standard directly. Also on `srd:kb`, which banks
+  platform facts. If either is missing at run time in a mode that runs it (not
+  `learn` for `srd:review`), stop and tell the user.
 
 ## Support files
 
@@ -133,7 +134,9 @@ resolves to nothing: say so and ask — never guess what to work on.
      to cover; a competent engineer does not ask what they could have looked
      up. When the lookup answers a question, one
      already in the file included, drop it and tell the user in one line, naming
-     the document that answers it by its title or path, never by its role —
+     the document that answers it by its title or path, never by its role
+     (the page holding the answer, such as a glossary page titled "Acme Terms",
+     never "the glossary") —
      also when the delegated review did the lookup: that line is yours. When
      the lookup shows the docs themselves at fault, also hand the gap to
      `srd:report-doc-gap`.
@@ -180,7 +183,8 @@ question, the interaction ends in one of:
 - Answer: the user answers. Restate the resolution in a line, folding any
   durable platform fact it carries into the restatement, so confirming it
   confirms both. Then remove the item from the questions file and hand the fact
-  to `srd:kb`, which writes it to the inbox silently — never a separate "bank
+  to `srd:kb` (invoke `srd:kb` with the Skill tool; never write the inbox
+  yourself), which writes it to the inbox silently — never a separate "bank
   this?" prompt (see [Platform knowledge](#platform-knowledge)).
 
   An answer that is about this SRD rather than the platform has nowhere to go:
@@ -261,8 +265,9 @@ durable facts, before they scroll away.
    an SRD in play do not qualify.
 2. Restate the candidates once, as one list; the user's confirmation is the
    gate, and a correction corrects the list.
-3. Hand the confirmed facts to `srd:kb`; coverage checks against the corpus,
-   dedup, and the writing are its job, not this skill's.
+3. Hand the confirmed facts to `srd:kb` (invoke `srd:kb` with the Skill tool;
+   never write the inbox yourself); coverage checks against the corpus, dedup,
+   and the writing are its job, not this skill's.
 
 Report tersely, once: what `srd:kb` banked and what it dropped as already
 covered, named as its work (`srd:kb: 1 fact`) as the walk's close names it.

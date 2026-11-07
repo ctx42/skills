@@ -136,7 +136,22 @@
       "id": "drop-names-document-title",
       "rule": "A dropped question names the answering document by its title or path, never by its role",
       "must": [
-        "naming the document that answers it by its title or path, never by\\s+its role"
+        "naming the document that answers it by its title or path, never by\\s+its role",
+        "such\\s+as\\s+a\\s+glossary\\s+page\\s+titled\\s+\"Acme\\s+Terms\",\\s+never\\s+\"the\\s+glossary\""
+      ]
+    },
+    {
+      "id": "kb-via-skill-tool",
+      "rule": "Facts reach srd:kb through the Skill tool; questions never writes the inbox itself",
+      "must": [
+        "invoke\\s+`srd:kb`\\s+with\\s+the\\s+Skill\\s+tool;\\s+never\\s+write\\s+the\\s+inbox\\s+yourself"
+      ]
+    },
+    {
+      "id": "missing-dependency-stops",
+      "rule": "A missing srd:review (outside learn) or srd:kb at run time stops the run with a message",
+      "must": [
+        "If\\s+either\\s+is\\s+missing\\s+at\\s+run\\s+time\\s+in\\s+a\\s+mode\\s+that\\s+runs\\s+it\\s+\\(not\\s+`learn`\\s+for\\s+`srd:review`\\),\\s+stop\\s+and\\s+tell\\s+the\\s+user"
       ]
     }
   ]
