@@ -77,8 +77,10 @@ SRD path is agreed yet, capture the draft at once with `srd_ref` empty — never
 wait for the path — and fold a proposed path (its own folder under
 `initiatives`) into that branch's restatement; once it is confirmed, invoke
 `srd:report-doc-gap` with it, which sets the `srd_ref` of every draft captured
-without one, and offers nothing yet (never `update_gap` it yourself) — a draft
-left without a path is invisible to every later draft check. A platform fact is
+without one, and offers nothing yet (never `update_gap` or `submit_gap` a draft
+yourself: its path and its filing belong to `srd:report-doc-gap`, invoked with
+the Skill tool) — a draft left without a path is invisible to every later draft
+check. A platform fact is
 confirmed through the branch restatement in step 1, never through a separate
 prompt, and reaches `srd:kb` only once that restatement is confirmed — the
 user's answer inside the branch is not the confirmation.
@@ -265,7 +267,8 @@ Write only once step 4 has settled every blocker. Write the SRD as a single
 `.md` file to the path agreed at the first gap (the drafts' `srd_ref` names it),
 else the one the user gives; when neither exists, propose one in its own folder
 under `initiatives` and ask. When this session captured drafts, invoke
-`srd:report-doc-gap` to offer them. Then report once: the file path, the
+`srd:report-doc-gap` with the Skill tool to offer them. Then report once: the
+file path, the
 requirement groups with their counts (counts only — the requirement text is in
 the file, never quoted back), the judgment findings and human follow-ups
 collected in step 4, any blocker the user chose to leave standing, and the

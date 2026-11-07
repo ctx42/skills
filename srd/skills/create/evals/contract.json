@@ -319,6 +319,15 @@
       "must": [
         "Make no\\s+MCP call for the gate"
       ]
+    },
+    {
+      "id": "gap-path-via-report-doc-gap",
+      "rule": "create never updates or files a draft gap itself; srd:report-doc-gap, invoked with the Skill tool, sets its path and files it",
+      "must": [
+        "never\\s+`update_gap`\\s+or\\s+`submit_gap`\\s+a\\s+draft\\s+yourself",
+        "invoked\\s+with\\s+the\\s+Skill\\s+tool",
+        "invoke\\s+`srd:report\\-doc\\-gap`\\s+with\\s+the\\s+Skill\\s+tool\\s+to\\s+offer\\s+them"
+      ]
     }
   ]
 }
