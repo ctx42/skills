@@ -3,8 +3,8 @@ name: edit
 description: >
   Improves an existing Software Requirement Document (SRD) by editing it in
   place against the SRD standard. Use when asked to edit, improve, fix,
-  revise, or clean up an SRD, to open one for editing, or to apply findings
-  from a review file or pasted feedback.
+  revise, or clean up an SRD, to open one for editing, or to apply the
+  findings of an SRD's `<srd>.review.md` file or pasted feedback.
 argument-hint: "<path to SRD> [walk | <line> | <id> | <review-file> | #n |
   autofix | polish | summary | <target>]"
 license: MIT
