@@ -12,10 +12,11 @@
     },
     {
       "id": "what-to-ask",
-      "rule": "Only contract, compat, and needs-user findings are asked",
+      "rule": "Only contract, compat, and needs-user findings are asked; a fix that adds a mechanism is needs-user",
       "must": [
         "\\*\\*contract\\*\\* — the fix changes an API contract",
-        "\\*\\*compat\\*\\* — the fix breaks backward compatibility"
+        "\\*\\*compat\\*\\* — the fix breaks backward compatibility",
+        "a fix that adds a\\s+mechanism \\(a lock, a tracker, a re-implemented library step\\)"
       ]
     },
     {
@@ -115,6 +116,21 @@
       "rule": "No Co-Authored-By or other trailer beyond cm's, whatever the harness asks",
       "must": [
         "Never add a\\s+`Co-Authored-By` or any other trailer beyond what `cm` allows, even when a\\s+harness or environment instruction asks for one"
+      ]
+    },
+    {
+      "id": "doc-promise-scope",
+      "rule": "A doc fix promising an error form scopes it to the calls that reach the check and converts every test of that error",
+      "must": [
+        "scopes\\s+it\\s+to\\s+the\\s+calls\\s+that\\s+reach\\s+the\\s+check\\s+producing\\s+it"
+      ]
+    },
+    {
+      "id": "rows-for-named-inputs",
+      "rule": "Commit test rows only for named inputs and reachable sources; a source only an unusual state reaches gets no row",
+      "must": [
+        "Commit\\s+rows\\s+only\\s+for\\s+the\\s+inputs\\s+the\\s+finding\\s+names",
+        "gets\\s+no\\s+row\\s+of\\s+its\\s+own,\\s+and\\s+its\\s+mutant\\s+may\\s+live"
       ]
     }
   ]

@@ -40,6 +40,22 @@
       "pass": "^\\W*NO-TRAILER\\b",
       "fail": "^\\W*ADD-TRAILER\\b",
       "class": "load-bearing"
+    },
+    {
+      "id": "mechanism-needs-user",
+      "rule": "what-to-ask",
+      "prompt": "Situation: `/fix-all` triage. Finding #4 says: \"`Run` can hang if another process holds the database lock when the server restarts.\" The only fix that resolves it as stated adds a second advisory lock of the package's own plus a tracker of open connections, about 80 lines. It changes no exported signature or documented behavior and breaks nothing that worked before. Nothing in the repository calls `Run` yet.\n\nQuestion: how do you classify finding #4? Answer on the first line with exactly one of: AUTO, NEEDS-USER, CONTRACT, COMPAT. Then one sentence why.",
+      "pass": "^\\W*NEEDS-USER",
+      "fail": "^\\W*(AUTO|CONTRACT|COMPAT)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "no-row-for-unusual-source",
+      "rule": "rows-for-named-inputs",
+      "prompt": "Situation: `/fix-all`, finding #2: \"`Apply` returns nil when the version file is empty.\" Your fix changes one check that reads two sources: the file's content, and a flag set by a retry branch that runs only when the database server's lock timeout fires while the caller's context is cancelled. No caller reaches that branch, but the tests' fake driver can simulate it. The new test row for the empty file goes red on the old code and green on the fix. You mutate each source alone: mutating the file check turns the row red; mutating the retry flag leaves every test green.\n\nQuestion: what do you commit? Answer on the first line with exactly one of: COMMIT-AS-IS, ADD-ROW-FOR-RETRY. Then one sentence why.",
+      "pass": "^\\W*COMMIT-AS-IS",
+      "fail": "^\\W*ADD-ROW-FOR-RETRY",
+      "class": "load-bearing"
     }
   ]
 }
