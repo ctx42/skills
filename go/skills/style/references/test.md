@@ -106,10 +106,17 @@ detection detail lives in the skill's `rules.md`, opened one entry at a time.
   different paths wins over this list.
 - Test helpers must use `tester.T` to allow testing with `tester.Spy`.
 - Use `tester.Spy` (not raw `*testing.T`) when testing test helpers.
-- Don't wrap a single expression in a test helper; inline it. If a helper only
-  centralizes a repeated literal (e.g. a fixture path), extract a `const`.
+- Inline a test helper that wraps a single expression or that only one
+  subtest calls (count call sites, not the test functions holding them), a
+  shared polling helper excepted. If a helper only centralizes a repeated
+  literal (e.g. a fixture path), extract a `const`.
 - Simple test helpers shared within a package live in `all_test.go`; do not
   scatter them across individual `_test.go` files.
+- Keep `all_test.go` small: wait with a call that already blocks until done
+  where one exists, else share one polling helper, never a deadline loop per
+  helper; merge helpers or fakes that differ only in the action or call they
+  change into one that takes a func (hook funcs for a fake); use the assertion
+  library's assertion over a local wrapper.
 - In arrange/readback code where the error is not under test, unwrap
   value-plus-error with `must.Value`/`must.Values` instead of assigning then
   `assert.NoError`; keep the explicit check only where the error itself is the
@@ -124,6 +131,9 @@ detection detail lives in the skill's `rules.md`, opened one entry at a time.
   `t.Setenv`.
 - Pick fixture values off the grid the code rounds or buckets to (80s, not
   2m), so the rounding under test changes the result.
+- In a fixture for code that sorts, use at least three rows whose insert
+  order, primary-key order, and sort-key order all differ, so an order
+  assertion fails when the code sorts by the wrong key.
 - Build fixed test times with `time.Date`, never by parsing a string literal;
   table rows hold `time.Time` fields, not strings the loop body parses.
 - Fix the clock in tests: pass the code under test a fixed now (an injected
@@ -144,6 +154,9 @@ detection detail lives in the skill's `rules.md`, opened one entry at a time.
 - When a test guards a struct's field count, a new field must both bump the
   count and gain an assertion in the same change — never bump the count alone.
 - Cover error paths and edge cases, not just the happy path.
+- Never test a generated mock; put a compile-time check
+  (`var _ pkg.Iface = (*IfaceMock)(nil)`) in a hand-written file of the mock's
+  package, so a mock not regenerated after an interface change fails to build.
 - Prove each new assertion can fail: break the code it covers, watch the test
   go red, then undo the break; an assertion that stays green is not a test.
 - Run the production setup path (constructor, config load, wiring) in at

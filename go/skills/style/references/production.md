@@ -90,6 +90,9 @@ a rule in `test.md` overrides one. Keyed detection detail lives in the skill's
   module for its siblings, the same check or calculation written elsewhere.
 - Order a function body so cheap, fallible checks (config reads, validation)
   run before expensive or side-effecting work; fail fast before the heavy work.
+- Assign a multi-line closure passed as a call argument to a named local
+  first (`fn := func(...) error {...}`, then `run(..., fn)`); `t.Run` subtest
+  bodies and `go func() {...}()` stay inline.
 
 ## Declarations & files
 
@@ -102,6 +105,16 @@ a rule in `test.md` overrides one. Keyed detection detail lives in the skill's
 - Keep package-wide top-level declarations (exported consts/vars) in the
   package-named file, not a separate topic-named file; same principle as the
   package-godoc rule above.
+- Open a file's top-level declarations with exported consts, then exported
+  vars, then exported interfaces, even when an interface uses a type declared
+  below; below them, declare each type above the first type, function, or
+  method that uses it, a group's types before the functions and methods that
+  use them — unexported and test helper types included.
+- Keep a type's methods together, right after its constructor; put no other
+  function between them unless readability needs it.
+- Put SQL query functions (`XxxQry`, free functions only) at the bottom of
+  their file, below the types, constructors, methods, and helpers that run
+  them.
 - Domain-agnostic, typeless helpers (`fileExists`, `isDigits`) live in
   `helpers.go`, their tests in `helpers_test.go` — mirrors `all_test.go`.
 - Declare an empty slice as `var s []T` (nil) or `make([]T, 0)` (non-nil),
@@ -122,6 +135,8 @@ a rule in `test.md` overrides one. Keyed detection detail lives in the skill's
   document only behavior beyond it, or nothing.
 - Use godoc cross-references for exported symbols only: `[Type]`,
   `[pkg.Symbol]`; name unexported identifiers in plain text.
+- When code deliberately avoids the idiomatic form (a type switch over
+  `errors.As`, a loop over a library call), say why in its comment.
 - nolint: no space `//nolint:name`; line-level at end of line; func-scoped as
   the last godoc line after an empty `//`; comma-join multiple (`a,b`).
 
@@ -169,6 +184,9 @@ a rule in `test.md` overrides one. Keyed detection detail lives in the skill's
 - Assert implementations at compile time: `var _ Iface = (*T)(nil)` near the
   top of the file.
 - Make the zero value useful or at least safe.
+- A method callers chain on (`x.Config().Field`) states in its godoc exactly
+  when it never returns nil, and a test in its own package pins that; add no
+  nil checks to callers the contract covers.
 - Return a copy of a slice or map field a mutex guards; never `append` into a
   caller's slice.
 - Release everything a constructor starts (files, goroutines, writers) on
@@ -179,6 +197,8 @@ a rule in `test.md` overrides one. Keyed detection detail lives in the skill's
 
 - Provide `Example*` for non-trivial public APIs; they must pass `go test`;
   skip `main`, `internal`, and test-only packages.
+- Keep an example minimal — no option, parameter, or setting its subject does
+  not need — and never show a value unsafe to copy into production.
 - A reusable package ships a `README.md` (or a package-godoc overview):
   purpose, import path, and one runnable usage example; skip `main`,
   `internal`, and test-only packages.
