@@ -22,7 +22,8 @@ before writing.
    (below). If the scope is ambiguous, ask one quick question.
 3. Detect duplicate or conflicting rules; show them and the proposed change,
    then wait for confirmation before writing. Never silently overwrite a
-   conflicting rule.
+   conflicting rule. An answer that makes a new request instead of picking an
+   option is not confirmation; propose again and wait.
 4. Check the write location (above), then write: `add` inserts the rule line
    in the file of its section (plus a keyed `../style/rules.md` entry when
    warranted); `change` rewrites the existing line and entry in place;

@@ -35,9 +35,12 @@ find everything the edit must touch — `findReferences` for every call site,
 dependents change together. With no `LSP` tool in this client, or no language
 server behind it, grep for the call sites and say the enumeration is
 grep-confident. LSP only locates code; edits still go through Edit/Write.
-Re-query after writing, since a pre-edit result goes stale. The
-test gate (below) remains the proof that no caller broke. No Go language
-server → fall back to grep to enumerate call sites.
+Re-query after writing, since a pre-edit result goes stale. The test gate
+(below) remains the proof that no caller broke. No Go language server → fall
+back to grep to enumerate call sites. Before merging helpers, map each one to
+its call sites and read every caller; apply no merge that needs a bool flag
+parameter or moves code into the callers, and report each one skipped with
+that reason.
 
 ## Logical bugs: prove before fixing
 
@@ -52,7 +55,11 @@ touching the fix:
 
 An assertion that ends the subtest on failure (ctx42 `assert.ErrorIs`) hides
 the ones after it: prove a later assertion can fail with the earlier one
-disabled.
+disabled. A compile-time implementation check (`var _ Iface = (*T)(nil)`),
+added or kept, is proved by a red build once it is in place: temporarily break
+the checked type, never the shared interface (another implementation's check
+then fails first and hides the result), then undo the break; adding a missing
+one needs no red on the old code.
 
 A bug is always reported, whether or not it can be proven. If it genuinely
 cannot be reproduced by a test or benchmark (unreachable branch, untestable

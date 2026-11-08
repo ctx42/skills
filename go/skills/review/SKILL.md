@@ -141,7 +141,9 @@ broad.
    - Correctness: bugs, wrong logic, nil/bounds, ignored errors, data races.
    - Edge cases: empty/large/concurrent inputs and every error path; never
      call one unreachable without reading the callee's doc for every input it
-     can receive, a replaceable package-level variable passed in included.
+     can receive, a replaceable package-level variable passed in included,
+     nor rare without checking whether a server-side setting (a statement or
+     lock timeout) or a concurrent caller makes it fail on demand.
    - Error handling & API: wrapping, sentinels, boundaries, easy misuse.
    - Leaks: search for every acquisition (container, file, goroutine) with no
      release at all, not only for releases done wrong.
