@@ -185,11 +185,13 @@ Commit control:
    a check that exits non-zero on any line over 72, chained with `&&` ahead of
    the commit in the same command — before the heredoc opener — so a long line
    stops the commit; the whole message, summary and body, fed to it inline by
-   `printf`, never a second heredoc), every sentence parsing on one read — no
-   dangling opener, no clause stranded on a preposition — and passing Describe
-   changes only, its numbers and any contrast with a design the diff does not
-   contain ("instead of …") included; no process jargon, no trailer beyond the
-   two allowed. Fix and re-check.
+   `printf`, never a second heredoc, any line holding a backtick or `$`
+   single-quoted, since a double-quoted one runs it and measures the wrong
+   text), every sentence parsing on one read — no dangling opener, no clause
+   stranded on a preposition — and passing Describe changes only, its numbers
+   and any contrast with a design the diff does not contain ("instead of …")
+   included; no process jargon, no trailer beyond the two allowed. Fix and
+   re-check.
 4. Present it per Output; commit only under `apply` or `asis`.
 
 ## Describe changes only
@@ -220,7 +222,9 @@ review; they see only the diff and the message.
 - State only what the changed lines show. No guessed history ("a rename of X
   to Y also replaced …") and no conversation facts, even true ones (what
   another package lacks): if the diff does not show it, the message does not
-  say it.
+  say it. Say the old code misbehaved only where the diff or a failing test
+  shows it; a change that fills a gap the old text left open says the gap was
+  open.
 
 - Scope every universal or negative claim ("any X", "no longer Y") to what
   the code does after the change, not to the changed lines alone: read the
