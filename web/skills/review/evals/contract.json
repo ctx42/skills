@@ -143,6 +143,15 @@
       "must": [
         "`tmp/agent-plan-review-fix\\.md`"
       ]
+    },
+    {
+      "id": "baseline-before-plan",
+      "file": "references/fixing.md",
+      "rule": "A big fix job runs the green baseline once, before writing the plan; each chunk's after-edit gate is the next chunk's baseline",
+      "must": [
+        "Run the Test gate's baseline once, before\\s+writing the plan",
+        "each chunk's after-edit run is the next\\s+chunk's baseline"
+      ]
     }
   ]
 }

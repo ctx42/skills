@@ -84,6 +84,18 @@
       "pass": "^\\W*YES\\b",
       "fail": "^\\W*NO\\b",
       "class": "redundant"
+    },
+    {
+      "id": "baseline-then-plan",
+      "rule": "baseline-before-plan",
+      "context": [
+        "SKILL.md",
+        "references/fixing.md"
+      ],
+      "prompt": "Situation: `/web:review fix` on findings that span four directories, so this is a big fix job. Nothing has been run or written yet. The project defines `bun run check`.\n\nQuestion: in what order do the first steps go, and how often does the baseline run? Answer on the first line with exactly one of: A (run `bun run check` now, then write the plan; no new baseline before later chunks), B (write the plan, then run `bun run check` after the go-ahead, before chunk 1), C (write the plan, then run `bun run check` before every chunk). Then one sentence why.",
+      "pass": "^\\W*A\\b",
+      "fail": "^\\W*[BC]\\b",
+      "class": "load-bearing"
     }
   ]
 }
