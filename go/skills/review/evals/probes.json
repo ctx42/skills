@@ -84,6 +84,14 @@
       "pass": "^\\W*TWENTY-FIVE",
       "fail": "^\\W*FIVE",
       "class": "redundant"
+    },
+    {
+      "id": "unreached-edge-blocker",
+      "rule": "grading",
+      "prompt": "Situation: you review an exported function `Apply` in package `migrate`. No other package in the module imports `migrate`; it is new. `Apply` waits for a database advisory lock. If the caller's context is cancelled at the same moment the database server's lock timeout fires, `Apply` runs the same migration twice and corrupts the schema. Every other call works correctly.\n\nQuestion: what grade do you give this finding? Answer on the first line with exactly one of: BLOCKER, SHOULD-FIX, NIT. Then one sentence why.",
+      "pass": "^\\W*SHOULD-FIX",
+      "fail": "^\\W*(BLOCKER|NIT)",
+      "class": "load-bearing"
     }
   ]
 }

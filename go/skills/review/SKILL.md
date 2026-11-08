@@ -143,10 +143,14 @@ broad.
      call one unreachable without reading the callee's doc for every input it
      can receive, a replaceable package-level variable passed in included,
      nor rare without checking whether a server-side setting (a statement or
-     lock timeout) or a concurrent caller makes it fail on demand.
+     lock timeout) or a concurrent caller makes it fail on demand. That it can
+     fail makes it a finding; Output grades it.
    - Error handling & API: wrapping, sentinels, boundaries, easy misuse.
    - Leaks: search for every acquisition (container, file, goroutine) with no
      release at all, not only for releases done wrong.
+   - Simplicity: code that re-implements what a library it imports already
+     provides (its own stepping, locking, or retries around a library call
+     that has them) — a Should-fix naming the library call to use.
    - Never report a form the style rules require as a defect: the `"" +`
      segmented multi-line string is the mandated style (raw strings break
      indentation); never propose a backtick raw string for it.
@@ -204,14 +208,19 @@ broad.
 Group by severity: Blocker / Should-fix / Nit. Style offenses keep the tier
 `go:style` gave them. Grade a correctness finding by the worst consequence a
 reachable input or state produces, naming that input in the finding — one you
-cannot tie to an input is at most Should-fix. First match wins:
+cannot tie to an input is at most Should-fix. Reachable, here and in the tiers
+below, means a current caller sends it, or it is a normal input of the
+documented API; an edge case that needs an unusual state (a server-side
+timeout, a cancel racing a call, concurrent use the documentation does not
+promise) and that no caller reaches is at most Should-fix. First match wins:
 
 1. Blocker — a reachable input gives a wrong result, a panic, lost or
    corrupted data, a leak, a data race, a security exposure, or a swallowed
    error a caller depends on; or a test passes while the code is wrong.
 2. Should-fix — correct for every current caller but fragile: an edge case no
    caller reaches yet, an error too vague to diagnose, an API easy to misuse, a
-   reachable branch with no test, a performance cliff on realistic input.
+   reachable branch with no test, a performance cliff on realistic input, code
+   re-implementing a feature of a library it imports.
 3. Nit — no behavioural consequence: clarity, dead code, a micro-optimization.
 
 Each finding:
@@ -222,16 +231,19 @@ Each finding:
   both names both (`correctness`, `wrap-errors-w`), never a paraphrase.
 - A minimal suggested fix, checked to do what it claims: read how a helper
   reports failure (`t.Error` is not fatal) before prescribing a fatal or panic
-  assertion, and its defaults (environment, working directory, streams)
-  before prescribing it as isolation — a test helper can inherit the same
-  process state; a tool that does not perform the edit (`go mod tidy` never
-  merges single-line `require` statements) gets a manual fix instead. A fix
-  making an operation idempotent covers every write it performs, not only the
-  one that failed loudly. Never prescribe lazy initialization inside a
-  value-receiver method — the field lands on a copy and is lost; prescribe a
-  pointer receiver or a constructor the godoc requires. A fix replacing a
-  format verb matches named types of a kind (`json.RawMessage`) by reflect
-  kind, never by a type-switch case on the base type (`[]byte`, `string`).
+  assertion, and its defaults (environment, working directory, streams) before
+  prescribing it as isolation — a test helper can inherit the same process
+  state; a tool that does not perform the edit (`go mod tidy` never merges
+  single-line `require` statements) gets a manual fix instead. Before
+  prescribing a fix that adds a mechanism (a lock, a tracker, a re-run of a
+  library step), check whether a library the code already imports does the job
+  or a doc note suffices, and prescribe that instead. A fix making an operation
+  idempotent covers every write it performs, not only the one that failed
+  loudly. Never prescribe lazy initialization inside a value-receiver method —
+  the field lands on a copy and is lost; prescribe a pointer receiver or a
+  constructor the godoc requires. A fix replacing a format verb matches named
+  types of a kind (`json.RawMessage`) by reflect kind, never by a type-switch
+  case on the base type (`[]byte`, `string`).
 
 End with a one-line verdict (ship / fix-first) and the per-severity counts. For
 a module, give the verdict per package plus an overall summary. Report budget

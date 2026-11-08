@@ -64,9 +64,10 @@
     },
     {
       "id": "grading",
-      "rule": "Correctness findings graded by a named input",
+      "rule": "Correctness findings graded by a named input; an edge case needing an unusual state that no caller reaches is at most Should-fix",
       "must": [
-        "one you cannot tie to an input is at most Should-fix"
+        "one you cannot tie to an input is at most Should-fix",
+        "an\\s+edge case that\\s+needs an unusual state \\(a server-side\\s+timeout, a cancel racing a call, concurrent use the documentation does not\\s+promise\\) and that\\s+no caller reaches is at most Should-fix"
       ]
     },
     {
@@ -153,6 +154,14 @@
       "rule": "The ordered fix plan goes to tmp/agent-plan-review-fix.md",
       "must": [
         "`tmp/agent-plan-review-fix\\.md`"
+      ]
+    },
+    {
+      "id": "library-reimplementation",
+      "rule": "Re-implementing an imported library's feature is a Should-fix; a fix adding a mechanism first checks the library and a doc note",
+      "must": [
+        "code that re-implements what a library it imports already\\s+provides",
+        "check whether a library the code already imports does the job\\s+or a doc note suffices"
       ]
     }
   ]
