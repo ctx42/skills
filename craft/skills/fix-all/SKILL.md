@@ -87,16 +87,20 @@ For each fix:
 
 1. Make the smallest change that resolves the finding as stated, located by the
    `file:line` the finding cites, never by a name or pattern that also matches a
-   sibling site. An edit script asserts every replacement changed the text — a
-   pattern that matches nothing fails silently — anchors a whole-line pattern at
-   the line start with its exact indentation, since an indented fragment also
-   matches inside deeper-indented lines, and, spanning several files, validates
-   every replacement before writing any file and holds its intermediate text in
-   memory, never in a temp file beside the sources, so a failed assertion leaves
-   the tree untouched. A scripted rename skips selector positions (`x.name`) and
-   string literals, which a bare word-boundary match also renames. A sweep
-   applying one style rule across many sites leaves the forms another rule
-   mandates; read the rulebook before it. An edit to hard-wrapped Markdown
+   sibling site. Before keeping a branch the fix prescribes (an extra error
+   code, a second case), find an input that reaches it; drop one no fixture can
+   supply rather than ship it untested. An edit script asserts every replacement
+   changed the text — a pattern that matches nothing fails silently — anchors a
+   whole-line pattern at the line start with its exact indentation, since an
+   indented fragment also matches inside deeper-indented lines, and, spanning
+   several files, validates every replacement before writing any file and holds
+   its intermediate text in memory, never in a temp file beside the sources, so
+   a failed assertion leaves the tree untouched. A scripted rename skips
+   selector positions (`x.name`) and string literals, which a bare word-boundary
+   match also renames. A sweep applying one style rule across many sites leaves
+   the forms another rule mandates; read the rulebook before it. An edit to
+   hard-wrapped text (Markdown, a comment block) anchors on whole lines — an
+   anchor ending mid-line joins the rest of that line onto the new text — and
    rewraps the whole paragraph it touches, never splitting an inline code span
    across lines. When a fix reads several sources (inputs, branches, both sides
    of a check), give each a fixture value only it supplies and, beyond the red
@@ -108,10 +112,12 @@ For each fix:
    directory (a runner invoking `go test ./...`) in a temp dir, since it can
    recurse. Prove it red as it will be committed — after it passes the per-file
    checks, line width included — and before changing any signature it calls,
-   which leaves the old code unbuildable. A test for code already correct is
-   proved red by mutating the branch it covers; one still green under the
-   mutation asserts a rendering that hides the change (an error's text can hide
-   its nested fields), so assert the data the branch changes.
+   which leaves the old code unbuildable. Build each mutant before reading its
+   result: one that does not compile runs no test, so its outcome proves
+   nothing. A test for code already correct is proved red by mutating the branch
+   it covers; one still green under the mutation asserts a rendering that hides
+   the change (an error's text can hide its nested fields), so assert the data
+   the branch changes.
 2. Check before committing. A fix that turns out to need a contract or compat
    change nobody foresaw is not applied: restore its files, defer it with the
    reason, and go on. A fix relying on timing or ordering (a watcher flush, a
