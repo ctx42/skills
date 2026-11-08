@@ -109,7 +109,7 @@ put skill-enhance in scope.
 
    - A convention for Go or frontend (`.vue`/`.ts`) code the user asked for —
      naming, layout, a construct to use or avoid — is a style rule: route it
-     to `go:review learn` or `web:review learn`.
+     to `go:style learn` or `web:style learn`.
    - A durable fact about the platform the user stated or confirmed is
      knowledge: route it to `srd:questions learn`.
 

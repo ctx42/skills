@@ -97,9 +97,9 @@
     },
     {
       "id": "route-to-learn",
-      "rule": "Code conventions route to go:review/web:review learn and platform facts to srd:questions learn, whichever skill was driving; invoked after the lessons are written",
+      "rule": "Code conventions route to go:style/web:style learn and platform facts to srd:questions learn, whichever skill was driving; invoked after the lessons are written",
       "must": [
-        "route it\\s+to `go:review learn` or `web:review learn`",
+        "route it\\s+to `go:style learn` or `web:style learn`",
         "route it to `srd:questions learn`",
         "whichever skill was driving,\\s+or none",
         "Then invoke each destination with\\s+`learn` through the Skill tool"

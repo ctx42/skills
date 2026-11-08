@@ -1,7 +1,6 @@
 ---
 type: tool_used
-tool: Skill
-input_match: 'go:style'
+tool: Write
 min: 0
 max: 0
 arm: both

@@ -1,10 +1,9 @@
-# review rule editing
+# style rule editing
 
-Read when Rule-edit or Learn mode triggers. Both modes write to the
-`web:style` rulebook: `../style/references/production.md` and
-`../style/references/test.md` for rules a tool cannot check,
-`../style/references/biome.json` for rules Biome can. Never write a rule into
-`../style/SKILL.md`: it only routes to those files.
+Read when Rule-edit or Learn mode triggers. Both modes write to the `web:style`
+rulebook: `references/production.md` and `references/test.md` for rules a tool
+cannot check, `references/biome.json` for rules Biome can. Never write a rule
+into `SKILL.md`: it only routes to those files.
 
 ## Writes must reach the repo
 
@@ -16,25 +15,24 @@ them re-run from the clone before writing.
 
 ## Where a rule goes
 
-1. A Biome rule, with its options, enforces it — over the files the rule
-   names or more (a rule worded for `.ts` modules that Biome checks in every
-   file counts): it goes in `../style/references/biome.json`, at `error`, in
-   its group; look the rule up in the installed Biome's
-   `configuration_schema.json` rather than from memory. Nothing goes in the
-   prose rulebook: config and prose line together is never right for a rule
-   Biome checks in full.
+1. A Biome rule, with its options, enforces it — over the files the rule names
+   or more (a rule worded for `.ts` modules that Biome checks in every file
+   counts): it goes in `references/biome.json`, at `error`, in its group; look
+   the rule up in the installed Biome's `configuration_schema.json` rather than
+   from memory. Nothing goes in the prose rulebook: config and prose line
+   together is never right for a rule Biome checks in full.
 2. Biome checks only part of what the rule asks (some cases, not others): the
    part Biome checks goes in the config, and the prose line keeps only what it
    cannot.
-3. Otherwise: one line in `../style/references/production.md` or
-   `../style/references/test.md`, by its scope.
+3. Otherwise: one line in `references/production.md` or `references/test.md`, by
+   its scope.
 
 Say which of the three it is, and why, in the confirmation.
 
 ## Rule-edit mode
 
-1. Read `../style/references/production.md`, `../style/references/test.md`,
-   and `../style/references/biome.json`.
+1. Read `references/production.md`, `references/test.md`, and
+   `references/biome.json`.
 2. Turn the input into rule entries shaped per How a rule entry should look,
    placed per Where a rule goes. If the scope is ambiguous, ask one question.
 3. Detect duplicate or conflicting rules in all three files; show them and the

@@ -86,10 +86,9 @@
     },
     {
       "id": "fix-gate",
-      "rule": "Applying fixes requires the fixing.md test gate; rule edits need confirmation",
+      "rule": "Applying fixes requires the fixing.md test gate",
       "must": [
-        "applying findings requires the test gate in `references/fixing.md`",
-        "never write a rule without confirmation"
+        "applying findings requires the test gate in `references/fixing.md`"
       ]
     },
     {
@@ -162,6 +161,14 @@
       "must": [
         "code that re-implements what a library it imports already\\s+provides",
         "check whether a library the code already imports does the job\\s+or a doc note suffices"
+      ]
+    },
+    {
+      "id": "rule-changes-redirect",
+      "rule": "add, change, remove, learn, or a style preference: one line naming go:style, then stop",
+      "must": [
+        "Rule changes moved to `go:style`",
+        "`/go:style add …` and `/go:style learn`, and stop"
       ]
     }
   ]

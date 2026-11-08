@@ -2,14 +2,6 @@
   "skill_name": "style",
   "probes": [
     {
-      "id": "rule-edit-via-review",
-      "rule": "rules-change-via-review",
-      "prompt": "Situation: the user says: \"From now on, no named return values anywhere. Add that to the style rulebook.\" You have the style skill loaded and can edit files.\n\nQuestion: how do you add the rule? Answer on the first line with exactly one of: EDIT-STYLE-MD, VIA-REVIEW. Then one sentence why.",
-      "pass": "^\\W*VIA-REVIEW",
-      "fail": "^\\W*EDIT-STYLE-MD",
-      "class": "load-bearing"
-    },
-    {
       "id": "test-edit-reads",
       "rule": "reference-vs-pass",
       "prompt": "Situation: you are about to change one assertion in `cache_test.go`. You have the style skill loaded and have read none of its rule files yet.\n\nQuestion: which rule files do you read before the edit? Answer on the first line with exactly one of: TEST-ONLY, TEST-AND-PRODUCTION, NONE. Then one sentence why.",
@@ -136,6 +128,14 @@
       "prompt": "Situation: a Go server's retry behavior is turned on by a field that `NewServer(cfg)` sets from the config. Every existing test builds the server as `&Server{retry: true}`. You add a test for a new retry case.\n\nQuestion: how does the package's test suite build the server? Answer on the first line with exactly one of: LITERAL-ONLY (keep the struct literal everywhere), VIA-CONSTRUCTOR (at least one test builds it through `NewServer` with a config). Then one sentence why.",
       "pass": "^\\W*VIA-CONSTRUCTOR",
       "fail": "^\\W*LITERAL-ONLY",
+      "class": "load-bearing"
+    },
+    {
+      "id": "rule-edit-confirms",
+      "rule": "rules-change-via-rule-modes",
+      "prompt": "Situation: the user says: \"From now on, no named return values anywhere. Add that to the style rulebook.\" You have the style skill loaded and can edit files.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: EDIT-NOW (write the rule line into the rulebook now), PROPOSE-AND-WAIT (show the proposed rule and any duplicate or conflict, then wait for a yes), HAND-OFF (pass the request to another skill). Then one sentence why.",
+      "pass": "^\\W*PROPOSE-AND-WAIT\\b",
+      "fail": "^\\W*(EDIT-NOW|HAND-OFF)\\b",
       "class": "load-bearing"
     }
   ]

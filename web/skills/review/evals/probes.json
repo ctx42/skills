@@ -30,18 +30,6 @@
       "class": "redundant"
     },
     {
-      "id": "rule-goes-to-biome",
-      "rule": "rule-placement",
-      "context": [
-        "SKILL.md",
-        "references/rule-editing.md"
-      ],
-      "prompt": "Situation: `/web:review add \"never export a default from a .ts module\"`. Biome has the rule `style/noDefaultExport`.\n\nQuestion: where does the rule go? Answer on the first line with exactly one of: STYLE-SKILL-MD, REFERENCE-BIOME-JSON, BOTH. Then one sentence why.",
-      "pass": "^\\W*(REFERENCE-)?BIOME-JSON",
-      "fail": "^\\W*(STYLE-SKILL-MD|BOTH)",
-      "class": "load-bearing"
-    },
-    {
       "id": "unprovable-fix",
       "rule": "prove-before-fixing",
       "context": [
@@ -51,14 +39,6 @@
       "prompt": "Situation: `/web:review src fix`. One finding is a race you are sure of, but no Vitest or Playwright test can reproduce it.\n\nQuestion: do you apply its fix? Answer on the first line YES or NO, then one sentence why.",
       "pass": "^\\W*NO\\b",
       "fail": "^\\W*YES\\b",
-      "class": "redundant"
-    },
-    {
-      "id": "session-rules-offered",
-      "rule": "session-rules-close",
-      "prompt": "Situation: the user runs `/web:review src/pages`. Earlier this session, before the review, while you edited `.vue` files, the user corrected you twice: 'compute that in a computed, not inline in the template'. web:style carries no such rule. You have written the findings report.\n\nQuestion: where does that correction go in this run? A) a line in this skill's LESSONS.md; B) a candidate style rule listed after the report for the user to pick; C) nowhere until the user runs `/web:review learn`. Answer on the first line with the letter only, then one sentence why.",
-      "pass": "^\\W*B\\b",
-      "fail": "^\\W*[AC]\\b",
       "class": "redundant"
     },
     {
@@ -96,6 +76,17 @@
       "pass": "^\\W*A\\b",
       "fail": "^\\W*[BC]\\b",
       "class": "load-bearing"
+    },
+    {
+      "id": "rule-request-redirects",
+      "rule": "rule-changes-redirect",
+      "bullets": [
+        "rule-request-redirects#b1"
+      ],
+      "prompt": "Situation: the user runs `/web:review add \"no naked returns in tests\"`.\n\nQuestion: what do you do? Answer on the first line with exactly one of: PROPOSE (propose the rule and write it to the style rulebook after a yes), REVIEW (review the code that phrase names), OTHER (something else). Then one sentence saying what you do.",
+      "pass": "^\\W*OTHER\\b",
+      "fail": "^\\W*(PROPOSE|REVIEW)\\b",
+      "class": "redundant"
     }
   ]
 }

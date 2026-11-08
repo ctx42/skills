@@ -16,28 +16,20 @@
       ]
     },
     {
-      "id": 3,
-      "name": "rule-edit-add-change-remove",
+      "id": 5,
+      "name": "rule-request-redirects",
       "expected_behavior": [
-        "Recognizes each as a rule edit rather than a review target",
-        "Turns the `add` into a terse imperative one-liner in the existing style, scoped to Test",
-        "Detects a duplicate or conflicting rule and waits for confirmation before writing to a style rule file, showing the before/after of the rule text",
-        "Rewrites the existing receiver-naming line in place for the `change` instead of adding a second rule",
-        "For the `remove`, deletes the rule line from `../style/references/production.md`, plus its keyed `../style/rules.md` entry and Contents row where it has one — a rule carrying no keyed entry is removed from the rule file alone"
-      ],
-      "blind_only": [3]
+        "Says in one line that rule changes moved to `go:style`, naming `/go:style add …`, and stops",
+        "Writes no file and reviews no code"
+      ]
     },
     {
-      "id": 4,
-      "name": "learn-from-the-session",
+      "id": 6,
+      "name": "session-rules-offered-at-close",
       "expected_behavior": [
-        "Scans the session's Go feedback and pairs each item with the diff hunk that resolved it",
-        "Proposes the two genuinely new rules, each with its provenance and a before/after example",
-        "Drops the project-specific rename",
-        "Reports the `context.Context` correction as already covered rather than proposing it again — deduping against the style rule files happens before presenting, not after",
-        "Waits for the user to pick before writing; on confirmation writes each rule line into `../style/references/production.md` or `../style/references/test.md` by its scope, never `../style/SKILL.md`, plus its keyed `../style/rules.md` entry where the rule needs one, and shows the diff"
-      ],
-      "blind_only": [1, 2, 3, 4]
+        "Below the finished report, under `Rules this session taught`, offers the early-return correction as a candidate style rule with its provenance",
+        "Writes no rule until the user picks one, and adds no `LESSONS.md` line for the correction"
+      ]
     }
   ]
 }

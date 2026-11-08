@@ -5,11 +5,13 @@ description: >
   rulebook to read before writing or editing any .go file, however small (a
   rename or a one-line fix included), and a runnable style-only pass that
   lists style offenses across a diff, package, or module and proposes fixes
-  to apply. Use before touching Go, or to check or fix Go style; adding or
-  changing a rule belongs to go:review.
+  to apply. Use before touching Go, or to check or fix Go style. Also the
+  skill that adds, changes, or removes a Go style rule, or learns one from
+  feedback.
 license: MIT
-argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all]
-  [packages=a,b] [max=N] [depth=light|standard*|full] [plan_first] [fix]"
+argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all |
+  add|change|remove RULE | learn] [packages=a,b] [max=N]
+  [depth=light|standard*|full] [plan_first] [fix]"
 ---
 
 # style
@@ -17,17 +19,21 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all]
 ## Usage
 
 ```
-/go:style                             style-check the current git diff (default)
-/go:style func=Parse                  check one function (func=T.Bar: a method)
-/go:style pkg/foo/foo.go:42           check the function enclosing that line
-/go:style pkg/foo/foo.go              check one file
-/go:style ./pkg/foo                   check one package
-/go:style all                         check every package of the module
-/go:style /path/to/project            check that module (a go.mod dir)
-/go:style ./pkg/foo fix               apply every offense's fix without asking
-/go:style all plan_first              propose the budget, then stop
-/go:style all packages=a,b            restrict a module check to these packages
-/go:style all max=15 depth=light      cap offenses; set depth
+/go:style                                       style-check the current git diff (default)
+/go:style func=Parse                            check one function (func=T.Bar: a method)
+/go:style pkg/foo/foo.go:42                     check the function enclosing that line
+/go:style pkg/foo/foo.go                        check one file
+/go:style ./pkg/foo                             check one package
+/go:style all                                   check every package of the module
+/go:style /path/to/project                      check that module (a go.mod dir)
+/go:style ./pkg/foo fix                         apply every offense's fix without asking
+/go:style all plan_first                        propose the budget, then stop
+/go:style all packages=a,b                      restrict a module check to these packages
+/go:style all max=15 depth=light                cap offenses; set depth
+/go:style add "no naked returns in tests"       add a style rule
+/go:style change "receivers are three letters"  refine an existing style rule
+/go:style remove "the compile-time check rule"  remove a style rule
+/go:style learn                                 mine this session's feedback into rules
 ```
 
 Authoritative Go style rules and the style-only pass that enforces them. The
@@ -39,7 +45,7 @@ rules live in two files:
 - [references/test.md](references/test.md) — the Test section: structure,
   naming, assertions, helpers and fixtures, and coverage.
 
-Two uses:
+Three uses:
 
 - Reference — when loaded as context before writing Go (the default): apply
   the Production section to `*.go` and the Test section to `*_test.go`; Test
@@ -56,6 +62,12 @@ Two uses:
   detection detail lives in [rules.md](rules.md), opened one entry at a time.
   A `fix` run reports each applied fix as one line, `file:sym — what changed`
   (`cache.go:Get — wrap the error with %w`), then the gate result; no diffs.
+- Change a rule — Rule edit: `add`/`change`/`remove`, everything after it
+  being the rule text, reserved words included, or input that is a plain style
+  preference; Learn: `learn`, which mines the current editing session (since
+  the last /clear) for convention feedback and proposes rules. For either, read
+  [references/rule-editing.md](references/rule-editing.md) first and follow
+  it; never write a rule without confirmation.
 
 Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
 a control, and anything else is the target. `func=` names the target, not a
@@ -66,8 +78,7 @@ absent — unless dropping it would widen what the run changes; then ask. A targ
 that resolves to nothing: say so and ask — never guess what to work on. A pass
 without `fix` changes no file, so a dropped control never widens it.
 
-Change the rules only through `go:review` (state a preference, or
-`go:review learn` to mine an editing session); never hand-edit them.
+Change the rules only through Rule edit or Learn; never hand-edit them.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see — when citing a rule, name it and the fix, not

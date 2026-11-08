@@ -30,6 +30,26 @@
       "setup": "An 8-package module, byte-identical apart from the package name except in one test: four packages have a `--- Given ---` block with no blank line between two distinct subjects (a variable with its own setup statement, then a second variable), and the other four have a blank line splitting one `--- Then ---` subject (an `assert.NoError` and the `assert.Equal` checking the same call's result). So one rule is broken at eight sites, four needing a blank line inserted and four needing one deleted — both directions genuinely right where they are. Every package also has a correct blank line in `--- Then ---` before a second action (a further call on the `--- When ---` result, asserted on its own). Nothing else in the module breaks any rule.",
       "query": "/style all max=25 depth=standard",
       "files": []
+    },
+    {
+      "id": 13,
+      "name": "rule-edit-add-change-remove",
+      "skills": [
+        "style"
+      ],
+      "setup": "`references/production.md` already carries a receiver-naming rule. The session issues three rule edits in turn.",
+      "query": "/style add \"no naked returns in tests\", then /style change \"receivers are three letters\", then /style remove \"the compile-time check rule\"",
+      "files": []
+    },
+    {
+      "id": 14,
+      "name": "learn-from-the-session",
+      "skills": [
+        "style"
+      ],
+      "setup": "A finished session with four corrections. Two are genuinely absent from the style rule files: the user rejected a `time.After` inside a `select` loop because each iteration leaks a timer until it fires, and asked that a string built in a loop use `strings.Builder` rather than `+=`. One repeats a rule the rulebook already carries verbatim — never store a `context.Context` in a struct field. The fourth was a rename specific to this project's domain vocabulary.",
+      "query": "/style learn",
+      "files": []
     }
   ]
 }

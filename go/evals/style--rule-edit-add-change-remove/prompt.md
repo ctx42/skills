@@ -1,5 +1,5 @@
 ---
-tags: [case:review--rule-edit-add-change-remove, skill:review, sec:review:usage, sec:review:rule-edit-and-learn-modes, ref:review/rule-editing, needs-shell]
+tags: [case:style--rule-edit-add-change-remove, skill:style, sec:style:usage, ref:style/rule-editing, needs-shell]
 runs: 1
 max_turns: 60
 timeout_seconds: 300
@@ -7,10 +7,9 @@ allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(git:*)]
 append_system_prompt: |
   The user writes English; reply in English.
   Eval wiring: this workspace is the go plugin's git clone, checked out at
-  ./go (the run loads a read-only copy of it). Wherever the skill names a file
-  under `../style/` (`references/production.md`, `references/test.md`,
-  `rules.md`), use the same path under ./go/skills/style/ in this workspace; it
-  is the writable clone.
+  ./go (the run loads a read-only copy of it). Wherever the skill names a rule
+  file (`references/production.md`, `references/test.md`, `rules.md`), use the
+  same path under ./go/skills/style/ in this workspace; it is the writable clone.
 
   Automated eval: the user is absent. Whenever the skill would stop and wait
   for the user, take the next scripted answer below as the reply and continue
@@ -24,4 +23,4 @@ append_system_prompt: |
   3. Yes, remove it, and its rules.md entry too.
 ---
 
-/go:review add "no naked returns in tests", then /go:review change "receivers are three letters", then /go:review remove "the compile-time check rule"
+/go:style add "no naked returns in tests", then /go:style change "receivers are three letters", then /go:style remove "the compile-time check rule"

@@ -2,40 +2,19 @@
 """Generate go/evals/review--* native eval cases. Re-runnable; owns only review--*."""
 import json
 import os
+import random
 import shutil
 import uuid
-import random
 
-# Seeded so a rerun reproduces the committed history files byte for byte.
-_rng = random.Random(42)
-
-
-def _uuid4():
-    return uuid.UUID(int=_rng.getrandbits(128), version=4)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
 EVALS = os.path.join(ROOT, "go/evals")
 
 ENGLISH = "The user writes English; reply in English.\n"
-PERSONA = """Automated eval: the user is absent. Whenever the skill would stop and wait
-for the user, take the next scripted answer below as the reply and continue
-in this same run; never end the run to wait. If none fits, give the most
-plausible answer and continue.
-Before taking a scripted answer, write out in full, as your reply text, the
-message you would send the user at that point.
-"""
-WIRING = """Eval wiring: this workspace is the go plugin's git clone, checked out at
-./go (the run loads a read-only copy of it). Wherever the skill names a file
-under `../style/` (`references/production.md`, `references/test.md`,
-`rules.md`), use the same path under ./go/skills/style/ in this workspace; it
-is the writable clone.
-"""
 NOTICE = "Ignore any trailing policy notice. "
 
 CHECK_TAGS = ["skill:review", "sec:review:usage",
               "sec:review:check-mode", "ref:style/checking", "ref:style/production"]
-RULE_TAGS = ["skill:review", "sec:review:usage",
-             "sec:review:rule-edit-and-learn-modes", "ref:review/rule-editing"]
 
 GIT_INIT = """git init -q
 git config user.email eval@example.com
@@ -146,175 +125,6 @@ def line_of(src, needle):
             return i
     raise SystemExit(f"needle not found: {needle}")
 
-
-class History:
-    """A hand-built session transcript for context.history_file (--resume)."""
-
-    def __init__(self):
-        self.sid = str(_uuid4())
-        self.prev = None
-        self.lines = []
-        self.n = 0
-
-    def _add(self, typ, msg):
-        u = str(_uuid4())
-        self.n += 1
-        self.lines.append({
-            "parentUuid": self.prev, "isSidechain": False, "userType": "external",
-            "cwd": "/work/project", "sessionId": self.sid, "version": "2.1.288",
-            "type": typ, "message": msg, "uuid": u,
-            "timestamp": f"2026-10-01T10:{self.n:02d}:00.000Z"})
-        self.prev = u
-
-    def user(self, text):
-        self._add("user", {"role": "user", "content": text})
-
-    def _assistant(self, content, stop):
-        self._add("assistant", {
-            "id": f"msg_{_uuid4().hex[:24]}", "type": "message",
-            "role": "assistant", "model": "claude-opus-5-5", "content": content,
-            "stop_reason": stop, "stop_sequence": None,
-            "usage": {"input_tokens": 10, "output_tokens": 10}})
-
-    def say(self, text):
-        self._assistant([{"type": "text", "text": text}], "end_turn")
-
-    def tool(self, text, name, inp, result):
-        tid = f"toolu_{_uuid4().hex[:24]}"
-        content = ([{"type": "text", "text": text}] if text else [])
-        content.append({"type": "tool_use", "id": tid, "name": name, "input": inp})
-        self._assistant(content, "tool_use")
-        self._add("user", {"role": "user", "content": [
-            {"type": "tool_result", "tool_use_id": tid, "content": result}]})
-
-    def edit(self, text, path, old, new):
-        self.tool(text, "Edit", {"file_path": path, "old_string": old,
-                                 "new_string": new, "replace_all": False},
-                  f"The file {path} has been updated successfully.")
-
-    def dump(self):
-        return "\n".join(json.dumps(x) for x in self.lines) + "\n"
-
-
-# ------------------------------------------------- style rulebook fixture
-
-STYLE_SKILL = """---
-name: style
-description: >
-  Enforced Go coding style for this project (production and test code).
-license: MIT
----
-
-# style
-
-Authoritative Go style rules. They live in two files:
-[references/production.md](references/production.md) and
-[references/test.md](references/test.md). Apply the Production section to
-`*.go` and the Test section to `*_test.go`; Test inherits Production unless a
-Test rule overrides it. Per-rule detection detail lives in [rules.md](rules.md).
-
-Change the rules only through `go:review`; never hand-edit them.
-"""
-
-STYLE_PROD = """# Go style — Production
-
-## Formatting
-
-- gofmt + goimports always; never hand-format or reorder imports manually.
-- Separate multi-line switch cases with a blank line; none before the first.
-
-## Naming
-
-- No name stutter: `pkg.Thing`, not `pkg.PkgThing`.
-- Receivers are a short type abbreviation, never a single letter: `pag *page`,
-  `cfg *config`.
-
-## Functions & methods
-
-- A func whose sole parameter is a local `*T`/`T` belongs on T as a method
-  (`pag.f()`, not `f(pag)`).
-- No naked returns in non-trivial functions.
-
-## Errors
-
-- Wrap errors with `%w` and add context; never swallow the error.
-- Match errors with `errors.Is`/`errors.As`, never `==`.
-
-## API design
-
-- `context.Context` is the first parameter when used; never store it in a
-  struct.
-- Assert implementations at compile time: `var _ Iface = (*T)(nil)` near the
-  top of the file.
-- No work in `init()`; no package-level mutable state or singletons.
-"""
-
-STYLE_TEST = """# Go style — Test
-
-## Structure
-
-- Structure every test body with the `--- Given ---`, `--- When ---`, and
-  `--- Then ---` comment markers, in order.
-- Table-driven subtests via `t.Run`; one case per table row.
-
-## Naming
-
-- Test function names are `Test_Func` and `Test_Type_Method`; add `_tabular`
-  for table tests.
-- Name the actual value `have` and the expected value `want`, never `got`.
-
-## Helpers & fixtures
-
-- Test helpers call `t.Helper()`.
-- Simple test helpers shared within a package live in `all_test.go`.
-"""
-
-STYLE_RULES = """# Go style — deep rules
-
-Keyed detection detail for the rules in `references/production.md` and
-`references/test.md`. An entry
-adds only what a capable reviewer can't infer from the one-line rule — an
-exemption or a detection heuristic — in two short sentences. Open an entry only
-when about to flag its rule; never preload the file. Grows via
-`go:review add`.
-
-## Contents
-
-- No name stutter (Production)
-- Method over a single-receiver-arg func (Production)
-- Assert implementations at compile time (Production)
-- Test helpers in all_test.go (Test)
-
-## No name stutter (Production)
-
-Exemption: a name fixed by a contract outside the package, such as a method
-another type is asserted against. Detect: a member repeating its type or
-package qualifier (`client.ClientDo`) with no same-file pin.
-
-## Method over a single-receiver-arg func (Production)
-
-Exemption: the arg is one of several equals with no clear receiver. Detect: an
-unexported func with a single local-type parameter.
-
-## Assert implementations at compile time (Production)
-
-Exemption: an unexported type only ever used through its concrete type. Detect:
-a type passed as an interface with no `var _ Iface = (*T)(nil)` in its file.
-
-## Test helpers in all_test.go (Test)
-
-Exemption: a helper used by one test file only may stay beside it. Detect: a
-helper declared in a `_test.go` file other than `all_test.go` and called from
-two or more test files.
-"""
-
-STYLE_FILES = {"go/skills/style/SKILL.md": STYLE_SKILL,
-               "go/skills/style/references/production.md": STYLE_PROD,
-               "go/skills/style/references/test.md": STYLE_TEST,
-               "go/skills/style/rules.md": STYLE_RULES}
-PROD_P = {"file": "go/skills/style/references/production.md"}
-TEST_P = {"file": "go/skills/style/references/test.md"}
-RULES_P = {"file": "go/skills/style/rules.md"}
 
 # ------------------------------------------- 1 review-the-current-diff
 
@@ -457,272 +267,165 @@ def case_review_diff():
                max_turns=40, timeout=300, asp=ENGLISH)
 
 
-# --------------------------------------- 3 rule-edit-add-change-remove
+# ------------------------------------------- 5 rule-request-redirects
 
-RULE_QUERY = ('/go:review add "no naked returns in tests", then /go:review change '
-              '"receivers are three letters", then /go:review remove "the compile-time '
-              'check rule"')
-
-
-def case_rule_edit():
-    sc = scaffold(GIT_INIT, heredocs(STYLE_FILES), commit())
-    gate = {
-        "b3-no-write": g_never("Write"),
-        "b3-no-edit": g_never("Edit"),
-        "b3-flags-the-existing-rule": g_regex(
-            r"^(?=[\s\S]*naked)(?=[\s\S]*(duplicate|already|inherit|overlap|conflict|covers|existing))",
-            flags="i"),
-        "b3-quotes-existing-rule-text": g_regex(r"naked returns in non-trivial functions", flags="i"),
-        "b3-shows-proposed-text": g_regex(
-            r"^\+\s*- [^\n]*naked return|(after|proposed|new)[^\n]{0,40}[:\n][\s\S]{0,400}naked return",
-            flags="im"),
-    }
-    asp = ENGLISH + WIRING + "\n" + PERSONA + """
-1. Yes, add it to the Test section anyway.
-2. Yes, rewrite the receiver rule that way.
-3. Yes, remove it, and its rules.md entry too.
-"""
-    full = {
-        "b1-not-a-review-target": g_never("Skill", "go:style"),
+def case_rule_redirect():
+    sc = scaffold(GIT_INIT, heredocs({"go.mod": "module example.com/kv\n\ngo 1.22",
+                                      "store/store.go": STORE_OLD}), commit())
+    graders = {
+        "b1-names-go-style": g_regex(r"go:style"),
+        "b1-names-the-command": g_regex(r"/go:style add"),
         "b1-no-findings": g_regex(r"\b[a-z]+\.go:\d+", match="not_contains"),
-        "b2-test-rule-added": g_regex(r"\n- (?=[^\n]*naked return)[^\n]{1,100}\n",
-                                      target=TEST_P, flags="i"),
-        "b2-one-line-rule": g_regex(r"\n- [^\n]*naked return[^\n]*\n(  [^\n]+\n){2,}",
-                                    target=TEST_P, flags="i", match="not_contains"),
-        "b4-one-receiver-rule": g_regex(r"^- (?:[^\n]|\n  )*?receiver", target=PROD_P,
-                                        flags="im", match="count:1"),
-        "b4-receiver-rule-says-three": g_regex(r"^- (?:[^\n]|\n  )*?receiver(?:[^\n]|\n  )*?three",
-                                               target=PROD_P, flags="im"),
-        "b4-old-wording-gone": g_regex(r"short type abbreviation", target=PROD_P,
-                                       match="not_contains"),
-        "b5-skill-line-removed": g_regex(r"compile[- ]time|\(\*T\)\(nil\)", target=PROD_P,
-                                         flags="i", match="not_contains"),
-        "b5-rules-entry-and-row-removed": g_regex(r"compile[- ]time", target=RULES_P,
-                                                  flags="i", match="not_contains"),
-        "b5-other-entries-kept": g_regex(
-            r"^(?=[\s\S]*- No name stutter \(Production\))(?=[\s\S]*## Method over a single-receiver-arg func)(?=[\s\S]*## Test helpers in all_test\.go)",
-            target=RULES_P),
+        "b2-no-write": g_never("Write"),
+        "b2-no-edit": g_never("Edit"),
     }
-    write_case("review--rule-edit-add-change-remove", RULE_TAGS, RULE_QUERY, full,
-               scaffold_sh=sc, allowed=["Read", "Glob", "Grep", "Skill", "Write", "Edit", "Bash(git:*)"],
-               max_turns=60, timeout=300, asp=asp)
+    write_case("review--rule-request-redirects",
+               ["skill:review", "sec:review:usage"],
+               '/go:review add "no naked returns in tests"', graders, scaffold_sh=sc,
+               allowed=["Read", "Glob", "Grep", "Skill", "Write", "Edit"],
+               max_turns=20, timeout=180, asp=ENGLISH)
 
 
-# ------------------------------------------- 4 learn-from-the-session
+# ------------------------------------- 6 session-rules-offered-at-close
 
-POLL_V0 = """// Package poll fetches readings from remote stations on a fixed interval.
-package poll
+# Seeded so a rerun reproduces the committed history file byte for byte.
+_rng = random.Random(6)
 
-import (
-	"context"
-	"time"
-)
 
-// Fetcher reads the current value of one item.
-type Fetcher interface {
-	Fetch(ctx context.Context, name string) (float64, error)
-}
+def _uuid4():
+    return uuid.UUID(int=_rng.getrandbits(128), version=4)
 
-// Poller fetches every item on a fixed interval.
-type Poller struct {
-	ctx      context.Context
-	fet      Fetcher
-	items    []string
-	interval time.Duration
-}
 
-// Run polls until the context is cancelled.
-func (pol *Poller) Run(out chan<- float64) error {
-	for {
-		select {
-		case <-pol.ctx.Done():
-			return pol.ctx.Err()
-		case <-time.After(pol.interval):
-			for _, name := range pol.items {
-				val, err := pol.fet.Fetch(pol.ctx, name)
-				if err != nil {
-					return err
-				}
-				out <- val
-			}
-		}
+class History:
+    """A hand-built session transcript for context.history_file (--resume)."""
+
+    def __init__(self):
+        self.sid = str(_uuid4())
+        self.prev = None
+        self.lines = []
+        self.n = 0
+
+    def _add(self, typ, msg):
+        u = str(_uuid4())
+        self.n += 1
+        self.lines.append({
+            "parentUuid": self.prev, "isSidechain": False, "userType": "external",
+            "cwd": "/work/project", "sessionId": self.sid, "version": "2.1.288",
+            "type": typ, "message": msg, "uuid": u,
+            "timestamp": f"2026-10-01T10:{self.n:02d}:00.000Z"})
+        self.prev = u
+
+    def user(self, text):
+        self._add("user", {"role": "user", "content": text})
+
+    def _assistant(self, content, stop):
+        self._add("assistant", {
+            "id": f"msg_{_uuid4().hex[:24]}", "type": "message",
+            "role": "assistant", "model": "claude-opus-5-5", "content": content,
+            "stop_reason": stop, "stop_sequence": None,
+            "usage": {"input_tokens": 10, "output_tokens": 10}})
+
+    def say(self, text):
+        self._assistant([{"type": "text", "text": text}], "end_turn")
+
+    def tool(self, text, name, inp, result):
+        tid = f"toolu_{_uuid4().hex[:24]}"
+        content = ([{"type": "text", "text": text}] if text else [])
+        content.append({"type": "tool_use", "id": tid, "name": name, "input": inp})
+        self._assistant(content, "tool_use")
+        self._add("user", {"role": "user", "content": [
+            {"type": "tool_result", "tool_use_id": tid, "content": result}]})
+
+    def edit(self, text, path, old, new):
+        self.tool(text, "Edit", {"file_path": path, "old_string": old,
+                                 "new_string": new, "replace_all": False},
+                  f"The file {path} has been updated successfully.")
+
+    def dump(self):
+        return "\n".join(json.dumps(x) for x in self.lines) + "\n"
+
+
+NESTED = """\tif err != nil {
+		return err
+	} else {
+		cache[key] = data
 	}
+	return nil"""
+EARLY = """\tif err != nil {
+		return err
+	}
+	cache[key] = data
+	return nil"""
+NESTED2 = """\tif len(key) == 0 {
+		return errors.New("empty key")
+	} else {
+		delete(cache, key)
+	}
+	return nil"""
+EARLY2 = """\tif len(key) == 0 {
+		return errors.New("empty key")
+	}
+	delete(cache, key)
+	return nil"""
+
+MEM_V0 = """// Package mem keeps decoded blobs in memory.
+package mem
+
+import "errors"
+
+var cache = map[string][]byte{}
+
+// Put decodes raw and stores it under key.
+func Put(key string, raw []byte) error {
+	data, err := decode(raw)
+""" + NESTED + """
 }
 
-// Summary lists the polled items, comma separated.
-func (pol *Poller) Summary() string {
-	s := ""
-	for i, name := range pol.items {
-		if i > 0 {
-			s += ", "
-		}
-		s += name
-	}
-	return s
+// Drop removes key.
+func Drop(key string) error {
+""" + NESTED2 + """
 }
+
+func decode(raw []byte) ([]byte, error) { return raw, nil }
 """
 
-LEARN_EDITS = []  # (user feedback, assistant text, old, new)
-LEARN_EDITS.append((
-    "Don't call time.After inside the select loop: every iteration allocates a new "
-    "timer that isn't released until it fires, so a long-running loop leaks them. "
-    "Create one time.Ticker before the loop and select on its channel.",
-    "Switched Run to one ticker created before the loop.",
-    """	for {
-		select {
-		case <-pol.ctx.Done():
-			return pol.ctx.Err()
-		case <-time.After(pol.interval):""",
-    """	tick := time.NewTicker(pol.interval)
-	defer tick.Stop()
-	for {
-		select {
-		case <-pol.ctx.Done():
-			return pol.ctx.Err()
-		case <-tick.C:"""))
-LEARN_EDITS.append((
-    "In Summary, build the string with strings.Builder instead of += in the loop.",
-    "Summary now uses strings.Builder.",
-    """	s := ""
-	for i, name := range pol.items {
-		if i > 0 {
-			s += ", "
-		}
-		s += name
-	}
-	return s""",
-    """	var buf strings.Builder
-	for i, name := range pol.items {
-		if i > 0 {
-			buf.WriteString(", ")
-		}
-		buf.WriteString(name)
-	}
-	return buf.String()"""))
-LEARN_EDITS.append((
-    "Don't keep the context in the Poller struct; pass ctx to Run as its first "
-    "parameter instead.",
-    "Removed the ctx field; Run now takes ctx first.",
-    """type Poller struct {
-	ctx      context.Context
-	fet      Fetcher""",
-    """type Poller struct {
-	fet      Fetcher"""))
-LEARN_EDITS.append((
-    None, None,
-    """func (pol *Poller) Run(out chan<- float64) error {
-	tick := time.NewTicker(pol.interval)
-	defer tick.Stop()
-	for {
-		select {
-		case <-pol.ctx.Done():
-			return pol.ctx.Err()
-		case <-tick.C:
-			for _, name := range pol.items {
-				val, err := pol.fet.Fetch(pol.ctx, name)""",
-    """func (pol *Poller) Run(ctx context.Context, out chan<- float64) error {
-	tick := time.NewTicker(pol.interval)
-	defer tick.Stop()
-	for {
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		case <-tick.C:
-			for _, name := range pol.items {
-				val, err := pol.fet.Fetch(ctx, name)"""))
-LEARN_EDITS.append((
-    "Rename items to stations: in this project the things we poll are always stations.",
-    "Renamed items to stations.",
-    None, None))
 
-
-def poll_final():
-    src = POLL_V0
-    for _, _, old, new in LEARN_EDITS:
-        if old:
-            assert old in src, old
-            src = src.replace(old, new)
-    src = src.replace('import (\n\t"context"\n\t"time"\n)',
-                      'import (\n\t"context"\n\t"strings"\n\t"time"\n)')
-    src = src.replace("pol.items", "pol.stations").replace("\titems    []string",
-                                                           "\tstations []string")
-    src = src.replace("// Summary lists the polled items", "// Summary lists the polled stations")
-    return src
-
-
-def learn_history():
+def session_history():
     h = History()
-    h.user("poll/poll.go has my first draft of the station poller. Let's clean it up; "
-           "read it first.")
-    h.tool("", "Read", {"file_path": "poll/poll.go"}, POLL_V0)
-    h.say("Read it: a Poller with Run and Summary. What should change?")
-    src = POLL_V0
-    for fb, txt, old, new in LEARN_EDITS:
-        if fb:
-            h.user(fb)
-        if old:
-            h.edit("" if fb else "", "poll/poll.go", old, new)
-            src = src.replace(old, new)
-        if fb and old and "strings.Builder" in new:
-            o = 'import (\n\t"context"\n\t"time"\n)'
-            n = 'import (\n\t"context"\n\t"strings"\n\t"time"\n)'
-            h.edit("", "poll/poll.go", o, n)
-        if txt and old is None:
-            h.tool("", "Edit", {"file_path": "poll/poll.go", "old_string": "items",
-                                "new_string": "stations", "replace_all": True},
-                   "The file poll/poll.go has been updated. All occurrences of 'items' "
-                   "were successfully replaced with 'stations'.")
-        if txt:
-            h.say(txt)
-    h.user("Looks good now, thanks.")
-    h.say("Done; poll/poll.go builds with all four changes.")
+    h.user("mem/mem.go needs tidying; read it first.")
+    h.tool("", "Read", {"file_path": "mem/mem.go"}, MEM_V0)
+    h.say("Read it: Put and Drop both nest the success path in an else branch.")
+    h.user("Return early instead of nesting the else branch in Put.")
+    h.edit("", "mem/mem.go", NESTED, EARLY)
+    h.say("Done: Put returns early on the error.")
+    h.user("Same in Drop: return early instead of nesting the else branch.")
+    h.edit("", "mem/mem.go", NESTED2, EARLY2)
+    h.say("Done: Drop returns early too.")
     return h.dump()
 
 
-def case_learn():
-    sc = scaffold(GIT_INIT,
-                  heredocs({**STYLE_FILES, "go.mod": "module example.com/pollr\n\ngo 1.22",
-                            "poll/poll.go": POLL_V0}),
-                  commit(),
-                  heredocs({"poll/poll.go": poll_final()}))
-    hist = learn_history()
-    gate = {
-        "b1-pairs-feedback-with-hunks": g_llm(
-            "Each proposed rule is shown with the code change from this session that "
-            "resolved the user's correction, as a before/after example or hunk."),
-        "b2-proposes-timer-rule": g_regex(r"time\.After", flags="i"),
-        "b2-timer-before-after": g_regex(r"(Ticker|NewTimer|timer\.Reset)"),
-        "b2-proposes-builder-rule": g_regex(r"strings\.Builder"),
-        "b2-builder-before-after": g_regex(r"\+=") ,
-        "b2-provenance": g_regex(
-            r"(comes? from|came from|provenance|prompted by|source:|from:|you (said|asked|rejected|wrote)|your (correction|feedback|instruction|request|\w+ fix))",
+def case_session_rules():
+    sc = scaffold(GIT_INIT, heredocs({"go.mod": "module example.com/mem\n\ngo 1.22",
+                                      "mem/mem.go": MEM_V0}), commit(),
+                  heredocs({"mem/mem.go": MEM_V0.replace(NESTED, EARLY).replace(NESTED2, EARLY2)}),
+                  "git add mem/mem.go\n")
+    graders = {
+        "b1-heading": g_regex(r"Rules this session taught"),
+        "b1-early-return-candidate": g_regex(
+            r"Rules this session taught[\s\S]*(early return|return early|nest(ed|ing)?[^\n]{0,40}else)",
             flags="i"),
-        "b3-drops-the-rename": g_llm(
-            "The items-to-stations rename is not proposed as a style rule; if it is "
-            "mentioned at all, it is as dropped or project-specific."),
-        "b4-context-already-covered": g_regex(
-            r"^(?=[^\n]*context)(?=[^\n]*(already|covered|existing|duplicate|dedup))", flags="im"),
-        "b5-no-write": g_never("Write"),
-        "b5-no-edit": g_never("Edit"),
-        "b5-asks-to-pick": g_regex(r"\?|\b(tell me|let me know) which\b|\bwhich (to|ones? to) keep\b", flags="i"),
+        "b2-no-write": g_never("Write"),
+        "b2-no-edit": g_never("Edit"),
     }
-    asp = ENGLISH + WIRING + "\n" + PERSONA + "\n1. Keep both new rules.\n"
-    full = {
-        "b5-timer-rule-written": g_regex(r"time\.After|timer", target=PROD_P, flags="i"),
-        "b5-builder-rule-written": g_regex(r"strings\.Builder", target=PROD_P),
-        "b5-no-context-duplicate": g_regex(r"never store it in a", target=PROD_P, match="count:1"),
-        "b5-no-rename-rule": g_regex(r"station", target=PROD_P, flags="i", match="not_contains"),
-        "b5-shows-the-diff": g_regex(r"```diff|^\+\s*- ", flags="m"),
-    }
-    write_case("review--learn-from-the-session", RULE_TAGS, "/go:review learn", full,
-               scaffold_sh=sc, history=hist,
+    write_case("review--session-rules-offered-at-close", CHECK_TAGS,
+               "/go:review", graders, scaffold_sh=sc, history=session_history(),
                allowed=["Read", "Glob", "Grep", "Skill", "Write", "Edit", "Bash(git:*)"],
-               max_turns=40, timeout=300, asp=asp)
+               max_turns=40, timeout=300, asp=ENGLISH)
 
 
 if __name__ == "__main__":
     os.makedirs(EVALS, exist_ok=True)
     case_review_diff()
-    case_rule_edit()
-    case_learn()
+    case_rule_redirect()
+    case_session_rules()
     print("ok")

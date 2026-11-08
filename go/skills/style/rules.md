@@ -4,7 +4,7 @@ Keyed detection detail for the rules in `references/production.md` and
 `references/test.md`. An entry adds only what a capable reviewer can't infer
 from the one-line rule — an exemption or a detection heuristic — in two short
 sentences. Open an entry only when about to flag its rule; never preload the
-file. Grows via `go:review add`.
+file. Grows via `go:style add`.
 
 ## Contents
 

@@ -1,10 +1,9 @@
-# review rule editing
+# style rule editing
 
-Read when Rule-edit or Learn mode triggers. Both modes write Production rules
-to `../style/references/production.md`, Test rules to
-`../style/references/test.md`, and, when non-obvious, a keyed entry to
-`../style/rules.md`. Never write a rule into `../style/SKILL.md`: it only
-routes to those files.
+Read when Rule-edit or Learn mode triggers. Both modes write Production rules to
+`references/production.md`, Test rules to `references/test.md`, and, when
+non-obvious, a keyed entry to `rules.md`. Never write a rule into `SKILL.md`: it
+only routes to those files.
 
 ## Writes must reach the repo
 
@@ -17,18 +16,17 @@ before writing.
 
 ## Rule-edit mode
 
-1. Read `../style/references/production.md` and `../style/references/test.md`.
+1. Read `references/production.md` and `references/test.md`.
 2. Turn the input into rule entries shaped per How a rule entry should look
    (below). If the scope is ambiguous, ask one quick question.
 3. Detect duplicate or conflicting rules; show them and the proposed change,
    then wait for confirmation before writing. Never silently overwrite a
    conflicting rule. An answer that makes a new request instead of picking an
    option is not confirmation; propose again and wait.
-4. Check the write location (above), then write: `add` inserts the rule line
-   in the file of its section (plus a keyed `../style/rules.md` entry when
-   warranted); `change` rewrites the existing line and entry in place;
-   `remove` deletes the line and, if present, its keyed entry and Contents
-   row.
+4. Check the write location (above), then write: `add` inserts the rule line in
+   the file of its section (plus a keyed `rules.md` entry when warranted);
+   `change` rewrites the existing line and entry in place; `remove` deletes the
+   line and, if present, its keyed entry and Contents row.
 5. Show the before/after diff of the rule text.
 
 ## Learn mode
@@ -72,8 +70,8 @@ rules.
   rule for both goes in `production.md`, which Test inherits.
 - Prefer no example; add one only when the rule is ambiguous without it, using
   only generic Go syntax (`ErrXxx`, `[Type]`, `//nolint:name`).
-- Keyed `../style/rules.md` entry only when non-obvious: match the shape of
-  the existing entries (rule-name heading with its scope, a row in the file's
-  Contents list) and carry only what the line can't — an exemption or a
-  detection heuristic — in a few short sentences; no code fence unless the
-  prose alone is ambiguous. Drop the entry when the style line is enough.
+- Keyed `rules.md` entry only when non-obvious: match the shape of the existing
+  entries (rule-name heading with its scope, a row in the file's Contents list)
+  and carry only what the line can't — an exemption or a detection heuristic —
+  in a few short sentences; no code fence unless the prose alone is ambiguous.
+  Drop the entry when the style line is enough.

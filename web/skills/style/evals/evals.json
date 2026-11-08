@@ -39,6 +39,17 @@
         "web/evals/assets/"
       ],
       "requires": "Bun with the fixture's dependencies installed, so the new page's test and `bun run check` run."
+    },
+    {
+      "id": 5,
+      "name": "rule-edit-picks-biome-over-prose",
+      "skills": [
+        "style"
+      ],
+      "setup": "The web plugin is loaded from the git clone of this skills repository (`claude --plugin-dir ./web`), so a rule edit writes into the repository. The working directory is a frontend project. The user answers the confirmation with `yes`.",
+      "query": "/web:style add \"never export a default from a .ts module\"",
+      "files": [],
+      "requires": "A writable clone of this skills repository loaded as the plugin, and Biome installed (its `configuration_schema.json` names the rules). Run against a throwaway copy of the clone; never write the real one."
     }
   ]
 }

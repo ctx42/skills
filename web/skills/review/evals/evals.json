@@ -16,17 +16,6 @@
       "requires": "Bun with the fixture's dependencies installed and a Go toolchain with the fixture's modules cached, so the baseline the setup states holds. The review itself runs neither."
     },
     {
-      "id": 2,
-      "name": "rule-edit-picks-biome-over-prose",
-      "skills": [
-        "review"
-      ],
-      "setup": "The web plugin is loaded from the git clone of this skills repository (`claude --plugin-dir ./web`), so a rule edit writes into the repository. The working directory is a frontend project. The user answers the confirmation with `yes`.",
-      "query": "/web:review add \"never export a default from a .ts module\"",
-      "files": [],
-      "requires": "A writable clone of this skills repository loaded as the plugin, and Biome installed (its `configuration_schema.json` names the rules). Run against a throwaway copy of the clone; never write the real one."
-    },
-    {
       "id": 3,
       "name": "fix-proves-the-leak-red-then-green",
       "skills": [
@@ -39,6 +28,16 @@
         "web/evals/assets/"
       ],
       "requires": "Bun with the fixture's dependencies installed, to run the tests and the `bun run check` gate."
+    },
+    {
+      "id": 4,
+      "name": "rule-request-redirects",
+      "skills": [
+        "review"
+      ],
+      "setup": "A frontend project with a clean working tree. The user asks review to add a style rule.",
+      "query": "/web:review add \"never export a default from a .ts module\"",
+      "files": []
     }
   ]
 }

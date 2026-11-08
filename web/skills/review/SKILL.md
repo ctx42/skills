@@ -6,10 +6,10 @@ description: >
   project style rules and for correctness (reactivity, leaks, async races,
   router and PrimeVue pitfalls, tests that cannot fail), and checks the API
   client's types against the JSON the Go server sends. Use after edits or a
-  feature are complete, and to add, change, or learn frontend style rules.
+  feature are complete.
 license: MIT
-argument-hint: "[TARGET* | add|change|remove RULE | learn] [dirs=a,b] [max=N]
-  [depth=light|standard*|full] [plan_first] [fix]"
+argument-hint: "[TARGET*] [dirs=a,b] [max=N] [depth=light|standard*|full]
+  [plan_first] [fix]"
 ---
 
 # review
@@ -27,10 +27,6 @@ argument-hint: "[TARGET* | add|change|remove RULE | learn] [dirs=a,b] [max=N]
 /web:review all dirs=pages,stores            restrict to these directories
 /web:review all plan_first                   propose the budget, then stop for approval
 /web:review src/pages fix                    review, then apply the findings
-/web:review add "never export a default"     add a style rule
-/web:review change "the boolean naming rule" refine an existing style rule
-/web:review remove "the px rule"             remove a style rule
-/web:review learn                            mine this session's feedback into rules
 ```
 
 Done-time review for the frontend. Read the tokens in any order: a reserved word
@@ -44,19 +40,16 @@ and ask — never guess what to work on. Pick the mode:
 
 - Check (default) — no mode word; audit the target, then offer the rules this
   session taught (Session rules).
-- Rule edit — `add`/`change`/`remove`, the rest being the rule text, reserved
-  words included, or the input is a plain style preference.
-- Learn — `learn`; mines the current editing session (since the last /clear)
-  for convention feedback and proposes rules.
+- Rule changes moved to `web:style`: for `add`, `change`, `remove`, `learn`,
+  or input that is a plain style preference, say so in one line, naming
+  `/web:style add …` and `/web:style learn`, and stop.
 
 Sources of truth:
 - `web:style` (on-demand: Check mode) — owns the style rules, the reference
   Biome config, and their detection; the whole style dimension is delegated to
   it.
-- `../style/references/production.md`, `../style/references/test.md`,
-  `../style/references/biome.json` (on-demand: Rule-edit/Learn) — the prose
-  Production and Test rules and the reference config; those modes write
-  here.
+- `../style/references/rule-editing.md` (on-demand: Session rules) — the
+  Learn steps and where a picked rule is written.
 - [references/correctness.md](references/correctness.md) (on-demand: Check
   mode) — what to look for beyond style.
 - [references/contract.md](references/contract.md) (on-demand: Check mode,
@@ -173,16 +166,17 @@ When asked to change code (apply findings, fix, refactor), read
 ### Session rules
 
 Close every completed Check run with Learn mode's scan, so the session's
-corrections become rules without a separate `learn` call: below the finished
-report (its verdict and budget line stay put), and after the fixes when `fix`
-applies them, if this session holds the user's feedback on `.vue`/`.ts` code,
-read [references/rule-editing.md](references/rule-editing.md) and run its Learn
-steps 1–4 under the heading `Rules this session taught`, then write only what
-the user picks; a code-style correction, one given during this run included, is
-a rule candidate, never a `LESSONS.md` line as well; a correction of how the
-review ran stays a lesson. No feedback, or none surviving step 2, adds nothing
-to the report. A `plan_first` stop is not a completed run, and a fan-out worker
-never runs it; the session is not its own.
+corrections become rules without a separate `/web:style learn` call: below the
+finished report (its verdict and budget line stay put), and after the fixes when
+`fix` applies them, if this session holds the user's feedback on `.vue`/`.ts`
+code, read
+[../style/references/rule-editing.md](../style/references/rule-editing.md) and
+run its Learn steps 1–4 under the heading `Rules this session taught`, then
+write only what the user picks; a code-style correction, one given during this
+run included, is a rule candidate, never a `LESSONS.md` line as well; a
+correction of how the review ran stays a lesson. No feedback, or none surviving
+step 2, adds nothing to the report. A `plan_first` stop is not a completed run,
+and a fan-out worker never runs it; the session is not its own.
 
 ### Delegated by web:audit
 
@@ -201,12 +195,6 @@ and how many Nits `depth=light` left out, but no verdict or budget line (the
 audit writes its own), then stop: no `plan_first` stop (the audit agreed the
 budget), no `fix`, no Session rules, and no fan-out (the audit already split the
 work, and a worker cannot dispatch one).
-
-## Rule-edit and Learn modes
-
-When either mode triggers, read
-[references/rule-editing.md](references/rule-editing.md) first and follow it;
-never write a rule without confirmation.
 
 ## Self-learning
 

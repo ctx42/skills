@@ -4,12 +4,10 @@ description: >
   Done-time Go quality review: checks finished code — the current diff, a
   package, or a whole module — against the project style rules and for
   general correctness (bugs, edge cases, error handling). Use after edits or
-  a feature are complete. Also the skill that adds, changes, or removes a Go
-  style rule, or learns one from feedback.
+  a feature are complete.
 license: MIT
-argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all |
-  add|change|remove RULE | learn] [packages=a,b] [max=N]
-  [depth=light|standard*|full] [plan_first] [fix]"
+argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all]
+  [packages=a,b] [max=N] [depth=light|standard*|full] [plan_first] [fix]"
 ---
 
 # review
@@ -28,10 +26,6 @@ argument-hint: "[func=NAME | FILE:LINE | FILE.go | ./pkg | all |
 /go:review all packages=parser,lexer             restrict to these packages
 /go:review all plan_first                        propose the budget, then stop for approval
 /go:review ./pkg/foo fix                         review, then apply the findings
-/go:review add "no naked returns in tests"       add a style rule
-/go:review change "receivers are three letters"  refine an existing style rule
-/go:review remove "the compile-time check rule"  remove a style rule
-/go:review learn                                 mine this session's feedback into rules
 ```
 
 Done-time review for Go code. Read the tokens in any order: a reserved word is a
@@ -40,17 +34,15 @@ names the target, not a control. The mode:
 
 - Check (default) — no mode word; audit the target's finished code, then offer
   the rules this session taught (Session rules).
-- Rule edit — `add`/`change`/`remove`, everything after it being the rule text,
-  reserved words included, or input that is a plain style preference.
-- Learn — `learn`; mines the current editing session (since the last /clear)
-  for convention feedback and proposes rules.
+- Rule changes moved to `go:style`: for `add`, `change`, `remove`, `learn`, or
+  input that is a plain style preference, say so in one line, naming
+  `/go:style add …` and `/go:style learn`, and stop.
 
 Sources of truth:
 - `go:style` (on-demand: Check mode) — owns the style rules and their
   detection; the whole style dimension is delegated to it.
-- `../style/references/production.md`, `../style/references/test.md`,
-  `../style/rules.md` (on-demand: Rule-edit/Learn) — the terse Production and
-  Test rules and their keyed detection detail; those modes write here.
+- `../style/references/rule-editing.md` (on-demand: Session rules) — the
+  Learn steps and where a picked rule is written.
 
 In every mode, report tersely: no preamble or narration; state each fact once;
 don't restate output the user can already see.
@@ -257,18 +249,17 @@ When asked to change code (apply findings, fix, refactor), read
 [references/fixing.md](references/fixing.md) first and follow it.
 
 ### Session rules
-
 Close every completed Check run with Learn mode's scan, so the session's
-corrections become rules without a separate `learn` call: below the finished
-report (its verdict and budget line stay put), and after the fixes when `fix`
-applies them, if this session holds the user's feedback on Go code, read
-[references/rule-editing.md](references/rule-editing.md) and run its Learn steps
-1–4 under the heading `Rules this session taught`, then write only what the user
-picks; a code-style correction, one given during this run included, is a rule
-candidate, never a `LESSONS.md` line as well; a correction of how the review ran
-stays a lesson. No feedback, or none surviving step 2, adds nothing to the
-report. A `plan_first` stop is not a completed run, and a fan-out worker never
-runs it; the session is not its own.
+corrections become rules without a separate `/go:style learn` call: below the
+finished report (its verdict and budget line stay put), and after the fixes when
+`fix` applies them, if this session holds the user's feedback on Go code, read
+[../style/references/rule-editing.md](../style/references/rule-editing.md) and
+run its Learn steps 1–4 under the heading `Rules this session taught`, then
+write only what the user picks; a code-style correction, one given during this
+run included, is a rule candidate, never a `LESSONS.md` line as well; a
+correction of how the review ran stays a lesson. No feedback, or none surviving
+step 2, adds nothing to the report. A `plan_first` stop is not a completed run,
+and a fan-out worker never runs it; the session is not its own.
 
 ### Delegated by go:audit
 
@@ -280,12 +271,6 @@ the audit applies `max` once, at its merge — plus every command run,
 then stop: no `plan_first` stop (the audit agreed the budget), no `fix`, no
 Session rules, and no fan-out (the audit already split the work, and a worker
 cannot dispatch one).
-
-## Rule-edit and Learn modes
-
-When either mode triggers, read
-[references/rule-editing.md](references/rule-editing.md) first and follow it;
-never write a rule without confirmation.
 
 ## Self-learning
 

@@ -2,12 +2,13 @@
   "skill_name": "style",
   "rules": [
     {
-      "id": "rules-change-via-review",
-      "rule": "Rulebook changes go only through go:review, never hand-edited",
+      "id": "rules-change-via-rule-modes",
+      "rule": "The style skill owns rule changes: Rule edit and Learn, via rule-editing.md, never without confirmation or by hand",
       "must": [
-        "Change the rules only through `go:review`",
-        "never hand-edit them",
-        "adding or changing a rule belongs to go:review"
+        "Also the\\s+skill that adds, changes, or removes a Go style rule",
+        "Change the rules only through Rule edit or Learn; never hand-edit them",
+        "read\\s+\\[references/rule-editing\\.md\\]\\(references/rule-editing\\.md\\) first",
+        "never write a rule without confirmation"
       ]
     },
     {
@@ -88,11 +89,11 @@
       ]
     },
     {
-      "id": "pass-redirects-rule-edits",
-      "rule": "Rule edits redirect to go:review, unknown targets ask",
+      "id": "pass-routes-rule-edits",
+      "rule": "A rule edit given as a pass target runs Rule edit, never resolves as a path",
       "file": "references/checking.md",
       "must": [
-        "redirect to `go:review`"
+        "is a rulebook edit, not a target: run Rule edit"
       ]
     },
     {

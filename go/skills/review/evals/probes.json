@@ -72,7 +72,10 @@
     {
       "id": "session-rules-offered",
       "rule": "session-rules-close",
-      "prompt": "Situation: the user runs `/review ./pkg/foo`. Earlier this session, before the review, while you edited Go code, the user corrected you twice: 'return early instead of nesting the else branch'. go:style carries no such rule. You have written the findings report.\n\nQuestion: where does that correction go in this run? A) a line in this skill's LESSONS.md; B) a candidate style rule listed after the report for the user to pick; C) nowhere until the user runs `/review learn`. Answer on the first line with the letter only, then one sentence why.",
+      "bullets": [
+        "session-rules-offered-at-close#b1"
+      ],
+      "prompt": "Situation: the user runs `/review ./pkg/foo`. Earlier this session, before the review, while you edited Go code, the user corrected you twice: 'return early instead of nesting the else branch'. go:style carries no such rule. You have written the findings report.\n\nQuestion: where does that correction go in this run? A) a line in this skill's LESSONS.md; B) a candidate style rule listed after the report for the user to pick; C) nowhere: this run reports findings only, and learning rules is a separate command. Answer on the first line with the letter only, then one sentence why.",
       "pass": "^\\W*B\\b",
       "fail": "^\\W*[AC]\\b",
       "class": "load-bearing"
@@ -92,6 +95,17 @@
       "pass": "^\\W*SHOULD-FIX",
       "fail": "^\\W*(BLOCKER|NIT)",
       "class": "load-bearing"
+    },
+    {
+      "id": "rule-request-redirects",
+      "rule": "rule-changes-redirect",
+      "bullets": [
+        "rule-request-redirects#b1"
+      ],
+      "prompt": "Situation: the user runs `/go:review add \"no naked returns in tests\"`.\n\nQuestion: what do you do? Answer on the first line with exactly one of: PROPOSE (propose the rule and write it to the style rulebook after a yes), REVIEW (review the code that phrase names), OTHER (something else). Then one sentence saying what you do.",
+      "pass": "^\\W*OTHER\\b",
+      "fail": "^\\W*(PROPOSE|REVIEW)\\b",
+      "class": "redundant"
     }
   ]
 }

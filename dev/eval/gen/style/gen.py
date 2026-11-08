@@ -670,6 +670,9 @@ def check(base):
 if __name__ == "__main__":
     for name, c in CASES.items():
         write_case(name, c)
-    print("wrote", len(CASES), "cases")
+    sys.dont_write_bytecode = True  # importing rules must leave no __pycache__
+    import rules  # noqa: E402  the rule-edit and learn cases
+    rules.main()
+    print("wrote", len(CASES) + 2, "cases")
     if len(sys.argv) == 3 and sys.argv[1] == "--check":
         check(sys.argv[2])

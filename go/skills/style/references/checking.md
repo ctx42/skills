@@ -23,8 +23,8 @@ The target selects what to check:
 - empty — run `git diff HEAD`; if that is empty, fall back to the diff vs the
   base branch (staged + unstaged).
 - not a path at all — `add`, `change`, `remove`, or prose about the rules
-  themselves is a rulebook edit, not a target: redirect to `go:review`
-  (see SKILL.md) rather than resolving it as a directory that does not exist.
+  themselves is a rulebook edit, not a target: run Rule edit (see SKILL.md)
+  rather than resolving it as a directory that does not exist.
 - `func=NAME` or `func=T.Bar` — that function or method; `FILE:LINE` — the
   function enclosing that line; `FILE.go` — that file. Check just that code. A
   name matching in more than one package: say which and ask.

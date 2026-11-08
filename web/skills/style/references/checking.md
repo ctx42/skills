@@ -32,8 +32,8 @@ The target selects what to check:
   under the root; if that is empty, the diff vs the base branch (staged +
   unstaged).
 - not a path at all — `add`, `change`, `remove`, or prose about the rules
-  themselves is a rulebook edit, not a target: redirect to `web:review` rather
-  than resolving it as a directory that does not exist.
+  themselves is a rulebook edit, not a target: run Rule edit (see SKILL.md)
+  rather than resolving it as a directory that does not exist.
 - a directory (`src/pages`) — its `.vue` and `.ts` files, recursively.
 - a file — that file.
 - `component=<Name>` — the one `<Name>.vue` under the root (and its

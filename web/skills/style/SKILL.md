@@ -3,14 +3,14 @@ name: style
 description: >
   Enforced Vue 3 + TypeScript coding style for the frontend (production and
   test code): the rulebook to read before writing or editing any .vue or .ts
-  file, and a runnable style-only pass that lists style offenses, and drift
-  from the reference Biome config, across a diff, a directory, a file, or the
-  whole frontend, and proposes fixes to apply. Use before touching frontend
-  code, or to check or fix its style; adding or changing a rule belongs to
-  web:review.
+  file, and a runnable style-only pass that lists style offenses and drift
+  from the reference Biome config across a diff, a directory, or the whole
+  frontend, with fixes to apply. Use before touching frontend code, or to
+  check or fix its style. Also the skill that adds, changes, or removes a
+  frontend style rule, or learns one from feedback.
 license: MIT
-argument-hint: "[TARGET] [dirs=a,b] [max=N] [depth=light|standard*|full]
-  [plan_first] [fix]"
+argument-hint: "[TARGET | add|change|remove RULE | learn] [dirs=a,b] [max=N]
+  [depth=light|standard*|full] [plan_first] [fix]"
 ---
 
 # style
@@ -18,16 +18,20 @@ argument-hint: "[TARGET] [dirs=a,b] [max=N] [depth=light|standard*|full]
 ## Usage
 
 ```
-/web:style                                style-check the current git diff (default)
-/web:style src/pages                      style-check one directory
-/web:style src/pages/DevicesPage.vue      style-check one file
-/web:style src/pages/DevicesPage.vue:42   the unit enclosing that line
-/web:style component=DeviceTable          one component; func=<name> for one function
-/web:style all                            check the whole frontend
-/web:style src/pages fix                  apply every offense's fix without asking
-/web:style all plan_first                 propose the budget, then stop
-/web:style all dirs=pages,stores          restrict a whole-frontend check to these directories
-/web:style all max=15 depth=light         cap offenses; set depth
+/web:style                                   style-check the current git diff (default)
+/web:style src/pages                         style-check one directory
+/web:style src/pages/DevicesPage.vue         style-check one file
+/web:style src/pages/DevicesPage.vue:42      the unit enclosing that line
+/web:style component=DeviceTable             one component; func=<name> for one function
+/web:style all                               check the whole frontend
+/web:style src/pages fix                     apply every offense's fix without asking
+/web:style all plan_first                    propose the budget, then stop
+/web:style all dirs=pages,stores             restrict a whole-frontend check to these directories
+/web:style all max=15 depth=light            cap offenses; set depth
+/web:style add "never export a default"      add a style rule
+/web:style change "the boolean naming rule"  refine an existing style rule
+/web:style remove "the px rule"              remove a style rule
+/web:style learn                             mine this session's feedback into rules
 ```
 
 Authoritative frontend style rules and the style-only pass that enforces
@@ -42,7 +46,7 @@ live in two files:
 - [references/test.md](references/test.md) — the Test rules: unit, component,
   store, and end-to-end tests.
 
-Two uses:
+Three uses:
 
 - Reference — when loaded as context before writing frontend code (the default):
   apply Production to `*.vue` and `*.ts`, and Test to `*.test.ts`,
@@ -55,6 +59,12 @@ Two uses:
 - Run a pass — when invoked as `/web:style [target]`: check finished code
   against these rules and propose fixes. Read
   [references/checking.md](references/checking.md) and follow it.
+- Change a rule — Rule edit: `add`/`change`/`remove`, the rest being the rule
+  text, reserved words included, or input that is a plain style preference;
+  Learn: `learn`, which mines the current editing session (since the last
+  /clear) for convention feedback and proposes rules. For either, read
+  [references/rule-editing.md](references/rule-editing.md) first and follow
+  it; never write a rule without confirmation.
 
 Read the tokens in any order: a reserved word is a mode or flag, `key=value` is
 a control, and anything else is the target. `func=` and `component=` name the
@@ -66,8 +76,8 @@ target that resolves to nothing: say so and ask — never guess what to work on.
 
 Mechanical rules live in [references/biome.json](references/biome.json), the
 reference Biome config; the two rule files hold the rules a tool cannot
-check. Change any of them only through `web:review` (state a preference, or
-`web:review learn` to mine an editing session); never hand-edit them.
+check. Change any of them only through Rule edit or Learn; never hand-edit
+them.
 
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see — when citing a rule, name it and the fix, not

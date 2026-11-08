@@ -41,7 +41,7 @@
     {
       "id": "style-correction-routes",
       "rule": "route-to-learn",
-      "prompt": "Situation: `/skill-enhance`. Only `plan-smith` was invoked in this conversation. Separately, while you edited Go code with no skill driving, the user corrected you: 'always name the receiver with one letter'. The go plugin is installed.\n\nQuestion: where does that correction go? A) a lesson in plan-smith's LESSONS.md; B) handed to `go:review learn`; C) not filed, named as a correction no skill owns. Answer on the first line with the letter only, then one sentence why.",
+      "prompt": "Situation: `/skill-enhance`. Only `plan-smith` was invoked in this conversation. Separately, while you edited Go code with no skill driving, the user corrected you: 'always name the receiver with one letter'. The go plugin is installed.\n\nQuestion: where does that correction go? A) a lesson in plan-smith's LESSONS.md; B) handed to `go:style learn`; C) not filed, named as a correction no skill owns. Answer on the first line with the letter only, then one sentence why.",
       "pass": "^\\W*B\\b",
       "fail": "^\\W*[AC]\\b",
       "class": "load-bearing"
@@ -49,7 +49,7 @@
     {
       "id": "named-skill-no-foreign-route",
       "rule": "single-skill-harvest",
-      "prompt": "Situation: `/skill-enhance cm`. This conversation invoked `cm` and `plan-smith`. While `plan-smith` drove, the user corrected you on Go code: 'always name the receiver with one letter'. While `cm` drove, there were no corrections. The go plugin is installed.\n\nQuestion: what happens to the receiver-name correction? A) handed to `go:review learn`; B) left unmined, outside this run's scope; C) a lesson in cm's LESSONS.md. Answer on the first line with the letter only, then one sentence why.",
+      "prompt": "Situation: `/skill-enhance cm`. This conversation invoked `cm` and `plan-smith`. While `plan-smith` drove, the user corrected you on Go code: 'always name the receiver with one letter'. While `cm` drove, there were no corrections. The go plugin is installed.\n\nQuestion: what happens to the receiver-name correction? A) handed to `go:style learn`; B) left unmined, outside this run's scope; C) a lesson in cm's LESSONS.md. Answer on the first line with the letter only, then one sentence why.",
       "pass": "^\\W*B\\b",
       "fail": "^\\W*[AC]\\b",
       "class": "load-bearing"

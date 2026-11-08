@@ -21,7 +21,7 @@ Authoritative Go style rules. They live in two files:
 `*.go` and the Test section to `*_test.go`; Test inherits Production unless a
 Test rule overrides it. Per-rule detection detail lives in [rules.md](rules.md).
 
-Change the rules only through `go:review`; never hand-edit them.
+Change the rules only through Rule edit or Learn; never hand-edit them.
 EOF_0
 mkdir -p go/skills/style/references
 cat > go/skills/style/references/production.md <<'EOF_1'
@@ -87,7 +87,7 @@ Keyed detection detail for the rules in `references/production.md` and
 adds only what a capable reviewer can't infer from the one-line rule — an
 exemption or a detection heuristic — in two short sentences. Open an entry only
 when about to flag its rule; never preload the file. Grows via
-`go:review add`.
+`go:style add`.
 
 ## Contents
 
@@ -118,118 +118,5 @@ Exemption: a helper used by one test file only may stay beside it. Detect: a
 helper declared in a `_test.go` file other than `all_test.go` and called from
 two or more test files.
 EOF_3
-cat > go.mod <<'EOF_4'
-module example.com/pollr
-
-go 1.22
-EOF_4
-mkdir -p poll
-cat > poll/poll.go <<'EOF_5'
-// Package poll fetches readings from remote stations on a fixed interval.
-package poll
-
-import (
-	"context"
-	"time"
-)
-
-// Fetcher reads the current value of one item.
-type Fetcher interface {
-	Fetch(ctx context.Context, name string) (float64, error)
-}
-
-// Poller fetches every item on a fixed interval.
-type Poller struct {
-	ctx      context.Context
-	fet      Fetcher
-	items    []string
-	interval time.Duration
-}
-
-// Run polls until the context is cancelled.
-func (pol *Poller) Run(out chan<- float64) error {
-	for {
-		select {
-		case <-pol.ctx.Done():
-			return pol.ctx.Err()
-		case <-time.After(pol.interval):
-			for _, name := range pol.items {
-				val, err := pol.fet.Fetch(pol.ctx, name)
-				if err != nil {
-					return err
-				}
-				out <- val
-			}
-		}
-	}
-}
-
-// Summary lists the polled items, comma separated.
-func (pol *Poller) Summary() string {
-	s := ""
-	for i, name := range pol.items {
-		if i > 0 {
-			s += ", "
-		}
-		s += name
-	}
-	return s
-}
-EOF_5
 git add -A
 git commit -qm 'initial'
-mkdir -p poll
-cat > poll/poll.go <<'EOF_0'
-// Package poll fetches readings from remote stations on a fixed interval.
-package poll
-
-import (
-	"context"
-	"strings"
-	"time"
-)
-
-// Fetcher reads the current value of one item.
-type Fetcher interface {
-	Fetch(ctx context.Context, name string) (float64, error)
-}
-
-// Poller fetches every item on a fixed interval.
-type Poller struct {
-	fet      Fetcher
-	stations []string
-	interval time.Duration
-}
-
-// Run polls until the context is cancelled.
-func (pol *Poller) Run(ctx context.Context, out chan<- float64) error {
-	tick := time.NewTicker(pol.interval)
-	defer tick.Stop()
-	for {
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		case <-tick.C:
-			for _, name := range pol.stations {
-				val, err := pol.fet.Fetch(ctx, name)
-				if err != nil {
-					return err
-				}
-				out <- val
-			}
-		}
-	}
-}
-
-// Summary lists the polled stations, comma separated.
-func (pol *Poller) Summary() string {
-	var buf strings.Builder
-	for i, name := range pol.stations {
-		if i > 0 {
-			buf.WriteString(", ")
-		}
-		buf.WriteString(name)
-	}
-	return buf.String()
-}
-EOF_0

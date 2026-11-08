@@ -2,14 +2,6 @@
   "skill_name": "style",
   "probes": [
     {
-      "id": "rule-edit-via-review",
-      "rule": "rules-change-via-review",
-      "prompt": "Situation: the user says: \"From now on, no default exports in .ts modules. Add that to the frontend style rulebook.\" You have the web style skill loaded and can edit files.\n\nQuestion: how do you add the rule? Answer on the first line with exactly one of: EDIT-STYLE-MD, VIA-REVIEW. Then one sentence why.",
-      "pass": "^\\W*VIA-REVIEW",
-      "fail": "^\\W*EDIT-STYLE-MD",
-      "class": "load-bearing"
-    },
-    {
       "id": "test-edit-reads",
       "rule": "reference-vs-pass",
       "prompt": "Situation: you are about to change one assertion in `src/stores/devices.test.ts`. You have the style skill loaded and have read none of its rule files yet.\n\nQuestion: which rule files do you read before the edit? Answer on the first line with exactly one of: TEST-ONLY, TEST-AND-PRODUCTION, NONE. Then one sentence why.",
@@ -72,6 +64,26 @@
       "prompt": "Situation: the user runs `/web:style src/pages limit=10`. `src/pages` holds 12 files.\n\nQuestion: how many offenses do you report at most, and what do you say about `limit=10`? Answer on the first line with exactly one of: CAP-AT-10, IGNORE-AND-SAY. Then one sentence why.",
       "pass": "^\\W*IGNORE-AND-SAY",
       "fail": "^\\W*CAP-AT-10",
+      "class": "redundant"
+    },
+    {
+      "id": "rule-edit-confirms",
+      "rule": "rules-change-via-rule-modes",
+      "prompt": "Situation: the user says: \"From now on, no default exports in .ts modules. Add that to the frontend style rulebook.\" You have the style skill loaded and can edit files.\n\nQuestion: what do you do next? Answer on the first line with exactly one of: EDIT-NOW (write the rule line into the rulebook now), PROPOSE-AND-WAIT (show the proposed rule and any duplicate or conflict, then wait for a yes), HAND-OFF (pass the request to another skill). Then one sentence why.",
+      "pass": "^\\W*PROPOSE-AND-WAIT\\b",
+      "fail": "^\\W*(EDIT-NOW|HAND-OFF)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "rule-goes-to-biome",
+      "rule": "rule-placement",
+      "context": [
+        "SKILL.md",
+        "references/rule-editing.md"
+      ],
+      "prompt": "Situation: `/web:style add \"never export a default from a .ts module\"`. Biome has the rule `style/noDefaultExport`.\n\nQuestion: where does the rule go? Answer on the first line with exactly one of: STYLE-SKILL-MD, REFERENCE-BIOME-JSON, BOTH. Then one sentence why.",
+      "pass": "^\\W*(REFERENCE-)?BIOME-JSON",
+      "fail": "^\\W*(STYLE-SKILL-MD|BOTH)",
       "class": "redundant"
     }
   ]

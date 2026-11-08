@@ -66,22 +66,6 @@
       "file": "references/fixing.md"
     },
     {
-      "id": "rule-placement",
-      "rule": "A rule Biome enforces goes in the reference config, never the prose rulebook",
-      "must": [
-        "it goes in\\s+`\\.\\./style/references/biome\\.json`",
-        "Nothing goes in the prose rulebook"
-      ],
-      "file": "references/rule-editing.md"
-    },
-    {
-      "id": "confirm-before-writing",
-      "rule": "No rule is written without confirmation",
-      "must": [
-        "never write a rule without confirmation"
-      ]
-    },
-    {
       "id": "session-rules-close",
       "rule": "Every Check run closes with Learn's scan of the session's feedback, writing only what the user picks; fan-out workers never run it",
       "must": [
@@ -151,6 +135,14 @@
       "must": [
         "Run the Test gate's baseline once, before\\s+writing the plan",
         "each chunk's after-edit run is the next\\s+chunk's baseline"
+      ]
+    },
+    {
+      "id": "rule-changes-redirect",
+      "rule": "add, change, remove, learn, or a style preference: one line naming web:style, then stop",
+      "must": [
+        "Rule changes moved to `web:style`",
+        "`/web:style add …` and `/web:style learn`, and stop"
       ]
     }
   ]

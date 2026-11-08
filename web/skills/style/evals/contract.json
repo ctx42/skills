@@ -2,12 +2,13 @@
   "skill_name": "style",
   "rules": [
     {
-      "id": "rules-change-via-review",
-      "rule": "Rulebook and reference config change only through web:review",
+      "id": "rules-change-via-rule-modes",
+      "rule": "The style skill owns rule and config changes: Rule edit and Learn, via rule-editing.md, never without confirmation or by hand",
       "must": [
-        "Change any of them only through\\s+`web:review`",
-        "never hand-edit them",
-        "adding or changing a rule belongs to\\s+web:review"
+        "Also the skill that adds, changes, or\\s+removes a frontend style rule",
+        "Change any of them only through Rule edit or Learn; never hand-edit\\s+them",
+        "read\\s+\\[references/rule-editing\\.md\\]\\(references/rule-editing\\.md\\) first",
+        "never write a rule without confirmation"
       ]
     },
     {
@@ -149,6 +150,23 @@
       "rule": "The ordered fix plan goes to tmp/agent-plan-style-fix.md",
       "must": [
         "`tmp/agent-plan-style-fix\\.md`"
+      ]
+    },
+    {
+      "id": "rule-placement",
+      "rule": "A rule Biome enforces goes in the reference config, never the prose rulebook",
+      "must": [
+        "it goes in `references/biome\\.json`",
+        "Nothing goes in the\\s+prose rulebook"
+      ],
+      "file": "references/rule-editing.md"
+    },
+    {
+      "id": "pass-routes-rule-edits",
+      "file": "references/checking.md",
+      "rule": "A rule edit given as a pass target runs Rule edit, never resolves as a path",
+      "must": [
+        "is a rulebook edit, not a target: run Rule edit"
       ]
     }
   ]
