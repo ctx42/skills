@@ -38,9 +38,11 @@ resolves to nothing: say so and ask — never guess what to work on.
 ## Setup
 
 The tools are in `${CLAUDE_SKILL_DIR}/scripts/` (`scripts/` below). Run them
-from the root of the repo under test; they take it from the working directory,
-and `SKILL_EVAL_ROOT` overrides it. Before any eval work read
-[running.md](references/running.md) and [pitfalls.md](references/pitfalls.md).
+from the root of the repo under test; they take it from the working
+directory's git top level, and `SKILL_EVAL_ROOT` overrides it (see
+[pitfalls.md](references/pitfalls.md) for a nested repo). Before any eval work
+read [running.md](references/running.md) and
+[pitfalls.md](references/pitfalls.md).
 The tiers, their costs, and the eval loop are in [tiers.md](references/tiers.md);
 the agent-case format in [native-cases.md](references/native-cases.md); the
 skill standard in [authoring.md](references/authoring.md).

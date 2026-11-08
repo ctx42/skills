@@ -75,6 +75,10 @@ Add a line when a run teaches a new one.
   included, and no flag removes them; the user's own `CLAUDE.md` does not
   reach a run.
 - Batch the decisions a run needs before editing, so one eval round covers all.
-- Before trusting a clean diff-mode tier, compare what it read (proposed count,
-  inputs) with `git diff --name-only <base>`: a repo under test nested in
-  another git repo loses changed references silently.
+- For a repo under test nested in another git repo, export `SKILL_EVAL_ROOT`
+  to its root before any tool: without it the scripts take the root from
+  `git rev-parse --show-toplevel`, which can resolve the outer repo even from
+  inside the inner one, and lose changed references silently. Before trusting
+  a clean diff-mode tier, exported or not, compare what it read (proposed
+  count, inputs) with `git diff --name-only <base>` run in the repo under test;
+  on a mismatch, fix the root and re-run the tier before trusting it.
