@@ -242,6 +242,14 @@
         "Word what a rule or guard in the diff does as\\s+its aim: it \"keeps\" an outcome from happening",
         "Scan the body for \"cannot\",\\s+\"never\", and \"so … can't\" claims"
       ]
+    },
+    {
+      "id": "unreleased-api-no-bang",
+      "rule": "In a repo that tags releases, a change to an API no release tag contains gets no ! and no footer; check with git tag --contains",
+      "must": [
+        "An API no release tag contains has no callers to break",
+        "run `git tag --contains <sha>` on the commit that added the API"
+      ]
     }
   ]
 }

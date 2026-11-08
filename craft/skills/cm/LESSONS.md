@@ -1,1 +1,0 @@
-- Before committing, scan each body for "cannot", "never", and "so … can't" claims about what a rule or guard prevents; a rule keeps an outcome from happening, so word it that way.

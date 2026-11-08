@@ -292,6 +292,11 @@ callers — not the ones the bug bit — are the ones with something to do:
 - Add a mandatory `BREAKING CHANGE:` footer describing the impact and
   migration.
 
+An API no release tag contains has no callers to break. In a repo that tags its
+releases, run `git tag --contains <sha>` on the commit that added the API, found
+with `git log -S'<name>' --reverse --format=%h`; when it lists no tag, the
+change gets no `!` and no footer.
+
 ## Body (kernel style)
 
 - Wrap at 72 columns.
