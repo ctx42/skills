@@ -136,8 +136,11 @@ Every worker is read-only on source; `cover` writes only its profiles under
 Severities follow `review`'s Output: Blocker / Should-fix / Nit. `review`
 findings keep their grade; style offenses keep the tier `go:style` gave them.
 - `cover`, one finding per function: Should-fix when it has no direct tests or
-  an uncovered error-path or branch line; Nit when only statement lines are
-  uncovered. Un-coverable lines are counted per package, never findings.
+  an uncovered error-path or branch line that a reachable input runs; Nit when
+  only statement lines are uncovered, or every uncovered branch line needs an
+  unusual state (a server-side timeout, a cancel racing a call) no caller
+  reaches (`review`'s Output defines both terms).
+  Un-coverable lines are counted per package, never findings.
 - `doc`, one finding per item: Should-fix for item 3 (inaccurate), or item 1
   (missing) on the package or an exported symbol; Nit for every other item and
   every unverifiable flag. Never-touch items are not findings.
@@ -203,8 +206,14 @@ Verdict: <ship | fix-first> per package; overall.
 Counts: severity × dimension.
 Budget: depth; packages audited and skipped; findings past `max`;
 findings dropped at the line check.
+Size: <pkg> <code> code / <test> test lines, <n> importers; one per package.
 Ran: <every command the workers ran>.
 ```
+
+Size counts the non-blank lines of the package's `.go` files, test files apart,
+and the module's other packages that import it. It is a summary line, never a
+graded finding, and never counts toward the verdict: it lets the user see
+growth, and a finding would be one more thing for a fix loop to grow.
 
 Verdict is fix-first with any Blocker, else ship — counting every finding, one
 cut by `max` included. The headings and the Counts line count the

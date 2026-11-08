@@ -51,7 +51,8 @@
       "rule": "cover and doc grade Should-fix or Nit, never Blocker",
       "must": [
         "`cover` and `doc` never grade a Blocker",
-        "Nit when only statement lines are uncovered"
+        "Nit when only statement lines are uncovered",
+        "every\\s+uncovered\\s+branch\\s+line\\s+needs\\s+an\\s+unusual\\s+state"
       ]
     },
     {
@@ -82,6 +83,14 @@
       "rule": "Counts read off the finished report",
       "must": [
         "Read every count off the finished report"
+      ]
+    },
+    {
+      "id": "size-line",
+      "rule": "Size is one summary line per package, never a graded finding or part of the verdict",
+      "must": [
+        "Size:\\s+<pkg>\\s+<code>\\s+code\\s+/\\s+<test>\\s+test\\s+lines,\\s+<n>\\s+importers",
+        "It\\s+is\\s+a\\s+summary\\s+line,\\s+never\\s+a\\s+graded\\s+finding,\\s+and\\s+never\\s+counts\\s+toward\\s+the\\s+verdict"
       ]
     }
   ]

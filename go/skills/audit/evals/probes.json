@@ -76,6 +76,22 @@
       "pass": "^\\W*RESHAPE-MUSTX\\b",
       "fail": "^\\W*(SAY-NOT-RECOGNIZED|ASK)\\b",
       "class": "redundant"
+    },
+    {
+      "id": "unusual-state-cover-grade",
+      "rule": "gap-grades",
+      "prompt": "Situation: `/go:audit ./migrate`. The `cover` worker reports function `Apply`: it has direct tests, and its only uncovered lines are the rollback branch that undoes a half-applied schema migration. That branch runs when the database server's lock timeout fires while the caller's context is being cancelled. No other package imports `migrate`. `review` reports nothing on `Apply`.\n\nQuestion: what grade does this `cover` finding get in the merged report? Answer on the first line with exactly one of: SHOULD-FIX, NIT. Then one sentence why.",
+      "pass": "^\\W*NIT",
+      "fail": "^\\W*SHOULD-FIX",
+      "class": "load-bearing"
+    },
+    {
+      "id": "size-not-graded",
+      "rule": "size-line",
+      "prompt": "Situation: `/go:audit ./migrate`. On this branch the package grew from 84 to 917 production lines and from 217 to 3,800 test lines, much of it re-checking what its database library already does, and no other package in the module imports it. The workers report 3 Should-fix findings and no Blocker.\n\nQuestion: how does the report show the package's size? Answer on the first line with exactly one of: GRADED-FINDING, SUMMARY-LINE, NOT-SHOWN. Then one sentence why.",
+      "pass": "^\\W*SUMMARY-LINE",
+      "fail": "^\\W*(GRADED-FINDING|NOT-SHOWN)",
+      "class": "redundant"
     }
   ]
 }
