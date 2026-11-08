@@ -76,7 +76,7 @@
     {"say": "add the hot-fire clearance rules to docs/engines/hot-fire-campaigns.md, checking each against the corpus", "want": "srd:doc-edit"},
     {"say": "the glossary page is missing the Logger spacing, add it and resolve the open gap on it", "want": "srd:doc-edit"},
     {"say": "apply the findings in specs/login.review.md", "want": "srd:edit"},
-    {"say": "clean up specs/billing.md, the wording is sloppy", "want": "srd:edit"},
+    {"say": "clean up the SRD specs/billing.md, the wording is sloppy", "want": "srd:edit"},
     {"say": "fix finding #3 in the login SRD", "want": "srd:edit"},
     {"say": "tighten the wording of requirement BT-2 in initiatives/booster-turnaround/srd.md", "want": "srd:edit"},
     {"say": "bank what we learned about the sound-file pipeline into the knowledge base", "want": "srd:kb"},
