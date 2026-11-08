@@ -177,10 +177,12 @@ call.
    acceptance criteria — what proves it done — so `Y` is verifiable, not
    asserted. An item that changes code also carries an `Edges:` line: the
    inputs at and past each bound, empty, zero and invalid, with the result
-   or error each must give, and the test proven red first. From a `grill-me`
-   summary, an item's `Done when:` copies that branch's verification word
-   for word; when a branch splits into several items, each copies the part
-   of it that item covers. Path: the name the user gives, else
+   or error each must give, and the test proven red first. An item that
+   produces generated code is proved done by a regeneration that leaves no
+   diff plus a compile-time check, never by tests of the generated code. From
+   a `grill-me` summary, an item's `Done when:` copies that branch's
+   verification word for word; when a branch splits into several items, each
+   copies the part of it that item covers. Path: the name the user gives, else
    `tmp/agent-plan-<slug>.md` relative to the working directory; no need to
    ask, the report names it.
    If something is already there, say so and ask before overwriting.
