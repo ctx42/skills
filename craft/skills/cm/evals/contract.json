@@ -234,6 +234,14 @@
       "must": [
         "`tmp/agent-plan-\\*\\.md`"
       ]
+    },
+    {
+      "id": "rule-aim-wording",
+      "rule": "A rule or guard in the diff is worded as what it keeps from happening; cannot, never, and can't claims about what it prevents are reworded",
+      "must": [
+        "Word what a rule or guard in the diff does as\\s+its aim: it \"keeps\" an outcome from happening",
+        "Scan the body for \"cannot\",\\s+\"never\", and \"so … can't\" claims"
+      ]
     }
   ]
 }

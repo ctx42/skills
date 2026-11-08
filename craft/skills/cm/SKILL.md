@@ -232,8 +232,9 @@ review; they see only the diff and the message.
   that still supply the property — and narrow the claim to what they leave
   true. Check a claim spanning several files against each one; call a change
   a pure rename only when every removed line, names normalized and signs
-  stripped, equals an added line. A rule or guideline in the diff aims at its
-  outcome: it "keeps" something, it never makes it "cannot happen".
+  stripped, equals an added line. Word what a rule or guard in the diff does as
+  its aim: it "keeps" an outcome from happening. Scan the body for "cannot",
+  "never", and "so … can't" claims about what it prevents, and reword each.
 
 - Paraphrase only to the exact meaning: "leave X alone" is not "unset X".
   Where a synonym would shift what the change does, reuse the diff's wording.
