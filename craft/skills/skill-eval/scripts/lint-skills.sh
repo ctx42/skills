@@ -27,10 +27,10 @@
 # directory (skills under .claude/skills/ are project-local and exempt).
 #
 # Then it lints the native eval cases (<group>/evals/<case>/) via
-# lint-cases.mjs: scenario coverage, tags, the English line, limits, and
-# that every grader pattern compiles as JavaScript.
+# lint-cases.py: scenario coverage, tags, the English line, limits, and
+# that every grader pattern is inside the JavaScript subset Python reads alike.
 #
-# No external dependencies beyond node for the case checks (no jq).
+# No external dependencies beyond python3 for the case checks (no jq).
 #
 # Exit status is 0 when clean, 1 when any error is found. Warnings do not fail.
 set -euo pipefail
@@ -381,16 +381,15 @@ if command -v node >/dev/null; then
             }'))
 fi
 
-# Native eval cases: patterns must compile as JavaScript, so this half runs in
-# node (lint-cases.mjs); its last line carries its counts.
-if command -v node >/dev/null; then
-    cases_out="$(node "$HERE/lint-cases.mjs" || true)"
+# Native eval cases (lint-cases.py); its last line carries its counts.
+if command -v python3 >/dev/null; then
+    cases_out="$(python3 -B "$HERE/lint-cases.py" || true)"
     printf '%s\n' "$cases_out" | sed '$d'
     read -r ce cw < <(printf '%s\n' "$cases_out" | tail -1 |
         sed -E 's/^cases: ([0-9]+) error\(s\), ([0-9]+) warning\(s\)$/\1 \2/')
     errors=$((errors + ${ce:-1})); warnings=$((warnings + ${cw:-0}))
 else
-    warn "skipping native-case checks (node not found)"
+    warn "skipping native-case checks (python3 not found)"
 fi
 
 # Free eval checks (no model): contracts, probe files, generators reproduce
