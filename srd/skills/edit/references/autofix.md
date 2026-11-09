@@ -56,12 +56,14 @@ touches ids.
    the standard places the notice — directly after the element it names, ahead
    of the next heading, and after a TOC macro or block that follows that
    element; one or more → stale, as above, wherever it sits. A first-use link
-   finding is verified by its term: it must occur unlinked in the anchor,
-   nowhere earlier in the document, and link the entry later exactly at the uses
-   the finding names, no more and no fewer; then wrap that one occurrence in the
-   link `glossary_terms` gives and remove the link at each named later use,
-   keeping its text. A later link the finding does not name, or a named use that
-   holds no link, makes the whole finding stale, nothing applied. A divider
+   finding is verified by its term: it must occur in the anchor (unlinked, or
+   already linked to the entry when the finding has nothing to link), nowhere
+   earlier in the document, and link the entry later exactly at the uses the
+   finding names, no more and no fewer; then wrap that one occurrence, when
+   unlinked, in the link `glossary_terms` gives and remove the link at each
+   named later use, keeping its text. A later link the finding does not name,
+   or a named use that holds no link, makes the whole finding stale, nothing
+   applied. A divider
    finding (`new` or `old` is `---`) is verified just above its heading, outside
    the heading's range (or at the document's end for `(end of document)`): blank
    lines aside, an insertion needs no `---` line there, a removal exactly one;

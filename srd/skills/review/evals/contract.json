@@ -257,7 +257,8 @@
       "rule": "A first-use link erratum names every later use linking the entry; the fix unlinks it and keeps its text",
       "must": [
         "the\\s+fix\\s+removes\\s+that\\s+link\\s+and\\s+keeps\\s+its\\s+text",
-        "every\\s+later\\s+use\\s+linking\\s+the\\s+entry\\s+is\\s+named"
+        "every\\s+later\\s+use\\s+linking\\s+the\\s+entry\\s+is\\s+named",
+        "the\\s+repeated\\s+later\\s+links\\s+are\\s+the\\s+whole\\s+finding,\\s+still\\s+errata"
       ]
     }
   ]

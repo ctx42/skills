@@ -113,6 +113,19 @@
       "pass": "^[^\\n]*(?<![\\w/])work/login/login-srd\\.review\\.md\\b",
       "fail": "^[^\\n]*(?<![\\w/])initiatives/[^\\n\\s`]*\\.(review|decisions|questions)\\.md",
       "class": "redundant"
+    },
+    {
+      "id": "repeated-link-is-errata",
+      "rule": "link-move-errata",
+      "context": [
+        "SKILL.md",
+        "references/review-file.md",
+        "../create/references/errata.md"
+      ],
+      "prompt": "Situation: a default review of specs/x.md. The standard's GLO-2 says a shared-glossary term is linked on its first use only, bare after that. A shared-glossary term first occurs in TRK-1, correctly linked to its entry, and nowhere before it. TRK-3 and TRK-5 link the same entry again; TRK-4 uses the term as plain text.\n\nQuestion: where do you file the TRK-3 and TRK-5 links? Answer on the first line with exactly one of: ERRATA, ORDINARY-FINDING, NO-FINDING. Then one sentence why.",
+      "pass": "^\\W*ERRATA\\b",
+      "fail": "^\\W*(ORDINARY-FINDING|NO-FINDING)\\b",
+      "class": "load-bearing"
     }
   ]
 }
