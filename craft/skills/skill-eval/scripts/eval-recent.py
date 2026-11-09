@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tell eval-changed.sh's stall watchdog whether a run still writes.
+"""Tell eval-changed.py's stall watchdog whether a run still writes.
 
 Usage: eval-recent.py <seconds> <results dir> <tmp dir>
 

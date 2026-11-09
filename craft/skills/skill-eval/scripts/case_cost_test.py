@@ -76,7 +76,7 @@ class Rows(unittest.TestCase):
             self.assertEqual(2, len(cc.rows([d])))
 
     def test_saved_failed_trace(self):
-        # A failed case's workspace is gone, but eval-changed.sh saved its
+        # A failed case's workspace is gone, but eval-changed.py saved its
         # trace as <run>/<group>/failed/<case>.trace.jsonl.
         with tempfile.TemporaryDirectory() as d:
             os.makedirs(os.path.join(d, "craft", "failed"))

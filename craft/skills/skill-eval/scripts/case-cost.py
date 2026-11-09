@@ -2,7 +2,7 @@
 """Per-case cost of an agent-run round: dollars and turns from its results
 JSON, tokens from each case's trace when it was kept.
 
-eval-changed.sh deletes the trace of a passing case unless run with --keep, so
+eval-changed.py deletes the trace of a passing case unless run with --keep, so
 a plain round has tokens for its failures only.
 
 Usage:

@@ -5,7 +5,7 @@ Used by eval_ledger_test.py and eval_changed_test.py; nothing here runs a
 real model or needs a network.
 
 The fake `claude` answers `claude plugin eval` with the result JSON
-eval-changed.sh reads, and `claude -p` (as eval-shell.py calls it) with a
+eval-changed.py reads, and `claude -p` (as eval-shell.py calls it) with a
 stream-json trace. Each case's outcome comes from a JSON plan file named by
 $FAKE_CLAUDE_PLAN: {"<case>": {"result": "pass"|"fail"|"limit"|"hang", "cost": N}}
 ("hang" sleeps two minutes, writing nothing),
@@ -198,7 +198,7 @@ def make_bin(bindir, modcache):
 def copy_scripts(dst):
     """Copy the eval scripts to dst with lint-skills.py stubbed to pass.
 
-    eval-changed.sh lints the repo under test first; the fake repo is not a
+    eval-changed.py lints the repo under test first; the fake repo is not a
     lint-clean skills repo, and lint has its own checks.
     """
     shutil.copytree(HERE, dst, ignore=shutil.ignore_patterns("__pycache__", "*_test.py"))

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pass ledger for the agent-run cases (used by eval-changed.sh).
+"""Pass ledger for the agent-run cases (used by eval-changed.py).
 
 A case's key is a sha256 over what its run depends on, as far as its tags
 say: the case dir; for each skill its tags name (skill:, sec:, ref:), the
@@ -132,7 +132,7 @@ def resolve(word, cached):
 
 
 # A history_file run leaves its session (`<uuid>.jsonl`) beside the history
-# until eval-changed.sh ends; it is never an input, so no key hashes it.
+# until eval-changed.py ends; it is never an input, so no key hashes it.
 SESSION = re.compile(r"[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\.jsonl")
 
 
@@ -153,7 +153,7 @@ LINK = re.compile(r"\.\./(?:\.\./)?([a-z0-9-]+)/([A-Za-z0-9_./-]*[A-Za-z0-9_])")
 
 
 def slug(heading):
-    """Slug a `## ` heading as eval-changed.sh does for sec: tags."""
+    """Slug a `## ` heading as eval-changed.py does for sec: tags."""
     return re.sub(r"[^a-z0-9]+", "-", heading.lower()).strip("-")
 
 

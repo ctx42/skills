@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Tests for eval-changed.sh against a fake repo and a fake `claude`.
+"""Tests for eval-changed.py against a fake repo and a fake `claude`.
 
-Run: python3 -B -m unittest eval_changed_test (from scripts/). Needs bash,
-git, and node; no network, no logged-in `claude`, no model spend.
+Run: python3 -B -m unittest eval_changed_test (from scripts/). Needs git; no
+network, no logged-in `claude`, no model spend.
 """
 import glob
 import json
@@ -42,8 +42,9 @@ class EvalChangedTest(unittest.TestCase):
             json.dump(plan or {}, f)
 
     def run_changed(self, *args):
-        """Run eval-changed.sh in the fake repo; return (exit code, output)."""
-        r = subprocess.run(["bash", os.path.join(self.scripts, "eval-changed.sh"), *args],
+        """Run eval-changed.py in the fake repo; return (exit code, output)."""
+        cmd = [sys.executable, "-B", os.path.join(self.scripts, "eval-changed.py")]
+        r = subprocess.run([*cmd, *args],
                            cwd=self.root, env=self.env, capture_output=True, text=True, timeout=120)
         return r.returncode, r.stdout + r.stderr
 
@@ -360,6 +361,56 @@ class EvalChangedTest(unittest.TestCase):
         with open(envlog) as f:
             have = [json.loads(line)["EVAL_STRIP_NOTICE"] for line in f]
         self.assertIn("Policy notice", have)
+
+    def test_tmp_eval_env_takes_comments_and_export(self):
+        self.repo(("a", True))
+        fake.write(os.path.join(self.root, "tmp", "eval.env"),
+                   "# private settings\n\nexport EVAL_STRIP_NOTICE=\"Policy notice\"\n")
+        envlog = os.path.join(self.tmp.name, "env.log")
+        self.env["FAKE_CLAUDE_ENV_LOG"] = envlog
+
+        code, out = self.run_changed("--all", fake.GROUP)
+
+        self.assertEqual(0, code, out)
+        with open(envlog) as f:
+            have = [json.loads(line)["EVAL_STRIP_NOTICE"] for line in f]
+        self.assertIn("Policy notice", have)
+
+    def test_list_tags(self):
+        self.repo(("a", False))
+        fake.write(os.path.join(self.root, fake.GROUP, "skills", fake.SKILL, "references", "r1.md"), "R.\n")
+
+        code, out = self.run_changed("--list-tags", f"{fake.GROUP}/{fake.SKILL}")
+
+        self.assertEqual(0, code, out)
+        self.assertEqual("skill:s1\nsec:s1:usage\nsec:s1:alpha\nsec:s1:beta\nref:s1/r1\n", out)
+
+    def test_unknown_argument_exits_1(self):
+        self.repo(("a", False))
+
+        code, out = self.run_changed("--nope")
+
+        self.assertEqual(1, code)
+        self.assertIn("eval-changed: unknown argument: --nope (see --help)", out)
+
+    def test_clean_removes_leftover_workspaces(self):
+        self.repo(("a", False))
+        ws = os.path.join(self.env["TMPDIR"], "claude-eval-x")
+        fake.write(os.path.join(ws, "plugin", "f"), "x")
+        os.chmod(os.path.join(ws, "plugin"), 0o555)
+
+        code, out = self.run_changed("--clean")
+
+        self.assertEqual(0, code, out)
+        self.assertFalse(os.path.exists(ws))
+
+    def test_no_change_says_lint_is_clean(self):
+        self.repo(("a", False))
+
+        code, out = self.run_changed()
+
+        self.assertEqual(0, code, out)
+        self.assertIn("eval-changed: no skill change found; lint is clean.", out)
 
     def test_stalled_plain_chunk_is_stopped(self):
         self.repo(("a", False), plan={"a": {"result": "hang"}})

@@ -34,7 +34,7 @@ def heredocs(files):
 
 def scaffold(files, extra=""):
     # Runs have no network: fill the run's module cache now, from the local
-    # cache that dev/eval-changed.sh serves as GOPROXY.
+    # cache that dev/eval-changed.py serves as GOPROXY.
     tail = "go mod download\n" if "go.sum" in files else ""
     return "#!/usr/bin/env bash\nset -euo pipefail\n" + heredocs(files) + tail + extra
 
