@@ -112,6 +112,8 @@ a rule in `test.md` overrides one. Keyed detection detail lives in the skill's
   use them — unexported and test helper types included.
 - Keep a type's methods together, right after its constructor; put no other
   function between them unless readability needs it.
+- Never insert a new or moved declaration between an existing godoc comment
+  and the symbol it documents.
 - Put SQL query functions (`XxxQry`, free functions only) at the bottom of
   their file, below the types, constructors, methods, and helpers that run
   them.
