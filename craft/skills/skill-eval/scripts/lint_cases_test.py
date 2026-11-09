@@ -259,7 +259,6 @@ class LintCasesTest(unittest.TestCase):
         self.assertEqual(0, have, lines)
 
 
-@unittest.skipIf(os.environ.get("LINT_CASES"), "Python-only behavior")
 class SubsetTest(unittest.TestCase):
     """Grader patterns stay inside the JavaScript subset Python reads alike."""
 
@@ -292,9 +291,6 @@ class SubsetTest(unittest.TestCase):
         self.assertEqual(1, code, out)
         self.assertIn("ERROR  g/evals/s--basic/graders/b2-x.md", out)
 
-
-if os.environ.get("LINT_CASES"):  # another implementation to check the tests against
-    CMD = os.environ["LINT_CASES"].split()
 
 if __name__ == "__main__":
     unittest.main()

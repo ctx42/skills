@@ -9,8 +9,6 @@ import unittest
 sys.dont_write_bytecode = True
 HERE = os.path.dirname(os.path.abspath(__file__))
 CMD = [sys.executable, "-B", os.path.join(HERE, "token-report.py")]
-if os.environ.get("TOKEN_REPORT"):  # another implementation to check the tests against
-    CMD = os.environ["TOKEN_REPORT"].split()
 
 
 def write(root, rel, text):

@@ -12,7 +12,7 @@ import unittest
 
 sys.dont_write_bytecode = True
 HERE = os.path.dirname(os.path.abspath(__file__))
-NAME = os.environ.get("EVAL_ROUTINE", "eval-routine.py")  # another implementation to check against
+NAME = "eval-routine.py"
 
 TOOL = """#!/usr/bin/env python3
 import os, sys, time
@@ -43,9 +43,7 @@ class EvalRoutineTest(unittest.TestCase):
 
     def run_routine(self, *args):
         env = dict(os.environ, SKILL_EVAL_ROOT=self.dir)
-        cmd = [os.path.join(self.dir, NAME), *args]
-        if NAME.endswith(".py"):
-            cmd = [sys.executable, "-B", *cmd]
+        cmd = [sys.executable, "-B", os.path.join(self.dir, NAME), *args]
         t0 = time.time()
         r = subprocess.run(cmd, capture_output=True, text=True, env=env, timeout=60)
         return r.returncode, r.stdout, time.time() - t0

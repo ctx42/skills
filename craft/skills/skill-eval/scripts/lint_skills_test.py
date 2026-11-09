@@ -14,8 +14,6 @@ import unittest
 sys.dont_write_bytecode = True
 HERE = os.path.dirname(os.path.abspath(__file__))
 CMD = [sys.executable, "-B", os.path.join(HERE, "lint-skills.py")]
-if os.environ.get("LINT_SKILLS"):  # another implementation to check the tests against
-    CMD = os.environ["LINT_SKILLS"].split()
 
 SKILL = """---
 name: s

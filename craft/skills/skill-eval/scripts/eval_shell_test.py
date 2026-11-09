@@ -16,8 +16,6 @@ sys.path.insert(0, HERE)
 import eval_fake as fake  # noqa: E402
 
 CMD = [sys.executable, "-B", os.path.join(HERE, "eval-shell.py")]
-if os.environ.get("EVAL_SHELL"):  # another implementation to check the tests against
-    CMD = os.environ["EVAL_SHELL"].split()
 
 
 class EvalShellTest(unittest.TestCase):
