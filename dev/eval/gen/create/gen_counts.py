@@ -16,29 +16,49 @@ WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
          "nine", "ten", "eleven", "twelve"]
 
 
-def file_has(n):
-    # The SRD Write holds exactly n entries of the group captured as \1.
+# The reply's group counts are found and judged with lookaheads from the
+# start of the trace only, so the pattern stays inside the regex subset Python
+# reads alike: a capture made inside a lookahead keeps its value, and the later
+# checks use it as a backreference. Each alternative skips the first k counts
+# the reply states, then takes the next one that states n.
+MAX_COUNTS = 6  # counts judged per reply; a wrong one past them goes unseen
+GAP = r"(?:(?!\b[A-Z]{2,6}\b|\\n)[^\n\"]){0,60}?"
+
+
+def stated(num):
+    # "SW … 3 requirements", "`SW`: 3", "SW, the … group: 3", or
+    # "`SW` (…) has 3". The gap after the prefix never crosses another group
+    # prefix or a line break, which the JSON reply holds as backslash and n.
+    return (rf"(?:{GAP}\b{num} requirements?\b|`?\)?(?:\*\*)?:?(?:\*\*)?\s*\|?\s*{num}\b"
+            rf"|`?{GAP}:\s*{num}\b|{GAP}\bhas\s+{num}\b)")
+
+
+ANY_COUNT = r"\b`?[A-Z]{2,6}`?\b" + stated(r"(?:\d+|" + "|".join(WORDS[1:]) + ")")
+
+
+def file_has(g, n):
+    # An SRD Write holds exactly n entries of the group captured as group g.
     # A list item at a line start; the Write content is JSON, so the newline
     # before it is the two characters backslash and n.
-    entry = r"\\n- `\1-\d+[a-z]?`"
+    entry = rf"\\n- `\{g}-\d+[a-z]?`"
     other = rf"(?:(?!{entry}){CH})*"
     return rf"{WRITE}{other}(?:{entry}{other}){{{n}}}\""
 
 
-alts = []
-for n in range(1, 13):
-    num = rf"(?:{n}|{WORDS[n]})"
-    # "SW … 3 requirements", "`SW`: 3", "SW, the … group: 3", or
-    # "`SW` (…) has 3". The gap after the prefix never crosses another group
-    # prefix or a line break, which the JSON reply holds as backslash and n.
-    gap = r"(?:(?!\b[A-Z]{2,6}\b|\\n)[^\n\"]){0,60}?"
-    stated = (rf"(?:{gap}\b{num} requirements?\b|`?\)?(?:\*\*)?:?(?:\*\*)?\s*\|?\s*{num}\b"
-              rf"|`?{gap}:\s*{num}\b|{gap}\bhas\s+{num}\b)")
-    alts.append(rf"{stated}(?<!{file_has(n)}[\s\S]*)")
-# Only a real group is judged: the trace before the reply holds an entry of it,
-# so a word such as SRD or DRAFT is never taken for a group.
-REAL = r"(?<=\\n- `\1-\d+[a-z]?`[\s\S]*)"
-pattern = (r'"result":"' + CH + r'*?\b`?([A-Z]{2,6})' + REAL + r'`?\b(?:' + "|".join(alts) + ")")
+alts, g = [], 0
+for k in range(MAX_COUNTS):
+    for n in range(1, 13):
+        g += 1
+        num = rf"(?:{n}|{WORDS[n]})"
+        alts.append(
+            # The reply states n for a group, after k other counts.
+            rf'(?=[\s\S]*?"result":"(?:{CH}*?{ANY_COUNT}){{{k}}}{CH}*?\b`?([A-Z]{{2,6}})`?\b{stated(num)})'
+            # Only a real group is judged: the trace holds an entry of it, so a
+            # word such as SRD or DRAFT is never taken for a group.
+            rf"(?=[\s\S]*\\n- `\{g}-\d+[a-z]?`)"
+            # No SRD Write holds n entries of that group.
+            rf"(?![\s\S]*{file_has(g, n)})")
+pattern = "^(?:" + "|".join(alts) + ")"
 # Companion: some count is stated at all (the match grader passes on none).
 open(os.path.join(D, "b6-counts-stated.md"), "w").write(
     "---\ntype: regex\ntarget: last_message\nflags: \"i\"\n---\n"
