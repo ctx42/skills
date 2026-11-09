@@ -127,9 +127,10 @@ Nothing outside this list is errata.
   kept site never stops a finding being errata. Errata only when the review
   settles every site; never at a sentence start, in a heading, glossary entry
   heading, quoted UI string, code span, or anchor: those places are no sites and
-  need no naming. Every site changed is named with its count. A local terms
-  entry or user-interface component whose name contains the word (`Payload Mass`
-  for `Payload`) is no site: name each as excluded
+  need no naming. Every site changed is named with its count. A longer local
+  term or user-interface component name that contains the word (`Payload Mass`
+  for `Payload`) is no site, though a local term that is the word itself is one:
+  name each such longer name as excluded
   (`excluding Payload Mass, Payload Class`). A site where the rules keep the
   capital — a proper name, a named screen, a UI label such as a column name — is
   named as kept with its anchor and why (`kept: ABC-4, the PAYLOAD column`):

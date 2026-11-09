@@ -24,7 +24,9 @@ addition also states, apply its wording and cite its identifier as the
 standard writes it (`SRD:<id>`, e.g. `SRD:ABC-1`), never `SRD:house`; the house
 addition supplies only what the standard leaves out, and every `SRD:house`
 below applies only when the standard has no such rule. Casing rules the
-standard states count as the project's casing rules.
+standard states count as the project's casing rules; one stated for glossary
+terms without naming a glossary covers the terms an SRD's own Glossary defines
+as well as the shared glossary's. This guide's examples set no casing.
 
 - Write SRDs in US English: `color`, `behavior`, `standardize`,
   `analyze`, `center` — not `colour`, `behaviour`, `standardise`. The self-check
