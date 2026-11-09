@@ -24,6 +24,9 @@ import re
 import warnings
 
 FLAGS = {"i": re.I, "m": re.M, "s": re.S}
+# The check() reason for a lookbehind of varying width: valid JavaScript that
+# Python cannot run. Callers that never grade in Python may let it through.
+VARIABLE_LOOKBEHIND = "lookbehind of varying width: valid JavaScript, but Python cannot run it"
 
 WORD = "A-Za-z0-9_"
 EOL = "\\n\\r\\u2028\\u2029"
@@ -141,6 +144,8 @@ def check(pattern, flags=""):
             warnings.simplefilter("error")
             re.compile(py, _flags(flags))
     except (re.error, FutureWarning) as e:
+        if "look-behind requires fixed-width" in str(e):
+            return [VARIABLE_LOOKBEHIND]
         return [f"does not compile in Python: {e}"]
     return []
 

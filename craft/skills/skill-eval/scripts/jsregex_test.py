@@ -91,7 +91,8 @@ class CheckTest(unittest.TestCase):
             ("a", "u", "flag 'u'"),
             ("[\\W]", "", "\\W inside"),
             ("[\\D]", "", "\\D inside"),
-            ("(?<=a+)b", "", "Python"),
+            ("(?<=a+)b", "", jsregex.VARIABLE_LOOKBEHIND),
+            ("(?<!a|bc)d", "", jsregex.VARIABLE_LOOKBEHIND),
             ("(", "", "Python"),
             ("a\\", "", "trailing"),
         ]:
