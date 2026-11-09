@@ -235,6 +235,9 @@ review; they see only the diff and the message.
   stripped, equals an added line. Word what a rule or guard in the diff does as
   its aim: it "keeps" an outcome from happening. Scan the body for "cannot",
   "never", and "so … can't" claims about what it prevents, and reword each.
+  Before stating what a changed value means to callers (a default, a sentinel
+  such as 0 or -1), read the doc comment of every place that defines or
+  consumes it; never infer the meaning from one type's convention.
 
 - Paraphrase only to the exact meaning: "leave X alone" is not "unset X".
   Where a synonym would shift what the change does, reuse the diff's wording.
