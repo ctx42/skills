@@ -104,8 +104,9 @@ branch by branch, until you both share one understanding of the subject.
   front of you makes everything look equally askable. Never tack a second
   question on with "And …?", and never offer options that hide a second axis
   (whether to split a commit, and then by file or by hunk) — ask the other
-  next turn. Never use
-  `AskUserQuestion` multiple-choice unless the user asks for it.
+  next turn. Number the options of a multiple-option question (1, 2, 3) so one
+  digit answers it. Never use `AskUserQuestion` multiple-choice unless the user
+  asks for it.
 
 - When the user asks to explain at length first, hold the interview — questions,
   pushback, a conflict you spot, and the branch count alike — until they say
