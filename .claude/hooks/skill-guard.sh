@@ -36,7 +36,7 @@ cat <<'JSON'
 {
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
-    "additionalContext": "This file lives in a skill. Before writing, hold the change to the skill authoring standard (craft/skills/skill-eval/references/authoring.md) — especially the token-performance, conciseness, and output-discipline rules: the description and SKILL.md body are always-loaded token cost, so cut anything that does not raise the skill's success rate, push on-demand detail into references, and keep runtime output terse. For a new skill or a structural change (rename, new files, catalog updates), follow CONTRIBUTING.md and run ./dev/lint-skills.sh rather than editing ad hoc."
+    "additionalContext": "This file lives in a skill. Before writing, hold the change to the skill authoring standard (craft/skills/skill-eval/references/authoring.md) — especially the token-performance, conciseness, and output-discipline rules: the description and SKILL.md body are always-loaded token cost, so cut anything that does not raise the skill's success rate, push on-demand detail into references, and keep runtime output terse. For a new skill or a structural change (rename, new files, catalog updates), follow CONTRIBUTING.md and run ./dev/lint-skills.py rather than editing ad hoc."
   }
 }
 JSON

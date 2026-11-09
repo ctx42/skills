@@ -21,8 +21,8 @@ export SKILL_EVAL_ROOT="$ROOT"
 base=HEAD
 [ "${1:-}" = --base ] && base="$2"
 t0=$(date +%s)
-"$HERE/lint-skills.sh" >/dev/null 2>&1 || {
-    "$HERE/lint-skills.sh" | grep -E '^ERR'; echo "eval-routine: lint failed"; exit 1
+python3 -B "$HERE/lint-skills.py" >/dev/null 2>&1 || {
+    python3 -B "$HERE/lint-skills.py" | grep -E '^ERR'; echo "eval-routine: lint failed"; exit 1
 }
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT

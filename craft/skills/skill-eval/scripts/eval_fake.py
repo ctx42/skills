@@ -196,13 +196,13 @@ def make_bin(bindir, modcache):
 
 
 def copy_scripts(dst):
-    """Copy the eval scripts to dst with lint-skills.sh stubbed to pass.
+    """Copy the eval scripts to dst with lint-skills.py stubbed to pass.
 
     eval-changed.sh lints the repo under test first; the fake repo is not a
     lint-clean skills repo, and lint has its own checks.
     """
     shutil.copytree(HERE, dst, ignore=shutil.ignore_patterns("__pycache__", "*_test.py"))
-    write(os.path.join(dst, "lint-skills.sh"), "#!/bin/sh\nexit 0\n", 0o755)
+    write(os.path.join(dst, "lint-skills.py"), "import sys\nsys.exit(0)\n", 0o755)
     return dst
 
 

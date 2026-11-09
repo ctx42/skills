@@ -219,8 +219,8 @@ GOPROXY="file://$(go env GOMODCACHE)/cache/download"
 export GOPROXY
 
 # --- Tier 0: lint first; a lint error stops the run. ---
-"$HERE/lint-skills.sh" >/dev/null 2>&1 || {
-    "$HERE/lint-skills.sh" | grep -E '^ERR' || true
+python3 -B "$HERE/lint-skills.py" >/dev/null 2>&1 || {
+    python3 -B "$HERE/lint-skills.py" | grep -E '^ERR' || true
     die "lint failed; fix it before running evals"
 }
 
