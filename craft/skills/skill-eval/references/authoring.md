@@ -1,7 +1,7 @@
 # Skill authoring standard
 
 The standard every skill in a `<group>/skills/<name>/` repo meets.
-`scripts/lint-skills.sh` checks its mechanical parts; the rest is read.
+`scripts/lint-skills.py` checks its mechanical parts; the rest is read.
 
 ## Contents
 
@@ -43,7 +43,7 @@ linter checks the ids match and that no `expected_behavior` leaks back into
 Skills ship no `README.md`. Everything a user or agent needs lives in
 `SKILL.md`, its bundled files, and `evals/evals.json`; the repo-level
 `README.md` is where humans get oriented. A skill README is a second copy of
-what `SKILL.md` already says, kept in step by nothing — `scripts/lint-skills.sh`
+what `SKILL.md` already says, kept in step by nothing — `scripts/lint-skills.py`
 fails on one.
 
 Frontmatter requires `name` + `description`; optional metadata (`license`/
@@ -51,7 +51,7 @@ Frontmatter requires `name` + `description`; optional metadata (`license`/
 Claude-native affordances are permitted and encouraged where they earn their
 place: `argument-hint`, `$ARGUMENTS` body substitution, and dynamic injection
 (`` !`cmd` ``). Beyond that, follow Anthropic's Agent Skills authoring
-guidance; `scripts/lint-skills.sh` enforces the mechanical parts.
+guidance; `scripts/lint-skills.py` enforces the mechanical parts.
 
 ## Token budget
 
@@ -132,7 +132,7 @@ whole project; no target in a code skill is the working diff; `packages=`
 filters kinds; `func=`/`component=`/`route=`/`flow=` and `FILE:LINE` name one
 unit; `create`, `audit`, `walk`, `learn` are the mode words for new, check,
 work-through-together, and mine-the-session. Fan-out is decided by size,
-never by a flag. `scripts/lint-skills.sh` checks the mechanical parts.
+never by a flag. `scripts/lint-skills.py` checks the mechanical parts.
 
 ```markdown
 ---
@@ -144,7 +144,7 @@ description: >
 ```
 
 ## Mechanical checks
- `scripts/lint-skills.sh` checks the mechanical parts of the skill layout:
+ `scripts/lint-skills.py` checks the mechanical parts of the skill layout:
 `SKILL.md` present with a `## Usage` block, frontmatter carries `name` +
 `description` with `name` equal to the directory, the body carries the
 output-discipline line, `evals/evals.json` holds at least 3 scenarios, no

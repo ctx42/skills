@@ -18,7 +18,7 @@
       "skills": [
         "skill-eval"
       ],
-      "setup": "The same repo with one changed skill, `craft:cm`. Lint and the routine tiers pass. `scripts/eval-changed.sh` lists 5 agent cases for it with an estimate of $1.50-4. The user declines the agent cases when asked.",
+      "setup": "The same repo with one changed skill, `craft:cm`. Lint and the routine tiers pass. `scripts/eval-changed.py` lists 5 agent cases for it with an estimate of $1.50-4. The user declines the agent cases when asked.",
       "query": "/skill-eval run",
       "files": [],
       "requires": "A writable skills-repo checkout with the `<group>/skills/<name>/` layout, its eval tools runnable, and the `claude` CLI signed in: the probe, hunt, and trigger tiers call models, which a sandboxed agent case cannot. A stand-in that reads the tools' output from a fixture does not establish that the skill runs them, in order, against the right target."

@@ -4,7 +4,7 @@ Read [pitfalls.md](pitfalls.md) first: fixture, grader, and mock mistakes past
 runs paid for.
 
 The audit tier: `claude plugin eval` cases a change selects
-(`scripts/eval-changed.sh --audit`), run only when the user asks — the routine
+(`scripts/eval-changed.py --audit`), run only when the user asks — the routine
 check is `scripts/eval-check.py` and `scripts/eval-probe.py`
 ([tiers.md](tiers.md)). Each case runs the real skill in a fresh `claude -p`
 session with only its plugin loaded. Each skill keeps three scenarios, chosen
@@ -60,7 +60,7 @@ append_system_prompt: |
 
 - `case:<dir>` always; `skill:<s>` for every skill the scenario's `skills`
   array names; the `sec:`/`ref:` tags of every section and reference the case
-  exercises (`scripts/eval-changed.sh --list-tags <group>/<skill>`). An srd case
+  exercises (`scripts/eval-changed.py --list-tags <group>/<skill>`). An srd case
   also tags the shared references it passes through, at least
   `ref:create/project-config`.
 - Body: the scenario's `query`, plugin-namespaced (`/edit x` → `/srd:edit x`).
@@ -76,13 +76,13 @@ append_system_prompt: |
   A case needing a shell adds `Bash(<cmd>:*)` and the tag `needs-shell`
   (lint enforces the pair, and the tag on every case of a skill that injects
   `!`…`` output). Only `needs-shell` cases get Bash, and they run through
-  `scripts/eval-shell.mjs` (plain `claude -p` in a throwaway workspace, no OS
+  `scripts/eval-shell.py` (plain `claude -p` in a throwaway workspace, no OS
   sandbox), since `claude plugin eval`'s sandbox fails every in-run command
   on stock Ubuntu. It grades `regex`, `tool_used`, `tool_order` and
   `file_exists`; give a `needs-shell` case no `llm` or `mock_calls` grader.
   When your account makes every reply end with a fixed notice paragraph, set
   `EVAL_STRIP_NOTICE` to a regex for it, in the git-ignored `tmp/eval.env`
-  that `eval-changed.sh` sources: this runner drops a last paragraph that
+  that `eval-changed.py` reads: this runner drops a last paragraph that
   matches before grading. `claude plugin eval` cases keep the notice.
 - Interactive skills: `append_system_prompt` carries the persona's replies
   for the bullets graded after them —
@@ -130,7 +130,7 @@ reads nothing from the repo. Where the setup says something is correct, make
 it correct; where it says something is absent, make it absent. Runs have
 no network and a fresh `$HOME`: a Go fixture with dependencies writes its
 `go.sum` and ends with `go mod download`, which fills the run's module cache
-from this machine's (served as `GOPROXY` by `eval-changed.sh`, whose preflight
+from this machine's (served as `GOPROXY` by `eval-changed.py`, whose preflight
 names any module missing locally). A fictional module: the scaffold builds it
 into a throwaway file proxy and `go get`s it (reshape's `oskit`). A fixture
 must build and its tests pass unless the setup says otherwise — runs have a
@@ -178,9 +178,14 @@ One per bullet, `b<N>-<slug>.md`, deterministic wherever the bullet allows:
 | a file's content or unchanged | `regex`, `target: {source: file, path: <p>}`                   |
 | judgment                      | `llm`, one atomic claim, `focus: last_message`                 |
 
-Patterns are JavaScript regexes: put flags in `flags:` (`m`, `i`, `s`),
-never inline `(?m)`, which throws; `\A` and `\Z` match a literal letter, so
-anchor with `^` and `$` without `m`. A read-only check (`tool_used` Write/Edit
+Patterns are JavaScript regexes, kept to the part Python's `re` reads the
+same way: the Python tools lint them and grade the `needs-shell` cases. Put
+flags in `flags:` (`m`, `i`, `s`), never inline `(?m)`, which throws; `\A` and
+`\Z` match a literal letter, so anchor with `^` and `$` without `m`. The lint
+also refuses possessive quantifiers, atomic groups, `\p{…}`, `[]`, `[^]`,
+`{,n}`, and `\D` or `\W` inside a class. A lookbehind of varying width is a
+warning, since only `claude plugin eval` can run it, and an error in a
+`needs-shell` case. A read-only check (`tool_used` Write/Edit
 `max: 0`) only bites when Write/Edit are in `allowed_tools`. `file_exists`
 sees only files the run created, never scaffold-made ones: check those by
 content regex. An `llm` grader states one concrete, checkable claim; split a
@@ -235,12 +240,13 @@ Pitfalls, each seen failing a correct run:
 
 ## Calibrate
 
-`scripts/lint-skills.sh` first: it checks every case (scenario coverage, tags,
-the English line, limits, JavaScript patterns). Then, when the user asks for an
-audit, run `scripts/eval-changed.sh --case <group> '<skill>--*' --model default
--j 4` (repeat `--case` for several globs). A failure prints its last message and
-keeps its trace in `<results>/<group>/failed/<case>.trace.jsonl`, so diagnose
-from those before re-running; `--keep` keeps every workspace, `--clean` deletes
+`scripts/lint-skills.py` first: it checks every case (scenario coverage, tags,
+the English line, limits, patterns inside the shared regex subset). Then, when
+the user asks for an audit, run `scripts/eval-changed.py --case <group>
+'<skill>--*' --model default -j 4` (repeat `--case` for several globs). A
+failure prints its last message and keeps its trace in
+`<results>/<group>/failed/<case>.trace.jsonl`, so diagnose from those before
+re-running; `--keep` keeps every workspace, `--clean` deletes
 leftover ones. Cases run in chunks of 2 x `-j`; each pass goes to
 `tmp/eval-ledger.json` under a key of everything the case depends on, and a case
 whose key still holds a pass is skipped (`--fresh` runs it anyway). The first

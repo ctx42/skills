@@ -50,15 +50,16 @@ skill standard in [authoring.md](references/authoring.md).
 The tools expect `<group>/skills/<name>/SKILL.md`. A repo without that layout
 gets a read-only review of each `SKILL.md` against
 [authoring.md](references/authoring.md), whatever the mode; say so first. A
-missing tool (`python3`, `node`, `git`, and `claude` for the paid tiers) is
-reported with the tier it blocks, never replaced by an improvised check.
+missing tool (`python3` and `git`; `claude` for the paid tiers; `node`, `go`,
+and `gofmt` for agent cases) is reported with the tier it blocks, never
+replaced by an improvised check.
 
 ## Audit
 
 Read-only: edits nothing, commits nothing. Per target skill, find and grade
 each finding Blocker, Should-fix, or Nit:
 
-1. Mechanical: the target's lines from `scripts/lint-skills.sh` (it runs
+1. Mechanical: the target's lines from `scripts/lint-skills.py` (it runs
    `scripts/eval-check.py`); an error is a Blocker, a warning a Nit.
 2. Conflicts: read `SKILL.md` and the references it loads. Two rules that
    cannot both hold, or one against a `contract.json` phrase, is a Blocker.
@@ -70,7 +71,7 @@ each finding Blocker, Should-fix, or Nit:
    draft probe.
 5. Triggers: `scripts/eval-triggers.py` when the description differs from the
    base; a miss is a Should-fix.
-6. Tokens: `scripts/token-report.sh`. A description past ~350 characters is a
+6. Tokens: `scripts/token-report.py`. A description past ~350 characters is a
    Nit, past 500 a Should-fix; a body past ~5000 tokens or ~500 lines is a
    Should-fix. When a run's results exist under `tmp/eval-changed/<run>/`, add
    each case's dollars and tokens from `scripts/case-cost.py <run dir>`.
@@ -86,18 +87,18 @@ token surface in one line.
 The eval loop of [tiers.md](references/tiers.md), cheapest first; edits no
 skill text:
 
-1. `scripts/lint-skills.sh`, its output read unfiltered; an error stops the
+1. `scripts/lint-skills.py`, its output read unfiltered; an error stops the
    run.
-2. `scripts/eval-routine.sh --base <base>`: probes, hunt, and triggers in
+2. `scripts/eval-routine.py --base <base>`: probes, hunt, and triggers in
    parallel. For a target the diff does not touch, run the probes and the hunt
    with `--skill <group>/<skill>` (hunt `--full`) instead.
-3. Agent cases: `scripts/eval-changed.sh` with no flag lists the cases the diff
+3. Agent cases: `scripts/eval-changed.py` with no flag lists the cases the diff
    reaches, with an estimate; for a named skill or group add `--dry-run` to
    `--skill <group>/<skill>` or `--all <group>`, or they run the cases. Once the
    target is confirmed or needs no confirmation, run probes, hunt, and triggers
    without asking — they cost cents; before any agent case, state the case list,
    the count, and the estimate, and ask — whatever the size. On a yes, run
-   `scripts/eval-changed.sh --audit --model default -j 4 --max-usd <cap>` (the
+   `scripts/eval-changed.py --audit --model default -j 4 --max-usd <cap>` (the
    cap is `max=` or the one agreed) under the memory cap and stall watchdog of
    [running.md](references/running.md). The yes covers the round end to end, its
    re-runs included, within the cap. At the cap, stop: report the cases and
@@ -131,7 +132,7 @@ One improvement at a time, each its own commit:
    paragraph. Cut token cost by moving condition-triggered prose (a mode, a
    case type) to `references/` with a pointer and its one-line rule, never by
    dropping a rule.
-3. Gate: `scripts/lint-skills.sh`, then the probes and the hunt on the changed
+3. Gate: `scripts/lint-skills.py`, then the probes and the hunt on the changed
    skill. One fix and one rerun per FAIL; a second FAIL reverts the improvement
    with an inverse edit and goes to the user as a question. A hunt split on
    lines the fix added goes to `tmp/eval-backlog.md`, not another edit.

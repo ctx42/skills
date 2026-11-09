@@ -89,7 +89,7 @@
       "id": "agent-cases-default-model",
       "rule": "Agent cases run on the default model with -j 4; no sonnet first pass",
       "must": [
-        "`scripts/eval-changed\\.sh --audit --model default -j 4"
+        "`scripts/eval-changed\\.py --audit --model default -j 4"
       ]
     },
     {

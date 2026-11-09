@@ -13,7 +13,7 @@
 #
 # Subcommands:
 #   verify         Exit non-zero if any manifest version != VER. Used by
-#                  lint-skills.sh as a drift backstop.
+#                  lint-skills.py as a drift backstop.
 #   sync           Write VER's number into every manifest. Idempotent; the
 #                  pre-commit hook calls this when VER is staged.
 #   manifests      Print the absolute path of every version-bearing JSON file,

@@ -176,7 +176,7 @@ of truth. (Lessons, the one per-machine data, are exempt: they live at a fixed
 external path, not inside the plugin. The `srd` skills' project data lives in
 the project — see [STRUCTURE.md](./STRUCTURE.md#where-skill-data-lives).)
 
-Run `./dev/lint-skills.sh` before committing; it checks every skill against the
+Run `./dev/lint-skills.py` before committing; it checks every skill against the
 mechanical parts of the authoring standard and the marketplace wiring. Test a
 change with `/craft:skill-eval`.
 

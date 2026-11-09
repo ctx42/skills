@@ -28,18 +28,18 @@ Skills ship no `README.md`; the repo-level one orients humans.
 4. **Reference siblings relatively.** Skills in the same plugin resolve each other
    as `../sibling/...` (they are cached together). Cross-plugin file references do
    not resolve — keep interdependent skills in one group.
-5. **Lint before committing.** Run `./dev/lint-skills.sh` after editing any skill; it
+5. **Lint before committing.** Run `./dev/lint-skills.py` after editing any skill; it
    checks the mechanical parts of the authoring standard and the marketplace
    wiring, and exits non-zero on any error.
 6. **Confirm a behaviour change with `/craft:skill-eval run`** or
-   `./dev/eval-routine.sh` (it runs `./dev/eval-probe.py`, `./dev/eval-hunt.py`,
+   `./dev/eval-routine.py` (it runs `./dev/eval-probe.py`, `./dev/eval-hunt.py`,
    and `./dev/eval-triggers.py` in parallel after lint). The `./dev/` scripts
    are wrappers: the tools ship in `craft/skills/skill-eval/scripts/`. Lint
    already ran the free contract checks (`./dev/eval-check.py`); probes ask the
    changed skill one cached question per high-stakes rule, the hunt measures
    what the diff made ambiguous, the trigger test re-routes requests when a
    description changed — cents, a minute or two. Agent-run cases
-   (`./dev/eval-changed.sh --audit`) are a manual audit only; a blind round is a
+   (`./dev/eval-changed.py --audit`) are a manual audit only; a blind round is a
    release audit, not the gate on a change. Before any eval work, read
    [running.md](./craft/skills/skill-eval/references/running.md) (work order,
    costs, long runs, tokens) and

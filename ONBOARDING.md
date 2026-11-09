@@ -60,9 +60,9 @@ holds the scenarios it is expected to handle.
 
 ### Eval runs (maintainers)
 
-`./dev/eval-changed.sh` checks the machine before every run and stops with the
+`./dev/eval-changed.py` checks the machine before every run and stops with the
 fix when something is missing: `git`, `node`, `go`, `gofmt` on `PATH`. Cases
-tagged `needs-shell` run through `./dev/eval-shell.mjs` (plain `claude -p`, no
+tagged `needs-shell` run through `./dev/eval-shell.py` (plain `claude -p`, no
 OS sandbox) instead of `claude plugin eval`, whose sandbox nests a user
 namespace inside `bwrap`'s and fails every in-run command on stock Ubuntu
 (24.04 and later). Never lift that restriction (the

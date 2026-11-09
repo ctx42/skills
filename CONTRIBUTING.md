@@ -48,8 +48,8 @@ argument conventions — ships with the tool that enforces it, `craft:skill-eval
 Run `/craft:skill-eval` (a read-only audit), `/craft:skill-eval run`, or
 `/craft:skill-eval fix`. The scripts behind it live in
 [`craft/skills/skill-eval/scripts/`](./craft/skills/skill-eval/scripts/); the
-`./dev/` wrappers run them on this repo (`./dev/lint-skills.sh`,
-`./dev/eval-routine.sh`, `./dev/eval-probe.py`, …). Before eval work read
+`./dev/` wrappers run them on this repo (`./dev/lint-skills.py`,
+`./dev/eval-routine.py`, `./dev/eval-probe.py`, …). Before eval work read
 [running.md](./craft/skills/skill-eval/references/running.md) (work order,
 costs, long runs) and
 [pitfalls.md](./craft/skills/skill-eval/references/pitfalls.md) (mistakes past
@@ -80,7 +80,7 @@ live through the server (`get_doc` on the `srd-standard` id in the project's
 native cases' `get_doc` mock serves, with `srd/evals/fixtures/project-config.md`
 for the gate. `dev/eval/blind-runner-prompt.md` tells the runner to substitute
 both. Cases that override `get_doc` carry copies of the standard, which
-`dev/lint-skills.sh` keeps identical to it. Change the frozen standard only
+`dev/lint-skills.py` keeps identical to it. Change the frozen standard only
 together with the scenarios graded on it.
 
 ## Develop and Test
@@ -104,7 +104,7 @@ Before committing a new or changed skill, run the linter:
 
 ```bash
 # from the repo root
-./dev/lint-skills.sh
+./dev/lint-skills.py
 ```
 
 It checks the mechanical parts of the standard
@@ -163,11 +163,11 @@ git tag -a v0.2.0 -m 'Tag version v0.2.0.' && git push --follow-tags
 Supporting commands (you rarely run these directly):
 
 ```shell
-./dev/version.sh verify   # fail if any manifest disagrees with VER (run by lint-skills.sh)
+./dev/version.sh verify   # fail if any manifest disagrees with VER (run by lint-skills.py)
 ./dev/version.sh sync     # write VER's number into every manifest (repairs drift)
 ```
 
-`./dev/lint-skills.sh` calls `dev/version.sh verify`, so a drifted manifest also
+`./dev/lint-skills.py` calls `dev/version.sh verify`, so a drifted manifest also
 fails the lint gate as a backstop. The hook fails closed: if a manifest cannot be
 written, the commit aborts rather than releasing drift.
 
@@ -175,7 +175,7 @@ written, the commit aborts rather than releasing drift.
 
 1. Rename the directory (keep the `name:` frontmatter in `SKILL.md` in sync).
 2. Update any `../sibling` references that pointed at the old name.
-3. Run `./dev/lint-skills.sh`, then `/reload-plugins` to pick up the change.
+3. Run `./dev/lint-skills.py`, then `/reload-plugins` to pick up the change.
 4. Update documentation.
 
 ## Retiring a Skill
@@ -183,5 +183,5 @@ written, the commit aborts rather than releasing drift.
 1. Delete its directory. Its history stays in Git if you need to recover it.
 2. If it was the last skill in a group, also remove the group's marketplace entry
    and directory.
-3. Run `./dev/lint-skills.sh`, then `/reload-plugins`.
+3. Run `./dev/lint-skills.py`, then `/reload-plugins`.
 4. Remove it from the documentation skill lists.

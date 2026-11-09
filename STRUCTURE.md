@@ -17,7 +17,7 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 ├── AGENTS.md                       # Guide for AI agents working in this repo
 ├── dev/                            # Maintainer wrappers and this repo's eval data
 │   ├── version.sh                  # Syncs manifest versions with the VER file
-│   ├── lint-skills.sh, eval-*.py … # One-line wrappers: craft:skill-eval's scripts on this repo
+│   ├── lint-skills.py, eval-*.py … # One-line wrappers: craft:skill-eval's scripts on this repo
 │   └── eval/                       # Blind-round prompts and triggers.json
 │       └── gen/<skill>/            # Case generators: the source of a skill's cases
 ├── .claude/
@@ -131,7 +131,7 @@ routed corrections to `go:style learn`, `web:style learn`, and
 A path written in a `references/` file needs one more `..` than the same path
 in a `SKILL.md`, since it sits a directory deeper — `../../create/references/`
 from `edit/references/autofix.md`, `../create/references/` from
-`edit/SKILL.md`. `dev/lint-skills.sh` resolves every relative link in both and
+`edit/SKILL.md`. `dev/lint-skills.py` resolves every relative link in both and
 fails on one that points nowhere; it was added after a reference file lost its
 only link to a sibling by carrying the SKILL.md spelling.
 

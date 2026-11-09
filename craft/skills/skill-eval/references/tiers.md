@@ -41,10 +41,10 @@ loop* below).
 
 **Tiers.** The routine check after any edit is free and takes seconds; the
 paid routine checks cost cents and finish in a minute or two.
-`scripts/eval-routine.sh` runs tiers 1–4 in one go — lint, then probes,
+`scripts/eval-routine.py` runs tiers 1–4 in one go — lint, then probes,
 triggers, and the hunt in parallel — for ~\$0.15 and ~2 min per changed skill:
 
-1. *Lint and contracts* (`scripts/lint-skills.sh`, which runs
+1. *Lint and contracts* (`scripts/lint-skills.py`, which runs
    `scripts/eval-check.py`; free, seconds). Each skill's `evals/contract.json`
    lists its high-stakes rules as phrases its text must keep; an edit that
    deletes, weakens, or contradicts one fails here, named. The same check
@@ -72,10 +72,10 @@ triggers, and the hunt in parallel — for ~\$0.15 and ~2 min per changed skill:
 4. *Triggers* (`scripts/eval-triggers.py`; ~\$0.04, ~20 s). Routes every request
    in `dev/eval/triggers.json` against all skill descriptions plus real
    distractors. Run after a description changes.
-5. *Agent-run cases* (`scripts/eval-changed.sh --audit --model default`;
+5. *Agent-run cases* (`scripts/eval-changed.py --audit --model default`;
    ~\$0.25–0.80 a case, up to minutes). Full sessions on scripted fixtures with
    mocked MCP servers ([native-cases.md](native-cases.md)); `needs-shell` cases
-   run through `scripts/eval-shell.mjs` instead. A manual audit only, when the
+   run through `scripts/eval-shell.py` instead. A manual audit only, when the
    user asks; never the gate on a change. Cases run on the CLI's default
    model, whose first verdict stands; `--model sonnet` runs them on Sonnet
    only, never re-run on another model. A pass is recorded in a ledger keyed
@@ -131,8 +131,8 @@ treated as the next round's work and nothing measured what those edits bought.
 `$HOME/.agent-data/` holds the user's real lesson files, and a live server a
 skill calls may be production. Tell every eval agent so: redirect every
 `$HOME/.agent-data` path a skill resolves into the run's workspace, and call
-only a server's read tools. `scripts/eval-shell.mjs` also refuses every file
+only a server's read tools. `scripts/eval-shell.py` also refuses every file
 edit under the real home, and fails a case whose trace shows such an edit or
-a Bash call naming the real home (`scripts/eval-guard.mjs`); cases run by
+a Bash call naming the real home (`scripts/eval_guard.py`); cases run by
 `claude plugin eval` get neither. That FAIL is re-run like any other, and the
 report names the path or command.
