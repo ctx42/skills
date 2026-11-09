@@ -65,7 +65,9 @@ outcome.
    derives from the settled requirements (the standard's coverage rules).
    Within each pass, severity
    order — blocker → major → minor — using the review's tags and numbers; judge
-   untagged pasted feedback from the rule.
+   untagged pasted feedback from the rule. A user who asks to go through the
+   review file point by point gets its findings in the file's top-to-bottom
+   order instead, with no passes.
 3. Run the loop per finding; reference findings by number in the closing
    manifest. The unit is the review's finding, not the entry, so `Y` proposes
    the next finding on that entry and stops when the review has no more —
