@@ -18,6 +18,7 @@ import re
 import sys
 
 sys.dont_write_bytecode = True  # importing evalroot must not leave __pycache__ in the skill
+import jsregex  # noqa: E402
 from evalroot import ROOT  # noqa: E402
 
 
@@ -77,14 +78,10 @@ def main():
         if fm.get("type") != "regex" or fm.get("target") != "last_message":
             print(f"   SKIP  {gid}  ({fm.get('type')} on {fm.get('target', '?')})")
             continue
-        flags = re.S if "s" in fm.get("flags", "") else 0
-        flags |= re.I if "i" in fm.get("flags", "") else 0
-        flags |= re.M if "m" in fm.get("flags", "") else 0
-        pat = re.sub(r"\(\?<([A-Za-z_]\w*)>", r"(?P<\1>", body)
         try:
-            n = len(re.findall(pat, msg, flags))
-        except re.error as e:
-            print(f"   ERR   {gid}: regex does not compile in Python: {e}")
+            n = sum(1 for _ in jsregex.compile(body, fm.get("flags", "")).finditer(msg))
+        except ValueError as e:
+            print(f"   ERR   {gid}: {e}")
             bad += 1
             continue
         match = fm.get("match", "contains")
