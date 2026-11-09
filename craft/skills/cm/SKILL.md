@@ -243,7 +243,8 @@ review; they see only the diff and the message.
   not umbrella slogans that hide the actual edits.
 
 - Every number in the body is read off the diff, not reasoned out from it nor
-  carried from the session: a tally of the diff's own items (files, flags) and a
+  carried from the session, and so is every number in the summary line (a
+  status code, a limit): a tally of the diff's own items (files, flags) and a
   size, count, timing, or before/after figure measured outside the diff stay
   out. A message describing `1<<attempt * 100ms` over `maxAttempts = 3` as
   backing off "200ms, 400ms and 800ms" invented the third value — the third
