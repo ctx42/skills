@@ -61,7 +61,7 @@
 #
 # Every run first checks the machine (git, node, go, gofmt) and stops with the
 # fix if one is missing. Only cases tagged needs-shell get Bash; they run
-# through eval-shell.mjs (plain `claude -p`, no OS sandbox), the rest
+# through eval-shell.py (plain `claude -p`, no OS sandbox), the rest
 # through `claude plugin eval`.
 #
 # Each group line is followed by `flaky: <case> (<f> of <n> failed), ...` when
@@ -334,7 +334,7 @@ for g in $groups; do
     if [ "$fresh" = 1 ] || [ "$total" = 0 ] || [ -z "$model_name" ]; then todo=("${sel_cases[@]}")
     else mapfile -t todo < <(python3 "$HERE/eval-ledger.py" pending "$g" "$model_name" "${sel_cases[@]}")
     fi
-    # needs-shell cases run through eval-shell.mjs: `claude plugin eval`
+    # needs-shell cases run through eval-shell.py: `claude plugin eval`
     # wraps each in-run command in a sandbox that nests a user namespace inside
     # bwrap's, which stock Ubuntu refuses, so every Bash call there fails.
     # Never lift the host restriction instead (disabling bwrap-userns-restrict
@@ -411,7 +411,7 @@ for g in $groups; do
             echo "   $kind chunk $((k / chunk + 1))/$(((nb + chunk - 1) / chunk)): ${part[*]} ($(date +%H:%M))"
             set +e
             if [[ "$kind" == shell* ]]; then
-                watched node "$HERE/eval-shell.mjs" "$g" "${part[@]}" --model "$model_name" --runs "$runs" \
+                watched python3 -B "$HERE/eval-shell.py" "$g" "${part[@]}" --model "$model_name" --runs "$runs" \
                     -j "$jobs" --keep "${cap[@]}" --json "$json" >>"$out/$g.out" 2>>"$out/$g.err"
             else
                 watched claude plugin eval "./$g" "${sel[@]}" --runs "$runs" --ablation none --scaffold \

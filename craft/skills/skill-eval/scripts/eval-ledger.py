@@ -8,9 +8,9 @@ name, the references/ files its ref: tags name, and every other file of the
 skill outside SKILL.md, references/, and evals/ (LESSONS.md, assets/, ...);
 every file those hashed parts link as `../<skill>/<path>`, one level deep;
 the group's shared mocks/ and fixtures/; for a needs-shell case, the shell
-runner (eval-shell.mjs, eval-notice.mjs); and the model. A PASS is recorded
-under that key in tmp/eval-ledger.json; while the key is unchanged, the case
-need not run again.
+runner (eval-shell.py and the modules it grades with); and the model. A PASS
+is recorded under that key in tmp/eval-ledger.json; while the key is
+unchanged, the case need not run again.
 
   eval-ledger.py pending <group> <model> <case>...   print cases without a
                                                      PASS at their current key
@@ -148,7 +148,7 @@ def files_under(top, skip=()):
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 HISTORY = 10  # runs kept per entry for the flaky count
-SHELL_RUNNER = ("eval-shell.mjs", "eval-notice.mjs", "eval-guard.mjs")
+SHELL_RUNNER = ("eval-shell.py", "eval_notice.py", "eval_guard.py", "jsregex.py")
 LINK = re.compile(r"\.\./(?:\.\./)?([a-z0-9-]+)/([A-Za-z0-9_./-]*[A-Za-z0-9_])")
 
 
