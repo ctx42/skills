@@ -159,8 +159,9 @@ branch by branch, until you both share one understanding of the subject.
   to let a resolved branch keep an answer that is now known to be wrong. A
   conflict counts before it is settled: when an answer contradicts an
   assumption earlier branches rest on, name every branch that reopens if it
-  wins, then ask which side holds. The reopened list rides with that turn's
-  one question; it is not the extra item a later turn may carry.
+  wins, count them open in the tally until the user picks, then ask which side
+  holds. The reopened list rides with that turn's one question; it is not the
+  extra item a later turn may carry.
 
 ## Self-learning
 

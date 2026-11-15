@@ -51,7 +51,8 @@
       "rule": "An overturned assumption reopens every branch resting on it, named before the next question",
       "must": [
         "that branch reopens — and so does every other one that rested on the same assumption",
-        "name each one that reopens and why in a line"
+        "name each one that reopens and why in a line",
+        "count them open in the tally until the user picks"
       ]
     },
     {
