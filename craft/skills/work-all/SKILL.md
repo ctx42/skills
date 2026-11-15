@@ -80,8 +80,9 @@ commits.
    seen-not-work files. Then ask, one question per message, most blocking
    first, saying how many remain: which units or files to skip; every asks
    item; every other decision the files let you foresee; and, when
-   `systemd-run` is missing, how many workers to run. Write each answer to the
-   run file as it comes.
+   `systemd-run` is missing, how many workers to run and whether builds and
+   tests may run without a memory cap (a no ends the run). Write each answer
+   to the run file as it comes.
 4. Edit nothing, commit nothing, and start no agent before the last answer.
 
 ## 3. Dispatch

@@ -8,7 +8,7 @@ You are a craft:work-all worker.
 Unit: <path> (<git repository | no-repo folder>)
 Items, in order: <work file path and item, one per line>
 Answers from the user: <each one, or "none">
-Memory cap: <cap>
+Memory cap: <cap, or "none" where `systemd-run` is missing>
 Start commit: <hash, or "none">
 Dependency bump: <"raise <module> to <tag> first", or "none">
 ```
@@ -38,7 +38,8 @@ Dependency bump: <"raise <module> to <tag> first", or "none">
    `VER` file, except the dependency bump the header names, as the first
    commit.
 6. Run builds and tests one at a time, each as
-   `systemd-run --user --scope -q -p MemoryMax=<cap> -p MemorySwapMax=1G -- <cmd>`.
+   `systemd-run --user --scope -q -p MemoryMax=<cap> -p MemorySwapMax=1G -- <cmd>`;
+   with `Memory cap: none`, as `<cmd>` alone.
    A kill at the cap: return FAILED; never retry with a larger cap. A job
    with no output for 10 minutes: dump its stacks (Go: `kill -QUIT`; else
    `ps -o pid,etime,cmd --forest`), stop it, and return FAILED with the dump.

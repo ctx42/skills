@@ -73,6 +73,13 @@
       ]
     },
     {
+      "id": "no-systemd-run",
+      "rule": "Without systemd-run, the up-front questions ask whether builds and tests may run uncapped; a no ends the run",
+      "must": [
+        "`systemd-run` is missing, how many workers to run and whether builds and tests may run without a memory cap \\(a no ends the run\\)"
+      ]
+    },
+    {
       "id": "midrun-questions",
       "rule": "Mid-run questions are queued, asked one at a time, and the worker resumed with the answer",
       "must": [
@@ -183,6 +190,15 @@
       "must": [
         "A kill at the cap: return FAILED; never retry with a larger cap",
         "with no output for 10 minutes"
+      ]
+    },
+    {
+      "id": "worker-uncapped",
+      "rule": "A worker whose brief says `Memory cap: none` runs each build and test bare, one at a time",
+      "file": "references/worker.md",
+      "must": [
+        "Memory cap: <cap, or \"none\" where `systemd-run` is missing>",
+        "with `Memory cap: none`, as `<cmd>` alone"
       ]
     },
     {
