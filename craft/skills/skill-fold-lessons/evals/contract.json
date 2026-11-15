@@ -160,6 +160,14 @@
       "must": [
         "with one reading: reread it for a phrase a run can take as its\\s+opposite"
       ]
+    },
+    {
+      "id": "open-question-recommends",
+      "rule": "Each open question in the report carries a recommended option",
+      "must": [
+        "each\\s+as\\s+a\\s+plain-terms\\s+question\\s+that\\s+stands\\s+on\\s+its\\s+own",
+        "a\\s+recommended\\s+option,\\s+so\\s+a\\s+bare\\s+yes\\s+picks\\s+one"
+      ]
     }
   ]
 }

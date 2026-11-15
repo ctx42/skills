@@ -150,10 +150,11 @@ check changes the verdict, never passes silently:
 Report tersely: no preamble or narration; state each fact once; don't restate
 output the user can already see. The proposal is the full ledger; the final
 report is per skill: counts per verdict, read off the finished files, not
-carried from the proposal; the files touched; whether `LESSONS.md` was
-deleted; the lint and routine result with its cost. End with what is still
-open — held items, second failures — each as a plain-terms question. A run
-with nothing in scope is one line.
+carried from the proposal; the files touched; whether `LESSONS.md` was deleted;
+the lint and routine result with its cost. End with what is still open — held
+items, second failures — each as a plain-terms question that stands on its own:
+the situation, the options, and a recommended option, so a bare yes picks one. A
+run with nothing in scope is one line.
 
 A folded line the user only questions is explained, not reverted. An "undo",
 even in the same message as the question, reverts that fold and restores the
