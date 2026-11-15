@@ -112,6 +112,13 @@
       ]
     },
     {
+      "id": "run-file-tools",
+      "rule": "The run file is written with the file tools, never through the shell",
+      "must": [
+        "Write it with the file tools \\(Write, Edit\\), never through the shell"
+      ]
+    },
+    {
       "id": "resume",
       "rule": "A resumed run never re-asks a recorded answer",
       "must": [

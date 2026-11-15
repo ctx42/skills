@@ -27,7 +27,7 @@
         "Does not re-implement `Trim`: no commit for plan item 1",
         "Implements plan item 2: `text.go` has `Upper`",
         "Fixes the README typo the dept file lists",
-        "Writes the run file `tmp/agent/agent-run-cwd.md` with a `## Report` section",
+        "Writes the run file `tmp/agent/agent-run-cwd.md` with a `## Report` section, through the file tools",
         "The reply opens with the `worked N of M items in K commits across 2 units` line",
         "Never pushes",
         "Deletes the finished bug and dept files"

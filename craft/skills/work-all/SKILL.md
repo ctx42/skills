@@ -138,7 +138,8 @@ allows that one. Never tag, release, push, bump a version, or edit a
 inside a repository; else in `<start>/tmp/agent/` when `<start>/tmp/` exists;
 else in the start folder. Rewrite it as work moves, keeping these sections:
 `## Selection`, `## Answers`, `## Order`, `## Status` (unit, item, status,
-commits), `## Budget`, and, at the end, `## Report`.
+commits), `## Budget`, and, at the end, `## Report`. Write it with the file
+tools (Write, Edit), never through the shell.
 
 ## 6. Report
 
