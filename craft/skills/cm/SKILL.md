@@ -243,6 +243,10 @@ review; they see only the diff and the message.
 
 - Paraphrase only to the exact meaning: "leave X alone" is not "unset X".
   Where a synonym would shift what the change does, reuse the diff's wording.
+  Check each verb that says what the code does (opens, reads, writes) against
+  the call that does it, reading the unchanged code around the hunk when the
+  diff does not show that call: a near synonym can name a step the code never
+  takes.
 
 - Prefer concrete symbols and files: `` `ParseConfig` ``, `` `Server.Close` ``,
   not umbrella slogans that hide the actual edits.

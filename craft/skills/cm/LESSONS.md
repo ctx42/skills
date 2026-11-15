@@ -1,1 +1,0 @@
-- Check each verb that describes what the code does (opens, reads, stats, writes) against the calls in the diff and its surrounding code before committing; a near synonym can name a step the code never takes.
