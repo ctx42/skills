@@ -93,11 +93,11 @@ Nothing outside this list is errata.
 - A first-use link to the shared glossary, missing or repeated: with the first
   use already linked correctly, the repeated later links are the whole finding,
   still errata: anchored at the first use, nothing to link, each named later use
-  unlinked. It is the one coded fix outside whitespace and glyph, since a link
-  target cannot meet the 40-character rule but `glossary_terms` fixes it. State
-  it as "link *term* to its shared glossary entry" plus the anchor id holding
-  the first use; `edit` derives the link, and the text and its case stay as
-  found. A later use that already links the same entry is named by its anchor
+  unlinked. Like the whitespace, glyph, and divider fixes, it is coded, since a
+  link target cannot meet the 40-character rule but `glossary_terms` fixes it.
+  State it as "link *term* to its shared glossary entry" plus the anchor id
+  holding the first use; `edit` derives the link, and the text and its case stay
+  as found. A later use that already links the same entry is named by its anchor
   ("unlink the later use in ABC-2"); the fix removes that link and keeps its
   text, in the same finding: moving a link is one substitution, never two
   findings. The first use stays the anchor; later uses are named beside it. A
