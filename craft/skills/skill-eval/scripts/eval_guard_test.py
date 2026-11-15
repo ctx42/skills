@@ -24,6 +24,10 @@ def bash(tid, command):
     return write(tid, {"command": command}, "Bash")
 
 
+def denied(text):
+    return {"type": "system", "subtype": "permission_denied", "message": text}
+
+
 class DenyHomeEditsTest(unittest.TestCase):
     def test_denies_edits_under_the_real_home(self):
         have = deny_home_edits(HOME, WS)
@@ -89,6 +93,14 @@ class HomeWritesTest(unittest.TestCase):
 
         self.assertEqual([], have)
 
+    def test_skips_an_event_whose_message_is_text(self):
+        events = [denied("This Bash command requires approval"),
+                  write("t1", {"file_path": "/home/u/x.md"}), result("t1")]
+
+        have = home_writes(events, HOME, WS)
+
+        self.assertEqual(["/home/u/x.md"], have)
+
 
 class HomeCommandsTest(unittest.TestCase):
     def test_lists_a_bash_call_that_names_the_real_home(self):
@@ -109,6 +121,14 @@ class HomeCommandsTest(unittest.TestCase):
 
     def test_matches_the_home_at_the_end_of_a_command(self):
         events = [bash("b1", "ls /home/u"), result("b1")]
+
+        have = home_commands(events, HOME)
+
+        self.assertEqual(["ls /home/u"], have)
+
+    def test_skips_an_event_whose_message_is_text(self):
+        events = [denied("This Bash command requires approval"),
+                  bash("b1", "ls /home/u"), result("b1")]
 
         have = home_commands(events, HOME)
 

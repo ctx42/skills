@@ -29,7 +29,10 @@ def _calls(events):
     without an error, in order."""
     uses, ok = [], set()
     for e in events:
-        for b in ((e or {}).get("message") or {}).get("content") or []:
+        message = (e or {}).get("message")
+        if not isinstance(message, dict):
+            continue  # a system event (permission_denied) carries text
+        for b in message.get("content") or []:
             if not isinstance(b, dict):
                 continue
             if e.get("type") == "assistant" and b.get("type") == "tool_use":
