@@ -123,6 +123,13 @@
       "must": [
         "Criteria hold one value, never an alternative \\(`or`, `if the user\\s+prefers`\\)"
       ]
+    },
+    {
+      "id": "either-is-fine",
+      "rule": "A brief that accepts several values has decided: the plan pins one, never asks",
+      "must": [
+        "A\\s+brief\\s+that\\s+accepts\\s+several\\s+values\\s+\\(\"either\\s+is\\s+fine\"\\)\\s+has\\s+decided:\\s+pin\\s+one\\s+in\\s+the\\s+criteria,\\s+never\\s+ask"
+      ]
     }
   ]
 }

@@ -156,17 +156,18 @@ call.
 
 3. Settle what the brief left open before writing, not inside the file. An
    outcome nobody has chosen has no acceptance criteria, so it can never be
-   honestly checked off, and a guess written down reads afterwards as a
-   decision the user made. Ask the one open question that most changes what the
-   items are; a detail inside an already-decided outcome is not that question —
-   the item's acceptance criteria absorb it. When several are open and the
-   shape is still moving, say so and offer `grill-me` rather than dripping
-   questions one per turn. Several open but the shape firm is not that case:
-   ask the one that most changes the items and wait for the answer before
-   writing, naming the rest as leave-outs, where they stay the user's to
-   decide. Write in the same turn only when nothing open changes what the items
-   are. A point changes them when its answer changes what an item does or
-   contains — where the output goes, which protocol, which store — not only
+   honestly checked off, and a guess written down reads afterwards as a decision
+   the user made. Ask the one open question that most changes what the items
+   are; a detail inside an already-decided outcome is not that question — the
+   item's acceptance criteria absorb it. A brief that accepts several values
+   ("either is fine") has decided: pin one in the criteria, never ask. When
+   several are open and the shape is still moving, say so and offer `grill-me`
+   rather than dripping questions one per turn. Several open but the shape firm
+   is not that case: ask the one that most changes the items and wait for the
+   answer before writing, naming the rest as leave-outs, where they stay the
+   user's to decide. Write in the same turn only when nothing open changes what
+   the items are. A point changes them when its answer changes what an item does
+   or contains — where the output goes, which protocol, which store — not only
    how many items there are; listing such a point as a leave-out and writing
    anyway is the guess this step forbids.
 
