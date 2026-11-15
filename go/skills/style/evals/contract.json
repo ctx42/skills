@@ -207,6 +207,14 @@
       ]
     },
     {
+      "id": "library-claims-checked",
+      "file": "references/production.md",
+      "rule": "A godoc claim about library behavior is confirmed first-hand, never taken from a report",
+      "must": [
+        "State a library's behavior in godoc only after confirming it yourself, in\\s+its source or by a run; a reviewer's or agent's report is no proof"
+      ]
+    },
+    {
       "id": "fix-plan-path",
       "file": "references/checking.md",
       "rule": "The ordered fix plan goes to tmp/agent/agent-plan-style-fix.md",

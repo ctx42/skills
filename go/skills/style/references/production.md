@@ -132,6 +132,8 @@ a rule in `test.md` overrides one. Keyed detection detail lives in the skill's
 - Every exported symbol and the package have godoc; a const-group headline
   covers members whose name and type say it all.
 - Godoc states only what the signature can't; never restate the obvious.
+- State a library's behavior in godoc only after confirming it yourself, in
+  its source or by a run; a reviewer's or agent's report is no proof.
 - In godoc prose name the type, not the receiver variable.
 - On interface-implementing methods, never restate the interface's contract;
   document only behavior beyond it, or nothing.
