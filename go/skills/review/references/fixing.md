@@ -100,7 +100,7 @@ When the fix job is broad — findings span several packages or large LOC — do
 not edit straight through:
 
 1. Write an ordered plan to a gitignored scratch file
-   (`tmp/agent-plan-review-fix.md`): one entry per chunk, each naming the
+   (`tmp/agent/agent-plan-review-fix.md`): one entry per chunk, each naming the
    package (or file) it covers, the findings to fix there, and status boxes
    (fixed / tests green). A chunk is one package; split a large package (many
    findings or big files) into file-level chunks and note the split. Show the

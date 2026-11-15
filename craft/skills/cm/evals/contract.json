@@ -232,7 +232,7 @@
       "id": "no-plan-paths",
       "rule": "A message never names a plan file unless the diff only touches those files",
       "must": [
-        "`tmp/agent-plan-\\*\\.md`"
+        "`tmp/agent/agent-plan-\\*\\.md`"
       ]
     },
     {

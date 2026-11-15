@@ -78,7 +78,7 @@
       "id": "report-shape",
       "rule": "After writing, report path plus counts in the fixed shape; never paste the plan back",
       "must": [
-        "`wrote tmp/agent-plan-sso\\.md — 0 Y / 5 N / 0 X`",
+        "`wrote tmp/agent/agent-plan-sso\\.md — 0 Y / 5 N / 0 X`",
         "never paste the plan back"
       ]
     },
@@ -112,9 +112,9 @@
     },
     {
       "id": "default-path",
-      "rule": "With no path from the user, the plan goes to tmp/agent-plan-<slug>.md",
+      "rule": "With no path from the user, the plan goes to tmp/agent/agent-plan-<slug>.md",
       "must": [
-        "`tmp/agent-plan-<slug>\\.md`"
+        "`tmp/agent/agent-plan-<slug>\\.md`"
       ]
     }
   ]

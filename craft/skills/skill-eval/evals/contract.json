@@ -102,9 +102,9 @@
     {
       "id": "handoff-path",
       "file": "references/running.md",
-      "rule": "A session handoff goes to tmp/agent-handoff-<topic>.md",
+      "rule": "A session handoff goes to tmp/agent/agent-handoff-<topic>.md",
       "must": [
-        "`tmp/agent-handoff-<topic>\\.md`"
+        "`tmp/agent/agent-handoff-<topic>\\.md`"
       ]
     }
   ]

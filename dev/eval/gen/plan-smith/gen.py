@@ -229,17 +229,17 @@ def plan_write_graders(path, n_items, named_heads):
 sh = Sh()
 sh.file("go.mod", GO_SERVICE_MOD)
 sh.file("cmd/svc/main.go", GO_SERVICE_MAIN)
-g = plan_write_graders("tmp/agent-plan-sso.md", 5,
+g = plan_write_graders("tmp/agent/agent-plan-sso.md", 5,
                        [r"(provider|config)", r"login", r"session", r"doc"])
 g["b2-no-invented-items"] = regex(
     r"^## \d+\.[^\n]*\b(tests?|testing|CI|monitor\w*|rollout|roll-out|migrat\w*|metrics|alert\w*)\b",
-    "file:tmp/agent-plan-sso.md", "im", "not_contains")
+    "file:tmp/agent/agent-plan-sso.md", "im", "not_contains")
 g["b5-no-protocol-picked"] = regex(
     r"^(?![\s\S]*\b(OIDC|OpenID|SAML)\b)|^(?=[\s\S]*\b(OIDC|OpenID)\b)(?=[\s\S]*\bSAML\b)",
-    "file:tmp/agent-plan-sso.md")
+    "file:tmp/agent/agent-plan-sso.md")
 g["b5-only-table-and-items"] = regex(
     r"^#{2,6} (?!Summary$|\d+\. )|^\**(assumptions?|open (questions?|choices|decisions)|risks?|decisions?)\**:?\s*$",
-    "file:tmp/agent-plan-sso.md", "im", "not_contains")
+    "file:tmp/agent/agent-plan-sso.md", "im", "not_contains")
 g["b7-path-and-counts-one-line"] = regex(
     r"agent-plan-sso\.md[^\n]*" + counts(0, 5, 0) + "|" + counts(0, 5, 0) + r"[^\n]*agent-plan-sso\.md",
     "last_message", "i")
@@ -258,7 +258,7 @@ BUNDLED = ("/craft:plan-smith we need to get the nightly export working properly
            "dashboard. The figures can only be reconciled once the export is split per "
            "entity, since today there is nothing to compare line by line. Write that up as "
            "a plan.")
-P2 = "tmp/agent-plan-export.md"
+P2 = "tmp/agent/agent-plan-export.md"
 g = {}
 g["b1-plan-file-exists"] = exists(P2)
 g["b1-split-into-outcomes"] = regex(
@@ -282,7 +282,7 @@ case("bundled-brief", CREATE, BUNDLED, g,
               "from the dashboard's totals for the same day. The files should go to the "
               "shared object store (s3://finance-exports) instead of the app server's "
               "disk, and failure notices go to the #data-alerts channel. Save the plan "
-              "as tmp/agent-plan-export.md."])
+              "as tmp/agent/agent-plan-export.md."])
 
 g = {}
 g["b2-no-write"] = no_tool("Write")
@@ -322,7 +322,7 @@ TURNS = [
 5. Permissions — anyone who can see the report can export it, no separate grant. Verified by: a viewer-role user can export, and a user who cannot open the report gets 403.
 6. Audit — every export is logged with user, timestamp, and row count. Verified by: an export writes exactly one audit row carrying those three fields.
 
-Persist this as a tracked plan at tmp/agent-plan-csv-export.md?"""),
+Persist this as a tracked plan at tmp/agent/agent-plan-csv-export.md?"""),
 ]
 
 
@@ -347,7 +347,7 @@ def history(turns, session):
     return "\n".join(lines) + "\n"
 
 
-P3 = "tmp/agent-plan-csv-export.md"
+P3 = "tmp/agent/agent-plan-csv-export.md"
 g = plan_write_graders(P3, 7, [r"scope|filter", r"limit|size|row", r"format|csv|4180",
                                r"deliver|download|synchron", r"permission|access", r"audit"])
 g["b1-no-reinterview"] = regex(

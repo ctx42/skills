@@ -1,5 +1,5 @@
 ---
 type: file_exists
-path: tmp/agent-plan-sso.md
+path: tmp/agent/agent-plan-sso.md
 exists: true
 ---
