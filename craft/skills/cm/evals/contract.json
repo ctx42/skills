@@ -231,9 +231,11 @@
     },
     {
       "id": "measure-characters",
-      "rule": "Message lines are measured in characters by a Unicode-aware check, never in bytes",
+      "rule": "Message lines are measured in characters by a locale-pinned grep gate, never in bytes, by hand, or by Python",
       "must": [
-        "counted in characters by a\\s+Unicode-aware check — Python's `len`, never a byte-counting `awk length`"
+        "counted in characters, never bytes,",
+        "LC_ALL=C\\.UTF-8 grep -q",
+        "a refused check stops the commit, never a count by\\s+hand"
       ]
     },
     {

@@ -181,12 +181,15 @@ Commit control:
 2. Draft the message per the sections below.
 3. Check each message, every one of an `apply` series and not only the first,
    before presenting it and before its commit runs: summary ≤ 72 chars, body
-   wrapped at 72 (measured, not eyeballed: counted in characters by a
-   Unicode-aware check — Python's `len`, never a byte-counting `awk length` —
-   that exits non-zero on any line over 72, chained with `&&` ahead of the
-   commit in the same command — before the heredoc opener — so a long line stops
-   the commit; the exact text the heredoc commits, summary and body, fed to it
-   inline by `printf`, never a second heredoc, any line holding a backtick or
+   wrapped at 72 (measured, not eyeballed: counted in characters, never bytes,
+   by `! printf '%s\n' '<line>'… | LC_ALL=C.UTF-8 grep -q '.\{73\}'`, which
+   fails on a line over 72 — the locale makes GNU grep count characters;
+   never Python or a script (the permission check refuses them) or
+   `awk length` (bytes); a refused check stops the commit, never a count by
+   hand — chained with `&&` ahead of the commit in the same command, before
+   the heredoc opener, so a long line stops the commit; the exact text the
+   heredoc commits, summary and body, fed to it inline by a `printf` written
+   after the last edit, never a second heredoc, any line holding a backtick or
    `$` single-quoted, since a double-quoted one runs it and measures the wrong
    text), every sentence parsing on one read — no dangling opener, no clause
    stranded on a preposition — and passing Describe changes only, its numbers
