@@ -116,19 +116,17 @@ Commit control:
 - `apply` and `asis` together contradict: say so, commit nothing, and ask
   which one; with a commit-ish too, name that in the same question (`asis`
   takes none, `apply` with it rewrites that commit's message).
-- `review` with `apply` or `asis` reviews first: before anything is staged,
-  when `.go` files changed, start the `go-change-reviewer` agent with the
-  repository path as its prompt and commit only after it records a pass, which
-  means no Blocker; name any lesser findings in the reply. A Blocker stops the
-  run: commit nothing, not even files it does not touch, and report it. No such
-  agent: say so, commit nothing, and stop. No `.go` change: carry on. Alone or
-  on an amend, `review` does nothing: say so in one line. Without `review`,
-  never start one before a commit: run the commit, and only when a gate blocks
-  it and asks for that agent, start it and retry that commit — no step 5
-  failure; a review started before trying is wasted. Under a gate keyed on
-  per-file diffs, a landed commit voids the pass for later groups sharing its
-  files: within step 3's order, land groups with disjoint files back to back
-  under one pass, and expect a new pass before each group that shares a file.
+- `review` with `apply` or `asis` reviews first: when `.go` files changed,
+  start the review agent before anything is staged, per
+  [references/review.md](references/review.md); commit only after its pass. No
+  `.go` change: carry on. Alone or on an amend, `review` does nothing: say so
+  in one line. Without `review`, never start one before a commit: run the
+  commit, and only when a gate blocks it and asks for that agent, start it and
+  retry that commit — no step 5 failure; a review started before trying is
+  wasted. Under a gate keyed on per-file diffs, a landed commit voids the pass
+  for later groups sharing its files: within step 3's order, land groups with
+  disjoint files back to back under one pass, and expect a new pass before
+  each group that shares a file.
 - Commit with `git commit -F -` reading the message on stdin from a heredoc,
   each commit its own shell command with nothing chained after the heredoc
   opener, or `git commit --amend -F -` for an amend — `--only` as well whenever

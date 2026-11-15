@@ -224,9 +224,17 @@
       "rule": "review is opt-in: with apply or asis it runs the reviewer before the first commit and a Blocker commits nothing; without it no review starts before a commit",
       "must": [
         "`review` with `apply` or `asis` reviews first",
-        "A\\s+Blocker stops the run: commit nothing",
+        "commit only after its pass",
         "Without `review`, never start one before a commit",
         "run the commit, and only when a gate blocks\\s+it and asks for that agent, start it and retry that commit"
+      ]
+    },
+    {
+      "id": "review-blocker-stops",
+      "rule": "A reviewer Blocker under review commits nothing",
+      "file": "references/review.md",
+      "must": [
+        "A Blocker stops the\\s+run: commit nothing, not even files it does not touch"
       ]
     },
     {

@@ -132,6 +132,7 @@
     {
       "id": "review-before-staging",
       "rule": "review-opt-in",
+      "context": ["SKILL.md", "references/review.md"],
       "prompt": "Situation: `/craft:cm apply review`. The working tree holds edits to `fetch.go`.\n\nQuestion: what do you run first? Answer on the first line with exactly one of: GIT-ADD, GIT-DIFF, SUBAGENT. Then one sentence why.",
       "pass": "^\\W*SUBAGENT\\b",
       "fail": "^\\W*(GIT-ADD|GIT-DIFF)\\b",
