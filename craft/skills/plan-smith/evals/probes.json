@@ -35,7 +35,7 @@
     {
       "id": "resolved-handoff-raises-nothing",
       "rule": "resolved-handoff",
-      "prompt": "Situation: `/plan-smith create` right after a `grill-me` summary that marks all six branches of a CSV-export feature resolved, each with its verification; the user said 'persist this'. Writing the items, you find three points the summary never mentions and the user may well care about: whether a refused (over-limit) export also writes an audit row, whether exactly 100,000 rows is allowed, and whether the CSV has a header row. You have written the plan file.\n\nQuestion: how many of those three points does your reply name as open or left out? Answer on the first line with the integer only, then one sentence why.",
+      "prompt": "Situation: `/plan-smith create` right after a `grill-me` summary that marks all six branches of a CSV-export feature resolved, each with its verification; the user said 'persist this'. Writing the items, you find three points the summary never mentions and the user may well care about: the exact wording of the over-limit refusal message, whether exactly 100,000 rows is allowed, and whether the CSV has a header row. You have written the plan file.\n\nQuestion: how many of those three points does your reply name as open or left out? Answer on the first line with the integer only, then one sentence why.",
       "pass": "^\\W*0\\b",
       "fail": "^\\W*[1-3]\\b",
       "bullets": [
