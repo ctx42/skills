@@ -82,10 +82,11 @@ check changes the verdict, never passes silently:
   escape its spaces); keep verbatim a contract phrase the line carries, and
   widen a grader keyed on the old word.
 - Placed: one step governs it; a rule that fits no step is not yet a rule.
-- Written to the authoring rules: one dense imperative line, stated once, in
-  the surrounding text's terms, no hedging; re-flowed so the paragraph it
-  lands in wraps at ~80 columns, no short line left mid-paragraph; never a
-  dollar-digit positional in a body.
+- Written to the authoring rules: one dense imperative line, stated once, in the
+  surrounding text's terms, no hedging, with one reading: reread it for a phrase
+  a run can take as its opposite ("leaves X alone": X untouched, or X the only
+  one left); re-flowed so the paragraph it lands in wraps at ~80 columns, no
+  short line left mid-paragraph; never a dollar-digit positional in a body.
 - Budget: `SKILL.md` aims at ~5000 tokens and ~500 lines. Never cut a settled
   rule to make room; move condition-triggered prose (a mode, a case type) to
   `references/`, leaving a pointer and the one-line rule. A reference over

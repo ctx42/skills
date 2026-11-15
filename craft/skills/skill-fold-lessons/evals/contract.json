@@ -153,6 +153,13 @@
       "must": [
         "never open, list, or mention one the user did\\s+not name"
       ]
+    },
+    {
+      "id": "one-reading",
+      "rule": "Each folded line is reread for a phrase a run can take as its opposite",
+      "must": [
+        "with one reading: reread it for a phrase a run can take as its\\s+opposite"
+      ]
     }
   ]
 }
