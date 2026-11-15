@@ -221,6 +221,14 @@
       "must": [
         "`tmp/agent/agent-plan-style-fix\\.md`"
       ]
+    },
+    {
+      "id": "unconfirmed-claim-blocker",
+      "file": "references/checking.md",
+      "rule": "A godoc claim about library behavior nobody confirmed is a Blocker",
+      "must": [
+        "a\\s+godoc\\s+claim\\s+about\\s+library\\s+behavior\\s+nobody\\s+confirmed"
+      ]
     }
   ]
 }

@@ -137,8 +137,9 @@ site happens to need — by the first of these that matches:
 
 1. Blocker — the code is wrong or will mislead: a swallowed or `%v`-wrapped
    error, an error matched with `==`, an exported symbol with no godoc, a name
-   that states the opposite of what the code does, an assertion that passes on
-   the wrong branch, work that continues after its context is cancelled.
+   that states the opposite of what the code does, a godoc claim about library
+   behavior nobody confirmed, an assertion that passes on the wrong branch, work
+   that continues after its context is cancelled.
 2. Nit — `gofmt`/`goimports` would produce the fix, or the fix only inserts,
    removes, or rewraps whitespace or inserts, rewords, or deletes a comment (a
    marker comment included), leaving every identifier, statement, and declaration
