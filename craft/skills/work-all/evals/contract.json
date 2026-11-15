@@ -57,6 +57,14 @@
       ]
     },
     {
+      "id": "brief-scope",
+      "rule": "A brief carries only what its items name: no unchecked step of the orchestrator's own and no trailer instruction; the report never mentions trailers",
+      "must": [
+        "Put only what its items name in a brief; before adding a step of your own, check that it changes something in that unit",
+        "`craft:cm` owns the commit message, so add no trailer instruction, and never mention trailers or their absence in the report"
+      ]
+    },
+    {
       "id": "budget",
       "rule": "Each dispatch is budgeted: cap min(4 GB, budget), none below 1.5 GB",
       "must": [

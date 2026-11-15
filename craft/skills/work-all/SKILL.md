@@ -99,7 +99,10 @@ budget is under 1.5 GB. Log the reading and the cap in the run file.
 Dispatch the next unit in order whose dependencies are done, as a background
 general-purpose agent whose prompt is the brief in
 [references/worker.md](references/worker.md), filled in. A worker knows only
-its brief.
+its brief. Put only what its items name in a brief; before adding a step of
+your own, check that it changes something in that unit. `craft:cm` owns the
+commit message, so add no trailer instruction, and never mention trailers or
+their absence in the report.
 
 ## 4. While workers run
 

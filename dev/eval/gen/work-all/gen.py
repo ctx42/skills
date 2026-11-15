@@ -280,6 +280,8 @@ case("work-all--full-run-commits-and-reports",
          "b8-no-push": g_tool("Bash", GIT_PUSH, 0, 0),
          "b9-bug-deleted": g_exists("calc/tmp/agent/agent-bug-div-zero.md", exists=False),
          "b9-dept-deleted": g_exists("text/tmp/agent/agent-dept-docs.md", exists=False),
+         "b10-no-trailer-brief": g_tool("Agent", r"[Cc]o-[Aa]uthored", 0, 0),
+         "b10-no-trailer-report": g_regex(r"co-authored", flags="i", match="not_contains"),
      }, system=ENGLISH + SCRIPTED, tags=RUN_TAGS, long=True)
 
 
