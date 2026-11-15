@@ -53,7 +53,8 @@ List available skills. They are namespaced by plugin, e.g.:
   `/srd:questions`, `/srd:report-doc-gap`, `/srd:backlog`, `/srd:kb`
 - `craft`: `/craft:cm`, `/craft:grill-me`, `/craft:plan-smith`,
   `/craft:readme-smith`, `/craft:doc-smith`, `/craft:skill-enhance`,
-  `/craft:skill-fold-lessons`, `/craft:skill-eval`, `/craft:fix-all`
+  `/craft:skill-fold-lessons`, `/craft:skill-eval`, `/craft:fix-all`,
+  `/craft:work-all`
 
 Each skill's `SKILL.md` opens with a `## Usage` block; its `evals/evals.json`
 holds the scenarios it is expected to handle.

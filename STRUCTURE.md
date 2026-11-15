@@ -62,7 +62,8 @@ It holds reusable skills for **Claude**. The skills ship as Claude Code plugins.
 │       ├── skill-eval/             # Eval suite: audit, run, fix one improvement at a time
 │       │   ├── scripts/            # Lint, contracts, probes, hunt, triggers, cases, tokens
 │       │   └── references/         # Authoring standard, tiers, running, pitfalls, case format
-│       └── fix-all/                # Fix all findings unattended, one commit each
+│       ├── fix-all/                # Fix all findings unattended, one commit each
+│       └── work-all/               # Work off agent files across repos with subagents
 └── web/                            # Plugin: web-app UX and performance
     ├── .claude-plugin/plugin.json
     ├── evals/assets/               # Shared Vue + Go fixture app every web skill's evals run on

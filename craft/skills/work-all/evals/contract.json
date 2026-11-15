@@ -1,0 +1,199 @@
+{
+  "skill_name": "work-all",
+  "rules": [
+    {
+      "id": "work-kinds",
+      "rule": "Only plan, handoff, bug, feature, todo, and dept files are work; every other agent-* file is reported and left alone",
+      "must": [
+        "`agent-plan-\\*\\.md`, `agent-handoff-\\*\\.md`, `agent-bug-\\*\\.md`, `agent-feature-\\*\\.md`, `agent-todo\\.md`, or `agent-dept-\\*\\.md`",
+        "Every other `agent-\\*` file \\(`agent-decisions\\.md`, a script, an image\\) is seen, reported, and never changed"
+      ]
+    },
+    {
+      "id": "skip-forbidden",
+      "rule": "Paths the user's instructions mark read-only or forbidden are skipped and listed with their rule",
+      "must": [
+        "Skip every path the user's loaded instructions \\(`CLAUDE\\.md`, `AGENTS\\.md`, rules files\\) mark read-only or forbid editing",
+        "record each with the rule that skips it"
+      ]
+    },
+    {
+      "id": "no-repo-unit",
+      "rule": "A file outside any repository is a unit of its own folder, worked without commits",
+      "must": [
+        "a no-repo unit, worked without commits"
+      ]
+    },
+    {
+      "id": "ask-before-dispatch",
+      "rule": "Everything foreseeable is asked up front, one question per message; nothing is edited or started before the last answer",
+      "must": [
+        "one question per message, most blocking first, saying how many remain",
+        "Edit nothing, commit nothing, and start no agent before the last answer"
+      ]
+    },
+    {
+      "id": "item-classes",
+      "rule": "Each item is classed runs, asks, or waiting; a waiting item is reported and left alone",
+      "must": [
+        "\\*\\*runs\\*\\* \\(nothing blocks it\\), \\*\\*asks\\*\\*",
+        "\\*\\*waiting\\*\\* \\(its condition cannot be met now",
+        "reported and left alone"
+      ]
+    },
+    {
+      "id": "dependency-order",
+      "rule": "Units are ordered by dependency: a consumer after the library it requires",
+      "must": [
+        "requires a module another selected unit holds goes after that unit"
+      ]
+    },
+    {
+      "id": "one-agent-per-unit",
+      "rule": "At most five agents at once, never two on one unit",
+      "must": [
+        "Run at most five agents at once",
+        "never two on one unit"
+      ]
+    },
+    {
+      "id": "budget",
+      "rule": "Each dispatch is budgeted: cap min(4 GB, budget), none below 1.5 GB",
+      "must": [
+        "the budget is available memory minus 4 GB minus the caps of the running workers",
+        "A new worker gets a cap of min\\(4 GB, budget\\); none starts while the budget is under 1\\.5 GB"
+      ]
+    },
+    {
+      "id": "midrun-questions",
+      "rule": "Mid-run questions are queued, asked one at a time, and the worker resumed with the answer",
+      "must": [
+        "resume that worker \\(`SendMessage`\\) with the answer"
+      ]
+    },
+    {
+      "id": "new-file-approval",
+      "rule": "Work a worker writes into another unit is approved or skipped by the user before it runs",
+      "must": [
+        "ask: approve or skip",
+        "a finished unit runs again"
+      ]
+    },
+    {
+      "id": "failure-choices",
+      "rule": "A failure is a question: retry, park, or stop the unit; dependants are held",
+      "must": [
+        "retry with guidance; park",
+        "undoes its own edits by inverse edit",
+        "Hold every unit that depends on it"
+      ]
+    },
+    {
+      "id": "release-pause",
+      "rule": "A consumer of a library waits for the user's release and is raised to exactly the tag they name",
+      "must": [
+        "release and push <module>, then reply with the tag",
+        "raises its requirement to exactly that tag",
+        "That is the only dependency bump this skill makes"
+      ]
+    },
+    {
+      "id": "never-push",
+      "rule": "The skill never pushes, tags, releases, or bumps versions",
+      "must": [
+        "Never tag, release, push, bump a version"
+      ]
+    },
+    {
+      "id": "run-file",
+      "rule": "The run file sits in the repo's tmp/agent, else the start folder's tmp/agent, else the start folder",
+      "must": [
+        "in `<repo>/tmp/agent/` when started inside a repository; else in `<start>/tmp/agent/` when `<start>/tmp/` exists; else in the start folder"
+      ]
+    },
+    {
+      "id": "resume",
+      "rule": "A resumed run never re-asks a recorded answer",
+      "must": [
+        "never ask again a question it records an answer to"
+      ]
+    },
+    {
+      "id": "report-shape",
+      "rule": "Report counts come from git log and the run file, in the fixed first-line shape",
+      "must": [
+        "worked N of M items in K commits across U units",
+        "Read every count and hash off `git log <start>\\.\\.HEAD`"
+      ]
+    },
+    {
+      "id": "worker-scope",
+      "rule": "A worker edits only its unit and writes spill-over as todo or handoff files",
+      "file": "references/worker.md",
+      "must": [
+        "Edit only this unit",
+        "never as a code edit"
+      ]
+    },
+    {
+      "id": "worker-agents",
+      "rule": "A worker starts no agent but the commit-gate reviewer; looping skills go back to the orchestrator",
+      "file": "references/worker.md",
+      "must": [
+        "`cm` starts `go-change-reviewer`: the only agent you may start",
+        "return NEEDS-SKILL; never run it"
+      ]
+    },
+    {
+      "id": "worker-plan-check",
+      "rule": "A plan item already done is marked Y with evidence, not redone",
+      "file": "references/worker.md",
+      "must": [
+        "before each N item, check the code\\. Already done: mark it Y with the evidence"
+      ]
+    },
+    {
+      "id": "worker-test-first",
+      "rule": "Bugs and features are built test-first",
+      "file": "references/worker.md",
+      "must": [
+        "test-first — a test that fails for the right reason"
+      ]
+    },
+    {
+      "id": "worker-limits",
+      "rule": "Builds and tests run capped; a cap kill or a 10-minute stall returns FAILED",
+      "file": "references/worker.md",
+      "must": [
+        "A kill at the cap: return FAILED; never retry with a larger cap",
+        "with no output for 10 minutes"
+      ]
+    },
+    {
+      "id": "worker-no-weaken",
+      "rule": "A worker never weakens a test or discards work",
+      "file": "references/worker.md",
+      "must": [
+        "Never weaken, skip, gate, or retry a test",
+        "undo your own edits by inverse edit"
+      ]
+    },
+    {
+      "id": "worker-lifecycle",
+      "rule": "A work file is updated as items land and deleted once nothing open or needed is left",
+      "file": "references/worker.md",
+      "must": [
+        "Delete a work file as soon as nothing open or needed is left in it"
+      ]
+    },
+    {
+      "id": "worker-commands",
+      "rule": "A worker runs single commands by absolute path and retries a denied one in that form before failing",
+      "file": "references/worker.md",
+      "must": [
+        "Run one command per call, by absolute path or with `git -C <unit>`",
+        "A denied command is not a denied tool: retry it once in that form before returning FAILED"
+      ]
+    }
+  ]
+}

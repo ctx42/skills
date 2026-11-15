@@ -1,0 +1,49 @@
+{
+  "skill_name": "work-all",
+  "expectations": [
+    {
+      "id": 1,
+      "name": "upfront-round-before-work",
+      "expected_behavior": [
+        "Lists the work of units `lib`, `app`, and `tools`",
+        "Orders `lib` before `app`",
+        "Lists the `mirror/` plan as skipped, naming the read-only rule",
+        "Lists `agent-readme-tools.md` and `agent-check-x.ts` as seen but not work",
+        "Classes the todo that waits for a second failure as waiting",
+        "Lists `notes/` as a unit without a repository",
+        "Asks before working: edits no file but the run file, commits nothing, and starts no agent",
+        "Opens on the list, with no preamble"
+      ],
+      "blind_only": [
+        8
+      ]
+    },
+    {
+      "id": 2,
+      "name": "full-run-commits-and-reports",
+      "expected_behavior": [
+        "Commits the `calc` bug fix: `Div` returns `ErrDivZero` for a zero divisor",
+        "The `calc` fix comes with a test of the zero divisor",
+        "Does not re-implement `Trim`: no commit for plan item 1",
+        "Implements plan item 2: `text.go` has `Upper`",
+        "Fixes the README typo the dept file lists",
+        "Writes the run file `tmp/agent/agent-run-cwd.md` with a `## Report` section",
+        "The reply opens with the `worked N of M items in K commits across 2 units` line",
+        "Never pushes"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "resume-offered-from-run-file",
+      "expected_behavior": [
+        "Offers to resume the run recorded in `tmp/agent/agent-run-cwd.md`",
+        "Does not ask again whether to skip `calc`",
+        "Edits no file but the run file, commits nothing, and starts no agent before the answer",
+        "Reports tersely, with no preamble"
+      ],
+      "blind_only": [
+        4
+      ]
+    }
+  ]
+}

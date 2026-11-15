@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: work-all--upfront-round-before-work
+context:
+  scaffold_script: scaffold.sh

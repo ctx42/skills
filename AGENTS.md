@@ -132,6 +132,9 @@ source of truth.
   standard (`references/authoring.md`).
 - `fix-all` — fixes every finding in the conversation, one commit each, after
   one up-front question round for contract and compatibility changes.
+- `work-all` — orchestrates up to five subagents, one per repository, that
+  work off every agent work file under a root, each item committed; the
+  session asks every question.
 
 ### web
 

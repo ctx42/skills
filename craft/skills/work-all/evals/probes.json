@@ -1,0 +1,110 @@
+{
+  "skill_name": "work-all",
+  "probes": [
+    {
+      "id": "non-work-file",
+      "rule": "work-kinds",
+      "prompt": "Situation: `/work-all` found `app/tmp/agent/agent-readme-app.md` and `app/tmp/agent/agent-decisions.md`; both list things still to do.\n\nQuestion: does a worker work on either file? Answer on the first line with exactly one of: WORK-ON-THEM, REPORT-ONLY. Then one sentence why.",
+      "pass": "^\\W*REPORT-ONLY\\b",
+      "fail": "^\\W*WORK-ON-THEM\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "todo-condition-met-runs",
+      "rule": "item-classes",
+      "prompt": "Situation: `/work-all`, planning the run. `app/tmp/agent/agent-todo.md` holds one item: \"Switch to `lib.Retry`. Waits for the release of `example.com/lib` v1.2.0.\" `git -C lib tag` lists `v1.2.0`, pushed yesterday.\n\nQuestion: how is this item classed? Answer on the first line with exactly one of: RUNS, ASKS, WAITING. Then one sentence why.",
+      "pass": "^\\W*RUNS\\b",
+      "fail": "^\\W*(?:ASKS|WAITING)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "budget-too-small",
+      "rule": "budget",
+      "prompt": "Situation: `/work-all` is about to dispatch the next unit. `free` shows 5.2 GB available; no worker is running.\n\nQuestion: does it start a worker now? Answer on the first line with exactly one of: DISPATCH, NO-DISPATCH. Then one sentence why.",
+      "pass": "^\\W*NO-DISPATCH\\b",
+      "fail": "^\\W*DISPATCH\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "budget-cap",
+      "rule": "budget",
+      "prompt": "Situation: `/work-all` is about to dispatch the next unit. `free` shows 9 GB available; one worker is running with a 2 GB cap.\n\nQuestion: what memory cap does the new worker get? Answer on the first line with exactly one of: 2GB, 3GB, 4GB, 5GB. Then one sentence why.",
+      "pass": "^\\W*3\\s*GB\\b",
+      "fail": "^\\W*(?:2|4|5)\\s*GB\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "release-pause",
+      "rule": "release-pause",
+      "prompt": "Situation: `/work-all`. Unit `lib` (module `example.com/lib`) has finished every selected item; unit `app` requires `example.com/lib` and its handoff needs the new `lib.Retry`. No tag exists for the new code.\n\nQuestion: what happens to `app` next? Answer on the first line with exactly one of: ASK-FOR-RELEASE, PSEUDO-VERSION, LOCAL-REPLACE. Then one sentence why.",
+      "pass": "^\\W*ASK-FOR-RELEASE\\b",
+      "fail": "^\\W*(?:PSEUDO-VERSION|LOCAL-REPLACE)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "new-file-into-done-unit",
+      "rule": "new-file-approval",
+      "prompt": "Situation: `/work-all`. A worker in `app` reports DONE with `new-file: lib/tmp/agent/agent-todo.md from agent-plan-retry.md #2`. Unit `lib` finished earlier in this run.\n\nQuestion: what does the orchestrator do with that file? Answer on the first line with exactly one of: ASK-USER, RUN-NOW, NEXT-RUN. Then one sentence why.",
+      "pass": "^\\W*ASK-USER\\b",
+      "fail": "^\\W*(?:RUN-NOW|NEXT-RUN)\\b",
+      "class": "redundant"
+    },
+    {
+      "id": "failed-item-asks",
+      "rule": "failure-choices",
+      "prompt": "Situation: `/work-all`. A worker returns `FAILED agent-bug-div.md: go test ./calc — TestDiv still fails after two attempts`.\n\nQuestion: what does the orchestrator do? Answer on the first line with exactly one of: ASK-USER, PARK, STOP-UNIT, RETRY. Then one sentence why.",
+      "pass": "^\\W*ASK-USER\\b",
+      "fail": "^\\W*(?:PARK|STOP-UNIT|RETRY)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "run-file-outside-repo",
+      "rule": "run-file",
+      "prompt": "Situation: `/work-all` was started in `/home/u/ws`, which is not a git repository and has no `tmp/` folder.\n\nQuestion: where is the run file? Answer on the first line with exactly one of: WS-TMP-AGENT (create `/home/u/ws/tmp/agent/`), WS (`/home/u/ws/`), HOME-DATA (`~/.agent-data/`). Then one sentence why.",
+      "pass": "^\\W*WS\\b(?!-)",
+      "fail": "^\\W*(?:WS-TMP-AGENT|HOME-DATA)\\b",
+      "class": "load-bearing"
+    },
+    {
+      "id": "report-count",
+      "rule": "report-shape",
+      "prompt": "Situation: `/work-all` finished. Six items were selected in two units. Four were done in five commits; one plan item was already done in the code and was marked Y with no commit; one was parked.\n\nQuestion: write the report's first line exactly, and nothing else on that line.",
+      "pass": "^\\W*worked 5 of 6 items in 5 commits across 2 units\\b",
+      "fail": "^\\W*worked (?!5 of 6 items in 5 commits)",
+      "class": "redundant"
+    },
+    {
+      "id": "worker-looping-skill",
+      "rule": "worker-agents",
+      "prompt": "Situation: you are a work-all worker. Your next item, from a plan, says: \"Raise coverage of `./store` to 90% with go:cover.\"\n\nQuestion: what do you do? Answer on the first line with exactly one of: RUN-GO-COVER, RETURN-NEEDS-SKILL. Then one sentence why.",
+      "pass": "^\\W*RETURN-NEEDS-SKILL\\b",
+      "fail": "^\\W*RUN-GO-COVER\\b",
+      "context": [
+        "references/worker.md"
+      ],
+      "class": "load-bearing"
+    },
+    {
+      "id": "worker-cap-kill",
+      "rule": "worker-limits",
+      "prompt": "Situation: you are a work-all worker with a 2 GB cap. `go test ./...` under `systemd-run` was killed at the memory cap; `free` shows 20 GB available right now.\n\nQuestion: what do you do? Answer on the first line with exactly one of: RETURN-FAILED, RETRY-4GB, RETRY-UNCAPPED. Then one sentence why.",
+      "pass": "^\\W*RETURN-FAILED\\b",
+      "fail": "^\\W*RETRY-",
+      "context": [
+        "references/worker.md"
+      ],
+      "class": "redundant"
+    },
+    {
+      "id": "worker-denied-chain",
+      "rule": "worker-commands",
+      "prompt": "Situation: you are a work-all worker for unit `/w/calc`. Your first command, `cd /w/calc && git status && go test ./...`, came back: \"Permission to use Bash has been denied.\"\n\nQuestion: what do you do next? Answer on the first line with exactly one of: RETRY-SINGLE-COMMANDS, RETURN-FAILED, PARK-ALL. Then one sentence why.",
+      "pass": "^\\W*RETRY-SINGLE-COMMANDS\\b",
+      "fail": "^\\W*(?:RETURN-FAILED|PARK-ALL)\\b",
+      "context": [
+        "references/worker.md"
+      ],
+      "class": "load-bearing"
+    }
+  ]
+}

@@ -29,18 +29,18 @@ own manifest and a `skills/` folder:
 │   └── skills/{create,review,edit,doc-edit,questions,report-doc-gap,backlog,kb}/
 ├── craft/
 │   ├── .claude-plugin/plugin.json
-│   └── skills/{cm,grill-me,plan-smith,readme-smith,doc-smith,skill-enhance,skill-fold-lessons,skill-eval,fix-all}/
+│   └── skills/{cm,grill-me,plan-smith,readme-smith,doc-smith,skill-enhance,skill-fold-lessons,skill-eval,fix-all,work-all}/
 └── web/
     ├── .claude-plugin/plugin.json
     └── skills/{style,review,cover,doc,e2e,improve,perf,audit}/
 ```
 
-| Plugin  | Skills                                                                                                                      | Purpose                                                                                                                                 |
-|---------|-----------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| `go`    | `style`, `review`, `cover`, `doc`, `reshape`, `audit`                                                                       | Go style (write + check), done-time review, test coverage, doc fixing, API proposals, one-report audit                                  |
-| `srd`   | `create`, `review`, `edit`, `doc-edit`, `questions`, `report-doc-gap`, `backlog`, `kb`                                      | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base                                                       |
-| `craft` | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `skill-enhance`, `skill-fold-lessons`, `skill-eval`, `fix-all` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning, lesson folding, skill evals, unattended fixing |
-| `web`   | `style`, `review`, `cover`, `doc`, `e2e`, `improve`, `perf`, `audit`                                                        | Vue/TS style, review, unit and e2e coverage, docs, one-report audit; UX and speed fixes in a visible Chrome                             |
+| Plugin  | Skills                                                                                                                                  | Purpose                                                                                                                                                             |
+|---------|-----------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `go`    | `style`, `review`, `cover`, `doc`, `reshape`, `audit`                                                                                   | Go style (write + check), done-time review, test coverage, doc fixing, API proposals, one-report audit                                                              |
+| `srd`   | `create`, `review`, `edit`, `doc-edit`, `questions`, `report-doc-gap`, `backlog`, `kb`                                                  | Software Requirement Document lifecycle, the doc-gap loop, and the knowledge base                                                                                   |
+| `craft` | `cm`, `grill-me`, `plan-smith`, `readme-smith`, `doc-smith`, `skill-enhance`, `skill-fold-lessons`, `skill-eval`, `fix-all`, `work-all` | Commit messages, planning interview, plan tracking, README/doc authoring, self-learning, lesson folding, skill evals, unattended fixing, cross-repo agent-file runs |
+| `web`   | `style`, `review`, `cover`, `doc`, `e2e`, `improve`, `perf`, `audit`                                                                    | Vue/TS style, review, unit and e2e coverage, docs, one-report audit; UX and speed fixes in a visible Chrome                                                         |
 
 Plugin skills are **namespaced** by their plugin (e.g. `/srd:review`),
 so they never silently shadow a personal or project skill of the same name.

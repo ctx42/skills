@@ -1,0 +1,35 @@
+{
+  "skill_name": "work-all",
+  "evals": [
+    {
+      "id": 1,
+      "name": "upfront-round-before-work",
+      "skills": [
+        "work-all"
+      ],
+      "setup": "The current folder is not a git repository. Its `CLAUDE.md` says `mirror/` holds read-only clones: never edit or work in them. Under it: git repo `lib` (module `example.com/lib`) with `tmp/agent/agent-plan-retry.md`, one N item adding `Retry`; git repo `app` (module `example.com/app`, requires `example.com/lib`) with `tmp/agent/agent-handoff-retry.md` whose open item waits for `lib.Retry`; git repo `tools` with `tmp/agent/agent-todo.md` (one item that waits for a second failure, one ready now), `tmp/agent/agent-dept-docs.md` (Open: None.), `tmp/agent/agent-readme-tools.md`, and `tmp/agent/agent-check-x.ts`; folder `notes/` outside any repo with `agent-feature-index.md`; git repo `mirror/old` with `tmp/agent/agent-plan-old.md`. Every repo's tree is clean with `tmp/` git-ignored.",
+      "query": "/work-all",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "full-run-commits-and-reports",
+      "skills": [
+        "work-all"
+      ],
+      "setup": "The current folder is not a git repository and holds an empty `tmp/`. Git repo `calc` (Go module `example.com/calc`, tests pass) has `tmp/agent/agent-bug-div-zero.md`: `Div(1, 0)` panics; `Div` must return `(int, error)` and `ErrDivZero` when `b` is 0; no other code calls it. Git repo `text` (Go module `example.com/text`, tests pass) already has `Trim` with a test; its `tmp/agent/agent-plan-text.md` has two N items, 1 \"Add Trim\" and 2 \"Add Upper\"; its `tmp/agent/agent-dept-docs.md` lists one Open entry: `README.md` misspells \"receive\" as \"recieve\". The user answers: run everything as proposed; take the recommendation on any other question.",
+      "query": "/work-all",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "resume-offered-from-run-file",
+      "skills": [
+        "work-all"
+      ],
+      "setup": "The current folder (`cwd`) is not a git repository and holds `tmp/agent/agent-run-cwd.md` from an earlier run: its Answers record \"skip unit calc\", its Status shows `text` plan item 1 done and item 2 open. Git repos `calc` and `text` are as in scenario 2, with item 1 of the text plan already marked Y.",
+      "query": "/work-all",
+      "files": []
+    }
+  ]
+}
