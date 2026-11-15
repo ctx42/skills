@@ -277,6 +277,8 @@ case("work-all--full-run-commits-and-reports",
          "b6-run-file-report": file_has("tmp/agent/agent-run-cwd.md", r"^## Report", flags="m"),
          "b7-count-line": g_regex(r"^\W*worked \d+ of \d+ items in \d+ commits? across 2 units"),
          "b8-no-push": g_tool("Bash", GIT_PUSH, 0, 0),
+         "b9-bug-deleted": g_exists("calc/tmp/agent/agent-bug-div-zero.md", exists=False),
+         "b9-dept-deleted": g_exists("text/tmp/agent/agent-dept-docs.md", exists=False),
      }, system=ENGLISH + SCRIPTED, tags=RUN_TAGS, long=True)
 
 

@@ -46,10 +46,10 @@ Dependency bump: <"raise <module> to <tag> first", or "none">
    green. A failure you cannot fix: return FAILED with the output, edits in
    place.
 8. After each item lands, update its file: Y in the plan's table
-   (`craft:plan-smith update`), a done todo line removed, a paid dept entry
-   moved under `## Notes, not debt` as `Paid <date>: …`, the handoff
-   rewritten. Delete a work file as soon as nothing open or needed is left
-   in it.
+   (`craft:plan-smith update`), a done todo line or a paid dept entry
+   removed, the handoff rewritten. Delete a work file as soon as nothing open
+   or needed is left in it; a section that says only "None." holds nothing,
+   and content under a dept file's `## Notes, not debt` keeps the file.
 9. An item that needs a looping or fan-out skill (`go:cover`, `web:improve`,
    `craft:fix-all`, any skill that starts agents): return NEEDS-SKILL; never
    run it.

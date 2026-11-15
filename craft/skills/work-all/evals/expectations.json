@@ -29,7 +29,8 @@
         "Fixes the README typo the dept file lists",
         "Writes the run file `tmp/agent/agent-run-cwd.md` with a `## Report` section",
         "The reply opens with the `worked N of M items in K commits across 2 units` line",
-        "Never pushes"
+        "Never pushes",
+        "Deletes the finished bug and dept files"
       ]
     },
     {

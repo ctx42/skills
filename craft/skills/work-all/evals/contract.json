@@ -181,10 +181,11 @@
     },
     {
       "id": "worker-lifecycle",
-      "rule": "A work file is updated as items land and deleted once nothing open or needed is left",
+      "rule": "A work file drops each finished entry and is deleted once nothing open or needed is left",
       "file": "references/worker.md",
       "must": [
-        "Delete a work file as soon as nothing open or needed is left in it"
+        "a done todo line or a paid dept entry removed",
+        "Delete a work file as soon as nothing open or needed is left in it; a section that says only \"None\\.\" holds nothing, and content under a dept file's `## Notes, not debt` keeps the file"
       ]
     },
     {
