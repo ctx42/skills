@@ -120,10 +120,11 @@
     },
     {
       "id": "report-shape",
-      "rule": "Report counts come from git log and the run file, in the fixed first-line shape",
+      "rule": "Report counts come from git log and the run file, in the fixed first-line shape; the run file's report repeats the chat's Open list",
       "must": [
         "worked N of M items in K commits across U units",
-        "Read every count and hash off `git log <start>\\.\\.HEAD`"
+        "Read every count and hash off `git log <start>\\.\\.HEAD`",
+        "the Open list exactly as the chat shows it"
       ]
     },
     {

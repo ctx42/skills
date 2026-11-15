@@ -166,8 +166,8 @@ already done and marked Y counts toward N though it has no commit; K every
 commit the workers made; U the units worked. Align the table. Omit an empty
 section. Then write `## Report` into the run file: each item with its commit
 hashes, the files deleted, the files written into other units, the seen-not-work
-files, and the skipped paths with their rule. End the reply with the run file's
-path.
+files, the skipped paths with their rule, and the Open list exactly as the chat
+shows it. End the reply with the run file's path.
 
 ## Self-learning
 
