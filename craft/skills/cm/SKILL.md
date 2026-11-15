@@ -250,15 +250,16 @@ review; they see only the diff and the message.
   not umbrella slogans that hide the actual edits.
 
 - Every number in the body is read off the diff, not reasoned out from it nor
-  carried from the session, and so is every number in the summary line (a
-  status code, a limit): a tally of the diff's own items (files, flags) and a
-  size, count, timing, or before/after figure measured outside the diff stay
-  out. A message describing `1<<attempt * 100ms` over `maxAttempts = 3` as
-  backing off "200ms, 400ms and 800ms" invented the third value — the third
-  attempt is the last one, so it never sleeps. Retry counts, timeouts, sizes,
-  versions: take them from the changed lines or leave them out. The reader
-  checks the message against the diff, and a wrong number there discredits the
-  rest of a message that was otherwise right.
+  carried from the session or from another commit of the series, and so is
+  every number in the summary line (a status code, a limit): a tally of the
+  diff's own items (files, flags) and a size, count, timing, or before/after
+  figure measured outside the diff stay out. A message describing
+  `1<<attempt * 100ms` over `maxAttempts = 3` as backing off "200ms, 400ms and
+  800ms" invented the third value — the third attempt is the last one, so it
+  never sleeps. Retry counts, timeouts, sizes, versions: take them from the
+  changed lines or leave them out. The reader checks the message against the
+  diff, and a wrong number there discredits the rest of a message that was
+  otherwise right.
 
 - If the diff mixes unrelated edits (e.g. IDE config + library fix), say so
   in the body and ask the user to split it into separate commits — still
@@ -283,6 +284,8 @@ review; they see only the diff and the message.
   `ci`, `chore`, `revert`
 - Scope: optional, short noun
 - Description: imperative, lowercase, no period, ideally ≤ 50 chars (hard 72)
+- Coverage: the whole diff, removals included; one naming only the additions
+  misdescribes a commit that also deletes.
 
 ## Breaking changes
 
