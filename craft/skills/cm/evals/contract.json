@@ -225,7 +225,15 @@
       "must": [
         "`review` with `apply` or `asis` reviews first",
         "A\\s+Blocker stops the run: commit nothing",
-        "Without `review`, never start one before a commit"
+        "Without `review`, never start one before a commit",
+        "run the commit, and only when a gate blocks\\s+it and asks for that agent, start it and retry that commit"
+      ]
+    },
+    {
+      "id": "measure-characters",
+      "rule": "Message lines are measured in characters by a Unicode-aware check, never in bytes",
+      "must": [
+        "counted in characters by a\\s+Unicode-aware check — Python's `len`, never a byte-counting `awk length`"
       ]
     },
     {

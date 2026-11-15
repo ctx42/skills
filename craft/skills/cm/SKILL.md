@@ -123,12 +123,12 @@ Commit control:
   run: commit nothing, not even files it does not touch, and report it. No such
   agent: say so, commit nothing, and stop. No `.go` change: carry on. Alone or
   on an amend, `review` does nothing: say so in one line. Without `review`,
-  never start one before a commit. A gate that blocks a commit and asks for that
-  agent is no step 5 failure: start it, then retry that commit. Under a gate
-  keyed on per-file diffs, a landed commit voids the pass for later groups
-  sharing its files: within step 3's order, land groups with disjoint files back
-  to back under one pass, and expect a new pass before each group that shares a
-  file.
+  never start one before a commit: run the commit, and only when a gate blocks
+  it and asks for that agent, start it and retry that commit — no step 5
+  failure; a review started before trying is wasted. Under a gate keyed on
+  per-file diffs, a landed commit voids the pass for later groups sharing its
+  files: within step 3's order, land groups with disjoint files back to back
+  under one pass, and expect a new pass before each group that shares a file.
 - Commit with `git commit -F -` reading the message on stdin from a heredoc,
   each commit its own shell command with nothing chained after the heredoc
   opener, or `git commit --amend -F -` for an amend — `--only` as well whenever
@@ -181,10 +181,11 @@ Commit control:
 2. Draft the message per the sections below.
 3. Check each message, every one of an `apply` series and not only the first,
    before presenting it and before its commit runs: summary ≤ 72 chars, body
-   wrapped at 72 (measured, not eyeballed: counted in characters, not bytes, by
-   a check that exits non-zero on any line over 72, chained with `&&` ahead of
-   the commit in the same command — before the heredoc opener — so a long line
-   stops the commit; the whole message, summary and body, fed to it inline by
+   wrapped at 72 (measured, not eyeballed: counted in characters by a
+   Unicode-aware check — Python's `len`, never a byte-counting `awk length` —
+   that exits non-zero on any line over 72, chained with `&&` ahead of the
+   commit in the same command — before the heredoc opener — so a long line stops
+   the commit; the whole message, summary and body, fed to it inline by
    `printf`, never a second heredoc, any line holding a backtick or `$`
    single-quoted, since a double-quoted one runs it and measures the wrong
    text), every sentence parsing on one read — no dangling opener, no clause
