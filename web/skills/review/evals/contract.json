@@ -123,9 +123,10 @@
     {
       "id": "fix-plan-path",
       "file": "references/fixing.md",
-      "rule": "The ordered fix plan goes to tmp/agent/agent-plan-review-fix.md",
+      "rule": "The ordered fix plan goes to tmp/agent/agent-plan-review-fix.md at the repository root, never the frontend root",
       "must": [
-        "`tmp/agent/agent-plan-review-fix\\.md`"
+        "`tmp/agent/agent-plan-review-fix\\.md`",
+        "at\\s+the\\s+repository\\s+root,\\s+never\\s+the\\s+frontend\\s+root"
       ]
     },
     {
