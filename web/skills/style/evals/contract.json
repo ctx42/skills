@@ -28,6 +28,14 @@
       ]
     },
     {
+      "id": "tsdoc-stays-on-symbol",
+      "rule": "A new or moved declaration never lands between a TSDoc block and its symbol",
+      "file": "references/production.md",
+      "must": [
+        "Never insert a new or moved declaration between an existing TSDoc block and\\s+the symbol it documents"
+      ]
+    },
+    {
       "id": "biome-superset",
       "rule": "A project's biome.json keeps every reference rule, may add, never drops",
       "file": "references/production.md",

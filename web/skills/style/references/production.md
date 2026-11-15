@@ -173,6 +173,9 @@ tool cannot check.
 - Name parameters in backticks in the prose; no `@param` or `@returns`.
 - Cross-reference symbols with `{@link X}`.
 - Document an interface field with `/** */` above it, never a trailing `//`.
+- Never insert a new or moved declaration between an existing TSDoc block and
+  the symbol it documents; under a comment a run shares, that is the run's
+  first symbol, and a like const may join the run below it.
 - Put the reason for non-obvious code in a comment above it: `//` in script,
   `<!-- -->` in templates, `/* */` with ` * ` leaders in CSS.
 - A one-line `if` whose body fits on the line may go unbraced; anything longer
