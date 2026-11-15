@@ -116,6 +116,13 @@
       "must": [
         "`tmp/agent/agent-plan-<slug>\\.md`"
       ]
+    },
+    {
+      "id": "criteria-one-value",
+      "rule": "Acceptance criteria hold one value, never an alternative",
+      "must": [
+        "Criteria hold one value, never an alternative \\(`or`, `if the user\\s+prefers`\\)"
+      ]
     }
   ]
 }
