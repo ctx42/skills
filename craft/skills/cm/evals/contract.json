@@ -258,6 +258,14 @@
         "An API no release tag contains has no callers to break",
         "run `git tag --contains <sha>` on the commit that added the API"
       ]
+    },
+    {
+      "id": "check-exact-text",
+      "rule": "The length check reads the exact text the heredoc commits, re-run after any edit",
+      "must": [
+        "the\\s+exact\\s+text\\s+the\\s+heredoc\\s+commits",
+        "re-check\\s+the\\s+edited\\s+text"
+      ]
     }
   ]
 }

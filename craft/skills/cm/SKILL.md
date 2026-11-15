@@ -185,14 +185,14 @@ Commit control:
    Unicode-aware check — Python's `len`, never a byte-counting `awk length` —
    that exits non-zero on any line over 72, chained with `&&` ahead of the
    commit in the same command — before the heredoc opener — so a long line stops
-   the commit; the whole message, summary and body, fed to it inline by
-   `printf`, never a second heredoc, any line holding a backtick or `$`
-   single-quoted, since a double-quoted one runs it and measures the wrong
+   the commit; the exact text the heredoc commits, summary and body, fed to it
+   inline by `printf`, never a second heredoc, any line holding a backtick or
+   `$` single-quoted, since a double-quoted one runs it and measures the wrong
    text), every sentence parsing on one read — no dangling opener, no clause
    stranded on a preposition — and passing Describe changes only, its numbers
    and any contrast with a design the diff does not contain ("instead of …")
    included; no process jargon, no trailer beyond the two allowed. Fix and
-   re-check.
+   re-check the edited text.
 4. Present it per Output; commit only under `apply` or `asis`.
 
 ## Describe changes only
