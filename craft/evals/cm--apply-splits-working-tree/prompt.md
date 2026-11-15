@@ -3,7 +3,7 @@ tags: [case:cm--apply-splits-working-tree, skill:cm, needs-shell, sec:cm:usage, 
 runs: 1
 max_turns: 40
 timeout_seconds: 300
-allowed_tools: [Read, Glob, Grep, Skill, Bash(git:*)]
+allowed_tools: [Read, Glob, Grep, Skill, Bash(git:*), Bash(python3:*)]
 append_system_prompt: |
   The user writes English; reply in English.
 

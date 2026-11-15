@@ -3,7 +3,7 @@ tags: [case:cm--message-from-staged-diff, skill:cm, needs-shell, sec:cm:usage, s
 runs: 1
 max_turns: 30
 timeout_seconds: 240
-allowed_tools: [Read, Glob, Grep, Skill, Bash(git:*)]
+allowed_tools: [Read, Glob, Grep, Skill, Bash(git:*), Bash(python3:*)]
 append_system_prompt: |
   The user writes English; reply in English.
 ---

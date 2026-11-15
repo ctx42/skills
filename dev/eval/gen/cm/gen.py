@@ -517,7 +517,7 @@ def main():
                     "runs: 1\n"
                     f"max_turns: {c['max_turns']}\n"
                     f"timeout_seconds: {c['timeout']}\n"
-                    "allowed_tools: [Read, Glob, Grep, Skill, Bash(git:*)]\n"
+                    "allowed_tools: [Read, Glob, Grep, Skill, Bash(git:*), Bash(python3:*)]\n"
                     "append_system_prompt: |\n" + sysp +
                     "---\n\n" + c["query"] + "\n")
         yaml = (f'schema_version: "1.1"\nname: {c["name"]}\ncontext:\n'
