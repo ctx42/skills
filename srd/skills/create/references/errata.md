@@ -90,25 +90,26 @@ Nothing outside this list is errata.
   when no keyword notice appears anywhere in the SRD and the standard fixes
   the place; a misplaced one is a move, not errata. Its location is the
   section the standard places it in, named as for a wrong notice.
-- A missing first-use link to the shared glossary: the one coded fix outside
-  whitespace and glyph, since a link target cannot meet the 40-character rule
-  but `glossary_terms` fixes it. State it as "link *term* to its shared glossary
-  entry" plus the anchor id holding the first use; `edit` derives the link, and
-  the text and its case stay as found. A later use that already links the same
-  entry is named by its anchor ("unlink the later use in ABC-2"); the fix
-  removes that link and keeps its text, in the same finding: moving a link is
-  one substitution, never two findings. The first use stays the anchor; later
-  uses are named beside it. With the first use already linked correctly, the
-  repeated later links are the whole finding, still errata: anchored at the
-  first use, nothing to link, each named later use unlinked. A later link to
-  another entry is no part of the move and stays as found. Errata only when
-  the standard asks for a first-use link, the term occurs nowhere before that
-  anchor in any sense or form (plural, case), linked or not, every later use
-  linking the entry is named, the site means the defined term beyond doubt, and
-  the term is no proper name the standard exempts from linking; otherwise an
-  ordinary finding. Cite the standard's first-use link rule by its identifier.
-  A finding anchored past the term's first use qualifies once re-anchored
-  there: the same defect, its site corrected.
+- A first-use link to the shared glossary, missing or repeated: with the first
+  use already linked correctly, the repeated later links are the whole finding,
+  still errata: anchored at the first use, nothing to link, each named later use
+  unlinked. It is the one coded fix outside whitespace and glyph, since a link
+  target cannot meet the 40-character rule but `glossary_terms` fixes it. State
+  it as "link *term* to its shared glossary entry" plus the anchor id holding
+  the first use; `edit` derives the link, and the text and its case stay as
+  found. A later use that already links the same entry is named by its anchor
+  ("unlink the later use in ABC-2"); the fix removes that link and keeps its
+  text, in the same finding: moving a link is one substitution, never two
+  findings. The first use stays the anchor; later uses are named beside it. A
+  later link to another entry is no part of the move and stays as found. Errata
+  only when the standard asks for a first-use link, the term occurs nowhere
+  before that anchor in any sense or form (plural, case), linked or not, every
+  later use linking the entry is named, the site means the defined term beyond
+  doubt, and the term is no proper name the standard exempts from linking;
+  otherwise an ordinary finding. Cite the standard's first-use link rule by its
+  identifier. A finding anchored past the term's first use qualifies once
+  re-anchored there: the same defect,
+  its site corrected.
 - A dead same-document anchor: a link whose `#anchor` matches no heading of the
   document, when exactly one heading is its evident target — it shares the
   anchor's distinctive words and no other heading does. `#old` → that
